@@ -1,4 +1,5 @@
 import pandas as pd
+from collections import defaultdict
 import random
 import math
 
@@ -79,13 +80,14 @@ class DatasetFormatter():
         self.num_users = df_info.loc['users']
         self.num_items = df_info.loc['items']
         self.num_consumes = df_info.loc['ratings']
-        return df_cons, df_genre,df_item
+        # return df_cons, df_genre,df_item
     
     def get_base(self):
         return eval(self.BASES_HANDLERS[self.base])
     
     def run_selection_model(self):
-        return eval(self.SELECTION_MODEL_HANDLERS[self.selection_model])
+        eval(self.SELECTION_MODEL_HANDLERS[self.selection_model])
+        self.get_fixed_format_for_recs()
     
     def run_users_train_test(self):
         num_train_users = round(self.num_users*(self.selection_model_parameters['train_size']))
@@ -100,8 +102,31 @@ class DatasetFormatter():
         # self.selected_test = []
         # self.selected_train = []
         pass
+    def get_fixed_format_for_recs(self):
+        test_users_items = defaultdict(list)
+        test_users_ratings = defaultdict(list)
+        for index, row in self.test_users_items.iterrows():
+            test_users_items[row['uid']].append(row['iid'])
+            test_users_ratings[row['uid']].append(row['r'])
+
+        self.test_users_items = test_users_items
+        self.test_users_ratings = test_users_ratings
+        
+        train_users_items = defaultdict(list)
+        train_users_ratings = defaultdict(list)
+        for index, row in self.train_users_items.iterrows():
+            train_users_items[row['uid']].append(row['iid'])
+            train_users_ratings[row['uid']].append(row['r'])
+
+        self.train_users_items = train_users_items
+        self.train_users_ratings = train_users_ratings
     
 d = DatasetFormatter()
+d.get_base()
 d.run_selection_model()
+
+
+
+
 
 
