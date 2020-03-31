@@ -1,0 +1,10 @@
+class ICF():
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.interaction_size = interaction_size
+        self.interactions = interactions
+        
+        pass
+
+    def interact(self,test_data):
+        pass

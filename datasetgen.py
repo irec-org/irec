@@ -1,7 +1,10 @@
 import pandas as pd
+import numpy as np
 from collections import defaultdict
 import random
 import math
+
+from pmf.ICFPMF import ICFPMF
 
 class DatasetFormatter():
     BASES_DIRS = {'movie_lens':'ml-100k/'}
@@ -80,6 +83,10 @@ class DatasetFormatter():
         self.num_users = df_info.loc['users']
         self.num_items = df_info.loc['items']
         self.num_consumes = df_info.loc['ratings']
+
+        self.matrix_users_ratings = np.zeros((self.num_users,self.num_items))
+        for index, row in self.users_items.iterrows():
+            self.matrix_users_ratings[row['uid'],row['iid']] = row['r']
         # return df_cons, df_genre,df_item
     
     def get_base(self):
@@ -90,13 +97,14 @@ class DatasetFormatter():
         self.get_fixed_format_for_recs()
     
     def run_users_train_test(self):
-        num_train_users = round(self.num_users*(self.selection_model_parameters['train_size']))
-        num_test_users = int(self.num_users-num_train_users)
+        self.num_train_users = round(self.num_users*(self.selection_model_parameters['train_size']))
+        self.num_test_users = int(self.num_users-self.num_train_users)
         users_items_consumed=self.users_items.groupby('uid').count().iloc[:,0]
         test_candidate_users=list(users_items_consumed[users_items_consumed>=self.selection_model_parameters['test_consumes']].to_dict().keys())
         # print(users_items_consumed)
-        test_uids = random.choices(test_candidate_users,k=num_test_users)
-        rows_in_test = self.users_items['uid'].isin(test_uids)
+        self.test_uids = random.choices(test_candidate_users,k=self.num_test_users)
+        self.train_uids = list(set(range(self.num_users))-set(self.test_uids))
+        rows_in_test = self.users_items['uid'].isin(self.test_uids)
         self.test_users_items=self.users_items[rows_in_test]
         self.train_users_items=self.users_items[~rows_in_test]
         # self.selected_test = []
@@ -118,6 +126,7 @@ class DatasetFormatter():
             train_users_items[row['uid']].append(row['iid'])
             train_users_ratings[row['uid']].append(row['r'])
 
+        
         self.train_users_items = train_users_items
         self.train_users_ratings = train_users_ratings
     
@@ -125,8 +134,49 @@ d = DatasetFormatter()
 d.get_base()
 d.run_selection_model()
 
+model = ICFPMF(40,iterations=1)
+model.fit(d.matrix_users_ratings[d.train_uids,:])
 
 
 
 
+                    
 
+
+
+itmodel = ThompsonSampling()
+
+
+
+# itmodel.interact(d.test_users_items,
+#                  model.best.items_means, model.best.items_covs,
+#                  model.best.var, model.best.u_lambda
+#                  )        
+
+
+# result = build_bpmf_model(d.matrix_users_ratings)
+
+
+# pmf = PMF(40)
+# pmf.fit(d.users_items)
+
+# pmf.fit(d.matrix_users_ratings)
+
+# observed_ui = np.nonzero(d.matrix_users_ratings) # itens observed by some user
+# print(np.sqrt(np.mean((pmf.get_predicted()[observed_ui] - d.matrix_users_ratings[observed_ui])**2)))
+
+
+# observed_ui = np.nonzero(d.matrix_users_ratings) # itens observed by some user
+
+
+# from sklearn.decomposition import NMF
+# from sklearn.decomposition import PCA
+
+
+# model = PCA(n_components=10, init='random', random_state=0)
+# model = PCA(40)
+# W = model.fit_transform(d.matrix_users_ratings)
+# H = model.components_
+# print(W,H)
+# print(np.sqrt(np.mean((np.dot(W,H)[observed_ui] - d.matrix_users_ratings[observed_ui])**2)))
+# print(np.sqrt(nṕ.sum(pmf.get_predicted() - d.matrix_users_ratings)**2))
