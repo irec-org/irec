@@ -134,42 +134,18 @@ d = DatasetFormatter()
 d.get_base()
 d.run_selection_model()
 
-model = pmf.ICFPMF(40,iterations=5)
-model.fit(d.matrix_users_ratings[d.train_uids,:]/5)
+observed_ui = np.nonzero(d.matrix_users_ratings) # itens observed by some user
+d.matrix_users_ratings = d.matrix_users_ratings
 
-# itmodel = ThompsonSampling()
-
-
-
-# itmodel.interact(d.test_users_items,
-#                  model.best.items_means, model.best.items_covs,
-#                  model.best.var, model.best.u_lambda
-#                  )        
-
-
-# result = build_bpmf_model(d.matrix_users_ratings)
-
-
-# pmf = PMF(40)
-# pmf.fit(d.users_items)
-
-# pmf.fit(d.matrix_users_ratings)
-
-# observed_ui = np.nonzero(d.matrix_users_ratings) # itens observed by some user
-# print(np.sqrt(np.mean((pmf.get_predicted()[observed_ui] - d.matrix_users_ratings[observed_ui])**2)))
-
-
-# observed_ui = np.nonzero(d.matrix_users_ratings) # itens observed by some user
+model = pmf.ICFPMF()
+model.fit(d.matrix_users_ratings# [d.train_uids,:]
+)
 
 
 # from sklearn.decomposition import NMF
-# from sklearn.decomposition import PCA
+from sklearn.decomposition import PCA
 
-
-# model = PCA(n_components=10, init='random', random_state=0)
-# model = PCA(40)
-# W = model.fit_transform(d.matrix_users_ratings)
-# H = model.components_
-# print(W,H)
-# print(np.sqrt(np.mean((np.dot(W,H)[observed_ui] - d.matrix_users_ratings[observed_ui])**2)))
-# print(np.sqrt(nṕ.sum(pmf.get_predicted() - d.matrix_users_ratings)**2))
+model = PCA(n_components=40)
+W = model.fit_transform(d.matrix_users_ratings)
+H = model.components_
+print(np.sqrt(np.mean((np.dot(W,H)[observed_ui] - d.matrix_users_ratings[observed_ui])**2)))
