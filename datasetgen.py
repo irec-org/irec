@@ -4,7 +4,7 @@ from collections import defaultdict
 import random
 import math
 
-from pmf.ICFPMF import ICFPMF
+import pmf
 
 class DatasetFormatter():
     BASES_DIRS = {'movie_lens':'ml-100k/'}
@@ -134,17 +134,10 @@ d = DatasetFormatter()
 d.get_base()
 d.run_selection_model()
 
-model = ICFPMF(40,iterations=1)
-model.fit(d.matrix_users_ratings[d.train_uids,:])
+model = pmf.ICFPMF(40,iterations=5)
+model.fit(d.matrix_users_ratings[d.train_uids,:]/5)
 
-
-
-
-                    
-
-
-
-itmodel = ThompsonSampling()
+# itmodel = ThompsonSampling()
 
 
 
