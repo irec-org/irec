@@ -4,7 +4,6 @@ from collections import defaultdict
 import random
 import math
 
-import pmf
 
 class DatasetFormatter():
     BASES_DIRS = {'movie_lens':'ml-100k/'}
@@ -126,26 +125,5 @@ class DatasetFormatter():
             train_users_items[row['uid']].append(row['iid'])
             train_users_ratings[row['uid']].append(row['r'])
 
-        
         self.train_users_items = train_users_items
         self.train_users_ratings = train_users_ratings
-    
-d = DatasetFormatter()
-d.get_base()
-d.run_selection_model()
-
-observed_ui = np.nonzero(d.matrix_users_ratings) # itens observed by some user
-d.matrix_users_ratings = d.matrix_users_ratings
-
-model = pmf.ICFPMF()
-model.fit(d.matrix_users_ratings# [d.train_uids,:]
-)
-
-
-# from sklearn.decomposition import NMF
-from sklearn.decomposition import PCA
-
-model = PCA(n_components=40)
-W = model.fit_transform(d.matrix_users_ratings)
-H = model.components_
-print(np.sqrt(np.mean((np.dot(W,H)[observed_ui] - d.matrix_users_ratings[observed_ui])**2)))
