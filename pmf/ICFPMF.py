@@ -4,11 +4,12 @@ import scipy
 import sys, os
 sys.path.insert(0, os.path.abspath('..'))
 
-from util import Nameable
+from util import Saveable
 
-class ICFPMF(Nameable):
+class ICFPMF(Saveable):
     
-    def __init__(self,num_lat=40,iterations=50,var=0.21,us_vars=0.21,is_vars=0.21):
+    def __init__(self,num_lat=40,iterations=1,var=0.21,us_vars=0.21,is_vars=0.21,*args,**kwargs):
+        super().__init__(*args,**kwargs)
         self.num_lat = num_lat
         self.iterations = iterations
         self.var = var
@@ -25,20 +26,19 @@ class ICFPMF(Nameable):
         highest_value = np.max(training_matrix)
         self.observed_ui = observed_ui = np.nonzero(training_matrix>lowest_value) # itens observed by some user
         # value_abs_range = abs(highest_value - lowest_value)
-        self._mean = np.mean(training_matrix[observed_ui])
-        print(f"mean = {self._mean}")
         I = np.eye(self.num_lat)
 
         if data_var:
             self.us_vars = 1/np.mean(np.var(training_matrix,axis=1))
             self.is_vars = 1/np.mean(np.var(training_matrix,axis=0))
-            self.var = np.mean(np.var(training_matrix))
+            # self.var = np.mean(np.var(training_matrix))
 
         print(self.us_vars,self.is_vars,self.var)
 
         self.us_weights = np.random.multivariate_normal(np.zeros(self.num_lat),self.us_vars*I,training_matrix.shape[0])
         self.is_weights = np.random.multivariate_normal(np.zeros(self.num_lat),self.is_vars*I,training_matrix.shape[1])
 
+        best_rmse = np.inf
         # self.noise = np.random.normal(self._mean,self.var)
         # self.noise = self._mean
         # #samples
@@ -80,16 +80,18 @@ class ICFPMF(Nameable):
             # self.us_weights = final_us_weights
             # self.is_weights = final_is_weights
 
-            self.rmse=np.sqrt(np.mean((self.get_predicted()[observed_ui] - training_matrix[observed_ui])**2))
+            rmse=np.sqrt(np.mean((self.get_predicted()[observed_ui] - training_matrix[observed_ui])**2))
 
-            print("current =",self.rmse)
+            print("current =",rmse)
             if self.best == None:
                 self.best = self.__deepcopy__()
+                best_rmse = rmse
             else:
-                if self.rmse < self.best.rmse:
+                if rmse < best_rmse:
                     self.best = self.__deepcopy__()
-            print("best =",self.best.rmse)
-
+                    best_rmse = rmse
+            print("best =",best_rmse)
+        self.save()
     def __deepcopy__(self):
         new = type(self)()
         new.__dict__.update(self.__dict__)
@@ -105,6 +107,3 @@ class ICFPMF(Nameable):
 
     def get_best_predicted(self):
         return self.get_matrix(self.best.us_weights,self.best.is_weights,self.best.var)
-
-    def get_means_and_covs(self):
-        return self.best.users_means, self.best.users_covs, self.best.items_means, self.best.items_covs
