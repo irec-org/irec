@@ -1,9 +1,14 @@
 import numpy as np
 import scipy
 
-class ICFPMF():
+import sys, os
+sys.path.insert(0, os.path.abspath('..'))
+
+from util import Nameable
+
+class ICFPMF(Nameable):
     
-    def __init__(self,num_lat=40,iterations=12,var=0.21,us_vars=0.21,is_vars=0.21):
+    def __init__(self,num_lat=40,iterations=50,var=0.21,us_vars=0.21,is_vars=0.21):
         self.num_lat = num_lat
         self.iterations = iterations
         self.var = var
@@ -13,7 +18,7 @@ class ICFPMF():
         self.i_lambda = self.var/self.is_vars
         self.best=None
 
-    def fit(self,training_matrix):
+    def fit(self,training_matrix, data_var = True):
         num_users = training_matrix.shape[0]
         num_items = training_matrix.shape[1]
         lowest_value = np.min(training_matrix)
@@ -23,6 +28,13 @@ class ICFPMF():
         self._mean = np.mean(training_matrix[observed_ui])
         print(f"mean = {self._mean}")
         I = np.eye(self.num_lat)
+
+        if data_var:
+            self.us_vars = 1/np.mean(np.var(training_matrix,axis=1))
+            self.is_vars = 1/np.mean(np.var(training_matrix,axis=0))
+            self.var = np.mean(np.var(training_matrix))
+
+        print(self.us_vars,self.is_vars,self.var)
 
         self.us_weights = np.random.multivariate_normal(np.zeros(self.num_lat),self.us_vars*I,training_matrix.shape[0])
         self.is_weights = np.random.multivariate_normal(np.zeros(self.num_lat),self.is_vars*I,training_matrix.shape[1])
@@ -86,8 +98,7 @@ class ICFPMF():
         return new
 
     def get_matrix(self, us_weights, is_weights, var):
-        mean_matrix = us_weights @ is_weights.T
-        return np.random.normal(mean_matrix,var)
+        return np.random.normal(us_weights @ is_weights.T,var)
     
     def get_predicted(self):
         return self.get_matrix(self.us_weights,self.is_weights,self.var)
@@ -97,4 +108,3 @@ class ICFPMF():
 
     def get_means_and_covs(self):
         return self.best.users_means, self.best.users_covs, self.best.items_means, self.best.items_covs
-
