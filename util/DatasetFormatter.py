@@ -4,13 +4,14 @@ from collections import defaultdict
 import random
 import math
 
+from .Saveable import Saveable
 
-class DatasetFormatter():
-    BASES_DIRS = {'movie_lens':'ml-100k/'}
-    BASES_HANDLERS = {'movie_lens':'self.get_movie_lens()'}
+class DatasetFormatter(Saveable):
+    BASES_DIRS = {'ml_100k':'ml-100k/'}
+    BASES_HANDLERS = {'ml_100k':'self.get_ml_100k()'}
     SELECTION_MODEL = {'users_train_test': {'train_size': 0.7879,'test_consumes':120}}
     SELECTION_MODEL_HANDLERS = {'users_train_test': 'self.run_users_train_test()'}
-    def __init__(self,base='movie_lens',
+    def __init__(self,base='ml_100k',
                  selection_model='users_train_test',
                  selection_model_parameters={}):
         self.base = base
@@ -52,7 +53,7 @@ class DatasetFormatter():
 
         self._selection_model_parameters = parameters_result
 
-    def get_movie_lens(self):
+    def get_ml_100k(self):
         base_dir = self.BASES_DIRS[self.base]
         df_cons = pd.read_csv(base_dir+'u.data',sep='\t',header=None)
         df_cons.columns = ['uid','iid','r','t']
@@ -89,11 +90,13 @@ class DatasetFormatter():
         # return df_cons, df_genre,df_item
     
     def get_base(self):
+        print(f"Loading {self.base} {self.BASES_DIRS[self.base]}")
         return eval(self.BASES_HANDLERS[self.base])
     
     def run_selection_model(self):
+        print(f"Running selection model {self.selection_model}")
         eval(self.SELECTION_MODEL_HANDLERS[self.selection_model])
-        self.get_fixed_format_for_recs()
+        # self.get_fixed_format_for_recs()
     
     def run_users_train_test(self):
         self.num_train_users = round(self.num_users*(self.selection_model_parameters['train_size']))
@@ -103,27 +106,32 @@ class DatasetFormatter():
         # print(users_items_consumed)
         self.test_uids = random.choices(test_candidate_users,k=self.num_test_users)
         self.train_uids = list(set(range(self.num_users))-set(self.test_uids))
-        rows_in_test = self.users_items['uid'].isin(self.test_uids)
-        self.test_users_items=self.users_items[rows_in_test]
-        self.train_users_items=self.users_items[~rows_in_test]
+        # rows_in_test = self.users_items['uid'].isin(self.test_uids)
+        # self.test_users_items=self.users_items[rows_in_test]
+        # self.train_users_items=self.users_items[~rows_in_test]
         # self.selected_test = []
         # self.selected_train = []
         pass
-    def get_fixed_format_for_recs(self):
-        test_users_items = defaultdict(list)
-        test_users_ratings = defaultdict(list)
-        for index, row in self.test_users_items.iterrows():
-            test_users_items[row['uid']].append(row['iid'])
-            test_users_ratings[row['uid']].append(row['r'])
+    # def get_fixed_format_for_recs(self):
+    #     test_users_items = defaultdict(list)
+    #     test_users_ratings = defaultdict(list)
+    #     for index, row in self.test_users_items.iterrows():
+    #         test_users_items[row['uid']].append(row['iid'])
+    #         test_users_ratings[row['uid']].append(row['r'])
 
-        self.test_users_items = test_users_items
-        self.test_users_ratings = test_users_ratings
+    #     self.test_users_items = test_users_items
+    #     self.test_users_ratings = test_users_ratings
         
-        train_users_items = defaultdict(list)
-        train_users_ratings = defaultdict(list)
-        for index, row in self.train_users_items.iterrows():
-            train_users_items[row['uid']].append(row['iid'])
-            train_users_ratings[row['uid']].append(row['r'])
+    #     train_users_items = defaultdict(list)
+    #     train_users_ratings = defaultdict(list)
+    #     for index, row in self.train_users_items.iterrows():
+    #         train_users_items[row['uid']].append(row['iid'])
+    #         train_users_ratings[row['uid']].append(row['r'])
 
-        self.train_users_items = train_users_items
-        self.train_users_ratings = train_users_ratings
+    #     self.train_users_items = train_users_items
+    #     self.train_users_ratings = train_users_ratings
+
+    def get_name(self):
+        return super().get_name(
+            {k: v for k, v in self.__dict__.items()
+             if k not in ['num_test_users','num_train_users','num_users', 'num_items', 'num_consumes']})

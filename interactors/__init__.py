@@ -5,5 +5,6 @@ from .Interactor import *
 from .ICF import *
 from .LinearUCB import *
 from .ThompsonSampling import *
-from .GLMUCB import *
+from .LinearEGreedy import *
+from .GLM_UCB import *
 

@@ -1,5 +1,6 @@
+from .Interactor import Interactor
 class ICF(Interactor):
-    def __init__(self, var, u_lambda, *args, **kwargs):
+    def __init__(self, var, user_lambda, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.var = var
-        self.u_lambda = u_lambda
+        self.user_lambda = user_lambda
