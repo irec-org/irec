@@ -26,6 +26,7 @@ class ICFPMF(Saveable):
         self.item_lambda = self.var/self.item_var
 
     def fit(self,training_matrix):
+        print(self.get_verbose_name())
         num_users = training_matrix.shape[0]
         num_items = training_matrix.shape[1]
         lowest_value = np.min(training_matrix)

@@ -19,7 +19,6 @@ class GLM_UCB(ICF):
         num_lat = len(items_means[0])
 
         I = np.eye(num_lat)
-
         for idx_uid in tqdm(range(num_users)):
             uid = uids[idx_uid]
             u_items_means = items_means.copy()
@@ -52,3 +51,6 @@ class GLM_UCB(ICF):
                 u_rec_rewards.append(max_reward)
                 u_rec_items_means.append(max_item_mean)
                 A += max_item_mean.dot(max_item_mean.T)
+                self.result[uid].append(max_i)
+        self.save_result()
+

@@ -39,3 +39,5 @@ class LinearUCB(ICF):
 
                 A += max_item_mean.dot(max_item_mean.T)
                 b += self.get_reward(uid,max_i)*max_item_mean
+                self.result[uid].append(max_i)
+        self.save_result()

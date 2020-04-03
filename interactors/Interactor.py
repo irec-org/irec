@@ -18,6 +18,7 @@ class Interactor(Nameable, DirectoryDependent):
         
     def interact(self):
         print(self.get_verbose_name())
+        self.result.clear()
         pass
 
     def save_result(self):

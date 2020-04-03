@@ -35,3 +35,5 @@ class ThompsonSampling(ICF):
                 del u_items_covs[max_i]
                 A += max_q.dot(max_q.T)
                 b += self.get_reward(uid,max_i)*max_q
+                self.result[uid].append(max_i)
+        self.save_result()
