@@ -1,3 +1,5 @@
+from concurrent.futures import ProcessPoolExecutor
+
 def dict_to_list_gen(d):
     for k, v in zip(d.keys(), d.values()):
         if v == None:
@@ -13,3 +15,9 @@ def dict_to_str(dictionary):
     for key, value in dictionary.items():
         string += f"{key}: {value}\n"
     return string
+
+def run_parallel(func, args, chunksize=10):
+    executor = ProcessPoolExecutor()
+    num_args = len(args)
+    results = [i for i in tqdm(executor.map(func,*list(zip(*args)),chunksize=chunksize),total=num_args)]
+    return results
