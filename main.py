@@ -4,30 +4,46 @@ from util import DatasetFormatter
 from mf import ICFPMF
 from interactors import LinearUCB, ThompsonSampling, LinearEGreedy, GLM_UCB
 
+# @click.group()
+# def cli2():
+#     pass
 
-@click.group()
+
+@click.group(invoke_without_command=True)
 @click.option('-d', default='ml_100k', help=f'Dataset to use [{", ".join(list(DatasetFormatter.BASES_DIRS.keys()))}]')
 @click.option('-s', default='users_train_test', help=f'Selection model [{", ".join(list(DatasetFormatter.SELECTION_MODEL.keys()))}]')
-@click.option('--load/--save', default=True, help=f'Load(get ready) or save(generate)')
 @click.pass_context
-def cli(ctx, d, s, load):
-    dsf = DatasetFormatter(base=d,selection_model=s)
-    if load:
-        dsf = dsf.load()
+def cli1(ctx, d, s):
+    if not(ctx.invoked_subcommand is None):
+        if ctx.invoked_subcommand != 'gen-base':
+            dsf = DatasetFormatter(base=d,selection_model=s)
+            dsf = dsf.load()
+            ctx.obj = dsf
+        else:
+            ctx.ensure_object(dict)
+            ctx.obj['d'] = d
+            ctx.obj['s'] = s
     else:
-        dsf.get_base()
-        dsf.run_selection_model()
-        dsf.save()
-    ctx.obj = dsf
+        click.echo(ctx.get_help())
+@cli1.command()
+@click.pass_obj
+def gen_base(obj):
+    d = obj['d']
+    s = obj['s']
+    dsf = DatasetFormatter(base=d,selection_model=s)
+    dsf.get_base()
+    dsf.run_selection_model()
+    dsf.save()
 
-@cli.command()
+
+@cli1.command()
 @click.pass_obj
 def icfpmf(dsf):
     mf = ICFPMF()
     mf.load_var(dsf.matrix_users_ratings[dsf.train_uids])
     mf.fit(dsf.matrix_users_ratings[dsf.train_uids])
 
-@cli.command()
+@cli1.command()
 @click.option('--epsilon', default=0.5, help=f'Epsilon')
 @click.pass_obj
 def linearegreedy(dsf,epsilon):
@@ -42,7 +58,7 @@ def linearegreedy(dsf,epsilon):
     interactor.interact(dsf.test_uids, mf.items_means)
 
 
-@cli.command()
+@cli1.command()
 @click.pass_obj
 def thompsonsampling(dsf):
     mf = ICFPMF()
@@ -55,7 +71,7 @@ def thompsonsampling(dsf):
     interactor.interact(dsf.test_uids, mf.items_means, mf.items_covs)
 
     
-@cli.command()
+@cli1.command()
 @click.option('--alpha', default=0.5)
 @click.pass_obj
 def linearucb(dsf,alpha):
@@ -68,7 +84,7 @@ def linearucb(dsf,alpha):
                            consumption_matrix=dsf.matrix_users_ratings)
     interactor.interact(dsf.test_uids, mf.items_means)
 
-@cli.command()
+@cli1.command()
 @click.option('-c', default=0.5)
 @click.pass_obj
 def glmucb(dsf,c):
@@ -82,27 +98,6 @@ def glmucb(dsf,c):
     interactor.interact(dsf.test_uids, mf.items_means)
 
 
-cli()
 
-# d = DatasetFormatter()
-# d.get_base()
-# d.run_selection_model()
-
-# observed_ui = np.nonzero(d.matrix_users_ratings) # itens observed by some user
-# d.matrix_users_ratings = d.matrix_users_ratings
-
-# model = ICFPMF()
-# model.fit(d.matrix_users_ratings# [d.train_uids,:]
-# )
-
-
-
-
-
-# # from sklearn.decomposition import NMF
-# from sklearn.decomposition import PCA
-
-# model = PCA(n_components=40)
-# W = model.fit_transform(d.matrix_users_ratings)
-# H = model.components_
-# print(np.sqrt(np.mean((np.dot(W,H)[observed_ui] - d.matrix_users_ratings[observed_ui])**2)))
+if __name__ == '__main__':
+    cli1()
