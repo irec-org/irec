@@ -3,7 +3,7 @@ import numpy as np
 import random
 from tqdm import tqdm
 class LinearEGreedy(ICF):
-    def __init__(self, epsilon=None, *args, **kwargs):
+    def __init__(self, epsilon=0.1, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.epsilon = epsilon
 

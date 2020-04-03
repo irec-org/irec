@@ -2,7 +2,7 @@ from .ICF import ICF
 import numpy as np
 from tqdm import tqdm
 class GLM_UCB(ICF):
-    def __init__(self, c=None, *args, **kwargs):
+    def __init__(self, c=0.5, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.c = c
 

@@ -44,7 +44,7 @@ def icfpmf(dsf):
     mf.fit(dsf.matrix_users_ratings[dsf.train_uids])
 
 @cli1.command()
-@click.option('--epsilon', default=0.5, help=f'Epsilon')
+@click.option('--epsilon', default=0.1, help=f'Epsilon')
 @click.pass_obj
 def linearegreedy(dsf,epsilon):
     mf = ICFPMF()
@@ -72,7 +72,7 @@ def thompsonsampling(dsf):
 
     
 @cli1.command()
-@click.option('--alpha', default=0.5)
+@click.option('--alpha', default=0.7)
 @click.pass_obj
 def linearucb(dsf,alpha):
     mf = ICFPMF()

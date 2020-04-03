@@ -1,7 +1,7 @@
 from util import dict_to_list, dict_to_str
 
 class Nameable():
-    def get_name(self,name=None,parameters=None):
+    def get_name(self,parameters=None,name=None):
         if parameters == None:
             parameters = self.__dict__
         filtered_dict = {k: v for k, v in parameters.items() if isinstance(v, (int, float, complex, str))}
@@ -15,7 +15,7 @@ class Nameable():
             return f"{name}"+\
                 has_parameter+'_'.join(list_parameters)
 
-    def get_verbose_name(self,name=None,parameters=None):
+    def get_verbose_name(self,parameters=None,name=None):
         if parameters == None:
             parameters = self.__dict__
         filtered_dict = {k: v for k, v in parameters.items() if isinstance(v, (int, float, complex, str))}

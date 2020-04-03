@@ -7,7 +7,7 @@ from collections import defaultdict
 import pickle
 
 class Interactor(Nameable, DirectoryDependent):
-    def __init__(self, consumption_matrix=None, interactions=20):
+    def __init__(self, consumption_matrix=None, interactions=120):
         self.consumption_matrix = consumption_matrix
         self.interactions = interactions
         self.result = defaultdict(list)
