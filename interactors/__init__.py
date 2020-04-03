@@ -7,13 +7,15 @@ from .LinearUCB import *
 from .ThompsonSampling import *
 from .LinearEGreedy import *
 from .GLM_UCB import *
+from .MostPopular import *
 
 
 INTERACTORS = {
-    'Interactor': Interactor,
-    'ICF': ICF,
-    'LinearUCB': LinearUCB,
-    'ThompsonSampling': ThompsonSampling,
+    # 'Interactor': Interactor,
+    # 'ICF': ICF,
     'LinearEGreedy': LinearEGreedy,
+    'LinearUCB': LinearUCB,
     'GLM_UCB': GLM_UCB,
+    'ThompsonSampling': ThompsonSampling,
+    'MostPopular': MostPopular,
 }

@@ -10,7 +10,7 @@ class GLM_UCB(ICF):
         return 1/(1+np.exp(-x))
 
     def p(self,x):
-        return self.sigmoid(x)
+        return x
 
     def interact(self, uids, items_means):
         super().interact()

@@ -8,7 +8,7 @@ from util import Saveable
 
 class ICFPMF(Saveable):
     
-    def __init__(self, num_lat=40, iterations=5, var=0.21, user_var=0.21, item_var=0.21, *args, **kwargs):
+    def __init__(self, num_lat=40, iterations=50, var=0.21, user_var=0.21, item_var=0.21, *args, **kwargs):
         super().__init__(*args,**kwargs)
         self.num_lat = num_lat
         self.iterations = iterations
