@@ -5,9 +5,9 @@ import os
 
 class Saveable(Nameable, DirectoryDependent):
     def save(self):
-        with open(f'{os.path.join(self.DIRS["state_save"],self.get_name())}', "wb") as f:
+        with open(f'{os.path.join(self.DIRS["state_save"],self.get_name())}.pickle', "wb") as f:
             pickle.dump(self, f)
     def load(self):
-        with open(f'{os.path.join(self.DIRS["state_save"],self.get_name())}', "rb") as f:
+        with open(f'{os.path.join(self.DIRS["state_save"],self.get_name())}.pickle', "rb") as f:
             return pickle.load(f)
         

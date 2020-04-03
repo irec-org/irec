@@ -14,6 +14,7 @@ class DatasetFormatter(Saveable):
     def __init__(self,base='ml_100k',
                  selection_model='users_train_test',
                  selection_model_parameters={}):
+        super().__init__()
         self.base = base
         self.selection_model = selection_model
         self.num_users = None
