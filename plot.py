@@ -24,7 +24,7 @@ dsf = dsf.load()
 mf = ICFPMF()
 mf.load_var(dsf.matrix_users_ratings[dsf.train_uids])
 
-METRIC_NAME = 'recall'
+METRIC_NAME = 'precision'
 metric_values = defaultdict(dict)
 for i in answers['interactors']:
     itr_class = interactors.INTERACTORS[i]
@@ -33,11 +33,13 @@ for i in answers['interactors']:
                         user_lambda=mf.user_lambda)
     else:
         itr = itr_class()
-    for k in tqdm(range(1,121)):
+    for k in tqdm(range(1,itr.interactions+1)):
         me = MetricsEvaluator(itr.get_name(), k)
         me = me.load()
         print(me.metrics_mean)
         metric_values[i][k] = me.metrics_mean[METRIC_NAME]
         
 pd.DataFrame(metric_values).plot()
+plt.xlabel("N")
+plt.ylabel("Precision@N")
 plt.show()

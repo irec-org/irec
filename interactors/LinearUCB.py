@@ -2,7 +2,7 @@ from .ICF import ICF
 import numpy as np
 from tqdm import tqdm
 class LinearUCB(ICF):
-    def __init__(self, alpha=0.7, zeta=None,*args, **kwargs):
+    def __init__(self, alpha=0.2, zeta=None,*args, **kwargs):
         super().__init__(*args, **kwargs)
         if alpha != None:
             self.alpha = alpha

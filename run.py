@@ -17,6 +17,7 @@ mf = ICFPMF()
 mf.load_var(dsf.matrix_users_ratings[dsf.train_uids])
 mf = mf.load()
 for i in answers['interactors']:
+
     if i == 'MostPopular':
         itr = interactors.INTERACTORS[i](consumption_matrix=dsf.matrix_users_ratings)
     else:
@@ -27,7 +28,7 @@ for i in answers['interactors']:
 
     if i  == 'ThompsonSampling':
         itr.interact(dsf.test_uids, mf.items_means, mf.items_covs)
-    elif 'MostPopular':
+    elif i == 'MostPopular':
         itr.interact(dsf.test_uids)
     else:
         itr.interact(dsf.test_uids, mf.items_means)
