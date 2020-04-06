@@ -15,7 +15,7 @@ class LinearEGreedy(ICF):
         # get number of latent factors 
         num_lat = len(items_means[0])
         I = np.eye(num_lat)
-        args = [(int(uids[idx_uid]),) for idx_uid in range(num_users)]
+        args = [(int(uid),) for uid in uids]
         result = util.run_parallel(self.interact_user,args)
         for i, user_result in enumerate(result):
             self.result[uids[i]] = user_result

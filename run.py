@@ -20,9 +20,9 @@ mf = mf.load()
 for i in answers['interactors']:
 
     if i == 'MostPopular':
-        itr = interactors.INTERACTORS[i](consumption_matrix=dsf.matrix_users_ratings)
+        itr = interactors.INTERACTORS[i].getInstance(consumption_matrix=dsf.matrix_users_ratings)
     else:
-        itr = interactors.INTERACTORS[i](var=mf.var,
+        itr = interactors.INTERACTORS[i].getInstance(var=mf.var,
                                         user_lambda=mf.user_lambda,
                                         consumption_matrix=dsf.matrix_users_ratings
         )
