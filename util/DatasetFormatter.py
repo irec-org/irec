@@ -8,12 +8,13 @@ import time
 from .Saveable import Saveable
 
 class DatasetFormatter(Saveable):
-    BASES_DIRS = {'ml_100k':'ml-100k/', 'ml_1m': 'ml-1m/'}
+    BASES_DIRS = {'ml_100k':'ml-100k/', 'ml_1m': 'ml-1m/', 'tr_te_ml_1m': 'TrainTest - ML-1M/'}
     BASES_HANDLERS = {'ml_100k':'self.get_ml_100k()',
-                      'ml_1m': 'self.get_ml_1m()'}
+                      'ml_1m': 'self.get_ml_1m()',
+                      'tr_te_ml_1m': 'self.get_tr_te_ml_1m()'}
     SELECTION_MODEL = {'users_train_test': {'train_size': 0.7879,'test_consumes':120}}
     SELECTION_MODEL_HANDLERS = {'users_train_test': 'self.run_users_train_test()'}
-    def __init__(self,base='ml_1m',
+    def __init__(self,base='tr_te_ml_1m',
                  selection_model='users_train_test',
                  selection_model_parameters={}):
         super().__init__()
@@ -159,4 +160,30 @@ class DatasetFormatter(Saveable):
         self.users_items = df_cons
 
         self.matrix_users_ratings = np.nan_to_num(np.array(self.users_items.pivot(index='uid', columns='iid', values = 'r')))
+    def get_tr_te_ml_1m(self):
+        base_dir = self.BASES_DIRS[self.base]
+        df_cons1 = pd.read_csv(base_dir+'trainSet_ml-1m.data',sep='::',header=None,engine='python')
+        df_cons1.columns = ['uid','iid','r','t']
+
+        df_cons1['iid'] = df_cons1['iid']-1
+        df_cons1['uid'] = df_cons1['uid']-1
+
+        df_cons2 = pd.read_csv(base_dir+'testSet_ml-1m.data',sep='::',header=None,engine='python')
+        df_cons2.columns = ['uid','iid','r','t']
+
+        df_cons2['iid'] = df_cons2['iid']-1
+        df_cons2['uid'] = df_cons2['uid']-1
+
+        df_cons = df_cons1.append(df_cons2)
+        self.num_users = len(np.unique(df_cons['uid']))
+        self.num_items = len(np.unique(df_cons['iid']))
+        self.num_consumes = len(df_cons)
+
+
+        self.train_uids = np.unique(df_cons1['uid'])
+        self.test_uids = np.unique(df_cons2['uid'])
+
+        self.users_items = df_cons
+
+        self.matrix_users_ratings = np.nan_to_num(np.array(df_cons.pivot(index='uid', columns='iid', values = 'r')))
 
