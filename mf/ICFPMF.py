@@ -4,9 +4,9 @@ import scipy
 import sys, os
 sys.path.insert(0, os.path.abspath('..'))
 
-from util import Saveable
+from util import Saveable, run_parallel, Singleton
 
-class ICFPMF(Saveable):
+class ICFPMF(Saveable, Singleton):
     
     def __init__(self, num_lat=40, iterations=10, var=0.21, user_var=0.21, item_var=0.21, *args, **kwargs):
         super().__init__(*args,**kwargs)
@@ -27,13 +27,14 @@ class ICFPMF(Saveable):
 
     def fit(self,training_matrix):
         print(self.get_verbose_name())
+        self.training_matrix = training_matrix
         num_users = training_matrix.shape[0]
         num_items = training_matrix.shape[1]
-        lowest_value = np.min(training_matrix)
+        self.lowest_value = lowest_value = np.min(training_matrix)
         highest_value = np.max(training_matrix)
         self.observed_ui = observed_ui = np.nonzero(training_matrix>lowest_value) # itens observed by some user
         # value_abs_range = abs(highest_value - lowest_value)
-        I = np.eye(self.num_lat)
+        self.I = I = np.eye(self.num_lat)
 
             # self.var = np.mean(np.var(training_matrix))
 
@@ -56,28 +57,22 @@ class ICFPMF(Saveable):
 
             self.users_means = dict()
             self.users_covs = dict()
-
-            for uid in range(num_users):
-                observed = training_matrix[uid,:]>lowest_value
-                tmp = np.linalg.inv((np.dot(self.items_weights[observed].T,self.items_weights[observed]) + I*self.user_lambda))
-                mean = tmp.dot(self.items_weights[observed].T).dot(training_matrix[uid,observed])
-                cov = tmp*self.var
+            args = [(i,) for i in range(num_users)]
+            results = run_parallel(self.compute_user_weight,args)
+            for uid, (mean, cov, weight) in enumerate(results):
                 self.users_means[uid] = mean
                 self.users_covs[uid] = cov
-                self.users_weights[uid] = np.random.multivariate_normal(mean,cov)
-                # final_users_weights[uid] = np.random.multivariate_normal(mean,cov)
+                self.users_weights[uid] = weight
 
             self.items_means = dict()
             self.items_covs = dict()
-
-            for iid in range(num_items):
-                observed = training_matrix[:,iid]>lowest_value
-                tmp = np.linalg.inv((np.dot(self.users_weights[observed].T,self.users_weights[observed]) + I*self.item_lambda))
-                mean = tmp.dot(self.users_weights[observed].T).dot(training_matrix[observed,iid])
-                cov = tmp*self.var
+            args = [(i,) for i in range(num_items)]
+            results = run_parallel(self.compute_item_weight,args)
+            for iid, (mean, cov, weight) in enumerate(results):
                 self.items_means[iid] = mean
                 self.items_covs[iid] = cov
-                self.items_weights[iid] = np.random.multivariate_normal(mean,cov)
+                self.items_weights[iid] = weight
+            
                 # final_items_weights[iid] = np.random.multivariate_normal(mean,cov)
 
             # self.users_weights = final_users_weights
@@ -96,7 +91,34 @@ class ICFPMF(Saveable):
             print("best =",best_rmse)
         self = self.best
         del self.best
+        del self.training_matrix
+        del self.lowest_value
         self.save()
+
+    @classmethod
+    def compute_user_weight(cls,uid):
+        self = cls.getInstance()
+        training_matrix = self.training_matrix
+        lowest_value = self.lowest_value
+        I = self.I
+        observed = training_matrix[uid,:]>lowest_value
+        tmp = np.linalg.inv((np.dot(self.items_weights[observed].T,self.items_weights[observed]) + I*self.user_lambda))
+        mean = tmp.dot(self.items_weights[observed].T).dot(training_matrix[uid,observed])
+        cov = tmp*self.var
+        return mean, cov, np.random.multivariate_normal(mean,cov)
+
+    @classmethod
+    def compute_item_weight(cls,iid):
+        self = cls.getInstance()
+        training_matrix = self.training_matrix
+        lowest_value = self.lowest_value
+        I = self.I
+        observed = training_matrix[:,iid]>lowest_value
+        tmp = np.linalg.inv((np.dot(self.users_weights[observed].T,self.users_weights[observed]) + I*self.item_lambda))
+        mean = tmp.dot(self.users_weights[observed].T).dot(training_matrix[observed,iid])
+        cov = tmp*self.var
+        return mean, cov, np.random.multivariate_normal(mean,cov)
+
     def __deepcopy__(self):
         new = type(self)()
         new.__dict__.update(self.__dict__)
