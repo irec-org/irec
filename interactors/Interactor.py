@@ -2,11 +2,11 @@ import sys, os
 sys.path.insert(0, os.path.abspath('..'))
 
 from util import Nameable
-from util import DirectoryDependent
+from util import DirectoryDependent, Singleton
 from collections import defaultdict
 import pickle
 
-class Interactor(Nameable, DirectoryDependent):
+class Interactor(Nameable, DirectoryDependent, Singleton):
     def __init__(self, consumption_matrix=None, interactions=120):
         self.consumption_matrix = consumption_matrix
         self.interactions = interactions
@@ -19,6 +19,9 @@ class Interactor(Nameable, DirectoryDependent):
     def interact(self):
         print(self.get_verbose_name())
         self.result.clear()
+        pass
+
+    def interact_user(self,uid):
         pass
 
     def save_result(self):

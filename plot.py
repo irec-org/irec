@@ -19,7 +19,8 @@ q = [
 answers=inquirer.prompt(q)
 
 dsf = DatasetFormatter()
-dsf = dsf.load()
+# dsf = dsf.load()
+dsf.get_base()
 
 mf = ICFPMF()
 mf.load_var(dsf.matrix_users_ratings[dsf.train_uids])
