@@ -5,6 +5,5 @@ First export these variables when running the interactors to desactive the numpy
     export OMP_NUM_THREADS=1
 
 To execute the code install the requirements
-
 ::
    pip install -r requirements.txt
