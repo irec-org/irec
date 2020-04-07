@@ -10,7 +10,8 @@ class MostPopular(Interactor):
         num_users = len(uids)
         mask = np.ones(self.consumption_matrix.shape[0], dtype=bool)
         mask[uids] = 0
-        top_iids = list(reversed(np.argsort(np.count_nonzero(self.consumption_matrix[mask],axis=0))))
+        lowest_value = np.min(self.consumption_matrix)
+        top_iids = list(reversed(np.argsort(np.count_nonzero(self.consumption_matrix[mask,:]>lowest_value,axis=0))))
         for idx_uid in tqdm(range(num_users)):
             uid = uids[idx_uid]
             self.result[uid].extend(top_iids)

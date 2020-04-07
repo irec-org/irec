@@ -14,7 +14,7 @@ class DatasetFormatter(Saveable):
                       'tr_te_ml_1m': 'self.get_tr_te_ml_1m()'}
     SELECTION_MODEL = {'users_train_test': {'train_size': 0.7879,'test_consumes':120}}
     SELECTION_MODEL_HANDLERS = {'users_train_test': 'self.run_users_train_test()'}
-    def __init__(self,base='tr_te_ml_1m',
+    def __init__(self,base='ml_100k',
                  selection_model='users_train_test',
                  selection_model_parameters={}):
         super().__init__()
@@ -63,6 +63,9 @@ class DatasetFormatter(Saveable):
         df_cons.columns = ['uid','iid','r','t']
         df_cons['iid'] = df_cons['iid']-1
         df_cons['uid'] = df_cons['uid']-1
+
+        df_cons['r'] = df_cons['r']
+
         df_cons = df_cons.sort_values(by='t')
 
         df_genre = pd.read_csv(base_dir+'u.genre',sep='|',header=None,index_col=1)
@@ -88,9 +91,13 @@ class DatasetFormatter(Saveable):
         self.num_items = df_info.loc['items']
         self.num_consumes = df_info.loc['ratings']
 
-        self.matrix_users_ratings = np.zeros((self.num_users,self.num_items))
-        for index, row in self.users_items.iterrows():
-            self.matrix_users_ratings[row['uid'],row['iid']] = row['r']
+        # self.matrix_users_ratings = np.zeros((self.num_users,self.num_items))
+        # for index, row in self.users_items.iterrows():
+        #     self.matrix_users_ratings[row['uid'],row['iid']] = row['r']
+
+        self.matrix_users_ratings = np.nan_to_num(np.array(df_cons.pivot(index='uid', columns='iid', values = 'r')))
+
+        self.matrix_users_ratings = 2*self.matrix_users_ratings/5 -1
         # return df_cons, df_genre,df_item
     
     def get_base(self):
@@ -175,6 +182,7 @@ class DatasetFormatter(Saveable):
         df_cons2['uid'] = df_cons2['uid']-1
 
         df_cons = df_cons1.append(df_cons2)
+        df_cons['r'] = df_cons['r']
         self.num_users = len(np.unique(df_cons['uid']))
         self.num_items = len(np.unique(df_cons['iid']))
         self.num_consumes = len(df_cons)

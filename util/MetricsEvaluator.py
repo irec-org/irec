@@ -3,27 +3,48 @@ import numpy as np
 from collections import defaultdict
 
 class MetricsEvaluator(Saveable):
-    def __init__(self, name, k,threshold=3.2):
+    def __init__(self, name, k):
         super().__init__()
         self.metrics = defaultdict(dict)
         self.metrics_mean = defaultdict(float)
         self.name = name
         self.k = k
-        self.threshold = threshold
 
+    def eval_chunk_metrics(self, result, ground_truth, size):
+        self.metrics.clear()
+        self.metrics_mean.clear()
+        lowest_value = np.min(ground_truth)
+        
+        for uid, predicted in result.items():
+            predicted = predicted[self.k-size:self.k]
+            actual = np.nonzero(ground_truth[uid,:]>lowest_value)[0]
+            precision = len(set(predicted) & set(actual))/size
+            # recall = self.recall(predicted, actual)
+            self.metrics_mean['precision'] += precision
+            # self.metrics_mean['recall'] += recall
+            self.metrics[uid] = {'precision': precision,
+                                 # 'recall': recall
+            }
+
+        for k in self.metrics_mean.keys():
+            self.metrics_mean[k] /= len(result)
+        self.save()
+        pass
     def eval_metrics(self, result, ground_truth):
         self.metrics.clear()
         self.metrics_mean.clear()
+        lowest_value = np.min(ground_truth)
         for uid, predicted in result.items():
             predicted = predicted[:self.k]
-            actual = np.nonzero(ground_truth[uid,:]>=self.threshold
+            actual = np.nonzero(ground_truth[uid,:]>lowest_value
             )[0]
             precision = self.precision(predicted, actual)
-            recall = self.recall(predicted, actual)
+            # recall = self.recall(predicted, actual)
             self.metrics_mean['precision'] += precision
-            self.metrics_mean['recall'] += recall
+            # self.metrics_mean['recall'] += recall
             self.metrics[uid] = {'precision': precision,
-                                 'recall': recall}
+                                 # 'recall': recall
+            }
         for k in self.metrics_mean.keys():
             self.metrics_mean[k] /= len(result)
         self.save()

@@ -1,5 +1,6 @@
 from collections import defaultdict
 
+import numpy as np
 import inquirer
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -19,8 +20,9 @@ q = [
 answers=inquirer.prompt(q)
 
 dsf = DatasetFormatter()
-# dsf = dsf.load()
-dsf.get_base()
+dsf = dsf.load()
+# dsf.get_base()
+KS = list(map(int,np.arange(1,121,step=5)))
 
 mf = ICFPMF()
 mf.load_var(dsf.matrix_users_ratings[dsf.train_uids])
@@ -30,17 +32,18 @@ metric_values = defaultdict(dict)
 for i in answers['interactors']:
     itr_class = interactors.INTERACTORS[i]
     if issubclass(itr_class, interactors.ICF):
-        itr = itr_class(var=mf.var,
+        itr = itr_class.getInstance(var=mf.var,
                         user_lambda=mf.user_lambda)
     else:
-        itr = itr_class()
-    for k in tqdm(range(1,itr.interactions+1)):
+        itr = itr_class.getInstance()
+    for j in tqdm(range(len(KS))):
+        k = KS[j]
         me = MetricsEvaluator(itr.get_name(), k)
         me = me.load()
         print(me.metrics_mean)
-        metric_values[i][k] = me.metrics_mean[METRIC_NAME]
+        metric_values[i][j] = me.metrics_mean[METRIC_NAME]
         
 pd.DataFrame(metric_values).plot()
 plt.xlabel("N")
-plt.ylabel("Precision@N")
-plt.show()
+plt.ylabel("Precision")
+plt.savefig('img/plot.png')

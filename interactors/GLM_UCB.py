@@ -2,6 +2,7 @@ from .ICF import ICF
 import numpy as np
 from tqdm import tqdm
 import util
+from threadpoolctl import threadpool_limits
 class GLM_UCB(ICF):
     def __init__(self, c=0.5, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -18,8 +19,9 @@ class GLM_UCB(ICF):
         self.items_means = items_means
         num_users = len(uids)
         # get number of latent factors 
-        args = [(int(uid),) for uid in uids]
-        result = util.run_parallel(self.interact_user,args)
+        with threadpool_limits(limits=1, user_api='blas'):
+            args = [(int(uid),) for uid in uids]
+            result = util.run_parallel(self.interact_user,args)
         for i, user_result in enumerate(result):
             self.result[uids[i]] = user_result
         self.save_result()

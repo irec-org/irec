@@ -5,3 +5,13 @@ dsf = DatasetFormatter()
 dsf.get_base()
 dsf.run_selection_model()
 dsf.save()
+
+
+# import numpy as np
+# print(dsf.matrix_users_ratings)
+# print(np.min(dsf.matrix_users_ratings))
+# print(dsf.train_uids)
+# print(dsf.test_uids)
+
+
+

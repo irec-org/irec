@@ -1,14 +1,17 @@
 import numpy as np
 import scipy
-
+import scipy.stats
+import util
 import sys, os
+import random
+from threadpoolctl import threadpool_limits
 sys.path.insert(0, os.path.abspath('..'))
 
 from util import Saveable, run_parallel, Singleton
 
 class ICFPMF(Saveable, Singleton):
     
-    def __init__(self, num_lat=40, iterations=10, var=0.21, user_var=0.21, item_var=0.21, *args, **kwargs):
+    def __init__(self, num_lat=10, iterations=100, var=0.1, user_var=1.01, item_var=1.01, *args, **kwargs):
         super().__init__(*args,**kwargs)
         self.num_lat = num_lat
         self.iterations = iterations
@@ -17,9 +20,12 @@ class ICFPMF(Saveable, Singleton):
         self.item_var = item_var
         self.user_lambda = self.var/self.user_var
         self.item_lambda = self.var/self.item_var
+        self.maps = []
+        self.map_value = np.NAN
         self.best=None
 
     def load_var(self, training_matrix):
+        self.var = np.var(training_matrix)
         self.user_var = 1/np.mean(np.var(training_matrix,axis=1))
         self.item_var = 1/np.mean(np.var(training_matrix,axis=0))
         self.user_lambda = self.var/self.user_var
@@ -42,36 +48,38 @@ class ICFPMF(Saveable, Singleton):
         self.users_weights = np.random.multivariate_normal(np.zeros(self.num_lat),self.user_var*I,training_matrix.shape[0])
         self.items_weights = np.random.multivariate_normal(np.zeros(self.num_lat),self.item_var*I,training_matrix.shape[1])
 
-        best_rmse = np.inf
+        best_map_value = np.inf
+        # best_rmse = np.inf
         # self.noise = np.random.normal(self._mean,self.var)
         # self.noise = self._mean
         # #samples
         # without burning
         for i in range(self.iterations):
             print(f'[{i+1}/{self.iterations}]')
-            # self.noise = np.random.normal(self._mean,self.var)
             # self.noise = np.random.normal(sha)
             # little modified than the original
             # final_users_weights = np.zeros((num_users,self.num_lat))
             # final_items_weights = np.zeros((num_items,self.num_lat))
-
-            self.users_means = dict()
-            self.users_covs = dict()
-            args = [(i,) for i in range(num_users)]
-            results = run_parallel(self.compute_user_weight,args)
-            for uid, (mean, cov, weight) in enumerate(results):
-                self.users_means[uid] = mean
-                self.users_covs[uid] = cov
-                self.users_weights[uid] = weight
-
-            self.items_means = dict()
-            self.items_covs = dict()
-            args = [(i,) for i in range(num_items)]
-            results = run_parallel(self.compute_item_weight,args)
-            for iid, (mean, cov, weight) in enumerate(results):
-                self.items_means[iid] = mean
-                self.items_covs[iid] = cov
-                self.items_weights[iid] = weight
+            with threadpool_limits(limits=1, user_api='blas'):
+                for to_run in random.sample([1,2],2):
+                    if to_run == 1:
+                        self.users_means = dict()
+                        self.users_covs = dict()
+                        args = [(i,) for i in range(num_users)]
+                        results = run_parallel(self.compute_user_weight,args)
+                        for uid, (mean, cov, weight) in enumerate(results):
+                            self.users_means[uid] = mean
+                            self.users_covs[uid] = cov
+                            self.users_weights[uid] = weight
+                    else:
+                        self.items_means = dict()
+                        self.items_covs = dict()
+                        args = [(i,) for i in range(num_items)]
+                        results = run_parallel(self.compute_item_weight,args)
+                        for iid, (mean, cov, weight) in enumerate(results):
+                            self.items_means[iid] = mean
+                            self.items_covs[iid] = cov
+                            self.items_weights[iid] = weight
             
                 # final_items_weights[iid] = np.random.multivariate_normal(mean,cov)
 
@@ -79,16 +87,32 @@ class ICFPMF(Saveable, Singleton):
             # self.items_weights = final_items_weights
 
             rmse=np.sqrt(np.mean((self.get_predicted()[observed_ui] - training_matrix[observed_ui])**2))
+            # map_value = 1
+            # for val, mean, std in zip(training_matrix[observed_ui],(self.users_weights @ self.items_weights.T)[observed_ui],[self.var]*len(observed_ui[0])):
+            #     map_value *= scipy.stats.norm.pdf(val,mean,std)
+            map_value = scipy.special.logsumexp(scipy.stats.norm.pdf(training_matrix[observed_ui],(self.users_weights @ self.items_weights.T)[observed_ui],self.var))
+            # map_value = np.prod(r_probabilities)
+            print("MAP:",map_value)
+            self.maps.append(map_value)
+            print("RMSE:",rmse)
 
-            print("current =",rmse)
             if self.best == None:
                 self.best = self.__deepcopy__()
-                best_rmse = rmse
+                best_map_value = map_value
             else:
-                if rmse < best_rmse:
+                if map_value > best_map_value:
                     self.best = self.__deepcopy__()
-                    best_rmse = rmse
-            print("best =",best_rmse)
+                    best_map_value = map_value
+
+            # print("best =",best_rmse)
+            # if self.best == None:
+            #     self.best = self.__deepcopy__()
+            #     best_rmse = rmse
+            # else:
+            #     if rmse < best_rmse:
+            #         self.best = self.__deepcopy__()
+            #         best_rmse = rmse
+            # print("best =",best_rmse)
         self = self.best
         del self.best
         del self.training_matrix
@@ -132,5 +156,5 @@ class ICFPMF(Saveable, Singleton):
     def get_predicted(self):
         return self.get_matrix(self.users_weights,self.items_weights,self.var)
 
-    def get_best_predicted(self):
-        return self.get_matrix(self.best.users_weights,self.best.items_weights,self.best.var)
+    # def get_best_predicted(self):
+    #     return self.get_matrix(self.best.users_weights,self.best.items_weights,self.best.var)

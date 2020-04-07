@@ -3,10 +3,11 @@ import interactors
 from mf import ICFPMF
 from util import DatasetFormatter
 import numpy as np
-
+from tqdm import tqdm
+from util import MetricsEvaluator
 dsf = DatasetFormatter()
-# dsf = dsf.load()
-dsf.get_base()
+dsf = dsf.load()
+# dsf.get_base()
 
 mf = ICFPMF()
 mf.load_var(dsf.matrix_users_ratings[dsf.train_uids])
@@ -16,11 +17,8 @@ itr = interactors.LinearEGreedy.getInstance(var=mf.var,
                                             user_lambda=mf.user_lambda,
                                             consumption_matrix=dsf.matrix_users_ratings,
 )
-for epsilon in np.linspace(0,1,11):
-    itr.epsilon = epsilon
-    itr.interact(dsf.test_uids, mf.items_means)
     
-for epsilon in np.linspace(0,1,11):
+for epsilon in np.linspace(0,1,5):
     itr.epsilon = epsilon
 
     itr.result = itr.load_result()
