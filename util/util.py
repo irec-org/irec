@@ -22,6 +22,6 @@ def dict_to_str(dictionary):
 def run_parallel(func, args):
     executor = ProcessPoolExecutor()
     num_args = len(args)
-    chunksize = int(num_args/multiprocessing.cpu_count())
+    chunksize = int(num_args/multiprocessing.cpu_count()/2)
     results = [i for i in tqdm(executor.map(func,*list(zip(*args)),chunksize=chunksize),total=num_args)]
     return results
