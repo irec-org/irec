@@ -4,7 +4,7 @@ from tqdm import tqdm
 import util
 from threadpoolctl import threadpool_limits
 class GLM_UCB(ICF):
-    def __init__(self, c=0.5, *args, **kwargs):
+    def __init__(self, c=0.0, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.c = c
 

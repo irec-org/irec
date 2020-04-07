@@ -194,4 +194,10 @@ class DatasetFormatter(Saveable):
         self.users_items = df_cons
 
         self.matrix_users_ratings = np.nan_to_num(np.array(df_cons.pivot(index='uid', columns='iid', values = 'r')))
+    def gen_base(self):
+        print("generating base")
+        self.get_base()
+        if self.base not in ['tr_te_ml_1m']:
+            self.run_selection_model()
+        self.save()
 

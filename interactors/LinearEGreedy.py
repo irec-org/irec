@@ -6,7 +6,7 @@ import util
 from threadpoolctl import threadpool_limits
 
 class LinearEGreedy(ICF):
-    def __init__(self, epsilon=0.1, *args, **kwargs):
+    def __init__(self, epsilon=0.01, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.epsilon = epsilon
 

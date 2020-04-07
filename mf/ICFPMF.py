@@ -26,8 +26,8 @@ class ICFPMF(Saveable, Singleton):
 
     def load_var(self, training_matrix):
         self.var = np.var(training_matrix)
-        self.user_var = 1/np.mean(np.var(training_matrix,axis=1))
-        self.item_var = 1/np.mean(np.var(training_matrix,axis=0))
+        self.user_var = np.mean(np.var(training_matrix,axis=1))
+        self.item_var = np.mean(np.var(training_matrix,axis=0))
         self.user_lambda = self.var/self.user_var
         self.item_lambda = self.var/self.item_var
 

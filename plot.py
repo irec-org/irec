@@ -27,8 +27,8 @@ KS = list(map(int,np.arange(1,121,step=5)))
 mf = ICFPMF()
 mf.load_var(dsf.matrix_users_ratings[dsf.train_uids])
 
-METRIC_NAME = 'precision'
-metric_values = defaultdict(dict)
+metrics_names = ['precision','hits']
+metric_values = defaultdict(lambda:defaultdict(dict))
 for i in answers['interactors']:
     itr_class = interactors.INTERACTORS[i]
     if issubclass(itr_class, interactors.ICF):
@@ -40,10 +40,13 @@ for i in answers['interactors']:
         k = KS[j]
         me = MetricsEvaluator(itr.get_name(), k)
         me = me.load()
-        print(me.metrics_mean)
-        metric_values[i][j] = me.metrics_mean[METRIC_NAME]
+        for metric_name in metrics_names:
+            metric_values[metric_name][i][j] = me.metrics_mean[metric_name]
         
-pd.DataFrame(metric_values).plot()
-plt.xlabel("N")
-plt.ylabel("Precision")
-plt.savefig('img/plot.png')
+        
+for metric_name in metrics_names:
+
+    pd.DataFrame(metric_values[metric_name]).plot()
+    plt.xlabel("N")
+    plt.ylabel(MetricsEvaluator.METRICS_PRETTY[metric_name])
+    plt.savefig(f'img/plot_{metric_name}.png')

@@ -4,7 +4,7 @@ from tqdm import tqdm
 import util
 from threadpoolctl import threadpool_limits
 class LinearUCB(ICF):
-    def __init__(self, alpha=0.2, zeta=None,*args, **kwargs):
+    def __init__(self, alpha=1.0, zeta=None,*args, **kwargs):
         super().__init__(*args, **kwargs)
         if alpha != None:
             self.alpha = alpha
