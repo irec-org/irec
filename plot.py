@@ -48,10 +48,11 @@ for i in answers['interactors']:
 for metric_name in metrics_names:
 
     df = pd.DataFrame(metric_values[metric_name])
-    df['KS'] = KS
-    df=df.set_index('KS')
+    # df['KS'] = KS
+    # df=df.set_index('KS')
     print(df)
     df.plot()
-    plt.xlabel("Eval. list size")
+    plt.xlabel("Interactions")
+    plt.title(f"top-{5} recommendation")
     plt.ylabel(MetricsEvaluator.METRICS_PRETTY[metric_name])
     plt.savefig(f'img/plot_{metric_name}.png')
