@@ -43,11 +43,11 @@ class LinearUCB(ICF):
             max_reward = np.NINF
             for item, item_mean in zip(u_items_means.keys(),u_items_means.values()):
                 # q = np.random.multivariate_normal(item_mean,item_cov)
-                reward = mean.T @ item_mean + self.alpha*np.sqrt(item_mean.T.dot(cov).dot(item_mean))
-                if reward > max_reward:
+                e_reward = mean.T @ item_mean + self.alpha*np.sqrt(item_mean.T.dot(cov).dot(item_mean))
+                if e_reward > max_reward:
                     max_i = item
                     max_item_mean = item_mean
-                    max_reward = reward
+                    max_reward = e_reward
             del u_items_means[max_i]
 
             A += max_item_mean[:,None].dot(max_item_mean[None,:])

@@ -44,11 +44,11 @@ class LinearEGreedy(ICF):
             if self.epsilon < np.random.rand():
                 for item, item_mean in zip(u_items_means.keys(),u_items_means.values()):
                     # q = np.random.multivariate_normal(item_mean,item_cov)
-                    reward = mean.T @ item_mean
-                    if reward > max_reward:
+                    e_reward = mean.T @ item_mean
+                    if e_reward > max_reward:
                         max_i = item
                         max_item_mean = item_mean
-                        max_reward = reward
+                        max_reward = e_reward
             else:
                 max_i = random.choice(list(u_items_means.keys()))
                 max_item_mean = u_items_means[max_i]

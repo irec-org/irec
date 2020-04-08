@@ -42,11 +42,11 @@ class ThompsonSampling(ICF):
             max_reward = np.NINF
             for item, (item_mean, item_cov) in zip(u_items_means.keys(),zip(u_items_means.values(), u_items_covs.values())):
                 q = np.random.multivariate_normal(item_mean,item_cov)
-                reward = p @ q
-                if reward > max_reward:
+                e_reward = p @ q
+                if e_reward > max_reward:
                     max_i = item
                     max_q = q
-                    max_reward = reward
+                    max_reward = e_reward
             del u_items_means[max_i]
             del u_items_covs[max_i]
             A += max_q[:,None].dot(max_q[None,:])
