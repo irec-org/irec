@@ -15,6 +15,6 @@ itr = interactors.GLM_UCB.getInstance(var=mf.var,
                                         user_lambda=mf.user_lambda,
                                         consumption_matrix=dsf.matrix_users_ratings,
 )
-for c in np.linspace(0,1,11):
+for c in np.linspace(0,1,6):
     itr.c = c
     itr.interact(dsf.test_uids, mf.items_means)

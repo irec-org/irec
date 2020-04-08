@@ -59,9 +59,9 @@ class GLM_UCB(ICF):
                     max_item_mean = item_mean
                     max_e_reward = e_reward
             user_candidate_items.remove(max_i)
-
             u_rec_rewards.append(self.get_reward(uid,max_i))
             u_rec_items_means.append(max_item_mean)
-            A += max_item_mean[:,None].dot(max_item_mean[None,:])
             result.append(max_i)
+            if self.get_reward(uid,max_i) >= self.values[-2]:
+                A += max_item_mean[:,None].dot(max_item_mean[None,:])
         return result

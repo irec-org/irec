@@ -33,23 +33,32 @@ class ThompsonSampling(ICF):
         A = self.user_lambda*I
         result = []
         for i in range(self.interactions):
-            mean = np.dot(np.linalg.inv(A),b)
-            cov = np.linalg.inv(A)*self.var
-            p = np.random.multivariate_normal(mean,cov)
-            max_i = np.NAN
-            max_q = np.NAN
-            max_e_reward = np.NINF
-            for item in user_candidate_items:
-                item_mean = self.items_means[item]
-                item_cov = self.items_covs[item]
-                q = np.random.multivariate_normal(item_mean,item_cov)
-                e_reward = p @ q
-                if e_reward > max_e_reward:
-                    max_i = item
-                    max_q = q
-                    max_e_reward = e_reward
-            user_candidate_items.remove(max_i)
-            A += max_q[:,None].dot(max_q[None,:])
-            b += self.get_reward(uid,max_i)*max_q
-            result.append(max_i)
+            tmp_max_qs = dict()
+            for j in range(self.interaction_size):
+                mean = np.dot(np.linalg.inv(A),b)
+                cov = np.linalg.inv(A)*self.var
+                p = np.random.multivariate_normal(mean,cov)
+                max_i = np.NAN
+                max_q = np.NAN
+                max_e_reward = np.NINF
+                for item in user_candidate_items:
+                    item_mean = self.items_means[item]
+                    item_cov = self.items_covs[item]
+                    q = np.random.multivariate_normal(item_mean,item_cov)
+                    e_reward = p @ q
+                    if e_reward > max_e_reward:
+                        max_i = item
+                        max_q = q
+                        max_e_reward = e_reward
+                user_candidate_items.remove(max_i)
+                tmp_max_qs[max_i]=max_q
+                result.append(max_i)
+            
+            # for item in result[i*self.interaction_size:(i+1)*self.interaction_size]:
+                if self.get_reward(uid,max_i) >= self.values[-2]:
+                    max_q = tmp_max_qs[max_i]
+                    A += max_q[:,None].dot(max_q[None,:])
+                    b += self.get_reward(uid,max_i)*max_q
+                    
+                
         return result

@@ -52,7 +52,9 @@ class LinearUCB(ICF):
 
             user_candidate_items.remove(max_i)
 
-            A += max_item_mean[:,None].dot(max_item_mean[None,:])
-            b += self.get_reward(uid,max_i)*max_item_mean
             result.append(max_i)
+
+            if self.get_reward(uid,max_i) >= self.values[-2]:
+                A += max_item_mean[:,None].dot(max_item_mean[None,:])
+                b += self.get_reward(uid,max_i)*max_item_mean
         return result

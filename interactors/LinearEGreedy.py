@@ -6,7 +6,7 @@ import util
 from threadpoolctl import threadpool_limits
 
 class LinearEGreedy(ICF):
-    def __init__(self, epsilon=0.01, *args, **kwargs):
+    def __init__(self, epsilon=0.02, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.epsilon = epsilon
 
@@ -37,24 +37,30 @@ class LinearEGreedy(ICF):
         b = np.zeros(num_lat)
         A = self.user_lambda*I
         for i in range(self.interactions):
-            mean = np.dot(np.linalg.inv(A),b)
-            max_i = np.NAN
-            max_item_mean = np.NAN
-            max_e_reward = np.NINF
-            if self.epsilon < np.random.rand():
-                for item in user_candidate_items:
-                    item_mean = self.items_means[item]
-                    # q = np.random.multivariate_normal(item_mean,item_cov)
-                    e_reward = mean.T @ item_mean
-                    if e_reward > max_e_reward:
-                        max_i = item
-                        max_item_mean = item_mean
-                        max_e_reward = e_reward
-            else:
-                max_i = random.choice(user_candidate_items)
-                max_item_mean = self.items_means[max_i]
-            user_candidate_items.remove(max_i)
-            A += max_item_mean[:,None].dot(max_item_mean[None,:])
-            b += self.get_reward(uid,max_i)*max_item_mean
-            result.append(max_i)
+            for j in range(self.interaction_size):
+                mean = np.dot(np.linalg.inv(A),b)
+                max_i = np.NAN
+                max_item_mean = np.NAN
+                max_e_reward = np.NINF
+                if self.epsilon < np.random.rand():
+                    for item in user_candidate_items:
+                        item_mean = self.items_means[item]
+                        # q = np.random.multivariate_normal(item_mean,item_cov)
+                        e_reward = mean.T @ item_mean
+                        if e_reward > max_e_reward:
+                            max_i = item
+                            max_item_mean = item_mean
+                            max_e_reward = e_reward
+                else:
+                    max_i = random.choice(user_candidate_items)
+                    max_item_mean = self.items_means[max_i]
+                user_candidate_items.remove(max_i)
+                result.append(max_i)
+            # for max_i in result[i*self.interaction_size:(i+1)*self.interaction_size]:
+                if self.get_reward(uid,max_i) >= self.values[-2]:
+                    max_item_mean = self.items_means[max_i]
+                    A += max_item_mean[:,None].dot(max_item_mean[None,:])
+                    b += self.get_reward(uid,max_i)*max_item_mean
+
+
         return result

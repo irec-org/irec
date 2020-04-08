@@ -22,11 +22,11 @@ itr = interactors.LinearEGreedy.getInstance(var=mf.var,
 )
 METRIC_NAME = 'precision'
 metric_values = defaultdict(dict)
-for i in np.linspace(0,0.1,11):
+for i in np.linspace(0,0.1,6):
     itr.epsilon = i
 
     itr.result = itr.load_result()
-    for k in tqdm(range(1,itr.interactions+1)):
+    for k in tqdm(range(1,itr.get_iterations()+1)):
         me = MetricsEvaluator(itr.get_name(), k)
         me = me.load()
 

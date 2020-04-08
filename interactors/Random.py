@@ -13,6 +13,6 @@ class Random(Interactor):
             uid = uids[idx_uid]
             iids= list(range(self.consumption_matrix.shape[1]))
             random.shuffle(iids)
-            self.result[uid].extend(iids[:self.interactions])
+            self.result[uid].extend(iids[:self.interactions*self.interaction_size])
         self.save_result()
         
