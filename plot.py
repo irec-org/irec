@@ -50,6 +50,7 @@ for metric_name in metrics_names:
     df = pd.DataFrame(metric_values[metric_name])
     df['KS'] = KS
     df=df.set_index('KS')
+    print(df)
     df.plot()
     plt.xlabel("Eval. list size")
     plt.ylabel(MetricsEvaluator.METRICS_PRETTY[metric_name])

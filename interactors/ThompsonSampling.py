@@ -60,5 +60,4 @@ class ThompsonSampling(ICF):
                     A += max_q[:,None].dot(max_q[None,:])
                     b += self.get_reward(uid,max_i)*max_q
                     
-                
         return result

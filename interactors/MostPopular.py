@@ -16,4 +16,3 @@ class MostPopular(Interactor):
             uid = uids[idx_uid]
             self.result[uid].extend(top_iids)
         self.save_result()
-        

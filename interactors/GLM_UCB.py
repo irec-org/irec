@@ -4,7 +4,7 @@ from tqdm import tqdm
 import util
 from threadpoolctl import threadpool_limits
 class GLM_UCB(ICF):
-    def __init__(self, c=0.5, *args, **kwargs):
+    def __init__(self, c=0.2, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.c = c
 
@@ -55,13 +55,16 @@ class GLM_UCB(ICF):
                 for item in user_candidate_items:
                     item_mean = self.items_means[item]
                     # q = np.random.multivariate_normal(item_mean,item_cov)
-                    e_reward = self.p(p.T @ item_mean) + self.c * np.sqrt(np.log(i+1)) * np.sqrt(item_mean.T.dot(cov).dot(item_mean))
+                    e_reward = self.p(p.T @ item_mean) + self.c * np.sqrt(np.log(i*self.interaction_size+j+1)) * np.sqrt(item_mean.T.dot(cov).dot(item_mean))
                     if e_reward > max_e_reward:
                         max_i = item
                         max_item_mean = item_mean
                         max_e_reward = e_reward
                 user_candidate_items.remove(max_i)
                 result.append(max_i)
+
+            # for max_i in result[i*self.interaction_size:(i+1)*self.interaction_size]:
+            #     max_item_mean = self.items_means[max_i]
                 if self.get_reward(uid,max_i) >= self.values[-2]:
                     u_rec_rewards.append(self.get_reward(uid,max_i))
                     u_rec_items_means.append(max_item_mean)

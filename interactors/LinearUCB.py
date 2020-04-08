@@ -35,6 +35,9 @@ class LinearUCB(ICF):
         b = np.zeros(num_lat)
         A = self.user_lambda*I
         result = []
+        # if uid == 379:
+        #     print(uid)
+
         for i in range(self.interactions):
             for j in range(self.interaction_size):
                 mean = np.dot(np.linalg.inv(A),b)
@@ -52,6 +55,8 @@ class LinearUCB(ICF):
                         max_e_reward = e_reward
 
                 user_candidate_items.remove(max_i)
+                # if uid == 379:
+                #     print("recommended item", max_i, "reward", self.get_reward(uid,max_i), "expected reward", max_e_reward)
 
                 result.append(max_i)
 

@@ -22,7 +22,7 @@ itr = interactors.GLM_UCB.getInstance(var=mf.var,
 )
 METRIC_NAME = 'precision'
 metric_values = defaultdict(dict)
-for i in np.linspace(0,1,6):
+for i in np.linspace(0,9,10):
     itr.c = i
 
     itr.result = itr.load_result()
