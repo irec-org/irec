@@ -20,7 +20,7 @@ itr = interactors.LinearEGreedy.getInstance(var=mf.var,
                                             user_lambda=mf.user_lambda,
                                             consumption_matrix=dsf.matrix_users_ratings,
 )
-METRIC_NAME = 'cumulative_precision'
+METRIC_NAME = 'precision'
 metric_values = defaultdict(dict)
 for i in np.linspace(0,0.1,11):
     itr.epsilon = i
