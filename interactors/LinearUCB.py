@@ -4,7 +4,7 @@ from tqdm import tqdm
 import util
 from threadpoolctl import threadpool_limits
 class LinearUCB(ICF):
-    def __init__(self, alpha=1.0, zeta=None,*args, **kwargs):
+    def __init__(self, alpha=0.2, zeta=None,*args, **kwargs):
         super().__init__(*args, **kwargs)
         if alpha != None:
             self.alpha = alpha
@@ -36,25 +36,26 @@ class LinearUCB(ICF):
         A = self.user_lambda*I
         result = []
         for i in range(self.interactions):
-            mean = np.dot(np.linalg.inv(A),b)
-            cov = np.linalg.inv(A)*self.var
-            max_i = np.NAN
-            max_item_mean = np.NAN
-            max_e_reward = np.NINF
-            for item in user_candidate_items:
-                item_mean = self.items_means[item]
-                # q = np.random.multivariate_normal(item_mean,item_cov)
-                e_reward = mean.T @ item_mean + self.alpha*np.sqrt(item_mean.T.dot(cov).dot(item_mean))
-                if e_reward > max_e_reward:
-                    max_i = item
-                    max_item_mean = item_mean
-                    max_e_reward = e_reward
+            for j in range(self.interaction_size):
+                mean = np.dot(np.linalg.inv(A),b)
+                cov = np.linalg.inv(A)*self.var
+                max_i = np.NAN
+                max_item_mean = np.NAN
+                max_e_reward = np.NINF
+                for item in user_candidate_items:
+                    item_mean = self.items_means[item]
+                    # q = np.random.multivariate_normal(item_mean,item_cov)
+                    e_reward = mean.T @ item_mean + self.alpha*np.sqrt(item_mean.T.dot(cov).dot(item_mean))
+                    if e_reward > max_e_reward:
+                        max_i = item
+                        max_item_mean = item_mean
+                        max_e_reward = e_reward
 
-            user_candidate_items.remove(max_i)
+                user_candidate_items.remove(max_i)
 
-            result.append(max_i)
+                result.append(max_i)
 
-            if self.get_reward(uid,max_i) >= self.values[-2]:
-                A += max_item_mean[:,None].dot(max_item_mean[None,:])
-                b += self.get_reward(uid,max_i)*max_item_mean
+                if self.get_reward(uid,max_i) >= self.values[-2]:
+                    A += max_item_mean[:,None].dot(max_item_mean[None,:])
+                    b += self.get_reward(uid,max_i)*max_item_mean
         return result
