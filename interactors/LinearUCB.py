@@ -31,7 +31,7 @@ class LinearUCB(ICF):
         num_lat = len(self.items_means[0])
         I = np.eye(num_lat)
 
-        u_items_means = self.items_means.copy()
+        user_candidate_items = list(range(len(self.items_means)))
         b = np.zeros(num_lat)
         A = self.user_lambda*I
         result = []
@@ -40,15 +40,17 @@ class LinearUCB(ICF):
             cov = np.linalg.inv(A)*self.var
             max_i = np.NAN
             max_item_mean = np.NAN
-            max_reward = np.NINF
-            for item, item_mean in zip(u_items_means.keys(),u_items_means.values()):
+            max_e_reward = np.NINF
+            for item in user_candidate_items:
+                item_mean = self.items_means[item]
                 # q = np.random.multivariate_normal(item_mean,item_cov)
                 e_reward = mean.T @ item_mean + self.alpha*np.sqrt(item_mean.T.dot(cov).dot(item_mean))
-                if e_reward > max_reward:
+                if e_reward > max_e_reward:
                     max_i = item
                     max_item_mean = item_mean
-                    max_reward = e_reward
-            del u_items_means[max_i]
+                    max_e_reward = e_reward
+
+            user_candidate_items.remove(max_i)
 
             A += max_item_mean[:,None].dot(max_item_mean[None,:])
             b += self.get_reward(uid,max_i)*max_item_mean

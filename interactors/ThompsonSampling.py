@@ -27,8 +27,7 @@ class ThompsonSampling(ICF):
         num_lat = len(self.items_means[0])
         I = np.eye(num_lat)
 
-        u_items_means = self.items_means.copy()
-        u_items_covs = self.items_covs.copy()
+        user_candidate_items = list(range(len(self.items_means)))
         # get number of latent factors 
         b = np.zeros(num_lat)
         A = self.user_lambda*I
@@ -39,16 +38,17 @@ class ThompsonSampling(ICF):
             p = np.random.multivariate_normal(mean,cov)
             max_i = np.NAN
             max_q = np.NAN
-            max_reward = np.NINF
-            for item, (item_mean, item_cov) in zip(u_items_means.keys(),zip(u_items_means.values(), u_items_covs.values())):
+            max_e_reward = np.NINF
+            for item in user_candidate_items:
+                item_mean = self.items_means[item]
+                item_cov = self.items_covs[item]
                 q = np.random.multivariate_normal(item_mean,item_cov)
                 e_reward = p @ q
-                if e_reward > max_reward:
+                if e_reward > max_e_reward:
                     max_i = item
                     max_q = q
-                    max_reward = e_reward
-            del u_items_means[max_i]
-            del u_items_covs[max_i]
+                    max_e_reward = e_reward
+            user_candidate_items.remove(max_i)
             A += max_q[:,None].dot(max_q[None,:])
             b += self.get_reward(uid,max_i)*max_q
             result.append(max_i)
