@@ -3,22 +3,22 @@ import numpy as np
 from collections import defaultdict
 
 class MetricsEvaluator(Saveable):
-    METRICS_PRETTY = {'precision':'Precision','hits':'Hits'}
+    METRICS_PRETTY = {'precision':'Precision','hits':'Hits','cumulative_precision':'Cumulative Precision'}
     def __init__(self, name, k):
         super().__init__()
         self.metrics = defaultdict(dict)
         self.metrics_mean = defaultdict(float)
         self.name = name
+        self.threshold = 0.6
         self.k = k
 
     def eval_chunk_metrics(self, result, ground_truth, size):
         self.metrics.clear()
         self.metrics_mean.clear()
         lowest_value = np.min(ground_truth)
-        
         for uid, predicted in result.items():
             predicted = predicted[self.k-size:self.k]
-            actual = np.nonzero(ground_truth[uid,:]>lowest_value)[0]
+            actual = np.nonzero(ground_truth[uid,:]>=self.threshold)[0]
             hits = len(set(predicted) & set(actual))
             precision = hits/size
             # recall = self.recall(predicted, actual)
@@ -39,7 +39,7 @@ class MetricsEvaluator(Saveable):
         lowest_value = np.min(ground_truth)
         for uid, predicted in result.items():
             predicted = predicted[:self.k]
-            actual = np.nonzero(ground_truth[uid,:]>lowest_value)[0]
+            actual = np.nonzero(ground_truth[uid,:]>=self.threshold)[0]
             hits = len(set(predicted) & set(actual))
             precision = hits/len(predicted)
             # recall = self.recall(predicted, actual)

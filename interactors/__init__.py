@@ -8,6 +8,7 @@ from .ThompsonSampling import *
 from .LinearEGreedy import *
 from .GLM_UCB import *
 from .MostPopular import *
+from .Random import *
 
 
 INTERACTORS = {
@@ -18,4 +19,5 @@ INTERACTORS = {
     'GLM_UCB': GLM_UCB,
     'ThompsonSampling': ThompsonSampling,
     'MostPopular': MostPopular,
+    'Random': Random,
 }

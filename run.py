@@ -19,7 +19,7 @@ mf.load_var(dsf.matrix_users_ratings[dsf.train_uids])
 mf = mf.load()
 for i in answers['interactors']:
 
-    if i == 'MostPopular':
+    if i in ['MostPopular','Random']:
         itr = interactors.INTERACTORS[i].getInstance(consumption_matrix=dsf.matrix_users_ratings)
     else:
         itr = interactors.INTERACTORS[i].getInstance(var=mf.var,
@@ -29,7 +29,7 @@ for i in answers['interactors']:
 
     if i  == 'ThompsonSampling':
         itr.interact(dsf.test_uids, mf.items_means, mf.items_covs)
-    elif i == 'MostPopular':
+    elif i in ['MostPopular','Random']:
         itr.interact(dsf.test_uids)
     else:
         itr.interact(dsf.test_uids, mf.items_means)

@@ -48,13 +48,13 @@ class LinearEGreedy(ICF):
                     if reward > max_reward:
                         max_i = item
                         max_item_mean = item_mean
-                        max_reward = reward
+                       max_reward = reward
             else:
                 max_i = random.choice(list(u_items_means.keys()))
                 max_item_mean = u_items_means[max_i]
                 max_reward = mean.T @ max_item_mean
             del u_items_means[max_i]
-            A += max_item_mean.dot(max_item_mean.T)
+            A += max_item_mean[:,None].dot(max_item_mean[None,:])
             b += self.get_reward(uid,max_i)*max_item_mean
             result.append(max_i)
         return result

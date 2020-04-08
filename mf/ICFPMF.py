@@ -11,7 +11,7 @@ from util import Saveable, run_parallel, Singleton
 
 class ICFPMF(Saveable, Singleton):
     
-    def __init__(self, num_lat=10, iterations=100, var=0.1, user_var=1.01, item_var=1.01, *args, **kwargs):
+    def __init__(self, num_lat=10, iterations=3000, var=0.1, user_var=1.01, item_var=1.01, *args, **kwargs):
         super().__init__(*args,**kwargs)
         self.num_lat = num_lat
         self.iterations = iterations
