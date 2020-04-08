@@ -61,6 +61,6 @@ class GLM_UCB(ICF):
 
             u_rec_rewards.append(max_reward)
             u_rec_items_means.append(max_item_mean)
-            A += max_item_mean.dot(max_item_mean.T)
+            A += max_item_mean[:,None].dot(max_item_mean[None,:])
             result.append(max_i)
         return result

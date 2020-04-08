@@ -49,7 +49,7 @@ class ThompsonSampling(ICF):
                     max_reward = reward
             del u_items_means[max_i]
             del u_items_covs[max_i]
-            A += max_q.dot(max_q.T)
+            A += max_q[:,None].dot(max_q[None,:])
             b += self.get_reward(uid,max_i)*max_q
             result.append(max_i)
         return result
