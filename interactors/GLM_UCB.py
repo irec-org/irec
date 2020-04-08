@@ -56,7 +56,7 @@ class GLM_UCB(ICF):
                 if e_reward > max_reward:
                     max_i = item
                     max_item_mean = item_mean
-                    max_reward = self.get_reward(uid,max_i)
+                    max_reward = e_reward
             del u_items_means[max_i]
 
             u_rec_rewards.append(max_reward)
