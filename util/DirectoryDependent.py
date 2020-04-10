@@ -7,6 +7,7 @@ class DirectoryDependent():
     DIRS['data'] = os.path.join(BASE_DIR, 'data')
     DIRS['result'] = os.path.join(DIRS['data'], 'result')
     DIRS['state_save'] = os.path.join(DIRS['data'], 'state_save')
+    DIRS['img'] = os.path.join(DIRS['data'], 'img')
     EXISTS = False
     def __init__(self):
         if not self.EXISTS:
