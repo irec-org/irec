@@ -9,16 +9,16 @@ class MetricsEvaluator(Saveable):
         self.metrics = defaultdict(dict)
         self.metrics_mean = defaultdict(float)
         self.name = name
-        self.threshold = 0.6
         self.k = k
 
     def eval_chunk_metrics(self, result, ground_truth, size):
         self.metrics.clear()
         self.metrics_mean.clear()
         lowest_value = np.min(ground_truth)
+        threshold = np.unique(ground_truth)[-2]
         for uid, predicted in result.items():
             predicted = predicted[self.k-size:self.k]
-            actual = np.nonzero(ground_truth[uid,:]>=self.threshold)[0]
+            actual = np.nonzero(ground_truth[uid,:]>=threshold)[0]
             hits = len(set(predicted) & set(actual))
             precision = hits/size
             # recall = self.recall(predicted, actual)
@@ -37,9 +37,10 @@ class MetricsEvaluator(Saveable):
         self.metrics.clear()
         self.metrics_mean.clear()
         lowest_value = np.min(ground_truth)
+        threshold = np.unique(ground_truth)[-2]
         for uid, predicted in result.items():
             predicted = predicted[:self.k]
-            actual = np.nonzero(ground_truth[uid,:]>=self.threshold)[0]
+            actual = np.nonzero(ground_truth[uid,:]>=threshold)[0]
             hits = len(set(predicted) & set(actual))
             precision = hits/len(predicted)
             # recall = self.recall(predicted, actual)

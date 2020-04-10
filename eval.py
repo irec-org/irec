@@ -32,7 +32,7 @@ for i in answers['interactors']:
 
         )
     else:
-        itr = itr_class.getInstance()
+        itr = itr_class.getInstance(consumption_matrix=dsf.matrix_users_ratings)
 
     itr.result = itr.load_result()
     for j in tqdm(range(len(KS))):
