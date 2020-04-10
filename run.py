@@ -19,18 +19,20 @@ mf.load_var(dsf.matrix_users_ratings[dsf.train_uids])
 mf = mf.load()
 for i in answers['interactors']:
 
-    if i in ['MostPopular','Random']:
-        itr = interactors.INTERACTORS[i].getInstance(consumption_matrix=dsf.matrix_users_ratings)
-    else:
-        itr = interactors.INTERACTORS[i].getInstance(var=mf.var,
-                                        user_lambda=mf.user_lambda,
-                                        consumption_matrix=dsf.matrix_users_ratings
+    itr_class = interactors.INTERACTORS[i]
+    if issubclass(itr_class,interactors.ICF):
+        itr = itr_class.getInstance(var=mf.var,
+                                    user_lambda=mf.user_lambda,
+                                    consumption_matrix=dsf.matrix_users_ratings
         )
+    else:
+        itr = itr_class.getInstance(consumption_matrix=dsf.matrix_users_ratings)
+        
 
     if i  == 'ThompsonSampling':
         itr.interact(dsf.test_uids, mf.items_means, mf.items_covs)
-    elif i in ['MostPopular','Random']:
-        itr.interact(dsf.test_uids)
-    else:
+    elif issubclass(itr_class,interactors.ICF):
         itr.interact(dsf.test_uids, mf.items_means)
-    
+    else:
+        itr.interact(dsf.test_uids)
+        

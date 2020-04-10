@@ -9,6 +9,8 @@ from .LinearEGreedy import *
 from .GLM_UCB import *
 from .MostPopular import *
 from .Random import *
+from .Entropy import *
+from .LogPopEnt import *
 
 
 INTERACTORS = {
@@ -20,4 +22,6 @@ INTERACTORS = {
     'ThompsonSampling': ThompsonSampling,
     'MostPopular': MostPopular,
     'Random': Random,
+    'Entropy': Entropy,
+    'LogPopEnt': LogPopEnt,
 }
