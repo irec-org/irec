@@ -14,7 +14,7 @@ class DatasetFormatter(Saveable):
                       'tr_te_ml_1m': 'self.get_tr_te_ml_1m()'}
     SELECTION_MODEL = {'users_train_test': {'train_size': 0.7879,'test_consumes':120}}
     SELECTION_MODEL_HANDLERS = {'users_train_test': 'self.run_users_train_test()'}
-    def __init__(self,base='tr_te_ml_1m',
+    def __init__(self,base='ml_100k',
                  selection_model='users_train_test',
                  selection_model_parameters={}):
         super().__init__()

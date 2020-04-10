@@ -3,8 +3,9 @@ import numpy as np
 from tqdm import tqdm
 import util
 from threadpoolctl import threadpool_limits
+import scipy.optimize
 class GLM_UCB(ICF):
-    def __init__(self, c=0.0, *args, **kwargs):
+    def __init__(self, c=1.0, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.c = c
 
@@ -12,12 +13,13 @@ class GLM_UCB(ICF):
         return 1/(1+np.exp(-x))
 
     def p(self,x):
-        return self.sigmoid(x)
+        return x
 
     def interact(self, uids, items_means):
         super().interact()
         self.items_means = items_means
         num_users = len(uids)
+        print(uids)
         # get number of latent factors 
         with threadpool_limits(limits=1, user_api='blas'):
             args = [(int(uid),) for uid in uids]
@@ -26,6 +28,11 @@ class GLM_UCB(ICF):
             self.result[uids[i]] = user_result
         self.save_result()
 
+    def error_user_weight_function(self,p,u_rec_rewards,u_rec_items_means):
+        return np.sum(np.array(
+            [(u_rec_rewards[t] - self.p(p.T @ u_rec_items_means[t]))*u_rec_items_means[t]
+             for t in range(0,len(u_rec_items_means))]),0)
+
     @classmethod
     def interact_user(cls, uid):
         self = cls.getInstance()
@@ -33,8 +40,8 @@ class GLM_UCB(ICF):
         I = np.eye(num_lat)
 
         user_candidate_items = list(range(len(self.items_means)))
-        b = np.zeros(num_lat)
-        p = np.zeros(num_lat)
+        # b = np.zeros(num_lat)
+        # p = np.zeros(num_lat)
         u_rec_rewards = []
         u_rec_items_means = []
         A = self.user_lambda*I
@@ -44,10 +51,11 @@ class GLM_UCB(ICF):
                 if len(u_rec_items_means) == 0:
                     p = np.zeros(num_lat)
                 else:
-                    p = np.sum(np.array(
-                        [(u_rec_rewards[t] - self.p(p.T @ u_rec_items_means[t]))*u_rec_items_means[t]
-                            for t in range(0,len(u_rec_items_means))]
-                    ),axis=0)
+                    p = scipy.optimize.root(self.error_user_weight_function,
+                                            p,
+                                            (u_rec_rewards,u_rec_items_means)).x
+                # if uid == 902:
+                #     print(f"[{i},{j}] p = {p}, Error Function = {self.error_user_weight_function(p,u_rec_rewards,u_rec_items_means)}")
                 cov = np.linalg.inv(A)*self.var
                 max_i = np.NAN
                 max_item_mean = np.NAN
@@ -65,7 +73,7 @@ class GLM_UCB(ICF):
 
             # for max_i in result[i*self.interaction_size:(i+1)*self.interaction_size]:
             #     max_item_mean = self.items_means[max_i]
-                if self.get_reward(uid,max_i) >= self.values[-2]:
+                if self.get_reward(uid,max_i) >= self.values[1]:
                     u_rec_rewards.append(self.get_reward(uid,max_i))
                     u_rec_items_means.append(max_item_mean)
                     A += max_item_mean[:,None].dot(max_item_mean[None,:])

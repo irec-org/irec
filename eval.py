@@ -18,7 +18,7 @@ answers=inquirer.prompt(q)
 dsf = DatasetFormatter()
 dsf = dsf.load()
 # dsf.get_base()
-KS = list(map(int,np.arange(1,121,step=5)))
+KS = list(map(int,np.arange(5,121,step=5)))
 
 mf = ICFPMF()
 mf.load_var(dsf.matrix_users_ratings[dsf.train_uids])
