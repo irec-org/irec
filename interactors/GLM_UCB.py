@@ -71,8 +71,8 @@ class GLM_UCB(ICF):
                 user_candidate_items.remove(max_i)
                 result.append(max_i)
 
-            # for max_i in result[i*self.interaction_size:(i+1)*self.interaction_size]:
-            #     max_item_mean = self.items_means[max_i]
+            for max_i in result[i*self.interaction_size:(i+1)*self.interaction_size]:
+                max_item_mean = self.items_means[max_i]
                 if self.get_reward(uid,max_i) >= self.values[1]:
                     u_rec_rewards.append(self.get_reward(uid,max_i))
                     u_rec_items_means.append(max_item_mean)
