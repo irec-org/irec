@@ -13,6 +13,7 @@ from .Entropy import *
 from .LogPopEnt import *
 from .ThompsonSampling import *
 from .EGreedy import *
+from .UCB import *
 
 INTERACTORS = {
     # 'Interactor': Interactor,
@@ -27,4 +28,5 @@ INTERACTORS = {
     'LogPopEnt': LogPopEnt,
     'ThompsonSampling': ThompsonSampling,
     'EGreedy': EGreedy,
+    'UCB': UCB,
 }
