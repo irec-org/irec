@@ -15,7 +15,7 @@ class EGreedy(Interactor):
         num_items = self.consumption_matrix.shape[1]
         
         items_values = np.zeros(num_items)
-
+        items_count = np.zeros(num_items,dtype=int)
         for i in tqdm(range(self.get_iterations())):
             for idx_uid in range(num_users):
                 uid = uids[idx_uid]
@@ -23,10 +23,13 @@ class EGreedy(Interactor):
                 not_recommended[self.result[uid]] = 0
                 items_not_recommended = np.nonzero(not_recommended)[0]
                 if self.epsilon < np.random.rand():
-                    best_item = items_not_recommended[np.argmax(items_values[items_not_recommended])]
+                    items_mean_values = np.divide(items_values[items_not_recommended], items_count[items_not_recommended],
+                                                  out=np.zeros(items_not_recommended.shape), where=items_count[items_not_recommended]!=0)
+                    best_item = items_not_recommended[np.argmax(items_mean_values)]
                 else:
                     best_item = random.choice(items_not_recommended)
-                items_values[best_item] = max(items_values[best_item],self.get_reward(uid,best_item))
-                # items_values[best_item] += self.get_reward(uid,best_item)
+                # items_values[best_item] = max(items_values[best_item],self.get_reward(uid,best_item))
+                items_count[best_item] += 1
+                items_values[best_item] += self.get_reward(uid,best_item)
                 self.result[uid].append(best_item)
         self.save_result()
