@@ -27,8 +27,11 @@ class ThompsonSampling(Interactor):
                 items_not_recommended = np.nonzero(not_recommended)[0]
                 best_item = items_not_recommended[np.argmax(np.random.beta(self.alphas[items_not_recommended],
                                                      self.betas[items_not_recommended]))]
-                reward = (self.get_reward(uid,best_item)-self.lowest_value)/(self.highest_value-self.lowest_value)
-                # reward = self.get_reward(uid,best_item)
+                # reward = (self.get_reward(uid,best_item)-self.lowest_value)/(self.highest_value-self.lowest_value)
+                # reward = 1 if reward >= 0.8 else 0
+                reward = self.get_reward(uid,best_item)
+                reward = 1 if reward >= self.values[-2] else 0
+                
                 self.alphas[best_item] += reward
                 self.betas[best_item] += 1-reward
                 # self.betas[best_item] += self.highest_value-reward
