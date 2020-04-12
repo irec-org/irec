@@ -22,7 +22,6 @@ KS = list(map(int,np.arange(5,121,step=5)))
 
 mf = ICFPMF()
 mf.load_var(dsf.matrix_users_ratings[dsf.train_uids])
-size = 5
 for i in answers['interactors']:
     itr_class = interactors.INTERACTORS[i]
     if issubclass(itr_class, interactors.ICF):

@@ -29,7 +29,7 @@ for i in answers['interactors']:
         itr = itr_class.getInstance(consumption_matrix=dsf.matrix_users_ratings)
         
 
-    if i  == 'ThompsonSampling':
+    if i  == 'LinearThompsonSampling':
         itr.interact(dsf.test_uids, mf.items_means, mf.items_covs)
     elif issubclass(itr_class,interactors.ICF):
         itr.interact(dsf.test_uids, mf.items_means)

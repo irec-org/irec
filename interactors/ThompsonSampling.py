@@ -1,63 +1,36 @@
-from .ICF import ICF
 import numpy as np
 from tqdm import tqdm
-import util
-from threadpoolctl import threadpool_limits
-class ThompsonSampling(ICF):
+from . import Interactor
+import os
+import random
+import scipy.stats
+class ThompsonSampling(Interactor):
     def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def interact(self, uids, items_means,items_covs):
+    def interact(self, uids):
         super().interact()
-        self.items_means = items_means
-        self.items_covs = items_covs
         num_users = len(uids)
-        # get number of latent factors 
+        num_items = self.consumption_matrix.shape[1]
+        
+        # self.beta_distributions = [scipy.stats.beta(a=1,b=1) for item in range(num_items)]
+        # print(self.beta_distributions[0].a)
+        self.alphas = np.ones(num_items)
+        self.betas = np.ones(num_items)
 
-        with threadpool_limits(limits=1, user_api='blas'):
-            args = [(int(uid),) for uid in uids]
-            result = util.run_parallel(self.interact_user,args)
-        for i, user_result in enumerate(result):
-            self.result[uids[i]] = user_result
+        for i in tqdm(range(self.get_iterations())):
+            for idx_uid in range(num_users):
+                uid = uids[idx_uid]
+                # best_item = np.argmax([self.beta_distributions[item].rvs() for item in range(num_items)])
+                not_recommended = np.ones(num_items,dtype=bool)
+                not_recommended[self.result[uid]] = 0
+                items_not_recommended = np.nonzero(not_recommended)[0]
+                best_item = items_not_recommended[np.argmax(np.random.beta(self.alphas[items_not_recommended],
+                                                     self.betas[items_not_recommended]))]
+                reward = (self.get_reward(uid,best_item)-self.lowest_value)/(self.highest_value-self.lowest_value)
+                # reward = self.get_reward(uid,best_item)
+                self.alphas[best_item] += reward
+                self.betas[best_item] += 1-reward
+                # self.betas[best_item] += self.highest_value-reward
+                self.result[uid].append(best_item)
         self.save_result()
-
-    @classmethod
-    def interact_user(cls, uid):
-        self = cls.getInstance()
-        num_lat = len(self.items_means[0])
-        I = np.eye(num_lat)
-
-        user_candidate_items = list(range(len(self.items_means)))
-        # get number of latent factors 
-        b = np.zeros(num_lat)
-        A = self.user_lambda*I
-        result = []
-        for i in range(self.interactions):
-            tmp_max_qs = dict()
-            for j in range(self.interaction_size):
-                mean = np.dot(np.linalg.inv(A),b)
-                cov = np.linalg.inv(A)*self.var
-                p = np.random.multivariate_normal(mean,cov)
-                max_i = np.NAN
-                max_q = np.NAN
-                max_e_reward = np.NINF
-                for item in user_candidate_items:
-                    item_mean = self.items_means[item]
-                    item_cov = self.items_covs[item]
-                    q = np.random.multivariate_normal(item_mean,item_cov)
-                    e_reward = p @ q
-                    if e_reward > max_e_reward:
-                        max_i = item
-                        max_q = q
-                        max_e_reward = e_reward
-                user_candidate_items.remove(max_i)
-                tmp_max_qs[max_i]=max_q
-                result.append(max_i)
-            
-            # for item in result[i*self.interaction_size:(i+1)*self.interaction_size]:
-                if self.get_reward(uid,max_i) >= self.values[-2]:
-                    max_q = tmp_max_qs[max_i]
-                    A += max_q[:,None].dot(max_q[None,:])
-                    b += self.get_reward(uid,max_i)*max_q
-                    
-        return result
