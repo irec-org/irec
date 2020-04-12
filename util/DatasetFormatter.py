@@ -97,7 +97,7 @@ class DatasetFormatter(Saveable):
 
         self.matrix_users_ratings = np.nan_to_num(np.array(df_cons.pivot(index='uid', columns='iid', values = 'r')))
 
-        self.matrix_users_ratings = 2*self.matrix_users_ratings/5 -1
+        self.matrix_users_ratings = self.matrix_users_ratings/5
         # return df_cons, df_genre,df_item
     
     def get_base(self):
