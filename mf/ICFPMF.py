@@ -21,7 +21,6 @@ class ICFPMF(Saveable, Singleton):
         self.user_lambda = self.var/self.user_var
         self.item_lambda = self.var/self.item_var
         self.maps = []
-        self.map_value = np.NAN
         self.best=None
 
     def load_var(self, training_matrix):
@@ -33,6 +32,8 @@ class ICFPMF(Saveable, Singleton):
 
     def fit(self,training_matrix):
         print(self.get_verbose_name())
+
+        self.map_value = np.NINF
         self.training_matrix = training_matrix
         num_users = training_matrix.shape[0]
         num_items = training_matrix.shape[1]
@@ -56,7 +57,7 @@ class ICFPMF(Saveable, Singleton):
         # without burning
         for i in range(self.iterations):
             print(f'[{i+1}/{self.iterations}]')
-            # self.noise = np.random.normal(sha)
+            self.noise = np.random.normal(0,self.var)
             # little modified than the original
             # final_users_weights = np.zeros((num_users,self.num_lat))
             # final_items_weights = np.zeros((num_items,self.num_lat))
@@ -90,7 +91,7 @@ class ICFPMF(Saveable, Singleton):
             # map_value = 1
             # for val, mean, std in zip(training_matrix[observed_ui],(self.users_weights @ self.items_weights.T)[observed_ui],[self.var]*len(observed_ui[0])):
             #     map_value *= scipy.stats.norm.pdf(val,mean,std)
-            map_value = scipy.special.logsumexp(scipy.stats.norm.pdf(training_matrix[observed_ui],(self.users_weights @ self.items_weights.T)[observed_ui],self.var))
+            map_value = scipy.special.logsumexp(scipy.stats.norm.pdf(training_matrix[observed_ui],(self.noise + self.users_weights @ self.items_weights.T)[observed_ui],self.var))
             # map_value = np.prod(r_probabilities)
             print("MAP:",map_value)
             self.maps.append(map_value)
@@ -117,6 +118,8 @@ class ICFPMF(Saveable, Singleton):
         del self.best
         del self.training_matrix
         del self.lowest_value
+        del self.map_value
+        del self.noise
         self.save()
 
     @classmethod
