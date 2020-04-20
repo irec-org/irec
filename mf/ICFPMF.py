@@ -33,7 +33,6 @@ class ICFPMF(Saveable, Singleton):
     def fit(self,training_matrix):
         print(self.get_verbose_name())
 
-        self.map_value = np.NINF
         self.training_matrix = training_matrix
         num_users = training_matrix.shape[0]
         num_items = training_matrix.shape[1]
@@ -118,7 +117,6 @@ class ICFPMF(Saveable, Singleton):
         del self.best
         del self.training_matrix
         del self.lowest_value
-        del self.map_value
         del self.noise
         self.save()
 
