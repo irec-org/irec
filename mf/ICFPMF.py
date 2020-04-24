@@ -11,7 +11,7 @@ from util import Saveable, run_parallel, Singleton
 
 class ICFPMF(Saveable, Singleton):
     
-    def __init__(self, num_lat=10, iterations=3000, var=0.1, user_var=1.01, item_var=1.01, *args, **kwargs):
+    def __init__(self, num_lat=10, iterations=100, var=0.1, user_var=1.01, item_var=1.01, *args, **kwargs):
         super().__init__(*args,**kwargs)
         self.num_lat = num_lat
         self.iterations = iterations
@@ -63,8 +63,8 @@ class ICFPMF(Saveable, Singleton):
             with threadpool_limits(limits=1, user_api='blas'):
                 for to_run in random.sample([1,2],2):
                     if to_run == 1:
-                        self.users_means = dict()
-                        self.users_covs = dict()
+                        self.users_means = np.zeros((num_users,self.num_lat))
+                        self.users_covs = np.zeros((num_users,self.num_lat,self.num_lat))
                         args = [(i,) for i in range(num_users)]
                         results = run_parallel(self.compute_user_weight,args)
                         for uid, (mean, cov, weight) in enumerate(results):
@@ -72,8 +72,8 @@ class ICFPMF(Saveable, Singleton):
                             self.users_covs[uid] = cov
                             self.users_weights[uid] = weight
                     else:
-                        self.items_means = dict()
-                        self.items_covs = dict()
+                        self.items_means = np.zeros((num_items,self.num_lat))
+                        self.items_covs = np.zeros((num_items,self.num_lat,self.num_lat))
                         args = [(i,) for i in range(num_items)]
                         results = run_parallel(self.compute_item_weight,args)
                         for iid, (mean, cov, weight) in enumerate(results):
