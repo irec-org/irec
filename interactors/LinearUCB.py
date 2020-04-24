@@ -35,8 +35,6 @@ class LinearUCB(ICF):
         b = np.zeros(num_lat)
         A = self.user_lambda*I
         result = []
-        # if uid == 379:
-        #     print(uid)
 
         for i in range(self.interactions):
             for j in range(self.interaction_size):
@@ -45,22 +43,16 @@ class LinearUCB(ICF):
                 max_i = np.NAN
                 max_item_mean = np.NAN
                 max_e_reward = np.NINF
-                for item in user_candidate_items:
-                    item_mean = self.items_means[item]
-                    # q = np.random.multivariate_normal(item_mean,item_cov)
-                    e_reward = mean.T @ item_mean + self.alpha*np.sqrt(item_mean.T.dot(cov).dot(item_mean))
-                    if e_reward > max_e_reward:
-                        max_i = item
-                        max_item_mean = item_mean
-                        max_e_reward = e_reward
+
+                max_i = user_candidate_items[np.argmax(mean[None,:] @ self.items_means[user_candidate_items].T+\
+                                                       self.alpha*np.sqrt(np.sum(self.items_means[user_candidate_items].dot(cov) * self.items_means[user_candidate_items],axis=1)))]
 
                 user_candidate_items.remove(max_i)
-                # if uid == 379:
-                #     print("recommended item", max_i, "reward", self.get_reward(uid,max_i), "expected reward", max_e_reward)
-
                 result.append(max_i)
 
+            for max_i in result[i*self.interaction_size:(i+1)*self.interaction_size]:
                 if self.get_reward(uid,max_i) >= self.values[-2]:
+                    max_item_mean = self.items_means[max_i]
                     A += max_item_mean[:,None].dot(max_item_mean[None,:])
                     b += self.get_reward(uid,max_i)*max_item_mean
         return result
