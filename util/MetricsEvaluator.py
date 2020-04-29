@@ -1,6 +1,7 @@
 from .Saveable import Saveable
 import numpy as np
 from collections import defaultdict
+import metrics
 
 class MetricsEvaluator(Saveable):
     METRICS_PRETTY = {'precision':'Precision','hits':'Hits','cumulative_precision':'Cumulative Precision'}
@@ -43,10 +44,13 @@ class MetricsEvaluator(Saveable):
             actual = np.nonzero(ground_truth[uid,:]>=threshold)[0]
             hits = len(set(predicted) & set(actual))
             precision = hits/len(predicted)
-            # recall = self.recall(predicted, actual)
+            recall = hits/len(actual)
             self.metrics_mean['precision'] += precision
-            # self.metrics_mean['recall'] += recall
+            self.metrics_mean['recall'] += recall
             self.metrics_mean['hits'] += hits
+            self.metrics_mean['f1'] += metrics.f1k(precision,recall)
+            self.metrics_mean['ndcg'] += metrics.ndcgk(actual,predicted)
+
             # self.metrics[uid] = {'precision': precision,
             #                      # 'recall': recall,
             #                      ''
