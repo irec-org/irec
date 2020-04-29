@@ -2,6 +2,7 @@ import inquirer
 import interactors
 from mf import ICFPMF
 from util import DatasetFormatter
+from sklearn.decomposition import NMF
 q = [
     inquirer.Checkbox('interactors',
                       message='Interactors to run',
@@ -33,6 +34,11 @@ for i in answers['interactors']:
         itr.interact(dsf.test_uids, mf.items_means, mf.items_covs)
     elif issubclass(itr_class,interactors.ICF):
         itr.interact(dsf.test_uids, mf.items_means)
+    elif issubclass(itr_class,interactors.LinUCB):
+        model = NMF(n_components=10, init='nndsvd', random_state=0)
+        P = model.fit_transform(dsf.matrix_users_ratings[dsf.train_uids])
+        Q = model.components_.T
+        itr.interact(dsf.test_uids,Q)
     else:
         itr.interact(dsf.test_uids)
         

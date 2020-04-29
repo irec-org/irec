@@ -1,8 +1,4 @@
 import numpy as np
-import networkx as nx
-import geocat.objfunc
-import geo_utils
-from geocat.objfunc import category_dis_sim
 np.seterr(all='raise')
 
 def mapk(actual, predicted, k):

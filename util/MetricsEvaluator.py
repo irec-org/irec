@@ -1,10 +1,11 @@
 from .Saveable import Saveable
 import numpy as np
 from collections import defaultdict
-import metrics
+import util.metrics as metrics
 
 class MetricsEvaluator(Saveable):
-    METRICS_PRETTY = {'precision':'Precision','hits':'Hits','cumulative_precision':'Cumulative Precision'}
+    METRICS_PRETTY = {'precision':'Precision','hits':'Hits','cumulative_precision':'Cumulative Precision',
+                      'recall':'Recall','f1':'F1 Score','ndcg':'NDCG'}
     def __init__(self, name, k):
         super().__init__()
         self.metrics = defaultdict(dict)
@@ -49,7 +50,7 @@ class MetricsEvaluator(Saveable):
             self.metrics_mean['recall'] += recall
             self.metrics_mean['hits'] += hits
             self.metrics_mean['f1'] += metrics.f1k(precision,recall)
-            self.metrics_mean['ndcg'] += metrics.ndcgk(actual,predicted)
+            self.metrics_mean['ndcg'] += metrics.ndcgk(actual,predicted,self.k)
 
             # self.metrics[uid] = {'precision': precision,
             #                      # 'recall': recall,

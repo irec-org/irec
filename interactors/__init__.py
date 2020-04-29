@@ -14,6 +14,7 @@ from .LogPopEnt import *
 from .ThompsonSampling import *
 from .EGreedy import *
 from .UCB import *
+from .LinUCB import *
 
 INTERACTORS = {
     # 'Interactor': Interactor,
@@ -29,4 +30,5 @@ INTERACTORS = {
     'ThompsonSampling': ThompsonSampling,
     'EGreedy': EGreedy,
     'UCB': UCB,
+    'LinUCB': LinUCB,
 }
