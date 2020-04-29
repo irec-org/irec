@@ -21,7 +21,6 @@ def hitsk(actual, predicted):
 def precisionk(actual, predicted):
     return 1.0 * len(set(actual) & set(predicted)) / len(predicted)
 
-
 def recallk(actual, predicted):
     return 1.0 * len(set(actual) & set(predicted)) / len(actual)
 
@@ -30,7 +29,7 @@ def f1k(precision, recall):
         return 0
     return 2*(precision*recall)/(precision+recall)
 
-def ndcgk(actual, predicted, k):
+def ndcgk(actual, predicted):
     idcg = 1.0
     dcg = 1.0 if predicted[0] in actual else 0.0
     for i,p in enumerate(predicted[1:]):
@@ -39,7 +38,7 @@ def ndcgk(actual, predicted, k):
         idcg += 1.0 / np.log(i+2)
     return dcg / idcg
 
-def epck(rec_list,actual,uid,training_matrix):
+def epck(rec_list,actual,training_matrix):
 
     C_2 = 1.0/len(rec_list)
     sum_2=0
