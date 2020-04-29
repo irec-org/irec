@@ -38,11 +38,11 @@ def ndcgk(actual, predicted):
         idcg += 1.0 / np.log(i+2)
     return dcg / idcg
 
-def epck(rec_list,actual,training_matrix):
+def epck(actual,predicted,training_matrix):
 
-    C_2 = 1.0/len(rec_list)
+    C_2 = 1.0/len(predicted)
     sum_2=0
-    for i,lid in enumerate(rec_list):
+    for i,lid in enumerate(predicted):
         if lid in actual:
             prob_seen_k=np.count_nonzero(training_matrix[:,lid])/training_matrix.shape[0]
             sum_2 += 1-prob_seen_k
