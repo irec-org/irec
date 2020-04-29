@@ -49,3 +49,16 @@ def epck(actual,predicted,training_matrix):
     EPC=C_2*sum_2
     return EPC
 
+def ildk(items,items_distance):
+    num_items=len(items)
+    local_ild=0
+    if num_items == 0 or num_items == 1:
+        print("Number of items:",num_items)
+        return 1.0
+    else:
+        for i, item_1 in enumerate(items):
+            for j, item_2 in enumerate(items):
+                if j < i:
+                    local_ild+=items_distance[item_1,item_2]
+
+    return local_ild/(num_items*(num_items-1)/2)
