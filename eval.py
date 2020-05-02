@@ -37,5 +37,5 @@ for i in answers['interactors']:
     for j in tqdm(range(len(KS))):
         k = KS[j]
         me = MetricsEvaluator(name=itr.get_name(), k=k)
-        me.eval_metrics(itr.result, dsf.matrix_users_ratings)
+        me.eval_chunk_metrics(itr.result, dsf.matrix_users_ratings,5)
 

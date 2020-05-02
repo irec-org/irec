@@ -49,8 +49,8 @@ class MetricsEvaluator(Saveable):
             self.metrics_mean['precision'] += precision
             self.metrics_mean['recall'] += recall
             self.metrics_mean['hits'] += hits
-            self.metrics_mean['f1'] += metrics.f1k(precision,recall)
-            self.metrics_mean['ndcg'] += metrics.ndcgk(actual,predicted,self.k)
+            # self.metrics_mean['f1'] += metrics.f1k(precision,recall)
+            # self.metrics_mean['ndcg'] += metrics.ndcgk(actual,predicted)
 
             # self.metrics[uid] = {'precision': precision,
             #                      # 'recall': recall,
