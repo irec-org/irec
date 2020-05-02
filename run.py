@@ -3,6 +3,7 @@ import interactors
 from mf import ICFPMF
 from util import DatasetFormatter
 from sklearn.decomposition import NMF
+import numpy as np
 q = [
     inquirer.Checkbox('interactors',
                       message='Interactors to run',
@@ -14,10 +15,10 @@ answers=inquirer.prompt(q)
 dsf = DatasetFormatter()
 dsf = dsf.load()
 # dsf.get_base()
-
-mf = ICFPMF()
-mf.load_var(dsf.matrix_users_ratings[dsf.train_uids])
-mf = mf.load()
+if np.any([issubclass(interactors.INTERACTORS[i],interactors.ICF) for i in answers['interactors']]):
+    mf = ICFPMF()
+    mf.load_var(dsf.matrix_users_ratings[dsf.train_uids])
+    mf = mf.load()
 for i in answers['interactors']:
 
     itr_class = interactors.INTERACTORS[i]
