@@ -7,6 +7,7 @@ from util import Nameable
 from util import DirectoryDependent, Singleton
 from collections import defaultdict
 import pickle
+import json
 
 class Interactor(Nameable, DirectoryDependent, Singleton):
     def __init__(self, consumption_matrix=None, interactions=24, interaction_size=5):
@@ -32,11 +33,24 @@ class Interactor(Nameable, DirectoryDependent, Singleton):
     def interact_user(self,uid):
         pass
 
-    def save_result(self):
-        with open(f'{os.path.join(self.DIRS["result"],self.get_name())}.pickle', "wb") as f:
-            pickle.dump(self.result, f)
+    @staticmethod
+    def json_entry_save_format(uid, items):
+        return json.dumps({'uid': int(uid), 'predicted': list(map(int,items))})+'\n'
 
-    def load_result(self):
-        with open(f'{os.path.join(self.DIRS["result"],self.get_name())}.pickle', "rb") as f:
-            return pickle.load(f)
+    def save_result(self,data_type='pickle'):
+        if 'pickle' in data_type:
+            with open(f'{os.path.join(self.DIRS["result"],self.get_name())}.pickle', "wb") as f:
+                pickle.dump(self.result, f)
+        if 'txt' in data_type:
+            with open(f'{os.path.join(self.DIRS["result"],self.get_name())}.txt', "w") as f:
+                for uid, items in self.result.items():
+                    f.write(self.json_entry_save_format(uid,items))
 
+    def load_result(self,data_type='pickle'):
+        if 'pickle' == data_type:
+            with open(f'{os.path.join(self.DIRS["result"],self.get_name())}.pickle', "rb") as f:
+                return pickle.load(f)
+        elif 'pickle' == data_type:
+            pass
+        else:
+            print("No valid data type given! Could not load result")
