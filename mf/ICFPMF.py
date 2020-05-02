@@ -54,6 +54,7 @@ class ICFPMF(Saveable, Singleton):
         # self.noise = self._mean
         # #samples
         # without burning
+        np.seterr('warn')
         for i in range(self.iterations):
             print(f'[{i+1}/{self.iterations}]')
             self.noise = np.random.normal(0,self.var)
