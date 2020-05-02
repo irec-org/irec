@@ -20,7 +20,7 @@ class DatasetFormatter(Saveable):
     }
     SELECTION_MODEL_HANDLERS = {'users_train_test': 'self.run_users_train_test()',
                                 'users_train_test_chrono': 'self.run_users_train_test_chrono()'}
-    def __init__(self,base='ml_1m',
+    def __init__(self,base='ml_100k',
                  selection_model='users_train_test',
                  selection_model_parameters={}):
         super().__init__()
@@ -129,15 +129,8 @@ class DatasetFormatter(Saveable):
         self.num_test_users = int(self.num_users-self.num_train_users)
         users_items_consumed=self.users_items.groupby('uid').count().iloc[:,0]
         test_candidate_users=list(users_items_consumed[users_items_consumed>=self.selection_model_parameters['test_consumes']].to_dict().keys())
-        # print(users_items_consumed)
-        self.test_uids = random.choices(test_candidate_users,k=self.num_test_users)
+        self.test_uids = random.sample(test_candidate_users,k=self.num_test_users)
         self.train_uids = list(set(range(self.num_users))-set(self.test_uids))
-        # rows_in_test = self.users_items['uid'].isin(self.test_uids)
-        # self.test_users_items=self.users_items[rows_in_test]
-        # self.train_users_items=self.users_items[~rows_in_test]
-        # self.selected_test = []
-        # self.selected_train = []
-        pass
 
     def run_users_train_test_chrono(self):
         self.num_train_users = round(self.num_users*(self.selection_model_parameters['train_size']))
