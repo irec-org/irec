@@ -9,7 +9,7 @@ from collections import defaultdict
 import pickle
 import json
 
-class Interactor(Nameable, DirectoryDependent, Singleton):
+class Interactor(Nameable, DirectoryDependent):
     def __init__(self, consumption_matrix=None, interactions=24, interaction_size=5):
         self.consumption_matrix = consumption_matrix
         self.highest_value = np.max(self.consumption_matrix)

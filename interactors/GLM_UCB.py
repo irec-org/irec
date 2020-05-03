@@ -4,6 +4,7 @@ from tqdm import tqdm
 import util
 from threadpoolctl import threadpool_limits
 import scipy.optimize
+import ctypes
 class GLM_UCB(ICF):
     def __init__(self, c=1.0, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -21,8 +22,9 @@ class GLM_UCB(ICF):
         num_users = len(uids)
         print(uids)
         # get number of latent factors 
+        self_id = id(self)
         with threadpool_limits(limits=1, user_api='blas'):
-            args = [(int(uid),) for uid in uids]
+            args = [(self_id,int(uid),) for uid in uids]
             result = util.run_parallel(self.interact_user,args)
         for i, user_result in enumerate(result):
             self.result[uids[i]] = user_result
@@ -33,9 +35,11 @@ class GLM_UCB(ICF):
             [(u_rec_rewards[t] - self.p(p.T @ u_rec_items_means[t]))*u_rec_items_means[t]
              for t in range(0,len(u_rec_items_means))]),0)
 
-    @classmethod
-    def interact_user(cls, uid):
-        self = cls.getInstance()
+    @staticmethod
+    def interact_user(obj_id,uid):
+        self = ctypes.cast(obj_id, ctypes.py_object).value
+        if not issubclass(self.__class__,ICF): # DANGER CODE
+            raise RuntimeError
         num_lat = len(self.items_means[0])
         I = np.eye(num_lat)
 

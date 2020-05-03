@@ -4,7 +4,7 @@ import random
 from tqdm import tqdm
 import util
 from threadpoolctl import threadpool_limits
-
+import ctypes
 class LinearEGreedy(ICF):
     def __init__(self, epsilon=0.05, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -17,17 +17,20 @@ class LinearEGreedy(ICF):
         # get number of latent factors 
         num_lat = len(items_means[0])
         I = np.eye(num_lat)
+        self_id = id(self)
         with threadpool_limits(limits=1, user_api='blas'):
-            args = [(int(uid),) for uid in uids]
+            args = [(self_id,int(uid),) for uid in uids]
             result = util.run_parallel(self.interact_user,args)
-
         for i, user_result in enumerate(result):
             self.result[uids[i]] = user_result
         self.save_result()
 
-    @classmethod
-    def interact_user(cls,uid):
-        self = cls.getInstance()
+    @staticmethod
+    def interact_user(obj_id,uid):
+        self = ctypes.cast(obj_id, ctypes.py_object).value
+        if not issubclass(self.__class__,ICF): # DANGER CODE
+            raise RuntimeError
+
         num_lat = len(self.items_means[0])
         I = np.eye(num_lat)
 

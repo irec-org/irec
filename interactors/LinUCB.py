@@ -3,6 +3,7 @@ import numpy as np
 from tqdm import tqdm
 import util
 from threadpoolctl import threadpool_limits
+import ctypes
 class LinUCB(Interactor):
     def __init__(self, alpha=0.2, zeta=None,*args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -18,17 +19,20 @@ class LinUCB(Interactor):
         num_users = len(uids)
         # get number of latent factors 
 
+        self_id = id(self)
         with threadpool_limits(limits=1, user_api='blas'):
-            args = [(int(uid),) for uid in uids]
+            args = [(self_id,int(uid),) for uid in uids]
             result = util.run_parallel(self.interact_user,args)
         for i, user_result in enumerate(result):
             self.result[uids[i]] = user_result
 
         self.save_result()
 
-    @classmethod
-    def interact_user(cls, uid):
-        self = cls.getInstance()
+    @staticmethod
+    def interact_user(obj_id,uid):
+        self = ctypes.cast(obj_id, ctypes.py_object).value
+        if not issubclass(self.__class__,Interactor): # DANGER CODE
+            raise RuntimeError
         num_lat = len(self.items_latent_factors[0])
         I = np.eye(num_lat)
 
