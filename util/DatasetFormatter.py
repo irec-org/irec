@@ -5,6 +5,7 @@ import random
 import math
 import time
 import scipy.sparse
+import os
 
 from .Saveable import Saveable
 
@@ -103,7 +104,7 @@ class DatasetFormatter(Saveable):
 
         self.matrix_users_ratings = np.nan_to_num(np.array(df_cons.pivot(index='uid', columns='iid', values = 'r')))
 
-        self.matrix_users_ratings = self.matrix_users_ratings/5
+        # self.matrix_users_ratings = self.matrix_users_ratings/5
 
         self.matrix_users_times = np.array(df_cons.pivot(index='uid', columns='iid', values = 't'))
         self.matrix_users_times[np.isnan(self.matrix_users_times)] = 0
@@ -232,6 +233,19 @@ class DatasetFormatter(Saveable):
         if self.base not in ['tr_te_ml_1m']:
             self.run_selection_model()
         self.save()
-    def export_base(self):
-        self.matrix_users_ratings
+    def export_base(self,format='movielens'):
+        full_rating_df = pd.DataFrame(np.where(self.matrix_users_ratings == np.min(self.matrix_users_ratings), np.nan,self.matrix_users_ratings))
+        full_time_df = pd.DataFrame(np.where(self.matrix_users_times.A == np.min(self.matrix_users_times.A), np.nan,self.matrix_users_times.A))
+        df = pd.concat([full_rating_df.stack(),full_time_df.stack()],axis=1)
+        del full_rating_df
+        del full_time_df
+        df = df.reset_index()
+        df.columns = ['uid','iid','r','t']
+        print(self.get_name())
+        
+    def export_users_sets(self):
+        with open(f'{os.path.join(self.DIRS["export"],"train_"+self.get_name())}.txt', "w") as f:
+            f.write(str(self.train_uids))
+        with open(f'{os.path.join(self.DIRS["export"],"test_"+self.get_name())}.txt', "w") as f:
+            f.write(str(self.test_uids))
 
