@@ -24,9 +24,6 @@ class ThompsonSampling(Interactor):
 
         for i in tqdm(range(num_users*self.interactions)):
             uid = random.sample(available_users,k=1)[0]
-            users_num_interactions[uid] += 1
-            if users_num_interactions[uid] == self.interactions:
-                available_users = available_users - {uid}
 
             # best_item = np.argmax([self.beta_distributions[item].rvs() for item in range(num_items)])
             not_recommended = np.ones(num_items,dtype=bool)
@@ -36,12 +33,19 @@ class ThompsonSampling(Interactor):
                                          self.betas[items_not_recommended])
             top_items = list(reversed(np.argsort(items_score)))[:self.interaction_size]
             best_items = items_not_recommended[top_items]
+            self.result[uid].extend(best_items)
             # reward = (self.get_reward(uid,best_item)-self.lowest_value)/(self.highest_value-self.lowest_value)
             # reward = 1 if reward >= 0.8 else 0
-            for best_item in best_items:
+
+            user_num_interactions = users_num_interactions[uid]
+
+            for best_item in self.result[uid][user_num_interactions*self.interaction_size:(user_num_interactions+1)*self.interaction_size]:
                 reward = self.get_reward(uid,best_item)
                 reward = 1 if reward >= self.values[-2] else 0
                 self.alphas[best_item] += reward
                 self.betas[best_item] += 1-reward
-                self.result[uid].append(best_item)
+
+            users_num_interactions[uid] += 1
+            if users_num_interactions[uid] == self.interactions:
+                available_users = available_users - {uid}
         self.save_result()

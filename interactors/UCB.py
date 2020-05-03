@@ -4,6 +4,7 @@ from . import Interactor
 import os
 import random
 import scipy.stats
+from collections import defaultdict
 class UCB(Interactor):
     def __init__(self,c=1.0,*args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -19,25 +20,33 @@ class UCB(Interactor):
         items_count = np.zeros(num_items,dtype=int)
 
         ctime = 2
-        for i in tqdm(range(self.get_iterations())):
-            for idx_uid in range(num_users):
-                uid = uids[idx_uid]
-                not_recommended = np.ones(num_items,dtype=bool)
-                not_recommended[self.result[uid]] = 0
-                items_not_recommended = np.nonzero(not_recommended)[0]
 
-                items_uncertainty = self.c*np.sqrt(2*np.log(ctime,dtype=np.float64)/items_count[items_not_recommended])
-                best_item = items_not_recommended[np.argmax(items_mean_values[items_not_recommended]+items_uncertainty)]
+        users_num_interactions = defaultdict(int)
+        available_users = set(uids)
 
-                # if (ctime+1) % 100 == 0:
-                #     print("====")
-                #     print(items_uncertainty[np.argmax(items_mean_values[items_not_recommended]+items_uncertainty)])
-                #     print(items_mean_values[best_item])
-                    # print(np.max(items_mean_values))
+        for i in tqdm(range(num_users*self.interactions)):
+            uid = random.sample(available_users,k=1)[0]
 
+            not_recommended = np.ones(num_items,dtype=bool)
+            not_recommended[self.result[uid]] = 0
+            items_not_recommended = np.nonzero(not_recommended)[0]
+
+            items_uncertainty = self.c*np.sqrt(2*np.log(ctime,dtype=np.float64)/items_count[items_not_recommended])
+            items_score = items_mean_values[items_not_recommended]+items_uncertainty
+            top_items = list(reversed(np.argsort(items_score)))[:self.interaction_size]
+            best_items = items_not_recommended[top_items]
+            self.result[uid].extend(best_items)
+
+            user_num_interactions = users_num_interactions[uid]
+            for best_item in self.result[uid][user_num_interactions*self.interaction_size:(user_num_interactions+1)*self.interaction_size]:
                 items_mean_values[best_item] = (items_mean_values[best_item]+self.get_reward(uid,best_item))/(items_count[best_item] + 1)
                 items_count[best_item] += 1
 
-                self.result[uid].append(best_item)
-                ctime += 1
+
+            users_num_interactions[uid] += 1
+            if users_num_interactions[uid] == self.interactions:
+                available_users = available_users - {uid}
+
+            ctime += 1
+
         self.save_result()
