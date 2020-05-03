@@ -21,7 +21,7 @@ class DatasetFormatter(Saveable):
     }
     SELECTION_MODEL_HANDLERS = {'users_train_test': 'self.run_users_train_test()',
                                 'users_train_test_chrono': 'self.run_users_train_test_chrono()'}
-    def __init__(self,base='ml_100k',
+    def __init__(self,base='ml_1m',
                  selection_model='users_train_test_chrono',
                  selection_model_parameters={}):
         super().__init__()
@@ -177,11 +177,15 @@ class DatasetFormatter(Saveable):
         df_cons = pd.read_csv(base_dir+'ratings.dat',sep='::',header=None,engine='python')
         df_cons.columns = ['uid','iid','r','t']
 
-        self.num_users = df_cons['uid'].max()
-        self.num_items = df_cons['iid'].max()
+        iids = dict()
+        for i, iid in enumerate(df_cons['iid'].unique()):
+            iids[iid] = i
+        df_cons['iid'] = df_cons['iid'].apply(lambda x: iids[x])
+        self.num_users = len(df_cons['uid'].unique())
+        self.num_items = len(df_cons['iid'].unique())
+        
         self.num_consumes = len(df_cons)
 
-        df_cons['iid'] = df_cons['iid']-1
         df_cons['uid'] = df_cons['uid']-1
 
         self.users_items = df_cons
