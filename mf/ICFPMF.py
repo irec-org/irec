@@ -41,10 +41,7 @@ class ICFPMF(Saveable, Singleton):
         self.observed_ui = observed_ui = np.nonzero(training_matrix>lowest_value) # itens observed by some user
         # value_abs_range = abs(highest_value - lowest_value)
         self.I = I = np.eye(self.num_lat)
-
             # self.var = np.mean(np.var(training_matrix))
-
-
         self.users_weights = np.random.multivariate_normal(np.zeros(self.num_lat),self.user_var*I,training_matrix.shape[0])
         self.items_weights = np.random.multivariate_normal(np.zeros(self.num_lat),self.item_var*I,training_matrix.shape[1])
 
@@ -108,15 +105,6 @@ class ICFPMF(Saveable, Singleton):
                     self.best = self.__deepcopy__()
                     best_map_value = map_value
 
-            # print("best =",best_rmse)
-            # if self.best == None:
-            #     self.best = self.__deepcopy__()
-            #     best_rmse = rmse
-            # else:
-            #     if rmse < best_rmse:
-            #         self.best = self.__deepcopy__()
-            #         best_rmse = rmse
-            # print("best =",best_rmse)
         self = self.best
         del self.best
         del self.training_matrix
@@ -160,6 +148,3 @@ class ICFPMF(Saveable, Singleton):
     
     def get_predicted(self):
         return self.get_matrix(self.users_weights,self.items_weights,self.var)
-
-    # def get_best_predicted(self):
-    #     return self.get_matrix(self.best.users_weights,self.best.items_weights,self.best.var)
