@@ -22,6 +22,13 @@ class ThompsonSampling(Interactor):
         users_num_interactions = defaultdict(int)
         available_users = set(uids)
 
+        mask = np.ones(self.consumption_matrix.shape[0], dtype=bool)
+        mask[uids] = 0
+        self.alphas += np.count_nonzero(self.consumption_matrix[mask]>=self.values[-2],
+                         axis=0)
+        self.betas += np.count_nonzero(self.consumption_matrix[mask]<self.values[-2],
+                         axis=0)
+
         for i in tqdm(range(num_users*self.interactions)):
             uid = random.sample(available_users,k=1)[0]
 
