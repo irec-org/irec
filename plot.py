@@ -19,10 +19,13 @@ q = [
 ]
 answers=inquirer.prompt(q)
 
+INTERACTION_SIZE = interactors.Interactor().interaction_size
+ITERATIONS = interactors.Interactor().get_iterations()
+
 dsf = DatasetFormatter()
 dsf = dsf.load()
 # dsf.get_base()
-KS = list(map(int,np.arange(5,121,step=5)))
+KS = list(map(int,np.arange(INTERACTION_SIZE,ITERATIONS+1,step=INTERACTION_SIZE)))
 mf = ICFPMF()
 mf.load_var(dsf.matrix_users_ratings[dsf.train_uids])
 
