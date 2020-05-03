@@ -57,7 +57,7 @@ class ICFPMF(Saveable, Singleton):
         np.seterr('warn')
         for i in range(self.iterations):
             print(f'[{i+1}/{self.iterations}]')
-            self.noise = np.random.normal(0,self.var)
+            # self.noise = np.random.normal(0,self.var)
             # little modified than the original
             # final_users_weights = np.zeros((num_users,self.num_lat))
             # final_items_weights = np.zeros((num_items,self.num_lat))
@@ -91,8 +91,11 @@ class ICFPMF(Saveable, Singleton):
             # map_value = 1
             # for val, mean, std in zip(training_matrix[observed_ui],(self.users_weights @ self.items_weights.T)[observed_ui],[self.var]*len(observed_ui[0])):
             #     map_value *= scipy.stats.norm.pdf(val,mean,std)
-            map_value = scipy.special.logsumexp(scipy.stats.norm.pdf(training_matrix[observed_ui],(self.noise + self.users_weights @ self.items_weights.T)[observed_ui],self.var))
+            map_value = scipy.special.logsumexp(scipy.stats.norm.pdf(training_matrix[observed_ui],(self.users_weights @ self.items_weights.T)[observed_ui],self.var))
+                # * scipy.special.logsumexp([scipy.stats.multivariate_normal.pdf(i,np.zeros(self.num_lat),self.user_var*I) for i in self.users_weights.flatten()])\
+                # * scipy.special.logsumexp([scipy.stats.multivariate_normal.pdf(i,np.zeros(self.num_lat),self.item_var*I) for i in self.items_weights.flatten()])\
             # map_value = np.prod(r_probabilities)
+
             print("MAP:",map_value)
             self.maps.append(map_value)
             print("RMSE:",rmse)
@@ -118,7 +121,7 @@ class ICFPMF(Saveable, Singleton):
         del self.best
         del self.training_matrix
         del self.lowest_value
-        del self.noise
+        # del self.noise
         self.save()
 
     @classmethod
