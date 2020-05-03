@@ -23,14 +23,8 @@ class MetricsEvaluator(Saveable):
             actual = np.nonzero(ground_truth[uid,:]>=threshold)[0]
             hits = len(set(predicted) & set(actual))
             precision = hits/size
-            # recall = self.recall(predicted, actual)
             self.metrics_mean['precision'] += precision
-            # self.metrics_mean['recall'] += recall
             self.metrics_mean['hits'] += hits
-            # self.metrics[uid] = {'precision': precision,
-            #                      # 'recall': recall
-            # }
-
         for k in self.metrics_mean.keys():
             self.metrics_mean[k] /= len(result)
         self.save()
@@ -49,20 +43,6 @@ class MetricsEvaluator(Saveable):
             self.metrics_mean['precision'] += precision
             self.metrics_mean['recall'] += recall
             self.metrics_mean['hits'] += hits
-            # self.metrics_mean['f1'] += metrics.f1k(precision,recall)
-            # self.metrics_mean['ndcg'] += metrics.ndcgk(actual,predicted)
-
-            # self.metrics[uid] = {'precision': precision,
-            #                      # 'recall': recall,
-            #                      ''
-            # }
         for k in self.metrics_mean.keys():
             self.metrics_mean[k] /= len(result)
         self.save()
-
-    # def hits(self, predicted, actual):
-    #     return len(set(predicted) & set(actual))
-    # def precision(self, predicted, actual):
-    #     return len(set(predicted) & set(actual))/len(predicted)
-    # def recall(self, predicted, actual):
-    #     return len(set(predicted) & set(actual))/len(actual)
