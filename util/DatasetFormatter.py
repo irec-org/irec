@@ -178,7 +178,7 @@ class DatasetFormatter(Saveable):
         df_cons.columns = ['uid','iid','r','t']
 
         iids = dict()
-        for i, iid in enumerate(df_cons['iid'].unique()):
+        for i, iid in enumerate(np.sort(df_cons['iid'].unique())):
             iids[iid] = i
         df_cons['iid'] = df_cons['iid'].apply(lambda x: iids[x])
         self.num_users = len(df_cons['uid'].unique())
