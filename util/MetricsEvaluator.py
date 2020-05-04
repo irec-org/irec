@@ -69,4 +69,5 @@ class MetricsEvaluator(Saveable):
         metrics_values['hits'] = hits
         metrics_values['ild'] = metrics.ildk(predicted,self.items_distance)
         metrics_values['epc'] = metrics.epck(actual,predicted,self.items_popularity)
+        metrics_values['ndcg'] = metrics.ndcgk(actual,predicted)
         return metrics_values
