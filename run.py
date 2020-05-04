@@ -35,7 +35,7 @@ for i in answers['interactors']:
         itr.interact(dsf.test_uids, mf.items_means, mf.items_covs)
     elif issubclass(itr_class,interactors.ICF):
         itr.interact(dsf.test_uids, mf.items_means)
-    elif issubclass(itr_class,interactors.LinUCB):
+    elif issubclass(itr_class,interactors.LinUCB) or issubclass(itr_class,interactors.UCBLearner):
         model = NMF(n_components=10, init='nndsvd', random_state=0)
         P = model.fit_transform(dsf.matrix_users_ratings[dsf.train_uids])
         Q = model.components_.T

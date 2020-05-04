@@ -8,8 +8,7 @@ from tqdm import tqdm
 
 import interactors
 from mf import ICFPMF
-from util import DatasetFormatter, MetricsEvaluator
-
+from util import DatasetFormatter, MetricsEvaluator, metrics
 
 q = [
     inquirer.Checkbox('interactors',
@@ -29,7 +28,7 @@ KS = list(map(int,np.arange(INTERACTION_SIZE,ITERATIONS+1,step=INTERACTION_SIZE)
 mf = ICFPMF()
 mf.load_var(dsf.matrix_users_ratings[dsf.train_uids])
 
-metrics_names = ['precision','recall','hits']
+metrics_names = ['precision','recall','hits','ild','epc']
 metric_values = defaultdict(lambda:defaultdict(dict))
 for i in answers['interactors']:
     itr_class = interactors.INTERACTORS[i]
@@ -42,7 +41,7 @@ for i in answers['interactors']:
 
     for j in tqdm(range(len(KS))):
         k = KS[j]
-        me = MetricsEvaluator(itr.get_name(), k)
+        me = MetricsEvaluator(itr.get_name(), k, 4)
         me = me.load()
         for metric_name in metrics_names:
             metric_values[metric_name][i][j] = me.metrics_mean[metric_name]
