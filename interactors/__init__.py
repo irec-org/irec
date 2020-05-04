@@ -15,6 +15,7 @@ from .ThompsonSampling import *
 from .EGreedy import *
 from .UCB import *
 from .LinUCB import *
+from .UCBLearner import *
 
 INTERACTORS = {
     # 'Interactor': Interactor,
@@ -31,4 +32,5 @@ INTERACTORS = {
     'EGreedy': EGreedy,
     'UCB': UCB,
     'LinUCB': LinUCB,
+    'UCBLearner': UCBLearner,
 }
