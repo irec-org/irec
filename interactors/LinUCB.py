@@ -53,7 +53,7 @@ class LinUCB(Interactor):
                 result.append(max_i)
 
             for max_i in result[i*self.interaction_size:(i+1)*self.interaction_size]:
-                if self.get_reward(uid,max_i) >= self.values[-2]:
+                if self.get_reward(uid,max_i) >= self.threshold:
                     max_item_latent_factors = self.items_latent_factors[max_i]
                     A += max_item_latent_factors[:,None].dot(max_item_latent_factors[None,:])
                     b += self.get_reward(uid,max_i)*max_item_latent_factors

@@ -72,7 +72,7 @@ class UCBLearner(Interactor):
                 result.append(max_i)
 
             for max_i in result[i*self.interaction_size:(i+1)*self.interaction_size]:
-                if self.get_reward(uid,max_i) >= self.values[-2]:
+                if self.get_reward(uid,max_i) >= self.threshold:
                     max_item_weight = self.items_factors[max_i]
                     A += max_item_weight[:,None].dot(max_item_weight[None,:])
                     b += self.get_reward(uid,max_i)*max_item_weight

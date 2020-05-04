@@ -24,9 +24,9 @@ class ThompsonSampling(Interactor):
 
         mask = np.ones(self.consumption_matrix.shape[0], dtype=bool)
         mask[uids] = 0
-        self.alphas += np.count_nonzero(self.consumption_matrix[mask]>=self.values[-2],
+        self.alphas += np.count_nonzero(self.consumption_matrix[mask]>=self.threshold,
                          axis=0)
-        self.betas += np.count_nonzero(self.consumption_matrix[mask]<self.values[-2],
+        self.betas += np.count_nonzero(self.consumption_matrix[mask]<self.threshold,
                          axis=0)
 
         for i in tqdm(range(num_users*self.interactions)):
@@ -48,7 +48,7 @@ class ThompsonSampling(Interactor):
 
             for best_item in self.result[uid][user_num_interactions*self.interaction_size:(user_num_interactions+1)*self.interaction_size]:
                 reward = self.get_reward(uid,best_item)
-                reward = 1 if reward >= self.values[-2] else 0
+                reward = 1 if reward >= self.threshold else 0
                 self.alphas[best_item] += reward
                 self.betas[best_item] += 1-reward
 

@@ -10,7 +10,7 @@ import pickle
 import json
 
 class Interactor(Nameable, DirectoryDependent):
-    def __init__(self, consumption_matrix=None, interactions=24, interaction_size=5):
+    def __init__(self, consumption_matrix=None, interactions=24, interaction_size=5, threshold=4):
         self.consumption_matrix = consumption_matrix
         self.highest_value = np.max(self.consumption_matrix)
         self.lowest_value = np.min(self.consumption_matrix)
@@ -18,6 +18,7 @@ class Interactor(Nameable, DirectoryDependent):
         self.interactions = interactions
         self.interaction_size = interaction_size
         self.result = defaultdict(list)
+        self.threshold = threshold
 
     def get_iterations(self):
         return self.interactions*self.interaction_size

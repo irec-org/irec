@@ -28,7 +28,7 @@ KS = list(map(int,np.arange(INTERACTION_SIZE,ITERATIONS+1,step=INTERACTION_SIZE)
 mf = ICFPMF()
 mf.load_var(dsf.matrix_users_ratings[dsf.train_uids])
 
-metrics_names = ['precision','recall','hits','ild','epc']
+metrics_names = ['precision','recall','hits']
 metric_values = defaultdict(lambda:defaultdict(dict))
 for i in answers['interactors']:
     itr_class = interactors.INTERACTORS[i]
@@ -55,6 +55,6 @@ for metric_name in metrics_names:
     print(df)
     df.plot()
     plt.xlabel("Interactions")
-    plt.title(f"top-{5} recommendation")
+    plt.title(f"Top-{INTERACTION_SIZE} recommendation")
     plt.ylabel(MetricsEvaluator.METRICS_PRETTY[metric_name])
     plt.savefig(f'img/plot_{metric_name}.png')

@@ -10,6 +10,7 @@ import interactors
 from mf import ICFPMF
 from util import DatasetFormatter, MetricsEvaluator, metrics
 
+plt.rcParams['lines.linewidth'] = 3
 q = [
     inquirer.Checkbox('interactors',
                       message='Interactors to run',
@@ -46,7 +47,7 @@ for i in answers['interactors']:
         for metric_name in metrics_names:
             metric_values[metric_name][i][j] = me.metrics_mean[metric_name]
         
-fig, axs = plt.subplots(nrows=2,ncols=3,figsize=(10,12))
+fig, axs = plt.subplots(nrows=2,ncols=3,figsize=(16,8))
 fig.suptitle(f"top-{INTERACTION_SIZE} recommendation")
 for ax,metric_name in zip(axs.flatten(),metrics_names):
     df = pd.DataFrame(metric_values[metric_name])
@@ -57,4 +58,9 @@ for ax,metric_name in zip(axs.flatten(),metrics_names):
     
     ax.set_ylabel(MetricsEvaluator.METRICS_PRETTY[metric_name])
 
-plt.savefig(f'img/plot_all.png')
+s = fig.subplotpars
+fig.legend(answers['interactors'],loc='lower center',
+           bbox_to_anchor=[s.left, s.top+0.02, s.right-s.left, 0.05],
+           ncol=5, mode="expand", borderaxespad=0,
+           bbox_transform=fig.transFigure, fancybox=False, edgecolor="k")
+plt.savefig(f'img/plot_all.png',bbox_inches='tight')

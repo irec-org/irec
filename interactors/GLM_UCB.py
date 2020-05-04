@@ -68,7 +68,7 @@ class GLM_UCB(ICF):
 
             for max_i in result[i*self.interaction_size:(i+1)*self.interaction_size]:
                 max_item_mean = self.items_means[max_i]
-                if self.get_reward(uid,max_i) >= self.values[-2]:
+                if self.get_reward(uid,max_i) >= self.threshold:
                     u_rec_rewards.append(self.get_reward(uid,max_i))
                     u_rec_items_means.append(max_item_mean)
                     A += max_item_mean[:,None].dot(max_item_mean[None,:])
