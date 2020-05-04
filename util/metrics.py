@@ -38,18 +38,18 @@ def ndcgk(actual, predicted):
         idcg += 1.0 / np.log(i+2)
     return dcg / idcg
 
-def epck(actual,predicted,training_matrix):
-
+def epck(actual,predicted,items_popularity):
     C_2 = 1.0/len(predicted)
     sum_2=0
     for i,lid in enumerate(predicted):
         if lid in actual:
-            prob_seen_k=np.count_nonzero(training_matrix[:,lid])/training_matrix.shape[0]
+            prob_seen_k=items_popularity[lid]
             sum_2 += 1-prob_seen_k
     EPC=C_2*sum_2
     return EPC
 
 def ildk(items,items_distance):
+    items = np.array(items)
     num_items=len(items)
     local_ild=0
     if num_items == 0 or num_items == 1:
@@ -57,8 +57,11 @@ def ildk(items,items_distance):
         return 1.0
     else:
         for i, item_1 in enumerate(items):
-            for j, item_2 in enumerate(items):
-                if j < i:
-                    local_ild+=items_distance[item_1,item_2]
+            local_ild += np.sum(items_distance[item_1,items[items!=item_1]])
 
     return local_ild/(num_items*(num_items-1)/2)
+
+def get_items_distance(matrix):
+    items_distance = np.corrcoef(matrix.T)
+    items_distance = (items_distance+1)/2
+    return items_distance
