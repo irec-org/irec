@@ -20,7 +20,6 @@ class GLM_UCB(ICF):
         super().interact()
         self.items_means = items_means
         num_users = len(uids)
-        print(uids)
         # get number of latent factors 
         self_id = id(self)
         with threadpool_limits(limits=1, user_api='blas'):
