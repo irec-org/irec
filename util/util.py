@@ -19,9 +19,13 @@ def dict_to_str(dictionary):
         string += f"{key}: {value}\n"
     return string
 
-def run_parallel(func, args):
+def run_parallel(func, args, use_tqdm=True):
     executor = ProcessPoolExecutor()
     num_args = len(args)
     chunksize = int(num_args/multiprocessing.cpu_count())
-    results = [i for i in tqdm(executor.map(func,*list(zip(*args)),chunksize=chunksize),total=num_args)]
+    if use_tqdm:
+        ff = tqdm
+    else:
+        ff = lambda x,*y,**z: x 
+    results = [i for i in ff(executor.map(func,*list(zip(*args)),chunksize=chunksize),total=num_args)]
     return results
