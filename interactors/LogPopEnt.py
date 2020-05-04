@@ -15,7 +15,7 @@ class LogPopEnt(Interactor):
         items_entropy = Entropy.get_items_entropy(self.consumption_matrix,uids)
         items_popularity = MostPopular.get_items_popularity(self.consumption_matrix,uids)
         
-        items_logpopent = items_entropy * np.ma.log(items_popularity).filled(0)
+        items_logpopent = items_entropy * np.ma.log(items_popularity+1).filled(0)
 
         correlation = scipy.stats.pearsonr(items_entropy,items_popularity)[0]
         fig, ax = plt.subplots()
