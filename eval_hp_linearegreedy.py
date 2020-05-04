@@ -13,7 +13,7 @@ mf = ICFPMF()
 mf.load_var(dsf.matrix_users_ratings[dsf.train_uids])
 mf = mf.load()
 
-itr = interactors.LinearEGreedy.getInstance(var=mf.var,
+itr = interactors.LinearEGreedy(var=mf.var,
                                             user_lambda=mf.user_lambda,
                                             consumption_matrix=dsf.matrix_users_ratings,
 )
