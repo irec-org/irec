@@ -16,6 +16,7 @@ answers=inquirer.prompt(q)
 
 INTERACTION_SIZE = interactors.Interactor().interaction_size
 ITERATIONS = interactors.Interactor().get_iterations()
+THRESHOLD = interactors.Interactor().threshold
 dsf = DatasetFormatter()
 dsf = dsf.load()
 # dsf.get_base()
@@ -39,7 +40,7 @@ for i in answers['interactors']:
     itr.result = itr.load_result()
     for j in tqdm(range(len(KS))):
         k = KS[j]
-        me = MetricsEvaluator(name=itr.get_name(), k=k,threshold=4)
+        me = MetricsEvaluator(name=itr.get_name(), k=k,threshold=THRESHOLD)
         # me.eval_chunk_metrics(itr.result, dsf.matrix_users_ratings,5)
         me.eval_metrics(itr.result, dsf.matrix_users_ratings,items_popularity,items_distance)
 
