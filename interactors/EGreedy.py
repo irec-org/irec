@@ -21,6 +21,11 @@ class EGreedy(Interactor):
         users_num_interactions = defaultdict(int)
         available_users = set(uids)
 
+        mask = np.ones(self.consumption_matrix.shape[0], dtype=bool)
+        mask[uids] = 0
+        items_mean_values = np.mean(self.consumption_matrix[mask],axis=0)
+        items_count += self.consumption_matrix[mask].shape[0]
+
         for i in tqdm(range(num_users*self.interactions)):
             uid = random.sample(available_users,k=1)[0]
 
@@ -36,7 +41,7 @@ class EGreedy(Interactor):
 
             user_num_interactions = users_num_interactions[uid]
             for best_item in self.result[uid][user_num_interactions*self.interaction_size:(user_num_interactions+1)*self.interaction_size]:
-                items_mean_values[best_item] = (items_mean_values[best_item]+self.get_reward(uid,best_item))/(items_count[best_item] + 1)
+                items_mean_values[best_item] = (items_mean_values[best_item]*items_count[best_item]+self.get_reward(uid,best_item))/(items_count[best_item] + 1)
                 items_count[best_item] += 1
 
             users_num_interactions[uid] += 1
