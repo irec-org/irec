@@ -57,7 +57,9 @@ def ildk(items,items_distance):
         return 1.0
     else:
         for i, item_1 in enumerate(items):
-            local_ild += np.sum(items_distance[item_1,items[items!=item_1]])
+            for j, item_2 in enumerate(items):
+                if j < i:
+                    local_ild+=items_distance[item_1,item_2]
 
     return local_ild/(num_items*(num_items-1)/2)
 
