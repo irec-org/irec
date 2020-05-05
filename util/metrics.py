@@ -67,3 +67,11 @@ def get_items_distance(matrix):
     items_distance = np.corrcoef(matrix.T)
     items_distance = (items_distance+1)/2
     return items_distance
+
+def epdk(actual, predicted, consumed_items, items_distance):
+    rel = np.zeros(items_distance.shape[0],dtype=bool)
+    rel[actual] = 1
+    # distances_sum
+    res = rel[predicted][:,None] @ rel[consumed_items][None,:] * items_distance[predicted,consumed_items]
+    C = 1/(len(predicted)*np.sum(rel[consumed_items]))
+    return np.sum(res)/C
