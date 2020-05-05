@@ -4,6 +4,7 @@ from mf import ICFPMF
 from util import DatasetFormatter
 from sklearn.decomposition import NMF
 import numpy as np
+import scipy.sparse
 q = [
     inquirer.Checkbox('interactors',
                       message='Interactors to run',
@@ -36,10 +37,14 @@ for i in answers['interactors']:
     elif issubclass(itr_class,interactors.ICF):
         itr.interact(dsf.test_uids, mf.items_means)
     elif issubclass(itr_class,interactors.LinUCB) or issubclass(itr_class,interactors.UCBLearner):
-        model = NMF(n_components=10, init='nndsvd', random_state=0)
-        P = model.fit_transform(dsf.matrix_users_ratings[dsf.train_uids])
-        Q = model.components_.T
-        itr.interact(dsf.test_uids,Q)
+        # model = NMF(n_components=10, init='nndsvd', random_state=0)
+        # P = model.fit_transform(dsf.matrix_users_ratings[dsf.train_uids])
+        # Q = model.components_.T
+        # itr.interact(dsf.test_uids,Q)
+        u, s, vt = scipy.sparse.linalg.svds(
+            scipy.sparse.csr_matrix(dsf.matrix_users_ratings[dsf.train_uids]),
+            k=10)
+        itr.interact(dsf.test_uids,vt.T)
     else:
         itr.interact(dsf.test_uids)
         

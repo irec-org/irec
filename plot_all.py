@@ -10,7 +10,7 @@ import interactors
 from mf import ICFPMF
 from util import DatasetFormatter, MetricsEvaluator, metrics
 
-plt.rcParams['lines.linewidth'] = 3
+plt.rcParams['lines.linewidth'] = 2
 q = [
     inquirer.Checkbox('interactors',
                       message='Interactors to run',
@@ -21,6 +21,7 @@ answers=inquirer.prompt(q)
 
 INTERACTION_SIZE = interactors.Interactor().interaction_size
 ITERATIONS = interactors.Interactor().get_iterations()
+THRESHOLD = interactors.Interactor().threshold
 
 dsf = DatasetFormatter()
 dsf = dsf.load()
@@ -42,7 +43,7 @@ for i in answers['interactors']:
 
     for j in tqdm(range(len(KS))):
         k = KS[j]
-        me = MetricsEvaluator(itr.get_name(), k, 4)
+        me = MetricsEvaluator(itr.get_name(), k, THRESHOLD, INTERACTION_SIZE)
         me = me.load()
         for metric_name in metrics_names:
             metric_values[metric_name][i][j] = me.metrics_mean[metric_name]
