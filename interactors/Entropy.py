@@ -7,7 +7,6 @@ class Entropy(Interactor):
     def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
 
-
     @staticmethod
     def get_items_entropy(consumption_matrix, test_uids):
         lowest_value = np.min(consumption_matrix)
@@ -26,14 +25,16 @@ class Entropy(Interactor):
         super().interact()
         num_users = len(uids)
         items_entropy = self.get_items_entropy(self.consumption_matrix, uids)
-
-        plt.hist(items_entropy)
-        plt.xlabel("Entropy")
-        plt.ylabel("#Items")
-        plt.savefig(os.path.join(self.DIRS['img'],"entropy_"+self.get_name()+".png"))
-        plt.clf()
+        fig, ax = plt.subplots()
+        ax.hist(items_entropy)
+        ax.set_xlabel("Entropy")
+        ax.set_ylabel("#Items")
+        fig.savefig(os.path.join(self.DIRS['img'],"entropy_"+self.get_name()+".png"))
         
         top_iids = list(reversed(np.argsort(items_entropy)))[:self.get_iterations()]
+
+        print(top_iids[:20])
+
         for idx_uid in tqdm(range(num_users)):
             uid = uids[idx_uid]
             self.result[uid].extend(top_iids)

@@ -11,7 +11,7 @@ from util import Saveable, run_parallel, Singleton
 
 class ICFPMF(Saveable, Singleton):
     
-    def __init__(self, num_lat=10, iterations=100, var=0.1, user_var=1.01, item_var=1.01, *args, **kwargs):
+    def __init__(self, num_lat=10, iterations=500, var=0.1, user_var=1.01, item_var=1.01, *args, **kwargs):
         super().__init__(*args,**kwargs)
         self.num_lat = num_lat
         self.iterations = iterations
@@ -20,7 +20,7 @@ class ICFPMF(Saveable, Singleton):
         self.item_var = item_var
         self.user_lambda = self.var/self.user_var
         self.item_lambda = self.var/self.item_var
-        self.maps = []
+        self.objective_values = []
         self.best=None
 
     def load_var(self, training_matrix):
@@ -45,7 +45,7 @@ class ICFPMF(Saveable, Singleton):
         self.users_weights = np.random.multivariate_normal(np.zeros(self.num_lat),self.user_var*I,training_matrix.shape[0])
         self.items_weights = np.random.multivariate_normal(np.zeros(self.num_lat),self.item_var*I,training_matrix.shape[1])
 
-        best_map_value = np.inf
+        best_objective_value = np.inf
         # best_rmse = np.inf
         # self.noise = np.random.normal(self._mean,self.var)
         # self.noise = self._mean
@@ -84,26 +84,26 @@ class ICFPMF(Saveable, Singleton):
             # self.users_weights = final_users_weights
             # self.items_weights = final_items_weights
 
-            rmse=np.sqrt(np.mean((self.get_predicted()[observed_ui] - training_matrix[observed_ui])**2))
+            # rmse=np.sqrt(np.mean((self.get_predicted()[observed_ui] - training_matrix[observed_ui])**2))
             # map_value = 1
             # for val, mean, std in zip(training_matrix[observed_ui],(self.users_weights @ self.items_weights.T)[observed_ui],[self.var]*len(observed_ui[0])):
             #     map_value *= scipy.stats.norm.pdf(val,mean,std)
             map_value = scipy.special.logsumexp(scipy.stats.norm.pdf(training_matrix[observed_ui],(self.users_weights @ self.items_weights.T)[observed_ui],self.var))
                 # * scipy.special.logsumexp([scipy.stats.multivariate_normal.pdf(i,np.zeros(self.num_lat),self.user_var*I) for i in self.users_weights.flatten()])\
-                # * scipy.special.logsumexp([scipy.stats.multivariate_normal.pdf(i,np.zeros(self.num_lat),self.item_var*I) for i in self.items_weights.flatten()])\
+                # * scipy.special.logsumexp([scipy.stats.multivariate_normal.pdf(i,np.zeros(self.num_lat),self.item_var*I) for i in self.items_weights.flatten()])
             # map_value = np.prod(r_probabilities)
-
+            objective_value = map_value
             print("MAP:",map_value)
-            self.maps.append(map_value)
-            print("RMSE:",rmse)
+            self.objective_values.append(objective_value)
+            # print("RMSE:",rmse)
 
             if self.best == None:
                 self.best = self.__deepcopy__()
-                best_map_value = map_value
+                best_objective_value = objective_value
             else:
-                if map_value > best_map_value:
+                if objective_value > best_objective_value:
                     self.best = self.__deepcopy__()
-                    best_map_value = map_value
+                    best_objective_value = objective_value
 
         self = self.best
         del self.best
@@ -140,7 +140,11 @@ class ICFPMF(Saveable, Singleton):
         new = type(self)()
         new.__dict__.update(self.__dict__)
         new.users_weights = self.users_weights.copy()
+        new.users_means = self.users_means.copy()
+        new.users_covs = self.users_covs.copy()
         new.items_weights = self.items_weights.copy()
+        new.items_means = self.items_means.copy()
+        new.items_covs = self.items_covs.copy()
         return new
 
     def get_matrix(self, users_weights, items_weights, var):

@@ -9,13 +9,16 @@ class LogPopEnt(Interactor):
     def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
 
+    @staticmethod
+    def get_logpopent(items_popularity,items_entropy):
+        items_logpopent = items_entropy * np.ma.log(items_popularity).filled(0)
+        return np.dot(items_logpopent,1/np.max(items_logpopent))
+
     def interact(self, uids):
         super().interact()
-
         items_entropy = Entropy.get_items_entropy(self.consumption_matrix,uids)
-        items_popularity = MostPopular.get_items_popularity(self.consumption_matrix,uids)
-        
-        items_logpopent = items_entropy * np.ma.log(items_popularity+1).filled(0)
+        items_popularity = MostPopular.get_items_popularity(self.consumption_matrix,uids,normalize=False)
+        items_logpopent = self.get_logpopent(items_popularity,items_entropy)
 
         correlation = scipy.stats.pearsonr(items_entropy,items_popularity)[0]
         fig, ax = plt.subplots()
@@ -29,6 +32,7 @@ class LogPopEnt(Interactor):
         fig.savefig(os.path.join(self.DIRS['img'],"corr_popent_"+self.get_name()+".png"))
 
         top_iids = list(reversed(np.argsort(items_logpopent)))[:self.get_iterations()]
+        print(top_iids[:20])
 
         num_users = len(uids)
         for idx_uid in tqdm(range(num_users)):

@@ -31,7 +31,7 @@ KS = list(map(int,np.arange(INTERACTION_SIZE,ITERATIONS+1,step=INTERACTION_SIZE)
 mf = ICFPMF()
 mf.load_var(dsf.matrix_users_ratings[dsf.train_uids])
 
-metrics_names = ['precision','recall','hits','ndcg','ild','epd']
+metrics_names = ['precision','recall','hits','ild','epc','epd']
 metric_values = defaultdict(lambda:defaultdict(dict))
 for i in answers['interactors']:
     itr_class = interactors.INTERACTORS[i]

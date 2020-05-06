@@ -17,7 +17,6 @@ class LinUCB(Interactor):
 
         self.items_latent_factors = items_latent_factors
         num_users = len(uids)
-        # get number of latent factors 
 
         self_id = id(self)
         with threadpool_limits(limits=1, user_api='blas'):
@@ -31,14 +30,14 @@ class LinUCB(Interactor):
     @staticmethod
     def interact_user(obj_id,uid):
         self = ctypes.cast(obj_id, ctypes.py_object).value
-        if not issubclass(self.__class__,Interactor): # DANGER CODE
+        if not issubclass(self.__class__,Interactor):
             raise RuntimeError
         num_lat = len(self.items_latent_factors[0])
         I = np.eye(num_lat)
 
         user_candidate_items = list(range(len(self.items_latent_factors)))
         b = np.zeros(num_lat)
-        A = I
+        A = I.copy()
         result = []
 
         for i in range(self.interactions):

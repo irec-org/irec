@@ -7,6 +7,8 @@ from threadpoolctl import threadpool_limits
 import ctypes
 from .Entropy import Entropy
 from .MostPopular import MostPopular
+from .LogPopEnt import LogPopEnt
+
 class UCBLearner(Interactor):
     def __init__(self, stop=14, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -14,10 +16,8 @@ class UCBLearner(Interactor):
     def interact(self, uids, items_factors):
         super().interact()
         items_entropy = Entropy.get_items_entropy(self.consumption_matrix,uids)
-        items_popularity = MostPopular.get_items_popularity(self.consumption_matrix,uids)
-        
-        self.items_logpopent = items_entropy * np.ma.log(items_popularity+1).filled(0)
-        self.items_logpopent = self.items_logpopent/np.max(self.items_logpopent)
+        items_popularity = MostPopular.get_items_popularity(self.consumption_matrix,uids,normalize=False)
+        self.items_logpopent= LogPopEnt.get_logpopent(items_popularity,items_entropy)
 
         self.items_factors = items_factors
         num_users = len(uids)
@@ -34,8 +34,8 @@ class UCBLearner(Interactor):
 
     @staticmethod
     def discount_bias(num_items,stop):
-        limit = pow(2,stop)
-        return 100*pow(2,num_items)/limit
+        limit = pow(2,stop)/100
+        return pow(2,num_items)/limit
 
     @staticmethod
     def interact_user(obj_id,uid):

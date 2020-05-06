@@ -15,5 +15,5 @@ mf.fit(dsf.matrix_users_ratings[dsf.train_uids])
 
 import matplotlib.pyplot as plt
 
-plt.plot(mf.maps)
-plt.savefig("img/icfpmf_map.png")
+plt.plot(mf.objective_values)
+plt.savefig("img/icfpmf_objective_value.png")

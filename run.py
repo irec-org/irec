@@ -20,6 +20,19 @@ if np.any([issubclass(interactors.INTERACTORS[i],interactors.ICF) for i in answe
     mf = ICFPMF()
     mf.load_var(dsf.matrix_users_ratings[dsf.train_uids])
     mf = mf.load()
+
+
+if np.any([issubclass(interactors.INTERACTORS[i],interactors.LinUCB) or
+    issubclass(interactors.INTERACTORS[i],interactors.UCBLearner)
+    for i in answers['interactors']]):
+        # u, s, vt = scipy.sparse.linalg.svds(
+        #     scipy.sparse.csr_matrix(dsf.matrix_users_ratings[dsf.train_uids]),
+        #     k=10)
+        # Q = s * vt.T
+        model = NMF(n_components=10, init='nndsvd', random_state=0)
+        P = model.fit_transform(dsf.matrix_users_ratings[dsf.train_uids])
+        Q = model.components_.T
+
 for i in answers['interactors']:
 
     itr_class = interactors.INTERACTORS[i]
@@ -31,20 +44,11 @@ for i in answers['interactors']:
     else:
         itr = itr_class(consumption_matrix=dsf.matrix_users_ratings)
         
-
     if i  == 'LinearThompsonSampling':
         itr.interact(dsf.test_uids, mf.items_means, mf.items_covs)
     elif issubclass(itr_class,interactors.ICF):
         itr.interact(dsf.test_uids, mf.items_means)
     elif issubclass(itr_class,interactors.LinUCB) or issubclass(itr_class,interactors.UCBLearner):
-        # model = NMF(n_components=10, init='nndsvd', random_state=0)
-        # P = model.fit_transform(dsf.matrix_users_ratings[dsf.train_uids])
-        # Q = model.components_.T
-        # itr.interact(dsf.test_uids,Q)
-        u, s, vt = scipy.sparse.linalg.svds(
-            scipy.sparse.csr_matrix(dsf.matrix_users_ratings[dsf.train_uids]),
-            k=10)
-        itr.interact(dsf.test_uids,vt.T)
+        itr.interact(dsf.test_uids,Q)
     else:
         itr.interact(dsf.test_uids)
-        
