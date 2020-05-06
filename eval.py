@@ -41,7 +41,7 @@ for i in answers['interactors']:
     itr.result = itr.load_result()
     for j in tqdm(range(len(KS))):
         k = KS[j]
-        me = MetricsEvaluator(name=itr.get_name(), k=k,threshold=THRESHOLD, size=INTERACTION_SIZE)
+        me = MetricsEvaluator(name=itr.get_name(), k=k,threshold=THRESHOLD, interaction_size=INTERACTION_SIZE)
         # me.eval_chunk_metrics(itr.result, dsf.matrix_users_ratings,5)
         me.eval_chunk_metrics(itr.result, ground_truth, items_popularity, items_distance)
 

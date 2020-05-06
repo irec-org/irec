@@ -9,14 +9,14 @@ class MetricsEvaluator(Saveable):
     METRICS_PRETTY = {'precision':'Precision','hits':'Hits','cumulative_precision':'Cumulative Precision',
                       'recall':'Recall','f1':'F1 Score','ndcg':'NDCG','ild':'ILD','epc':'EPC'}
     
-    def __init__(self, name, k, threshold, size=None):
+    def __init__(self, name, k, threshold, interaction_size=None):
         super().__init__()
         self.metrics = defaultdict(dict)
         self.metrics_mean = defaultdict(float)
         self.name = name
         self.k = k
         self.threshold = threshold
-        self.size = size
+        self.interaction_size = interaction_size
 
     @staticmethod
     def get_ground_truth(consumption_matrix,threshold):
@@ -29,7 +29,7 @@ class MetricsEvaluator(Saveable):
         self.items_distance = items_distance
         self.items_popularity = items_popularity
         self_id = id(self)
-        args = [(self_id,int(uid),predicted[self.k-self.size:self.k],actual,list(set(predicted[:self.k-self.size]) & set(actual)))
+        args = [(self_id,int(uid),predicted[self.k-self.interaction_size:self.k],actual,list(set(predicted[:self.k-self.interaction_size]) & set(actual)))
                 for (uid, predicted),actual
                 in zip(result.items(),ground_truth)]
         
@@ -48,7 +48,7 @@ class MetricsEvaluator(Saveable):
         self = ctypes.cast(obj_id, ctypes.py_object).value
         metrics_values = dict()
         hits = len(set(predicted) & set(actual))
-        precision = hits/self.size
+        precision = hits/self.interaction_size
         recall = hits/len(actual)
         metrics_values['precision'] = precision
         metrics_values['recall'] = recall
@@ -56,7 +56,7 @@ class MetricsEvaluator(Saveable):
         metrics_values['ild'] = metrics.ildk(predicted,self.items_distance)
         metrics_values['epc'] = metrics.epck(actual,predicted,self.items_popularity)
         metrics_values['ndcg'] = metrics.ndcgk(actual,predicted)
-        metrics_values['epd'] = metrics.epdk(actual,predicted,consumed_items)
+        metrics_values['epd'] = metrics.epdk(actual,predicted,consumed_items,self.items_distance)
         return metrics_values
 
     def eval_metrics(self, result, ground_truth, items_popularity, items_distance):
