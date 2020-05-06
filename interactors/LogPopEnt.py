@@ -32,7 +32,6 @@ class LogPopEnt(Interactor):
         fig.savefig(os.path.join(self.DIRS['img'],"corr_popent_"+self.get_name()+".png"))
 
         top_iids = list(reversed(np.argsort(items_logpopent)))[:self.get_iterations()]
-        print(top_iids[:20])
 
         num_users = len(uids)
         for idx_uid in tqdm(range(num_users)):

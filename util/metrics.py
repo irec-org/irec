@@ -53,7 +53,7 @@ def ildk(items,items_distance):
     num_items=len(items)
     local_ild=0
     if num_items == 0 or num_items == 1:
-        print("Number of items:",num_items)
+        # print("Number of items:",num_items)
         return 1.0
     else:
         for i, item_1 in enumerate(items):

@@ -18,7 +18,6 @@ class UCBLearner(Interactor):
         items_entropy = Entropy.get_items_entropy(self.consumption_matrix,uids)
         items_popularity = MostPopular.get_items_popularity(self.consumption_matrix,uids,normalize=False)
         self.items_logpopent= LogPopEnt.get_logpopent(items_popularity,items_entropy)
-
         self.items_factors = items_factors
         num_users = len(uids)
         # get number of latent factors 
@@ -77,6 +76,5 @@ class UCBLearner(Interactor):
                     A += max_item_weight[:,None].dot(max_item_weight[None,:])
                     b += self.get_reward(uid,max_i)*max_item_weight
                     nb_items += 1
-
 
         return result

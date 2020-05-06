@@ -26,7 +26,7 @@ mf = ICFPMF()
 mf.load_var(dsf.matrix_users_ratings[dsf.train_uids])
 
 items_distance = metrics.get_items_distance(dsf.matrix_users_ratings)
-items_popularity = interactors.MostPopular.get_items_popularity(dsf.matrix_users_ratings,[])
+items_popularity = interactors.MostPopular.get_items_popularity(dsf.matrix_users_ratings,[],normalize=True)
 ground_truth = MetricsEvaluator.get_ground_truth(dsf.matrix_users_ratings,THRESHOLD)
 for i in answers['interactors']:
     itr_class = interactors.INTERACTORS[i]

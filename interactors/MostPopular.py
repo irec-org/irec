@@ -30,9 +30,7 @@ class MostPopular(Interactor):
         plt.clf()
 
         top_iids = list(reversed(np.argsort(items_popularity)))[:self.get_iterations()]
-
-        print(top_iids[:20])
-
+        
         num_users = len(uids)
         for idx_uid in tqdm(range(num_users)):
             uid = uids[idx_uid]
