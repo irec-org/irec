@@ -98,14 +98,7 @@ class DatasetFormatter(Saveable):
         self.num_items = df_info.loc['items']
         self.num_consumes = df_info.loc['ratings']
 
-        # self.matrix_users_ratings = np.zeros((self.num_users,self.num_items))
-        # for index, row in self.users_items.iterrows():
-        #     self.matrix_users_ratings[row['uid'],row['iid']] = row['r']
-
         self.matrix_users_ratings = np.nan_to_num(np.array(df_cons.pivot(index='uid', columns='iid', values = 'r')))
-
-        # self.matrix_users_ratings = self.matrix_users_ratings/5
-
         self.matrix_users_times = np.array(df_cons.pivot(index='uid', columns='iid', values = 't'))
         self.matrix_users_times[np.isnan(self.matrix_users_times)] = 0
         self.matrix_users_times = scipy.sparse.csr_matrix(self.matrix_users_times,dtype=np.int32)
@@ -123,7 +116,6 @@ class DatasetFormatter(Saveable):
         stime = time.time()
         eval(self.SELECTION_MODEL_HANDLERS[self.selection_model])
         print(f'Elapsed time: {time.time()-stime}s')
-        # self.get_fixed_format_for_recs()
     
     def run_users_train_test(self):
         self.num_train_users = round(self.num_users*(self.selection_model_parameters['train_size']))
@@ -138,34 +130,9 @@ class DatasetFormatter(Saveable):
         self.num_test_users = int(self.num_users-self.num_train_users)
         users_items_consumed=self.users_items.groupby('uid').count().iloc[:,0]
         test_candidate_users=np.array(list(users_items_consumed[users_items_consumed>=self.selection_model_parameters['test_consumes']].to_dict().keys()))
-        # print(users_items_consumed)
         self.test_uids = np.array(list(test_candidate_users[list(reversed(np.argsort(self.users_start_time[test_candidate_users])))])[:self.num_test_users])
         self.train_uids = np.array(list(set(range(self.num_users))-set(self.test_uids)))
-        # rows_in_test = self.users_items['uid'].isin(self.test_uids)
-        # self.test_users_items=self.users_items[rows_in_test]
-        # self.train_users_items=self.users_items[~rows_in_test]
-        # self.selected_test = []
-        # self.selected_train = []
         pass
-
-    # def get_fixed_format_for_recs(self):
-    #     test_users_items = defaultdict(list)
-    #     test_users_ratings = defaultdict(list)
-    #     for index, row in self.test_users_items.iterrows():
-    #         test_users_items[row['uid']].append(row['iid'])
-    #         test_users_ratings[row['uid']].append(row['r'])
-
-    #     self.test_users_items = test_users_items
-    #     self.test_users_ratings = test_users_ratings
-        
-    #     train_users_items = defaultdict(list)
-    #     train_users_ratings = defaultdict(list)
-    #     for index, row in self.train_users_items.iterrows():
-    #         train_users_items[row['uid']].append(row['iid'])
-    #         train_users_ratings[row['uid']].append(row['r'])
-
-    #     self.train_users_items = train_users_items
-    #     self.train_users_ratings = train_users_ratings
 
     def get_name(self):
         return super().get_name(
