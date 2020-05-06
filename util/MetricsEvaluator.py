@@ -29,9 +29,9 @@ class MetricsEvaluator(Saveable):
         self.items_distance = items_distance
         self.items_popularity = items_popularity
         self_id = id(self)
-        args = [(self_id,int(uid),predicted[self.k-self.interaction_size:self.k],actual,list(set(predicted[:self.k-self.interaction_size]) & set(actual)))
-                for (uid, predicted),actual
-                in zip(result.items(),ground_truth)]
+        args = [(self_id,int(uid),predicted[self.k-self.interaction_size:self.k],ground_truth[uid],list(set(predicted[:self.k-self.interaction_size]) & set(ground_truth[uid])))
+                for uid, predicted
+                in result.items()]
         
         results = util.run_parallel(self.eval_chunk_user,args,use_tqdm=False)
         
@@ -65,9 +65,9 @@ class MetricsEvaluator(Saveable):
         self.items_popularity = items_popularity
         
         self_id = id(self)
-        args = [(self_id,int(uid),predicted[:self.k],actual)
-                for (uid, predicted),actual
-                in zip(result.items(),ground_truth)]
+        args = [(self_id,int(uid),predicted[:self.k],ground_truth[uid])
+                for uid, predicted
+                in result.items()]
         
         results = util.run_parallel(self.eval_user,args,use_tqdm=False)
         

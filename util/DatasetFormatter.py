@@ -21,7 +21,7 @@ class DatasetFormatter(Saveable):
     }
     SELECTION_MODEL_HANDLERS = {'users_train_test': 'self.run_users_train_test()',
                                 'users_train_test_chrono': 'self.run_users_train_test_chrono()'}
-    def __init__(self,base='tr_te_ml_1m',
+    def __init__(self,base='ml_1m',
                  selection_model='users_train_test_chrono',
                  selection_model_parameters={}):
         super().__init__()
@@ -130,8 +130,8 @@ class DatasetFormatter(Saveable):
         self.num_test_users = int(self.num_users-self.num_train_users)
         users_items_consumed=self.users_items.groupby('uid').count().iloc[:,0]
         test_candidate_users=list(users_items_consumed[users_items_consumed>=self.selection_model_parameters['test_consumes']].to_dict().keys())
-        self.test_uids = random.sample(test_candidate_users,k=self.num_test_users)
-        self.train_uids = list(set(range(self.num_users))-set(self.test_uids))
+        self.test_uids = np.array(random.sample(test_candidate_users,k=self.num_test_users))
+        self.train_uids = np.array(list(set(range(self.num_users))-set(self.test_uids)))
 
     def run_users_train_test_chrono(self):
         self.num_train_users = round(self.num_users*(self.selection_model_parameters['train_size']))
@@ -139,8 +139,8 @@ class DatasetFormatter(Saveable):
         users_items_consumed=self.users_items.groupby('uid').count().iloc[:,0]
         test_candidate_users=np.array(list(users_items_consumed[users_items_consumed>=self.selection_model_parameters['test_consumes']].to_dict().keys()))
         # print(users_items_consumed)
-        self.test_uids = list(test_candidate_users[list(reversed(np.argsort(self.users_start_time[test_candidate_users])))])[:self.num_test_users]
-        self.train_uids = list(set(range(self.num_users))-set(self.test_uids))
+        self.test_uids = np.array(list(test_candidate_users[list(reversed(np.argsort(self.users_start_time[test_candidate_users])))])[:self.num_test_users])
+        self.train_uids = np.array(list(set(range(self.num_users))-set(self.test_uids)))
         # rows_in_test = self.users_items['uid'].isin(self.test_uids)
         # self.test_users_items=self.users_items[rows_in_test]
         # self.train_users_items=self.users_items[~rows_in_test]

@@ -10,7 +10,7 @@ import pickle
 import json
 
 class Interactor(Nameable, DirectoryDependent):
-    def __init__(self, consumption_matrix=None, interactions=24, interaction_size=5, threshold=4.0):
+    def __init__(self, consumption_matrix=None, interactions=20, interaction_size=5, threshold=4.0):
         self.consumption_matrix = consumption_matrix
         self.highest_value = np.max(self.consumption_matrix)
         self.lowest_value = np.min(self.consumption_matrix)
@@ -51,7 +51,7 @@ class Interactor(Nameable, DirectoryDependent):
         if 'pickle' == data_type:
             with open(f'{os.path.join(self.DIRS["result"],self.get_name())}.pickle', "rb") as f:
                 return pickle.load(f)
-        elif 'pickle' == data_type:
-            pass
+        elif 'txt' == data_type:
+            print("TXT not implemented yet")
         else:
             print("No valid data type given! Could not load result")
