@@ -48,7 +48,7 @@ class MetricsEvaluator(Saveable):
         self = ctypes.cast(obj_id, ctypes.py_object).value
         metrics_values = dict()
         hits = len(set(predicted) & set(actual))
-        precision = hits/self.interaction_size
+        precision = hits/len(predicted)
         recall = hits/len(actual)
         metrics_values['precision'] = precision
         metrics_values['recall'] = recall

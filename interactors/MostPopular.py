@@ -23,14 +23,13 @@ class MostPopular(Interactor):
         super().interact()
         items_popularity = self.get_items_popularity(self.consumption_matrix, uids)
 
-        plt.hist(items_popularity)
-        plt.xlabel("Popularity")
-        plt.ylabel("#Items")
-        plt.savefig(os.path.join(self.DIRS['img'],"popularity_"+self.get_name()+".png"))
-        plt.clf()
+        fig, ax = plt.subplots()
+        ax.hist(items_popularity)
+        ax.set_xlabel("Popularity")
+        ax.set_ylabel("#Items")
+        fig.savefig(os.path.join(self.DIRS['img'],"popularity_"+self.get_name()+".png"))
 
         top_iids = list(reversed(np.argsort(items_popularity)))[:self.get_iterations()]
-        
         num_users = len(uids)
         for idx_uid in tqdm(range(num_users)):
             uid = uids[idx_uid]
