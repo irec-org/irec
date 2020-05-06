@@ -7,7 +7,7 @@ import ctypes
 
 class MetricsEvaluator(Saveable):
     METRICS_PRETTY = {'precision':'Precision','hits':'Hits','cumulative_precision':'Cumulative Precision',
-                      'recall':'Recall','f1':'F1 Score','ndcg':'NDCG','ild':'ILD','epc':'EPC'}
+                      'recall':'Recall','f1':'F1 Score','ndcg':'NDCG','ild':'ILD','epc':'EPC','epd':'EPD'}
     
     def __init__(self, name, k, threshold, interaction_size=None):
         super().__init__()
