@@ -3,14 +3,14 @@ sys.path.insert(0, os.path.abspath('..'))
 
 import numpy as np
 
-from util import Nameable
-from util import DirectoryDependent, Singleton
+from util import Saveable
 from collections import defaultdict
 import pickle
 import json
 
-class Interactor(Nameable, DirectoryDependent):
-    def __init__(self, consumption_matrix=None, interactions=20, interaction_size=5, threshold=4.0):
+class Interactor(Saveable):
+    def __init__(self, consumption_matrix=None, interactions=5, interaction_size=2, threshold=4.0, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.consumption_matrix = consumption_matrix
         self.highest_value = np.max(self.consumption_matrix)
         self.lowest_value = np.min(self.consumption_matrix)
@@ -33,6 +33,9 @@ class Interactor(Nameable, DirectoryDependent):
 
     def interact_user(self,uid):
         pass
+
+    def filter_parameters(self,parameters):
+        return super().filter_parameters({k: v for k, v in parameters.items() if k not in ['highest_value','lowest_value','threshold']})
 
     @staticmethod
     def json_entry_save_format(uid, items):

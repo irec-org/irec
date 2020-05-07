@@ -38,11 +38,13 @@ for i in answers['interactors']:
     itr_class = interactors.INTERACTORS[i]
     if issubclass(itr_class,interactors.ICF):
         itr = itr_class(var=mf.var,
-                                    user_lambda=mf.user_lambda,
-                                    consumption_matrix=dsf.matrix_users_ratings
+                        user_lambda=mf.user_lambda,
+                        consumption_matrix=dsf.matrix_users_ratings,
+                        prefix_name=dsf.base
         )
     else:
-        itr = itr_class(consumption_matrix=dsf.matrix_users_ratings)
+        itr = itr_class(consumption_matrix=dsf.matrix_users_ratings,
+                        prefix_name=dsf.base)
         
     if i  == 'LinearThompsonSampling':
         itr.interact(dsf.test_uids, mf.items_means, mf.items_covs)

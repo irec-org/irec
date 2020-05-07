@@ -33,7 +33,7 @@ class MetricsEvaluator(Saveable):
                 for uid, predicted
                 in result.items()]
         
-        results = util.run_parallel(self.eval_chunk_user,args,use_tqdm=False)
+        results = util.run_parallel(self.eval_chunk_user,args, use_tqdm=False)
         
         self.metrics_mean.clear()
         for metric_name in results[0].keys():

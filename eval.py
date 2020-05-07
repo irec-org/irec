@@ -33,10 +33,11 @@ for i in answers['interactors']:
     if issubclass(itr_class, interactors.ICF):
         itr = itr_class(var=mf.var,
                         user_lambda=mf.user_lambda,
-                        consumption_matrix=dsf.matrix_users_ratings
+                        consumption_matrix=dsf.matrix_users_ratings,
+                        prefix_name=dsf.base
         )
     else:
-        itr = itr_class(consumption_matrix=dsf.matrix_users_ratings)
+        itr = itr_class(consumption_matrix=dsf.matrix_users_ratings,prefix_name=dsf.base)
 
     itr.result = itr.load_result()
     for j in tqdm(range(len(KS))):

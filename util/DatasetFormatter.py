@@ -23,8 +23,8 @@ class DatasetFormatter(Saveable):
                                 'users_train_test_chrono': 'self.run_users_train_test_chrono()'}
     def __init__(self,base='ml_1m',
                  selection_model='users_train_test_chrono',
-                 selection_model_parameters={}):
-        super().__init__()
+                 selection_model_parameters={}, *args, **kwargs):
+        super().__init__(*args,**kwargs)
         self.base = base
         self.selection_model = selection_model
         self.num_users = None
@@ -134,10 +134,8 @@ class DatasetFormatter(Saveable):
         self.train_uids = np.array(list(set(range(self.num_users))-set(self.test_uids)))
         pass
 
-    def get_name(self):
-        return super().get_name(
-            {k: v for k, v in self.__dict__.items()
-             if k not in ['num_test_users','num_train_users','num_users', 'num_items', 'num_consumes']})
+    def filter_parameters(self,parameters):
+        return super().filter_parameters({k: v for k, v in parameters.items() if k not in ['num_test_users','num_train_users','num_users', 'num_items', 'num_consumes']})
 
     def get_ml_1m(self):
         base_dir = self.BASES_DIRS[self.base]
