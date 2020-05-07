@@ -11,7 +11,7 @@ from util import Saveable, run_parallel, Singleton
 
 class ICFPMF(Saveable, Singleton):
     
-    def __init__(self, num_lat=10, iterations=500, var=0.1, user_var=1.01, item_var=1.01, *args, **kwargs):
+    def __init__(self, num_lat=10, iterations=200, var=0.1, user_var=1.01, item_var=1.01, *args, **kwargs):
         super().__init__(*args,**kwargs)
         self.num_lat = num_lat
         self.iterations = iterations
@@ -24,11 +24,17 @@ class ICFPMF(Saveable, Singleton):
         self.best=None
 
     def load_var(self, training_matrix):
+        decimals = 4
         self.var = np.var(training_matrix)
         self.user_var = np.mean(np.var(training_matrix,axis=1))
         self.item_var = np.mean(np.var(training_matrix,axis=0))
         self.user_lambda = self.var/self.user_var
         self.item_lambda = self.var/self.item_var
+        self.var = np.round(self.var,decimals)
+        self.user_var = np.round(self.user_var,decimals)
+        self.item_var = np.round(self.item_var,decimals)
+        self.user_lambda = np.round(self.user_lambda,decimals)
+        self.item_lambda = np.round(self.item_lambda,decimals)
 
     def fit(self,training_matrix):
         print(self.get_verbose_name())
