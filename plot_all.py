@@ -26,7 +26,6 @@ THRESHOLD = interactors.Interactor().threshold
 
 dsf = DatasetFormatter()
 dsf = dsf.load()
-# dsf.get_base()
 KS = list(map(int,np.arange(INTERACTION_SIZE,ITERATIONS+1,step=INTERACTION_SIZE)))
 mf = ICFPMF()
 mf.load_var(dsf.matrix_users_ratings[dsf.train_uids])
@@ -49,7 +48,7 @@ for i in answers['interactors']:
         for metric_name in metrics_names:
             metric_values[metric_name][i][j] = me.metrics_mean[metric_name]
         
-fig, axs = plt.subplots(nrows=2,ncols=3,figsize=(16,11))
+fig, axs = plt.subplots(nrows=3,ncols=3,figsize=(18,13))
 fig.suptitle(f"Top-{INTERACTION_SIZE} recommendation")
 for ax,metric_name in zip(axs.flatten(),metrics_names):
     df = pd.DataFrame(metric_values[metric_name])
@@ -59,6 +58,14 @@ for ax,metric_name in zip(axs.flatten(),metrics_names):
     ax.set_xlabel("Interactions")
     
     ax.set_ylabel(MetricsEvaluator.METRICS_PRETTY[metric_name],rotation='horizontal')
+    ax.yaxis.set_label_coords(-0.1,1.02)
+
+for ax, metric_name in zip(axs[2,:],metrics_names[:3]):
+    df = pd.DataFrame(metric_values[metric_name]).cumsum()
+    ax.plot(df)
+    ax.set_xlabel("Interactions")
+    
+    ax.set_ylabel("Cum. "+MetricsEvaluator.METRICS_PRETTY[metric_name],rotation='horizontal')
     ax.yaxis.set_label_coords(-0.1,1.02)
 
 s = fig.subplotpars
