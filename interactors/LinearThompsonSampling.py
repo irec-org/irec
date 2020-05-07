@@ -60,9 +60,9 @@ class LinearThompsonSampling(ICF):
                 result.append(max_i)
             
             # for item in result[i*self.interaction_size:(i+1)*self.interaction_size]:
+                max_q = tmp_max_qs[max_i]
+                A += max_q[:,None].dot(max_q[None,:])
                 if self.get_reward(uid,max_i) >= self.threshold:
-                    max_q = tmp_max_qs[max_i]
-                    A += max_q[:,None].dot(max_q[None,:])
                     b += self.get_reward(uid,max_i)*max_q
                     
         return result

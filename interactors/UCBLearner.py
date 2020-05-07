@@ -13,11 +13,16 @@ class UCBLearner(Interactor):
     def __init__(self, stop=14, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.stop = stop
+
     def interact(self, uids, items_factors):
         super().interact()
         items_entropy = Entropy.get_items_entropy(self.consumption_matrix,uids)
         items_popularity = MostPopular.get_items_popularity(self.consumption_matrix,uids,normalize=False)
         self.items_logpopent= LogPopEnt.get_logpopent(items_popularity,items_entropy)
+
+        # items_popularity = MostPopular.get_items_popularity(self.consumption_matrix,uids,normalize=True)
+        # self.items_logpopent = items_popularity
+
         self.items_factors = items_factors
         num_users = len(uids)
         # get number of latent factors 
@@ -53,6 +58,8 @@ class UCBLearner(Interactor):
         nb_items = 0
         items_bias = self.items_logpopent
 
+        num_test_items = len(np.nonzero(self.consumption_matrix[uid,:]>=self.threshold)[0])
+
         for i in range(self.interactions):
             for j in range(self.interaction_size):
                 mean = np.dot(np.linalg.inv(A),b)
@@ -65,16 +72,20 @@ class UCBLearner(Interactor):
                 current_bias = items_bias[user_candidate_items] * max(1, np.max(pred_rule))
                 bias = current_bias - (current_bias * self.discount_bias(nb_items,self.stop)/100)
                 bias[bias<0] = 0
+                # bias = current_bias
                 max_i = user_candidate_items[np.argmax(pred_rule + bias)]
 
                 user_candidate_items.remove(max_i)
                 result.append(max_i)
 
             for max_i in result[i*self.interaction_size:(i+1)*self.interaction_size]:
+                max_item_weight = self.items_factors[max_i]
+                A += max_item_weight[:,None].dot(max_item_weight[None,:])
                 if self.get_reward(uid,max_i) >= self.threshold:
-                    max_item_weight = self.items_factors[max_i]
-                    A += max_item_weight[:,None].dot(max_item_weight[None,:])
                     b += self.get_reward(uid,max_i)*max_item_weight
                     nb_items += 1
+                    # if num_test_items == nb_items:
+                    #     print("uid:{} inter:{} num_items:{}".format(uid,i,nb_items))
+                
 
         return result

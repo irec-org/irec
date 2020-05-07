@@ -55,8 +55,8 @@ class LinearUCB(ICF):
                 result.append(max_i)
 
             for max_i in result[i*self.interaction_size:(i+1)*self.interaction_size]:
+                max_item_mean = self.items_means[max_i]
+                A += max_item_mean[:,None].dot(max_item_mean[None,:])
                 if self.get_reward(uid,max_i) >= self.threshold:
-                    max_item_mean = self.items_means[max_i]
-                    A += max_item_mean[:,None].dot(max_item_mean[None,:])
                     b += self.get_reward(uid,max_i)*max_item_mean
         return result

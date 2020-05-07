@@ -76,3 +76,4 @@ fig.legend(answers['interactors'],loc='lower center',
            bbox_transform=fig.transFigure, fancybox=False, edgecolor="k")
 
 plt.savefig(f'img/plot_all_{INTERACTIONS}_{INTERACTION_SIZE}.png',bbox_inches='tight')
+plt.savefig(f'img/plot_all_{INTERACTIONS}_{INTERACTION_SIZE}.eps',bbox_inches='tight')

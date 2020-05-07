@@ -66,7 +66,7 @@ def ildk(items,items_distance):
 def get_items_distance(matrix):
     items_distance = np.corrcoef(matrix.T)
     items_distance = (items_distance+1)/2
-    return items_distance
+    return 1-items_distance
 
 def epdk(actual, predicted, consumed_items, items_distance):
     if len(consumed_items) == 0:
