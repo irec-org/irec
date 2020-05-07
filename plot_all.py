@@ -20,6 +20,7 @@ q = [
 ]
 answers=inquirer.prompt(q)
 
+INTERACTIONS = interactors.Interactor().interactions
 INTERACTION_SIZE = interactors.Interactor().interaction_size
 ITERATIONS = interactors.Interactor().get_iterations()
 THRESHOLD = interactors.Interactor().threshold
@@ -73,4 +74,5 @@ fig.legend(answers['interactors'],loc='lower center',
            bbox_to_anchor=[s.left, s.top+0.04, s.right-s.left, 0.05],
            ncol=6, mode="expand", borderaxespad=0,
            bbox_transform=fig.transFigure, fancybox=False, edgecolor="k")
-plt.savefig(f'img/plot_all.png',bbox_inches='tight')
+
+plt.savefig(f'img/plot_all_{INTERACTIONS}_{INTERACTION_SIZE}.png',bbox_inches='tight')

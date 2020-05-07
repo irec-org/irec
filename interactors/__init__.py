@@ -21,7 +21,6 @@ INTERACTORS = {
     # 'Interactor': Interactor,
     # 'ICF': ICF,
     'LinearEGreedy': LinearEGreedy,
-    'LinearUCB': LinearUCB,
     'MostPopular': MostPopular,
     'ThompsonSampling': ThompsonSampling,
     'LinUCB': LinUCB,
@@ -33,4 +32,5 @@ INTERACTORS = {
     'LogPopEnt': LogPopEnt,
     'EGreedy': EGreedy,
     'UCB': UCB,
+    'LinearUCB': LinearUCB,
 }

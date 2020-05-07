@@ -60,7 +60,7 @@ class UCBLearner(Interactor):
                 max_item_weight = np.NAN
                 max_e_reward = np.NINF
 
-                pred_rule = mean[None,:] @ self.items_factors[user_candidate_items].T
+                pred_rule = mean @ self.items_factors[user_candidate_items].T
 
                 current_bias = items_bias[user_candidate_items] * max(1, np.max(pred_rule))
                 bias = current_bias - (current_bias * self.discount_bias(nb_items,self.stop)/100)
