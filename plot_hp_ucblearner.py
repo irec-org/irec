@@ -9,6 +9,9 @@ from tqdm import tqdm
 import matplotlib.pyplot as plt
 from collections import defaultdict
 import pandas as pd
+plt.rcParams['lines.linewidth'] = 2
+plt.rcParams['font.size'] = 15
+
 INTERACTION_SIZE = interactors.Interactor().interaction_size
 ITERATIONS = interactors.Interactor().get_iterations()
 INTERACTIONS = interactors.Interactor().interactions
@@ -37,10 +40,17 @@ for value in range(0,51):
 # print(metric_values)
 
 fig, axs = plt.subplots(nrows=2,ncols=3,figsize=(18,13))
-fig.suptitle(f"Top-{INTERACTION_SIZE} recommendation")
+fig.suptitle(f"Top-{INTERACTION_SIZE} recommendation with {INTERACTIONS} interactions")
 for ax,metric_name in zip(axs.flatten(),metrics_names):
-    
-    ax.plot(list(metric_values[metric_name].keys()),list(metric_values[metric_name].values()))
+    x, y = np.array(list(metric_values[metric_name].keys())), np.array(list(metric_values[metric_name].values()))
+    ax.plot(x,y,color='k')
+    argmax = np.argmax(y)
+    colors = (['k']*len(x))
+    colors[argmax] = 'r'
+    for i in range(len(x)):
+        ax.scatter(x[i],y[i],color=colors[i],zorder=33)
+
+    ax.set_title("Best {} at {}".format(MetricsEvaluator.METRICS_PRETTY[metric_name],argmax))
     ax.set_xlabel("Limit/Stop point")
     
     ax.set_ylabel(MetricsEvaluator.METRICS_PRETTY[metric_name],rotation='horizontal')
