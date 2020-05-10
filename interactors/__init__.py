@@ -16,21 +16,23 @@ from .EGreedy import *
 from .UCB import *
 from .LinUCB import *
 from .UCBLearner import *
+from .MostRepresentative import *
 
 INTERACTORS = {
     # 'Interactor': Interactor,
     # 'ICF': ICF,
     'LinearEGreedy': LinearEGreedy,
+    'LinearUCB': LinearUCB,
+    'GLM_UCB': GLM_UCB,
     'MostPopular': MostPopular,
     'ThompsonSampling': ThompsonSampling,
     'LinUCB': LinUCB,
     'UCBLearner': UCBLearner,
-    'GLM_UCB': GLM_UCB,
     'LinearThompsonSampling': LinearThompsonSampling,
     'Random': Random,
     'Entropy': Entropy,
     'LogPopEnt': LogPopEnt,
     'EGreedy': EGreedy,
     'UCB': UCB,
-    'LinearUCB': LinearUCB,
+    'MostRepresentative': MostRepresentative,
 }

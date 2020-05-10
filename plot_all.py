@@ -63,6 +63,7 @@ for ax,metric_name in zip(axs.flatten(),metrics_names):
 
 for ax, metric_name in zip(axs[2,:],metrics_names[:3]):
     df = pd.DataFrame(metric_values[metric_name]).cumsum()
+    print(df)
     ax.plot(df)
     ax.set_xlabel("Interactions")
     

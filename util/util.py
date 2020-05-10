@@ -2,6 +2,7 @@ from concurrent.futures import ProcessPoolExecutor
 from tqdm import tqdm
 import os
 import multiprocessing
+import numpy as np
 
 def dict_to_list_gen(d):
     for k, v in zip(d.keys(), d.values()):
@@ -29,3 +30,6 @@ def run_parallel(func, args, use_tqdm=True):
         ff = lambda x,*y,**z: x 
     results = [i for i in ff(executor.map(func,*list(zip(*args)),chunksize=chunksize),total=num_args)]
     return results
+
+def sigmoid(x):
+    return 1/(1+np.exp(-x))
