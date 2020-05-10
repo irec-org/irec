@@ -26,6 +26,8 @@ class ICFPMF(Saveable, Singleton):
     def load_var(self, training_matrix):
         decimals = 4
         self.var = np.var(training_matrix)
+        # self.user_var = self.var
+        # self.item_var = self.var
         self.user_var = np.mean(np.var(training_matrix,axis=1))
         self.item_var = np.mean(np.var(training_matrix,axis=0))
         self.user_lambda = self.var/self.user_var
@@ -94,22 +96,39 @@ class ICFPMF(Saveable, Singleton):
             # map_value = 1
             # for val, mean, std in zip(training_matrix[observed_ui],(self.users_weights @ self.items_weights.T)[observed_ui],[self.var]*len(observed_ui[0])):
             #     map_value *= scipy.stats.norm.pdf(val,mean,std)
-            map_value = scipy.special.logsumexp(scipy.stats.norm.pdf(training_matrix[observed_ui],(self.users_weights @ self.items_weights.T)[observed_ui],self.var))
+            map_value = scipy.special.logsumexp(scipy.stats.norm.pdf(training_matrix[observed_ui],(self.users_weights @ self.items_weights.T)[observed_ui],self.var))\
+                * scipy.special.logsumexp([scipy.stats.multivariate_normal.pdf(weights,means,covs)
+                                           for means, covs, weights in zip(self.users_means,self.users_covs,self.users_weights)])\
+                * scipy.special.logsumexp([scipy.stats.multivariate_normal.pdf(weights,means,covs)
+                                           for means, covs, weights in zip(self.items_means,self.items_covs,self.items_weights)])
+            
+            # print(scipy.special.logsumexp([scipy.stats.multivariate_normal.pdf(weights,means,covs)
+            #                                for means, covs, weights in zip(self.items_means,self.items_covs,self.items_weights)]))
+
+            
+            # Test of some type of joint probability that dont work
                 # * scipy.special.logsumexp([scipy.stats.multivariate_normal.pdf(i,np.zeros(self.num_lat),self.user_var*I) for i in self.users_weights.flatten()])\
                 # * scipy.special.logsumexp([scipy.stats.multivariate_normal.pdf(i,np.zeros(self.num_lat),self.item_var*I) for i in self.items_weights.flatten()])
             # map_value = np.prod(r_probabilities)
             objective_value = map_value
-            print("MAP:",map_value)
-            self.objective_values.append(objective_value)
-            # print("RMSE:",rmse)
+            # objective_value = np.sum((training_matrix[observed_ui] - self.get_predicted()[observed_ui])**2)/2 +\
+            #     self.user_lambda/2 * np.sum(np.linalg.norm(self.users_weights,axis=1)) +\
+            #     self.item_lambda/2 * np.sum(np.linalg.norm(self.items_weights,axis=1))
 
-            if self.best == None:
-                self.best = self.__deepcopy__()
-                best_objective_value = objective_value
-            else:
-                if objective_value > best_objective_value:
+            # # print("MAP:",map_value)
+            
+            print(objective_value)
+            if i > 5:
+                self.objective_values.append(objective_value)
+                # print("RMSE:",rmse)
+
+                if self.best == None:
                     self.best = self.__deepcopy__()
                     best_objective_value = objective_value
+                else:
+                    if objective_value > best_objective_value:
+                        self.best = self.__deepcopy__()
+                        best_objective_value = objective_value
 
         self = self.best
         del self.best
