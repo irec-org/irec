@@ -1,6 +1,6 @@
 import inquirer
 import interactors
-from mf import ICFPMF
+import mf
 from util import DatasetFormatter
 from sklearn.decomposition import NMF
 import numpy as np
@@ -17,9 +17,9 @@ dsf = DatasetFormatter()
 dsf = dsf.load()
 # dsf.get_base()
 if np.any([issubclass(interactors.INTERACTORS[i],interactors.ICF) for i in answers['interactors']]):
-    mf = ICFPMF()
-    mf.load_var(dsf.matrix_users_ratings[dsf.train_uids])
-    mf = mf.load()
+    mf_model = mf.ICFPMF()
+    mf_model.load_var(dsf.matrix_users_ratings[dsf.train_uids])
+    mf_model = mf_model.load()
 
 
 if np.any([issubclass(interactors.INTERACTORS[i],interactors.LinUCB) or
@@ -38,8 +38,8 @@ for i in answers['interactors']:
 
     itr_class = interactors.INTERACTORS[i]
     if issubclass(itr_class,interactors.ICF):
-        itr = itr_class(var=mf.var,
-                        user_lambda=mf.user_lambda,
+        itr = itr_class(var=mf_model.var,
+                        user_lambda=mf_model.user_lambda,
                         consumption_matrix=dsf.matrix_users_ratings,
                         prefix_name=dsf.base
         )
@@ -48,9 +48,9 @@ for i in answers['interactors']:
                         prefix_name=dsf.base)
         
     if i  == 'LinearThompsonSampling':
-        itr.interact(dsf.test_uids, mf.items_means, mf.items_covs)
+        itr.interact(dsf.test_uids, mf_model.items_means, mf_model.items_covs)
     elif issubclass(itr_class,interactors.ICF):
-        itr.interact(dsf.test_uids, mf.items_means)
+        itr.interact(dsf.test_uids, mf_model.items_means)
     elif issubclass(itr_class,interactors.LinUCB):
         itr.interact(dsf.test_uids,Q)
     elif issubclass(itr_class,interactors.UCBLearner):
