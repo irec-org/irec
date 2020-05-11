@@ -35,24 +35,21 @@ class LinearUCB(ICF):
         num_lat = len(self.items_means[0])
         I = np.eye(num_lat)
 
-        user_candidate_items = list(range(len(self.items_means)))
+        user_candidate_items = np.array(list(range(len(self.items_means))))
         b = np.zeros(num_lat)
         A = self.user_lambda*I
         result = []
 
         for i in range(self.interactions):
-            for j in range(self.interaction_size):
-                mean = np.dot(np.linalg.inv(A),b)
-                cov = np.linalg.inv(A)*self.var
-                max_i = np.NAN
-                max_item_mean = np.NAN
-                max_e_reward = np.NINF
+            mean = np.dot(np.linalg.inv(A),b)
+            cov = np.linalg.inv(A)*self.var
 
-                max_i = user_candidate_items[np.argmax(mean[None,:] @ self.items_means[user_candidate_items].T+\
-                                                       self.alpha*np.sqrt(np.sum(self.items_means[user_candidate_items].dot(cov) * self.items_means[user_candidate_items],axis=1)))]
+            best_items  = user_candidate_items[np.argsort(mean @ self.items_means[user_candidate_items].T+\
+                                                          self.alpha*np.sqrt(np.sum(self.items_means[user_candidate_items].dot(cov) * self.items_means[user_candidate_items],axis=1)))[::-1]][:self.interaction_size]
 
-                user_candidate_items.remove(max_i)
-                result.append(max_i)
+            user_candidate_items = user_candidate_items[~np.isin(user_candidate_items,best_items)]
+            result.extend(best_items)
+
 
             for max_i in result[i*self.interaction_size:(i+1)*self.interaction_size]:
                 max_item_mean = self.items_means[max_i]

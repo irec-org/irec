@@ -18,7 +18,7 @@ class UCBLearner(Interactor):
         super().interact()
         items_entropy = Entropy.get_items_entropy(self.consumption_matrix,uids)
         items_popularity = MostPopular.get_items_popularity(self.consumption_matrix,uids,normalize=False)
-        self.items_logpopent= LogPopEnt.get_logpopent(items_popularity,items_entropy)
+        self.items_logpopent= LogPopEnt.get_items_logpopent(items_popularity,items_entropy)
 
         # items_popularity = MostPopular.get_items_popularity(self.consumption_matrix,uids,normalize=True)
         # self.items_logpopent = items_popularity
@@ -51,7 +51,7 @@ class UCBLearner(Interactor):
         I = np.eye(num_lat)
 
         result = []
-        user_candidate_items = list(range(len(self.items_factors)))
+        user_candidate_items = np.array(list(range(len(self.items_factors))))
         b = np.zeros(num_lat)
         A = I
 
@@ -61,22 +61,18 @@ class UCBLearner(Interactor):
         num_test_items = len(np.nonzero(self.consumption_matrix[uid,:]>=self.threshold)[0])
 
         for i in range(self.interactions):
-            for j in range(self.interaction_size):
-                mean = np.dot(np.linalg.inv(A),b)
-                max_i = np.NAN
-                max_item_weight = np.NAN
-                max_e_reward = np.NINF
+            mean = np.dot(np.linalg.inv(A),b)
 
-                pred_rule = mean @ self.items_factors[user_candidate_items].T
+            pred_rule = mean @ self.items_factors[user_candidate_items].T
 
-                current_bias = items_bias[user_candidate_items] * max(1, np.max(pred_rule))
-                bias = current_bias - (current_bias * self.discount_bias(nb_items,self.stop)/100)
-                bias[bias<0] = 0
-                # bias = current_bias
-                max_i = user_candidate_items[np.argmax(pred_rule + bias)]
+            current_bias = items_bias[user_candidate_items] * max(1, np.max(pred_rule))
+            bias = current_bias - (current_bias * self.discount_bias(nb_items,self.stop)/100)
+            bias[bias<0] = 0
+            # bias = current_bias
+            best_items = user_candidate_items[np.argsort(pred_rule + bias)[::-1]][:self.interaction_size]
 
-                user_candidate_items.remove(max_i)
-                result.append(max_i)
+            user_candidate_items = user_candidate_items[~np.isin(user_candidate_items,best_items)]
+            result.extend(best_items)
 
             for max_i in result[i*self.interaction_size:(i+1)*self.interaction_size]:
                 max_item_weight = self.items_factors[max_i]
@@ -84,8 +80,6 @@ class UCBLearner(Interactor):
                 if self.get_reward(uid,max_i) >= self.threshold:
                     b += self.get_reward(uid,max_i)*max_item_weight
                     nb_items += 1
-                    # if num_test_items == nb_items:
-                    #     print("uid:{} inter:{} num_items:{}".format(uid,i,nb_items))
                 
 
         return result

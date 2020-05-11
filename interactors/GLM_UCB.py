@@ -48,18 +48,14 @@ class GLM_UCB(ICF):
         A = self.user_lambda*I
         result = []
         for i in range(self.interactions):
+            if len(u_rec_items_means) == 0:
+                p = np.zeros(num_lat)
+            else:
+                p = scipy.optimize.root(self.error_user_weight_function,
+                                        p,
+                                        (u_rec_rewards,u_rec_items_means)).x
+            cov = np.linalg.inv(A)*self.var
             for j in range(self.interaction_size):
-                if len(u_rec_items_means) == 0:
-                    p = np.zeros(num_lat)
-                else:
-                    p = scipy.optimize.root(self.error_user_weight_function,
-                                            p,
-                                            (u_rec_rewards,u_rec_items_means)).x
-                cov = np.linalg.inv(A)*self.var
-                max_i = np.NAN
-                max_item_mean = np.NAN
-                max_e_reward = np.NINF
-
                 max_i = user_candidate_items[np.argmax(self.p(p[None,:] @ self.items_means[user_candidate_items].T) + self.c * np.sqrt(np.log(i*self.interaction_size+j+1)) *\
                     np.sqrt(np.sum(self.items_means[user_candidate_items].dot(cov) * self.items_means[user_candidate_items],axis=1)))]
 
@@ -68,7 +64,6 @@ class GLM_UCB(ICF):
 
             for max_i in result[i*self.interaction_size:(i+1)*self.interaction_size]:
                 max_item_mean = self.items_means[max_i]
-                # if self.get_reward(uid,max_i) >= self.threshold:
                 u_rec_rewards.append(self.get_reward(uid,max_i))
                 u_rec_items_means.append(max_item_mean)
                 A += max_item_mean[:,None].dot(max_item_mean[None,:])

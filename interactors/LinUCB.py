@@ -35,44 +35,22 @@ class LinUCB(Interactor):
         num_lat = len(self.items_latent_factors[0])
         I = np.eye(num_lat)
 
-        user_candidate_items = list(range(len(self.items_latent_factors)))
+        user_candidate_items = np.array(list(range(len(self.items_latent_factors))))
         b = np.zeros(num_lat)
         A = I.copy()
         result = []
-        num_consumed_items = 0
 
         for i in range(self.interactions):
             mean = np.dot(np.linalg.inv(A),b)
-            # if uid == 2:
-            #     np.seterr('warn')
-            #     _part1 = mean[None,:] @ self.items_latent_factors[user_candidate_items].T
-            #     _part2 = self.alpha*np.sqrt(np.sum(self.items_latent_factors[user_candidate_items].dot(np.linalg.inv(A)) * self.items_latent_factors[user_candidate_items],axis=1))
-            #     _total = _part1 + _part2
-            #     print('Interaction {}, {} consumed items'.format(i,num_consumed_items))
-            #     print('c(y,p) {:.5f}'.format(np.corrcoef(_part1,_total)[0,1]))
-            #     print('c(y,b) {:.5f}'.format(np.corrcoef(_part2,_total)[0,1]))
+            best_items = user_candidate_items[np.argsort(mean @ self.items_latent_factors[user_candidate_items].T+\
+                                                         self.alpha*np.sqrt(np.sum(self.items_latent_factors[user_candidate_items].dot(np.linalg.inv(A)) * self.items_latent_factors[user_candidate_items],axis=1)))[::-1]][:self.interaction_size]
 
-            for j in range(self.interaction_size):
-                max_i = np.NAN
-
-                max_i = user_candidate_items[np.argmax(mean[None,:] @ self.items_latent_factors[user_candidate_items].T+\
-                                                       self.alpha*np.sqrt(np.sum(self.items_latent_factors[user_candidate_items].dot(np.linalg.inv(A)) * self.items_latent_factors[user_candidate_items],axis=1)))]
-
-                # if uid == 2:
-                #     _max_i= np.argmax(mean[None,:] @ self.items_latent_factors[user_candidate_items].T+\
-                #             self.alpha*np.sqrt(np.sum(self.items_latent_factors[user_candidate_items].dot(np.linalg.inv(A)) * self.items_latent_factors[user_candidate_items],axis=1)))
-                #     print('selected item {} with {:.2f}p and {:.2f}b'.format(max_i,
-                #         (mean[None,:] @ self.items_latent_factors[user_candidate_items].T).flatten()[_max_i],
-                #         (self.alpha*np.sqrt(np.sum(self.items_latent_factors[user_candidate_items].dot(np.linalg.inv(A)) * self.items_latent_factors[user_candidate_items],axis=1)))[_max_i]
-                #     ))
-
-                user_candidate_items.remove(max_i)
-                result.append(max_i)
+            user_candidate_items = user_candidate_items[~np.isin(user_candidate_items,best_items)]
+            result.extend(best_items)
 
             for max_i in result[i*self.interaction_size:(i+1)*self.interaction_size]:
                 max_item_latent_factors = self.items_latent_factors[max_i]
                 A += max_item_latent_factors[:,None].dot(max_item_latent_factors[None,:])
                 if self.get_reward(uid,max_i) >= self.threshold:
                     b += self.get_reward(uid,max_i)*max_item_latent_factors
-                    num_consumed_items += 1
         return result
