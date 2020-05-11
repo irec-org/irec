@@ -12,7 +12,7 @@ from util import Saveable, run_parallel
 from . import MF
 
 class ICFPMF(MF):
-    def __init__(self, iterations=100, var=0.1, user_var=1.01, item_var=1.01, *args, **kwargs):
+    def __init__(self, iterations=25, var=0.1, user_var=1.01, item_var=1.01, *args, **kwargs):
         super().__init__(*args,**kwargs)
         self.iterations = iterations
         self.var = var
@@ -44,32 +44,20 @@ class ICFPMF(MF):
         print(self.get_verbose_name())
         training_matrix = self.normalize_matrix(training_matrix)
         self_id = id(self)
-
         self.training_matrix = training_matrix
         num_users = training_matrix.shape[0]
         num_items = training_matrix.shape[1]
         self.lowest_value = lowest_value = np.min(training_matrix)
         highest_value = np.max(training_matrix)
         self.observed_ui = observed_ui = np.nonzero(training_matrix>lowest_value) # itens observed by some user
-        # value_abs_range = abs(highest_value - lowest_value)
         self.I = I = np.eye(self.num_lat)
-            # self.var = np.mean(np.var(training_matrix))
         self.users_weights = np.random.multivariate_normal(np.zeros(self.num_lat),self.user_var*I,training_matrix.shape[0])
         self.items_weights = np.random.multivariate_normal(np.zeros(self.num_lat),self.item_var*I,training_matrix.shape[1])
-
         best_objective_value = np.inf
-        # best_rmse = np.inf
-        # self.noise = np.random.normal(self._mean,self.var)
-        # self.noise = self._mean
-        # #samples
         # without burning
         np.seterr('warn')
         for i in range(self.iterations):
             print(f'[{i+1}/{self.iterations}]')
-            # self.noise = np.random.normal(0,self.var)
-            # little modified than the original
-            # final_users_weights = np.zeros((num_users,self.num_lat))
-            # final_items_weights = np.zeros((num_items,self.num_lat))
             with threadpool_limits(limits=1, user_api='blas'):
                 for to_run in random.sample([1,2],2):
                     if to_run == 1:
@@ -90,60 +78,39 @@ class ICFPMF(MF):
                             self.items_means[iid] = mean
                             self.items_covs[iid] = cov
                             self.items_weights[iid] = weight
-            
-                # final_items_weights[iid] = np.random.multivariate_normal(mean,cov)
-
-            # self.users_weights = final_users_weights
-            # self.items_weights = final_items_weights
-
+                            
             rmse=np.sqrt(np.mean((self.get_predicted()[observed_ui] - training_matrix[observed_ui])**2))
-            # map_value = 1
-            # for val, mean, std in zip(training_matrix[observed_ui],(self.users_weights @ self.items_weights.T)[observed_ui],[self.var]*len(observed_ui[0])):
-            #     map_value *= scipy.stats.norm.pdf(val,mean,std)
             # map_value = scipy.special.logsumexp(scipy.stats.norm.pdf(training_matrix[observed_ui],(self.users_weights @ self.items_weights.T)[observed_ui],self.var))\
-            #     * scipy.special.logsumexp([scipy.stats.multivariate_normal.pdf(weights,means,covs)
+            #         * scipy.special.logsumexp([scipy.stats.multivariate_normal.pdf(weights,means,covs)
             #                                for means, covs, weights in zip(self.users_means,self.users_covs,self.users_weights)])\
-            #     * scipy.special.logsumexp([scipy.stats.multivariate_normal.pdf(weights,means,covs)
+            #         * scipy.special.logsumexp([scipy.stats.multivariate_normal.pdf(weights,means,covs)
             #                                for means, covs, weights in zip(self.items_means,self.items_covs,self.items_weights)])
             
-            # print(scipy.special.logsumexp([scipy.stats.multivariate_normal.pdf(weights,means,covs)
-            #                                for means, covs, weights in zip(self.items_means,self.items_covs,self.items_weights)]))
-
-            
-            # Test of some type of joint probability that dont work
-                # * scipy.special.logsumexp([scipy.stats.multivariate_normal.pdf(i,np.zeros(self.num_lat),self.user_var*I) for i in self.users_weights.flatten()])\
-                # * scipy.special.logsumexp([scipy.stats.multivariate_normal.pdf(i,np.zeros(self.num_lat),self.item_var*I) for i in self.items_weights.flatten()])
-            # map_value = np.prod(r_probabilities)
-            # objective_value = map_value
             objective_value = np.sum((training_matrix[observed_ui] - self.get_predicted()[observed_ui])**2)/2 +\
                 self.user_lambda/2 * np.sum(np.linalg.norm(self.users_weights,axis=1)**2) +\
                 self.item_lambda/2 * np.sum(np.linalg.norm(self.items_weights,axis=1)**2)
 
-            # # print("MAP:",map_value)
-
             print("Objective value",objective_value)
-        #     self.objective_values.append(objective_value)
+            #     self.objective_values.append(objective_value)
             print("RMSE",rmse)
 
-        #     if self.best == None:
-        #         self.best = self.__deepcopy__()
-        #         best_objective_value = objective_value
-        #     else:
-        #         if objective_value < best_objective_value:
-        #             self.best = self.__deepcopy__()
-        #             best_objective_value = objective_value
+            # if self.best == None:
+            #     self.best = self.__deepcopy__()
+            #     best_objective_value = objective_value
+            # else:
+            #     if objective_value < best_objective_value:
+            #         self.best = self.__deepcopy__()
+            #         best_objective_value = objective_value
 
         # self = self.best
         # del self.best
         del self.training_matrix
         del self.lowest_value
-        # del self.noise
         self.save()
 
     @staticmethod
     def compute_user_weight(obj_id,uid):
         self = ctypes.cast(obj_id, ctypes.py_object).value
-
         training_matrix = self.training_matrix
         lowest_value = self.lowest_value
         I = self.I
@@ -156,7 +123,6 @@ class ICFPMF(MF):
     @staticmethod
     def compute_item_weight(obj_id,iid):
         self = ctypes.cast(obj_id, ctypes.py_object).value
-
         training_matrix = self.training_matrix
         lowest_value = self.lowest_value
         I = self.I
