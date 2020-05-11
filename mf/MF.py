@@ -11,3 +11,9 @@ class MF(Saveable):
 
     def fit(self):
         print(self.get_verbose_name())
+
+    def get_matrix(self, users_weights, items_weights):
+        return users_weights @ items_weights.T
+
+    def get_predicted(self):
+        return self.get_matrix(self.users_weights,self.items_weights)

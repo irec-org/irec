@@ -12,7 +12,7 @@ from util import Saveable, run_parallel
 from . import MF
 
 class ICFPMF(MF):
-    def __init__(self, iterations=25, var=0.1, user_var=1.01, item_var=1.01, *args, **kwargs):
+    def __init__(self, iterations=50, var=0.1, user_var=1.01, item_var=1.01, *args, **kwargs):
         super().__init__(*args,**kwargs)
         self.iterations = iterations
         self.var = var
@@ -41,7 +41,6 @@ class ICFPMF(MF):
 
     def fit(self,training_matrix):
         super().fit()
-        print(self.get_verbose_name())
         training_matrix = self.normalize_matrix(training_matrix)
         self_id = id(self)
         self.training_matrix = training_matrix
@@ -142,9 +141,3 @@ class ICFPMF(MF):
         new.items_means = self.items_means.copy()
         new.items_covs = self.items_covs.copy()
         return new
-
-    def get_matrix(self, users_weights, items_weights):
-        return users_weights @ items_weights.T
-    
-    def get_predicted(self):
-        return self.get_matrix(self.users_weights,self.items_weights)

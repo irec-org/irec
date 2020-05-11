@@ -8,31 +8,26 @@ import matplotlib.pyplot as plt
 from tabulate import tabulate
 import scipy.sparse
 
+q = [
+    inquirer.List('mf_model',
+                      message='MF model to run',
+                      choices=list(mf.MF_MODELS.keys())
+                      )
+]
+
+answers=inquirer.prompt(q)
+model_name = answers['mf_model']
+
 dsf = DatasetFormatter()
 dsf = dsf.load()
-# model = NMF(n_components=10, init='nndsvd', random_state=0)
-# P = model.fit_transform(dsf.matrix_users_ratings[dsf.train_uids])
-# Q = model.components_.T
-# u, s, vt = scipy.sparse.linalg.svds(
-#     scipy.sparse.csr_matrix(dsf.matrix_users_ratings[dsf.train_uids]),
-#     k=10)
-# Q = vt.T
 
-# model = mf.PMF()
-model = mf.ICFPMF()
-model.load_var(dsf.matrix_users_ratings[dsf.train_uids])
-model = model.load()
-Q = model.items_weights
+model_class=mf.MF_MODELS[model_name]
+model = model_class()
+if issubclass(model_class,mf.ICFPMF) or issubclass(model_class,mf.PMF):
+    model.load_var(dsf.matrix_users_ratings[dsf.train_uids])
+model.fit(dsf.matrix_users_ratings[dsf.train_uids])
 
-
-
-
-# MF_NAME = 'NMF'
-# MF_NAME = 'SVD'
-MF_NAME = 'ICFPMF'
-# MF_NAME = 'PMF'
-
-print(f"Using {MF_NAME} in {dsf.base} dataset with {dsf.selection_model} selection model")
+print(f"Using {model_name} in {dsf.base} dataset with {dsf.selection_model} selection model")
 
 items_popularity = interactors.MostPopular.get_items_popularity(dsf.matrix_users_ratings,[],normalize=False)
 top_iids_pop = list(reversed(np.argsort(items_popularity)))
@@ -45,8 +40,12 @@ top_iids_logpopent = list(reversed(np.argsort(items_logpopent)))
 
 num_items = 20
 
-items_representativeness = interactors.MostRepresentative.get_items_representativeness(Q)
+items_representativeness = interactors.MostRepresentative.get_items_representativeness(model.items_weights)
 top_iids_rep = list(reversed(np.argsort(items_representativeness)))
+
+rep_pop_corr = np.corrcoef(items_representativeness,items_popularity)[0,1]
+rep_ent_corr = np.corrcoef(items_representativeness,items_entropy)[0,1]
+rep_logpopent_corr = np.corrcoef(items_representativeness,items_logpopent)[0,1]
 
 # print('Item ID\tRepre.(Rank)\tPop.(Rank)\tEntropy(Rank)\tLogPopEnt(Rank)')
 
@@ -71,5 +70,6 @@ for i in range(num_items):
                                                       item_pop,item_rank_pop,
                                                       item_ent,item_rank_ent,
                                                       item_logpopent,item_rank_logpopent)).split('\t'))
-    
-print(tabulate(table, headers=['Item ID','Representativeness(Rank)','Popularity(Rank)','Entropy(Rank)','LogPopEnt(Rank)']))
+
+print(tabulate(table, headers=['Item ID','Representativeness(Rank)','Popularity(Rank)[c:%.2f]'%(rep_pop_corr),
+                               'Entropy(Rank)[c:%.2f]'%(rep_ent_corr),'LogPopEnt(Rank)[c:%.2f]'%(rep_logpopent_corr)]))
