@@ -6,14 +6,14 @@ import sys, os
 import random
 from threadpoolctl import threadpool_limits
 sys.path.insert(0, os.path.abspath('..'))
+import ctypes
 
-from util import Saveable, run_parallel, Singleton
+from util import Saveable, run_parallel
+from . import MF
 
-class ICFPMF(Saveable, Singleton):
-    
-    def __init__(self, num_lat=10, iterations=200, var=0.1, user_var=1.01, item_var=1.01, *args, **kwargs):
+class ICFPMF(MF):
+    def __init__(self, iterations=100, var=0.1, user_var=1.01, item_var=1.01, *args, **kwargs):
         super().__init__(*args,**kwargs)
-        self.num_lat = num_lat
         self.iterations = iterations
         self.var = var
         self.user_var = user_var
@@ -25,6 +25,7 @@ class ICFPMF(Saveable, Singleton):
 
     def load_var(self, training_matrix):
         decimals = 4
+        training_matrix = self.normalize_matrix(training_matrix)
         self.var = np.var(training_matrix)
         # self.user_var = self.var
         # self.item_var = self.var
@@ -39,7 +40,10 @@ class ICFPMF(Saveable, Singleton):
         self.item_lambda = np.round(self.item_lambda,decimals)
 
     def fit(self,training_matrix):
+        super().fit()
         print(self.get_verbose_name())
+        training_matrix = self.normalize_matrix(training_matrix)
+        self_id = id(self)
 
         self.training_matrix = training_matrix
         num_users = training_matrix.shape[0]
@@ -71,7 +75,7 @@ class ICFPMF(Saveable, Singleton):
                     if to_run == 1:
                         self.users_means = np.zeros((num_users,self.num_lat))
                         self.users_covs = np.zeros((num_users,self.num_lat,self.num_lat))
-                        args = [(i,) for i in range(num_users)]
+                        args = [(self_id,i,) for i in range(num_users)]
                         results = run_parallel(self.compute_user_weight,args)
                         for uid, (mean, cov, weight) in enumerate(results):
                             self.users_means[uid] = mean
@@ -80,7 +84,7 @@ class ICFPMF(Saveable, Singleton):
                     else:
                         self.items_means = np.zeros((num_items,self.num_lat))
                         self.items_covs = np.zeros((num_items,self.num_lat,self.num_lat))
-                        args = [(i,) for i in range(num_items)]
+                        args = [(self_id,i,) for i in range(num_items)]
                         results = run_parallel(self.compute_item_weight,args)
                         for iid, (mean, cov, weight) in enumerate(results):
                             self.items_means[iid] = mean
@@ -92,15 +96,15 @@ class ICFPMF(Saveable, Singleton):
             # self.users_weights = final_users_weights
             # self.items_weights = final_items_weights
 
-            # rmse=np.sqrt(np.mean((self.get_predicted()[observed_ui] - training_matrix[observed_ui])**2))
+            rmse=np.sqrt(np.mean((self.get_predicted()[observed_ui] - training_matrix[observed_ui])**2))
             # map_value = 1
             # for val, mean, std in zip(training_matrix[observed_ui],(self.users_weights @ self.items_weights.T)[observed_ui],[self.var]*len(observed_ui[0])):
             #     map_value *= scipy.stats.norm.pdf(val,mean,std)
-            map_value = scipy.special.logsumexp(scipy.stats.norm.pdf(training_matrix[observed_ui],(self.users_weights @ self.items_weights.T)[observed_ui],self.var))\
-                * scipy.special.logsumexp([scipy.stats.multivariate_normal.pdf(weights,means,covs)
-                                           for means, covs, weights in zip(self.users_means,self.users_covs,self.users_weights)])\
-                * scipy.special.logsumexp([scipy.stats.multivariate_normal.pdf(weights,means,covs)
-                                           for means, covs, weights in zip(self.items_means,self.items_covs,self.items_weights)])
+            # map_value = scipy.special.logsumexp(scipy.stats.norm.pdf(training_matrix[observed_ui],(self.users_weights @ self.items_weights.T)[observed_ui],self.var))\
+            #     * scipy.special.logsumexp([scipy.stats.multivariate_normal.pdf(weights,means,covs)
+            #                                for means, covs, weights in zip(self.users_means,self.users_covs,self.users_weights)])\
+            #     * scipy.special.logsumexp([scipy.stats.multivariate_normal.pdf(weights,means,covs)
+            #                                for means, covs, weights in zip(self.items_means,self.items_covs,self.items_weights)])
             
             # print(scipy.special.logsumexp([scipy.stats.multivariate_normal.pdf(weights,means,covs)
             #                                for means, covs, weights in zip(self.items_means,self.items_covs,self.items_weights)]))
@@ -110,36 +114,36 @@ class ICFPMF(Saveable, Singleton):
                 # * scipy.special.logsumexp([scipy.stats.multivariate_normal.pdf(i,np.zeros(self.num_lat),self.user_var*I) for i in self.users_weights.flatten()])\
                 # * scipy.special.logsumexp([scipy.stats.multivariate_normal.pdf(i,np.zeros(self.num_lat),self.item_var*I) for i in self.items_weights.flatten()])
             # map_value = np.prod(r_probabilities)
-            objective_value = map_value
-            # objective_value = np.sum((training_matrix[observed_ui] - self.get_predicted()[observed_ui])**2)/2 +\
-            #     self.user_lambda/2 * np.sum(np.linalg.norm(self.users_weights,axis=1)) +\
-            #     self.item_lambda/2 * np.sum(np.linalg.norm(self.items_weights,axis=1))
+            # objective_value = map_value
+            objective_value = np.sum((training_matrix[observed_ui] - self.get_predicted()[observed_ui])**2)/2 +\
+                self.user_lambda/2 * np.sum(np.linalg.norm(self.users_weights,axis=1)**2) +\
+                self.item_lambda/2 * np.sum(np.linalg.norm(self.items_weights,axis=1)**2)
 
             # # print("MAP:",map_value)
-            
-            print(objective_value)
-            if i > 5:
-                self.objective_values.append(objective_value)
-                # print("RMSE:",rmse)
 
-                if self.best == None:
-                    self.best = self.__deepcopy__()
-                    best_objective_value = objective_value
-                else:
-                    if objective_value > best_objective_value:
-                        self.best = self.__deepcopy__()
-                        best_objective_value = objective_value
+            print("Objective value",objective_value)
+        #     self.objective_values.append(objective_value)
+            print("RMSE",rmse)
 
-        self = self.best
-        del self.best
+        #     if self.best == None:
+        #         self.best = self.__deepcopy__()
+        #         best_objective_value = objective_value
+        #     else:
+        #         if objective_value < best_objective_value:
+        #             self.best = self.__deepcopy__()
+        #             best_objective_value = objective_value
+
+        # self = self.best
+        # del self.best
         del self.training_matrix
         del self.lowest_value
         # del self.noise
         self.save()
 
-    @classmethod
-    def compute_user_weight(cls,uid):
-        self = cls.getInstance()
+    @staticmethod
+    def compute_user_weight(obj_id,uid):
+        self = ctypes.cast(obj_id, ctypes.py_object).value
+
         training_matrix = self.training_matrix
         lowest_value = self.lowest_value
         I = self.I
@@ -149,9 +153,10 @@ class ICFPMF(Saveable, Singleton):
         cov = tmp*self.var
         return mean, cov, np.random.multivariate_normal(mean,cov)
 
-    @classmethod
-    def compute_item_weight(cls,iid):
-        self = cls.getInstance()
+    @staticmethod
+    def compute_item_weight(obj_id,iid):
+        self = ctypes.cast(obj_id, ctypes.py_object).value
+
         training_matrix = self.training_matrix
         lowest_value = self.lowest_value
         I = self.I
@@ -172,8 +177,8 @@ class ICFPMF(Saveable, Singleton):
         new.items_covs = self.items_covs.copy()
         return new
 
-    def get_matrix(self, users_weights, items_weights, var):
-        return np.random.normal(users_weights @ items_weights.T,var)
+    def get_matrix(self, users_weights, items_weights):
+        return users_weights @ items_weights.T
     
     def get_predicted(self):
-        return self.get_matrix(self.users_weights,self.items_weights,self.var)
+        return self.get_matrix(self.users_weights,self.items_weights)
