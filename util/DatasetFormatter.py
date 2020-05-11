@@ -16,7 +16,7 @@ class DatasetFormatter(Saveable):
                       'ml_1m': 'self.get_ml_1m()',
                       'tr_te_ml_1m': 'self.get_tr_te_ml_1m()'}
     SELECTION_MODEL = {
-        'users_train_test': {'train_size': 0.8,'test_consumes':1},
+        'users_train_test': {'train_size': 0.8,'test_consumes':120},
         'users_train_test_chrono': {'train_size': 0.8,'test_consumes':1}
     }
     SELECTION_MODEL_HANDLERS = {'users_train_test': 'self.run_users_train_test()',
