@@ -51,19 +51,16 @@ for i in answers['interactors']:
         for metric_name in metrics_names:
             metric_values[metric_name][i][j] = me.metrics_mean[metric_name]
         
-fig, axs = plt.subplots(nrows=3,ncols=3,figsize=(18,13))
+fig, axs = plt.subplots(nrows=4,ncols=3,figsize=(18,17))
 fig.suptitle(f"Top-{INTERACTION_SIZE} recommendation")
-for ax,metric_name in zip(axs.flatten(),metrics_names):
+for ax,metric_name in zip(axs[[0,2],:].flatten(),metrics_names):
     df = pd.DataFrame(metric_values[metric_name])
-    # df['KS'] = KS
-    # df=df.set_index('KS')
     ax.plot(df)
     ax.set_xlabel("Interactions")
-    
     ax.set_ylabel(MetricsEvaluator.METRICS_PRETTY[metric_name],rotation='horizontal')
     ax.yaxis.set_label_coords(-0.1,1.02)
 
-for ax, metric_name in zip(axs[2,:],metrics_names[:3]):
+for ax, metric_name in zip(axs[[1,3],:].flatten(),metrics_names):
     df = pd.DataFrame(metric_values[metric_name]).cumsum()
     print(df)
     ax.plot(df)
