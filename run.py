@@ -12,20 +12,24 @@ q = [
                       )
 ]
 answers=inquirer.prompt(q)
+interactors_classes = list(map(lambda x:interactors.INTERACTORS[x],answers['interactors']))
 
 dsf = DatasetFormatter()
 dsf = dsf.load()
-# dsf.get_base()
-if np.any([issubclass(interactors.INTERACTORS[i],interactors.ICF) for i in answers['interactors']]):
+
+if np.any(list(map(
+        lambda itr_class: issubclass(itr_class,interactors.ICF),
+        interactors_classes))):
     mf_model = mf.ICFPMF()
     mf_model.load_var(dsf.matrix_users_ratings[dsf.train_uids])
     mf_model = mf_model.load()
 
-
-if np.any([issubclass(interactors.INTERACTORS[i],interactors.LinUCB) or
-           issubclass(interactors.INTERACTORS[i],interactors.UCBLearner) or
-           issubclass(interactors.INTERACTORS[i],interactors.MostRepresentative)
-    for i in answers['interactors']]):
+if np.any(list(map(
+        lambda itr_class: issubclass(itr_class,(
+            interactors.LinUCB,
+            interactors.MostRepresentative)),
+        interactors_classes
+        ))):
     svd_model = mf.SVD()
     svd_model = svd_model.load()
     u, s, vt = scipy.sparse.linalg.svds(
@@ -33,9 +37,8 @@ if np.any([issubclass(interactors.INTERACTORS[i],interactors.LinUCB) or
         k=10)
     Q = svd_model.items_weights
 
-for i in answers['interactors']:
+for itr_class in interactors_classes:
 
-    itr_class = interactors.INTERACTORS[i]
     if issubclass(itr_class,interactors.ICF):
         itr = itr_class(var=mf_model.var,
                         user_lambda=mf_model.user_lambda,
@@ -46,11 +49,11 @@ for i in answers['interactors']:
         itr = itr_class(consumption_matrix=dsf.matrix_users_ratings,
                         prefix_name=dsf.base)
         
-    if i  == 'LinearThompsonSampling':
+    if issubclass(itr_class,interactors.LinearThompsonSampling):
         itr.interact(dsf.test_uids, mf_model.items_means, mf_model.items_covs)
     elif issubclass(itr_class,interactors.ICF):
         itr.interact(dsf.test_uids, mf_model.items_means)
-    elif issubclass(itr_class,interactors.LinUCB):
+    elif issubclass(itr_class,(interactors.LinUCB)):
         itr.interact(dsf.test_uids,Q)
     elif issubclass(itr_class,interactors.UCBLearner):
         itr.interact(dsf.test_uids,Q)
