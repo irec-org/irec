@@ -34,10 +34,10 @@ for i in answers['interactors']:
         itr = itr_class(var=mf.var,
                         user_lambda=mf.user_lambda,
                         consumption_matrix=dsf.matrix_users_ratings,
-                        prefix_name=dsf.base
+                        name_prefix=dsf.base
         )
     else:
-        itr = itr_class(consumption_matrix=dsf.matrix_users_ratings,prefix_name=dsf.base)
+        itr = itr_class(consumption_matrix=dsf.matrix_users_ratings,name_prefix=dsf.base)
 
     itr.result = itr.load_result()
     for j in tqdm(range(len(KS))):

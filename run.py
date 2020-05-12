@@ -45,11 +45,12 @@ for itr_class in interactors_classes:
         itr = itr_class(var=mf_model.var,
                         user_lambda=mf_model.user_lambda,
                         consumption_matrix=dsf.matrix_users_ratings,
-                        prefix_name=dsf.base
+                        name_prefix=dsf.base
         )
     else:
         itr = itr_class(consumption_matrix=dsf.matrix_users_ratings,
-                        prefix_name=dsf.base)
+                        name_prefix=dsf.base
+        )
         
     if itr_class in [interactors.LinearThompsonSampling]:
         itr.interact(dsf.test_uids, mf_model.items_means, mf_model.items_covs)
