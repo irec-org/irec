@@ -26,13 +26,12 @@ if np.any([issubclass(interactors.INTERACTORS[i],interactors.LinUCB) or
            issubclass(interactors.INTERACTORS[i],interactors.UCBLearner) or
            issubclass(interactors.INTERACTORS[i],interactors.MostRepresentative)
     for i in answers['interactors']]):
+    svd_model = mf.SVD()
+    svd_model = svd_model.load()
     u, s, vt = scipy.sparse.linalg.svds(
         scipy.sparse.csr_matrix(dsf.matrix_users_ratings[dsf.train_uids]),
         k=10)
-    Q = vt.T
-    # model = NMF(n_components=10, init='nndsvd', random_state=0)
-    # P = model.fit_transform(dsf.matrix_users_ratings[dsf.train_uids])
-    # Q = model.components_.T
+    Q = svd_model.items_weights
 
 for i in answers['interactors']:
 
