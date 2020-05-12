@@ -17,6 +17,7 @@ from .UCB import *
 from .LinUCB import *
 from .UCBLearner import *
 from .MostRepresentative import *
+from .LinEGreedy import *
 
 INTERACTORS = {
     # 'Interactor': Interactor,
@@ -25,14 +26,15 @@ INTERACTORS = {
     'Linear ε-Greedy': LinearEGreedy,
     'LinearUCB': LinearUCB,
     'GLM UCB': GLM_UCB,
-    'MostPopular': MostPopular,
+    'Most Popular': MostPopular,
     'TS': ThompsonSampling,
     'UCBLearner': UCBLearner,
-    'LinearTS': LinearThompsonSampling,
+    'Linear TS': LinearThompsonSampling,
     'Random': Random,
     'Entropy': Entropy,
-    'log(Pop)*Ent': LogPopEnt,
+    'log(Pop)⋅Ent': LogPopEnt,
     'ε-Greedy': EGreedy,
     'UCB': UCB,
-    'MostRepresentative': MostRepresentative,
+    'Most Representative': MostRepresentative,
+    'Lin ε-Greedy': LinEGreedy,
 }

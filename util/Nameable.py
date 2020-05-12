@@ -1,7 +1,7 @@
 from util import dict_to_list, dict_to_str
 
 class Nameable():
-    def __init__(self,prefix_name=None):
+    def __init__(self,prefix_name=None,*args,**kwargs):
         self.prefix_name = prefix_name
 
     # def __init__(self,prefix_name=None,name=None,parameters=None):
