@@ -42,9 +42,9 @@ def epck(actual,predicted,items_popularity):
     C_2 = 1.0/len(predicted)
     sum_2=0
     for i,lid in enumerate(predicted):
-        if lid in actual:
-            prob_seen_k=items_popularity[lid]
-            sum_2 += 1-prob_seen_k
+        # if lid in actual:
+        prob_seen_k=items_popularity[lid]
+        sum_2 += 1-prob_seen_k
     EPC=C_2*sum_2
     return EPC
 
