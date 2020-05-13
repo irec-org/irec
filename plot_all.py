@@ -11,7 +11,7 @@ import interactors
 from mf import ICFPMF
 from util import DatasetFormatter, MetricsEvaluator, metrics
 
-plt.rcParams['axes.prop_cycle'] = cycler(color='brmgykc')
+plt.rcParams['axes.prop_cycle'] = cycler(color='krbgmyc')
 plt.rcParams['lines.linewidth'] = 2
 plt.rcParams['font.size'] = 15
 q = [

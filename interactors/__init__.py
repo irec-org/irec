@@ -27,7 +27,7 @@ INTERACTORS = {
     'LinUCB (MF)': LinUCB,
     'Linear ε-Greedy (MF)': LinEGreedy,
     'Linear UCB (PMF)': LinearUCB,
-    'GLM UCB (PMF)': GLM_UCB,
+    'GLM-UCB (PMF)': GLM_UCB,
     'TS': ThompsonSampling,
     'Linear ε-Greedy (PMF)': LinearEGreedy,
     'Linear TS (PMF)': LinearThompsonSampling,
