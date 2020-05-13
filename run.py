@@ -29,15 +29,13 @@ if np.any(list(map(
         lambda itr_class: itr_class in
             [interactors.LinUCB,
             interactors.MostRepresentative,
-            interactors.LinEGreedy],
+             interactors.LinEGreedy,
+             interactors.UCBLearner],
         interactors_classes
         ))):
     print('Loading SVD')
     svd_model = mf.SVD()
     svd_model = svd_model.load()
-    u, s, vt = scipy.sparse.linalg.svds(
-        scipy.sparse.csr_matrix(dsf.matrix_users_ratings[dsf.train_uids]),
-        k=10)
     Q = svd_model.items_weights
 
 for itr_class in interactors_classes:
@@ -57,9 +55,9 @@ for itr_class in interactors_classes:
     elif issubclass(itr_class,interactors.ICF):
         itr.interact(dsf.test_uids, mf_model.items_means)
     elif itr_class in [interactors.LinUCB,
-                               interactors.LinEGreedy,
-                               interactors.UCBLearner,
-                               interactors.MostRepresentative]:
+                       interactors.LinEGreedy,
+                       interactors.UCBLearner,
+                       interactors.MostRepresentative]:
         itr.interact(dsf.test_uids,Q)
     else:
         itr.interact(dsf.test_uids)
