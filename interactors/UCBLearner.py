@@ -14,7 +14,7 @@ class UCBLearner(Interactor):
         super().__init__(*args, **kwargs)
         self.stop = stop
 
-    def interact(self, uids, items_factors):
+    def interact(self, uids, items_latent_factors):
         super().interact()
         items_entropy = Entropy.get_items_entropy(self.consumption_matrix,uids)
         items_popularity = MostPopular.get_items_popularity(self.consumption_matrix,uids,normalize=False)
@@ -23,10 +23,10 @@ class UCBLearner(Interactor):
         # items_popularity = MostPopular.get_items_popularity(self.consumption_matrix,uids,normalize=True)
         # self.items_logpopent = items_popularity
 
-        self.items_factors = items_factors
+        self.items_latent_factors = items_latent_factors
         num_users = len(uids)
         # get number of latent factors 
-        num_lat = len(items_factors[0])
+        num_lat = len(items_latent_factors[0])
         I = np.eye(num_lat)
         self_id = id(self)
         with threadpool_limits(limits=1, user_api='blas'):
@@ -47,11 +47,11 @@ class UCBLearner(Interactor):
         if not issubclass(self.__class__,Interactor): # DANGER CODE
             raise RuntimeError
 
-        num_lat = len(self.items_factors[0])
+        num_lat = len(self.items_latent_factors[0])
         I = np.eye(num_lat)
 
         result = []
-        user_candidate_items = np.array(list(range(len(self.items_factors))))
+        user_candidate_items = np.array(list(range(len(self.items_latent_factors))))
         b = np.zeros(num_lat)
         A = I
 
@@ -63,7 +63,7 @@ class UCBLearner(Interactor):
         for i in range(self.interactions):
             mean = np.dot(np.linalg.inv(A),b)
 
-            pred_rule = mean @ self.items_factors[user_candidate_items].T
+            pred_rule = mean @ self.items_latent_factors[user_candidate_items].T
 
             current_bias = items_bias[user_candidate_items] * max(1, np.max(pred_rule))
             bias = current_bias - (current_bias * self.discount_bias(nb_items,self.stop)/100)
@@ -75,7 +75,7 @@ class UCBLearner(Interactor):
             result.extend(best_items)
 
             for max_i in result[i*self.interaction_size:(i+1)*self.interaction_size]:
-                max_item_weight = self.items_factors[max_i]
+                max_item_weight = self.items_latent_factors[max_i]
                 A += max_item_weight[:,None].dot(max_item_weight[None,:])
                 if self.get_reward(uid,max_i) >= self.threshold:
                     b += self.get_reward(uid,max_i)*max_item_weight
