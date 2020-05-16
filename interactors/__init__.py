@@ -23,7 +23,7 @@ INTERACTORS = {
     # 'Interactor': Interactor,
     # 'ICF': ICF,
     'Most Popular': MostPopular,
-    'UCBLearner (MF)': UCBLearner,
+    'UCB-Learner (MF)': UCBLearner,
     'LinUCB (MF)': LinUCB,
     'Linear ε-Greedy (MF)': LinEGreedy,
     'Linear UCB (PMF)': LinearUCB,

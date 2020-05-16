@@ -42,9 +42,10 @@ class LinUCB(Interactor):
 
         for i in range(self.interactions):
             mean = np.dot(np.linalg.inv(A),b)
-            best_items = user_candidate_items[np.argsort(mean @ self.items_latent_factors[user_candidate_items].T+\
-                                                         self.alpha*np.sqrt(np.sum(self.items_latent_factors[user_candidate_items].dot(np.linalg.inv(A)) * self.items_latent_factors[user_candidate_items],axis=1)))[::-1]][:self.interaction_size]
-
+            items_uncertainty = self.alpha*np.sqrt(np.sum(self.items_latent_factors[user_candidate_items].dot(np.linalg.inv(A)) * self.items_latent_factors[user_candidate_items],axis=1))
+            items_user_similarity = mean @ self.items_latent_factors[user_candidate_items].T
+            items_score =  items_user_similarity + items_uncertainty
+            best_items = user_candidate_items[np.argsort(items_score)[::-1]][:self.interaction_size]
             user_candidate_items = user_candidate_items[~np.isin(user_candidate_items,best_items)]
             result.extend(best_items)
 
