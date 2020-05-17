@@ -20,9 +20,9 @@ dsf = dsf.load()
 for i in answers['mf_models']:
     model_class=mf.MF_MODELS[i]
     model = model_class()
-    if issubclass(model_class,mf.ICFPMF) or issubclass(model_class,mf.PMF):
+    if issubclass(model_class,(mf.ICFPMF,mf.PMF,mf.ICFPMFS)):
         model.load_var(dsf.matrix_users_ratings[dsf.train_uids])
     model.fit(dsf.matrix_users_ratings[dsf.train_uids])
-    if issubclass(model_class,mf.ICFPMF):
+    if issubclass(model_class,(mf.ICFPMF,mf.ICFPMFS)):
         plt.plot(model.objective_values)
-        plt.savefig("img/icfpmf_objective_value.png")
+        plt.savefig("img/%s_objective_value.png"%(model_class.__name__))

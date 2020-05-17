@@ -8,14 +8,17 @@ class Entropy(Interactor):
         super().__init__(*args, **kwargs)
 
     @staticmethod
-    def get_items_entropy(consumption_matrix, test_uids):
+    def get_items_entropy(consumption_matrix, test_uids, is_spmatrix):
         lowest_value = np.min(consumption_matrix)
         mask = np.ones(consumption_matrix.shape[0], dtype=bool)
         mask[test_uids] = 0
         items_entropy = np.zeros(consumption_matrix.shape[1])
         for iid in range(consumption_matrix.shape[1]):
-            iid_ratings = consumption_matrix[mask,iid]
-            iid_ratings = iid_ratings[iid_ratings > lowest_value]
+            if is_spmatrix:
+                iid_ratings = consumption_matrix[mask,iid].data
+            else:
+                iid_ratings = consumption_matrix[mask,iid]
+                iid_ratings = iid_ratings[iid_ratings > lowest_value]
             unique, counts = np.unique(iid_ratings, return_counts=True)
             ratings_probability = counts/np.sum(counts)
             items_entropy[iid] = -1*np.sum(ratings_probability*np.log(ratings_probability))
@@ -24,7 +27,7 @@ class Entropy(Interactor):
     def interact(self, uids):
         super().interact()
         num_users = len(uids)
-        items_entropy = self.get_items_entropy(self.consumption_matrix, uids)
+        items_entropy = self.get_items_entropy(self.consumption_matrix, uids, self.is_spmatrix)
         fig, ax = plt.subplots()
         ax.hist(items_entropy)
         ax.set_xlabel("Entropy")
@@ -32,8 +35,6 @@ class Entropy(Interactor):
         fig.savefig(os.path.join(self.DIRS['img'],"entropy_"+self.get_name()+".png"))
         
         top_iids = list(reversed(np.argsort(items_entropy)))[:self.get_iterations()]
-
-        print(top_iids[:20])
 
         for idx_uid in tqdm(range(num_users)):
             uid = uids[idx_uid]

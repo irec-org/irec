@@ -16,8 +16,8 @@ class UCBLearner(Interactor):
 
     def interact(self, uids, items_latent_factors):
         super().interact()
-        items_entropy = Entropy.get_items_entropy(self.consumption_matrix,uids)
-        items_popularity = MostPopular.get_items_popularity(self.consumption_matrix,uids,normalize=False)
+        items_entropy = Entropy.get_items_entropy(self.consumption_matrix,uids,self.is_spmatrix)
+        items_popularity = MostPopular.get_items_popularity(self.consumption_matrix,uids,self.is_spmatrix,normalize=False)
         self.items_logpopent= LogPopEnt.get_items_logpopent(items_popularity,items_entropy)
 
         # items_popularity = MostPopular.get_items_popularity(self.consumption_matrix,uids,normalize=True)

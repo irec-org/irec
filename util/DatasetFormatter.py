@@ -23,10 +23,12 @@ class DatasetFormatter(Saveable):
                                 'users_train_test_chrono': 'self.run_users_train_test_chrono()'}
     def __init__(self,base='ml_1m',
                  selection_model='users_train_test_chrono',
+                 is_spmatrix=True,
                  selection_model_parameters={}, *args, **kwargs):
         super().__init__(*args,**kwargs)
         self.base = base
         self.selection_model = selection_model
+        self.is_spmatrix = is_spmatrix
         self.num_users = None
         self.num_items = None
         self.num_consumes = None
@@ -98,11 +100,16 @@ class DatasetFormatter(Saveable):
         self.num_items = df_info.loc['items']
         self.num_consumes = df_info.loc['ratings']
 
-        self.matrix_users_ratings = np.nan_to_num(np.array(df_cons.pivot(index='uid', columns='iid', values = 'r')))
-        self.matrix_users_times = np.array(df_cons.pivot(index='uid', columns='iid', values = 't'))
-        self.matrix_users_times[np.isnan(self.matrix_users_times)] = 0
-        self.matrix_users_times = scipy.sparse.csr_matrix(self.matrix_users_times,dtype=np.int32)
-        self.users_start_time = np.where(self.matrix_users_times.A > 0,self.matrix_users_times.A,np.inf).min(axis=1)
+        if self.is_spmatrix:
+            self.matrix_users_ratings = scipy.sparse.csr_matrix((df_cons.r,(df_cons.uid,df_cons.iid)),dtype=float)
+            self.matrix_users_times = scipy.sparse.csr_matrix((df_cons.t,(df_cons.uid,df_cons.iid)))
+            self.users_start_time = df_cons.groupby('uid').min()['t'].to_numpy()
+        else:
+            self.matrix_users_ratings = np.nan_to_num(np.array(df_cons.pivot(index='uid', columns='iid', values = 'r')))
+            self.matrix_users_times = np.array(df_cons.pivot(index='uid', columns='iid', values = 't'))
+            self.matrix_users_times[np.isnan(self.matrix_users_times)] = 0
+            self.matrix_users_times = scipy.sparse.csr_matrix(self.matrix_users_times,dtype=np.int32)
+            self.users_start_time = np.where(self.matrix_users_times.A > 0,self.matrix_users_times.A,np.inf).min(axis=1)
 
     def get_base(self):
         print(f"Loading {self.base} {self.BASES_DIRS[self.base]}")
@@ -157,10 +164,15 @@ class DatasetFormatter(Saveable):
 
         self.matrix_users_ratings = np.nan_to_num(np.array(self.users_items.pivot(index='uid', columns='iid', values = 'r')))
 
-        self.matrix_users_times = np.array(df_cons.pivot(index='uid', columns='iid', values = 't'))
-        self.matrix_users_times[np.isnan(self.matrix_users_times)] = 0
-        self.matrix_users_times = scipy.sparse.csr_matrix(self.matrix_users_times,dtype=np.int32)
-        self.users_start_time = np.where(self.matrix_users_times.A > 0,self.matrix_users_times.A,np.inf).min(axis=1)
+        if self.is_spmatrix:
+            self.matrix_users_ratings = scipy.sparse.csr_matrix((df_cons.r,(df_cons.uid,df_cons.iid)),dtype=float)
+            self.matrix_users_times = scipy.sparse.csr_matrix((df_cons.t,(df_cons.uid,df_cons.iid)))
+            self.users_start_time = df_cons.groupby('uid').min()['t'].to_numpy()
+        else:
+            self.matrix_users_times = np.array(df_cons.pivot(index='uid', columns='iid', values = 't'))
+            self.matrix_users_times[np.isnan(self.matrix_users_times)] = 0
+            self.matrix_users_times = scipy.sparse.csr_matrix(self.matrix_users_times,dtype=np.int32)
+            self.users_start_time = np.where(self.matrix_users_times.A > 0,self.matrix_users_times.A,np.inf).min(axis=1)
 
     def get_tr_te_ml_1m(self):
         base_dir = self.BASES_DIRS[self.base]

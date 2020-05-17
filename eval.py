@@ -3,7 +3,7 @@ from tqdm import tqdm
 import numpy as np
 
 import interactors
-from mf import ICFPMF
+import mf
 from util import DatasetFormatter, MetricsEvaluator, metrics
 
 q = [
@@ -19,11 +19,16 @@ ITERATIONS = interactors.Interactor().get_iterations()
 THRESHOLD = interactors.Interactor().threshold
 dsf = DatasetFormatter()
 dsf = dsf.load()
-# dsf.get_base()
+is_spmatrix = dsf.is_spmatrix
+
 KS = list(map(int,np.arange(INTERACTION_SIZE,ITERATIONS+1,step=INTERACTION_SIZE)))
 
-mf = ICFPMF()
-mf.load_var(dsf.matrix_users_ratings[dsf.train_uids])
+if not is_spmatrix:
+    pmf_model = mf.ICFPMF()
+else:
+    pmf_model = mf.ICFPMFS()
+print('Loading %s'%(pmf_model.__class__.__name__))
+pmf_model.load_var(dsf.matrix_users_ratings[dsf.train_uids])
 
 items_distance = metrics.get_items_distance(dsf.matrix_users_ratings)
 items_popularity = interactors.MostPopular.get_items_popularity(dsf.matrix_users_ratings,[],normalize=True)
@@ -31,8 +36,8 @@ ground_truth = MetricsEvaluator.get_ground_truth(dsf.matrix_users_ratings,THRESH
 for i in answers['interactors']:
     itr_class = interactors.INTERACTORS[i]
     if issubclass(itr_class, interactors.ICF):
-        itr = itr_class(var=mf.var,
-                        user_lambda=mf.user_lambda,
+        itr = itr_class(var=pmf_model.var,
+                        user_lambda=pmf_model.user_lambda,
                         consumption_matrix=dsf.matrix_users_ratings,
                         name_prefix=dsf.base
         )

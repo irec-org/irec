@@ -2,6 +2,7 @@ import sys, os
 sys.path.insert(0, os.path.abspath('..'))
 
 import numpy as np
+import scipy.sparse
 
 from util import Saveable
 from collections import defaultdict
@@ -20,6 +21,18 @@ class Interactor(Saveable):
         self.result = defaultdict(list)
         self.threshold = threshold
 
+    @property
+    def consumption_matrix(self):
+        return self._consumption_matrix
+
+    @consumption_matrix.setter
+    def consumption_matrix(self, consumption_matrix):
+        self._consumption_matrix = consumption_matrix
+        if issubclass(consumption_matrix.__class__,scipy.sparse.spmatrix):
+            self.is_spmatrix = True
+        else:
+            self.is_spmatrix = False
+
     def get_iterations(self):
         return self.interactions*self.interaction_size
 
@@ -35,7 +48,7 @@ class Interactor(Saveable):
         pass
 
     def filter_parameters(self,parameters):
-        return super().filter_parameters({k: v for k, v in parameters.items() if k not in ['highest_value','lowest_value','threshold']})
+        return super().filter_parameters({k: v for k, v in parameters.items() if k not in ['highest_value','lowest_value','threshold','is_spmatrix']})
 
     @staticmethod
     def json_entry_save_format(uid, items):

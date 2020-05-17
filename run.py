@@ -16,14 +16,18 @@ interactors_classes = list(map(lambda x:interactors.INTERACTORS[x],answers['inte
 
 dsf = DatasetFormatter()
 dsf = dsf.load()
+is_spmatrix = dsf.is_spmatrix
 
 if np.any(list(map(
         lambda itr_class: issubclass(itr_class,interactors.ICF),
         interactors_classes))):
-    print('Loading ICFPMF')
-    mf_model = mf.ICFPMF()
-    mf_model.load_var(dsf.matrix_users_ratings[dsf.train_uids])
-    mf_model = mf_model.load()
+    if not is_spmatrix:
+        pmf_model = mf.ICFPMF()
+    else:
+        pmf_model = mf.ICFPMFS()
+    print('Loading %s'%(pmf_model.__class__.__name__))
+    pmf_model.load_var(dsf.matrix_users_ratings[dsf.train_uids])
+    pmf_model = pmf_model.load()
 
 if np.any(list(map(
         lambda itr_class: itr_class in
@@ -40,8 +44,8 @@ if np.any(list(map(
 
 for itr_class in interactors_classes:
     if issubclass(itr_class,interactors.ICF):
-        itr = itr_class(var=mf_model.var,
-                        user_lambda=mf_model.user_lambda,
+        itr = itr_class(var=pmf_model.var,
+                        user_lambda=pmf_model.user_lambda,
                         consumption_matrix=dsf.matrix_users_ratings,
                         name_prefix=dsf.base
         )
@@ -51,9 +55,9 @@ for itr_class in interactors_classes:
         )
         
     if itr_class in [interactors.LinearThompsonSampling]:
-        itr.interact(dsf.test_uids, mf_model.items_means, mf_model.items_covs)
+        itr.interact(dsf.test_uids, pmf_model.items_means, pmf_model.items_covs)
     elif issubclass(itr_class,interactors.ICF):
-        itr.interact(dsf.test_uids, mf_model.items_means)
+        itr.interact(dsf.test_uids, pmf_model.items_means)
     elif itr_class in [interactors.LinUCB,
                        interactors.LinEGreedy,
                        interactors.UCBLearner,

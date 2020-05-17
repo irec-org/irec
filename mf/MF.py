@@ -15,5 +15,11 @@ class MF(Saveable):
     def get_matrix(self, users_weights, items_weights):
         return users_weights @ items_weights.T
 
+    def get_sparse_matrix(self, users_weights, items_weights, users_items_pairs):
+        return np.array([users_weights[uid,:] @ items_weights[iid,:] for uid, iid in users_items_pairs]).flatten()
+
+    def get_sparse_predicted(self,users_items_pairs):
+        return self.get_sparse_matrix(self.users_weights,self.items_weights,users_items_pairs)
+
     def get_predicted(self):
         return self.get_matrix(self.users_weights,self.items_weights)

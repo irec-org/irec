@@ -8,20 +8,25 @@ class MostPopular(Interactor):
         super().__init__(*args, **kwargs)
 
     @staticmethod
-    def get_items_popularity(consumption_matrix, test_uids, normalize=True):
+    def get_items_popularity(consumption_matrix, test_uids, is_spmatrix, normalize=True):
         uids = test_uids
         num_users = len(uids)
         mask = np.ones(consumption_matrix.shape[0], dtype=bool)
         mask[uids] = 0
         lowest_value = np.min(consumption_matrix)
-        items_popularity = np.count_nonzero(consumption_matrix[mask,:]>lowest_value,axis=0)
+        if not is_spmatrix:
+            items_popularity = np.count_nonzero(consumption_matrix[mask,:]>lowest_value,axis=0)
+        else:
+            items_popularity = np.array(np.sum(consumption_matrix[mask,:]>lowest_value,axis=0)).flatten()
+
         if normalize:
             items_popularity = items_popularity/consumption_matrix.shape[0]
+                
         return items_popularity
 
     def interact(self, uids):
         super().interact()
-        items_popularity = self.get_items_popularity(self.consumption_matrix, uids)
+        items_popularity = self.get_items_popularity(self.consumption_matrix, uids, self.is_spmatrix)
 
         fig, ax = plt.subplots()
         ax.hist(items_popularity)
