@@ -276,9 +276,9 @@ class DatasetFormatter(Saveable):
         
         if self.is_spmatrix:
             print("1")
-            self.matrix_users_ratings = scipy.sparse.csr_matrix((r_full, (u_full, i_full)), shape=(num_users, num_items), dtype=float)
+            self.matrix_users_ratings = scipy.sparse.csr_matrix((r_full, (u_full, i_full)), shape=(self.num_users, self.num_items), dtype=float)
             print("2")
-            self.matrix_users_times = scipy.sparse.csr_matrix((t_full, (u_full, i_full)), shape=(num_users, num_items), dtype=float)
+            self.matrix_users_times = scipy.sparse.csr_matrix((t_full, (u_full, i_full)), shape=(self.num_users, self.num_items), dtype=float)
             print("3")
             # self.users_start_time = df_cons.groupby('uid').min()['t'].to_numpy()
             # print("4")
