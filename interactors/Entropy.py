@@ -9,6 +9,16 @@ class Entropy(Interactor):
         super().__init__(*args, **kwargs)
 
     @staticmethod
+    def probabilities_entropy(probabilities):
+        return -1*np.sum(probabilities*np.log(probabilities))
+
+    @staticmethod
+    def values_entropy(values):
+        unique, counts = np.unique(values, return_counts=True)
+        values_probability = counts/np.sum(counts)
+        return Entropy.probabilities_entropy(values_probability)
+    
+    @staticmethod
     def get_items_entropy(consumption_matrix, test_uids):
         lowest_value = np.min(consumption_matrix)
         mask = np.ones(consumption_matrix.shape[0], dtype=bool)
@@ -21,9 +31,10 @@ class Entropy(Interactor):
             else:
                 iid_ratings = consumption_matrix[mask,iid]
                 iid_ratings = iid_ratings[iid_ratings > lowest_value]
-            unique, counts = np.unique(iid_ratings, return_counts=True)
-            ratings_probability = counts/np.sum(counts)
-            items_entropy[iid] = -1*np.sum(ratings_probability*np.log(ratings_probability))
+            # unique, counts = np.unique(iid_ratings, return_counts=True)
+            # ratings_probability = counts/np.sum(counts)
+            # items_entropy[iid] = -1*np.sum(ratings_probability*np.log(ratings_probability))
+            items_entropy[iid] = Entropy.values_entropy(iid_ratings)
         return items_entropy
 
     def interact(self, uids):

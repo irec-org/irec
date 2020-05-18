@@ -18,6 +18,8 @@ from .LinUCB import *
 from .UCBLearner import *
 from .MostRepresentative import *
 from .LinEGreedy import *
+from .ALMostPopular import *
+from .ALEntropy import *
 
 INTERACTORS = {
     # 'Interactor': Interactor,
@@ -37,4 +39,6 @@ INTERACTORS = {
     'ε-Greedy': EGreedy,
     'UCB': UCB,
     'Most Representative': MostRepresentative,
+    'AL Most Popular': ALMostPopular,
+    'AL Entropy': ALEntropy,
 }
