@@ -24,9 +24,9 @@ is_spmatrix = dsf.is_spmatrix
 KS = list(map(int,np.arange(INTERACTION_SIZE,ITERATIONS+1,step=INTERACTION_SIZE)))
 
 if not is_spmatrix:
-    pmf_model = mf.ICFPMF()
+    pmf_model = mf.ICFPMF(name_prefix=dsf.base)
 else:
-    pmf_model = mf.ICFPMFS()
+    pmf_model = mf.ICFPMFS(name_prefix=dsf.base)
 pmf_model.load_var(dsf.matrix_users_ratings[dsf.train_uids])
 
 items_distance = metrics.get_items_distance(dsf.matrix_users_ratings)

@@ -22,9 +22,9 @@ if np.any(list(map(
         lambda itr_class: issubclass(itr_class,interactors.ICF),
         interactors_classes))):
     if not is_spmatrix:
-        pmf_model = mf.ICFPMF()
+        pmf_model = mf.ICFPMF(name_prefix=dsf.base)
     else:
-        pmf_model = mf.ICFPMFS()
+        pmf_model = mf.ICFPMFS(name_prefix=dsf.base)
     print('Loading %s'%(pmf_model.__class__.__name__))
     pmf_model.load_var(dsf.matrix_users_ratings[dsf.train_uids])
     pmf_model = pmf_model.load()
@@ -38,7 +38,7 @@ if np.any(list(map(
         interactors_classes
         ))):
     print('Loading SVD')
-    svd_model = mf.SVD()
+    svd_model = mf.SVD(name_prefix=dsf.base)
     svd_model = svd_model.load()
     Q = svd_model.items_weights
 

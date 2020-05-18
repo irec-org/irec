@@ -19,7 +19,7 @@ dsf = DatasetFormatter()
 dsf = dsf.load()
 for i in answers['mf_models']:
     model_class=mf.MF_MODELS[i]
-    model = model_class()
+    model = model_class(name_prefix=dsf.base)
     if issubclass(model_class,(mf.ICFPMF,mf.PMF,mf.ICFPMFS)):
         model.load_var(dsf.matrix_users_ratings[dsf.train_uids])
     model.fit(dsf.matrix_users_ratings[dsf.train_uids])

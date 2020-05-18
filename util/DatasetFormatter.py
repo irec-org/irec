@@ -6,7 +6,8 @@ import math
 import time
 import scipy.sparse
 import os
-
+import itertools
+import re
 from .Saveable import Saveable
 
 class DatasetFormatter(Saveable):
@@ -44,7 +45,7 @@ class DatasetFormatter(Saveable):
     SELECTION_MODEL_HANDLERS = {'users_train_test': 'self.run_users_train_test()',
                                 'users_train_test_chrono': 'self.run_users_train_test_chrono()'}
     
-    def __init__(self,base='tr_te_netflix',
+    def __init__(self,base='ml_100k',
                  selection_model='users_train_test_chrono',
                  is_spmatrix=True,
                  selection_model_parameters={}, *args, **kwargs):
@@ -198,7 +199,7 @@ class DatasetFormatter(Saveable):
             self.users_start_time = np.where(self.matrix_users_times.A > 0,self.matrix_users_times.A,np.inf).min(axis=1)
 
     def read_ratings(self, fileName):
-        numratings = sum(1 for line in open(fileName))
+        numratings = np.sum([1 for line in open(fileName)])
         usersId = np.zeros(numratings, dtype=np.int32)
         itemsId = np.zeros(numratings, dtype=np.int32)
         ratings = np.zeros(numratings, dtype=np.float16)
@@ -207,20 +208,21 @@ class DatasetFormatter(Saveable):
         file = open(fileName, "r")
         file.readline()
         cont = 0
-        for row in file:
-            values = row.split('::')
-            uid, iid,rating, ts = int(float(values[0])),int(float(values[1])),values[2], int(float(values[3].replace('\n', '')))
-            usersId[cont] = uid
-            itemsId[cont] = iid
-            ratings[cont] = rating
-            timestamp[cont] = ts
-            cont += 1
+        while True:
+            lines = list(itertools.islice(file, 1000000))
+            for row in lines:
+                values = row.split('::')
+                uid, iid,rating, ts = int(float(values[0])),int(float(values[1])),values[2], int(float(values[3].replace('\n', '')))
+                usersId[cont] = uid
+                itemsId[cont] = iid
+                ratings[cont] = rating
+                timestamp[cont] = ts
+                cont += 1
+            if not lines:
+                break
         
         file.close()
-        # print("Arquivo: ", fileName)
-        # print("Número de usuários: ", len(np.unique(usersId)))
         return usersId, itemsId, ratings, timestamp, numratings
-
 
     def get_tr_te_netflix(self):
 
@@ -239,10 +241,12 @@ class DatasetFormatter(Saveable):
         self.train_uids = np.unique(u_train)
         self.test_uids = np.unique(u_test)
 
+
         self.num_users = len(set(u_train).union(set(u_test)))
         self.num_items = len(set(i_train).union(set(i_test)))
         self.num_consumes = len(u_train) + len(u_test)
         
+        print(np.max(self.train_uids),np.max(self.test_uids),self.num_users,self.num_items)
         del u_train, u_test, i_train, i_test, r_train, r_test, t_train, t_test
         
         if self.is_spmatrix:
@@ -251,15 +255,8 @@ class DatasetFormatter(Saveable):
             print("2")
             self.matrix_users_times = scipy.sparse.csr_matrix((t_full, (u_full, i_full)), shape=(self.num_users, self.num_items), dtype=float)
             print("3")
-            # self.users_start_time = df_cons.groupby('uid').min()['t'].to_numpy()
-            # print("4")
         else:
-            input("Viiish")
-            # self.matrix_users_times = np.array(df_cons.pivot(index='uid', columns='iid', values = 't'))
-            # self.matrix_users_times[np.isnan(self.matrix_users_times)] = 0
-            # self.matrix_users_times = scipy.sparse.csr_matrix(self.matrix_users_times,dtype=np.int32)
-            # self.users_start_time = np.where(self.matrix_users_times.A > 0,self.matrix_users_times.A,np.inf).min(axis=1)
-
+            raise RuntimeError
 
     def get_tr_te_ml_1m(self):
         base_dir = self.BASES_DIRS[self.base]
@@ -306,9 +303,10 @@ class DatasetFormatter(Saveable):
     def gen_base(self):
         print("generating base")
         self.get_base()
-        if self.base not in ['tr_te_ml_1m']:
+        if not re.search('^tr_te',self.base):
             self.run_selection_model()
         self.save()
+        
     def export_base(self,format='movielens'):
         full_rating_df = pd.DataFrame(np.where(self.matrix_users_ratings == np.min(self.matrix_users_ratings), np.nan,self.matrix_users_ratings))
         full_time_df = pd.DataFrame(np.where(self.matrix_users_times.A == np.min(self.matrix_users_times.A), np.nan,self.matrix_users_times.A))
