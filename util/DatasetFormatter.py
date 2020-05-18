@@ -21,7 +21,7 @@ class DatasetFormatter(Saveable):
     }
     SELECTION_MODEL_HANDLERS = {'users_train_test': 'self.run_users_train_test()',
                                 'users_train_test_chrono': 'self.run_users_train_test_chrono()'}
-    def __init__(self,base='ml_1m',
+    def __init__(self,base='ml_100k',
                  selection_model='users_train_test_chrono',
                  is_spmatrix=True,
                  selection_model_parameters={}, *args, **kwargs):

@@ -4,6 +4,7 @@ from collections import defaultdict
 import util.metrics as metrics
 import util.util as util
 import ctypes
+import scipy.sparse
 
 class MetricsEvaluator(Saveable):
     METRICS_PRETTY = {'precision':'Precision','hits':'Hits','cumulative_precision':'Cumulative Precision',
@@ -20,9 +21,15 @@ class MetricsEvaluator(Saveable):
 
     @staticmethod
     def get_ground_truth(consumption_matrix,threshold):
-        return [np.nonzero(consumption_matrix[uid,:]>=threshold)[0]
-                        for uid
-                        in range(consumption_matrix.shape[0])]
+        if not isinstance(consumption_matrix,scipy.sparse.spmatrix):
+            return [np.nonzero(consumption_matrix[uid,:]>=threshold)[0]
+                    for uid
+                    in range(consumption_matrix.shape[0])]
+        else:
+            return [np.nonzero(consumption_matrix[uid,:]>=threshold)[1]
+                    for uid
+                    in range(consumption_matrix.shape[0])]
+            
 
     def eval_chunk_metrics(self, result, ground_truth, items_popularity, items_distance):
         self.metrics.clear()

@@ -27,7 +27,6 @@ if not is_spmatrix:
     pmf_model = mf.ICFPMF()
 else:
     pmf_model = mf.ICFPMFS()
-print('Loading %s'%(pmf_model.__class__.__name__))
 pmf_model.load_var(dsf.matrix_users_ratings[dsf.train_uids])
 
 items_distance = metrics.get_items_distance(dsf.matrix_users_ratings)

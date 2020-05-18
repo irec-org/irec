@@ -16,8 +16,8 @@ class LogPopEnt(Interactor):
 
     def interact(self, uids):
         super().interact()
-        items_entropy = Entropy.get_items_entropy(self.consumption_matrix,uids,self.is_spmatrix)
-        items_popularity = MostPopular.get_items_popularity(self.consumption_matrix,uids,self.is_spmatrix,normalize=False)
+        items_entropy = Entropy.get_items_entropy(self.consumption_matrix,uids)
+        items_popularity = MostPopular.get_items_popularity(self.consumption_matrix,uids,normalize=False)
         items_logpopent = self.get_items_logpopent(items_popularity,items_entropy)
 
         correlation = scipy.stats.pearsonr(items_entropy,items_popularity)[0]

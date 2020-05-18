@@ -1,4 +1,5 @@
 import numpy as np
+import scipy.sparse
 np.seterr(all='raise')
 
 def mapk(actual, predicted, k):
@@ -64,9 +65,18 @@ def ildk(items,items_distance):
     return local_ild/(num_items*(num_items-1)/2)
 
 def get_items_distance(matrix):
-    items_distance = np.corrcoef(matrix.T)
-    items_distance = (items_distance+1)/2
-    return 1-items_distance
+    if isinstance(matrix,scipy.sparse.spmatrix):
+        items_similarity = np.corrcoef(matrix.A.T)
+        # matrix = matrix.T
+        # center_matrix = matrix.sum(axis=1)
+        # center_matrix = center_matrix @ center_matrix.T
+        # cov_matrix = (matrix @ matrix.T - center_matrix)/(center_matrix.shape[0]-1)
+        # cov_diag = np.diag(cov_matrix)
+        # items_similarity = cov_matrix/np.sqrt(np.outer(cov_diag,cov_diag))
+    else:
+        items_similarity = np.corrcoef(matrix.T)
+    items_similarity = (items_similarity+1)/2
+    return 1-items_similarity
 
 def epdk(actual, predicted, consumed_items, items_distance):
     if len(consumed_items) == 0:
