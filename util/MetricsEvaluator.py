@@ -11,7 +11,7 @@ class MetricsEvaluator(Saveable):
                       'recall':'Recall','f1':'F1 Score','ndcg':'NDCG','ild':'ILD','epc':'EPC','epd':'EPD'}
     
     def __init__(self, name, k, threshold, interaction_size=None):
-        super().__init__()
+        super().__init__(directory='metric')
         self.metrics = defaultdict(dict)
         self.metrics_mean = defaultdict(float)
         self.name = name
