@@ -25,12 +25,23 @@ class Entropy(Interactor):
         mask[test_uids] = 0
         items_entropy = np.zeros(consumption_matrix.shape[1])
         is_spmatrix = isinstance(consumption_matrix,scipy.sparse.spmatrix)
+        if is_spmatrix:
+            consumption_matrix = scipy.sparse.csc_matrix(consumption_matrix)
+        # consumption_matrix=consumption_matrix.transpose()
+        # import time
         for iid in range(consumption_matrix.shape[1]):
+            # stime = time.time()
             if is_spmatrix:
-                iid_ratings = consumption_matrix[mask,iid].data
+                # iid_ratings = consumption_matrix[mask].data
+                # iid_ratings = consumption_matrix[mask,:][:,iid].data
+                # consumption_matrix.getcol(iid)
+                # iid_ratings = consumption_matrix[:,iid][mask].data
+                iid_ratings = consumption_matrix[:,iid].A.flatten()[mask]
+                iid_ratings = iid_ratings[iid_ratings > lowest_value]
             else:
                 iid_ratings = consumption_matrix[mask,iid]
                 iid_ratings = iid_ratings[iid_ratings > lowest_value]
+            # print(f"Elapsed time: {time.time()-stime}")
             # unique, counts = np.unique(iid_ratings, return_counts=True)
             # ratings_probability = counts/np.sum(counts)
             # items_entropy[iid] = -1*np.sum(ratings_probability*np.log(ratings_probability))
