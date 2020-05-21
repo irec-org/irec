@@ -124,7 +124,7 @@ class DatasetFormatter(Saveable):
         self.num_consumes = df_info.loc['ratings']
 
         if self.is_spmatrix:
-            self.matrix_users_ratings = scipy.sparse.csr_matrix((df_cons.r,(df_cons.uid,df_cons.iid)),dtype=float)
+            self.matrix_users_ratings = scipy.sparse.csr_matrix((df_cons.r,(df_cons.uid,df_cons.iid)))
             self.matrix_users_times = scipy.sparse.csr_matrix((df_cons.t,(df_cons.uid,df_cons.iid)))
             self.users_start_time = df_cons.groupby('uid').min()['t'].to_numpy()
         else:
@@ -253,13 +253,21 @@ class DatasetFormatter(Saveable):
         base_dir = self.BASES_DIRS[self.base]
         df_cons1 = pd.read_csv(base_dir+'train.data',sep='::',header=None,engine='python')
         df_cons1.columns = ['uid','iid','r','t']
+        df_cons1['uid'] = df_cons1['uid'].astype(np.int32)
+        df_cons1['iid'] = df_cons1['iid'].astype(np.int32)
+        df_cons1['t'] = df_cons1['t'].astype(np.int32)
+
         df_cons2 = pd.read_csv(base_dir+'test.data',sep='::',header=None,engine='python')
         df_cons2.columns = ['uid','iid','r','t']
+        df_cons2['uid'] = df_cons2['uid'].astype(np.int32)
+        df_cons2['iid'] = df_cons2['iid'].astype(np.int32)
+        df_cons2['t'] = df_cons2['t'].astype(np.int32)
 
         self.train_uids = np.unique(df_cons1['uid'])
         self.test_uids = np.unique(df_cons2['uid'])
         df_cons = df_cons1.append(df_cons2)
         del df_cons1, df_cons2
+
 
         self.num_users = len(np.unique(df_cons['uid']))
         self.num_items = len(np.unique(df_cons['iid']))
