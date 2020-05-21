@@ -34,7 +34,8 @@ if np.any(list(map(
             [interactors.LinUCB,
             interactors.MostRepresentative,
              interactors.LinEGreedy,
-             interactors.UCBLearner],
+             interactors.UCBLearner,
+             interactors.OurMethod1],
         interactors_classes
         ))):
     print('Loading SVD')
@@ -61,7 +62,8 @@ for itr_class in interactors_classes:
     elif itr_class in [interactors.LinUCB,
                        interactors.LinEGreedy,
                        interactors.UCBLearner,
-                       interactors.MostRepresentative]:
+                       interactors.MostRepresentative,
+                       interactors.OurMethod1]:
         itr.interact(dsf.test_uids,Q)
     else:
         itr.interact(dsf.test_uids)

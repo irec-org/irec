@@ -44,7 +44,7 @@ class DatasetFormatter(Saveable):
     SELECTION_MODEL_HANDLERS = {'users_train_test': 'self.run_users_train_test()',
                                 'users_train_test_chrono': 'self.run_users_train_test_chrono()'}
     
-    def __init__(self,base='tr_te_ml_1m',
+    def __init__(self,base='ml_100k',
                  selection_model='users_train_test_chrono',
                  is_spmatrix=True,
                  selection_model_parameters={}, *args, **kwargs):
@@ -124,7 +124,7 @@ class DatasetFormatter(Saveable):
         self.num_consumes = df_info.loc['ratings']
 
         if self.is_spmatrix:
-            self.matrix_users_ratings = scipy.sparse.csr_matrix((df_cons.r,(df_cons.uid,df_cons.iid)))
+            self.matrix_users_ratings = scipy.sparse.csr_matrix((df_cons.r,(df_cons.uid,df_cons.iid)),dtype=float)
             self.matrix_users_times = scipy.sparse.csr_matrix((df_cons.t,(df_cons.uid,df_cons.iid)))
             self.users_start_time = df_cons.groupby('uid').min()['t'].to_numpy()
         else:

@@ -20,10 +20,12 @@ from .MostRepresentative import *
 from .LinEGreedy import *
 from .ALMostPopular import *
 from .ALEntropy import *
+from .OurMethod1 import *
 
 INTERACTORS = {
     # 'Interactor': Interactor,
     # 'ICF': ICF,
+    'OurMethod1': OurMethod1,
     'Most Popular': MostPopular,
     'UCB-Learner (MF)': UCBLearner,
     'LinUCB (MF)': LinUCB,

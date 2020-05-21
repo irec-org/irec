@@ -56,7 +56,13 @@ axs[1,0].set_ylabel('First rating')
 # dont work with sparse matrix
 # users_num_consumption = np.count_nonzero(dsf.matrix_users_ratings,axis=1)[users_by_time]
 users_num_consumption = np.sum(dsf.matrix_users_ratings>lowest_value,axis=1)[users_by_time].A.flatten()
-print(users_num_consumption)
+# print(users_num_consumption)
+# print(np.argmin(users_num_consumption))
+# print(np.min(users_num_consumption))
+# print(len(users_by_time))
+# print(dsf.matrix_users_ratings.shape[0])
+# print(len(users_num_consumption))
+
 axs[1,1].bar(x=list(range(dsf.matrix_users_ratings.shape[0])),height=users_num_consumption,color='k',linewidth=2)
 axs[1,1].set_xlabel('Users')
 axs[1,1].set_ylabel('#Consumption')
