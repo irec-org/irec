@@ -6,13 +6,11 @@ from threadpoolctl import threadpool_limits
 import ctypes
 import scipy.spatial
 class OurMethod1(Interactor):
-    def __init__(self, alpha=1.0, weight_method='change', zeta=None,*args, **kwargs):
+    def __init__(self, alpha=1.0, stop=None, weight_method='change',*args, **kwargs):
         super().__init__(*args, **kwargs)
-        if alpha != None:
-            self.alpha = alpha
-        elif zeta != None:
-            self.alpha = 1+np.sqrt(np.log(2/zeta)/2)
+        self.alpha = alpha
         self.weight_method = weight_method
+        self.stop = stop
 
     def interact(self, uids, items_latent_factors):
         super().interact()
@@ -37,7 +35,7 @@ class OurMethod1(Interactor):
 
     def get_global_model_weight(self,user_latent_factors_history,num_correct_items_history,distance_history):
         if self.weight_method == 'stop':
-            b = 14
+            b = self.stop
             a = min(np.sum(num_correct_items_history),b)
             return (1-np.round(pow(2,a)/pow(2,b),3))
         elif self.weight_method == 'change':
@@ -79,24 +77,24 @@ class OurMethod1(Interactor):
             global_model_weight = self.get_global_model_weight(user_latent_factors_history,
                                                                num_correct_items_history,
                                                                distance_history)
-            if uid == 2:
-                print(np.sum(num_correct_items_history))
-                print(global_model_weight)
-                times_with_reward = np.nonzero(num_correct_items_history)[0]
-                print(times_with_reward)
+            # if uid == 2:
+            #     print(np.sum(num_correct_items_history))
+            #     print(global_model_weight)
+            #     times_with_reward = np.nonzero(num_correct_items_history)[0]
+            #     print(times_with_reward)
                 
-                if len(times_with_reward) >= 2:
-                    print(user_latent_factors_history[times_with_reward][-1])
-                    print(user_latent_factors_history[times_with_reward][-2])
+            #     if len(times_with_reward) >= 2:
+            #         print(user_latent_factors_history[times_with_reward][-1])
+            #         print(user_latent_factors_history[times_with_reward][-2])
                 # print(num_correct_items_history)
                 # print(mean)
                 # print(np.linalg.norm(mean-old_mean))
                 # print(np.corrcoef(mean,old_mean))
                 # print(mean,old_mean)
                 # print("%d %.5f %d"%(i,scipy.spatial.distance.cosine(mean,old_mean),np.count_nonzero([self.get_reward(uid,item) for item in result])))
-            items_uncertainty = np.sqrt(np.sum(self.items_latent_factors[user_candidate_items].dot(np.linalg.inv(A)) * self.items_latent_factors[user_candidate_items],axis=1))
+            # items_uncertainty = np.sqrt(np.sum(self.items_latent_factors[user_candidate_items].dot(np.linalg.inv(A)) * self.items_latent_factors[user_candidate_items],axis=1))
             items_user_similarity = user_latent_factors @ self.items_latent_factors[user_candidate_items].T
-            user_model_items_score = items_user_similarity + self.alpha*items_uncertainty
+            user_model_items_score = items_user_similarity # + self.alpha*items_uncertainty
             global_model_items_score = self.items_bias[user_candidate_items]
             user_model_items_score_min = np.min(user_model_items_score)
             user_model_items_score_max = np.max(user_model_items_score)

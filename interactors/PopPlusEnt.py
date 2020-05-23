@@ -10,19 +10,19 @@ class PopPlusEnt(Interactor):
         super().__init__(*args, **kwargs)
 
     @staticmethod
-    def get_items_logplusent(items_popularity,items_entropy):
-        items_logplusent =items_entropy/np.max(items_entropy) + items_popularity/np.max(items_popularity)
-        return items_logplusent/np.max(items_logplusent)
+    def get_items_popplusent(items_popularity,items_entropy):
+        items_popplusent =items_entropy/np.max(items_entropy) + items_popularity/np.max(items_popularity)
+        return items_popplusent/np.max(items_popplusent)
 
     def interact(self, uids):
         super().interact()
         items_entropy = Entropy.get_items_entropy(self.consumption_matrix,uids)
         items_popularity = MostPopular.get_items_popularity(self.consumption_matrix,uids,normalize=False)
-        items_logplusent = PopPlusEnt.get_items_logplusent(items_popularity,items_entropy)
+        items_popplusent = PopPlusEnt.get_items_popplusent(items_popularity,items_entropy)
 
         correlation = scipy.stats.pearsonr(items_entropy,items_popularity)[0]
 
-        top_iids = list(reversed(np.argsort(items_logplusent)))[:self.get_iterations()]
+        top_iids = list(reversed(np.argsort(items_popplusent)))[:self.get_iterations()]
 
         fig, ax = plt.subplots()
         ax.scatter(items_entropy,items_popularity,marker="D",color='darkblue')
