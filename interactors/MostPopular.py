@@ -14,6 +14,7 @@ class MostPopular(Interactor):
         num_users = len(uids)
         mask = np.ones(consumption_matrix.shape[0], dtype=bool)
         mask[uids] = 0
+        num_train_users = np.count_nonzero(mask)
         lowest_value = np.min(consumption_matrix)
         if not isinstance(consumption_matrix,scipy.sparse.spmatrix):
             items_popularity = np.count_nonzero(consumption_matrix[mask,:]>lowest_value,axis=0)
@@ -21,7 +22,7 @@ class MostPopular(Interactor):
             items_popularity = np.array(np.sum(consumption_matrix[mask,:]>lowest_value,axis=0)).flatten()
 
         if normalize:
-            items_popularity = items_popularity/consumption_matrix.shape[0]
+            items_popularity = items_popularity/num_train_users
                 
         return items_popularity
 
@@ -30,7 +31,7 @@ class MostPopular(Interactor):
         items_popularity = self.get_items_popularity(self.consumption_matrix, uids)
 
         fig, ax = plt.subplots()
-        ax.hist(items_popularity)
+        ax.hist(items_popularity,color='k')
         ax.set_xlabel("Popularity")
         ax.set_ylabel("#Items")
         fig.savefig(os.path.join(self.DIRS['img'],"popularity_"+self.get_name()+".png"))

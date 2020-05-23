@@ -5,24 +5,24 @@ import matplotlib.pyplot as plt
 import scipy.stats
 import os
 
-class LogPopEnt(Interactor):
+class PopPlusEnt(Interactor):
     def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
 
     @staticmethod
-    def get_items_logpopent(items_popularity,items_entropy):
-        items_logpopent = items_entropy * np.ma.log(items_popularity).filled(0)
-        return np.dot(items_logpopent,1/np.max(items_logpopent))
+    def get_items_logplusent(items_popularity,items_entropy):
+        items_logplusent =items_entropy/np.max(items_entropy) + items_popularity/np.max(items_popularity)
+        return items_logplusent/np.max(items_logplusent)
 
     def interact(self, uids):
         super().interact()
         items_entropy = Entropy.get_items_entropy(self.consumption_matrix,uids)
         items_popularity = MostPopular.get_items_popularity(self.consumption_matrix,uids,normalize=False)
-        items_logpopent = LogPopEnt.get_items_logpopent(items_popularity,items_entropy)
+        items_logplusent = PopPlusEnt.get_items_logplusent(items_popularity,items_entropy)
 
         correlation = scipy.stats.pearsonr(items_entropy,items_popularity)[0]
 
-        top_iids = list(reversed(np.argsort(items_logpopent)))[:self.get_iterations()]
+        top_iids = list(reversed(np.argsort(items_logplusent)))[:self.get_iterations()]
 
         fig, ax = plt.subplots()
         ax.scatter(items_entropy,items_popularity,marker="D",color='darkblue')
@@ -34,6 +34,9 @@ class LogPopEnt(Interactor):
                 transform = ax.transAxes)
         for start, end, color in [(0,10,'green'),(10,20,'red'),(20,30,'darkred'),(30,40,'yellow'),(40,50,'orange')]:
             ax.scatter(items_entropy[top_iids[start:end]],items_popularity[top_iids[start:end]],marker='D',color=color)
+            print("[%d,%d] sum(popularity)=%.2f sum(entropy)=%.2f"%(start,end,
+                                                                 np.sum(items_popularity[top_iids[start:end]]/np.max(items_popularity)),
+                                                                 np.sum(items_entropy[top_iids[start:end]]/np.max(items_entropy))))
         fig.savefig(os.path.join(self.DIRS['img'],"corr_popent_"+self.get_name()+".png"))
 
 

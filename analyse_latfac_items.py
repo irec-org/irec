@@ -40,7 +40,9 @@ top_iids_logpopent = list(reversed(np.argsort(items_logpopent)))
 
 num_items = 20
 
-items_representativeness = interactors.MostRepresentative.get_items_representativeness(model.items_weights)
+# items_representativeness = interactors.MostRepresentative.get_items_representativeness(model.items_weights)
+# items_representativeness = interactors.HELF.get_items_helf(items_popularity,items_entropy,dsf.matrix_users_ratings.shape[0])
+items_representativeness = interactors.Entropy0.get_items_entropy(dsf.matrix_users_ratings,[])
 top_iids_rep = list(reversed(np.argsort(items_representativeness)))
 
 rep_pop_corr = np.corrcoef(items_representativeness,items_popularity)[0,1]
@@ -71,5 +73,5 @@ for i in range(num_items):
                                                       item_ent,item_rank_ent,
                                                       item_logpopent,item_rank_logpopent)).split('\t'))
 
-print(tabulate(table, headers=['Item ID','Representativeness(Rank)','Popularity(Rank)[c:%.2f]'%(rep_pop_corr),
+print(tabulate(table, headers=['Item ID','Entropy0(Rank)','Popularity(Rank)[c:%.2f]'%(rep_pop_corr),
                                'Entropy(Rank)[c:%.2f]'%(rep_ent_corr),'LogPopEnt(Rank)[c:%.2f]'%(rep_logpopent_corr)]))

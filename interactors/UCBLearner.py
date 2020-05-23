@@ -39,7 +39,7 @@ class UCBLearner(Interactor):
     @staticmethod
     def discount_bias(num_items,stop):
         limit = pow(2,stop)/100
-        return pow(2,num_items)/limit
+        return pow(2,min(stop,num_items))/limit
 
     @staticmethod
     def interact_user(obj_id,uid):

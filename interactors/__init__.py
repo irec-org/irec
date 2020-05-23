@@ -21,6 +21,9 @@ from .LinEGreedy import *
 from .ALMostPopular import *
 from .ALEntropy import *
 from .OurMethod1 import *
+from .Entropy0 import *
+from .HELF import *
+from .PopPlusEnt import *
 
 INTERACTORS = {
     # 'Interactor': Interactor,
@@ -43,4 +46,7 @@ INTERACTORS = {
     'Most Representative': MostRepresentative,
     'AL Most Popular': ALMostPopular,
     'AL Entropy': ALEntropy,
+    'Entropy0': Entropy0,
+    'HELF': HELF,
+    'PopPlusEnt': PopPlusEnt,
 }

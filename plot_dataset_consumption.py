@@ -10,6 +10,8 @@ fig, axs = plt.subplots(nrows=2,ncols=2,figsize=(10,10))
 
 lowest_value = np.min(dsf.matrix_users_ratings)
 
+print(scipy.stats.describe(dsf.matrix_users_ratings.data))
+raise SystemExit
 
 for ax, matrix, name in zip(axs[0,:],
                             [dsf.matrix_users_ratings[dsf.test_uids],dsf.matrix_users_ratings[dsf.train_uids]],
