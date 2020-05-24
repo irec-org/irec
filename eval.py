@@ -1,7 +1,7 @@
 import inquirer
 from tqdm import tqdm
 import numpy as np
-
+from collections import defaultdict
 import interactors
 import mf
 from util import DatasetFormatter, MetricsEvaluator, metrics
@@ -30,7 +30,7 @@ else:
 pmf_model.load_var(dsf.consumption_matrix[dsf.train_uids])
 
 items_distance = metrics.get_items_distance(dsf.consumption_matrix)
-items_popularity = interactors.MostPopular.get_items_popularity(dsf.consumption_matrix,[],normalize=True)
+items_popularity = interactors.MostPopular.get_items_popularity(dsf.consumption_matrix,normalize=True)
 ground_truth = MetricsEvaluator.get_ground_truth(dsf.consumption_matrix,THRESHOLD)
 for i in answers['interactors']:
     itr_class = interactors.INTERACTORS[i]
@@ -44,9 +44,17 @@ for i in answers['interactors']:
         itr = itr_class(consumption_matrix=dsf.consumption_matrix,name_prefix=dsf.base)
 
     itr.results = itr.load_results()
+    users_consumed_items = defaultdict(list)
     for j in tqdm(range(len(KS))):
         k = KS[j]
-        me = MetricsEvaluator(name=itr.get_name(), k=k,threshold=THRESHOLD, interaction_size=INTERACTION_SIZE)
+        me = MetricsEvaluator(name_suffix='interaction_%d'%(j),name=itr.get_name(), k=k,threshold=THRESHOLD)
+        
         # me.eval_chunk_metrics(itr.results, dsf.consumption_matrix,5)
-        me.eval_chunk_metrics(itr.results, ground_truth, items_popularity, items_distance)
+        tmp_results = {uid: result[j*INTERACTION_SIZE:(j+1)*INTERACTION_SIZE] for uid, result in itr.results.items()}
+        me.eval_metrics(tmp_results,
+                        ground_truth, items_popularity, items_distance,
+                        users_consumed_items)
+        for uid, items in tmp_results.items():
+            users_consumed_items[uid].extend(list(set(ground_truth[uid]) & set(items)))
+            
 

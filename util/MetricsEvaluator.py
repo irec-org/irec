@@ -10,14 +10,13 @@ class MetricsEvaluator(Saveable):
     METRICS_PRETTY = {'precision':'Precision','hits':'Hits','cumulative_precision':'Cumulative Precision',
                       'recall':'Recall','f1':'F1 Score','ndcg':'NDCG','ild':'ILD','epc':'EPC','epd':'EPD'}
     
-    def __init__(self, name, k, threshold, interaction_size=None):
-        super().__init__(directory='metric')
+    def __init__(self, name, k, threshold,*args,**kwargs):
+        super().__init__(directory='metric',*args,**kwargs)
         self.metrics = defaultdict(dict)
         self.metrics_mean = defaultdict(float)
         self.name = name
         self.k = k
         self.threshold = threshold
-        self.interaction_size = interaction_size
 
     @staticmethod
     def get_ground_truth(consumption_matrix,threshold):
@@ -30,7 +29,7 @@ class MetricsEvaluator(Saveable):
                     for uid
                     in range(consumption_matrix.shape[0])]
             
-
+    #deprecated
     def eval_chunk_metrics(self, result, ground_truth, items_popularity, items_distance):
         self.metrics.clear()
         self.items_distance = items_distance
@@ -49,7 +48,7 @@ class MetricsEvaluator(Saveable):
         del self.items_distance
         del self.items_popularity
         self.save()
-
+    #deprecated
     @staticmethod
     def eval_chunk_user(obj_id,uid,predicted,actual,consumed_items):
         self = ctypes.cast(obj_id, ctypes.py_object).value
@@ -66,13 +65,14 @@ class MetricsEvaluator(Saveable):
         metrics_values['epd'] = metrics.epdk(actual,predicted,consumed_items,self.items_distance)
         return metrics_values
 
-    def eval_metrics(self, result, ground_truth, items_popularity, items_distance):
+    def eval_metrics(self, result, ground_truth, items_popularity, items_distance, users_consumed_items):
         self.metrics.clear()
         self.items_distance = items_distance
         self.items_popularity = items_popularity
         
         self_id = id(self)
-        args = [(self_id,int(uid),predicted[:self.k],ground_truth[uid])
+        args = [(self_id,int(uid),predicted[:self.k],ground_truth[uid]
+                 ,users_consumed_items[uid])
                 for uid, predicted
                 in result.items()]
         
@@ -87,7 +87,7 @@ class MetricsEvaluator(Saveable):
         self.save()
 
     @staticmethod
-    def eval_user(obj_id,uid,predicted,actual):
+    def eval_user(obj_id,uid,predicted,actual,consumed_items):
         self = ctypes.cast(obj_id, ctypes.py_object).value
         metrics_values = dict()
         hits = len(set(predicted) & set(actual))

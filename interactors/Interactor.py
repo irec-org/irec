@@ -10,7 +10,7 @@ import pickle
 import json
 
 class Interactor(Saveable):
-    def __init__(self, train_consumption_matrix=None, test_consumption_matrix=None, interactions=1682, interaction_size=1, threshold=1.0, *args, **kwargs):
+    def __init__(self, train_consumption_matrix=None, test_consumption_matrix=None, interactions=20, interaction_size=5, threshold=1.0, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # self.consumption_matrix = consumption_matrix
         # self.highest_value = max(np.max(train_matrix),np.max(test_matrix))
@@ -29,12 +29,13 @@ class Interactor(Saveable):
 
     @test_consumption_matrix.setter
     def test_consumption_matrix(self, test_consumption_matrix):
-        self.is_spmatrix = isinstance(test_consumption_matrix,scipy.sparse.spmatrix)
-        self.lowest_value = np.min(test_consumption_matrix)
-        self.highest_value = np.max(test_consumption_matrix)
-        print("max value set to:",self.highest_value)
-        print("min value set to:",self.lowest_value)
-        self.test_users = np.nonzero(np.sum(test_consumption_matrix>0,axis=1).A.flatten())[0]
+        if isinstance(test_consumption_matrix,scipy.sparse.spmatrix):
+            self.is_spmatrix = isinstance(test_consumption_matrix,scipy.sparse.spmatrix)
+            self.lowest_value = np.min(test_consumption_matrix)
+            self.highest_value = np.max(test_consumption_matrix)
+            print("max value set to:",self.highest_value)
+            print("min value set to:",self.lowest_value)
+            self.test_users = np.nonzero(np.sum(test_consumption_matrix>0,axis=1).A.flatten())[0]
         self._test_consumption_matrix = test_consumption_matrix
 
     @property
@@ -43,7 +44,8 @@ class Interactor(Saveable):
 
     @train_consumption_matrix.setter
     def train_consumption_matrix(self, train_consumption_matrix):
-        self.train_users = np.nonzero(np.sum(train_consumption_matrix>0,axis=1).A.flatten())[0]
+        if isinstance(train_consumption_matrix,scipy.sparse.spmatrix):
+            self.train_users = np.nonzero(np.sum(train_consumption_matrix>0,axis=1).A.flatten())[0]
         self._train_consumption_matrix = train_consumption_matrix
 
 
