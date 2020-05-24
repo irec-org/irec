@@ -2,6 +2,7 @@ import pickle
 from .Nameable import Nameable
 from .DirectoryDependent import DirectoryDependent
 import os
+import json
 
 class Saveable(Nameable, DirectoryDependent):
     def __init__(self, directory='state_save', *args, **kwargs):

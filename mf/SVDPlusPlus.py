@@ -80,6 +80,7 @@ class SVDPlusPlus(MF):
         num_users = training_matrix.shape[0]
         num_items = training_matrix.shape[1]
         n_u = np.array([np.sqrt(len(i.data)) for i in training_matrix])
+        self.r_mean = np.mean(training_matrix.data)
         self.b_u, self.b_i, self.p, self.q, self.y = _svdplusplus(training_matrix.data,
                                                                   training_matrix.indptr,
                                                                   training_matrix.indices,n_u,

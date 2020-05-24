@@ -17,6 +17,7 @@ class Nameable():
 
         return (self.name_prefix+'_' if self.name_prefix else '')+\
             (self.__class__.__name__ if name is None else name)+\
+            ('_'+self.name_suffix if self.name_suffix else '')+\
             ('_' if len(list_parameters)>0 else '')+\
             '_'.join(list_parameters)
 

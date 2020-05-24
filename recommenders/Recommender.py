@@ -7,8 +7,8 @@ class Recommender(Saveable):
         self.results = defaultdict(list)
 
     def train(self):
-        print('Training '+self.get_verbose_name())
+        print('-==Training==-')
 
     def predict(self):
-        print('Predicting '+self.get_verbose_name())
+        print('-==Predicting==-')
         self.results.clear()
