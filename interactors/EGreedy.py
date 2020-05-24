@@ -31,16 +31,16 @@ class EGreedy(Interactor):
 
             for j in range(self.interaction_size):
                 not_recommended = np.ones(num_items,dtype=bool)
-                not_recommended[self.result[uid]] = 0
+                not_recommended[self.results[uid]] = 0
                 items_not_recommended = np.nonzero(not_recommended)[0]
                 if self.epsilon < np.random.rand():
                     best_item = items_not_recommended[np.argmax(items_mean_values[items_not_recommended])]
                 else:
                     best_item = random.choice(items_not_recommended)
-                self.result[uid].append(best_item)
+                self.results[uid].append(best_item)
 
             user_num_interactions = users_num_interactions[uid]
-            for best_item in self.result[uid][user_num_interactions*self.interaction_size:(user_num_interactions+1)*self.interaction_size]:
+            for best_item in self.results[uid][user_num_interactions*self.interaction_size:(user_num_interactions+1)*self.interaction_size]:
                 items_mean_values[best_item] = (items_mean_values[best_item]*items_count[best_item]+self.get_reward(uid,best_item))/(items_count[best_item] + 1)
                 items_count[best_item] += 1
 
@@ -48,4 +48,4 @@ class EGreedy(Interactor):
             if users_num_interactions[uid] == self.interactions:
                 available_users = available_users - {uid}
 
-        self.save_result()
+        self.save_results()

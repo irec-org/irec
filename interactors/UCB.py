@@ -34,7 +34,7 @@ class UCB(Interactor):
             uid = random.sample(available_users,k=1)[0]
 
             not_recommended = np.ones(num_items,dtype=bool)
-            not_recommended[self.result[uid]] = 0
+            not_recommended[self.results[uid]] = 0
             items_not_recommended = np.nonzero(not_recommended)[0]
 
             items_uncertainty = self.c*np.sqrt(2*np.log(ctime)/items_count[items_not_recommended])
@@ -45,10 +45,10 @@ class UCB(Interactor):
             #     print(np.max(items_mean_values[items_not_recommended]))
             top_items = list(reversed(np.argsort(items_score)))[:self.interaction_size]
             best_items = items_not_recommended[top_items]
-            self.result[uid].extend(best_items)
+            self.results[uid].extend(best_items)
 
             user_num_interactions = users_num_interactions[uid]
-            for best_item in self.result[uid][user_num_interactions*self.interaction_size:(user_num_interactions+1)*self.interaction_size]:
+            for best_item in self.results[uid][user_num_interactions*self.interaction_size:(user_num_interactions+1)*self.interaction_size]:
                 items_mean_values[best_item] = (items_mean_values[best_item]*items_count[best_item]+self.get_reward(uid,best_item))/(items_count[best_item] + 1)
                 items_count[best_item] += 1
 
@@ -59,4 +59,4 @@ class UCB(Interactor):
 
             ctime += self.interaction_size
 
-        self.save_result()
+        self.save_results()

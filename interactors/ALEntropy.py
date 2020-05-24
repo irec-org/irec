@@ -28,7 +28,7 @@ class ALEntropy(Interactor):
         for i in tqdm(range(num_users*self.interactions)):
             uid = random.sample(available_users,k=1)[0]
             not_recommended = np.ones(num_items,dtype=bool)
-            not_recommended[self.result[uid]] = 0
+            not_recommended[self.results[uid]] = 0
             items_not_recommended = np.nonzero(not_recommended)[0]
             items_score =  [Entropy.values_entropy(items_ratings[iid])
                             for iid
@@ -41,9 +41,9 @@ class ALEntropy(Interactor):
                 if reward > self.lowest_value:
                     items_ratings[best_item,unique_values_ids[reward]] = reward
 
-            self.result[uid].extend(best_items)
+            self.results[uid].extend(best_items)
             users_num_interactions[uid] += 1
             if users_num_interactions[uid] == self.interactions:
                 available_users = available_users - {uid}
 
-        self.save_result()
+        self.save_results()

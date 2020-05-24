@@ -10,7 +10,7 @@ import pickle
 import json
 
 class Interactor(Saveable):
-    def __init__(self, consumption_matrix=None, interactions=1682, interaction_size=1, threshold=1.0, *args, **kwargs):
+    def __init__(self, consumption_matrix=None, interactions=20, interaction_size=5, threshold=1.0, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.consumption_matrix = consumption_matrix
         self.highest_value = np.max(self.consumption_matrix)
@@ -18,8 +18,8 @@ class Interactor(Saveable):
         self.values = np.unique(self.consumption_matrix)
         self.interactions = interactions
         self.interaction_size = interaction_size
-        self.result = defaultdict(list)
         self.threshold = threshold
+        self.results = defaultdict(list)
 
     @property
     def consumption_matrix(self):
@@ -41,7 +41,7 @@ class Interactor(Saveable):
         
     def interact(self):
         print(self.get_verbose_name())
-        self.result.clear()
+        self.results.clear()
         pass
 
     def interact_user(self,uid):
@@ -50,24 +50,24 @@ class Interactor(Saveable):
     def filter_parameters(self,parameters):
         return super().filter_parameters({k: v for k, v in parameters.items() if k not in ['highest_value','lowest_value','threshold','is_spmatrix']})
 
-    @staticmethod
-    def json_entry_save_format(uid, items):
-        return json.dumps({'uid': int(uid), 'predicted': list(map(int,items))})+'\n'
+    # @staticmethod
+    # def json_entry_save_format(uid, items):
+    #     return json.dumps({'uid': int(uid), 'predicted': list(map(int,items))})+'\n'
 
-    def save_result(self,data_type='pickle'):
-        if 'pickle' in data_type:
-            with open(f'{os.path.join(self.DIRS["result"],self.get_name())}.pickle', "wb") as f:
-                pickle.dump(self.result, f)
-        if 'txt' in data_type:
-            with open(f'{os.path.join(self.DIRS["result"],self.get_name())}.txt', "w") as f:
-                for uid, items in self.result.items():
-                    f.write(self.json_entry_save_format(uid,items))
+    # def save_results(self,data_type='pickle'):
+    #     if 'pickle' in data_type:
+    #         with open(f'{os.path.join(self.DIRS["result"],self.get_name())}.pickle', "wb") as f:
+    #             pickle.dump(self.results, f)
+    #     if 'txt' in data_type:
+    #         with open(f'{os.path.join(self.DIRS["result"],self.get_name())}.txt', "w") as f:
+    #             for uid, items in self.results.items():
+    #                 f.write(self.json_entry_save_format(uid,items))
 
-    def load_result(self,data_type='pickle'):
-        if 'pickle' == data_type:
-            with open(f'{os.path.join(self.DIRS["result"],self.get_name())}.pickle', "rb") as f:
-                return pickle.load(f)
-        elif 'txt' == data_type:
-            print("TXT not implemented yet")
-        else:
-            print("No valid data type given! Could not load result")
+    # def load_results(self,data_type='pickle'):
+    #     if 'pickle' == data_type:
+    #         with open(f'{os.path.join(self.DIRS["result"],self.get_name())}.pickle', "rb") as f:
+    #             return pickle.load(f)
+    #     elif 'txt' == data_type:
+    #         print("TXT not implemented yet")
+    #     else:
+    #         print("No valid data type given! Could not load result")

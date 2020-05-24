@@ -27,11 +27,11 @@ class OurMethod1(Interactor):
         np.seterr('warn')
         with threadpool_limits(limits=1, user_api='blas'):
             args = [(self_id,int(uid),) for uid in uids]
-            result = util.run_parallel(self.interact_user,args)
-        for i, user_result in enumerate(result):
-            self.result[uids[i]] = user_result
+            results = util.run_parallel(self.interact_user,args)
+        for i, user_result in enumerate(results):
+            self.results[uids[i]] = user_result
 
-        self.save_result()
+        self.save_results()
 
     def get_global_model_weight(self,user_latent_factors_history,num_correct_items_history,distance_history):
         if self.weight_method == 'stop':

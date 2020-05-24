@@ -35,5 +35,5 @@ class HELF(Interactor):
         num_users = len(uids)
         for idx_uid in tqdm(range(num_users)):
             uid = uids[idx_uid]
-            self.result[uid].extend(top_iids)
-        self.save_result()
+            self.results[uid].extend(top_iids)
+        self.save_results()

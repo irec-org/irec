@@ -43,10 +43,10 @@ for i in answers['interactors']:
     else:
         itr = itr_class(consumption_matrix=dsf.consumption_matrix,name_prefix=dsf.base)
 
-    itr.result = itr.load_result()
+    itr.results = itr.load_results()
     for j in tqdm(range(len(KS))):
         k = KS[j]
         me = MetricsEvaluator(name=itr.get_name(), k=k,threshold=THRESHOLD, interaction_size=INTERACTION_SIZE)
-        # me.eval_chunk_metrics(itr.result, dsf.consumption_matrix,5)
-        me.eval_chunk_metrics(itr.result, ground_truth, items_popularity, items_distance)
+        # me.eval_chunk_metrics(itr.results, dsf.consumption_matrix,5)
+        me.eval_chunk_metrics(itr.results, ground_truth, items_popularity, items_distance)
 

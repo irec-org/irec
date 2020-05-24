@@ -21,11 +21,11 @@ class LinUCB(Interactor):
         self_id = id(self)
         with threadpool_limits(limits=1, user_api='blas'):
             args = [(self_id,int(uid),) for uid in uids]
-            result = util.run_parallel(self.interact_user,args)
-        for i, user_result in enumerate(result):
-            self.result[uids[i]] = user_result
+            results = util.run_parallel(self.interact_user,args)
+        for i, user_result in enumerate(results):
+            self.results[uids[i]] = user_result
 
-        self.save_result()
+        self.save_results()
 
     @staticmethod
     def interact_user(obj_id,uid):
