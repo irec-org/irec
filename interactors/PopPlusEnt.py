@@ -17,8 +17,8 @@ class PopPlusEnt(Interactor):
     def interact(self):
         super().interact()
         uids = self.test_users
-        items_entropy = Entropy.get_items_entropy(self.consumption_matrix,uids)
-        items_popularity = MostPopular.get_items_popularity(self.consumption_matrix,uids,normalize=False)
+        items_entropy = Entropy.get_items_entropy(self.train_consumption_matrix)
+        items_popularity = MostPopular.get_items_popularity(self.train_consumption_matrix,normalize=False)
         items_popplusent = PopPlusEnt.get_items_popplusent(items_popularity,items_entropy)
 
         correlation = scipy.stats.pearsonr(items_entropy,items_popularity)[0]
