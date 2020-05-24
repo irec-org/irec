@@ -35,7 +35,7 @@ class InteractorsRunner():
             else:
                 pmf_model = mf.ICFPMFS(name_prefix=dsf.base)
             print('Loading %s'%(pmf_model.__class__.__name__))
-            pmf_model.load_var(dsf.matrix_users_ratings[dsf.train_uids])
+            pmf_model.load_var(dsf.consumption_matrix[dsf.train_uids])
             pmf_model = pmf_model.load()
 
         if np.any(list(map(
@@ -56,11 +56,11 @@ class InteractorsRunner():
             if issubclass(itr_class,interactors.ICF):
                 itr = itr_class(var=pmf_model.var,
                                 user_lambda=pmf_model.user_lambda,
-                                consumption_matrix=dsf.matrix_users_ratings,
+                                consumption_matrix=dsf.consumption_matrix,
                                 name_prefix=dsf.base
                 )
             else:
-                itr = itr_class(consumption_matrix=dsf.matrix_users_ratings,
+                itr = itr_class(consumption_matrix=dsf.consumption_matrix,
                                 name_prefix=dsf.base
                 )
 

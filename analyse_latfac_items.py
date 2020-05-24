@@ -24,15 +24,15 @@ dsf = dsf.load()
 model_class=mf.MF_MODELS[model_name]
 model = model_class()
 if issubclass(model_class,mf.ICFPMF) or issubclass(model_class,mf.PMF):
-    model.load_var(dsf.matrix_users_ratings[dsf.train_uids])
-model.fit(dsf.matrix_users_ratings[dsf.train_uids])
+    model.load_var(dsf.consumption_matrix[dsf.train_uids])
+model.fit(dsf.consumption_matrix[dsf.train_uids])
 
 print(f"Using {model_name} in {dsf.base} dataset with {dsf.selection_model} selection model")
 
-items_popularity = interactors.MostPopular.get_items_popularity(dsf.matrix_users_ratings,[],normalize=False)
+items_popularity = interactors.MostPopular.get_items_popularity(dsf.consumption_matrix,[],normalize=False)
 top_iids_pop = list(reversed(np.argsort(items_popularity)))
 
-items_entropy = interactors.Entropy.get_items_entropy(dsf.matrix_users_ratings,[])
+items_entropy = interactors.Entropy.get_items_entropy(dsf.consumption_matrix,[])
 top_iids_ent = list(reversed(np.argsort(items_entropy)))
 
 items_logpopent = interactors.LogPopEnt.get_items_logpopent(items_popularity,items_entropy)
@@ -41,8 +41,8 @@ top_iids_logpopent = list(reversed(np.argsort(items_logpopent)))
 num_items = 20
 
 # items_representativeness = interactors.MostRepresentative.get_items_representativeness(model.items_weights)
-# items_representativeness = interactors.HELF.get_items_helf(items_popularity,items_entropy,dsf.matrix_users_ratings.shape[0])
-items_representativeness = interactors.Entropy0.get_items_entropy(dsf.matrix_users_ratings,[])
+# items_representativeness = interactors.HELF.get_items_helf(items_popularity,items_entropy,dsf.consumption_matrix.shape[0])
+items_representativeness = interactors.Entropy0.get_items_entropy(dsf.consumption_matrix,[])
 top_iids_rep = list(reversed(np.argsort(items_representativeness)))
 
 rep_pop_corr = np.corrcoef(items_representativeness,items_popularity)[0,1]

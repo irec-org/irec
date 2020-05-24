@@ -8,13 +8,13 @@ dsf = dsf.load()
 
 fig, axs = plt.subplots(nrows=2,ncols=2,figsize=(10,10))
 
-lowest_value = np.min(dsf.matrix_users_ratings)
+lowest_value = np.min(dsf.consumption_matrix)
 
-print(scipy.stats.describe(dsf.matrix_users_ratings.data))
-raise SystemExit
+print(scipy.stats.describe(dsf.consumption_matrix.data))
+# raise SystemExit
 
 for ax, matrix, name in zip(axs[0,:],
-                            [dsf.matrix_users_ratings[dsf.test_uids],dsf.matrix_users_ratings[dsf.train_uids]],
+                            [dsf.consumption_matrix[dsf.test_uids],dsf.consumption_matrix[dsf.train_uids]],
                             ['Test','Train']):
     # dont work with sparse matrix
     # dataset = np.count_nonzero(matrix,axis=1)
@@ -56,29 +56,29 @@ axs[1,0].set_xlabel('Users')
 axs[1,0].set_ylabel('First rating')
 
 # dont work with sparse matrix
-# users_num_consumption = np.count_nonzero(dsf.matrix_users_ratings,axis=1)[users_by_time]
-users_num_consumption = np.sum(dsf.matrix_users_ratings>lowest_value,axis=1)[users_by_time].A.flatten()
+# users_num_consumption = np.count_nonzero(dsf.consumption_matrix,axis=1)[users_by_time]
+users_num_consumption = np.sum(dsf.consumption_matrix>lowest_value,axis=1)[users_by_time].A.flatten()
 # print(users_num_consumption)
 # print(np.argmin(users_num_consumption))
 # print(np.min(users_num_consumption))
 # print(len(users_by_time))
-# print(dsf.matrix_users_ratings.shape[0])
+# print(dsf.consumption_matrix.shape[0])
 # print(len(users_num_consumption))
 
-axs[1,1].bar(x=list(range(dsf.matrix_users_ratings.shape[0])),height=users_num_consumption,color='k',linewidth=2)
+axs[1,1].bar(x=list(range(dsf.consumption_matrix.shape[0])),height=users_num_consumption,color='k',linewidth=2)
 axs[1,1].set_xlabel('Users')
 axs[1,1].set_ylabel('#Consumption')
 
 axs[1,1].annotate('Pearson(time,#consumption) %.2f'%(scipy.stats.pearsonr(users_by_time,users_num_consumption)[0]),xy=(0.02,0.9),xycoords='axes fraction',fontsize=14,
                   bbox=dict(boxstyle="square", fc="w"))
 # dont work with sparse matrix
-# num_consumption = np.count_nonzero(dsf.matrix_users_ratings)
-num_consumption = np.sum(dsf.matrix_users_ratings>lowest_value)
+# num_consumption = np.count_nonzero(dsf.consumption_matrix)
+num_consumption = np.sum(dsf.consumption_matrix>lowest_value)
 
 plt.annotate('Sparsity {:.2f}%, #Users {}, #Items {}, #Consumption {}'.format(
-    100*(1-num_consumption/np.prod(dsf.matrix_users_ratings.shape)),
-    dsf.matrix_users_ratings.shape[0],
-    dsf.matrix_users_ratings.shape[1],
+    100*(1-num_consumption/np.prod(dsf.consumption_matrix.shape)),
+    dsf.consumption_matrix.shape[0],
+    dsf.consumption_matrix.shape[1],
     num_consumption,
 ),
              xy=(0.5,0.94),xycoords='figure fraction',fontsize=14,

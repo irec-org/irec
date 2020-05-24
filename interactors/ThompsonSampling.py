@@ -24,10 +24,17 @@ class ThompsonSampling(Interactor):
 
         mask = np.ones(self.consumption_matrix.shape[0], dtype=bool)
         mask[uids] = 0
-        self.alphas += np.count_nonzero(self.consumption_matrix[mask]>=self.threshold,
-                         axis=0)
-        self.betas += np.count_nonzero(self.consumption_matrix[mask]<self.threshold,
-                         axis=0)
+        if not self.is_spmatrix:
+            self.alphas += np.count_nonzero(self.consumption_matrix[mask]>=self.threshold,
+                                            axis=0)
+            self.betas += np.count_nonzero(self.consumption_matrix[mask]<self.threshold,
+                                           axis=0)
+        else:
+            self.alphas += np.sum(self.consumption_matrix[mask]>=self.threshold,
+                                            axis=0).A.flatten()
+            self.betas += np.sum(self.consumption_matrix[mask]<self.threshold,
+                                           axis=0).A.flatten()
+            print(self.alphas)
 
         for i in tqdm(range(num_users*self.interactions)):
             uid = random.sample(available_users,k=1)[0]
