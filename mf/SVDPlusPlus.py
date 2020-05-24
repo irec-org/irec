@@ -89,5 +89,4 @@ class SVDPlusPlus(MF):
                                                                   self.delta_bias, self.bias_learn_rate,
                                                                   self.iterations, self.stop_criteria,
                                                                   self.init_mean,self.init_std)
-        self.save()
             

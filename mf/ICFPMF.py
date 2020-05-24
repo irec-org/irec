@@ -105,7 +105,6 @@ class ICFPMF(MF):
         # del self.best
         del self.training_matrix
         del self.lowest_value
-        self.save()
 
     @staticmethod
     def compute_user_weight(obj_id,uid):

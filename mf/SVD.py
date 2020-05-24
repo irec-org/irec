@@ -7,4 +7,3 @@ class SVD(MF):
             k=self.num_lat)
         self.users_weights = u
         self.items_weights = vt.T
-        self.save()

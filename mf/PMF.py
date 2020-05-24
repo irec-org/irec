@@ -88,7 +88,6 @@ class PMF(MF):
             last_users_weights = self.users_weights.copy()
             last_items_weights = self.items_weights.copy()
 
-        self.save()
             
     def get_matrix(self, users_weights, items_weights):
         return users_weights @ items_weights.T

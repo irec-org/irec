@@ -6,6 +6,7 @@ class SVDPlusPlus(Recommender):
         pass
 
     def train(self,train_matrix):
+        super().train()
         mf_model = mf.SVDPlusPlus()
         mf_model.fit(train_matrix)
         self.b_u, self.b_i, self.p, self.q, self.y =\
@@ -14,5 +15,6 @@ class SVDPlusPlus(Recommender):
             mf_model.y
 
     def predict(self,test_matrix):
+        super().predict()
 
         pass

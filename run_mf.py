@@ -23,6 +23,7 @@ for i in answers['mf_models']:
     if issubclass(model_class,(mf.ICFPMF,mf.PMF,mf.ICFPMFS)):
         model.load_var(dsf.consumption_matrix[dsf.train_uids])
     model.fit(dsf.consumption_matrix[dsf.train_uids])
+    model.save()
     if issubclass(model_class,(mf.ICFPMF,mf.ICFPMFS)):
         plt.plot(model.objective_values)
         plt.savefig("img/%s_objective_value.png"%(model_class.__name__))
