@@ -55,7 +55,7 @@ def _svdplusplus(data, indptr, indices, n_u, num_users, num_items, num_lat, lear
                 p[uid] += learn_rate * (normalized_e_ui*q[iid]-delta*p[uid])
                 q[iid] += learn_rate * (normalized_e_ui*p_u - delta*q[iid])
         rmse = error/num_r
-        print('RMSE:',rmse)
+        print(iteration+1,'RMSE:',rmse)
 
         if np.fabs(rmse - rmse_old) <= stop_criteria:
             break
@@ -80,9 +80,14 @@ class SVDPlusPlus(MF):
         num_users = training_matrix.shape[0]
         num_items = training_matrix.shape[1]
         n_u = np.array([np.sqrt(len(i.data)) for i in training_matrix])
-        _svdplusplus(training_matrix.data,training_matrix.indptr,training_matrix.indices,n_u,
-                     num_users,num_items,self.num_lat, self.learn_rate, self.delta,self.delta_bias, self.bias_learn_rate, self.iterations, self.stop_criteria,
-                     self.init_mean,self.init_std)
-
-        # self.save()
+        self.b_u, self.b_i, self.p, self.q, self.y = _svdplusplus(training_matrix.data,
+                                                                  training_matrix.indptr,
+                                                                  training_matrix.indices,n_u,
+                                                                  num_users,num_items,
+                                                                  self.num_lat, self.learn_rate,
+                                                                  self.delta,
+                                                                  self.delta_bias, self.bias_learn_rate,
+                                                                  self.iterations, self.stop_criteria,
+                                                                  self.init_mean,self.init_std)
+        self.save()
             
