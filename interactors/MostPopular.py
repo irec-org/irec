@@ -9,26 +9,31 @@ class MostPopular(Interactor):
         super().__init__(*args, **kwargs)
 
     @staticmethod
-    def get_items_popularity(consumption_matrix, test_uids, normalize=True):
-        uids = test_uids
-        num_users = len(uids)
-        mask = np.ones(consumption_matrix.shape[0], dtype=bool)
-        mask[uids] = 0
-        num_train_users = np.count_nonzero(mask)
+    def get_items_popularity(consumption_matrix, normalize=True):
+        # uids = test_uids
+        # num_users = len(uids)
+        # mask = np.ones(consumption_matrix.shape[0], dtype=bool)
+        # mask[uids] = 0
+        # num_train_users = np.count_nonzero(mask)
         lowest_value = np.min(consumption_matrix)
         if not isinstance(consumption_matrix,scipy.sparse.spmatrix):
-            items_popularity = np.count_nonzero(consumption_matrix[mask,:]>lowest_value,axis=0)
+            items_popularity = np.count_nonzero(consumption_matrix>lowest_value,axis=0)
         else:
-            items_popularity = np.array(np.sum(consumption_matrix[mask,:]>lowest_value,axis=0)).flatten()
+            items_popularity = np.array(np.sum(consumption_matrix>lowest_value,axis=0)).flatten()
 
         if normalize:
-            items_popularity = items_popularity/num_train_users
+            items_popularity = items_popularity/consumption_matrix.shape[0]
                 
         return items_popularity
 
-    def interact(self, uids):
+    def interact(self):
         super().interact()
-        items_popularity = self.get_items_popularity(self.consumption_matrix, uids)
+        # num_users = len(uids)
+        # mask = np.ones(self.consumption_matrix.shape[0], dtype=bool)
+        # mask[uids] = 0
+        # num_train_users = np.count_nonzero(mask)
+
+        items_popularity = self.get_items_popularity(self.train_consumption_matrix)
 
         fig, ax = plt.subplots()
         ax.hist(items_popularity,color='k')
@@ -37,6 +42,7 @@ class MostPopular(Interactor):
         fig.savefig(os.path.join(self.DIRS['img'],"popularity_"+self.get_name()+".png"))
 
         top_iids = list(reversed(np.argsort(items_popularity)))[:self.get_iterations()]
+        uids = self.test_users
         num_users = len(uids)
         for idx_uid in tqdm(range(num_users)):
             uid = uids[idx_uid]

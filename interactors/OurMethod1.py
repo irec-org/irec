@@ -12,14 +12,15 @@ class OurMethod1(Interactor):
         self.weight_method = weight_method
         self.stop = stop
 
-    def interact(self, uids, items_latent_factors):
+    def interact(self, items_latent_factors):
         super().interact()
+        uids = self.test_users
 
         self.items_latent_factors = items_latent_factors
         num_users = len(uids)
 
-        items_entropy = Entropy.get_items_entropy(self.consumption_matrix,uids)
-        items_popularity = MostPopular.get_items_popularity(self.consumption_matrix,uids,normalize=False)
+        items_entropy = Entropy.get_items_entropy(self.train_consumption_matrix)
+        items_popularity = MostPopular.get_items_popularity(self.train_consumption_matrix,normalize=False)
         self.items_bias = LogPopEnt.get_items_logpopent(items_popularity,items_entropy)
         assert(self.items_bias.min() == 0 and self.items_bias.max() == 1)
 

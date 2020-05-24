@@ -14,10 +14,11 @@ class LogPopEnt(Interactor):
         items_logpopent = items_entropy * np.ma.log(items_popularity).filled(0)
         return np.dot(items_logpopent,1/np.max(items_logpopent))
 
-    def interact(self, uids):
+    def interact(self):
         super().interact()
-        items_entropy = Entropy.get_items_entropy(self.consumption_matrix,uids)
-        items_popularity = MostPopular.get_items_popularity(self.consumption_matrix,uids,normalize=False)
+        uids = self.test_users
+        items_entropy = Entropy.get_items_entropy(self.train_consumption_matrix)
+        items_popularity = MostPopular.get_items_popularity(self.train_consumption_matrix,normalize=False)
         items_logpopent = LogPopEnt.get_items_logpopent(items_popularity,items_entropy)
 
         correlation = scipy.stats.pearsonr(items_entropy,items_popularity)[0]

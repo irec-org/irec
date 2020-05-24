@@ -10,38 +10,53 @@ import pickle
 import json
 
 class Interactor(Saveable):
-    def __init__(self, consumption_matrix=None, interactions=1682, interaction_size=1, threshold=1.0, *args, **kwargs):
+    def __init__(self, train_consumption_matrix=None, test_consumption_matrix=None, interactions=1682, interaction_size=1, threshold=1.0, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.consumption_matrix = consumption_matrix
-        self.highest_value = np.max(self.consumption_matrix)
-        self.lowest_value = np.min(self.consumption_matrix)
-        self.values = np.unique(self.consumption_matrix)
+        # self.consumption_matrix = consumption_matrix
+        # self.highest_value = max(np.max(train_matrix),np.max(test_matrix))
+        # self.lowest_value = np.min(self.consumption_matrix)
+        # self.values = np.unique(self.consumption_matrix)
         self.interactions = interactions
         self.interaction_size = interaction_size
         self.threshold = threshold
         self.results = defaultdict(list)
+        self.train_consumption_matrix = train_consumption_matrix
+        self.test_consumption_matrix = test_consumption_matrix
 
     @property
-    def consumption_matrix(self):
-        return self._consumption_matrix
+    def test_consumption_matrix(self):
+        return self._test_consumption_matrix
 
-    @consumption_matrix.setter
-    def consumption_matrix(self, consumption_matrix):
-        self._consumption_matrix = consumption_matrix
-        if isinstance(consumption_matrix,scipy.sparse.spmatrix):
-            self.is_spmatrix = True
-        else:
-            self.is_spmatrix = False
+    @test_consumption_matrix.setter
+    def test_consumption_matrix(self, test_consumption_matrix):
+        self.is_spmatrix = isinstance(test_consumption_matrix,scipy.sparse.spmatrix)
+        self.lowest_value = np.min(test_consumption_matrix)
+        self.highest_value = np.max(test_consumption_matrix)
+        print("max value set to:",self.highest_value)
+        print("min value set to:",self.lowest_value)
+        self.test_users = np.nonzero(np.sum(test_consumption_matrix>0,axis=1).A.flatten())[0]
+        self._test_consumption_matrix = test_consumption_matrix
+
+    @property
+    def train_consumption_matrix(self):
+        return self._train_consumption_matrix
+
+    @train_consumption_matrix.setter
+    def train_consumption_matrix(self, train_consumption_matrix):
+        self.train_users = np.nonzero(np.sum(train_consumption_matrix>0,axis=1).A.flatten())[0]
+        self._train_consumption_matrix = train_consumption_matrix
+
 
     def get_iterations(self):
         return self.interactions*self.interaction_size
 
     def get_reward(self,uid,iid):
-        return self.consumption_matrix[uid,iid]
+        return self.test_consumption_matrix[uid,iid]
         
     def interact(self):
         print(self.get_verbose_name())
         self.results.clear()
+        # self.test_users = self.test_consumption_matrix
         pass
 
     def interact_user(self,uid):

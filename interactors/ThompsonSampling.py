@@ -9,10 +9,11 @@ class ThompsonSampling(Interactor):
     def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def interact(self, uids):
+    def interact(self):
         super().interact()
+        uids = self.test_users
         num_users = len(uids)
-        num_items = self.consumption_matrix.shape[1]
+        num_items = self.train_consumption_matrix.shape[1]
         
         # self.beta_distributions = [scipy.stats.beta(a=1,b=1) for item in range(num_items)]
         # print(self.beta_distributions[0].a)
@@ -22,17 +23,17 @@ class ThompsonSampling(Interactor):
         users_num_interactions = defaultdict(int)
         available_users = set(uids)
 
-        mask = np.ones(self.consumption_matrix.shape[0], dtype=bool)
-        mask[uids] = 0
+        # mask = np.ones(self.consumption_matrix.shape[0], dtype=bool)
+        # mask[uids] = 0
         if not self.is_spmatrix:
-            self.alphas += np.count_nonzero(self.consumption_matrix[mask]>=self.threshold,
+            self.alphas += np.count_nonzero(self.train_consumption_matrix>=self.threshold,
                                             axis=0)
-            self.betas += np.count_nonzero(self.consumption_matrix[mask]<self.threshold,
+            self.betas += np.count_nonzero(self.train_consumption_matrix<self.threshold,
                                            axis=0)
         else:
-            self.alphas += np.sum(self.consumption_matrix[mask]>=self.threshold,
+            self.alphas += np.sum(self.train_consumption_matrix>=self.threshold,
                                             axis=0).A.flatten()
-            self.betas += np.sum(self.consumption_matrix[mask]<self.threshold,
+            self.betas += np.sum(self.train_consumption_matrix<self.threshold,
                                            axis=0).A.flatten()
             print(self.alphas)
 

@@ -14,8 +14,9 @@ class PopPlusEnt(Interactor):
         items_popplusent =items_entropy/np.max(items_entropy) + items_popularity/np.max(items_popularity)
         return items_popplusent/np.max(items_popplusent)
 
-    def interact(self, uids):
+    def interact(self):
         super().interact()
+        uids = self.test_users
         items_entropy = Entropy.get_items_entropy(self.consumption_matrix,uids)
         items_popularity = MostPopular.get_items_popularity(self.consumption_matrix,uids,normalize=False)
         items_popplusent = PopPlusEnt.get_items_popplusent(items_popularity,items_entropy)

@@ -19,10 +19,10 @@ class Entropy(Interactor):
         return Entropy.probabilities_entropy(values_probability)
     
     @staticmethod
-    def get_items_entropy(consumption_matrix, test_uids):
+    def get_items_entropy(consumption_matrix):
         lowest_value = np.min(consumption_matrix)
-        mask = np.ones(consumption_matrix.shape[0], dtype=bool)
-        mask[test_uids] = 0
+        # mask = np.ones(consumption_matrix.shape[0], dtype=bool)
+        # mask[test_uids] = 0
         items_entropy = np.zeros(consumption_matrix.shape[1])
         is_spmatrix = isinstance(consumption_matrix,scipy.sparse.spmatrix)
         if is_spmatrix:
@@ -36,10 +36,10 @@ class Entropy(Interactor):
                 # iid_ratings = consumption_matrix[mask,:][:,iid].data
                 # consumption_matrix.getcol(iid)
                 # iid_ratings = consumption_matrix[:,iid][mask].data
-                iid_ratings = consumption_matrix[:,iid].A.flatten()[mask]
+                iid_ratings = consumption_matrix[:,iid].A.flatten()
                 iid_ratings = iid_ratings[iid_ratings > lowest_value]
             else:
-                iid_ratings = consumption_matrix[mask,iid]
+                iid_ratings = consumption_matrix[:,iid]
                 iid_ratings = iid_ratings[iid_ratings > lowest_value]
             # print(f"Elapsed time: {time.time()-stime}")
             # unique, counts = np.unique(iid_ratings, return_counts=True)
@@ -48,10 +48,11 @@ class Entropy(Interactor):
             items_entropy[iid] = Entropy.values_entropy(iid_ratings)
         return items_entropy
 
-    def interact(self, uids):
+    def interact(self):
         super().interact()
+        uids = self.test_users
         num_users = len(uids)
-        items_entropy = self.get_items_entropy(self.consumption_matrix, uids)
+        items_entropy = self.get_items_entropy(self.train_consumption_matrix)
         fig, ax = plt.subplots()
         ax.hist(items_entropy,color='k')
         ax.set_xlabel("Entropy")

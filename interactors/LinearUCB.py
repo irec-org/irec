@@ -12,8 +12,9 @@ class LinearUCB(ICF):
         elif zeta != None:
             self.alpha = 1+np.sqrt(np.log(2/zeta)/2)
 
-    def interact(self, uids, items_means):
+    def interact(self, items_means):
         super().interact()
+        uids = self.test_users
         self.items_means = items_means
         num_users = len(uids)
         # get number of latent factors 

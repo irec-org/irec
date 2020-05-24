@@ -11,13 +11,16 @@ class ALEntropy(Interactor):
     def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def interact(self, uids):
+    def interact(self):
         super().interact()
-        num_items = self.consumption_matrix.shape[1]
+        uids = self.test_users
+        num_items = self.train_consumption_matrix.shape[1]
         if self.is_spmatrix:
-            unique_values = np.unique(self.consumption_matrix.data)
+            unique_values = np.unique(np.append(self.train_consumption_matrix.data,self.test_consumption_matrix.data))
         else:
-            unique_values = np.unique(self.consumption_matrix[self.consumption_matrix>self.lowest_value])
+            raise RuntimeError
+        # else:
+        #     unique_values = np.unique(self.consumption_matrix[self.consumption_matrix>self.lowest_value])
         num_unique_values = len(unique_values)
         items_ratings = np.zeros((num_items,num_unique_values))
         unique_values_ids = dict(zip(unique_values,list(range(num_unique_values))))

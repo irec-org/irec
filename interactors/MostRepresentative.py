@@ -11,8 +11,9 @@ class MostRepresentative(Interactor):
     def get_items_representativeness(items_latent_factors):
         return np.sum(items_latent_factors**2,axis=1)
 
-    def interact(self, uids, items_latent_factors):
+    def interact(self, items_latent_factors):
         super().interact()
+        uids = self.test_users
         items_representativeness = self.get_items_representativeness(items_latent_factors)
         top_iids = list(reversed(np.argsort(items_representativeness)))[:self.get_iterations()]
         num_users = len(uids)

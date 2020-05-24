@@ -12,8 +12,9 @@ class LinUCB(Interactor):
         elif zeta != None:
             self.alpha = 1+np.sqrt(np.log(2/zeta)/2)
 
-    def interact(self, uids, items_latent_factors):
+    def interact(self, items_latent_factors):
         super().interact()
+        uids = self.test_users
 
         self.items_latent_factors = items_latent_factors
         num_users = len(uids)

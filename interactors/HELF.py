@@ -23,13 +23,14 @@ class HELF(Interactor):
         items_helf[np.isnan(items_helf)] = 0
         return items_helf
 
-    def interact(self, uids):
+    def interact(self):
         super().interact()
-        mask = np.ones(self.consumption_matrix.shape[0], dtype=bool)
-        mask[uids] = 0
-        num_train_users = np.count_nonzero(mask)
-        items_entropy = Entropy.get_items_entropy(self.consumption_matrix,uids)
-        items_popularity = MostPopular.get_items_popularity(self.consumption_matrix,uids,normalize=False)
+        uids = self.test_users
+        # mask = np.ones(self.train_consumption_matrix.shape[0], dtype=bool)
+        # mask[uids] = 0
+        num_train_users = len(self.train_users)
+        items_entropy = Entropy.get_items_entropy(self.train_consumption_matrix)
+        items_popularity = MostPopular.get_items_popularity(self.train_consumption_matrix,normalize=False)
         items_logpopent = HELF.get_items_helf(items_popularity,items_entropy,num_train_users)
         top_iids = list(reversed(np.argsort(items_logpopent)))[:self.get_iterations()]
         num_users = len(uids)

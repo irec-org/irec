@@ -10,8 +10,9 @@ class LinEGreedy(Interactor):
         super().__init__(*args, **kwargs)
         self.epsilon = epsilon
 
-    def interact(self, uids, items_weights):
+    def interact(self, items_weights):
         super().interact()
+        uids = self.test_users
         self.items_weights = items_weights
         num_users = len(uids)
         # get number of latent factors 

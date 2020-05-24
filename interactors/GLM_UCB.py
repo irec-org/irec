@@ -16,8 +16,9 @@ class GLM_UCB(ICF):
     def p(self,x):
         return x
 
-    def interact(self, uids, items_means):
+    def interact(self, items_means):
         super().interact()
+        uids = self.test_users
         self.items_means = items_means
         num_users = len(uids)
         # get number of latent factors 

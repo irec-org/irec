@@ -19,26 +19,27 @@ class Entropy0(Interactor):
         return Entropy0.probabilities_entropy(values_probability)
     
     @staticmethod
-    def get_items_entropy(consumption_matrix, test_uids):
+    def get_items_entropy(consumption_matrix):
         lowest_value = np.min(consumption_matrix)
-        mask = np.ones(consumption_matrix.shape[0], dtype=bool)
-        mask[test_uids] = 0
+        # mask = np.ones(consumption_matrix.shape[0], dtype=bool)
+        # mask[test_uids] = 0
         items_entropy = np.zeros(consumption_matrix.shape[1])
         is_spmatrix = isinstance(consumption_matrix,scipy.sparse.spmatrix)
         if is_spmatrix:
             consumption_matrix = scipy.sparse.csc_matrix(consumption_matrix)
         for iid in range(consumption_matrix.shape[1]):
             if is_spmatrix:
-                iid_ratings = consumption_matrix[:,iid].A.flatten()[mask]
+                iid_ratings = consumption_matrix[:,iid].A.flatten()
             else:
                 raise RuntimeError
             items_entropy[iid] = Entropy0.values_entropy(iid_ratings)
         return items_entropy
 
-    def interact(self, uids):
+    def interact(self):
         super().interact()
+        uids = self.test_users
         num_users = len(uids)
-        items_entropy = self.get_items_entropy(self.consumption_matrix, uids)
+        items_entropy = self.get_items_entropy(self.train_consumption_matrix)
         fig, ax = plt.subplots()
         ax.hist(items_entropy,color='k')
         ax.set_xlabel("Entropy0")

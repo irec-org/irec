@@ -15,10 +15,12 @@ class UCBLearner(Interactor):
         super().__init__(*args, **kwargs)
         self.stop = stop
 
-    def interact(self, uids, items_latent_factors):
+    def interact(self, items_latent_factors):
         super().interact()
-        items_entropy = Entropy.get_items_entropy(self.consumption_matrix,uids)
-        items_popularity = MostPopular.get_items_popularity(self.consumption_matrix,uids,normalize=False)
+        uids = self.test_users
+
+        items_entropy = Entropy.get_items_entropy(self.train_consumption_matrix)
+        items_popularity = MostPopular.get_items_popularity(self.train_consumption_matrix,normalize=False)
         self.items_bias= LogPopEnt.get_items_logpopent(items_popularity,items_entropy)
         # self.items_bias= PopPlusEnt.get_items_popplusent(items_popularity,items_entropy)
 
@@ -60,7 +62,7 @@ class UCBLearner(Interactor):
         nb_items = 0
         items_bias = self.items_bias
 
-        num_test_items = len(np.nonzero(self.consumption_matrix[uid,:]>=self.threshold)[0])
+        # num_test_items = len(np.nonzero(self.test_consumption_matrix[uid,:]>=self.threshold)[0])
 
         for i in range(self.interactions):
             mean = np.dot(np.linalg.inv(A),b)

@@ -56,23 +56,25 @@ class InteractorsRunner():
             if issubclass(itr_class,interactors.ICF):
                 itr = itr_class(var=pmf_model.var,
                                 user_lambda=pmf_model.user_lambda,
-                                consumption_matrix=dsf.consumption_matrix,
+                                test_consumption_matrix=dsf.test_consumption_matrix,
+                                train_consumption_matrix=dsf.train_consumption_matrix,
                                 name_prefix=dsf.base
                 )
             else:
-                itr = itr_class(consumption_matrix=dsf.consumption_matrix,
-                                name_prefix=dsf.base
+                itr = itr_class(name_prefix=dsf.base,
+                                test_consumption_matrix=dsf.test_consumption_matrix,
+                                train_consumption_matrix=dsf.train_consumption_matrix,
                 )
 
             if itr_class in [interactors.LinearThompsonSampling]:
-                itr.interact(dsf.test_uids, pmf_model.items_means, pmf_model.items_covs)
+                itr.interact(pmf_model.items_means, pmf_model.items_covs)
             elif issubclass(itr_class,interactors.ICF):
-                itr.interact(dsf.test_uids, pmf_model.items_means)
+                itr.interact(pmf_model.items_means)
             elif itr_class in [interactors.LinUCB,
                             interactors.LinEGreedy,
                             interactors.UCBLearner,
                             interactors.MostRepresentative,
                             interactors.OurMethod1]:
-                itr.interact(dsf.test_uids,Q)
+                itr.interact(Q)
             else:
-                itr.interact(dsf.test_uids)
+                itr.interact()

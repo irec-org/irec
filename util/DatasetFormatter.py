@@ -155,6 +155,16 @@ class DatasetFormatter(Saveable):
         self.test_uids = np.array(random.sample(test_candidate_users,k=self.num_test_users))
         self.train_uids = np.array(list(set(range(self.num_users))-set(self.test_uids)))
 
+        if self.is_spmatrix:
+            self.test_consumption_matrix = scipy.sparse.lil_matrix((self.num_users,self.num_items))
+            self.train_consumption_matrix = self.consumption_matrix.tolil()
+            for uid in range(self.num_users):
+                if uid in self.test_uids:
+                    self.test_consumption_matrix[uid] = self.consumption_matrix[uid]
+                    self.train_consumption_matrix[uid] = 0
+            self.train_consumption_matrix = self.train_consumption_matrix.tocsr()
+            self.test_consumption_matrix = self.test_consumption_matrix.tocsr()
+
     def run_users_train_test_chrono(self):
         self.num_train_users = round(self.num_users*(self.selection_model_parameters['train_size']))
         self.num_test_users = int(self.num_users-self.num_train_users)
@@ -162,7 +172,16 @@ class DatasetFormatter(Saveable):
         test_candidate_users=np.array(list(users_items_consumed[users_items_consumed>=self.selection_model_parameters['test_consumes']].to_dict().keys()))
         self.test_uids = np.array(list(test_candidate_users[list(reversed(np.argsort(self.users_start_time[test_candidate_users])))])[:self.num_test_users])
         self.train_uids = np.array(list(set(range(self.num_users))-set(self.test_uids)))
-        pass
+
+        if self.is_spmatrix:
+            self.test_consumption_matrix = scipy.sparse.lil_matrix((self.num_users,self.num_items))
+            self.train_consumption_matrix = self.consumption_matrix.tolil()
+            for uid in range(self.num_users):
+                if uid in self.test_uids:
+                    self.test_consumption_matrix[uid] = self.consumption_matrix[uid]
+                    self.train_consumption_matrix[uid] = 0
+            self.train_consumption_matrix = self.train_consumption_matrix.tocsr()
+            self.test_consumption_matrix = self.test_consumption_matrix.tocsr()
 
     def filter_parameters(self,parameters):
         return super().filter_parameters({k: v for k, v in parameters.items() if k not in ['num_test_users','num_train_users','num_users', 'num_items', 'num_consumes']})
@@ -266,7 +285,7 @@ class DatasetFormatter(Saveable):
         self.train_uids = np.unique(df_cons1['uid'])
         self.test_uids = np.unique(df_cons2['uid'])
         df_cons = df_cons1.append(df_cons2)
-        del df_cons1, df_cons2
+        # del df_cons1, df_cons2
 
 
         self.num_users = len(np.unique(df_cons['uid']))
@@ -275,6 +294,8 @@ class DatasetFormatter(Saveable):
 
         if self.is_spmatrix:
             self.consumption_matrix = scipy.sparse.csr_matrix((df_cons.r,(df_cons.uid,df_cons.iid)),dtype=float)
+            self.train_consumption_matrix = scipy.sparse.csr_matrix((df_cons1.r,(df_cons1.uid,df_cons1.iid)),dtype=float)
+            self.test_consumption_matrix = scipy.sparse.csr_matrix((df_cons2.r,(df_cons2.uid,df_cons2.iid)),dtype=float)
             self.consumption_time_matrix = scipy.sparse.csr_matrix((df_cons.t,(df_cons.uid,df_cons.iid)))
             self.users_start_time = df_cons.groupby('uid').min()['t'].to_numpy()
         else:

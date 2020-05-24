@@ -8,8 +8,9 @@ class LinearThompsonSampling(ICF):
     def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def interact(self, uids, items_means,items_covs):
+    def interact(self, items_means,items_covs):
         super().interact()
+        uids = self.test_users
         self.items_means = items_means
         self.items_covs = items_covs
         num_users = len(uids)

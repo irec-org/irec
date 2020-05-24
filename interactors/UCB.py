@@ -10,11 +10,12 @@ class UCB(Interactor):
         super().__init__(*args, **kwargs)
         self.c = c
 
-    def interact(self, uids):
+    def interact(self):
         super().interact()
+        uids = self.test_users
         np.seterr(divide='warn')
         num_users = len(uids)
-        num_items = self.consumption_matrix.shape[1]
+        num_items = self.train_consumption_matrix.shape[1]
         
         items_mean_values = np.zeros(num_items,dtype=np.float128)
         items_count = np.zeros(num_items,dtype=int)
@@ -24,11 +25,11 @@ class UCB(Interactor):
         users_num_interactions = defaultdict(int)
         available_users = set(uids)
 
-        mask = np.ones(self.consumption_matrix.shape[0], dtype=bool)
+        mask = np.ones(self.train_consumption_matrix.shape[0], dtype=bool)
         mask[uids] = 0
-        items_mean_values = np.mean(self.consumption_matrix[mask],axis=0)
-        items_count += self.consumption_matrix[mask].shape[0]
-        ctime += np.prod(self.consumption_matrix[mask].shape)
+        items_mean_values = np.mean(self.train_consumption_matrix[mask],axis=0).A.flatten()
+        items_count += self.train_consumption_matrix[mask].shape[0]
+        ctime += np.prod(self.train_consumption_matrix[mask].shape)
 
         for i in tqdm(range(num_users*self.interactions)):
             uid = random.sample(available_users,k=1)[0]

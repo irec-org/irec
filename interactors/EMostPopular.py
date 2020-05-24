@@ -15,10 +15,11 @@ class PopPlusEnt(Interactor):
         items_popplusent =items_entropy/np.max(items_entropy) + items_popularity/np.max(items_popularity)
         return items_popplusent/np.max(items_popplusent)
 
-    def interact(self, uids):
+    def interact(self):
         super().interact()
-        items_entropy = Entropy.get_items_entropy(self.consumption_matrix,uids)
-        items_popularity = MostPopular.get_items_popularity(self.consumption_matrix,uids,normalize=False)
+        uids = self.test_users
+        items_entropy = Entropy.get_items_entropy(self.train_consumption_matrix)
+        items_popularity = MostPopular.get_items_popularity(self.train_consumption_matrix,normalize=False)
 
         top_popularity_iids = list(reversed(np.argsort(items_entropy)))[:self.get_iterations()]
         top_entropy_iids = list(reversed(np.argsort(items_popularity)))[:self.get_iterations()]
