@@ -35,7 +35,7 @@ class InteractorsRunner():
             else:
                 pmf_model = mf.ICFPMFS(name_prefix=dsf.base)
             print('Loading %s'%(pmf_model.__class__.__name__))
-            pmf_model.load_var(dsf.consumption_matrix[dsf.train_uids])
+            pmf_model.load_var(dsf.train_consumption_matrix)
             pmf_model = pmf_model.load()
 
         if np.any(list(map(
@@ -47,10 +47,15 @@ class InteractorsRunner():
                     interactors.OurMethod1],
                 interactors_classes
                 ))):
-            print('Loading SVD')
-            svd_model = mf.SVD(name_prefix=dsf.base)
-            svd_model = svd_model.load()
-            Q = svd_model.items_weights
+            print('Loading PMF')
+            mf_model = mf.PMF(name_prefix=dsf.base)
+            mf_model.load_var(dsf.train_consumption_matrix)
+            mf_model = mf_model.load()
+            Q = mf_model.items_weights
+            # print('Loading SVD')
+            # svd_model = mf.SVD(name_prefix=dsf.base)
+            # svd_model = svd_model.load()
+            # Q = svd_model.items_weights
 
         for itr_class in interactors_classes:
             if issubclass(itr_class,interactors.ICF):

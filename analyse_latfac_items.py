@@ -24,8 +24,8 @@ dsf = dsf.load()
 model_class=mf.MF_MODELS[model_name]
 model = model_class()
 if issubclass(model_class,mf.ICFPMF) or issubclass(model_class,mf.PMF):
-    model.load_var(dsf.consumption_matrix[dsf.train_uids])
-model.fit(dsf.consumption_matrix[dsf.train_uids])
+    model.load_var(dsf.train_consumption_matrix)
+model.fit(dsf.train_consumption_matrix)
 
 print(f"Using {model_name} in {dsf.base} dataset with {dsf.selection_model} selection model")
 

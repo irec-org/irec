@@ -26,6 +26,9 @@ class PMF(MF):
 
     def load_var(self, training_matrix):
         decimals = 4
+        if isinstance(training_matrix,scipy.sparse.spmatrix):
+            non_empty_rows = np.sum(training_matrix>0,axis=1).A.flatten()
+            training_matrix = training_matrix[non_empty_rows].A
         training_matrix = self.normalize_matrix(training_matrix)
         self.var = np.var(training_matrix)
         # self.user_var = self.var
@@ -42,6 +45,9 @@ class PMF(MF):
 
     def fit(self,training_matrix):
         super().fit()
+        if isinstance(training_matrix,scipy.sparse.spmatrix):
+            non_empty_rows = np.sum(training_matrix>0,axis=1).A.flatten()
+            training_matrix = training_matrix[non_empty_rows].A
         self_id = id(self)
         training_matrix = self.normalize_matrix(training_matrix)
 
@@ -88,9 +94,11 @@ class PMF(MF):
             last_users_weights = self.users_weights.copy()
             last_items_weights = self.items_weights.copy()
 
-            
     def get_matrix(self, users_weights, items_weights):
         return users_weights @ items_weights.T
 
     def get_predicted(self):
         return self.get_matrix(self.users_weights,self.items_weights)
+
+    def predict(self,X):
+        return self.get_sparse_matrix(self.users_weights,self.items_weights,X)
