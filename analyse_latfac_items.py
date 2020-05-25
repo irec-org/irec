@@ -29,10 +29,10 @@ model.fit(dsf.consumption_matrix[dsf.train_uids])
 
 print(f"Using {model_name} in {dsf.base} dataset with {dsf.selection_model} selection model")
 
-items_popularity = interactors.MostPopular.get_items_popularity(dsf.consumption_matrix,[],normalize=False)
+items_popularity = interactors.MostPopular.get_items_popularity(dsf.consumption_matrix,normalize=False)
 top_iids_pop = list(reversed(np.argsort(items_popularity)))
 
-items_entropy = interactors.Entropy.get_items_entropy(dsf.consumption_matrix,[])
+items_entropy = interactors.Entropy.get_items_entropy(dsf.consumption_matrix)
 top_iids_ent = list(reversed(np.argsort(items_entropy)))
 
 items_logpopent = interactors.LogPopEnt.get_items_logpopent(items_popularity,items_entropy)
@@ -40,9 +40,10 @@ top_iids_logpopent = list(reversed(np.argsort(items_logpopent)))
 
 num_items = 20
 
-# items_representativeness = interactors.MostRepresentative.get_items_representativeness(model.items_weights)
+items_representativeness = interactors.MostRepresentative.get_items_representativeness(model.items_weights)
 # items_representativeness = interactors.HELF.get_items_helf(items_popularity,items_entropy,dsf.consumption_matrix.shape[0])
-items_representativeness = interactors.Entropy0.get_items_entropy(dsf.consumption_matrix,[])
+# items_representativeness = interactors.Entropy0.get_items_entropy(dsf.consumption_matrix)
+# items_representativeness = interactors.MostPopular.get_items_popularity(dsf.consumption_matrix)
 top_iids_rep = list(reversed(np.argsort(items_representativeness)))
 
 rep_pop_corr = np.corrcoef(items_representativeness,items_popularity)[0,1]
@@ -73,5 +74,5 @@ for i in range(num_items):
                                                       item_ent,item_rank_ent,
                                                       item_logpopent,item_rank_logpopent)).split('\t'))
 
-print(tabulate(table, headers=['Item ID','Entropy0(Rank)','Popularity(Rank)[c:%.2f]'%(rep_pop_corr),
+print(tabulate(table, headers=['Item ID','Representativeness(Rank)','Popularity(Rank)[c:%.2f]'%(rep_pop_corr),
                                'Entropy(Rank)[c:%.2f]'%(rep_ent_corr),'LogPopEnt(Rank)[c:%.2f]'%(rep_logpopent_corr)]))

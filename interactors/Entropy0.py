@@ -4,6 +4,8 @@ from .Interactor import Interactor
 import matplotlib.pyplot as plt
 import os
 import scipy.sparse
+
+from .MostPopular import *
 class Entropy0(Interactor):
     def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -45,7 +47,7 @@ class Entropy0(Interactor):
         ax.set_xlabel("Entropy0")
         ax.set_ylabel("#Items")
         fig.savefig(os.path.join(self.DIRS['img'],"entropy0_"+self.get_name()+".png"))
-        
+
         top_iids = list(reversed(np.argsort(items_entropy)))[:self.get_iterations()]
 
         for idx_uid in tqdm(range(num_users)):

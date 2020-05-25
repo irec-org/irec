@@ -24,12 +24,19 @@ from .OurMethod1 import *
 from .Entropy0 import *
 from .HELF import *
 from .PopPlusEnt import *
+from .EMostPopular import *
+from .DistinctPopular import *
 
 INTERACTORS = {
     # 'Interactor': Interactor,
     # 'ICF': ICF,
-    'OurMethod1': OurMethod1,
+    'Distinct Popular': DistinctPopular,
+    'ε-Most Popular': EMostPopular,
     'Most Popular': MostPopular,
+    'Random': Random,
+    'Entropy': Entropy,
+    'log(Pop)⋅Ent': LogPopEnt,
+    'OurMethod1': OurMethod1,
     'UCB-Learner (MF)': UCBLearner,
     'LinUCB (MF)': LinUCB,
     'Linear ε-Greedy (MF)': LinEGreedy,
@@ -38,9 +45,6 @@ INTERACTORS = {
     'TS': ThompsonSampling,
     'Linear ε-Greedy (PMF)': LinearEGreedy,
     'Linear TS (PMF)': LinearThompsonSampling,
-    'Random': Random,
-    'Entropy': Entropy,
-    'log(Pop)⋅Ent': LogPopEnt,
     'ε-Greedy': EGreedy,
     'UCB': UCB,
     'Most Representative': MostRepresentative,

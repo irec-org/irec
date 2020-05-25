@@ -1,12 +1,12 @@
 import numpy as np
 from tqdm import tqdm
 import util
-from . import Interactor, Entropy, MostPopular,LogPopEnt
+from . import Interactor, Entropy, MostPopular,LogPopEnt, PopPlusEnt
 from threadpoolctl import threadpool_limits
 import ctypes
 import scipy.spatial
 class OurMethod1(Interactor):
-    def __init__(self, alpha=1.0, stop=None, weight_method='change',*args, **kwargs):
+    def __init__(self, alpha=0.2, stop=5, weight_method='stop',*args, **kwargs):
         super().__init__(*args, **kwargs)
         self.alpha = alpha
         self.weight_method = weight_method
@@ -21,7 +21,8 @@ class OurMethod1(Interactor):
 
         items_entropy = Entropy.get_items_entropy(self.train_consumption_matrix)
         items_popularity = MostPopular.get_items_popularity(self.train_consumption_matrix,normalize=False)
-        self.items_bias = LogPopEnt.get_items_logpopent(items_popularity,items_entropy)
+        self.items_bias = PopPlusEnt.get_items_popplusent(items_popularity,items_entropy)
+
         assert(self.items_bias.min() == 0 and self.items_bias.max() == 1)
 
         self_id = id(self)

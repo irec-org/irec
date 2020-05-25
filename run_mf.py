@@ -21,8 +21,8 @@ for i in answers['mf_models']:
     model_class=mf.MF_MODELS[i]
     model = model_class(name_prefix=dsf.base)
     if issubclass(model_class,(mf.ICFPMF,mf.PMF,mf.ICFPMFS)):
-        model.load_var(dsf.consumption_matrix[dsf.train_uids])
-    model.fit(dsf.consumption_matrix[dsf.train_uids])
+        model.load_var(dsf.train_consumption_matrix)
+    model.fit(dsf.train_consumption_matrix)
     model.save()
     if issubclass(model_class,(mf.ICFPMF,mf.ICFPMFS)):
         plt.plot(model.objective_values)
