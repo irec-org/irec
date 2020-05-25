@@ -7,6 +7,7 @@ import random
 from threadpoolctl import threadpool_limits
 sys.path.insert(0, os.path.abspath('..'))
 import ctypes
+import util.metrics as metrics
 
 from util import Saveable, run_parallel
 from mf import MF
@@ -26,15 +27,20 @@ class PMF(MF):
 
     def load_var(self, training_matrix):
         decimals = 4
-        if isinstance(training_matrix,scipy.sparse.spmatrix):
-            non_empty_rows = np.sum(training_matrix>0,axis=1).A.flatten()
-            training_matrix = training_matrix[non_empty_rows].A
-        training_matrix = self.normalize_matrix(training_matrix)
-        self.var = np.var(training_matrix)
-        # self.user_var = self.var
-        # self.item_var = self.var
-        self.user_var = np.mean(np.var(training_matrix,axis=1))
-        self.item_var = np.mean(np.var(training_matrix,axis=0))
+        # if isinstance(training_matrix,scipy.sparse.spmatrix):
+        #     non_empty_rows = np.sum(training_matrix>0,axis=1).A.flatten()
+        #     training_matrix = training_matrix[non_empty_rows].A
+        # training_matrix = self.normalize_matrix(training_matrix)
+
+        if not isinstance(training_matrix,scipy.sparse.spmatrix):
+            self.var = np.var(training_matrix)
+            self.user_var = np.mean(np.var(training_matrix,axis=1))
+            self.item_var = np.mean(np.var(training_matrix,axis=0))
+        else:
+            self.var = np.mean(training_matrix.data**2) - np.mean(training_matrix.data)**2
+            self.user_var = np.mean([np.mean(i.data**2) - np.mean(i.data)**2 if i.getnnz()>0 else 0 for i in training_matrix])
+            self.item_var = np.mean([np.mean(i.data**2) - np.mean(i.data)**2 if i.getnnz()>0 else 0 for i in training_matrix.transpose()])
+
         self.user_lambda = self.var/self.user_var
         self.item_lambda = self.var/self.item_var
         self.var = np.round(self.var,decimals)
@@ -45,18 +51,21 @@ class PMF(MF):
 
     def fit(self,training_matrix):
         super().fit()
-        if isinstance(training_matrix,scipy.sparse.spmatrix):
-            non_empty_rows = np.sum(training_matrix>0,axis=1).A.flatten()
-            training_matrix = training_matrix[non_empty_rows].A
-        self_id = id(self)
-        training_matrix = self.normalize_matrix(training_matrix)
-
+        # if isinstance(training_matrix,scipy.sparse.spmatrix):
+        #     non_empty_rows = np.sum(training_matrix>0,axis=1).A.flatten()
+        #     training_matrix = training_matrix[non_empty_rows].A
+        #     self_id = id(self)
+        #     training_matrix = self.normalize_matrix(training_matrix)
         num_users = training_matrix.shape[0]
         num_items = training_matrix.shape[1]
         lowest_value = np.min(training_matrix)
         highest_value = np.max(training_matrix)
-        indicator_matrix = training_matrix>lowest_value
-        observed_ui = np.nonzero(indicator_matrix)
+        if not isinstance(training_matrix,scipy.sparse.spmatrix):
+            indicator_matrix = training_matrix>lowest_value
+            observed_ui = np.nonzero(indicator_matrix)
+        else:
+            observed_ui = (training_matrix.tocoo().row,training_matrix.tocoo().col)
+            observed_ui_pair = tuple(zip(*observed_ui))
         I = np.eye(self.num_lat)
         self.users_weights = 0.1*np.random.rand(num_users,self.num_lat)
         self.items_weights = 0.1*np.random.rand(num_items,self.num_lat)
@@ -66,10 +75,10 @@ class PMF(MF):
         last_users_weights = self.users_weights
         last_items_weights = self.items_weights
         np.seterr('warn')
+        predicted = self.predict(observed_ui_pair)
         for i in range(self.iterations):
             print(f'[{i+1}/{self.iterations}]')
-            predicted_matrix = self.get_predicted()
-            error = indicator_matrix*(training_matrix - util.sigmoid(predicted_matrix))
+            error = scipy.sparse.csr_matrix((training_matrix.data - predicted,observed_ui))
             users_gradient = error @ (-self.items_weights) + self.user_lambda*self.users_weights
             items_gradient = error.T @ (-self.users_weights) + self.item_lambda*self.items_weights
 
@@ -79,10 +88,12 @@ class PMF(MF):
             self.users_weights -= users_momentum
             self.items_weights -= items_momentum
 
-            objective_value = np.sum((training_matrix[observed_ui] - self.get_predicted()[observed_ui])**2)/2 +\
+            predicted = self.predict(observed_ui_pair)
+
+            objective_value = np.sum((training_matrix.data - predicted)**2)/2 +\
                 self.user_lambda/2 * np.sum(np.linalg.norm(self.users_weights,axis=1)**2) +\
                 self.item_lambda/2 * np.sum(np.linalg.norm(self.items_weights,axis=1)**2)
-            rmse=np.sqrt(np.mean((self.get_predicted()[observed_ui] - training_matrix[observed_ui])**2))
+            rmse=metrics.rmse(predicted,training_matrix.data)
             print("Objective value",objective_value)
             print("RMSE",rmse)
             if objective_value > last_objective_value:

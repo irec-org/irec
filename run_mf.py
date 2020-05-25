@@ -29,9 +29,9 @@ for i in answers['mf_models']:
     if issubclass(model_class,(mf.ICFPMF,mf.PMF,mf.ICFPMFS)):
         model.load_var(dsf.train_consumption_matrix)
     model.fit(dsf.train_consumption_matrix)
-    result = model.predict(test_observed_ui)
-    print('RMSE:',metrics.rmse(result,test_ground_truth))
-    print(result[:20])
+    # result = model.predict(test_observed_ui)
+    # print('RMSE:',metrics.rmse(result,test_ground_truth))
+    # print(result[:20])
     model.save()
     if issubclass(model_class,(mf.ICFPMF,mf.ICFPMFS)):
         plt.plot(model.objective_values)

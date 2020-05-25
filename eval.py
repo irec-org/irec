@@ -27,7 +27,7 @@ if not is_spmatrix:
     pmf_model = mf.ICFPMF(name_prefix=dsf.base)
 else:
     pmf_model = mf.ICFPMFS(name_prefix=dsf.base)
-pmf_model.load_var(dsf.consumption_matrix[dsf.train_uids])
+pmf_model.load_var(dsf.train_consumption_matrix)
 
 items_distance = metrics.get_items_distance(dsf.consumption_matrix)
 items_popularity = interactors.MostPopular.get_items_popularity(dsf.consumption_matrix,normalize=True)

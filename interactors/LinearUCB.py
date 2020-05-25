@@ -24,7 +24,7 @@ class LinearUCB(ICF):
             args = [(self_id,int(uid),) for uid in uids]
             results = util.run_parallel(self.interact_user,args)
         for i, user_result in enumerate(results):
-            self.result[uids[i]] = user_result
+            self.results[uids[i]] = user_result
 
         self.save_results()
 

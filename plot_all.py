@@ -35,7 +35,7 @@ if not is_spmatrix:
     pmf_model = mf.ICFPMF()
 else:
     pmf_model = mf.ICFPMFS()
-pmf_model.load_var(dsf.consumption_matrix[dsf.train_uids])
+pmf_model.load_var(dsf.train_consumption_matrix)
 
 metrics_names = ['precision','recall','hits','ild','epc','epd']
 metric_values = defaultdict(lambda:defaultdict(dict))
