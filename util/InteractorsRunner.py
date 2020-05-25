@@ -49,7 +49,7 @@ class InteractorsRunner():
                 ))):
             print('Loading PMF')
             mf_model = mf.PMF(name_prefix=dsf.base)
-            mf_model.load_var(dsf.train_consumption_matrix)
+            # mf_model.load_var(dsf.train_consumption_matrix)
             mf_model = mf_model.load()
             Q = mf_model.items_weights
             # print('Loading SVD')

@@ -23,3 +23,6 @@ class MF(Saveable):
 
     def get_predicted(self):
         return self.get_matrix(self.users_weights,self.items_weights)
+
+    def filter_parameters(self,parameters):
+        return super().filter_parameters({k: v for k, v in parameters.items() if k not in ['rmse','objective_value']})

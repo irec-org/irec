@@ -28,17 +28,10 @@ from .EMostPopular import *
 from .DistinctPopular import *
 
 INTERACTORS = {
-    # 'Interactor': Interactor,
-    # 'ICF': ICF,
-    'Distinct Popular': DistinctPopular,
-    'ε-Most Popular': EMostPopular,
+    'LinUCB (MF)': LinUCB,
     'Most Popular': MostPopular,
-    'Random': Random,
-    'Entropy': Entropy,
-    'log(Pop)⋅Ent': LogPopEnt,
     'OurMethod1': OurMethod1,
     'UCB-Learner (MF)': UCBLearner,
-    'LinUCB (MF)': LinUCB,
     'Linear ε-Greedy (MF)': LinEGreedy,
     'Linear UCB (PMF)': LinearUCB,
     'GLM-UCB (PMF)': GLM_UCB,
@@ -53,4 +46,9 @@ INTERACTORS = {
     'Entropy0': Entropy0,
     'HELF': HELF,
     'PopPlusEnt': PopPlusEnt,
+    'Distinct Popular': DistinctPopular,
+    'ε-Most Popular': EMostPopular,
+    'Random': Random,
+    'Entropy': Entropy,
+    'log(Pop)⋅Ent': LogPopEnt,
 }

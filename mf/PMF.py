@@ -12,7 +12,7 @@ import util.metrics as metrics
 from util import Saveable, run_parallel
 from mf import MF
 class PMF(MF):
-    def __init__(self, iterations=100, var=0.1, user_var=1.01, item_var=1.01, learning_rate=1e-3, momentum=0.5, *args, **kwargs):
+    def __init__(self, iterations=200, var=1, user_var=100, item_var=100, learning_rate=1e-3, momentum=0.6, stop_criteria=0.0009, *args, **kwargs):
         super().__init__(*args,**kwargs)
         self.iterations = iterations
         self.var = var
@@ -24,6 +24,7 @@ class PMF(MF):
         self.best=None
         self.learning_rate = learning_rate
         self.momentum = momentum
+        self.stop_criteria = stop_criteria
 
     def load_var(self, training_matrix):
         decimals = 4
@@ -51,11 +52,6 @@ class PMF(MF):
 
     def fit(self,training_matrix):
         super().fit()
-        # if isinstance(training_matrix,scipy.sparse.spmatrix):
-        #     non_empty_rows = np.sum(training_matrix>0,axis=1).A.flatten()
-        #     training_matrix = training_matrix[non_empty_rows].A
-        #     self_id = id(self)
-        #     training_matrix = self.normalize_matrix(training_matrix)
         num_users = training_matrix.shape[0]
         num_items = training_matrix.shape[1]
         lowest_value = np.min(training_matrix)
@@ -90,18 +86,21 @@ class PMF(MF):
 
             predicted = self.predict(observed_ui_pair)
 
-            objective_value = np.sum((training_matrix.data - predicted)**2)/2 +\
-                self.user_lambda/2 * np.sum(np.linalg.norm(self.users_weights,axis=1)**2) +\
-                self.item_lambda/2 * np.sum(np.linalg.norm(self.items_weights,axis=1)**2)
+            # objective_value = np.sum((training_matrix.data - predicted)**2)/2 +\
+            #     self.user_lambda/2 * np.sum(np.linalg.norm(self.users_weights,axis=1)**2) +\
+            #     self.item_lambda/2 * np.sum(np.linalg.norm(self.items_weights,axis=1)**2)
+            # print("Objective value",objective_value)
+
             rmse=metrics.rmse(predicted,training_matrix.data)
-            print("Objective value",objective_value)
+            objective_value = rmse
             print("RMSE",rmse)
-            if objective_value > last_objective_value:
+            if np.fabs(objective_value - last_objective_value) <= self.stop_criteria:
                 print("Achieved convergence with %d iterations, saving %d iteration"%(i+1,i))
                 self.users_weights = last_users_weights
                 self.items_weights = last_items_weights
                 break
             last_objective_value = objective_value
+            self.objective_value = objective_value
             last_users_weights = self.users_weights.copy()
             last_items_weights = self.items_weights.copy()
 
