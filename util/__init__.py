@@ -6,3 +6,4 @@ from .MetricsEvaluator import *
 from .Singleton import *
 from .metrics import *
 from .InteractorsRunner import *
+from .GridSearch import *

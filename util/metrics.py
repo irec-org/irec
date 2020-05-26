@@ -88,6 +88,6 @@ def epdk(actual, predicted, consumed_items, items_distance):
     C = 1/(len(predicted)*np.sum(rel[consumed_items]))
     return C*np.sum(res)
 
-def rmse(predicted,ground_truth):
+def rmse(ground_truth,predicted):
     return np.sqrt(np.mean((predicted - ground_truth)**2))
     

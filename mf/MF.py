@@ -1,5 +1,6 @@
 from util import Saveable
 import numpy as np
+
 class MF(Saveable):
 
     def __init__(self, num_lat=10, *args, **kwargs):
@@ -10,7 +11,8 @@ class MF(Saveable):
         return matrix/np.max(matrix)
 
     def fit(self):
-        print(self.get_verbose_name())
+        print(self.get_name())
+        pass
 
     def get_matrix(self, users_weights, items_weights):
         return users_weights @ items_weights.T

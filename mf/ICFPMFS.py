@@ -19,8 +19,6 @@ class ICFPMFS(MF):
         self.var = var
         self.user_var = user_var
         self.item_var = item_var
-        self.user_lambda = self.var/self.user_var
-        self.item_lambda = self.var/self.item_var
         self.objective_values = []
         self.best=None
 
@@ -42,6 +40,9 @@ class ICFPMFS(MF):
 
     def fit(self,training_matrix):
         super().fit()
+        decimals = 4
+        self.user_lambda = np.round(self.var/self.user_var,decimals)
+        self.item_lambda = np.round(self.var/self.item_var,decimals)
         self_id = id(self)
         training_matrix = self.normalize_matrix(training_matrix)
 

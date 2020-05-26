@@ -4,7 +4,7 @@ import numpy as np
 import interactors
 import mf
 from mf import ICFPMF
-from util import DatasetFormatter
+from util import DatasetFormatter, GridSearch
 import matplotlib.pyplot as plt
 import util.metrics as metrics
 
@@ -19,6 +19,8 @@ answers=inquirer.prompt(q)
 dsf = DatasetFormatter()
 dsf = dsf.load()
 
+do_gridsearch = False
+
 test_observed_ui = zip(*(dsf.test_consumption_matrix.tocoo().row,dsf.test_consumption_matrix.tocoo().col))
 test_ground_truth = dsf.test_consumption_matrix.data
 
@@ -28,10 +30,17 @@ for i in answers['mf_models']:
     model = model_class(name_prefix=dsf.base)
     # if issubclass(model_class,(mf.ICFPMF,mf.PMF,mf.ICFPMFS)):
     #     model.load_var(dsf.train_consumption_matrix)
-    model.fit(dsf.train_consumption_matrix)
-    result = model.predict(test_observed_ui)
-    print('Test RMSE:',metrics.rmse(result,test_ground_truth))
-    model.save()
-    if issubclass(model_class,(mf.ICFPMF,mf.ICFPMFS)):
-        plt.plot(model.objective_values)
-        plt.savefig("img/%s_objective_value.png"%(model_class.__name__))
+
+    if do_gridsearch:
+        gs = GridSearch(model,{'var': [0.1,1,10,100,200],
+                               'user_var': [0.1,1,10],
+                               'item_var': [0.1,1,10]})
+        gs.fit(dsf.train_consumption_matrix)
+    else:
+        model.fit(dsf.train_consumption_matrix)
+        result = model.predict(test_observed_ui)
+        print('Test RMSE:',metrics.rmse(result,test_ground_truth))
+        model.save()
+        if issubclass(model_class,(mf.ICFPMF,mf.ICFPMFS)):
+            plt.plot(model.objective_values)
+            plt.savefig("img/%s_objective_value.png"%(model_class.__name__))

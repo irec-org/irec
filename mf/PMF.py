@@ -12,14 +12,12 @@ import util.metrics as metrics
 from util import Saveable, run_parallel
 from mf import MF
 class PMF(MF):
-    def __init__(self, iterations=200, var=1, user_var=100, item_var=100, learning_rate=1e-3, momentum=0.6, stop_criteria=0.0009, *args, **kwargs):
+    def __init__(self, iterations=200, var=200, user_var=1, item_var=0.1, learning_rate=1e-3, momentum=0.6, stop_criteria=0.0009, *args, **kwargs):
         super().__init__(*args,**kwargs)
         self.iterations = iterations
         self.var = var
         self.user_var = user_var
         self.item_var = item_var
-        self.user_lambda = self.var/self.user_var
-        self.item_lambda = self.var/self.item_var
         self.objective_values = []
         self.best=None
         self.learning_rate = learning_rate
@@ -42,16 +40,20 @@ class PMF(MF):
             self.user_var = np.mean([np.mean(i.data**2) - np.mean(i.data)**2 if i.getnnz()>0 else 0 for i in training_matrix])
             self.item_var = np.mean([np.mean(i.data**2) - np.mean(i.data)**2 if i.getnnz()>0 else 0 for i in training_matrix.transpose()])
 
-        self.user_lambda = self.var/self.user_var
-        self.item_lambda = self.var/self.item_var
+        # self.user_lambda = self.var/self.user_var
+        # self.item_lambda = self.var/self.item_var
         self.var = np.round(self.var,decimals)
         self.user_var = np.round(self.user_var,decimals)
         self.item_var = np.round(self.item_var,decimals)
-        self.user_lambda = np.round(self.user_lambda,decimals)
-        self.item_lambda = np.round(self.item_lambda,decimals)
+        # self.user_lambda = np.round(self.user_lambda,decimals)
+        # self.item_lambda = np.round(self.item_lambda,decimals)
 
     def fit(self,training_matrix):
         super().fit()
+        training_matrix = self.normalize_matrix(training_matrix)
+        decimals = 4
+        user_lambda = self.var/self.user_var
+        item_lambda = self.var/self.item_var
         num_users = training_matrix.shape[0]
         num_items = training_matrix.shape[1]
         lowest_value = np.min(training_matrix)
@@ -73,10 +75,10 @@ class PMF(MF):
         np.seterr('warn')
         predicted = self.predict(observed_ui_pair)
         for i in range(self.iterations):
-            print(f'[{i+1}/{self.iterations}]')
-            error = scipy.sparse.csr_matrix((training_matrix.data - predicted,observed_ui))
-            users_gradient = error @ (-self.items_weights) + self.user_lambda*self.users_weights
-            items_gradient = error.T @ (-self.users_weights) + self.item_lambda*self.items_weights
+            # print(f'[{i+1}/{self.iterations}]')
+            error = scipy.sparse.csr_matrix((training_matrix.data - util.sigmoid(predicted),observed_ui))
+            users_gradient = error @ (-self.items_weights) + user_lambda*self.users_weights
+            items_gradient = error.T @ (-self.users_weights) + item_lambda*self.items_weights
 
             users_momentum = self.momentum * users_momentum + self.learning_rate * users_gradient
             items_momentum = self.momentum * items_momentum + self.learning_rate * items_gradient
@@ -87,14 +89,14 @@ class PMF(MF):
             predicted = self.predict(observed_ui_pair)
 
             # objective_value = np.sum((training_matrix.data - predicted)**2)/2 +\
-            #     self.user_lambda/2 * np.sum(np.linalg.norm(self.users_weights,axis=1)**2) +\
-            #     self.item_lambda/2 * np.sum(np.linalg.norm(self.items_weights,axis=1)**2)
+            #     user_lambda/2 * np.sum(np.linalg.norm(self.users_weights,axis=1)**2) +\
+            #     item_lambda/2 * np.sum(np.linalg.norm(self.items_weights,axis=1)**2)
             # print("Objective value",objective_value)
 
-            rmse=metrics.rmse(predicted,training_matrix.data)
+            rmse=metrics.rmse(training_matrix.data,predicted)
             objective_value = rmse
-            print("RMSE",rmse)
-            if np.fabs(objective_value - last_objective_value) <= self.stop_criteria:
+            # print("RMSE",rmse)
+            if objective_value > last_objective_value or np.fabs(objective_value - last_objective_value) <= self.stop_criteria:
                 print("Achieved convergence with %d iterations, saving %d iteration"%(i+1,i))
                 self.users_weights = last_users_weights
                 self.items_weights = last_items_weights
@@ -111,4 +113,11 @@ class PMF(MF):
         return self.get_matrix(self.users_weights,self.items_weights)
 
     def predict(self,X):
+        if isinstance(X,scipy.sparse.spmatrix):
+            observed_ui = (X.tocoo().row,X.tocoo().col)
+            X = tuple(zip(*observed_ui))
         return self.get_sparse_matrix(self.users_weights,self.items_weights,X)
+
+    def score(self,X):
+        return metrics.rmse(X.data,self.predict(X))
+
