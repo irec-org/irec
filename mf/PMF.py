@@ -12,7 +12,7 @@ import util.metrics as metrics
 from util import Saveable, run_parallel
 from mf import MF
 class PMF(MF):
-    def __init__(self, iterations=200, var=200, user_var=1, item_var=0.1, learning_rate=1e-3, momentum=0.6, stop_criteria=0.0009, *args, **kwargs):
+    def __init__(self, iterations=200, var=100, user_var=0.1, item_var=0.1, learning_rate=1e-3, momentum=0.6, stop_criteria=0.0009, *args, **kwargs):
         super().__init__(*args,**kwargs)
         self.iterations = iterations
         self.var = var
@@ -63,7 +63,7 @@ class PMF(MF):
             observed_ui = np.nonzero(indicator_matrix)
         else:
             observed_ui = (training_matrix.tocoo().row,training_matrix.tocoo().col)
-            observed_ui_pair = tuple(zip(*observed_ui))
+            # observed_ui = list(zip(*observed_ui))
         I = np.eye(self.num_lat)
         self.users_weights = 0.1*np.random.rand(num_users,self.num_lat)
         self.items_weights = 0.1*np.random.rand(num_items,self.num_lat)
@@ -73,9 +73,9 @@ class PMF(MF):
         last_users_weights = self.users_weights
         last_items_weights = self.items_weights
         np.seterr('warn')
-        predicted = self.predict(observed_ui_pair)
+        predicted = self.predict(observed_ui)
         for i in range(self.iterations):
-            # print(f'[{i+1}/{self.iterations}]')
+            print(f'[{i+1}/{self.iterations}]')
             error = scipy.sparse.csr_matrix((training_matrix.data - predicted,observed_ui))
             users_gradient = error @ (-self.items_weights) + user_lambda*self.users_weights
             items_gradient = error.T @ (-self.users_weights) + item_lambda*self.items_weights
@@ -86,7 +86,7 @@ class PMF(MF):
             self.users_weights -= users_momentum
             self.items_weights -= items_momentum
 
-            predicted = self.predict(observed_ui_pair)
+            predicted = self.predict(observed_ui)
 
             # objective_value = np.sum((training_matrix.data - predicted)**2)/2 +\
             #     user_lambda/2 * np.sum(np.linalg.norm(self.users_weights,axis=1)**2) +\
@@ -95,7 +95,7 @@ class PMF(MF):
 
             rmse=metrics.rmse(training_matrix.data,predicted)
             objective_value = rmse
-            # print("RMSE",rmse)
+            print("RMSE",rmse)
             if objective_value > last_objective_value or np.fabs(objective_value - last_objective_value) <= self.stop_criteria:
                 print("Achieved convergence with %d iterations, saving %d iteration"%(i+1,i))
                 self.users_weights = last_users_weights
@@ -105,19 +105,3 @@ class PMF(MF):
             self.objective_value = objective_value
             last_users_weights = self.users_weights.copy()
             last_items_weights = self.items_weights.copy()
-
-    def get_matrix(self, users_weights, items_weights):
-        return users_weights @ items_weights.T
-
-    def get_predicted(self):
-        return self.get_matrix(self.users_weights,self.items_weights)
-
-    def predict(self,X):
-        if isinstance(X,scipy.sparse.spmatrix):
-            observed_ui = (X.tocoo().row,X.tocoo().col)
-            X = tuple(zip(*observed_ui))
-        return self.get_sparse_matrix(self.users_weights,self.items_weights,X)
-
-    def score(self,X):
-        return metrics.rmse(X.data,self.predict(X))
-

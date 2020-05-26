@@ -54,7 +54,6 @@ class ICFPMFS(MF):
         self.lowest_value = lowest_value = np.min(training_matrix)
         highest_value = np.max(training_matrix)
         self.observed_ui = observed_ui = (training_matrix.tocoo().row,training_matrix.tocoo().col) # itens observed by some user
-        observed_ui_pair = tuple(zip(*self.observed_ui))
         self.I = I = np.eye(self.num_lat)
         self.users_weights = np.random.multivariate_normal(np.zeros(self.num_lat),self.user_var*I,training_matrix.shape[0])
         self.items_weights = np.random.multivariate_normal(np.zeros(self.num_lat),self.item_var*I,training_matrix.shape[1])
@@ -62,7 +61,7 @@ class ICFPMFS(MF):
         self.items_observed_users = collections.defaultdict(list)
         self.users_observed_items_ratings = collections.defaultdict(list)
         self.items_observed_users_ratings = collections.defaultdict(list)
-        for uid, iid in observed_ui_pair:
+        for uid, iid in zip(*self.observed_ui):
             self.users_observed_items[uid].append(iid)
             self.items_observed_users[iid].append(uid)
 
@@ -100,7 +99,7 @@ class ICFPMFS(MF):
                             self.items_covs[iid] = cov
                             self.items_weights[iid] = weight
 
-            predicted = self.predict(observed_ui_pair)
+            predicted = self.predict(observed_ui)
             rmse=metrics.rmse(training_matrix.data,predicted)
             objective_value = rmse
             print("RMSE",rmse)
@@ -167,12 +166,3 @@ class ICFPMFS(MF):
         new.items_means = self.items_means.copy()
         new.items_covs = self.items_covs.copy()
         return new
-
-    def predict(self,X):
-        if isinstance(X,scipy.sparse.spmatrix):
-            observed_ui = (X.tocoo().row,X.tocoo().col)
-            X = tuple(zip(*observed_ui))
-        return self.get_sparse_matrix(self.users_weights,self.items_weights,X)
-
-    def score(self,X):
-        return metrics.rmse(X.data,self.predict(X))

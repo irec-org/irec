@@ -1,5 +1,18 @@
 from util import Saveable
 import numpy as np
+import scipy.sparse
+from numba import jit, prange
+
+
+@jit(nopython=True,parallel=True)
+def _predict_sparse(users_weights, items_weights, users_items):
+    n = len(users_items[0])
+    results = np.zeros(n)
+    for i in prange(n):
+        uid = users_items[0][i]
+        iid = users_items[1][i]
+        results[i] = users_weights[uid] @ items_weights[iid]
+    return results
 
 class MF(Saveable):
 
@@ -11,20 +24,20 @@ class MF(Saveable):
         return matrix/np.max(matrix)
 
     def fit(self):
-        print(self.get_name())
+        print(self.get_verbose_name())
         pass
 
-    def get_matrix(self, users_weights, items_weights):
-        return users_weights @ items_weights.T
+    def predict_sparse(self,users_items):
+        return _predict_sparse(self.users_weights,self.items_weights,users_items)
 
-    def get_sparse_matrix(self, users_weights, items_weights, users_items_pairs):
-        return np.array([users_weights[uid,:] @ items_weights[iid,:] for uid, iid in users_items_pairs]).flatten()
+    def predict(self,X):
+        if isinstance(X,scipy.sparse.spmatrix):
+            observed_ui = (X.tocoo().row,X.tocoo().col)
+            X = observed_ui
+        return self.predict_sparse(X)
 
-    def get_sparse_predicted(self,users_items_pairs):
-        return self.get_sparse_matrix(self.users_weights,self.items_weights,users_items_pairs)
-
-    def get_predicted(self):
-        return self.get_matrix(self.users_weights,self.items_weights)
+    def score(self,X):
+        return metrics.rmse(X.data,self.predict(X))
 
     def filter_parameters(self,parameters):
         return super().filter_parameters({k: v for k, v in parameters.items() if k not in ['rmse','objective_value']})

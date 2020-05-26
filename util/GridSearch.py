@@ -3,6 +3,7 @@ from tqdm import tqdm
 from util import Saveable
 from sklearn.model_selection import KFold
 from collections import defaultdict
+import numpy as np
 class GridSearch(Saveable):
     def __init__(self, model, parameters, n_splits=5):
         self.model = model
@@ -30,7 +31,7 @@ class GridSearch(Saveable):
                 self.model.fit(X_train)
                 objective_values[values].append(self.model.score(X_test))
         print(objective_values)
-        print(sorted({k: np.sum(v) for k, v in objective_values.items()}.items(), key=lambda x: x[1]))
+        print(sorted({k: np.sum(v) for k, v in objective_values.items()}.items(), key=lambda x: x[1], reverse=True))
         
         
         

@@ -19,10 +19,14 @@ answers=inquirer.prompt(q)
 dsf = DatasetFormatter()
 dsf = dsf.load()
 
-do_gridsearch = True
+do_gridsearch = False
 
-test_observed_ui = zip(*(dsf.test_consumption_matrix.tocoo().row,dsf.test_consumption_matrix.tocoo().col))
+test_observed_ui = (dsf.test_consumption_matrix.tocoo().row,dsf.test_consumption_matrix.tocoo().col)
 test_ground_truth = dsf.test_consumption_matrix.data
+
+
+train_observed_ui = (dsf.train_consumption_matrix.tocoo().row,dsf.train_consumption_matrix.tocoo().col)
+train_ground_truth = dsf.train_consumption_matrix.data
 
 
 for i in answers['mf_models']:
@@ -44,7 +48,9 @@ for i in answers['mf_models']:
         model.fit(dsf.train_consumption_matrix)
         result = model.predict(test_observed_ui)
         print('Test RMSE:',metrics.rmse(result,test_ground_truth))
+        result = model.predict(train_observed_ui)
+        print('Train RMSE:',metrics.rmse(result,train_ground_truth))
         model.save()
-        if issubclass(model_class,(mf.ICFPMF,mf.ICFPMFS)):
-            plt.plot(model.objective_values)
-            plt.savefig("img/%s_objective_value.png"%(model_class.__name__))
+        # if issubclass(model_class,(mf.ICFPMF,mf.ICFPMFS)):
+        #     plt.plot(model.objective_values)
+        #     plt.savefig("img/%s_objective_value.png"%(model_class.__name__))
