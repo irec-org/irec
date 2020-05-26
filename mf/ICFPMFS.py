@@ -8,23 +8,25 @@ from threadpoolctl import threadpool_limits
 sys.path.insert(0, os.path.abspath('..'))
 import ctypes
 import collections
+import util.metrics as metrics
 
 from util import Saveable, run_parallel
 from . import MF
 
 class ICFPMFS(MF):
-    def __init__(self, iterations=50, var=0.1, user_var=1.01, item_var=1.01, *args, **kwargs):
+    def __init__(self, iterations=50, var=10, user_var=1, item_var=1, stop_criteria=0.0009, *args, **kwargs):
         super().__init__(*args,**kwargs)
         self.iterations = iterations
         self.var = var
         self.user_var = user_var
         self.item_var = item_var
+        self.stop_criteria = stop_criteria
         self.objective_values = []
         self.best=None
 
     def load_var(self, training_matrix):
         decimals = 4
-        training_matrix = self.normalize_matrix(training_matrix)
+        # training_matrix = self.normalize_matrix(training_matrix)
         self.var = np.mean(training_matrix.data**2) - np.mean(training_matrix.data)**2
         self.user_var = np.mean([np.mean(i.data**2) - np.mean(i.data)**2 if i.getnnz()>0 else 0 for i in training_matrix])
         self.item_var = np.mean([np.mean(i.data**2) - np.mean(i.data)**2 if i.getnnz()>0 else 0 for i in training_matrix.transpose()])
@@ -44,7 +46,7 @@ class ICFPMFS(MF):
         self.user_lambda = np.round(self.var/self.user_var,decimals)
         self.item_lambda = np.round(self.var/self.item_var,decimals)
         self_id = id(self)
-        training_matrix = self.normalize_matrix(training_matrix)
+        # training_matrix = self.normalize_matrix(training_matrix)
 
         self.training_matrix = training_matrix
         num_users = training_matrix.shape[0]
@@ -71,6 +73,8 @@ class ICFPMFS(MF):
             self.items_observed_users_ratings[iid] = training_matrix[uids,iid].data
 
         best_objective_value = np.inf
+
+        last_objective_value = np.NAN
         # without burning
         np.seterr('warn')
         for i in range(self.iterations):
@@ -95,7 +99,21 @@ class ICFPMFS(MF):
                             self.items_means[iid] = mean
                             self.items_covs[iid] = cov
                             self.items_weights[iid] = weight
-                            
+
+            predicted = self.predict(observed_ui_pair)
+            rmse=metrics.rmse(training_matrix.data,predicted)
+            objective_value = rmse
+            print("RMSE",rmse)
+            if objective_value > last_objective_value or np.fabs(objective_value - last_objective_value) <= self.stop_criteria:
+                print("Achieved convergence with %d iterations, saving %d iteration"%(i+1,i))
+                self.users_weights = last_users_weights
+                self.items_weights = last_items_weights
+                break
+            last_objective_value = objective_value
+            self.objective_value = objective_value
+            last_users_weights = self.users_weights.copy()
+            last_items_weights = self.items_weights.copy()
+            
             # sparse_predicted = self.get_sparse_predicted(observed_ui_pair)
             # rmse=np.sqrt(np.mean((sparse_predicted - training_matrix.data)**2))
             # objective_value = np.sum((training_matrix.data - sparse_predicted)**2)/2 +\
@@ -104,6 +122,8 @@ class ICFPMFS(MF):
             # print("Objective value",objective_value)
             # #     self.objective_values.append(objective_value)
             # print("RMSE",rmse)
+        del self.user_lambda
+        del self.item_lambda
         del self.users_observed_items
         del self.users_observed_items_ratings
         del self.items_observed_users
@@ -147,3 +167,12 @@ class ICFPMFS(MF):
         new.items_means = self.items_means.copy()
         new.items_covs = self.items_covs.copy()
         return new
+
+    def predict(self,X):
+        if isinstance(X,scipy.sparse.spmatrix):
+            observed_ui = (X.tocoo().row,X.tocoo().col)
+            X = tuple(zip(*observed_ui))
+        return self.get_sparse_matrix(self.users_weights,self.items_weights,X)
+
+    def score(self,X):
+        return metrics.rmse(X.data,self.predict(X))

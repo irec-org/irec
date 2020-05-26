@@ -19,7 +19,7 @@ answers=inquirer.prompt(q)
 dsf = DatasetFormatter()
 dsf = dsf.load()
 
-do_gridsearch = False
+do_gridsearch = True
 
 test_observed_ui = zip(*(dsf.test_consumption_matrix.tocoo().row,dsf.test_consumption_matrix.tocoo().col))
 test_ground_truth = dsf.test_consumption_matrix.data
@@ -32,9 +32,13 @@ for i in answers['mf_models']:
     #     model.load_var(dsf.train_consumption_matrix)
 
     if do_gridsearch:
-        gs = GridSearch(model,{'var': [0.1,1,10,100,200],
-                               'user_var': [0.1,1,10],
-                               'item_var': [0.1,1,10]})
+        if isinstance(model, (mf.PMF,mf.ICFPMFS)):
+            parameters = {'var': [0.1,1,10,100,200],
+                          'user_var': [0.1,1,10],
+                          'item_var': [0.1,1,10]}
+        else:
+            raise RuntimeError
+        gs = GridSearch(model,parameters)
         gs.fit(dsf.train_consumption_matrix)
     else:
         model.fit(dsf.train_consumption_matrix)

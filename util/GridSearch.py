@@ -30,6 +30,7 @@ class GridSearch(Saveable):
                 self.model.fit(X_train)
                 objective_values[values].append(self.model.score(X_test))
         print(objective_values)
+        print(sorted({k: np.sum(v) for k, v in objective_values.items()}.items(), key=lambda x: x[1]))
         
         
         

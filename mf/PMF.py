@@ -50,7 +50,7 @@ class PMF(MF):
 
     def fit(self,training_matrix):
         super().fit()
-        training_matrix = self.normalize_matrix(training_matrix)
+        # training_matrix = self.normalize_matrix(training_matrix)
         decimals = 4
         user_lambda = self.var/self.user_var
         item_lambda = self.var/self.item_var
@@ -76,7 +76,7 @@ class PMF(MF):
         predicted = self.predict(observed_ui_pair)
         for i in range(self.iterations):
             # print(f'[{i+1}/{self.iterations}]')
-            error = scipy.sparse.csr_matrix((training_matrix.data - util.sigmoid(predicted),observed_ui))
+            error = scipy.sparse.csr_matrix((training_matrix.data - predicted,observed_ui))
             users_gradient = error @ (-self.items_weights) + user_lambda*self.users_weights
             items_gradient = error.T @ (-self.users_weights) + item_lambda*self.items_weights
 
