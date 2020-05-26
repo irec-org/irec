@@ -14,7 +14,7 @@ from util import Saveable, run_parallel
 from . import MF
 
 class ICFPMFS(MF):
-    def __init__(self, iterations=50, var=10, user_var=1, item_var=1, stop_criteria=0.0009, *args, **kwargs):
+    def __init__(self, iterations=20, var=10, user_var=1, item_var=1, stop_criteria=0.0009, *args, **kwargs):
         super().__init__(*args,**kwargs)
         self.iterations = iterations
         self.var = var
@@ -24,6 +24,12 @@ class ICFPMFS(MF):
         self.objective_values = []
         self.best=None
 
+    def get_user_lambda(self):
+        return self.var/self.user_var
+
+    def get_item_lambda(self):
+        return self.var/self.item_var
+    
     def load_var(self, training_matrix):
         decimals = 4
         # training_matrix = self.normalize_matrix(training_matrix)
@@ -43,8 +49,8 @@ class ICFPMFS(MF):
     def fit(self,training_matrix):
         super().fit()
         decimals = 4
-        self.user_lambda = np.round(self.var/self.user_var,decimals)
-        self.item_lambda = np.round(self.var/self.item_var,decimals)
+        self.user_lambda = self.var/self.user_var
+        self.item_lambda = self.var/self.item_var
         self_id = id(self)
         # training_matrix = self.normalize_matrix(training_matrix)
 
@@ -103,15 +109,11 @@ class ICFPMFS(MF):
             rmse=metrics.rmse(training_matrix.data,predicted)
             objective_value = rmse
             print("RMSE",rmse)
-            if objective_value > last_objective_value or np.fabs(objective_value - last_objective_value) <= self.stop_criteria:
-                print("Achieved convergence with %d iterations, saving %d iteration"%(i+1,i))
-                self.users_weights = last_users_weights
-                self.items_weights = last_items_weights
+            if np.fabs(objective_value - last_objective_value) <= self.stop_criteria:
+                self.objective_value = objective_value
+                print("Achieved convergence with %d iterations"%(i+1))
                 break
             last_objective_value = objective_value
-            self.objective_value = objective_value
-            last_users_weights = self.users_weights.copy()
-            last_items_weights = self.items_weights.copy()
             
             # sparse_predicted = self.get_sparse_predicted(observed_ui_pair)
             # rmse=np.sqrt(np.mean((sparse_predicted - training_matrix.data)**2))

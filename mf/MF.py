@@ -2,7 +2,7 @@ from util import Saveable
 import numpy as np
 import scipy.sparse
 from numba import jit, prange
-
+import util.metrics as metrics
 
 @jit(nopython=True,parallel=True)
 def _predict_sparse(users_weights, items_weights, users_items):

@@ -10,10 +10,3 @@ class SVD(MF):
         self.users_weights = u
         self.items_weights = vt.T*s
 
-        observed_ui = (training_matrix.tocoo().row,training_matrix.tocoo().col) # itens observed by some user
-        observed_ui_pair = tuple(zip(*observed_ui))
-
-        print("Train RMSE:",metrics.rmse(training_matrix.data,self.get_sparse_matrix(self.users_weights,self.items_weights,observed_ui_pair)))
-    def predict(self,X):
-        return self.get_sparse_matrix(self.users_weights,self.items_weights,X)
-        

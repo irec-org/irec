@@ -293,9 +293,9 @@ class DatasetFormatter(Saveable):
         self.num_consumes = len(df_cons)
 
         if self.is_spmatrix:
-            self.consumption_matrix = scipy.sparse.csr_matrix((df_cons.r,(df_cons.uid,df_cons.iid)),dtype=float)
-            self.train_consumption_matrix = scipy.sparse.csr_matrix((df_cons1.r,(df_cons1.uid,df_cons1.iid)),dtype=float)
-            self.test_consumption_matrix = scipy.sparse.csr_matrix((df_cons2.r,(df_cons2.uid,df_cons2.iid)),dtype=float)
+            self.consumption_matrix = scipy.sparse.csr_matrix((df_cons.r,(df_cons.uid,df_cons.iid)),shape=(self.num_users,self.num_items),dtype=float)
+            self.train_consumption_matrix = scipy.sparse.csr_matrix((df_cons1.r,(df_cons1.uid,df_cons1.iid)),shape=(self.num_users,self.num_items),dtype=float)
+            self.test_consumption_matrix = scipy.sparse.csr_matrix((df_cons2.r,(df_cons2.uid,df_cons2.iid)),shape=(self.num_users,self.num_items),dtype=float)
             self.consumption_time_matrix = scipy.sparse.csr_matrix((df_cons.t,(df_cons.uid,df_cons.iid)))
             self.users_start_time = df_cons.groupby('uid').min()['t'].to_numpy()
         else:
