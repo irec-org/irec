@@ -14,7 +14,7 @@ from util import Saveable, run_parallel
 from . import MF
 
 class ICFPMFS(MF):
-    def __init__(self, iterations=20, var=10, user_var=1, item_var=1, stop_criteria=0.0009, *args, **kwargs):
+    def __init__(self, iterations=20, var=0.1, user_var=0.1, item_var=0.1, stop_criteria=0.0009, *args, **kwargs):
         super().__init__(*args,**kwargs)
         self.iterations = iterations
         self.var = var

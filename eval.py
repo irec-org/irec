@@ -27,7 +27,6 @@ if not is_spmatrix:
     pmf_model = mf.ICFPMF(name_prefix=dsf.base)
 else:
     pmf_model = mf.ICFPMFS(name_prefix=dsf.base)
-pmf_model.load_var(dsf.train_consumption_matrix)
 
 items_distance = metrics.get_items_distance(dsf.consumption_matrix)
 items_popularity = interactors.MostPopular.get_items_popularity(dsf.consumption_matrix,normalize=True)
@@ -36,7 +35,7 @@ for i in answers['interactors']:
     itr_class = interactors.INTERACTORS[i]
     if issubclass(itr_class, interactors.ICF):
         itr = itr_class(var=pmf_model.var,
-                        user_lambda=pmf_model.user_lambda,
+                        user_lambda=pmf_model.get_user_lambda(),
                         consumption_matrix=dsf.consumption_matrix,
                         name_prefix=dsf.base
         )

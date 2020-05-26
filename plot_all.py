@@ -35,7 +35,7 @@ if not is_spmatrix:
     pmf_model = mf.ICFPMF()
 else:
     pmf_model = mf.ICFPMFS()
-pmf_model.load_var(dsf.train_consumption_matrix)
+# pmf_model.load_var(dsf.train_consumption_matrix)
 
 metrics_names = ['precision','recall','hits','ild','epc','epd']
 metric_values = defaultdict(lambda:defaultdict(dict))
@@ -43,7 +43,7 @@ for i in answers['interactors']:
     itr_class = interactors.INTERACTORS[i]
     if issubclass(itr_class, interactors.ICF):
         itr = itr_class(var=pmf_model.var,
-                                    user_lambda=pmf_model.user_lambda,consumption_matrix=dsf.consumption_matrix,name_prefix=dsf.base)
+                                    user_lambda=pmf_model.get_user_lambda(),consumption_matrix=dsf.consumption_matrix,name_prefix=dsf.base)
                                         
     else:
         itr = itr_class(consumption_matrix=dsf.consumption_matrix,name_prefix=dsf.base)
