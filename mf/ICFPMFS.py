@@ -9,20 +9,43 @@ sys.path.insert(0, os.path.abspath('..'))
 import ctypes
 import collections
 import util.metrics as metrics
+from tqdm import tqdm
 
 from util import Saveable, run_parallel
 from . import MF
+from numba import jit
+
+
+@jit(nopython=True)
+def _multivariate_normal(x,mu=0,sigma=1):
+    """focus in speed and readability multivariate_normal, no checks like scipy and others libraries
+be sure to pass float array and matrix
+very limited to be more fast"""
+    k = len(x)
+    return (1/(np.sqrt(2*np.pi)**k * np.linalg.det(sigma)))*\
+        np.exp((-1/2)*(x-mu) @ np.linalg.inv(sigma)@(x - mu))
+
+
+@jit(nopython=True)
+def _apply_multivariate_normal(xs,mu=0,sigma=1):
+    n = len(xs)
+    result = np.zeros(n)
+    for i in range(n):
+        result[i] = _multivariate_normal(xs[i], mu, sigma)
+    return result
+
+def _norm_sum_probabilities(x):
+    return np.sum(-np.log(x))
+    # return scipy.special.logsumexp(x)
 
 class ICFPMFS(MF):
-    def __init__(self, iterations=20, var=0.1, user_var=0.1, item_var=0.1, stop_criteria=0.0009, *args, **kwargs):
+    def __init__(self, iterations=50, var=1.2881, user_var=0.8514, item_var=0.9134, stop_criteria=0.0009, *args, **kwargs):
         super().__init__(*args,**kwargs)
         self.iterations = iterations
         self.var = var
         self.user_var = user_var
         self.item_var = item_var
         self.stop_criteria = stop_criteria
-        self.objective_values = []
-        self.best=None
 
     def get_user_lambda(self):
         return self.var/self.user_var
@@ -38,16 +61,18 @@ class ICFPMFS(MF):
         self.item_var = np.mean([np.mean(i.data**2) - np.mean(i.data)**2 if i.getnnz()>0 else 0 for i in training_matrix.transpose()])
         # self.user_var = np.mean(np.var(training_matrix,axis=1))
         # self.item_var = np.mean(np.var(training_matrix,axis=0))
-        self.user_lambda = self.var/self.user_var
-        self.item_lambda = self.var/self.item_var
+        # self.user_lambda = self.var/self.user_var
+        # self.item_lambda = self.var/self.item_var
         self.var = np.round(self.var,decimals)
         self.user_var = np.round(self.user_var,decimals)
         self.item_var = np.round(self.item_var,decimals)
-        self.user_lambda = np.round(self.user_lambda,decimals)
-        self.item_lambda = np.round(self.item_lambda,decimals)
+        # self.user_lambda = np.round(self.user_lambda,decimals)
+        # self.item_lambda = np.round(self.item_lambda,decimals)
 
     def fit(self,training_matrix):
         super().fit()
+        self.objective_values = []
+        self.best=None
         decimals = 4
         self.user_lambda = self.var/self.user_var
         self.item_lambda = self.var/self.item_var
@@ -77,20 +102,24 @@ class ICFPMFS(MF):
         for iid, uids in self.items_observed_users.items():
             self.items_observed_users_ratings[iid] = training_matrix[uids,iid].data
 
-        best_objective_value = np.inf
+        best_objective_value = None
 
-        last_objective_value = np.NAN
+        last_objective_value = None
+
+        # users_probabilities_args = [(self_id, i) for i in range(self.users_weights.shape[0])]
+        # items_probabilities_args = [(self_id, i) for i in range(self.items_weights.shape[0])]
+
         # without burning
         np.seterr('warn')
-        for i in range(self.iterations):
-            print(f'[{i+1}/{self.iterations}]')
+        tq = tqdm(range(self.iterations))
+        for i in tq:
             with threadpool_limits(limits=1, user_api='blas'):
                 for to_run in random.sample([1,2],2):
                     if to_run == 1:
                         self.users_means = np.zeros((num_users,self.num_lat))
                         self.users_covs = np.zeros((num_users,self.num_lat,self.num_lat))
                         args = [(self_id,i,) for i in range(num_users)]
-                        results = run_parallel(self.compute_user_weight,args)
+                        results = run_parallel(self.compute_user_weight,args,use_tqdm=False)
                         for uid, (mean, cov, weight) in enumerate(results):
                             self.users_means[uid] = mean
                             self.users_covs[uid] = cov
@@ -99,21 +128,44 @@ class ICFPMFS(MF):
                         self.items_means = np.zeros((num_items,self.num_lat))
                         self.items_covs = np.zeros((num_items,self.num_lat,self.num_lat))
                         args = [(self_id,i,) for i in range(num_items)]
-                        results = run_parallel(self.compute_item_weight,args)
+                        results = run_parallel(self.compute_item_weight,args,use_tqdm=False)
                         for iid, (mean, cov, weight) in enumerate(results):
                             self.items_means[iid] = mean
                             self.items_covs[iid] = cov
                             self.items_weights[iid] = weight
 
             predicted = self.predict(observed_ui)
-            rmse=metrics.rmse(training_matrix.data,predicted)
-            objective_value = rmse
-            print("RMSE",rmse)
-            if np.fabs(objective_value - last_objective_value) <= self.stop_criteria:
-                self.objective_value = objective_value
-                print("Achieved convergence with %d iterations"%(i+1))
-                break
-            last_objective_value = objective_value
+           
+            # objective_value = _norm_sum_probabilities(scipy.stats.norm.pdf(training_matrix.data,predicted,self.var))\
+            #     + _norm_sum_probabilities(_apply_multivariate_normal(self.users_weights,np.zeros(self.num_lat),self.var*self.I))\
+            #     + _norm_sum_probabilities(_apply_multivariate_normal(self.items_weights,np.zeros(self.num_lat),self.var*self.I))
+
+            objective_value = np.sum((training_matrix.data - predicted)**2)/2 +\
+                self.user_lambda/2 * np.sum(np.linalg.norm(self.users_weights,axis=1)**2) +\
+                self.item_lambda/2 * np.sum(np.linalg.norm(self.items_weights,axis=1)**2)
+
+            self.objective_values.append(objective_value)
+
+            if self.best == None:
+                self.best = self.__deepcopy__()
+                best_objective_value = objective_value
+            else:
+                if objective_value < best_objective_value:
+                    self.best = self.__deepcopy__()
+                    best_objective_value = objective_value
+
+            tq.set_description('cur={:.3f},best={:.3f}'.format(objective_value,best_objective_value))
+            tq.refresh()
+
+            # predicted = self.predict(observed_ui)
+            # rmse=metrics.rmse(training_matrix.data,predicted)
+            # objective_value = rmse
+            # print("RMSE",rmse)
+            # if np.fabs(objective_value - last_objective_value) <= self.stop_criteria:
+            #     self.objective_value = objective_value
+            #     print("Achieved convergence with %d iterations"%(i+1))
+            #     break
+            # last_objective_value = objective_value
             
             # sparse_predicted = self.get_sparse_predicted(observed_ui_pair)
             # rmse=np.sqrt(np.mean((sparse_predicted - training_matrix.data)**2))
@@ -123,6 +175,8 @@ class ICFPMFS(MF):
             # print("Objective value",objective_value)
             # #     self.objective_values.append(objective_value)
             # print("RMSE",rmse)
+        self.__dict__.update(self.best.__dict__)
+        del self.best
         del self.user_lambda
         del self.item_lambda
         del self.users_observed_items
@@ -133,6 +187,16 @@ class ICFPMFS(MF):
         del self.I
         del self.training_matrix
         del self.lowest_value
+
+    @staticmethod
+    def _user_probability(obj_id,uid):
+        self = ctypes.cast(obj_id, ctypes.py_object).value
+        return scipy.stats.multivariate_normal.pdf(self.users_weights[uid],np.zeros(self.num_lat),self.var*self.I)
+
+    @staticmethod
+    def _item_probability(obj_id,iid):
+        self = ctypes.cast(obj_id, ctypes.py_object).value
+        return scipy.stats.multivariate_normal.pdf(self.items_weights[iid],np.zeros(self.num_lat),self.var*self.I)
 
     @staticmethod
     def compute_user_weight(obj_id,uid):

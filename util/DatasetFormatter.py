@@ -44,8 +44,8 @@ class DatasetFormatter(Saveable):
     SELECTION_MODEL_HANDLERS = {'users_train_test': 'self.run_users_train_test()',
                                 'users_train_test_chrono': 'self.run_users_train_test_chrono()'}
     
-    def __init__(self,base='tr_te_ml_1m',
-                 selection_model='users_train_test_chrono',
+    def __init__(self,base='ml_100k',
+                 selection_model='users_train_test',
                  is_spmatrix=True,
                  selection_model_parameters={}, *args, **kwargs):
         super().__init__(*args,**kwargs)
@@ -311,7 +311,7 @@ class DatasetFormatter(Saveable):
         if not re.search('^tr_te',self.base):
             self.run_selection_model()
         self.save()
-        
+
     def export_base(self,format='movielens'):
         full_rating_df = pd.DataFrame(np.where(self.consumption_matrix == np.min(self.consumption_matrix), np.nan,self.consumption_matrix))
         full_time_df = pd.DataFrame(np.where(self.consumption_time_matrix.A == np.min(self.consumption_time_matrix.A), np.nan,self.consumption_time_matrix.A))

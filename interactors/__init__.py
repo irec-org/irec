@@ -28,12 +28,12 @@ from .EMostPopular import *
 from .DistinctPopular import *
 
 INTERACTORS = {
+    'Linear UCB (PMF)': LinearUCB,
     'LinUCB (MF)': LinUCB,
     'Most Popular': MostPopular,
     'OurMethod1': OurMethod1,
     'UCB-Learner (MF)': UCBLearner,
     'Linear ε-Greedy (MF)': LinEGreedy,
-    'Linear UCB (PMF)': LinearUCB,
     'GLM-UCB (PMF)': GLM_UCB,
     'TS': ThompsonSampling,
     'Linear ε-Greedy (PMF)': LinearEGreedy,

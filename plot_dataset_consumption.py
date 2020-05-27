@@ -11,6 +11,9 @@ fig, axs = plt.subplots(nrows=2,ncols=2,figsize=(10,10))
 lowest_value = np.min(dsf.consumption_matrix)
 
 print(scipy.stats.describe(dsf.consumption_matrix.data))
+print(np.mean(dsf.train_consumption_matrix.data**2) - np.mean(dsf.train_consumption_matrix.data)**2)
+print(np.mean([np.mean(dsf.train_consumption_matrix.data**2) - np.mean(dsf.train_consumption_matrix.data)**2 if i.getnnz()>0 else 0 for i in dsf.train_consumption_matrix]))
+print(np.mean([np.mean(dsf.train_consumption_matrix.data**2) - np.mean(dsf.train_consumption_matrix.data)**2 if dsf.train_consumption_matrix.getnnz()>0 else 0 for i in dsf.train_consumption_matrix.transpose()]))
 # raise SystemExit
 
 for ax, matrix, name in zip(axs[0,:],
