@@ -12,7 +12,7 @@ from util import Saveable, run_parallel
 from . import MF
 
 class ICFPMF(MF):
-    def __init__(self, iterations=50, var=1.2881, user_var=0.8514, item_var=0.9134, *args, **kwargs):
+    def __init__(self, iterations=50, var=1, user_var=1, item_var=1, *args, **kwargs):
         super().__init__(*args,**kwargs)
         self.iterations = iterations
         self.var = var

@@ -4,6 +4,35 @@ from tqdm import tqdm
 import util
 from threadpoolctl import threadpool_limits
 import ctypes
+from numba import jit
+
+
+@jit(nopython=True)
+def _numba_multivariate_normal():
+
+    pass
+
+@jit(nopython=True)
+def _compute_rewards(p, user_candidate_items,items_means, items_covs):
+    max_i = np.NAN
+    max_q = np.NAN
+    max_e_reward = np.NINF
+    for item in user_candidate_items:
+        item_mean = items_means[item]
+        item_cov = items_covs[item]
+        q = np.random.multivariate_normal(item_mean,item_cov)
+        e_reward = p @ q
+        if e_reward > max_e_reward:
+            max_i = item
+            max_q = q
+            max_e_reward = e_reward
+    return max_i, max_q, max_e_reward
+    # user_candidate_items.remove(max_i)
+    # tmp_max_qs[max_i]=max_q
+    # result.append(max_i)
+
+
+
 class LinearThompsonSampling(ICF):
     def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -40,10 +69,11 @@ class LinearThompsonSampling(ICF):
         result = []
         for i in range(self.interactions):
             tmp_max_qs = dict()
+            mean = np.dot(np.linalg.inv(A),b)
+            cov = np.linalg.inv(A)*self.var
+            p = np.random.multivariate_normal(mean,cov)
+
             for j in range(self.interaction_size):
-                mean = np.dot(np.linalg.inv(A),b)
-                cov = np.linalg.inv(A)*self.var
-                p = np.random.multivariate_normal(mean,cov)
                 max_i = np.NAN
                 max_q = np.NAN
                 max_e_reward = np.NINF

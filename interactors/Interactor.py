@@ -10,7 +10,7 @@ import pickle
 import json
 
 class Interactor(Saveable):
-    def __init__(self, train_consumption_matrix=None, test_consumption_matrix=None, interactions=20, interaction_size=5, threshold=1e-6, *args, **kwargs):
+    def __init__(self, train_consumption_matrix=None, test_consumption_matrix=None, interactions=50, interaction_size=5, threshold=0.0001, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # self.consumption_matrix = consumption_matrix
         # self.highest_value = max(np.max(train_matrix),np.max(test_matrix))

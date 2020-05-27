@@ -40,6 +40,7 @@ top_iids_logpopent = list(reversed(np.argsort(items_logpopent)))
 
 num_items = 20
 
+# items_representativeness = interactors.PopPlusEnt.get_items_popplusent(items_popularity,items_entropy)
 items_representativeness = interactors.MostRepresentative.get_items_representativeness(model.items_weights)
 # items_representativeness = interactors.HELF.get_items_helf(items_popularity,items_entropy,dsf.consumption_matrix.shape[0])
 # items_representativeness = interactors.Entropy0.get_items_entropy(dsf.consumption_matrix)

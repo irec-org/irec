@@ -6,7 +6,7 @@ from threadpoolctl import threadpool_limits
 import ctypes
 import scipy.spatial
 class OurMethod1(Interactor):
-    def __init__(self, alpha=0.2, stop=5, weight_method='stop',*args, **kwargs):
+    def __init__(self, alpha=0.2, stop=None, weight_method='change',*args, **kwargs):
         super().__init__(*args, **kwargs)
         self.alpha = alpha
         self.weight_method = weight_method

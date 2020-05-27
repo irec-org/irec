@@ -26,6 +26,13 @@ class LogPopEnt(Interactor):
         top_iids = list(reversed(np.argsort(items_logpopent)))[:self.get_iterations()]
 
         fig, ax = plt.subplots()
+        ax.hist(items_entropy,color='k')
+        ax.set_xlabel("$\log(Pop)\cdot Ent$")
+        ax.set_ylabel("#Items")
+        fig.savefig(os.path.join(self.DIRS['img'],"logpopent_"+self.get_name()+".png"))
+
+
+        fig, ax = plt.subplots()
         ax.scatter(items_entropy,items_popularity,marker="D",color='darkblue')
         ax.set_ylabel("Popularity")
         ax.set_xlabel("Entropy")

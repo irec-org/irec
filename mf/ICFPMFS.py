@@ -39,7 +39,7 @@ def _norm_sum_probabilities(x):
     # return scipy.special.logsumexp(x)
 
 class ICFPMFS(MF):
-    def __init__(self, iterations=50, var=1.2881, user_var=0.8514, item_var=0.9134, stop_criteria=0.0009, *args, **kwargs):
+    def __init__(self, iterations=100, var=1, user_var=1, item_var=1, stop_criteria=0.0009, *args, **kwargs):
         super().__init__(*args,**kwargs)
         self.iterations = iterations
         self.var = var
@@ -63,6 +63,7 @@ class ICFPMFS(MF):
         # self.item_var = np.mean(np.var(training_matrix,axis=0))
         # self.user_lambda = self.var/self.user_var
         # self.item_lambda = self.var/self.item_var
+        # self.var *= 60
         self.var = np.round(self.var,decimals)
         self.user_var = np.round(self.user_var,decimals)
         self.item_var = np.round(self.item_var,decimals)
@@ -136,13 +137,13 @@ class ICFPMFS(MF):
 
             predicted = self.predict(observed_ui)
            
-            # objective_value = _norm_sum_probabilities(scipy.stats.norm.pdf(training_matrix.data,predicted,self.var))\
-            #     + _norm_sum_probabilities(_apply_multivariate_normal(self.users_weights,np.zeros(self.num_lat),self.var*self.I))\
-            #     + _norm_sum_probabilities(_apply_multivariate_normal(self.items_weights,np.zeros(self.num_lat),self.var*self.I))
+            objective_value = _norm_sum_probabilities(scipy.stats.norm.pdf(training_matrix.data,predicted,self.var))\
+                + _norm_sum_probabilities(_apply_multivariate_normal(self.users_weights,np.zeros(self.num_lat),self.var*self.I))\
+                + _norm_sum_probabilities(_apply_multivariate_normal(self.items_weights,np.zeros(self.num_lat),self.var*self.I))
 
-            objective_value = np.sum((training_matrix.data - predicted)**2)/2 +\
-                self.user_lambda/2 * np.sum(np.linalg.norm(self.users_weights,axis=1)**2) +\
-                self.item_lambda/2 * np.sum(np.linalg.norm(self.items_weights,axis=1)**2)
+            # objective_value = np.sum((training_matrix.data - predicted)**2)/2 +\
+            #     self.user_lambda/2 * np.sum(np.linalg.norm(self.users_weights,axis=1)**2) +\
+            #     self.item_lambda/2 * np.sum(np.linalg.norm(self.items_weights,axis=1)**2)
 
             self.objective_values.append(objective_value)
 

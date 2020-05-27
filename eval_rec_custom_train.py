@@ -70,5 +70,6 @@ for history_rate in history_rates_to_train:
             
             me = MetricsEvaluator(name=recommender_model.get_name(),k=recommender_model.result_list_size,threshold=THRESHOLD)
             me.eval_metrics(recommender_model.results, ground_truth, items_popularity, items_distance, users_consumed_items)
+            print(me.metrics_mean)
 
             

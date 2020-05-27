@@ -53,6 +53,7 @@ class Entropy(Interactor):
         uids = self.test_users
         num_users = len(uids)
         items_entropy = self.get_items_entropy(self.train_consumption_matrix)
+        # items_entropy = np.power(items_entropy+1,items_entropy+1)
         fig, ax = plt.subplots()
         ax.hist(items_entropy,color='k')
         ax.set_xlabel("Entropy")
@@ -60,7 +61,6 @@ class Entropy(Interactor):
         fig.savefig(os.path.join(self.DIRS['img'],"entropy_"+self.get_name()+".png"))
         
         top_iids = list(reversed(np.argsort(items_entropy)))[:self.get_iterations()]
-
         for idx_uid in tqdm(range(num_users)):
             uid = uids[idx_uid]
             self.results[uid].extend(top_iids)

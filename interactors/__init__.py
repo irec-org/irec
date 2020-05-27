@@ -26,8 +26,10 @@ from .HELF import *
 from .PopPlusEnt import *
 from .EMostPopular import *
 from .DistinctPopular import *
+from .PPELPE import *
 
 INTERACTORS = {
+    'PPELPE': PPELPE,
     'Linear UCB (PMF)': LinearUCB,
     'LinUCB (MF)': LinUCB,
     'Most Popular': MostPopular,
@@ -45,7 +47,7 @@ INTERACTORS = {
     'AL Entropy': ALEntropy,
     'Entropy0': Entropy0,
     'HELF': HELF,
-    'PopPlusEnt': PopPlusEnt,
+    'Pop+Ent': PopPlusEnt,
     'Distinct Popular': DistinctPopular,
     'ε-Most Popular': EMostPopular,
     'Random': Random,

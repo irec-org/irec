@@ -35,7 +35,7 @@ if not is_spmatrix:
     pmf_model = mf.ICFPMF()
 else:
     pmf_model = mf.ICFPMFS()
-# pmf_model.load_var(dsf.train_consumption_matrix)
+pmf_model.load_var(dsf.train_consumption_matrix)
 
 metrics_names = ['precision','recall','hits','ild','epc','epd']
 metric_values = defaultdict(lambda:defaultdict(dict))
@@ -66,7 +66,9 @@ for ax,metric_name in zip(axs[[0,2],:].flatten(),metrics_names):
 
 for ax, metric_name in zip(axs[[1,3],:].flatten(),metrics_names):
     df = pd.DataFrame(metric_values[metric_name]).cumsum()
-    print(df)
+    if metric_name == 'hits':
+        print(metric_name)
+        print(df)
     ax.plot(df)
     ax.set_xlabel("Interactions")
     

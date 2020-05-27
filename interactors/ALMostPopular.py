@@ -13,9 +13,9 @@ class ALMostPopular(Interactor):
 
     def interact(self):
         super().interact()
-        uids = self.test_uids
+        uids = self.test_users
         num_items = self.train_consumption_matrix.shape[1]
-        items_popularity = MostPopular.get_items_popularity(self.train_consumption_matrix, uids, normalize = False)
+        items_popularity = MostPopular.get_items_popularity(self.train_consumption_matrix, normalize=False)
 
         top_iids = list(reversed(np.argsort(items_popularity)))[:self.get_iterations()]
         num_users = len(uids)

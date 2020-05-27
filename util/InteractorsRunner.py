@@ -64,7 +64,7 @@ class InteractorsRunner():
             else:
                 pmf_model = mf.ICFPMFS(name_prefix=dsf.base)
             print('Loading %s'%(pmf_model.__class__.__name__))
-            # pmf_model.load_var(dsf.train_consumption_matrix)
+            pmf_model.load_var(dsf.train_consumption_matrix)
             pmf_model = pmf_model.load()
             self.pmf_model = pmf_model
 
@@ -79,6 +79,7 @@ class InteractorsRunner():
                 ))):
             # print('Loading PMF')
             # mf_model = mf.PMF(name_prefix=dsf.base)
+            # mf_model.load_var(dsf.train_consumption_matrix)
             # mf_model = mf_model.load()
             # mf_model.items_weights
             print('Loading SVD')

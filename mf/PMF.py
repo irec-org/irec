@@ -8,6 +8,7 @@ from threadpoolctl import threadpool_limits
 sys.path.insert(0, os.path.abspath('..'))
 import ctypes
 import util.metrics as metrics
+from tqdm import tqdm
 
 from util import Saveable, run_parallel
 from mf import MF
@@ -74,8 +75,10 @@ class PMF(MF):
         last_items_weights = self.items_weights
         np.seterr('warn')
         predicted = self.predict(observed_ui)
-        for i in range(self.iterations):
-            print(f'[{i+1}/{self.iterations}]')
+
+        tq = tqdm(range(self.iterations))
+        for i in tq:
+            # print(f'[{i+1}/{self.iterations}]')
             error = scipy.sparse.csr_matrix((training_matrix.data - predicted,observed_ui),shape=training_matrix.shape)
             users_gradient = error @ (-self.items_weights) + user_lambda*self.users_weights
             items_gradient = error.T @ (-self.users_weights) + item_lambda*self.items_weights
@@ -95,13 +98,16 @@ class PMF(MF):
 
             rmse=metrics.rmse(training_matrix.data,predicted)
             objective_value = rmse
-            print("RMSE",rmse)
+            # print("RMSE",rmse)
             if objective_value > last_objective_value or np.fabs(objective_value - last_objective_value) <= self.stop_criteria:
                 print("Achieved convergence with %d iterations, saving %d iteration"%(i+1,i))
                 self.users_weights = last_users_weights
                 self.items_weights = last_items_weights
                 break
+
             last_objective_value = objective_value
             self.objective_value = objective_value
             last_users_weights = self.users_weights.copy()
             last_items_weights = self.items_weights.copy()
+
+            tq.set_description('cur={:.3f},last={:.3f}'.format(objective_value,last_objective_value))
