@@ -76,7 +76,7 @@ class PMF(MF):
         predicted = self.predict(observed_ui)
         for i in range(self.iterations):
             print(f'[{i+1}/{self.iterations}]')
-            error = scipy.sparse.csr_matrix((training_matrix.data - predicted,observed_ui))
+            error = scipy.sparse.csr_matrix((training_matrix.data - predicted,observed_ui),shape=training_matrix.shape)
             users_gradient = error @ (-self.items_weights) + user_lambda*self.users_weights
             items_gradient = error.T @ (-self.users_weights) + item_lambda*self.items_weights
 
