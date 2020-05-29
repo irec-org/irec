@@ -9,4 +9,7 @@ import scipy.sparse
 dsf = DatasetFormatter()
 dsf = dsf.load()
 
-util.InteractorsRunner(dsf).run_interactors()
+ir = util.InteractorsRunner(dsf)
+ir.select_interactors()
+ir.run_interactors()
+# ir.run_bases(['tr_te_yahoo_music','tr_te_good_books','tr_te_ml_10m'])

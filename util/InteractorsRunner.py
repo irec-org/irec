@@ -2,10 +2,11 @@ import inquirer
 import interactors
 import numpy as np
 import mf
+from util import DatasetFormatter
 
 class InteractorsRunner():
 
-    def __init__(self,dsf,interactors_classes=None):
+    def __init__(self,dsf=None,interactors_classes=None):
         self.dsf = dsf
         self.interactors_classes = interactors_classes
 
@@ -20,6 +21,13 @@ class InteractorsRunner():
         interactors_classes = list(map(lambda x:interactors.INTERACTORS[x],answers['interactors']))
         self.interactors_classes = interactors_classes
         return interactors_classes
+
+    def run_bases(self,bases):
+        for base in bases:
+            dsf = DatasetFormatter(base=base)
+            dsf = dsf.load()
+            self.dsf = dsf
+            self.run_interactors()
 
     def create_and_run_interactor(self,itr_class):
         dsf = self.dsf
@@ -51,7 +59,6 @@ class InteractorsRunner():
             itr.interact()
 
     def run_interactors(self):
-        self.select_interactors()
         dsf = self.dsf
         interactors_classes = self.interactors_classes
         is_spmatrix = dsf.is_spmatrix

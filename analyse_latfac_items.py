@@ -23,7 +23,7 @@ dsf = dsf.load()
 
 model_class=mf.MF_MODELS[model_name]
 model = model_class()
-if issubclass(model_class,mf.ICFPMF) or issubclass(model_class,mf.PMF):
+if issubclass(model_class,(mf.ICFPMF,mf.ICFPMFS,mf.PMF)):
     model.load_var(dsf.train_consumption_matrix)
 model.fit(dsf.train_consumption_matrix)
 
@@ -40,8 +40,10 @@ top_iids_logpopent = list(reversed(np.argsort(items_logpopent)))
 
 num_items = 20
 
-# items_representativeness = interactors.PopPlusEnt.get_items_popplusent(items_popularity,items_entropy)
 items_representativeness = interactors.MostRepresentative.get_items_representativeness(model.items_weights)
+# items_representativeness = interactors.PopPlusEnt.get_items_popplusent(items_popularity,items_entropy)
+# items_representativeness = interactors.PPELPE.get_items_ppelpe(items_popularity,items_entropy)
+# items_representativeness = interactors.MostRepresentative.get_items_representativeness(model.items_weights)
 # items_representativeness = interactors.HELF.get_items_helf(items_popularity,items_entropy,dsf.consumption_matrix.shape[0])
 # items_representativeness = interactors.Entropy0.get_items_entropy(dsf.consumption_matrix)
 # items_representativeness = interactors.MostPopular.get_items_popularity(dsf.consumption_matrix)

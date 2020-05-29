@@ -56,7 +56,7 @@ for i in answers['interactors']:
             metric_values[metric_name][i][j] = me.metrics_mean[metric_name]
         
 fig, axs = plt.subplots(nrows=4,ncols=3,figsize=(18,17))
-fig.suptitle(f"Top-{INTERACTION_SIZE} recommendation")
+fig.suptitle(f"Top-{INTERACTION_SIZE} recommendation, {dsf.PRETTY[dsf.base]}")
 for ax,metric_name in zip(axs[[0,2],:].flatten(),metrics_names):
     df = pd.DataFrame(metric_values[metric_name])
     ax.plot(df)
@@ -81,5 +81,5 @@ fig.legend(answers['interactors'],loc='lower center',
            ncol=6, mode="expand", borderaxespad=0,
            bbox_transform=fig.transFigure, fancybox=False, edgecolor="k")
 
-plt.savefig(f'img/plot_all_{INTERACTIONS}_{INTERACTION_SIZE}.png',bbox_inches='tight')
+plt.savefig(f'img/plot_all_{dsf.base}_{INTERACTIONS}_{INTERACTION_SIZE}.png',bbox_inches='tight')
 # plt.savefig(f'img/plot_all_{INTERACTIONS}_{INTERACTION_SIZE}.eps',bbox_inches='tight')

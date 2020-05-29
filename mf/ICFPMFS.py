@@ -55,23 +55,17 @@ class ICFPMFS(MF):
     
     def load_var(self, training_matrix):
         decimals = 4
-        # training_matrix = self.normalize_matrix(training_matrix)
-        self.var = np.mean(training_matrix.data**2) - np.mean(training_matrix.data)**2
-        self.user_var = np.mean([np.mean(i.data**2) - np.mean(i.data)**2 if i.getnnz()>0 else 0 for i in training_matrix])
-        self.item_var = np.mean([np.mean(i.data**2) - np.mean(i.data)**2 if i.getnnz()>0 else 0 for i in training_matrix.transpose()])
-        # self.user_var = np.mean(np.var(training_matrix,axis=1))
-        # self.item_var = np.mean(np.var(training_matrix,axis=0))
-        # self.user_lambda = self.var/self.user_var
-        # self.item_lambda = self.var/self.item_var
-        # self.var *= 60
-        self.var = np.round(self.var,decimals)
-        self.user_var = np.round(self.user_var,decimals)
-        self.item_var = np.round(self.item_var,decimals)
-        # self.user_lambda = np.round(self.user_lambda,decimals)
-        # self.item_lambda = np.round(self.item_lambda,decimals)
+        # self.var = np.mean(training_matrix.data**2) - np.mean(training_matrix.data)**2
+        # self.user_var = np.mean([np.mean(i.data**2) - np.mean(i.data)**2 if i.getnnz()>0 else 0 for i in training_matrix])
+        # self.item_var = np.mean([np.mean(i.data**2) - np.mean(i.data)**2 if i.getnnz()>0 else 0 for i in training_matrix.transpose()])
+
+        # self.var = np.round(self.var,decimals)
+        # self.user_var = np.round(self.user_var,decimals)
+        # self.item_var = np.round(self.item_var,decimals)
 
     def fit(self,training_matrix):
         super().fit()
+        train_uids = np.unique(training_matrix.tocoo().row)
         self.objective_values = []
         self.best=None
         decimals = 4
@@ -89,6 +83,13 @@ class ICFPMFS(MF):
         self.I = I = np.eye(self.num_lat)
         self.users_weights = np.random.multivariate_normal(np.zeros(self.num_lat),self.user_var*I,training_matrix.shape[0])
         self.items_weights = np.random.multivariate_normal(np.zeros(self.num_lat),self.item_var*I,training_matrix.shape[1])
+        # self.users_weights[~np.isin(list(range(self.users_weights.shape[0])), train_uids)] = np.ones(self.num_lat)
+
+        # self.users_weights = np.mean(training_matrix.data)*np.random.rand(num_users,self.num_lat)
+        # self.items_weights = np.mean(training_matrix.data)*np.random.rand(num_items,self.num_lat)
+        # self.users_weights = 0.1*np.random.multivariate_normal(np.zeros(self.num_lat),self.user_var*I,training_matrix.shape[0])
+        # self.items_weights = 0.1*np.random.multivariate_normal(np.zeros(self.num_lat),self.item_var*I,training_matrix.shape[1])
+
         self.users_observed_items = collections.defaultdict(list)
         self.items_observed_users = collections.defaultdict(list)
         self.users_observed_items_ratings = collections.defaultdict(list)
@@ -115,13 +116,14 @@ class ICFPMFS(MF):
         tq = tqdm(range(self.iterations))
         for i in tq:
             with threadpool_limits(limits=1, user_api='blas'):
-                for to_run in random.sample([1,2],2):
+                # for to_run in random.sample([1,2],2):
+                for to_run in [1,2]:
                     if to_run == 1:
                         self.users_means = np.zeros((num_users,self.num_lat))
                         self.users_covs = np.zeros((num_users,self.num_lat,self.num_lat))
-                        args = [(self_id,i,) for i in range(num_users)]
+                        args = [(self_id,i,) for i in train_uids]
                         results = run_parallel(self.compute_user_weight,args,use_tqdm=False)
-                        for uid, (mean, cov, weight) in enumerate(results):
+                        for uid, (mean, cov, weight) in zip(train_uids,results):
                             self.users_means[uid] = mean
                             self.users_covs[uid] = cov
                             self.users_weights[uid] = weight
@@ -135,49 +137,49 @@ class ICFPMFS(MF):
                             self.items_covs[iid] = cov
                             self.items_weights[iid] = weight
 
-            predicted = self.predict(observed_ui)
+        #     predicted = self.predict(observed_ui)
            
-            objective_value = _norm_sum_probabilities(scipy.stats.norm.pdf(training_matrix.data,predicted,self.var))\
-                + _norm_sum_probabilities(_apply_multivariate_normal(self.users_weights,np.zeros(self.num_lat),self.var*self.I))\
-                + _norm_sum_probabilities(_apply_multivariate_normal(self.items_weights,np.zeros(self.num_lat),self.var*self.I))
+        #     # objective_value = _norm_sum_probabilities(scipy.stats.norm.pdf(training_matrix.data,predicted,self.var))\
+        #     #     + _norm_sum_probabilities(_apply_multivariate_normal(self.users_weights,np.zeros(self.num_lat),self.var*self.I))\
+        #     #     + _norm_sum_probabilities(_apply_multivariate_normal(self.items_weights,np.zeros(self.num_lat),self.var*self.I))
 
-            # objective_value = np.sum((training_matrix.data - predicted)**2)/2 +\
-            #     self.user_lambda/2 * np.sum(np.linalg.norm(self.users_weights,axis=1)**2) +\
-            #     self.item_lambda/2 * np.sum(np.linalg.norm(self.items_weights,axis=1)**2)
+        #     objective_value = np.sum((training_matrix.data - predicted)**2)/2 +\
+        #         self.user_lambda/2 * np.sum(np.linalg.norm(self.users_weights,axis=1)**2) +\
+        #         self.item_lambda/2 * np.sum(np.linalg.norm(self.items_weights,axis=1)**2)
 
-            self.objective_values.append(objective_value)
+        #     self.objective_values.append(objective_value)
 
-            if self.best == None:
-                self.best = self.__deepcopy__()
-                best_objective_value = objective_value
-            else:
-                if objective_value < best_objective_value:
-                    self.best = self.__deepcopy__()
-                    best_objective_value = objective_value
+        #     if self.best == None:
+        #         self.best = self.__deepcopy__()
+        #         best_objective_value = objective_value
+        #     else:
+        #         if objective_value < best_objective_value:
+        #             self.best = self.__deepcopy__()
+        #             best_objective_value = objective_value
 
-            tq.set_description('cur={:.3f},best={:.3f}'.format(objective_value,best_objective_value))
-            tq.refresh()
+        #     tq.set_description('cur={:.3f},best={:.3f}'.format(objective_value,best_objective_value))
+        #     tq.refresh()
 
-            # predicted = self.predict(observed_ui)
-            # rmse=metrics.rmse(training_matrix.data,predicted)
-            # objective_value = rmse
-            # print("RMSE",rmse)
-            # if np.fabs(objective_value - last_objective_value) <= self.stop_criteria:
-            #     self.objective_value = objective_value
-            #     print("Achieved convergence with %d iterations"%(i+1))
-            #     break
-            # last_objective_value = objective_value
+        #     # predicted = self.predict(observed_ui)
+        #     # rmse=metrics.rmse(training_matrix.data,predicted)
+        #     # objective_value = rmse
+        #     # print("RMSE",rmse)
+        #     # if np.fabs(objective_value - last_objective_value) <= self.stop_criteria:
+        #     #     self.objective_value = objective_value
+        #     #     print("Achieved convergence with %d iterations"%(i+1))
+        #     #     break
+        #     # last_objective_value = objective_value
             
-            # sparse_predicted = self.get_sparse_predicted(observed_ui_pair)
-            # rmse=np.sqrt(np.mean((sparse_predicted - training_matrix.data)**2))
-            # objective_value = np.sum((training_matrix.data - sparse_predicted)**2)/2 +\
-            #     self.user_lambda/2 * np.sum(np.linalg.norm(self.users_weights,axis=1)**2) +\
-            #     self.item_lambda/2 * np.sum(np.linalg.norm(self.items_weights,axis=1)**2)
-            # print("Objective value",objective_value)
-            # #     self.objective_values.append(objective_value)
-            # print("RMSE",rmse)
-        self.__dict__.update(self.best.__dict__)
-        del self.best
+        #     # sparse_predicted = self.get_sparse_predicted(observed_ui_pair)
+        #     # rmse=np.sqrt(np.mean((sparse_predicted - training_matrix.data)**2))
+        #     # objective_value = np.sum((training_matrix.data - sparse_predicted)**2)/2 +\
+        #     #     self.user_lambda/2 * np.sum(np.linalg.norm(self.users_weights,axis=1)**2) +\
+        #     #     self.item_lambda/2 * np.sum(np.linalg.norm(self.items_weights,axis=1)**2)
+        #     # print("Objective value",objective_value)
+        #     # #     self.objective_values.append(objective_value)
+        #     # print("RMSE",rmse)
+        # self.__dict__.update(self.best.__dict__)
+        # del self.best
         del self.user_lambda
         del self.item_lambda
         del self.users_observed_items
@@ -210,6 +212,8 @@ class ICFPMFS(MF):
         mean = tmp.dot(self.items_weights[observed].T).dot(self.users_observed_items_ratings[uid])
         cov = tmp*self.var
         return mean, cov, np.random.multivariate_normal(mean,cov)
+        # return mean, cov, scipy.stats.multivariate_normal.pdf(self.users_weights[uid],mean,cov)
+        # return mean, cov, scipy.stats.multivariate_normal.pdf(np.random.multivariate_normal(mean,cov),mean,cov)
 
     @staticmethod
     def compute_item_weight(obj_id,iid):
@@ -222,6 +226,8 @@ class ICFPMFS(MF):
         mean = tmp.dot(self.users_weights[observed].T).dot(self.items_observed_users_ratings[iid])
         cov = tmp*self.var
         return mean, cov, np.random.multivariate_normal(mean,cov)
+        # return mean, cov, scipy.stats.multivariate_normal.pdf(self.items_weights[iid],mean,cov)
+        # return mean, cov, scipy.stats.multivariate_normal.pdf(np.random.multivariate_normal(mean,cov),mean,cov)
 
     def __deepcopy__(self):
         new = type(self)()

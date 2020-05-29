@@ -17,7 +17,9 @@ class DatasetFormatter(Saveable):
               'tr_te_ciao_dvd': 'Ciao DVD',
               'tr_te_amazon': 'Amazon Kindle Store',
               'tr_te_ml_10m': 'MovieLens 10M',
-              'tr_te_netflix': 'Netflix'}
+              'tr_te_netflix': 'Netflix',
+              'tr_te_yahoo_music': 'Yahoo Music',
+    }
 
     BASES_DIRS = {'ml_100k':'ml-100k/',
                   'ml_1m': 'ml-1m/',
@@ -26,7 +28,9 @@ class DatasetFormatter(Saveable):
                   'tr_te_ciao_dvd': 'Train-Test_Ciao-DVD/',
                   'tr_te_amazon': 'Train-Test_Amazon-Kindle-Store/',
                   'tr_te_ml_10m': 'Train-Test_ML-10M/',
-                  'tr_te_netflix': 'Train-Test_Netflix/'}
+                  'tr_te_netflix': 'Train-Test_Netflix/',
+                  'tr_te_yahoo_music': 'Train-Test_Yahoo-Music/',
+    }
                   # 'tr_te_netflix': 'Train-Test_Netflix/',}
 
     BASES_HANDLERS = {'ml_100k':'self.get_ml_100k()',
@@ -36,7 +40,9 @@ class DatasetFormatter(Saveable):
                       'tr_te_ciao_dvd': 'self.get_tr_te_ml_1m()',
                       'tr_te_amazon': 'self.get_tr_te_ml_1m()',
                       'tr_te_ml_10m': 'self.get_tr_te_ml_1m()',
-                      'tr_te_netflix': 'self.get_tr_te_netflix()'}
+                      'tr_te_netflix': 'self.get_tr_te_netflix()',
+                      'tr_te_yahoo_music': 'self.get_tr_te_ml_1m()',
+    }
     SELECTION_MODEL = {
         'users_train_test': {'train_size': 0.8,'test_consumes':120},
         'users_train_test_chrono': {'train_size': 0.8,'test_consumes':1}
@@ -44,7 +50,7 @@ class DatasetFormatter(Saveable):
     SELECTION_MODEL_HANDLERS = {'users_train_test': 'self.run_users_train_test()',
                                 'users_train_test_chrono': 'self.run_users_train_test_chrono()'}
     
-    def __init__(self,base='tr_te_ml_1m',
+    def __init__(self,base='ml_100k',
                  selection_model='users_train_test_chrono',
                  is_spmatrix=True,
                  selection_model_parameters={}, *args, **kwargs):
@@ -293,10 +299,10 @@ class DatasetFormatter(Saveable):
         self.num_consumes = len(df_cons)
 
         if self.is_spmatrix:
-            self.consumption_matrix = scipy.sparse.csr_matrix((df_cons.r,(df_cons.uid,df_cons.iid)),shape=(self.num_users,self.num_items),dtype=float)
-            self.train_consumption_matrix = scipy.sparse.csr_matrix((df_cons1.r,(df_cons1.uid,df_cons1.iid)),shape=(self.num_users,self.num_items),dtype=float)
-            self.test_consumption_matrix = scipy.sparse.csr_matrix((df_cons2.r,(df_cons2.uid,df_cons2.iid)),shape=(self.num_users,self.num_items),dtype=float)
-            self.consumption_time_matrix = scipy.sparse.csr_matrix((df_cons.t,(df_cons.uid,df_cons.iid)))
+            self.consumption_matrix = scipy.sparse.csr_matrix((df_cons.r,(df_cons.uid,df_cons.iid)),shape=(self.num_users,self.num_items),dtype=np.float32)
+            self.train_consumption_matrix = scipy.sparse.csr_matrix((df_cons1.r,(df_cons1.uid,df_cons1.iid)),shape=(self.num_users,self.num_items),dtype=np.float32)
+            self.test_consumption_matrix = scipy.sparse.csr_matrix((df_cons2.r,(df_cons2.uid,df_cons2.iid)),shape=(self.num_users,self.num_items),dtype=np.float32)
+            self.consumption_time_matrix = scipy.sparse.csr_matrix((df_cons.t,(df_cons.uid,df_cons.iid)),dtype=np.int32)
             self.users_start_time = df_cons.groupby('uid').min()['t'].to_numpy()
         else:
             self.consumption_matrix = np.nan_to_num(np.array(df_cons.pivot(index='uid', columns='iid', values = 'r')))

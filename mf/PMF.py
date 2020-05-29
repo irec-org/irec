@@ -25,6 +25,12 @@ class PMF(MF):
         self.momentum = momentum
         self.stop_criteria = stop_criteria
 
+    def get_user_lambda(self):
+        return self.var/self.user_var
+
+    def get_item_lambda(self):
+        return self.var/self.item_var
+
     def load_var(self, training_matrix):
         decimals = 4
         # if isinstance(training_matrix,scipy.sparse.spmatrix):

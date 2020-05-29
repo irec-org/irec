@@ -41,6 +41,8 @@ class LinUCB(Interactor):
         A = I.copy()
         result = []
 
+        num_correct_items = 0
+
         for i in range(self.interactions):
             mean = np.dot(np.linalg.inv(A),b)
             items_uncertainty = self.alpha*np.sqrt(np.sum(self.items_latent_factors[user_candidate_items].dot(np.linalg.inv(A)) * self.items_latent_factors[user_candidate_items],axis=1))
@@ -55,4 +57,9 @@ class LinUCB(Interactor):
                 A += max_item_latent_factors[:,None].dot(max_item_latent_factors[None,:])
                 if self.get_reward(uid,max_i) >= self.threshold:
                     b += self.get_reward(uid,max_i)*max_item_latent_factors
+                    num_correct_items += 1
+                    if self.exit_when_consumed_all and num_correct_items == self.users_num_correct_items[uid]:
+                        print(f"Exiting user {uid} with {len(result)} items in total and {num_correct_items} correct ones")
+                        return result
+
         return result

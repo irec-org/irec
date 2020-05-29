@@ -33,3 +33,7 @@ def run_parallel(func, args, use_tqdm=True):
 
 def sigmoid(x):
     return 1/(1+np.exp(-x))
+
+
+def create_train_test_with_results(consumption_matrix,results,rate):
+    pass

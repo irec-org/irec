@@ -1,25 +1,30 @@
 import numpy as np
 from tqdm import tqdm
-from . import Interactor, Entropy, MostPopular,LogPopEnt, PopPlusEnt
+from . import Interactor, Entropy, MostPopular, LogPopEnt, PopPlusEnt
 import matplotlib.pyplot as plt
 import scipy.stats
 import os
 
 class PPELPE(Interactor):
-    def __init__(self,*args, **kwargs):
-        super().__init__(*args, **kwargs)
-
+    @staticmethod
+    def get_items_ppelpe(items_popularity,items_entropy, do_sum=True):
+        items_popplusent = PopPlusEnt.get_items_popplusent(items_popularity,items_entropy)
+        items_logpopent = LogPopEnt.get_items_logpopent(items_popularity,items_entropy)
+        if do_sum:
+            res = items_popplusent + items_logpopent
+        else:
+            res = items_popplusent * items_logpopent
+        return res/np.max(res)
+    
     def interact(self):
         super().interact()
         uids = self.test_users
         items_entropy = Entropy.get_items_entropy(self.train_consumption_matrix)
         items_popularity = MostPopular.get_items_popularity(self.train_consumption_matrix,normalize=False)
-        items_popplusent = PopPlusEnt.get_items_popplusent(items_popularity,items_entropy)
-        items_logpopent = LogPopEnt.get_items_logpopent(items_popularity,items_entropy)
-
+        items_ppelpe = self.get_items_ppelpe(items_popularity,items_entropy)
         correlation = scipy.stats.pearsonr(items_entropy,items_popularity)[0]
 
-        top_iids = list(reversed(np.argsort(items_popplusent + items_logpopent)))[:self.get_iterations()]
+        top_iids = list(reversed(np.argsort(items_ppelpe)))[:self.get_iterations()]
 
         fig, ax = plt.subplots()
         ax.scatter(items_entropy,items_popularity,marker="D",color='darkblue')

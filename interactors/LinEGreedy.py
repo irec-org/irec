@@ -43,9 +43,11 @@ class LinEGreedy(Interactor):
         b = np.zeros(num_lat)
         A = self.init_A(num_lat)
         REC_ONE = False
-
+        num_user_candidate_items = len(user_candidate_items)
+        num_correct_items = 0
         for i in range(self.interactions):
-            for j in range(self.interaction_size):
+
+            for j in range(min(self.interaction_size,num_user_candidate_items)):
                 mean = np.dot(np.linalg.inv(A),b)
                 max_i = np.NAN
 
@@ -56,6 +58,7 @@ class LinEGreedy(Interactor):
 
                 user_candidate_items.remove(max_i)
                 result.append(max_i)
+                num_user_candidate_items -= 1
 
             for max_i in result[i*self.interaction_size:(i+1)*self.interaction_size]:
                 max_item_mean = self.items_weights[max_i]
@@ -63,5 +66,9 @@ class LinEGreedy(Interactor):
                 if self.get_reward(uid,max_i) >= self.threshold:
                     b += self.get_reward(uid,max_i)*max_item_mean
                     REC_ONE = True
+                    num_correct_items += 1
+                    if self.exit_when_consumed_all and num_correct_items == self.users_num_correct_items[uid]:
+                        print(f"Exiting user {uid} with {len(result)} items in total and {num_correct_items} correct ones")
+                        return result
 
         return result
