@@ -13,7 +13,7 @@ from tqdm import tqdm
 from util import Saveable, run_parallel
 from mf import MF
 class PMF(MF):
-    def __init__(self, iterations=200, var=100, user_var=0.1, item_var=0.1, learning_rate=1e-3, momentum=0.6, stop_criteria=0.0009, *args, **kwargs):
+    def __init__(self, iterations=200, var=0.1, user_var=1, item_var=1, learning_rate=1e-3, momentum=0.6, stop_criteria=0.0009, *args, **kwargs):
         super().__init__(*args,**kwargs)
         self.iterations = iterations
         self.var = var
@@ -38,20 +38,20 @@ class PMF(MF):
         #     training_matrix = training_matrix[non_empty_rows].A
         # training_matrix = self.normalize_matrix(training_matrix)
 
-        if not isinstance(training_matrix,scipy.sparse.spmatrix):
-            self.var = np.var(training_matrix)
-            self.user_var = np.mean(np.var(training_matrix,axis=1))
-            self.item_var = np.mean(np.var(training_matrix,axis=0))
-        else:
-            self.var = np.mean(training_matrix.data**2) - np.mean(training_matrix.data)**2
-            self.user_var = np.mean([np.mean(i.data**2) - np.mean(i.data)**2 if i.getnnz()>0 else 0 for i in training_matrix])
-            self.item_var = np.mean([np.mean(i.data**2) - np.mean(i.data)**2 if i.getnnz()>0 else 0 for i in training_matrix.transpose()])
+        # if not isinstance(training_matrix,scipy.sparse.spmatrix):
+        #     self.var = np.var(training_matrix)
+        #     self.user_var = np.mean(np.var(training_matrix,axis=1))
+        #     self.item_var = np.mean(np.var(training_matrix,axis=0))
+        # else:
+        #     self.var = np.mean(training_matrix.data**2) - np.mean(training_matrix.data)**2
+        #     self.user_var = np.mean([np.mean(i.data**2) - np.mean(i.data)**2 if i.getnnz()>0 else 0 for i in training_matrix])
+        #     self.item_var = np.mean([np.mean(i.data**2) - np.mean(i.data)**2 if i.getnnz()>0 else 0 for i in training_matrix.transpose()])
 
-        # self.user_lambda = self.var/self.user_var
-        # self.item_lambda = self.var/self.item_var
-        self.var = np.round(self.var,decimals)
-        self.user_var = np.round(self.user_var,decimals)
-        self.item_var = np.round(self.item_var,decimals)
+        # # self.user_lambda = self.var/self.user_var
+        # # self.item_lambda = self.var/self.item_var
+        # self.var = np.round(self.var,decimals)
+        # self.user_var = np.round(self.user_var,decimals)
+        # self.item_var = np.round(self.item_var,decimals)
         # self.user_lambda = np.round(self.user_lambda,decimals)
         # self.item_lambda = np.round(self.item_lambda,decimals)
 

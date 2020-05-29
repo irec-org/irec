@@ -34,32 +34,37 @@ class OurMethod1(interactors.Interactor):
             args = [(self_id,int(uid),) for uid in uids]
             results = util.run_parallel(self.interact_user,args)
 
-        users_global_model_weights = dict()
-        for i, (user_result, global_model_weights) in enumerate(results):
-            self.results[uids[i]] = user_result
-            users_global_model_weights[uids[i]] = global_model_weights
+        if self.exit_when_consumed_all:
+            for i, user_result in enumerate(results):
+                self.results[uids[i]] = user_result
+        else:
+            users_global_model_weights = dict()
 
-        # users_global_model_weights=np.array(list(users_global_model_weights.values()))
+            for i, (user_result, global_model_weights) in enumerate(results):
+                self.results[uids[i]] = user_result
+                users_global_model_weights[uids[i]] = global_model_weights
+
+            users_global_model_weights=np.array(list(users_global_model_weights.values()))
 
 
-        # fig, ax = plt.subplots()
-        # ax.errorbar(np.arange(users_global_model_weights.shape[1])+1,
-        #             y=np.mean(users_global_model_weights,axis=0),
-        #             yerr=np.std(users_global_model_weights,axis=0), label= '$\overline{x}$ and $s$',marker='.',color='k',
-        #             capsize=3)
-        # ax.plot(np.arange(users_global_model_weights.shape[1])+1,
-        #         np.min(users_global_model_weights,axis=0), label='Min weight',
-        #         color='green'
-        # )
-        # ax.plot(np.arange(users_global_model_weights.shape[1])+1,
-        #         np.max(users_global_model_weights,axis=0), label='Max weight',
-        #         color='red',
-        # )
-        # ax.set_xlabel("Interaction $t$")
-        # ax.set_ylabel("Weight $\Phi_{t}$")
-        # ax.set_xlim(1,users_global_model_weights.shape[1])
-        # ax.legend()
-        # fig.savefig(os.path.join(self.DIRS['img'],"weights_"+self.get_name()+".png"))
+            fig, ax = plt.subplots()
+            ax.errorbar(np.arange(users_global_model_weights.shape[1])+1,
+                        y=np.mean(users_global_model_weights,axis=0),
+                        yerr=np.std(users_global_model_weights,axis=0), label= '$\overline{x}$ and $s$',marker='.',color='k',
+                        capsize=3)
+            ax.plot(np.arange(users_global_model_weights.shape[1])+1,
+                    np.min(users_global_model_weights,axis=0), label='Min weight',
+                    color='green'
+            )
+            ax.plot(np.arange(users_global_model_weights.shape[1])+1,
+                    np.max(users_global_model_weights,axis=0), label='Max weight',
+                    color='red',
+            )
+            ax.set_xlabel("Interaction $t$")
+            ax.set_ylabel("Weight $\Phi_{t}$")
+            ax.set_xlim(1,users_global_model_weights.shape[1])
+            ax.legend()
+            fig.savefig(os.path.join(self.DIRS['img'],"weights_"+self.get_name()+".png"))
 
         self.save_results()
 
@@ -154,4 +159,8 @@ class OurMethod1(interactors.Interactor):
 
                     
             # old_mean = mean.copy()
-        return result, global_model_weights
+
+        if self.exit_when_consumed_all:
+            return result
+        else:
+            return result, global_model_weights

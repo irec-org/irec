@@ -39,7 +39,7 @@ def _norm_sum_probabilities(x):
     # return scipy.special.logsumexp(x)
 
 class ICFPMFS(MF):
-    def __init__(self, iterations=100, var=1, user_var=1, item_var=1, stop_criteria=0.0009, *args, **kwargs):
+    def __init__(self, iterations=100, var=10, user_var=1, item_var=1, stop_criteria=0.0009, *args, **kwargs):
         super().__init__(*args,**kwargs)
         self.iterations = iterations
         self.var = var
@@ -137,49 +137,49 @@ class ICFPMFS(MF):
                             self.items_covs[iid] = cov
                             self.items_weights[iid] = weight
 
-        #     predicted = self.predict(observed_ui)
+            predicted = self.predict(observed_ui)
            
-        #     # objective_value = _norm_sum_probabilities(scipy.stats.norm.pdf(training_matrix.data,predicted,self.var))\
-        #     #     + _norm_sum_probabilities(_apply_multivariate_normal(self.users_weights,np.zeros(self.num_lat),self.var*self.I))\
-        #     #     + _norm_sum_probabilities(_apply_multivariate_normal(self.items_weights,np.zeros(self.num_lat),self.var*self.I))
+            # objective_value = _norm_sum_probabilities(scipy.stats.norm.pdf(training_matrix.data,predicted,self.var))\
+            #     + _norm_sum_probabilities(_apply_multivariate_normal(self.users_weights,np.zeros(self.num_lat),self.var*self.I))\
+            #     + _norm_sum_probabilities(_apply_multivariate_normal(self.items_weights,np.zeros(self.num_lat),self.var*self.I))
 
-        #     objective_value = np.sum((training_matrix.data - predicted)**2)/2 +\
-        #         self.user_lambda/2 * np.sum(np.linalg.norm(self.users_weights,axis=1)**2) +\
-        #         self.item_lambda/2 * np.sum(np.linalg.norm(self.items_weights,axis=1)**2)
+            objective_value = np.sum((training_matrix.data - predicted)**2)/2 +\
+                self.user_lambda/2 * np.sum(np.linalg.norm(self.users_weights,axis=1)**2) +\
+                self.item_lambda/2 * np.sum(np.linalg.norm(self.items_weights,axis=1)**2)
 
-        #     self.objective_values.append(objective_value)
+            self.objective_values.append(objective_value)
 
-        #     if self.best == None:
-        #         self.best = self.__deepcopy__()
-        #         best_objective_value = objective_value
-        #     else:
-        #         if objective_value < best_objective_value:
-        #             self.best = self.__deepcopy__()
-        #             best_objective_value = objective_value
+            if self.best == None:
+                self.best = self.__deepcopy__()
+                best_objective_value = objective_value
+            else:
+                if objective_value < best_objective_value:
+                    self.best = self.__deepcopy__()
+                    best_objective_value = objective_value
 
-        #     tq.set_description('cur={:.3f},best={:.3f}'.format(objective_value,best_objective_value))
-        #     tq.refresh()
+            tq.set_description('cur={:.3f},best={:.3f}'.format(objective_value,best_objective_value))
+            tq.refresh()
 
-        #     # predicted = self.predict(observed_ui)
-        #     # rmse=metrics.rmse(training_matrix.data,predicted)
-        #     # objective_value = rmse
-        #     # print("RMSE",rmse)
-        #     # if np.fabs(objective_value - last_objective_value) <= self.stop_criteria:
-        #     #     self.objective_value = objective_value
-        #     #     print("Achieved convergence with %d iterations"%(i+1))
-        #     #     break
-        #     # last_objective_value = objective_value
+            # predicted = self.predict(observed_ui)
+            # rmse=metrics.rmse(training_matrix.data,predicted)
+            # objective_value = rmse
+            # print("RMSE",rmse)
+            # if np.fabs(objective_value - last_objective_value) <= self.stop_criteria:
+            #     self.objective_value = objective_value
+            #     print("Achieved convergence with %d iterations"%(i+1))
+            #     break
+            # last_objective_value = objective_value
             
-        #     # sparse_predicted = self.get_sparse_predicted(observed_ui_pair)
-        #     # rmse=np.sqrt(np.mean((sparse_predicted - training_matrix.data)**2))
-        #     # objective_value = np.sum((training_matrix.data - sparse_predicted)**2)/2 +\
-        #     #     self.user_lambda/2 * np.sum(np.linalg.norm(self.users_weights,axis=1)**2) +\
-        #     #     self.item_lambda/2 * np.sum(np.linalg.norm(self.items_weights,axis=1)**2)
-        #     # print("Objective value",objective_value)
-        #     # #     self.objective_values.append(objective_value)
-        #     # print("RMSE",rmse)
-        # self.__dict__.update(self.best.__dict__)
-        # del self.best
+            # sparse_predicted = self.get_sparse_predicted(observed_ui_pair)
+            # rmse=np.sqrt(np.mean((sparse_predicted - training_matrix.data)**2))
+            # objective_value = np.sum((training_matrix.data - sparse_predicted)**2)/2 +\
+            #     self.user_lambda/2 * np.sum(np.linalg.norm(self.users_weights,axis=1)**2) +\
+            #     self.item_lambda/2 * np.sum(np.linalg.norm(self.items_weights,axis=1)**2)
+            # print("Objective value",objective_value)
+            # #     self.objective_values.append(objective_value)
+            # print("RMSE",rmse)
+        self.__dict__.update(self.best.__dict__)
+        del self.best
         del self.user_lambda
         del self.item_lambda
         del self.users_observed_items
