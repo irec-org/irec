@@ -6,7 +6,7 @@ from collections import defaultdict
 import util
 import ctypes
 
-class ItemKNN(Recommender):
+class UserKNN(Recommender):
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
         pass
@@ -23,11 +23,11 @@ class ItemKNN(Recommender):
         self.sim_matrix[self.sim_matrix==0] = 0.001
 
         self.users_similar_users = dict()
-        for uid in range(train_matrix.shape[1]):
+        for uid in range(train_matrix.shape[0]):
             top_uids = np.argsort(self.sim_matrix[uid])[::-1]
             self.users_similar_users[uid] = top_uids[top_uids != uid][:self.num_neighbors]
         
-        self.users_ratings_mean = np.zeros(train_matrix.shape[1])
+        self.users_ratings_mean = np.zeros(train_matrix.shape[0])
 
         for uid in range(train_matrix.shape[0]):
             self.users_ratings_mean[uid] = np.mean(train_matrix[uid,:].data)

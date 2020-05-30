@@ -29,13 +29,13 @@ from .DistinctPopular import *
 from .PPELPE import *
 
 INTERACTORS = {
-    'Linear UCB (PMF)': LinearUCB,
-    'LinUCB (MF)': LinUCB,
-    'Most Popular': MostPopular,
-    'PPELPE': PPELPE,
     'OurMethod1': OurMethod1,
-    'UCB-Learner (MF)': UCBLearner,
+    'Most Popular': MostPopular,
+    'Linear UCB (PMF)': LinearUCB,
     'Linear ε-Greedy (MF)': LinEGreedy,
+    'LinUCB (MF)': LinUCB,
+    'PPELPE': PPELPE,
+    'UCB-Learner (MF)': UCBLearner,
     'GLM-UCB (PMF)': GLM_UCB,
     'TS': ThompsonSampling,
     'Linear ε-Greedy (PMF)': LinearEGreedy,

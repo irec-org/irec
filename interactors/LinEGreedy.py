@@ -23,7 +23,11 @@ class LinEGreedy(Interactor):
             args = [(self_id,int(uid),) for uid in uids]
             results = util.run_parallel(self.interact_user,args)
         for i, user_result in enumerate(results):
-            self.results[uids[i]] = user_result
+            if not self.results_save_relevants:
+                self.results[uids[i]] = user_result
+            else:
+                self.results[uids[i]] = user_result[np.isin(user_result,np.nonzero(self.test_consumption_matrix[uids[i]].A.flatten())[0])]
+
         self.save_results()
 
     def init_A(self,num_lat):
@@ -39,36 +43,39 @@ class LinEGreedy(Interactor):
         I = np.eye(num_lat)
 
         result = []
-        user_candidate_items = list(range(len(self.items_weights)))
+        user_candidate_items = np.array(list(range(len(self.items_weights))))
         b = np.zeros(num_lat)
         A = self.init_A(num_lat)
         REC_ONE = False
         num_user_candidate_items = len(user_candidate_items)
         num_correct_items = 0
         for i in range(self.interactions):
+            # for j in range(min(self.interaction_size,num_user_candidate_items)):
+            mean = np.dot(np.linalg.inv(A),b)
+            max_i = np.NAN
 
-            for j in range(min(self.interaction_size,num_user_candidate_items)):
-                mean = np.dot(np.linalg.inv(A),b)
-                max_i = np.NAN
+            items_score = mean @ self.items_weights[user_candidate_items].T
+            rand = np.random.rand(min(self.interaction_size,num_user_candidate_items))
+            rand = np.where(self.epsilon>rand, True, False) 
+            randind= random.sample(list(range(len(user_candidate_items))),k=np.count_nonzero(rand))
+            items_score[randind] = np.inf
 
-                if not REC_ONE or not(self.epsilon < np.random.rand()):
-                    max_i = random.choice(user_candidate_items)
-                else:
-                    max_i = user_candidate_items[np.argmax(mean[None,:] @ self.items_weights[user_candidate_items].T)]
-
-                user_candidate_items.remove(max_i)
-                result.append(max_i)
-                num_user_candidate_items -= 1
+            best_items = user_candidate_items[np.argsort(items_score)[::-1]][:self.interaction_size]
+            best_items = best_items[::-1] # random itens last, NDCG DCG will benefit from this
+                    
+            user_candidate_items = user_candidate_items[~np.isin(user_candidate_items,best_items)]
+            result.extend(best_items)
 
             for max_i in result[i*self.interaction_size:(i+1)*self.interaction_size]:
                 max_item_mean = self.items_weights[max_i]
                 A += max_item_mean[:,None].dot(max_item_mean[None,:])
+                num_user_candidate_items -= 1
                 if self.get_reward(uid,max_i) >= self.threshold:
                     b += self.get_reward(uid,max_i)*max_item_mean
                     REC_ONE = True
                     num_correct_items += 1
                     if self.exit_when_consumed_all and num_correct_items == self.users_num_correct_items[uid]:
                         print(f"Exiting user {uid} with {len(result)} items in total and {num_correct_items} correct ones")
-                        return result
+                        return np.array(result)
 
-        return result
+        return np.array(result)

@@ -10,8 +10,12 @@ import pickle
 import json
 
 class Interactor(Saveable):
-    def __init__(self, train_consumption_matrix=None, test_consumption_matrix=None, interactions=24, interaction_size=5, threshold=0.0001,
-                 exit_when_consumed_all=False, *args, **kwargs):
+    # def __init__(self, train_consumption_matrix=None, test_consumption_matrix=None, interactions=5*6*10*4*2, interaction_size=5, threshold=0.0001,
+    #              exit_when_consumed_all=True, results_save_relevants=True,
+    #              *args, **kwargs):
+    def __init__(self, train_consumption_matrix=None, test_consumption_matrix=None, interactions=100, interaction_size=5, threshold=0.0001,
+                 exit_when_consumed_all=False, results_save_relevants=False,
+                 *args, **kwargs):
         super().__init__(*args, **kwargs)
         # self.consumption_matrix = consumption_matrix
         # self.highest_value = max(np.max(train_matrix),np.max(test_matrix))
@@ -24,6 +28,7 @@ class Interactor(Saveable):
         self.train_consumption_matrix = train_consumption_matrix
         self.test_consumption_matrix = test_consumption_matrix
         self.exit_when_consumed_all = exit_when_consumed_all
+        self.results_save_relevants = results_save_relevants
 
     @property
     def test_consumption_matrix(self):
@@ -68,7 +73,7 @@ class Interactor(Saveable):
         pass
 
     def filter_parameters(self,parameters):
-        return super().filter_parameters({k: v for k, v in parameters.items() if k not in ['highest_value','lowest_value','threshold','is_spmatrix','exit_when_consumed_all']})
+        return super().filter_parameters({k: v for k, v in parameters.items() if k not in ['highest_value','lowest_value','threshold','is_spmatrix','exit_when_consumed_all','results_save_relevants']})
 
     # @staticmethod
     # def json_entry_save_format(uid, items):

@@ -1,5 +1,5 @@
 import numpy as np
-from tqdm import tqdm
+from tqdm import tqdm, trange
 from . import Interactor
 import os
 import random
@@ -31,13 +31,16 @@ class ThompsonSampling(Interactor):
             self.betas += np.count_nonzero(self.train_consumption_matrix<self.threshold,
                                            axis=0)
         else:
-            self.alphas += np.sum(self.train_consumption_matrix>=self.threshold,
+            a = np.sum(self.train_consumption_matrix>=self.threshold,
                                             axis=0).A.flatten()
-            self.betas += np.sum(self.train_consumption_matrix<self.threshold,
-                                           axis=0).A.flatten()
-            print(self.alphas)
+            self.alphas += a
+            self.betas += self.train_consumption_matrix.shape[0] - a
+            del a
+        #     print(self.alphas)
 
-        for i in tqdm(range(num_users*self.interactions)):
+        # print("WQEWQ")
+        for i in trange(num_users*self.interactions):
+
             uid = random.sample(available_users,k=1)[0]
 
             # best_item = np.argmax([self.beta_distributions[item].rvs() for item in range(num_items)])

@@ -7,6 +7,7 @@ import ctypes
 import scipy.spatial
 import matplotlib.pyplot as plt
 import os
+import pickle
 class OurMethod1(interactors.Interactor):
     def __init__(self, alpha=1.0, stop=None, weight_method='change',*args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -36,12 +37,18 @@ class OurMethod1(interactors.Interactor):
 
         if self.exit_when_consumed_all:
             for i, user_result in enumerate(results):
-                self.results[uids[i]] = user_result
+                if not self.results_save_relevants:
+                    self.results[uids[i]] = user_result
+                else:
+                    self.results[uids[i]] = user_result[np.isin(user_result,np.nonzero(self.test_consumption_matrix[uids[i]].A.flatten())[0])]
         else:
             users_global_model_weights = dict()
 
             for i, (user_result, global_model_weights) in enumerate(results):
-                self.results[uids[i]] = user_result
+                if not self.results_save_relevants:
+                    self.results[uids[i]] = user_result
+                else:
+                    self.results[uids[i]] = user_result[np.isin(user_result,np.nonzero(self.test_consumption_matrix[uids[i]].A.flatten())[0])]
                 users_global_model_weights[uids[i]] = global_model_weights
 
             users_global_model_weights=np.array(list(users_global_model_weights.values()))
@@ -65,6 +72,8 @@ class OurMethod1(interactors.Interactor):
             ax.set_xlim(1,users_global_model_weights.shape[1])
             ax.legend()
             fig.savefig(os.path.join(self.DIRS['img'],"weights_"+self.get_name()+".png"))
+            with open(os.path.join(self.DIRS['result'],"weights_"+self.get_name()+".pickle"),'wb') as f:
+                pickle.dump(users_global_model_weights,f)
 
         self.save_results()
 
@@ -108,6 +117,7 @@ class OurMethod1(interactors.Interactor):
         global_model_weights = []
         num_correct_items = 0
         for i in range(self.interactions):
+            
             user_latent_factors = np.dot(np.linalg.inv(A),b)
             user_latent_factors_history = np.vstack([user_latent_factors_history,user_latent_factors])
             global_model_weight = self.get_global_model_weight(user_latent_factors_history,
@@ -155,12 +165,12 @@ class OurMethod1(interactors.Interactor):
                     num_correct_items += 1
                     if self.exit_when_consumed_all and num_correct_items == self.users_num_correct_items[uid]:
                         print(f"Exiting user {uid} with {len(result)} items in total and {num_correct_items} correct ones")
-                        return result, global_model_weights
+                        return np.array(result)
 
                     
             # old_mean = mean.copy()
 
         if self.exit_when_consumed_all:
-            return result
+            return np.array(result)
         else:
-            return result, global_model_weights
+            return np.array(result), global_model_weights

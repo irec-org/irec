@@ -36,9 +36,9 @@ for history_rate in history_rates_to_train:
             interactors.OurMethod1,
     ]:
         interactor_model = interactor_class(
-            name_prefix=dsf.base,
-            interactions=dsf.num_items,
-            interaction_size=1)
+            name_prefix=dsf.base)
+            # interactions=dsf.num_items,
+            # interaction_size=1)
             # interactions=100,
             # interaction_size=5)
 

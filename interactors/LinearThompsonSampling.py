@@ -8,30 +8,30 @@ from numba import jit
 
 
 @jit(nopython=True)
-def _numba_multivariate_normal():
-
-    pass
+def _central_limit_theorem(k):
+    p = len(k)
+    x = (np.sum(k) - p/2)/(np.sqrt(p/12))
+    return x
 
 @jit(nopython=True)
-def _compute_rewards(p, user_candidate_items,items_means, items_covs):
-    max_i = np.NAN
-    max_q = np.NAN
-    max_e_reward = np.NINF
-    for item in user_candidate_items:
+def _numba_multivariate_normal(mean,cov):
+    n = len(mean)
+    cov_eig = np.linalg.eig(cov)
+    x = np.zeros(n)
+    for i in range(n):
+        x[i] = _central_limit_theorem(np.random.uniform(0,1,20000)) # best parameter is 20000 in terms of speed and accuracy in distribution sampling
+    return ((np.diag(cov_eig[0])**(0.5)) @ cov_eig[1].T @ x)+mean
+
+@jit(nopython=True)
+def _sample_items_weights(user_candidate_items, items_means, items_covs):
+    n= len(user_candidate_items)
+    num_lat = items_means.shape[1]
+    qs = np.zeros((n,num_lat))
+    for i, item in enumerate(user_candidate_items):
         item_mean = items_means[item]
         item_cov = items_covs[item]
-        q = np.random.multivariate_normal(item_mean,item_cov)
-        e_reward = p @ q
-        if e_reward > max_e_reward:
-            max_i = item
-            max_q = q
-            max_e_reward = e_reward
-    return max_i, max_q, max_e_reward
-    # user_candidate_items.remove(max_i)
-    # tmp_max_qs[max_i]=max_q
-    # result.append(max_i)
-
-
+        qs[i] = _numba_multivariate_normal(item_mean,item_cov)
+    return qs
 
 class LinearThompsonSampling(ICF):
     def __init__(self,*args, **kwargs):
@@ -53,6 +53,7 @@ class LinearThompsonSampling(ICF):
             self.results[uids[i]] = user_result
         self.save_results()
 
+
     @staticmethod
     def interact_user(obj_id, uid):
         self = ctypes.cast(obj_id, ctypes.py_object).value
@@ -62,38 +63,35 @@ class LinearThompsonSampling(ICF):
         num_lat = len(self.items_means[0])
         I = np.eye(num_lat)
 
-        user_candidate_items = list(range(len(self.items_means)))
+        user_candidate_items = np.array(list(range(len(self.items_means))))
         # get number of latent factors 
         b = np.zeros(num_lat)
         A = self.user_lambda*I
         result = []
+
+        num_correct_items = 0
         for i in range(self.interactions):
             tmp_max_qs = dict()
             mean = np.dot(np.linalg.inv(A),b)
             cov = np.linalg.inv(A)*self.var
             p = np.random.multivariate_normal(mean,cov)
+            qs = _sample_items_weights(user_candidate_items,self.items_means, self.items_covs)
 
-            for j in range(self.interaction_size):
-                max_i = np.NAN
-                max_q = np.NAN
-                max_e_reward = np.NINF
-                for item in user_candidate_items:
-                    item_mean = self.items_means[item]
-                    item_cov = self.items_covs[item]
-                    q = np.random.multivariate_normal(item_mean,item_cov)
-                    e_reward = p @ q
-                    if e_reward > max_e_reward:
-                        max_i = item
-                        max_q = q
-                        max_e_reward = e_reward
-                user_candidate_items.remove(max_i)
-                tmp_max_qs[max_i]=max_q
-                result.append(max_i)
+            items_score = p @ qs
+            best_items = user_candidate_items[np.argsort(items_score)[::-1]][:self.interaction_size]
+
+            user_candidate_items = user_candidate_items[~np.isin(user_candidate_items,best_items)]
+            result.extend(best_items)
             
-            # for item in result[i*self.interaction_size:(i+1)*self.interaction_size]:
-                max_q = tmp_max_qs[max_i]
+            for item in result[i*self.interaction_size:(i+1)*self.interaction_size]:
+                max_q = qs[item == user_candidate_items]
                 A += max_q[:,None].dot(max_q[None,:])
                 if self.get_reward(uid,max_i) >= self.threshold:
                     b += self.get_reward(uid,max_i)*max_q
+                    num_correct_items += 1
+                    if self.exit_when_consumed_all and num_correct_items == self.users_num_correct_items[uid]:
+                        print(f"Exiting user {uid} with {len(result)} items in total and {num_correct_items} correct ones")
+                        return np.array(result)
+
                     
         return result

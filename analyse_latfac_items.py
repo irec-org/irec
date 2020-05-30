@@ -22,10 +22,11 @@ dsf = DatasetFormatter()
 dsf = dsf.load()
 
 model_class=mf.MF_MODELS[model_name]
-model = model_class()
+model = model_class(name_prefix=dsf.base)
 if issubclass(model_class,(mf.ICFPMF,mf.ICFPMFS,mf.PMF)):
     model.load_var(dsf.train_consumption_matrix)
-model.fit(dsf.train_consumption_matrix)
+# model.fit(dsf.train_consumption_matrix)
+model = model.load()
 
 print(f"Using {model_name} in {dsf.base} dataset with {dsf.selection_model} selection model")
 
@@ -71,11 +72,12 @@ for i in range(num_items):
     #                                                   item_pop,item_rank_pop,
     #                                                   item_ent,item_rank_ent,
     #                                                   item_logpopent,item_rank_logpopent),sep='\t')
-    table.append(("{}\t{:.2f}({})\t{}({})\t{:.2f}({})\t{:.2f}({})".format(item,
+    table.append(("{}({:.2f})\t{:.2f}({})\t{}({})\t{:.2f}({})\t{:.2f}({})".format(item,
+                                                        np.mean(dsf.consumption_matrix[:,item].data),
                                                       item_rep,item_rank_rep,
                                                       item_pop,item_rank_pop,
                                                       item_ent,item_rank_ent,
                                                       item_logpopent,item_rank_logpopent)).split('\t'))
 
-print(tabulate(table, headers=['Item ID','Representativeness(Rank)','Popularity(Rank)[c:%.2f]'%(rep_pop_corr),
+print(tabulate(table, headers=['Item ID(Rat. mean)','Representativeness(Rank)','Popularity(Rank)[c:%.2f]'%(rep_pop_corr),
                                'Entropy(Rank)[c:%.2f]'%(rep_ent_corr),'LogPopEnt(Rank)[c:%.2f]'%(rep_logpopent_corr)]))

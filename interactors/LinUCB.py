@@ -24,7 +24,10 @@ class LinUCB(Interactor):
             args = [(self_id,int(uid),) for uid in uids]
             results = util.run_parallel(self.interact_user,args)
         for i, user_result in enumerate(results):
-            self.results[uids[i]] = user_result
+            if not self.results_save_relevants:
+                self.results[uids[i]] = user_result
+            else:
+                self.results[uids[i]] = user_result[np.isin(user_result,np.nonzero(self.test_consumption_matrix[uids[i]].A.flatten())[0])]
 
         self.save_results()
 
@@ -60,6 +63,6 @@ class LinUCB(Interactor):
                     num_correct_items += 1
                     if self.exit_when_consumed_all and num_correct_items == self.users_num_correct_items[uid]:
                         print(f"Exiting user {uid} with {len(result)} items in total and {num_correct_items} correct ones")
-                        return result
+                        return np.array(result)
 
-        return result
+        return np.array(result)

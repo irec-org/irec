@@ -38,8 +38,15 @@ def _norm_sum_probabilities(x):
     return np.sum(-np.log(x))
     # return scipy.special.logsumexp(x)
 
+def _norm_ratings(x,highest_value,lowest_value):
+    return 2*(x - lowest_value)/(highest_value - lowest_value) - 1
+    
+
+def _unnorm_ratings(x,highest_value,lowest_value):
+    return (x+1)/2 * (highest_value - lowest_value) + lowest_value
+
 class ICFPMFS(MF):
-    def __init__(self, iterations=100, var=10, user_var=1, item_var=1, stop_criteria=0.0009, *args, **kwargs):
+    def __init__(self, iterations=20, var=0.05, user_var=0.01, item_var=0.01, stop_criteria=0.0009, *args, **kwargs):
         super().__init__(*args,**kwargs)
         self.iterations = iterations
         self.var = var
@@ -71,6 +78,8 @@ class ICFPMFS(MF):
         decimals = 4
         self.user_lambda = self.var/self.user_var
         self.item_lambda = self.var/self.item_var
+        self.r_mean = np.mean(training_matrix.data)
+        # self.r_mean = np.
         self_id = id(self)
         # training_matrix = self.normalize_matrix(training_matrix)
 
@@ -78,7 +87,7 @@ class ICFPMFS(MF):
         num_users = training_matrix.shape[0]
         num_items = training_matrix.shape[1]
         self.lowest_value = lowest_value = np.min(training_matrix)
-        highest_value = np.max(training_matrix)
+        self.highest_value = highest_value = np.max(training_matrix)
         self.observed_ui = observed_ui = (training_matrix.tocoo().row,training_matrix.tocoo().col) # itens observed by some user
         self.I = I = np.eye(self.num_lat)
         self.users_weights = np.random.multivariate_normal(np.zeros(self.num_lat),self.user_var*I,training_matrix.shape[0])
@@ -139,47 +148,51 @@ class ICFPMFS(MF):
 
             predicted = self.predict(observed_ui)
            
-            # objective_value = _norm_sum_probabilities(scipy.stats.norm.pdf(training_matrix.data,predicted,self.var))\
-            #     + _norm_sum_probabilities(_apply_multivariate_normal(self.users_weights,np.zeros(self.num_lat),self.var*self.I))\
-            #     + _norm_sum_probabilities(_apply_multivariate_normal(self.items_weights,np.zeros(self.num_lat),self.var*self.I))
-
-            objective_value = np.sum((training_matrix.data - predicted)**2)/2 +\
-                self.user_lambda/2 * np.sum(np.linalg.norm(self.users_weights,axis=1)**2) +\
-                self.item_lambda/2 * np.sum(np.linalg.norm(self.items_weights,axis=1)**2)
-
-            self.objective_values.append(objective_value)
-
-            if self.best == None:
-                self.best = self.__deepcopy__()
-                best_objective_value = objective_value
-            else:
-                if objective_value < best_objective_value:
-                    self.best = self.__deepcopy__()
-                    best_objective_value = objective_value
-
-            tq.set_description('cur={:.3f},best={:.3f}'.format(objective_value,best_objective_value))
+            tq.set_description('rmse={:.3f}'.format(metrics.rmse(training_matrix.data,_unnorm_ratings(predicted,self.lowest_value,self.highest_value))))
             tq.refresh()
 
-            # predicted = self.predict(observed_ui)
-            # rmse=metrics.rmse(training_matrix.data,predicted)
-            # objective_value = rmse
-            # print("RMSE",rmse)
-            # if np.fabs(objective_value - last_objective_value) <= self.stop_criteria:
-            #     self.objective_value = objective_value
-            #     print("Achieved convergence with %d iterations"%(i+1))
-            #     break
-            # last_objective_value = objective_value
+        #     # objective_value = _norm_sum_probabilities(scipy.stats.norm.pdf(training_matrix.data,predicted,self.var))\
+        #     #     + _norm_sum_probabilities(_apply_multivariate_normal(self.users_weights,np.zeros(self.num_lat),self.var*self.I))\
+        #     #     + _norm_sum_probabilities(_apply_multivariate_normal(self.items_weights,np.zeros(self.num_lat),self.var*self.I))
+
+        #     objective_value = np.sum((training_matrix.data - predicted)**2)/2 +\
+        #         self.user_lambda/2 * np.sum(np.linalg.norm(self.users_weights,axis=1)**2) +\
+        #         self.item_lambda/2 * np.sum(np.linalg.norm(self.items_weights,axis=1)**2)
+
+        #     self.objective_values.append(objective_value)
+
+        #     if self.best == None:
+        #         self.best = self.__deepcopy__()
+        #         best_objective_value = objective_value
+        #     else:
+        #         if objective_value < best_objective_value:
+        #             self.best = self.__deepcopy__()
+        #             best_objective_value = objective_value
+
+        #     tq.set_description('cur={:.3f},best={:.3f}'.format(objective_value,best_objective_value))
+        #     tq.refresh()
+
+        #     # predicted = self.predict(observed_ui)
+        #     # rmse=metrics.rmse(training_matrix.data,predicted)
+        #     # objective_value = rmse
+        #     # print("RMSE",rmse)
+        #     # if np.fabs(objective_value - last_objective_value) <= self.stop_criteria:
+        #     #     self.objective_value = objective_value
+        #     #     print("Achieved convergence with %d iterations"%(i+1))
+        #     #     break
+        #     # last_objective_value = objective_value
             
-            # sparse_predicted = self.get_sparse_predicted(observed_ui_pair)
-            # rmse=np.sqrt(np.mean((sparse_predicted - training_matrix.data)**2))
-            # objective_value = np.sum((training_matrix.data - sparse_predicted)**2)/2 +\
-            #     self.user_lambda/2 * np.sum(np.linalg.norm(self.users_weights,axis=1)**2) +\
-            #     self.item_lambda/2 * np.sum(np.linalg.norm(self.items_weights,axis=1)**2)
-            # print("Objective value",objective_value)
-            # #     self.objective_values.append(objective_value)
-            # print("RMSE",rmse)
-        self.__dict__.update(self.best.__dict__)
-        del self.best
+        #     # sparse_predicted = self.get_sparse_predicted(observed_ui_pair)
+        #     # rmse=np.sqrt(np.mean((sparse_predicted - training_matrix.data)**2))
+        #     # objective_value = np.sum((training_matrix.data - sparse_predicted)**2)/2 +\
+        #     #     self.user_lambda/2 * np.sum(np.linalg.norm(self.users_weights,axis=1)**2) +\
+        #     #     self.item_lambda/2 * np.sum(np.linalg.norm(self.items_weights,axis=1)**2)
+        #     # print("Objective value",objective_value)
+        #     # #     self.objective_values.append(objective_value)
+        #     # print("RMSE",rmse)
+        # self.__dict__.update(self.best.__dict__)
+        # del self.best
+        del self.r_mean
         del self.user_lambda
         del self.item_lambda
         del self.users_observed_items
@@ -190,6 +203,7 @@ class ICFPMFS(MF):
         del self.I
         del self.training_matrix
         del self.lowest_value
+        del self.highest_value
 
     @staticmethod
     def _user_probability(obj_id,uid):
@@ -209,7 +223,7 @@ class ICFPMFS(MF):
         I = self.I
         observed = self.users_observed_items[uid]
         tmp = np.linalg.inv((np.dot(self.items_weights[observed].T,self.items_weights[observed]) + I*self.user_lambda))
-        mean = tmp.dot(self.items_weights[observed].T).dot(self.users_observed_items_ratings[uid])
+        mean = tmp.dot(self.items_weights[observed].T).dot(_norm_ratings(self.users_observed_items_ratings[uid],self.lowest_value,self.highest_value))
         cov = tmp*self.var
         return mean, cov, np.random.multivariate_normal(mean,cov)
         # return mean, cov, scipy.stats.multivariate_normal.pdf(self.users_weights[uid],mean,cov)
@@ -223,7 +237,7 @@ class ICFPMFS(MF):
         I = self.I
         observed = self.items_observed_users[iid]
         tmp = np.linalg.inv((np.dot(self.users_weights[observed].T,self.users_weights[observed]) + I*self.item_lambda))
-        mean = tmp.dot(self.users_weights[observed].T).dot(self.items_observed_users_ratings[iid])
+        mean = tmp.dot(self.users_weights[observed].T).dot(_norm_ratings(self.items_observed_users_ratings[iid], self.lowest_value,self.highest_value))
         cov = tmp*self.var
         return mean, cov, np.random.multivariate_normal(mean,cov)
         # return mean, cov, scipy.stats.multivariate_normal.pdf(self.items_weights[iid],mean,cov)
