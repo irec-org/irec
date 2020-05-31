@@ -6,7 +6,6 @@ from threadpoolctl import threadpool_limits
 import ctypes
 from numba import jit
 
-
 @jit(nopython=True)
 def _central_limit_theorem(k):
     p = len(k)
@@ -16,10 +15,10 @@ def _central_limit_theorem(k):
 @jit(nopython=True)
 def _numba_multivariate_normal(mean,cov):
     n = len(mean)
-    cov_eig = np.linalg.eig(cov)
+    cov_eig = np.linalg.eigh(cov) # suppose that the matrix is symmetric
     x = np.zeros(n)
     for i in range(n):
-        x[i] = _central_limit_theorem(np.random.uniform(0,1,20000)) # best parameter is 20000 in terms of speed and accuracy in distribution sampling
+        x[i] = _central_limit_theorem(np.random.uniform(0,1,200)) # best parameter is 20000 in terms of speed and accuracy in distribution sampling
     return ((np.diag(cov_eig[0])**(0.5)) @ cov_eig[1].T @ x)+mean
 
 @jit(nopython=True)
@@ -71,27 +70,26 @@ class LinearThompsonSampling(ICF):
 
         num_correct_items = 0
         for i in range(self.interactions):
-            tmp_max_qs = dict()
             mean = np.dot(np.linalg.inv(A),b)
             cov = np.linalg.inv(A)*self.var
             p = np.random.multivariate_normal(mean,cov)
             qs = _sample_items_weights(user_candidate_items,self.items_means, self.items_covs)
 
-            items_score = p @ qs
+            items_score = p @ qs.T
             best_items = user_candidate_items[np.argsort(items_score)[::-1]][:self.interaction_size]
 
-            user_candidate_items = user_candidate_items[~np.isin(user_candidate_items,best_items)]
             result.extend(best_items)
             
             for item in result[i*self.interaction_size:(i+1)*self.interaction_size]:
-                max_q = qs[item == user_candidate_items]
+                max_q = qs[np.argmax(item == user_candidate_items),:]
                 A += max_q[:,None].dot(max_q[None,:])
-                if self.get_reward(uid,max_i) >= self.threshold:
-                    b += self.get_reward(uid,max_i)*max_q
+                if self.get_reward(uid,item) >= self.threshold:
+                    b += self.get_reward(uid,item)*max_q
                     num_correct_items += 1
                     if self.exit_when_consumed_all and num_correct_items == self.users_num_correct_items[uid]:
                         print(f"Exiting user {uid} with {len(result)} items in total and {num_correct_items} correct ones")
                         return np.array(result)
 
+            user_candidate_items = user_candidate_items[~np.isin(user_candidate_items,best_items)]
                     
         return result
