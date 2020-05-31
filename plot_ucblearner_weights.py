@@ -60,11 +60,11 @@ for ax, base,base_name in zip(axs,['tr_te_yahoo_music','tr_te_good_books','tr_te
         users_global_model_weights = pickle.load(f)
 
 
-    xs = np.linspace(1,users_global_model_weights.shape[1],11,dtype=int)
+    xs = np.linspace(0,users_global_model_weights.shape[1]-1,11,dtype=int)
     # xs = [1, 5, 10, 15, 20, 40, 60, 80, 100]
     ax.errorbar(xs,
-                 y=np.mean(users_global_model_weights[:,xs-1],axis=0),
-                 yerr=np.std(users_global_model_weights[:,xs-1],axis=0),capsize=6,
+                 y=np.mean(users_global_model_weights[:,xs],axis=0),
+                 yerr=np.std(users_global_model_weights[:,xs],axis=0),capsize=6,
                     color='k',marker='o',markersize=6,markerfacecolor='red',linewidth=None)
     ax.set_xlabel("Interactions")
     # if i == 0:
@@ -72,8 +72,8 @@ for ax, base,base_name in zip(axs,['tr_te_yahoo_music','tr_te_good_books','tr_te
     # ax.set_xticklabels(xs)
     i+= 1
     ax.set_yticks([0,0.25,0.5,0.75,1])
-    ax.set_xticks(np.linspace(1,100,11,dtype=int))
-    ax.set_xlim(0,101.5)
+    ax.set_xticks(np.linspace(0,100,11,dtype=int))
+    ax.set_xlim(-0.95,100.5)
     # ax.set_ylim(0,1.03)
 fig.savefig(os.path.join(dsf.DIRS['img'],"weights_"+model.get_name()+".png"),bbox_inches='tight')
 fig.savefig(os.path.join(dsf.DIRS['img'],"weights_"+model.get_name()+".eps"),bbox_inches='tight')
