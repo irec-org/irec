@@ -84,22 +84,22 @@ class InteractorsRunner():
                     interactors.OurMethod1],
                 interactors_classes
                 ))):
-            if not is_spmatrix:
-                mf_model = mf.ICFPMF(name_prefix=dsf.base)
-            else:
-                mf_model = mf.ICFPMFS(name_prefix=dsf.base)
-            print('Loading %s'%(mf_model.__class__.__name__))
-            mf_model.load_var(dsf.train_consumption_matrix)
-            mf_model = mf_model.load()
-            self.mf_model = mf_model
+            # if not is_spmatrix:
+            #     mf_model = mf.ICFPMF(name_prefix=dsf.base)
+            # else:
+            #     mf_model = mf.ICFPMFS(name_prefix=dsf.base)
+            # print('Loading %s'%(mf_model.__class__.__name__))
+            # mf_model.load_var(dsf.train_consumption_matrix)
+            # mf_model = mf_model.load()
+            # self.mf_model = mf_model
             # print('Loading PMF')
             # mf_model = mf.PMF(name_prefix=dsf.base)
             # mf_model.load_var(dsf.train_consumption_matrix)
             # mf_model = mf_model.load()
-            # print('Loading SVD')
-            # mf_model = mf.SVD(name_prefix=dsf.base)
-            # mf_model = mf_model.load()
-            # self.mf_model = mf_model
+            print('Loading SVD')
+            mf_model = mf.SVD(name_prefix=dsf.base)
+            mf_model = mf_model.load()
+            self.mf_model = mf_model
 
         for itr_class in interactors_classes:
             self.create_and_run_interactor(itr_class)
