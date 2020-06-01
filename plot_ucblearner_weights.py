@@ -48,7 +48,7 @@ fig.subplots_adjust(top=0.85, wspace=0.3, hspace=0.5)
 #     i+= 1
 
 i = 0
-for ax, base,base_name in zip(axs,['tr_te_yahoo_music','tr_te_good_books','tr_te_ml_10m'],['ML-10M','Good-Books','Yahoo-Music']):
+for ax, base,base_name in zip(axs,['tr_te_ml_10m','tr_te_good_books','tr_te_yahoo_music'],['ML-10M','Good-Books','Yahoo-Music']):
 
     ax.set_title(base_name)
     dsf = DatasetFormatter(base=base)
