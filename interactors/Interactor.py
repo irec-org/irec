@@ -60,8 +60,14 @@ class Interactor(Saveable):
     def get_iterations(self):
         return self.interactions*self.interaction_size
 
-    def get_reward(self,uid,iid):
-        return self.test_consumption_matrix[uid,iid]
+    def get_reward(self,uid,iid,from_test_and_train=False):
+        if not from_test_and_train:
+            return self.test_consumption_matrix[uid,iid]
+        else:
+            if self.test_consumption_matrix[uid,iid] != self.lowest_value:
+                return self.test_consumption_matrix[uid,iid]
+            else:
+                return self.train_consumption_matrix[uid,iid]
         
     def interact(self):
         print(self.get_verbose_name())

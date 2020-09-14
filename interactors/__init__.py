@@ -27,8 +27,10 @@ from .PopPlusEnt import *
 from .EMostPopular import *
 from .DistinctPopular import *
 from .PPELPE import *
+from .kNNBandit import *
 
 INTERACTORS = {
+    'kNN-Bandit': kNNBandit,
     'OurMethod1': OurMethod1,
     'Most Popular': MostPopular,
     'Linear UCB (PMF)': LinearUCB,
