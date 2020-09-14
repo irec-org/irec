@@ -30,7 +30,10 @@ from .PPELPE import *
 from .kNNBandit import *
 
 INTERACTORS = {
+    'TS': ThompsonSampling,
+    'Random': Random,
     'kNN-Bandit': kNNBandit,
+    'AL Most Popular': ALMostPopular,
     'OurMethod1': OurMethod1,
     'Most Popular': MostPopular,
     'Linear UCB (PMF)': LinearUCB,
@@ -39,20 +42,17 @@ INTERACTORS = {
     'PPELPE': PPELPE,
     'UCB-Learner (MF)': UCBLearner,
     'GLM-UCB (PMF)': GLM_UCB,
-    'TS': ThompsonSampling,
     'Linear ε-Greedy (PMF)': LinearEGreedy,
     'Linear TS (PMF)': LinearThompsonSampling,
     'ε-Greedy': EGreedy,
     'UCB': UCB,
     'Most Representative': MostRepresentative,
-    'AL Most Popular': ALMostPopular,
     'AL Entropy': ALEntropy,
     'Entropy0': Entropy0,
     'HELF': HELF,
     'Pop+Ent': PopPlusEnt,
     'Distinct Popular': DistinctPopular,
     'ε-Most Popular': EMostPopular,
-    'Random': Random,
     'Entropy': Entropy,
     'log(Pop)⋅Ent': LogPopEnt,
 }
