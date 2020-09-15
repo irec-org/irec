@@ -53,7 +53,8 @@ class InteractorsRunner():
                         interactors.LinEGreedy,
                         interactors.UCBLearner,
                         interactors.MostRepresentative,
-                        interactors.OurMethod1]:
+                        interactors.OurMethod1,
+                        interactors.COFIBA]:
             itr.interact(self.mf_model.items_weights)
         else:
             itr.interact()
@@ -81,7 +82,8 @@ class InteractorsRunner():
                     interactors.MostRepresentative,
                     interactors.LinEGreedy,
                     interactors.UCBLearner,
-                    interactors.OurMethod1],
+                    interactors.OurMethod1,
+                     interactors.COFIBA],
                 interactors_classes
                 ))):
             # if not is_spmatrix:

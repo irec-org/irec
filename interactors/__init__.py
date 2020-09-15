@@ -28,8 +28,10 @@ from .EMostPopular import *
 from .DistinctPopular import *
 from .PPELPE import *
 from .kNNBandit import *
+from .COFIBA import *
 
 INTERACTORS = {
+    'COFIBA': COFIBA,
     'TS': ThompsonSampling,
     'Random': Random,
     'kNN-Bandit': kNNBandit,

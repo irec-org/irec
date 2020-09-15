@@ -13,7 +13,7 @@ class Interactor(Saveable):
     # def __init__(self, train_consumption_matrix=None, test_consumption_matrix=None, interactions=5*6*10*4*2, interaction_size=5, threshold=0.0001,
     #              exit_when_consumed_all=True, results_save_relevants=True,
     #              *args, **kwargs):
-    def __init__(self, train_consumption_matrix=None, test_consumption_matrix=None, interactions=100, interaction_size=5, threshold=0.0001,
+    def __init__(self, train_consumption_matrix=None, test_consumption_matrix=None, interactions=100, interaction_size=1, threshold=0.0001,
                  exit_when_consumed_all=False, results_save_relevants=False,
                  *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -44,7 +44,8 @@ class Interactor(Saveable):
             print("min value set to:",self.lowest_value)
             self.test_users = np.nonzero(np.sum(test_consumption_matrix>0,axis=1).A.flatten())[0]
             self.users_num_correct_items = np.sum(test_consumption_matrix>=self.threshold,axis=1)
-        self._test_consumption_matrix = test_consumption_matrix
+            self._test_consumption_matrix = test_consumption_matrix
+            # self._test_consumption_matrix[self._test_consumption_matrix>4] = 1
 
     @property
     def train_consumption_matrix(self):
@@ -54,7 +55,10 @@ class Interactor(Saveable):
     def train_consumption_matrix(self, train_consumption_matrix):
         if isinstance(train_consumption_matrix,scipy.sparse.spmatrix):
             self.train_users = np.nonzero(np.sum(train_consumption_matrix>0,axis=1).A.flatten())[0]
-        self._train_consumption_matrix = train_consumption_matrix
+            self._train_consumption_matrix = train_consumption_matrix
+            # self._train_consumption_matrix[self._train_consumption_matrix>4] = 1
+        # print(self._train_consumption_matrix)
+        # raise SystemExit
 
 
     def get_iterations(self):
