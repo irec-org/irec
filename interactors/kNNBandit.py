@@ -69,11 +69,13 @@ class kNNBandit(Interactor):
             self.results[uid].extend(best_items)
 
             for item in best_items:
-                tmp_val =self.get_reward(uid,item)*self.get_reward(top_user,item,from_test_and_train=True)
+                u1_reward = self.get_reward(uid,item)
+                u2_reward = self.get_reward(top_user,item,from_test_and_train=True)
+                tmp_val = u1_reward*u2_reward
                 users_alphas[uid,top_user] = tmp_val
                 users_alphas[top_user,uid] = tmp_val
-                users_rating_sum[uid] += self.get_reward(uid,item)
-                consumption_matrix[uid, item] = self.get_reward(uid,item)
+                users_rating_sum[uid] += u1_reward
+                consumption_matrix[uid, item] = u1_reward
             
             users_num_interactions[uid] += 1
             if users_num_interactions[uid] == self.interactions:
