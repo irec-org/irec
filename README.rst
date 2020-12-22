@@ -1,3 +1,12 @@
-To execute the code install the requirements
-::
-   pip install -r requirements.txt
+ReRec - Reinforcement Learning Recommender Systems
+==================================================
+
+This is a library containing Multi-Armed Bandit, Active Learning and others methods.
+
+A full environment to code yours Reinforcement Learning Recommender Systems.
+
+A basic Reinforcement Learning model:
+
+.. image:: figures/mab-model.png
+  :width: 300
+  :alt: Model
