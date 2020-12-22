@@ -29,6 +29,7 @@ from .DistinctPopular import *
 from .PPELPE import *
 from .kNNBandit import *
 from .COFIBA import *
+from .OurMethod2 import *
 
 INTERACTORS = {
     'COFIBA': COFIBA,
@@ -37,6 +38,7 @@ INTERACTORS = {
     'kNN-Bandit': kNNBandit,
     'AL Most Popular': ALMostPopular,
     'OurMethod1': OurMethod1,
+    'OurMethod2': OurMethod2,
     'Most Popular': MostPopular,
     'Linear UCB (PMF)': LinearUCB,
     'Linear ε-Greedy (MF)': LinEGreedy,

@@ -54,6 +54,7 @@ class InteractorsRunner():
                         interactors.UCBLearner,
                         interactors.MostRepresentative,
                         interactors.OurMethod1,
+                        interactors.OurMethod2,
                         interactors.COFIBA]:
             itr.interact(self.mf_model.items_weights)
         else:
@@ -83,6 +84,7 @@ class InteractorsRunner():
                     interactors.LinEGreedy,
                     interactors.UCBLearner,
                     interactors.OurMethod1,
+                    interactors.OurMethod2,
                      interactors.COFIBA],
                 interactors_classes
                 ))):
