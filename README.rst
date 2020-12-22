@@ -1,5 +1,9 @@
-ReRec - Reinforcement Learning Recommender Systems
-==================================================
+.. |rerec| image:: figures/logo-rerec.png
+
+ReRec - Reinforcement Learning Recommender Systems |rerec|
+==========================================================
+
+
 
 This is a library containing Multi-Armed Bandit, Active Learning and others methods.
 
