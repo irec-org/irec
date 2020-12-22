@@ -7,6 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from tabulate import tabulate
 import scipy.sparse
+import os
 
 q = [
     inquirer.List('mf_model',
@@ -21,21 +22,23 @@ dsf = dsf.load()
 model_class=mf.MF_MODELS[model_name]
 model = model_class(name_prefix=dsf.base)
 correlations= []
-for k in range(1,3,1):
+items_popularity = interactors.MostPopular.get_items_popularity(dsf.train_consumption_matrix)
+latent_factors_numbers = list(range(1,500,40))
+for k in latent_factors_numbers:
     model.num_lat = k
     model.fit(dsf.train_consumption_matrix)
 
     items_representativeness = interactors.MostRepresentative.get_items_representativeness(model.items_weights)
-    rep_weights_corr = np.corrcoef(items_representativeness,np.norm(model.items_weights,axis=0))[0,1]
-    correlations.append(rep_weights_corr)
+    rep_mp_corr = np.corrcoef(items_popularity,items_representativeness)[0,1]
+    correlations.append(rep_mp_corr)
 
 
 fig, ax = plt.subplots()
 ax.set_ylabel("Correlation to Most Popular")
 ax.set_xlabel("Number of Latent Factors")
 ax.set_title(f"{dsf.base} {model_name}")
-ax.plot(correlations)
+ax.plot(latent_factors_numbers,correlations)
 
-fig.savefig(os.path.join(self.DIRS['img'],f"{dsf.base}_{model_name}_mp_corr.png"))
+fig.savefig(os.path.join(dsf.DIRS['img'],f"{dsf.PRETTY[dsf.base]}_{model_name}_mp_corr.png"))
 
 
