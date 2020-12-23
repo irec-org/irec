@@ -58,7 +58,7 @@ class OurMethod2(interactors.Interactor):
 
         user_candidate_items = np.array(list(range(len(self.items_latent_factors))))
         num_user_candidate_items = len(user_candidate_items)
-        b = np.ones(num_lat)
+        b = self.initial_b.copy()
         # regression_model = sklearn.linear_model.LinearRegression()
         # (
         #     self.items_latent_factors)
