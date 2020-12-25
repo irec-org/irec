@@ -1,7 +1,7 @@
 from pathlib import Path
 import os
 
-class DirectoryDependent():
+class DirectoryDependent:
     BASE_DIR = ''
     DIRS = {}
     DIRS['data'] = os.path.join(BASE_DIR, 'data')

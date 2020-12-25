@@ -1,6 +1,6 @@
 import pickle
-from .Nameable import Nameable
-from .DirectoryDependent import DirectoryDependent
+from Nameable import Nameable
+from DirectoryDependent import DirectoryDependent
 import os
 import json
 
