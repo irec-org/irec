@@ -11,7 +11,6 @@ from Saveable import Saveable
 import dataset_parsers
 
 class DatasetDescriptor:
-    def __init__(self,name=None,pretty_name=None,base_dir=None):
+    def __init__(self,name=None,base_dir=None):
         name = name
-        pretty_name = pretty_name
         base_dir = base_dir

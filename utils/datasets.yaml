@@ -1,31 +1,36 @@
-    PRETTY = {'ml_100k': 'MovieLens 100k',
-              'ml_1m': 'MovieLens 1M',
-              'tr_te_ml_1m': 'MovieLens 1M',
-              'tr_te_good_books': 'Good Books',
-              'tr_te_ciao_dvd': 'Ciao DVD',
-              'tr_te_amazon': 'Amazon Kindle Store',
-              'tr_te_ml_10m': 'MovieLens 10M',
-              'tr_te_netflix': 'Netflix',
-              'tr_te_yahoo_music': 'Yahoo Music',
-    }
+datasets:
+  - name: MovieLens 100k
+    base_dir: ml-100k/
+  - name: MovieLens 1M
+    base_dir: ml-1m/
+    # PRETTY = {'ml_100k': 'MovieLens 100k',
+    #           'ml_1m': 'MovieLens 1M',
+    #           'tr_te_ml_1m': 'MovieLens 1M',
+    #           'tr_te_good_books': 'Good Books',
+    #           'tr_te_ciao_dvd': 'Ciao DVD',
+    #           'tr_te_amazon': 'Amazon Kindle Store',
+    #           'tr_te_ml_10m': 'MovieLens 10M',
+    #           'tr_te_netflix': 'Netflix',
+    #           'tr_te_yahoo_music': 'Yahoo Music',
+    # }
 
-    BASES_DIRS = {'ml_100k':'ml-100k/',
-                  'ml_1m': 'ml-1m/',
-                  'tr_te_ml_1m': 'Train-Test_ML-1M/',
-                  'tr_te_good_books': 'Train-Test_Good-Books/',
-                  'tr_te_ciao_dvd': 'Train-Test_Ciao-DVD/',
-                  'tr_te_amazon': 'Train-Test_Amazon-Kindle-Store/',
-                  'tr_te_ml_10m': 'Train-Test_ML-10M/',
-                  'tr_te_netflix': 'Train-Test_Netflix/',
-                  'tr_te_yahoo_music': 'Train-Test_Yahoo-Music/',
-    }
-    BASES_HANDLERS = {'ml_100k':'self.get_ml_100k()',
-                      'ml_1m': 'self.get_ml_1m()',
-                      'tr_te_ml_1m': 'self.get_tr_te_ml_1m()',
-                      'tr_te_good_books': 'self.get_tr_te_ml_1m()',
-                      'tr_te_ciao_dvd': 'self.get_tr_te_ml_1m()',
-                      'tr_te_amazon': 'self.get_tr_te_ml_1m()',
-                      'tr_te_ml_10m': 'self.get_tr_te_ml_1m()',
-                      'tr_te_netflix': 'self.get_tr_te_netflix()',
-                      'tr_te_yahoo_music': 'self.get_tr_te_ml_1m()',
-    }
+    # BASES_DIRS = {'ml_100k':'ml-100k/',
+    #               'ml_1m': 'ml-1m/',
+    #               'tr_te_ml_1m': 'Train-Test_ML-1M/',
+    #               'tr_te_good_books': 'Train-Test_Good-Books/',
+    #               'tr_te_ciao_dvd': 'Train-Test_Ciao-DVD/',
+    #               'tr_te_amazon': 'Train-Test_Amazon-Kindle-Store/',
+    #               'tr_te_ml_10m': 'Train-Test_ML-10M/',
+    #               'tr_te_netflix': 'Train-Test_Netflix/',
+    #               'tr_te_yahoo_music': 'Train-Test_Yahoo-Music/',
+    # }
+    # BASES_HANDLERS = {'ml_100k':'self.get_ml_100k()',
+    #                   'ml_1m': 'self.get_ml_1m()',
+    #                   'tr_te_ml_1m': 'self.get_tr_te_ml_1m()',
+    #                   'tr_te_good_books': 'self.get_tr_te_ml_1m()',
+    #                   'tr_te_ciao_dvd': 'self.get_tr_te_ml_1m()',
+    #                   'tr_te_amazon': 'self.get_tr_te_ml_1m()',
+    #                   'tr_te_ml_10m': 'self.get_tr_te_ml_1m()',
+    #                   'tr_te_netflix': 'self.get_tr_te_netflix()',
+    #                   'tr_te_yahoo_music': 'self.get_tr_te_ml_1m()',
+    # }
