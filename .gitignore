@@ -4,3 +4,11 @@
 *#
 *.pickle
 data/
+*.out
+*.zip
+*.data
+*.lock
+*.ipynb_checkpoints
+*.vscode
+*.eps
+*.png
