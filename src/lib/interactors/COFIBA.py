@@ -83,20 +83,20 @@ class COFIBA(Interactor):
         cluster_latent_factors = cluster_m @ cluster_b
         return cluster_latent_factors @ self.items_latent_factors[item] + self.cb(self.alpha,self.items_latent_factors[item],cluster_m,self.t)
 
-    def interact(self, items_latent_factors):
-        super().interact()
-        uids = self.test_users
-        num_items = self.train_consumption_matrix.shape[1]
-        consumption_matrix = self.train_consumption_matrix.tolil()
-        total_num_users = self.train_consumption_matrix.shape[0]
 
-        self.num_latent_factors = len(items_latent_factors[0])
-        self.items_latent_factors = items_latent_factors
+    def train(self,train_data,total_num_users,total_num_items):
+        super().train(train_data)
+        self.train_consumption_matrix = scipy.sparse.csr_matrix((train_data[2],(train_data[0],train_data[1])))
+        self.num_items = self.train_consumption_matrix.shape[1]
+        self.consumption_matrix = self.train_consumption_matrix.tolil()
+        self.total_num_users = self.train_consumption_matrix.shape[0]
+
+        mf_model = mf.SVD()
+        mf_model.fit(self.train_consumption_matrix)
+        self.items_latent_factors = mf_model.items_weights
+        self.num_latent_factors = len(self.items_latent_factors[0])
 
         self.I = np.identity(self.num_latent_factors)
-        num_users = len(uids)
-        users_num_interactions = defaultdict(int)
-        available_users = set(uids)
         # code her
         # ...
         self.items_graph = self.new_graph(num_items)

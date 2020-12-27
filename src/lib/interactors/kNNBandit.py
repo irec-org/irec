@@ -11,52 +11,39 @@ class kNNBandit(Interactor):
     def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def interact(self):
-        super().interact()
-        uids = self.test_users
-        num_items = self.train_consumption_matrix.shape[1]
-        consumption_matrix = self.train_consumption_matrix.tolil()
-        total_num_users = self.train_consumption_matrix.shape[0]
-        num_users = len(uids)
-        users_num_interactions = defaultdict(int)
-        available_users = set(uids)
+    def train(self,train_data):
+        super().train(train_data)
+        self.train_consumption_matrix = scipy.sparse.csr_matrix((train_data[2],(train_data[0],train_data[1])))
 
-        users_alphas = (self.train_consumption_matrix @ self.train_consumption_matrix.T).A
-        users_rating_sum = self.train_consumption_matrix.sum(axis=1).A.flatten()
-        for i in tqdm(range(num_users*self.interactions)):
-            uid = random.sample(available_users,k=1)[0]
-            not_recommended = np.ones(num_items,dtype=bool)
-            not_recommended[self.results[uid]] = 0
-            items_not_recommended = np.nonzero(not_recommended)[0]
+        self.num_items = self.train_consumption_matrix.shape[1]
+        self.consumption_matrix = self.train_consumption_matrix.tolil()
+        self.total_num_users = self.train_consumption_matrix.shape[0]
 
-            users_score = np.zeros(total_num_users)
-            for i, v1, v2 in zip(list(range(total_num_users)),users_alphas[uid], users_rating_sum-users_alphas[uid]):
-                if v1 > 0 and v2 > 0:
-                    users_score[i] = np.random.beta(v1,v2)
-                else:
-                    users_score[i] = 0
+        self.users_alphas = (self.train_consumption_matrix @ self.train_consumption_matrix.T).A
+        self.users_rating_sum = self.train_consumption_matrix.sum(axis=1).A.flatten()
 
-            for i in users_score.argsort():
-                if i != uid:
-                    top_user = uid
-                    break
-                
-            top_items = np.argsort(consumption_matrix[top_user].A.flatten()[items_not_recommended])[::-1][:self.interaction_size]
-            best_items = items_not_recommended[top_items]
+    def predict(self,uid,candidate_items):
+        users_score = np.zeros(self.total_num_users)
+        for i, v1, v2 in zip(list(range(self.total_num_users)),self.users_alphas[uid], self.users_rating_sum-self.users_alphas[uid]):
+            if v1 > 0 and v2 > 0:
+                users_score[i] = np.random.beta(v1,v2)
+            else:
+                users_score[i] = 0
 
-            self.results[uid].extend(best_items)
+        for i in users_score.argsort():
+            if i != uid:
+                self.top_user = uid
 
-            for item in best_items:
-                u1_reward = self.get_reward(uid,item)
-                u2_reward = self.get_reward(top_user,item,from_test_and_train=True)
-                tmp_val = u1_reward*u2_reward
-                users_alphas[uid,top_user] = tmp_val
-                users_alphas[top_user,uid] = tmp_val
-                users_rating_sum[uid] += u1_reward
-                consumption_matrix[uid, item] = u1_reward
-            
-            users_num_interactions[uid] += 1
-            if users_num_interactions[uid] == self.interactions:
-                available_users = available_users - {uid}
+        return consumption_matrix[top_user].A.flatten()[candidate_items]
+        # best_items = items_not_recommended[top_items]
 
-        self.save_results()
+
+    def update(self,uid,item,reward):
+        u1_reward = self.get_reward(uid,item)
+        u2_reward = self.consumption_matrix[self.top_user,item]
+        tmp_val = u1_reward*u2_reward
+        self.users_alphas[uid,top_user] = tmp_val
+        self.users_alphas[top_user,uid] = tmp_val
+        self.users_rating_sum[uid] += u1_reward
+        self.consumption_matrix[uid, item] = u1_reward
+        

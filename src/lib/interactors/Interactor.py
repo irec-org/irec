@@ -13,3 +13,9 @@ class Interactor(Saveable):
     def __init__(self,evaluation_policy,*args, **kwargs):
         super().__init__(*args, **kwargs)
         self.evaluation_policy = evaluation_policy
+    def train(self,train_data):
+        super().train(train_data)
+    def predict(self,uid,candidate_items):
+        pass
+    def update(self,uid,item,reward):
+        pass
