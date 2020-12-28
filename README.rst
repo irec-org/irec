@@ -1,7 +1,10 @@
 .. |rerec| image:: figures/logo-rerec.png
 
-ReRec - Reinforcement Learning Recommender Systems Library |rerec|
+|rerec|
+
+ReRec - Reinforcement Learning Recommender Systems Library 
 ==========================================================
+
 
 
 
