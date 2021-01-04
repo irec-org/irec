@@ -28,14 +28,14 @@ class Interaction(EvaluationPolicy):
             not_recommended = np.ones(num_items,dtype=bool)
             not_recommended[users_items_recommended[uid]] = 0
             items_not_recommended = np.nonzero(not_recommended)[0]
-            items_score = model.predict(uid,items_not_recommended)
+            items_score, additional_data = model.predict(uid,items_not_recommended)
             best_items = list(reversed(np.argsort(items_score)))[:self.parameters.interaction_size]
             # best_item = items_not_recommended[np.argmax(items_score)]
             users_items_recommended[uid].extend(best_items)
 
             # for i in range(self.parameters.interaction_size):
             for item in users_items_recommended[users_num_interactions[uid]*self.parameters.interaction_size:(users_num_interactions[uid]+1)*self.parameters.interaction_size]:
-                model.update(uid,item,test_consumption_matrix[uid,item])
+                model.update(uid,item,test_consumption_matrix[uid,item],additional_data)
 
             users_num_interactions[uid] += 1
             if users_num_interactions[uid] == self.parameters.interactions:

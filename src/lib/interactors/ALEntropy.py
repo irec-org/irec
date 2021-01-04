@@ -15,7 +15,6 @@ class ALEntropy(Interactor):
         super().train(train_dataset)
         self.train_dataset = train_dataset
         self.train_consumption_matrix = scipy.sparse.csr_matrix((train_data[2],(train_data[0],train_data[1])),(self.train_dataset.users_num,self.train_dataset.items_num))
-        # uids = self.test_users
         self.num_items = self.train_consumption_matrix.shape[1]
         self.unique_values = train_dataset.rate_domain
         self.num_unique_values = len(unique_values)
@@ -27,9 +26,9 @@ class ALEntropy(Interactor):
         items_score =  [Entropy.values_entropy(self.items_ratings[iid])
                         for iid
                         in candidate_items]
-        return items_score
+        return items_score, None
         # top_item = list(reversed(np.argsort(items_score)))[0]
         # best_item = candidate_items[top_item]
 
-    def update(self,uid,item,reward):
+    def update(self,uid,item,reward,additional_data):
         items_ratings[item,self.unique_values_ids[reward]] = reward
