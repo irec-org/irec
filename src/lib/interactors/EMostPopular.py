@@ -28,14 +28,12 @@ class EMostPopular(Interactor):
             top_iids.append(best_item)
         return top_iids
 
-    def interact(self):
-        super().interact()
-        uids = self.test_users
+    def train(self,train_dataset):
+        super().train(train_dataset)
+        self.train_dataset = train_dataset
         self.items_entropy = Entropy.get_items_entropy(self.train_consumption_matrix)
-        # items_entropy0 = Entropy0.get_items_entropy(self.train_consumption_matrix)
         self.items_popularity = MostPopular.get_items_popularity(self.train_consumption_matrix,normalize=False)
 
-        # items_probability = items_entropy/items_entropy.sum()
         self.top_iids = self.top_emostpopular(items_popularity,items_entropy)
         self.items_score = np.empty(len(self.top_iids))
         for i, iid in enumerate(reversed(self.top_iids)):
