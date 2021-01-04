@@ -15,7 +15,10 @@ class Interactor(Saveable):
         self.evaluation_policy = evaluation_policy
     def train(self,train_data):
         super().train(train_data)
+        self.t = 0
     def predict(self,uid,candidate_items):
         pass
     def update(self,uid,item,reward):
         pass
+    def increment_time(self):
+        self.t += 1

@@ -8,14 +8,15 @@ class Interaction(EvaluationPolicy):
         super().__init__(*args, **kwargs)
         self.parameters = parameters
 
-    def evaluate(self,model,train_data,test_data):
-        test_users = np.unique(test_data[0])
+    def evaluate(self,model,train_dataset,test_dataset):
+        test_users = np.unique(test_dataset.data[0])
         # total_num_users = len(np.unique(np.concatenate((train_data[0],
         #                                             test_data[0]),axis=None)))
 
         # total_num_items = len(np.unique(np.concatenate((train_data[1],
         #                                             test_data[1]),axis=None)))
         
+        test_data = test_dataset.data
         test_consumption_matrix = scipy.sparse.csr_matrix((test_data[2],(test_data[0],test_data[1])))
         users_items_recommended = defaultdict(list)
         num_test_users = len(test_users)
@@ -36,7 +37,7 @@ class Interaction(EvaluationPolicy):
             # for i in range(self.parameters.interaction_size):
             for item in users_items_recommended[users_num_interactions[uid]*self.parameters.interaction_size:(users_num_interactions[uid]+1)*self.parameters.interaction_size]:
                 model.update(uid,item,test_consumption_matrix[uid,item],additional_data)
-
+            model.increment_time()
             users_num_interactions[uid] += 1
             if users_num_interactions[uid] == self.parameters.interactions:
                 available_users = available_users - {uid}
