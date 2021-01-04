@@ -1,3 +1,4 @@
+from copy import copy
 def ModelSelection:
     pass
 
@@ -7,7 +8,8 @@ def TrainTestConsumption(ModelSelection):
         self.test_consumes=0.8
         self.crono = crono
         
-    def apply(self,data):
+    def apply(self,dataset):
+        data = dataset.data
         num_users = len(np.unique(data[0]))
         num_train_users = round(num_users*(self.train_size))
         num_test_users = int(num_users-num_train_users)
@@ -22,4 +24,10 @@ def TrainTestConsumption(ModelSelection):
         train_uids = np.array(list(set(range(num_users))-set(test_uids)))
 
         data_isin_test_uids = np.isin(data[0],test_uids)
-        return data[~data_isin_test_uids],data[data_isin_test_uids]
+
+        train_dataset = copy(dataset)
+        train_dataset.data = data[~data_isin_test_uids]
+        test_dataset = copy(dataset)
+        test_dataset.data = data[data_isin_test_uids]
+        return train_dataset, test_dataset
+        # return data[~data_isin_test_uids],data[data_isin_test_uids]
