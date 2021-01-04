@@ -14,7 +14,8 @@ class ALEntropy(Interactor):
     def train(self,train_dataset):
         super().train(train_dataset)
         self.train_dataset = train_dataset
-        self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[2],(self.train_dataset.data[0],self.train_dataset.data[1])),(self.train_dataset.users_num,self.train_dataset.items_num))
+        self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[2],(self.train_dataset.data[0],self.train_dataset.data[1])),
+                                                                (self.train_dataset.users_num,self.train_dataset.items_num))
         self.num_items = self.train_consumption_matrix.shape[1]
         self.unique_values = train_dataset.rate_domain
         self.num_unique_values = len(unique_values)
