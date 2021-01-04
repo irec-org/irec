@@ -37,16 +37,21 @@ class Entropy0(Interactor):
             items_entropy[iid] = Entropy0.values_entropy(iid_ratings)
         return items_entropy
 
-    def interact(self):
-        super().interact()
-        uids = self.test_users
-        num_users = len(uids)
-        items_entropy = self.get_items_entropy(self.train_consumption_matrix)
+    def train(self,train_dataset):
+        super().train(train_dataset)
+        self.train_dataset = train_dataset
+        self.num_items = self.train_dataset.num_items
+
+        self.items_entropy = self.get_items_entropy(self.train_consumption_matrix)
+
+    def predict(self,uid,candidate_items):
+        items_score = self.items_entropy[candidate_items]
+        return items_score, None
         # fig, ax = plt.subplots()
         # ax.hist(items_entropy,color='k')
         # ax.set_xlabel("Entropy0")
         # ax.set_ylabel("#Items")
         # fig.savefig(os.path.join(self.DIRS['img'],"entropy0_"+self.get_name()+".png"))
 
-        top_iids = list(reversed(np.argsort(items_entropy)))[:self.get_iterations()]
+        # top_iids = list(reversed(np.argsort(items_entropy)))
 

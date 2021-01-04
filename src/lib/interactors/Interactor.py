@@ -17,8 +17,8 @@ class Interactor(Saveable):
         super().train(train_data)
         self.t = 0
     def predict(self,uid,candidate_items):
-        pass
-    def update(self,uid,item,reward):
+        return None, None
+    def update(self,uid,item,reward,additional_data):
         pass
     def increment_time(self):
         self.t += 1
