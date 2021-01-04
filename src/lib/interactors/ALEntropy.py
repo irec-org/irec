@@ -11,12 +11,13 @@ class ALEntropy(Interactor):
     def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def train(self,train_data):
-        super().train(train_data)
-        self.train_consumption_matrix = scipy.sparse.csr_matrix((train_data[2],(train_data[0],train_data[1])))
+    def train(self,train_dataset):
+        super().train(train_dataset)
+        self.train_dataset = train_dataset
+        self.train_consumption_matrix = scipy.sparse.csr_matrix((train_data[2],(train_data[0],train_data[1])),(self.train_dataset.users_num,self.train_dataset.items_num))
         # uids = self.test_users
         self.num_items = self.train_consumption_matrix.shape[1]
-        self.unique_values = np.unique(np.append(self.train_consumption_matrix.data,self.test_consumption_matrix.data))
+        self.unique_values = train_dataset.rate_domain
         self.num_unique_values = len(unique_values)
         self.items_ratings = np.zeros((self.num_items,self.num_unique_values))
         self.unique_values_ids = dict(zip(unique_values,list(range(num_unique_values))))
