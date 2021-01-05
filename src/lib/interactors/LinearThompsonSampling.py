@@ -36,60 +36,70 @@ class LinearThompsonSampling(ICF):
     def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def interact(self, items_means,items_covs):
-        super().interact()
-        uids = self.test_users
-        self.items_means = items_means
-        self.items_covs = items_covs
-        num_users = len(uids)
+    def train(self,train_dataset):
+        super().train(train_dataset)
+        self.train_dataset = train_dataset
+        self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[2],(self.train_dataset.data[0],self.train_dataset.data[1])),(self.train_dataset.users_num,self.train_dataset.items_num))
+        self.num_items = self.train_dataset.num_items
+
+        mf_model = mf.ICFPMFS()
+        mf_model.fit(self.train_consumption_matrix)
+        self.items_means = mf_model.items_means
+        self.items_covs = mf_model.items_covs
+        self.num_latent_factors = len(self.items_latent_factors[0])
+
+        # num_lat = len(self.items_means[0])
+        self.I = np.eye(self.num_latent_factors)
+
+        # user_candidate_items = np.array(list(range(len(self.items_means))))
+        # get number of latent factors 
+        bs = defaultdict(lambda: np.zeros(self.num_latent_factors))
+        As = defaultdict(lambda: self.user_lambda*I)
+        # A = self.user_lambda*I
+        # result = []
+        # num_correct_items = 0
+
         # get number of latent factors 
 
-        self_id = id(self)
-        with threadpool_limits(limits=1, user_api='blas'):
-            args = [(self_id,int(uid),) for uid in uids]
-            results = util.run_parallel(self.interact_user,args)
-        for i, user_result in enumerate(results):
-            self.results[uids[i]] = user_result
-        self.save_results()
+        # self_id = id(self)
+        # with threadpool_limits(limits=1, user_api='blas'):
+        #     args = [(self_id,int(uid),) for uid in uids]
+        #     results = util.run_parallel(self.interact_user,args)
+        # for i, user_result in enumerate(results):
+        #     self.results[uids[i]] = user_result
+        # self.save_results()
 
 
-    @staticmethod
-    def interact_user(obj_id, uid):
-        self = ctypes.cast(obj_id, ctypes.py_object).value
-        if not issubclass(self.__class__,ICF): # DANGER CODE
-            raise RuntimeError
+    # @staticmethod
+    # def interact_user(obj_id, uid):
+    #     self = ctypes.cast(obj_id, ctypes.py_object).value
+    #     if not issubclass(self.__class__,ICF): # DANGER CODE
+    #         raise RuntimeError
 
-        num_lat = len(self.items_means[0])
-        I = np.eye(num_lat)
+    def predict(self,uid,candidate_items):
+        b = bs[uid]
+        A = As[uid]
 
-        user_candidate_items = np.array(list(range(len(self.items_means))))
-        # get number of latent factors 
-        b = np.zeros(num_lat)
-        A = self.user_lambda*I
-        result = []
+        mean = np.dot(np.linalg.inv(A),b)
+        cov = np.linalg.inv(A)*self.var
+        p = np.random.multivariate_normal(mean,cov)
+        qs = _sample_items_weights(candidate_items,self.items_means, self.items_covs)
 
-        num_correct_items = 0
-        for i in range(self.interactions):
-            mean = np.dot(np.linalg.inv(A),b)
-            cov = np.linalg.inv(A)*self.var
-            p = np.random.multivariate_normal(mean,cov)
-            qs = _sample_items_weights(user_candidate_items,self.items_means, self.items_covs)
+        items_score = p @ qs.T
+        return items_score, {'qs':qs,'candidate_items':candidate_items}
+        # best_items = user_candidate_items[np.argsort(items_score)[::-1]][:self.interaction_size]
 
-            items_score = p @ qs.T
-            best_items = user_candidate_items[np.argsort(items_score)[::-1]][:self.interaction_size]
+        # result.extend(best_items)
 
-            result.extend(best_items)
-            
-            for item in result[i*self.interaction_size:(i+1)*self.interaction_size]:
-                max_q = qs[np.argmax(item == user_candidate_items),:]
-                A += max_q[:,None].dot(max_q[None,:])
-                if self.get_reward(uid,item) >= self.threshold:
-                    b += self.get_reward(uid,item)*max_q
-                    num_correct_items += 1
-                    if self.exit_when_consumed_all and num_correct_items == self.users_num_correct_items[uid]:
-                        print(f"Exiting user {uid} with {len(result)} items in total and {num_correct_items} correct ones")
-                        return np.array(result)
+    def update(self,uid,item,reward,additional_data):
+        max_q = additional_data['qs'][np.argmax(item == additional_data['candidate_items']),:]
+        A += max_q[:,None].dot(max_q[None,:])
+        # if self.get_reward(uid,item) >= self.threshold:
+        b += reward*max_q
+                # num_correct_items += 1
+                # if self.exit_when_consumed_all and num_correct_items == self.users_num_correct_items[uid]:
+                #     print(f"Exiting user {uid} with {len(result)} items in total and {num_correct_items} correct ones")
+                #     return np.array(result)
 
-            user_candidate_items = user_candidate_items[~np.isin(user_candidate_items,best_items)]
+        # user_candidate_items = user_candidate_items[~np.isin(user_candidate_items,best_items)]
                     
-        return result
