@@ -13,6 +13,3 @@ class LinearEGreedy(ICF,LinEGreedy):
     
     def init_A(self,num_lat):
         return self.user_lambda*np.eye(num_lat)
-
-    def filter_parameters(self,parameters):
-        return super().filter_parameters({k: v for k, v in parameters.items() if k not in ['var']})

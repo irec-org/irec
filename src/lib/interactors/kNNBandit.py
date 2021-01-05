@@ -48,4 +48,3 @@ class kNNBandit(Interactor):
         self.users_alphas[top_user,uid] = tmp_val
         self.users_rating_sum[uid] += u1_reward
         self.consumption_matrix[uid, item] = u1_reward
-        
