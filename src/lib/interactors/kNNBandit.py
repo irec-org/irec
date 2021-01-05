@@ -11,11 +11,12 @@ class kNNBandit(Interactor):
     def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def train(self,train_data):
-        super().train(train_data)
-        self.train_consumption_matrix = scipy.sparse.csr_matrix((train_data[2],(train_data[0],train_data[1])))
+    def train(self,train_dataset):
+        super().train(train_dataset)
+        self.train_dataset = train_dataset
+        self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[2],(self.train_dataset.data[0],self.train_dataset.data[1])),(self.train_dataset.users_num,self.train_dataset.items_num))
+        self.num_items = self.train_dataset.num_items
 
-        self.num_items = self.train_consumption_matrix.shape[1]
         self.consumption_matrix = self.train_consumption_matrix.tolil()
         self.total_num_users = self.train_consumption_matrix.shape[0]
 
@@ -32,15 +33,16 @@ class kNNBandit(Interactor):
 
         for i in users_score.argsort():
             if i != uid:
-                self.top_user = uid
+                top_user = uid
 
-        return consumption_matrix[top_user].A.flatten()[candidate_items]
+        return consumption_matrix[top_user].A.flatten()[candidate_items], {'top_user': top_user}
         # best_items = items_not_recommended[top_items]
 
 
-    def update(self,uid,item,reward):
-        u1_reward = self.get_reward(uid,item)
-        u2_reward = self.consumption_matrix[self.top_user,item]
+    def update(self,uid,item,reward,additional_data):
+        top_user = additional_data['top_user']
+        u1_reward = reward
+        u2_reward = self.consumption_matrix[top_user,item]
         tmp_val = u1_reward*u2_reward
         self.users_alphas[uid,top_user] = tmp_val
         self.users_alphas[top_user,uid] = tmp_val
