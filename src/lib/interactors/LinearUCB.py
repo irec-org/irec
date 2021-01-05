@@ -4,6 +4,7 @@ from tqdm import tqdm
 import util
 from threadpoolctl import threadpool_limits
 import ctypes
+from collections import defaultdict
 class LinearUCB(ICF):
     def __init__(self, alpha=1.0, zeta=None,*args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -12,62 +13,33 @@ class LinearUCB(ICF):
         elif zeta != None:
             self.alpha = 1+np.sqrt(np.log(2/zeta)/2)
 
-    def interact(self, items_means):
-        super().interact()
-        uids = self.test_users
-        self.items_means = items_means
-        num_users = len(uids)
-        # get number of latent factors 
+    def train(self,train_dataset):
+        super().train(train_dataset)
+        self.train_dataset = train_dataset
+        self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[2],(self.train_dataset.data[0],self.train_dataset.data[1])),(self.train_dataset.users_num,self.train_dataset.items_num))
+        self.num_items = self.train_dataset.num_items
+        mf_model = mf.ICFPMFS()
+        mf_model.fit(self.train_consumption_matrix)
+        self.items_means = mf_model.items_means
 
-        self_id = id(self)
-        with threadpool_limits(limits=1, user_api='blas'):
-            args = [(self_id,int(uid),) for uid in uids]
-            results = util.run_parallel(self.interact_user,args)
-        for i, user_result in enumerate(results):
-            if not self.results_save_relevants:
-                self.results[uids[i]] = user_result
-            else:
-                self.results[uids[i]] = user_result[np.isin(user_result,np.nonzero(self.test_consumption_matrix[uids[i]].A.flatten())[0])]
+        self.num_latent_factors = len(self.items_latent_factors[0])
 
-        self.save_results()
+        self.I = np.eye(self.num_latent_factors)
+        bs = defaultdict(lambda: np.zeros(self.num_latent_factors))
+        As = defaultdict(lambda: self.user_lambda*I)
 
-    @staticmethod
-    def interact_user(obj_id,uid):
-        self = ctypes.cast(obj_id, ctypes.py_object).value
-        if not issubclass(self.__class__,ICF): # DANGER CODE
-            raise RuntimeError
-        num_lat = len(self.items_means[0])
-        I = np.eye(num_lat)
+    def predict(self,uid,candidate_items):
+        b = bs[uid]
+        A = As[uid]
+        mean = np.dot(np.linalg.inv(A),b)
+        cov = np.linalg.inv(A)*self.var
+        
+        items_score  = mean @ self.items_means[candidate_items].T+\
+            self.alpha*np.sqrt(np.sum(self.items_means[candidate_items].dot(cov) * self.items_means[candidate_items],axis=1))
+        
+        return items_score, None
 
-        user_candidate_items = np.array(list(range(len(self.items_means))))
-        b = np.zeros(num_lat)
-        A = self.user_lambda*I
-        result = []
-
-        num_correct_items = 0
-
-        for i in range(self.interactions):
-            mean = np.dot(np.linalg.inv(A),b)
-            cov = np.linalg.inv(A)*self.var
-
-            best_items  = user_candidate_items[np.argsort(mean @ self.items_means[user_candidate_items].T+\
-                                                          self.alpha*np.sqrt(np.sum(self.items_means[user_candidate_items].dot(cov) * self.items_means[user_candidate_items],axis=1)))[::-1]][:self.interaction_size]
-
-            user_candidate_items = user_candidate_items[~np.isin(user_candidate_items,best_items)]
-            result.extend(best_items)
-
-            # if i == 0:
-            #     if uid >= 0 and uid <= 300:
-            #         print('user',uid,'first top-5',result[i*self.interaction_size:(i+1)*self.interaction_size])
-
-            for max_i in result[i*self.interaction_size:(i+1)*self.interaction_size]:
-                max_item_mean = self.items_means[max_i]
-                A += max_item_mean[:,None].dot(max_item_mean[None,:])
-                if self.get_reward(uid,max_i) >= self.threshold:
-                    b += self.get_reward(uid,max_i)*max_item_mean
-                    num_correct_items += 1
-                    if self.exit_when_consumed_all and num_correct_items == self.users_num_correct_items[uid]:
-                        print(f"Exiting user {uid} with {len(result)} items in total and {num_correct_items} correct ones")
-                        return np.array(result)
-
-        return np.array(result)
+    def update(self,uid,item,reward,additional_data):
+        max_item_mean = self.items_means[item]
+        A += max_item_mean[:,None].dot(max_item_mean[None,:])
+        b += reward*max_item_mean
