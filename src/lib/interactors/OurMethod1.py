@@ -15,12 +15,19 @@ class OurMethod1(interactors.Interactor):
         self.weight_method = weight_method
         self.stop = stop
 
-    def interact(self, items_latent_factors):
-        super().interact()
-        uids = self.test_users
+    def train(self,train_dataset):
+        super().train(train_dataset)
+        self.train_dataset = train_dataset
+        self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[2],(self.train_dataset.data[0],self.train_dataset.data[1])),(self.train_dataset.users_num,self.train_dataset.items_num))
+        self.num_items = self.train_dataset.num_items
 
-        self.items_latent_factors = items_latent_factors
-        num_users = len(uids)
+        mf_model = mf.SVD()
+        mf_model.fit(self.train_consumption_matrix)
+        self.items_weights = mf_model.items_weights
+
+
+        # self.items_weights = items_weights
+        # num_users = len(uids)
 
         items_entropy = interactors.Entropy.get_items_entropy(self.train_consumption_matrix)
         items_popularity = interactors.MostPopular.get_items_popularity(self.train_consumption_matrix,normalize=False)
@@ -29,53 +36,23 @@ class OurMethod1(interactors.Interactor):
 
         assert(self.items_bias.min() >= 0 and self.items_bias.max() == 1)
 
-        self_id = id(self)
-        np.seterr('warn')
-        with threadpool_limits(limits=1, user_api='blas'):
-            args = [(self_id,int(uid),) for uid in uids]
-            results = util.run_parallel(self.interact_user,args)
+        self.I = np.eye(len(self.items_weights[0]))
+        bs = defaultdict(lambda: np.zeros(self.num_latent_factors))
+        As = defaultdict(lambda: self.I.copy())
 
-        if self.exit_when_consumed_all:
-            for i, user_result in enumerate(results):
-                if not self.results_save_relevants:
-                    self.results[uids[i]] = user_result
-                else:
-                    self.results[uids[i]] = user_result[np.isin(user_result,np.nonzero(self.test_consumption_matrix[uids[i]].A.flatten())[0])]
-        else:
-            users_global_model_weights = dict()
+        users_num_correct_items_history= defaultdict(lambda:[0])
+        users_num_correct_items_history = defaultdict(lambda:[0])
+        users_similarity_score = defaultdict(lambda:[0])
+        users_distance_history = defaultdict(lambda:[])
+        users_global_model_weights = defaultdict(lambda:[])
 
-            for i, (user_result, global_model_weights) in enumerate(results):
-                if not self.results_save_relevants:
-                    self.results[uids[i]] = user_result
-                else:
-                    self.results[uids[i]] = user_result[np.isin(user_result,np.nonzero(self.test_consumption_matrix[uids[i]].A.flatten())[0])]
-                users_global_model_weights[uids[i]] = global_model_weights
-
-            users_global_model_weights=np.array(list(users_global_model_weights.values()))
+        # user_latent_factors_history = np.empty(shape=(0, num_lat))
+        # num_correct_items_history = [0]
+        # similarity_score = [0]
+        # distance_history = []
+        # global_model_weights = []
 
 
-            fig, ax = plt.subplots()
-            ax.errorbar(np.arange(users_global_model_weights.shape[1])+1,
-                        y=np.mean(users_global_model_weights,axis=0),
-                        yerr=np.std(users_global_model_weights,axis=0), label= '$\overline{x}$ and $s$',marker='.',color='k',
-                        capsize=3)
-            ax.plot(np.arange(users_global_model_weights.shape[1])+1,
-                    np.min(users_global_model_weights,axis=0), label='Min weight',
-                    color='green'
-            )
-            ax.plot(np.arange(users_global_model_weights.shape[1])+1,
-                    np.max(users_global_model_weights,axis=0), label='Max weight',
-                    color='red',
-            )
-            ax.set_xlabel("Interaction $t$")
-            ax.set_ylabel("Weight $\Phi_{t}$")
-            ax.set_xlim(1,users_global_model_weights.shape[1])
-            ax.legend()
-            fig.savefig(os.path.join(self.DIRS['img'],"weights_"+self.get_name()+".png"))
-            with open(os.path.join(self.DIRS['result'],"weights_"+self.get_name()+".pickle"),'wb') as f:
-                pickle.dump(users_global_model_weights,f)
-
-        self.save_results()
 
     def get_global_model_weight(self,user_latent_factors_history,num_correct_items_history,distance_history):
         if self.weight_method == 'stop':
@@ -98,79 +75,41 @@ class OurMethod1(interactors.Interactor):
         else:
             raise RuntimeError
 
-    @staticmethod
-    def interact_user(obj_id,uid):
-        self = ctypes.cast(obj_id, ctypes.py_object).value
-        num_lat = len(self.items_latent_factors[0])
-        I = np.eye(num_lat)
+    def predict(self,uid,candidate_items,num_req_items):
+        b = bs[uid]
+        A = As[uid]
+        
+        user_latent_factors_history = users_num_correct_items_history[uid]
+        num_correct_items_history   = users_num_correct_items_history[uid]
+        similarity_score            = users_similarity_score[uid]
+        distance_history            = users_distance_history[uid]
+        global_model_weights        = users_global_model_weights[uid]
 
-        user_candidate_items = np.array(list(range(len(self.items_latent_factors))))
-        num_user_candidate_items = len(user_candidate_items)
-        b = np.zeros(num_lat)
-        A = I.copy()
-        result = []
-        # old_mean = np.ones(b.shape)*1
-        user_latent_factors_history = np.empty(shape=(0, num_lat))
-        num_correct_items_history = [0]
-        similarity_score = [0]
-        distance_history = []
-        global_model_weights = []
-        num_correct_items = 0
-        for i in range(self.interactions):
-            
-            user_latent_factors = np.dot(np.linalg.inv(A),b)
-            user_latent_factors_history = np.vstack([user_latent_factors_history,user_latent_factors])
-            global_model_weight = self.get_global_model_weight(user_latent_factors_history,
-                                                               num_correct_items_history,
-                                                               distance_history)
-            global_model_weights.append(global_model_weight)
-            # if uid == 2:
-            #     print(np.sum(num_correct_items_history))
-            #     print(global_model_weight)
-            #     times_with_reward = np.nonzero(num_correct_items_history)[0]
-            #     print(times_with_reward)
-                
-            #     if len(times_with_reward) >= 2:
-            #         print(user_latent_factors_history[times_with_reward][-1])
-            #         print(user_latent_factors_history[times_with_reward][-2])
-                # print(num_correct_items_history)
-                # print(mean)
-                # print(np.linalg.norm(mean-old_mean))
-                # print(np.corrcoef(mean,old_mean))
-                # print(mean,old_mean)
-                # print("%d %.5f %d"%(i,scipy.spatial.distance.cosine(mean,old_mean),np.count_nonzero([self.get_reward(uid,item) for item in result])))
-            items_uncertainty = np.sqrt(np.sum(self.items_latent_factors[user_candidate_items].dot(np.linalg.inv(A)) * self.items_latent_factors[user_candidate_items],axis=1))
-            items_user_similarity = user_latent_factors @ self.items_latent_factors[user_candidate_items].T
-            user_model_items_score = items_user_similarity + self.alpha*items_uncertainty
-            global_model_items_score = self.items_bias[user_candidate_items]
-            user_model_items_score_min = np.min(user_model_items_score)
-            user_model_items_score_max = np.max(user_model_items_score)
-            if user_model_items_score_max-user_model_items_score_min != 0:
-                global_model_items_score = global_model_items_score*(user_model_items_score_max-user_model_items_score_min) + user_model_items_score_min
+        user_latent_factors = np.dot(np.linalg.inv(A),b)
+        user_latent_factors_history = np.vstack([user_latent_factors_history,user_latent_factors])
+        global_model_weight = self.get_global_model_weight(user_latent_factors_history,
+                                                            num_correct_items_history,
+                                                            distance_history)
+        global_model_weights.append(global_model_weight)
+        items_uncertainty = np.sqrt(np.sum(self.items_weights[candidate_items].dot(np.linalg.inv(A)) * self.items_weights[candidate_items],axis=1))
+        items_user_similarity = user_latent_factors @ self.items_weights[candidate_items].T
+        user_model_items_score = items_user_similarity + self.alpha*items_uncertainty
+        global_model_items_score = self.items_bias[candidate_items]
+        user_model_items_score_min = np.min(user_model_items_score)
+        user_model_items_score_max = np.max(user_model_items_score)
+        if user_model_items_score_max-user_model_items_score_min != 0:
+            global_model_items_score = global_model_items_score*(user_model_items_score_max-user_model_items_score_min) + user_model_items_score_min
 
-            items_score =  (1-global_model_weight)*user_model_items_score + global_model_weight*global_model_items_score
+        items_score =  (1-global_model_weight)*user_model_items_score + global_model_weight*global_model_items_score
+        return items_score, None
 
-            best_items = user_candidate_items[np.argsort(items_score)[::-1]][:self.interaction_size]
-            user_candidate_items = user_candidate_items[~np.isin(user_candidate_items,best_items)]
-            result.extend(best_items)
 
-            num_correct_items_history.append(0)
-            for max_i in result[i*self.interaction_size:(i+1)*self.interaction_size]:
-                max_item_latent_factors = self.items_latent_factors[max_i]
-                A += max_item_latent_factors[:,None].dot(max_item_latent_factors[None,:])
-                num_user_candidate_items -= 1
-                if self.get_reward(uid,max_i) >= self.threshold:
-                    b += self.get_reward(uid,max_i)*max_item_latent_factors
-                    num_correct_items_history[-1] += 1
-                    num_correct_items += 1
-                    if self.exit_when_consumed_all and num_correct_items == self.users_num_correct_items[uid]:
-                        print(f"Exiting user {uid} with {len(result)} items in total and {num_correct_items} correct ones")
-                        return np.array(result)
-
-                    
-            # old_mean = mean.copy()
-
-        if self.exit_when_consumed_all:
-            return np.array(result)
-        else:
-            return np.array(result), global_model_weights
+    def update(self,uid,item,reward,additional_data):
+        max_item_latent_factors = self.items_weights[item]
+        b = bs[uid]
+        A = As[uid]
+        A += max_item_latent_factors[:,None].dot(max_item_latent_factors[None,:])
+        b += reward*max_item_latent_factors
+        if reward > min(self.train_dataset.rate_domain):
+            num_correct_items_history = users_num_correct_items_history[uid]
+            num_correct_items_history[-1] += 1
