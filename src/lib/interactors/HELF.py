@@ -36,7 +36,7 @@ class HELF(Interactor):
         self.items_logpopent = HELF.get_items_helf(items_popularity,items_entropy,num_train_users)
 
 
-    def predict(self,uid,candidate_items):
+    def predict(self,uid,candidate_items,num_req_items):
         items_score = self.items_logpopent[candidate_items]
         return items_score, None
         # top_items = list(reversed(np.argsort(items_score)))[:self.interaction_size]

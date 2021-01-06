@@ -141,7 +141,7 @@ class COFIBA(Interactor):
         #     # code her
         #     # ...
 
-    def predict(self,uid,candidate_items):
+    def predict(self,uid,candidate_items,num_req_items):
         items_score = np.zeros(candidate_items.shape)
             for i, item in enumerate(candidate_items):
                 users_graph, labels = self.update_user_cluster(uid,item)

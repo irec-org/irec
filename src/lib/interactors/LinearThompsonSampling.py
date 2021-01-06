@@ -76,7 +76,7 @@ class LinearThompsonSampling(ICF):
     #     if not issubclass(self.__class__,ICF): # DANGER CODE
     #         raise RuntimeError
 
-    def predict(self,uid,candidate_items):
+    def predict(self,uid,candidate_items,num_req_items):
         b = bs[uid]
         A = As[uid]
 

@@ -34,7 +34,7 @@ class EGreedy(Interactor):
         #     uid = random.sample(available_users,k=1)[0]
 
             # for j in range(self.interaction_size):
-    def predict(self,uid,candidate_items):
+    def predict(self,uid,candidate_items,num_req_items):
                 # not_recommended = np.ones(num_items,dtype=bool)
                 # not_recommended[self.results[uid]] = 0
                 # items_not_recommended = np.nonzero(not_recommended)[0]

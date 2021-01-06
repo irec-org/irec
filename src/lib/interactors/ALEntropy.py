@@ -23,7 +23,7 @@ class ALEntropy(Interactor):
             items_ratings[iid,reward] += 1
 
 
-    def predict(self,uid,candidate_items):
+    def predict(self,uid,candidate_items,num_req_items):
         items_score =  [Entropy.probabilities_entropy(self.items_ratings[iid]/np.sum(self.items_ratings[iid]))
                         for iid
                         in candidate_items]

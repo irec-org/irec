@@ -41,7 +41,7 @@ class EMostPopular(Interactor):
             self.items_score[iid] = i
             
 
-    def predict(self,uid,candidate_items):
+    def predict(self,uid,candidate_items,num_req_items):
         items_score = self.items_score[candidate_items]
         return items_score, None
 

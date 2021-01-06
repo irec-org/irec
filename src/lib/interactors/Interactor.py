@@ -16,7 +16,7 @@ class Interactor(Saveable):
     def train(self,train_data):
         super().train(train_data)
         self.t = 0
-    def predict(self,uid,candidate_items):
+    def predict(self,uid,candidate_items,num_req_items):
         return None, None
     def update(self,uid,item,reward,additional_data):
         pass

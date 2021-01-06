@@ -45,7 +45,7 @@ class Entropy0(Interactor):
 
         self.items_entropy = self.get_items_entropy(self.train_consumption_matrix)
 
-    def predict(self,uid,candidate_items):
+    def predict(self,uid,candidate_items,num_req_items):
         items_score = self.items_entropy[candidate_items]
         return items_score, None
         # fig, ax = plt.subplots()

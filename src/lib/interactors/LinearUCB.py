@@ -28,7 +28,7 @@ class LinearUCB(ICF):
         bs = defaultdict(lambda: np.zeros(self.num_latent_factors))
         As = defaultdict(lambda: self.user_lambda*I)
 
-    def predict(self,uid,candidate_items):
+    def predict(self,uid,candidate_items,num_req_items):
         b = bs[uid]
         A = As[uid]
         mean = np.dot(np.linalg.inv(A),b)

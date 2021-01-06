@@ -25,7 +25,7 @@ class DistinctPopular(Interactor):
         self.top_iids = defaultdict([])
         # num_items = self.train_consumption_matrix.shape[1]
 
-    def predict(self,uid,candidate_items):
+    def predict(self,uid,candidate_items,num_req_items):
 p_iids] = 0
             if len(self.top_iids) > 0:
                 items_not_recommended_distance = np.mean(self.items_distance[self.top_iids[uid]][:,candidate_items],axis=0)

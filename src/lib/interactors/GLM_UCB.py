@@ -39,7 +39,7 @@ class GLM_UCB(ICF):
             [(u_rec_rewards[t] - self.p(p.T @ u_rec_items_means[t]))*u_rec_items_means[t]
              for t in range(0,len(u_rec_items_means))]),0)
 
-    def predict(self,uid,candidate_items):
+    def predict(self,uid,candidate_items,num_req_items):
         # self = ctypes.cast(obj_id, ctypes.py_object).value
         # if not issubclass(self.__class__,ICF): # DANGER CODE
         #     raise RuntimeError

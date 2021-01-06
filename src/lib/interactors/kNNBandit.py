@@ -23,7 +23,7 @@ class kNNBandit(Interactor):
         self.users_alphas = (self.train_consumption_matrix @ self.train_consumption_matrix.T).A
         self.users_rating_sum = self.train_consumption_matrix.sum(axis=1).A.flatten()
 
-    def predict(self,uid,candidate_items):
+    def predict(self,uid,candidate_items,num_req_items):
         users_score = np.zeros(self.total_num_users)
         for i, v1, v2 in zip(list(range(self.total_num_users)),self.users_alphas[uid], self.users_rating_sum-self.users_alphas[uid]):
             if v1 > 0 and v2 > 0:

@@ -17,7 +17,7 @@ class ALMostPopular(Interactor):
         self.num_items = self.train_dataset.num_items
         self.items_popularity = MostPopular.get_items_popularity(self.train_consumption_matrix, normalize=False)
 
-    def predict(self,uid,candidate_items):
+    def predict(self,uid,candidate_items,num_req_items):
         items_score = self.items_popularity[candidate_items]
         return items_score, None
         # top_items = list(reversed(np.argsort(items_score)))[:self.interaction_size]
