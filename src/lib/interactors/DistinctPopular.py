@@ -7,7 +7,7 @@ import os
 import random
 import util.metrics as metrics
 
-class DistinctPopular(Interactor):
+class DistinctPopular(ExperimentalInteractor):
     def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
 

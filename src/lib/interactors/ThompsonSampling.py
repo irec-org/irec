@@ -5,7 +5,7 @@ import os
 import random
 import scipy.stats
 from collections import defaultdict
-class ThompsonSampling(Interactor):
+class ThompsonSampling(ExperimentalInteractor):
     def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
 

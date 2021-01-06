@@ -1,10 +1,10 @@
 import numpy as np
 from tqdm import tqdm
-from .Interactor import Interactor
+from .ExperimentalInteractor import ExperimentalInteractor
 import matplotlib.pyplot as plt
 import os
 import scipy.sparse
-class MostPopular(Interactor):
+class MostPopular(ExperimentalInteractor):
     def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
 

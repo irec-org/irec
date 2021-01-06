@@ -8,7 +8,7 @@ import scipy.spatial
 import matplotlib.pyplot as plt
 import os
 import pickle
-class OurMethod1(interactors.Interactor):
+class OurMethod1(interactors.ExperimentalInteractor):
     def __init__(self, alpha=1.0, stop=None, weight_method='change',*args, **kwargs):
         super().__init__(*args, **kwargs)
         self.alpha = alpha

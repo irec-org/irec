@@ -1,10 +1,10 @@
-from .Interactor import Interactor
+from .ExperimentalInteractor import ExperimentalInteractor
 import numpy as np
 from tqdm import tqdm
 import util
 from threadpoolctl import threadpool_limits
 import ctypes
-class LinUCB(Interactor):
+class LinUCB(ExperimentalInteractor):
     def __init__(self, alpha=1.0, zeta=None,*args, **kwargs):
         super().__init__(*args, **kwargs)
         if alpha != None:

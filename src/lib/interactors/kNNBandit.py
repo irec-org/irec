@@ -1,13 +1,13 @@
 import numpy as np
 from tqdm import tqdm
-from .Interactor import Interactor
+from .ExperimentalInteractor import ExperimentalInteractor
 import matplotlib.pyplot as plt
 import os
 import scipy.sparse
 from collections import defaultdict
 import random
 import itertools
-class kNNBandit(Interactor):
+class kNNBandit(ExperimentalInteractor):
     def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
 

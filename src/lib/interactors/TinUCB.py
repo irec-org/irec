@@ -1,4 +1,4 @@
-from .Interactor import Interactor
+from .ExperimentalInteractor import ExperimentalInteractor
 import numpy as np
 from tqdm import tqdm
 import util
@@ -6,7 +6,7 @@ from threadpoolctl import threadpool_limits
 import ctypes
 import functools
 
-class TinUCB(Interactor):
+class TinUCB(ExperimentalInteractor):
     def __init__(self, alpha=0.2, zeta=None,*args, **kwargs):
         super().__init__(*args, **kwargs)
         if alpha != None:
@@ -36,7 +36,7 @@ class TinUCB(Interactor):
     @staticmethod
     def interact_user(obj_id,uid):
         self = ctypes.cast(obj_id, ctypes.py_object).value
-        if not issubclass(self.__class__,Interactor):
+        if not issubclass(self.__class__,ExperimentalInteractor):
             raise RuntimeError
         num_lat = len(self.items_latent_factors[0])
         I = np.eye(num_lat)

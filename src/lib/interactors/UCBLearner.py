@@ -1,4 +1,4 @@
-from .Interactor import Interactor
+from .ExperimentalInteractor import ExperimentalInteractor
 import numpy as np
 import random
 from tqdm import tqdm
@@ -10,7 +10,7 @@ from .MostPopular import MostPopular
 from .LogPopEnt import LogPopEnt
 from .PopPlusEnt import *
 
-class UCBLearner(Interactor):
+class UCBLearner(ExperimentalInteractor):
     def __init__(self, stop=14, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.stop = stop
@@ -48,7 +48,7 @@ class UCBLearner(Interactor):
     @staticmethod
     def interact_user(obj_id,uid):
         self = ctypes.cast(obj_id, ctypes.py_object).value
-        if not issubclass(self.__class__,Interactor): # DANGER CODE
+        if not issubclass(self.__class__,ExperimentalInteractor): # DANGER CODE
             raise RuntimeError
 
         num_lat = len(self.items_latent_factors[0])

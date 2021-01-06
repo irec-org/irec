@@ -5,7 +5,7 @@ import os
 import random
 import scipy.stats
 from collections import defaultdict
-class UCB(Interactor):
+class UCB(ExperimentalInteractor):
     def __init__(self,c=1.0,*args, **kwargs):
         super().__init__(*args, **kwargs)
         self.c = c

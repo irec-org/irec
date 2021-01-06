@@ -6,7 +6,7 @@ import scipy.stats
 import os
 import random
 
-class EMostPopular(Interactor):
+class EMostPopular(ExperimentalInteractor):
     def __init__(self,epsilon=0.2,*args, **kwargs):
         super().__init__(*args, **kwargs)
         self.epsilon = epsilon

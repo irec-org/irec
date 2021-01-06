@@ -1,6 +1,6 @@
 import numpy as np
 from tqdm import tqdm
-from .Interactor import Interactor
+from .ExperimentalInteractor import ExperimentalInteractor
 import matplotlib.pyplot as plt
 import os
 import scipy.sparse
@@ -8,7 +8,7 @@ from collections import defaultdict
 import random
 import itertools
 from numba import jit, prange
-class COFIBA(Interactor):
+class COFIBA(ExperimentalInteractor):
     def __init__(self, alpha=1, alpha_2=1,*args, **kwargs):
         super().__init__(*args, **kwargs)
         self.alpha = alpha

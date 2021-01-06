@@ -1,13 +1,13 @@
 import numpy as np
 from tqdm import tqdm
 from .Interactor import *
-from .Entropy import *
+from .ExperimentalEntropy import *
 import matplotlib.pyplot as plt
 import os
 import scipy.sparse
 from collections import defaultdict
 import random
-class ALEntropy(Interactor):
+class ALEntropy(ExperimentalInteractor):
     def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
 

@@ -5,7 +5,7 @@ from tqdm import tqdm
 import util
 from threadpoolctl import threadpool_limits
 import ctypes
-class LinEGreedy(Interactor):
+class LinEGreedy(ExperimentalInteractor):
     def __init__(self, epsilon=0.1, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.epsilon = epsilon

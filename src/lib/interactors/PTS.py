@@ -1,6 +1,6 @@
 import numpy as np
 from tqdm import tqdm
-from .Interactor import Interactor
+from .ExperimentalInteractor import ExperimentalInteractor
 import matplotlib.pyplot as plt
 import os
 import scipy.sparse
@@ -9,7 +9,7 @@ import random
 
 def _softmax(x):
     return np.exp(x - np.max(x)) / np.sum(np.exp(x - np.max(x)))
-class PTS(Interactor):
+class PTS(ExperimentalInteractor):
     def __init__(self,num_particles,self.var,*args, **kwargs):
         super().__init__(*args, **kwargs)
         self.num_particles = num_particles

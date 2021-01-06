@@ -5,7 +5,7 @@ import os
 import random
 import scipy.stats
 from collections import defaultdict
-class EGreedy(Interactor):
+class EGreedy(ExperimentalInteractor):
     def __init__(self, epsilon=0.1,*args, **kwargs):
         super().__init__(*args, **kwargs)
         self.epsilon = epsilon

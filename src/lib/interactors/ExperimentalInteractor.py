@@ -8,14 +8,13 @@ from util import Saveable
 from collections import defaultdict
 import pickle
 import json
+from .Interactor import Interactor
 
-class Interactor():
-    def __init__(self,evaluation_policy,*args, **kwargs):
+class ExperimentalInteractor(Saveable):
+    def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.evaluation_policy = evaluation_policy
     def train(self,train_data):
         super().train(train_data)
-    def predict(self,uid,candidate_items,num_req_items):
-        return None, None
-    def update(self,uid,item,reward,additional_data):
-        pass
+        self.t = 0
+    def increment_time(self):
+        self.t += 1

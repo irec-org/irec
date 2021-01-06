@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import scipy.stats
 import os
 
-class HELF(Interactor):
+class HELF(ExperimentalInteractor):
     def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
 

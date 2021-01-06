@@ -10,7 +10,7 @@ import os
 import pickle
 import sklearn
 import scipy.optimize
-class OurMethod2(interactors.Interactor):
+class OurMethod2(interactors.ExperimentalInteractor):
     def __init__(self, alpha=1.0,*args, **kwargs):
         super().__init__(*args, **kwargs)
         self.alpha = alpha
