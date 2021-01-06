@@ -37,6 +37,8 @@ class LinUCB(Interactor):
 
     def update(self,uid,item,reward,additional_data):
         max_item_latent_factors = self.items_weights[item]
+        b = bs[uid]
+        A = As[uid]
         A += max_item_latent_factors[:,None].dot(max_item_latent_factors[None,:])
         b += reward*max_item_latent_factors
 
