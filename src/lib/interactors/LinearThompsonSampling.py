@@ -94,7 +94,7 @@ class LinearThompsonSampling(ICF):
     def update(self,uid,item,reward,additional_data):
         max_q = additional_data['qs'][np.argmax(item == additional_data['candidate_items']),:]
         A += max_q[:,None].dot(max_q[None,:])
-        # if self.get_reward(uid,item) >= self.threshold:
+        # if self.get_reward(uid,item) >= self.train_dataset.mean_rating:
         b += reward*max_q
                 # num_correct_items += 1
                 # if self.exit_when_consumed_all and num_correct_items == self.users_num_correct_items[uid]:

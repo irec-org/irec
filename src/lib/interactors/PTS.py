@@ -46,7 +46,7 @@ class PTS(ExperimentalInteractor):
             
             for best_item in best_items:
                 # users_history[uid,best_item] = self.get_reward(uid,best_item)
-                if self.get_reward(uid,best_item) >= self.threshold:
+                if self.get_reward(uid,best_item) >= self.train_dataset.mean_rating:
                     lambdas_u_i = []
                     etas_u_i  = []
                     mus_u_i = []

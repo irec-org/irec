@@ -62,7 +62,7 @@ class UCBLearner(ExperimentalInteractor):
         nb_items = 0
         items_bias = self.items_bias
 
-        # num_test_items = len(np.nonzero(self.test_consumption_matrix[uid,:]>=self.threshold)[0])
+        # num_test_items = len(np.nonzero(self.test_consumption_matrix[uid,:]>=self.train_dataset.mean_rating)[0])
 
         for i in range(self.interactions):
             mean = np.dot(np.linalg.inv(A),b)
@@ -81,7 +81,7 @@ class UCBLearner(ExperimentalInteractor):
             for max_i in result[i*self.interaction_size:(i+1)*self.interaction_size]:
                 max_item_weight = self.items_latent_factors[max_i]
                 A += max_item_weight[:,None].dot(max_item_weight[None,:])
-                if self.get_reward(uid,max_i) >= self.threshold:
+                if self.get_reward(uid,max_i) >= self.train_dataset.mean_rating:
                     b += self.get_reward(uid,max_i)*max_item_weight
                     nb_items += 1
         return result

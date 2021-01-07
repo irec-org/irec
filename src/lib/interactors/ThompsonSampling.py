@@ -18,7 +18,7 @@ class ThompsonSampling(ExperimentalInteractor):
         self.alphas = np.ones(self.num_items)
         self.betas = np.ones(self.num_items)
 
-        a = np.sum(self.train_consumption_matrix>=min(self.train_dataset.rate_domain),
+        a = np.sum(self.train_consumption_matrix>=self.train_dataset.mean_rating,
                                         axis=0).A.flatten()
         self.alphas += a
         self.betas += self.train_consumption_matrix.shape[0] - a
@@ -30,6 +30,6 @@ class ThompsonSampling(ExperimentalInteractor):
 
     def update(self,uid,item,reward,additional_data):
         reward = reward
-        reward = 1 if reward >= self.threshold else 0
+        reward = 1 if reward >= self.train_dataset.mean_rating else 0
         self.alphas[best_item] += reward
         self.betas[best_item] += 1-reward

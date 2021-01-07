@@ -29,4 +29,5 @@ class Dataset:
         self.num_items = len(np.unique(self.data[1]))
         self.rate_domain  = set(np.unique(self.data[2]))
         self.uids = np.unique(self.data[0])
+        self.mean_rating = np.mean(data[2])
 
