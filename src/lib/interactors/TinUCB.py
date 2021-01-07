@@ -35,7 +35,7 @@ class TinUCB(ExperimentalInteractor):
     def predict(self,uid,candidate_items,num_req_items):
         b = bs[uid]
         A = As[uid]
-        A_weights = [self.g(i+1)/self.g(len(A_sums_history)) for i in range(len(A_sums_history))] 
+        A_weights = [self.g(i+1)/self.g(len(self.users_A_sums_history[uid])) for i in range(len(A_sums_history))] 
         
         A = functools.reduce(lambda a,b: a+b,map(lambda x,w: x*w, zip(A_sums_history,A_weights)))
 
