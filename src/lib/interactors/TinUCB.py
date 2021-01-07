@@ -14,58 +14,41 @@ class TinUCB(ExperimentalInteractor):
         elif zeta != None:
             self.alpha = 1+np.sqrt(np.log(2/zeta)/2)
 
-    def interact(self, items_latent_factors):
-        super().interact()
-        uids = self.test_users
+    def train(self,train_dataset):
+        super().train(train_dataset)
+        self.train_dataset = train_dataset
+        self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[2],(self.train_dataset.data[0],self.train_dataset.data[1])),(self.train_dataset.users_num,self.train_dataset.items_num))
+        self.num_items = self.train_dataset.num_items
+        mf_model = mf.SVD()
+        mf_model.fit(self.train_consumption_matrix)
+        self.items_weights = mf_model.items_weights
+        self.I = np.eye(len(self.items_weights[0]))
+        bs = defaultdict(lambda: np.zeros(self.num_latent_factors))
+        tmp_I = self.I
+        As = defaultdict(lambda: tmp_I.copy())
+        self.users_A_sums_history = defaultdict(lambda:[tmp_I.copy()])
 
-        self.items_latent_factors = items_latent_factors
-        num_users = len(uids)
-
-        self_id = id(self)
-        with threadpool_limits(limits=1, user_api='blas'):
-            args = [(self_id,int(uid),) for uid in uids]
-            result = util.run_parallel(self.interact_user,args)
-        for i, user_result in enumerate(result):
-            self.result[uids[i]] = user_result
-
-        self.save_result()
 
     def g(self,x):
         return x
 
-    @staticmethod
-    def interact_user(obj_id,uid):
-        self = ctypes.cast(obj_id, ctypes.py_object).value
-        if not issubclass(self.__class__,ExperimentalInteractor):
-            raise RuntimeError
-        num_lat = len(self.items_latent_factors[0])
-        I = np.eye(num_lat)
+    def predict(self,uid,candidate_items,num_req_items):
+        b = bs[uid]
+        A = As[uid]
+        A_weights = [self.g(i+1)/self.g(len(A_sums_history)) for i in range(len(A_sums_history))] 
+        
+        A = functools.reduce(lambda a,b: a+b,map(lambda x,w: x*w, zip(A_sums_history,A_weights)))
 
-        user_candidate_items = np.array(list(range(len(self.items_latent_factors))))
-        b = np.zeros(num_lat)
-        A = I.copy()
-        result = []
+        mean = np.dot(np.linalg.inv(A),b)
+        items_score = mean @ self.items_weights[candidate_items].T+\
+            self.alpha*np.sqrt(np.sum(self.items_weights[candidate_items].dot(np.linalg.inv(A)) * self.items_weights[candidate_items],axis=1))
+        return items_score, None
 
-        A_sums_history = [A]
 
-        for i in range(self.interactions):
-            A_weights = [self.g(i+1)/self.g(len(A_sums_history)) for i in range(len(A_sums_history))] 
-            
-            A = functools.reduce(lambda a,b: a+b,map(lambda x,w: x*w, zip(A_sums_history,A_weights)))
-            # A = functools.reduce(lambda a,b: a+b,[_A*(2**(i+1)/2**len(A_sums_history)) for i,_A in enumerate(A_sums_history)])
-
-            
-            mean = np.dot(np.linalg.inv(A),b)
-            best_items = user_candidate_items[np.argsort(mean @ self.items_latent_factors[user_candidate_items].T+\
-                                                         self.alpha*np.sqrt(np.sum(self.items_latent_factors[user_candidate_items].dot(np.linalg.inv(A)) * self.items_latent_factors[user_candidate_items],axis=1)))[::-1]][:self.interaction_size]
-
-            user_candidate_items = user_candidate_items[~np.isin(user_candidate_items,best_items)]
-            result.extend(best_items)
-
-            for max_i in result[i*self.interaction_size:(i+1)*self.interaction_size]:
-                max_item_latent_factors = self.items_latent_factors[max_i]
-                # A += max_item_latent_factors[:,None].dot(max_item_latent_factors[None,:])
-                A_sums_history.append(max_item_latent_factors[:,None].dot(max_item_latent_factors[None,:]))
-                if self.get_reward(uid,max_i) >= self.threshold:
-                    b += self.get_reward(uid,max_i)*max_item_latent_factors
-        return result
+    def update(self,uid,item,reward,additional_data):
+        b = bs[uid]
+        A = As[uid]
+        max_item_latent_factors = self.items_weights[item]
+        self.users_A_sums_history[uid].append(max_item_latent_factors[:,None].dot(max_item_latent_factors[None,:]))
+        A += max_item_latent_factors[:,None].dot(max_item_latent_factors[None,:])
+        b += reward*max_item_latent_factors
