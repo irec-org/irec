@@ -15,73 +15,45 @@ class UCBLearner(ExperimentalInteractor):
         super().__init__(*args, **kwargs)
         self.stop = stop
 
-    def interact(self, items_latent_factors):
-        super().interact()
-        uids = self.test_users
+    def train(self,train_dataset):
+        super().train(train_dataset)
+        self.train_dataset = train_dataset
+        self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[2],(self.train_dataset.data[0],self.train_dataset.data[1])),(self.train_dataset.users_num,self.train_dataset.items_num))
+        self.num_items = self.train_dataset.num_items
 
         items_entropy = Entropy.get_items_entropy(self.train_consumption_matrix)
         items_popularity = MostPopular.get_items_popularity(self.train_consumption_matrix,normalize=False)
         self.items_bias= LogPopEnt.get_items_logpopent(items_popularity,items_entropy)
-        # self.items_bias= PopPlusEnt.get_items_popplusent(items_popularity,items_entropy)
 
-        # items_popularity = MostPopular.get_items_popularity(self.consumption_matrix,uids,normalize=True)
-        # self.items_bias = items_popularity
+        mf_model = mf.SVD()
+        mf_model.fit(self.train_consumption_matrix)
+        self.items_weights = mf_model.items_weights
+        self.num_latent_factors = len(self.items_weights[0])
 
-        self.items_latent_factors = items_latent_factors
-        num_users = len(uids)
-        # get number of latent factors 
-        num_lat = len(items_latent_factors[0])
-        I = np.eye(num_lat)
-        self_id = id(self)
-        with threadpool_limits(limits=1, user_api='blas'):
-            args = [(self_id,int(uid),) for uid in uids]
-            results = util.run_parallel(self.interact_user,args)
-        for i, user_result in enumerate(results):
-            self.results[uids[i]] = user_result
-        self.save_results()
+        self.I = np.eye(len(self.items_weights[0]))
+        bs = defaultdict(lambda: np.zeros(self.num_latent_factors))
+        As = defaultdict(lambda: self.I.copy())
+        self.users_nb_items = defaultdict(lambda: 0)
 
     @staticmethod
     def discount_bias(num_items,stop):
         limit = pow(2,stop)/100
         return pow(2,min(stop,num_items))/limit
 
-    @staticmethod
-    def interact_user(obj_id,uid):
-        self = ctypes.cast(obj_id, ctypes.py_object).value
-        if not issubclass(self.__class__,ExperimentalInteractor): # DANGER CODE
-            raise RuntimeError
-
-        num_lat = len(self.items_latent_factors[0])
-        I = np.eye(num_lat)
-
-        result = []
-        user_candidate_items = np.array(list(range(len(self.items_latent_factors))))
-        b = np.zeros(num_lat)
-        A = I
-
-        nb_items = 0
+    def predict(self,uid,candidate_items,num_req_items):
+        b = bs[uid]
+        A = As[uid]
         items_bias = self.items_bias
+        mean = np.dot(np.linalg.inv(A),b)
+        pred_rule = mean @ self.items_weights[user_candidate_items].T
+        current_bias = items_bias[user_candidate_items] * max(1, np.max(pred_rule))
+        bias = current_bias - (current_bias * self.discount_bias(self.users_nb_items[uid],self.stop)/100)
+        bias[bias<0] = 0
+        items_score = pred_rule + bias)[::-1]
+        return items_score
 
-        # num_test_items = len(np.nonzero(self.test_consumption_matrix[uid,:]>=self.train_dataset.mean_rating)[0])
-
-        for i in range(self.interactions):
-            mean = np.dot(np.linalg.inv(A),b)
-
-            pred_rule = mean @ self.items_latent_factors[user_candidate_items].T
-
-            current_bias = items_bias[user_candidate_items] * max(1, np.max(pred_rule))
-            bias = current_bias - (current_bias * self.discount_bias(nb_items,self.stop)/100)
-            bias[bias<0] = 0
-            # bias = current_bias
-            best_items = user_candidate_items[np.argsort(pred_rule + bias)[::-1]][:self.interaction_size]
-
-            user_candidate_items = user_candidate_items[~np.isin(user_candidate_items,best_items)]
-            result.extend(best_items)
-
-            for max_i in result[i*self.interaction_size:(i+1)*self.interaction_size]:
-                max_item_weight = self.items_latent_factors[max_i]
-                A += max_item_weight[:,None].dot(max_item_weight[None,:])
-                if self.get_reward(uid,max_i) >= self.train_dataset.mean_rating:
-                    b += self.get_reward(uid,max_i)*max_item_weight
-                    nb_items += 1
-        return result
+    def update(self,uid,item,reward,additional_data):
+        max_item_weight = self.items_weights[item]
+        A += max_item_weight[:,None].dot(max_item_weight[None,:])
+        b += reward*max_item_weight
+        self.users_nb_items[uid] += 1

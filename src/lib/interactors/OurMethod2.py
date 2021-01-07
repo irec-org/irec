@@ -24,6 +24,7 @@ class OurMethod2(interactors.ExperimentalInteractor):
         mf_model = mf.SVD()
         mf_model.fit(self.train_consumption_matrix)
         self.items_weights = mf_model.items_weights
+        self.num_latent_factors = len(self.items_weights[0])
 
         items_entropy = interactors.Entropy.get_items_entropy(self.train_consumption_matrix)
         items_popularity = interactors.MostPopular.get_items_popularity(self.train_consumption_matrix,normalize=False)
