@@ -15,10 +15,13 @@ def dict_to_list(d):
     return list(dict_to_list_gen(d))
 
 def dict_to_str(dictionary):
-    string = ''
+    strings = []
     for key, value in dictionary.items():
-        string += f"{key}: {value}\n"
-    return string
+        if isinstance(value,dict):
+            strings.append(f"{key}:{{{dict_to_str(value)}}}")
+        else:
+            strings.append(f"{key}:{value}")
+    return ",".join(strings)
 
 def run_parallel(func, args, use_tqdm=True):
     executor = ProcessPoolExecutor()
