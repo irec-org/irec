@@ -19,3 +19,8 @@ class ExperimentalInteractor(Saveable):
         self.t = 0
     def increment_time(self):
         self.t += 1
+    def get_name(self):
+        if hasattr(self,'parameters'):
+            return self.__class__.__name__+'_'+util.dict_to_str(self.parameters)
+        else:
+            raise TypeError
