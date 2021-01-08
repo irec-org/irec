@@ -13,7 +13,7 @@ from .PopPlusEnt import *
 class UCBLearner(ExperimentalInteractor):
     def __init__(self, stop=14, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.stop = stop
+        self.parameters['stop'] = stop
 
     def train(self,train_dataset):
         super().train(train_dataset)
@@ -47,7 +47,7 @@ class UCBLearner(ExperimentalInteractor):
         mean = np.dot(np.linalg.inv(A),b)
         pred_rule = mean @ self.items_weights[user_candidate_items].T
         current_bias = items_bias[user_candidate_items] * max(1, np.max(pred_rule))
-        bias = current_bias - (current_bias * self.discount_bias(self.users_nb_items[uid],self.stop)/100)
+        bias = current_bias - (current_bias * self.discount_bias(self.users_nb_items[uid],self.parameters['stop'])/100)
         bias[bias<0] = 0
         items_score = pred_rule + bias)[::-1]
         return items_score

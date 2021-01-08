@@ -13,6 +13,7 @@ from .Interactor import Interactor
 class ExperimentalInteractor(Saveable):
     def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.parameters = dict()
     def train(self,train_data):
         super().train(train_data)
         self.t = 0

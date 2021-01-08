@@ -20,7 +20,6 @@ class ALMostPopular(ExperimentalInteractor):
     def predict(self,uid,candidate_items,num_req_items):
         items_score = self.items_popularity[candidate_items]
         return items_score, None
-        # top_items = list(reversed(np.argsort(items_score)))[:self.interaction_size]
 
     def update(self,uid,item,reward,additional_data):
         self.items_popularity[item] += 1

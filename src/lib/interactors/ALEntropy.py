@@ -22,14 +22,11 @@ class ALEntropy(ExperimentalInteractor):
         for uid, iid, reward in train_dataset.data:
             items_ratings[iid,reward] += 1
 
-
     def predict(self,uid,candidate_items,num_req_items):
         items_score =  [Entropy.probabilities_entropy(self.items_ratings[iid]/np.sum(self.items_ratings[iid]))
                         for iid
                         in candidate_items]
         return items_score, None
-        # top_item = list(reversed(np.argsort(items_score)))[0]
-        # best_item = candidate_items[top_item]
 
     def update(self,uid,item,reward,additional_data):
         items_ratings[item,self.unique_values_ids[reward]] += 1 

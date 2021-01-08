@@ -8,17 +8,13 @@ from collections import defaultdict
 class UCB(ExperimentalInteractor):
     def __init__(self,c=1.0,*args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.c = c
+        self.parameters['c'] = c
 
     def train(self,train_dataset):
         super().train(train_dataset)
         self.train_dataset = train_dataset
         self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[2],(self.train_dataset.data[0],self.train_dataset.data[1])),(self.train_dataset.users_num,self.train_dataset.items_num))
         self.num_items = self.train_dataset.num_items
-        # uids = self.test_users
-        # np.seterr(divide='warn')
-        # num_users = len(uids)
-        # num_items = self.train_consumption_matrix.shape[1]
         
         self.items_mean_values = np.zeros(self.num_items,dtype=np.float128)
         self.items_count = np.zeros(self.num_items,dtype=int)
@@ -34,9 +30,8 @@ class UCB(ExperimentalInteractor):
         self.items_count += self.train_consumption_matrix[mask].shape[0]
         self.t += np.prod(self.train_consumption_matrix[mask].shape)
 
-
     def predict(self,uid,candidate_items,num_req_items):
-        items_uncertainty = self.c*np.sqrt(2*np.log(self.t)/self.items_count[candidate_items])
+        items_uncertainty = self.parameters['c']*np.sqrt(2*np.log(self.t)/self.items_count[candidate_items])
         items_score = self.items_mean_values[candidate_items]+items_uncertainty
         return items_score, None
 

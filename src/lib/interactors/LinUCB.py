@@ -8,9 +8,9 @@ class LinUCB(ExperimentalInteractor):
     def __init__(self, alpha=1.0, zeta=None,*args, **kwargs):
         super().__init__(*args, **kwargs)
         if alpha != None:
-            self.alpha = alpha
+            self.parameters['alpha'] = alpha
         elif zeta != None:
-            self.alpha = 1+np.sqrt(np.log(2/zeta)/2)
+            self.parameters['alpha'] = 1+np.sqrt(np.log(2/zeta)/2)
 
     def train(self,train_dataset):
         super().train(train_dataset)
@@ -30,7 +30,7 @@ class LinUCB(ExperimentalInteractor):
         b = bs[uid]
         A = As[uid]
         mean = np.dot(np.linalg.inv(A),b)
-        items_uncertainty = self.alpha*np.sqrt(np.sum(self.items_weights[candidate_items].dot(np.linalg.inv(A)) * self.items_weights[candidate_items],axis=1))
+        items_uncertainty = self.parameters['alpha']*np.sqrt(np.sum(self.items_weights[candidate_items].dot(np.linalg.inv(A)) * self.items_weights[candidate_items],axis=1))
         items_user_similarity = mean @ self.items_weights[candidate_items].T
         items_score =  items_user_similarity + items_uncertainty
         return items_score, None
