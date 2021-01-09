@@ -10,17 +10,12 @@ import pickle
 import json
 from .Interactor import Interactor
 
-class ExperimentalInteractor(Saveable):
-    def __init__(self,*args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.parameters = dict()
+class ExperimentalInteractor(Interactor,Saveable):
+    def __init__(self,directory,parameters,*args, **kwargs):
+        Interactor.__init__(self,*args, **kwargs)
+        Saveable.__init__(self,directory,parameters)
     def train(self,train_data):
         super().train(train_data)
         self.t = 0
     def increment_time(self):
         self.t += 1
-    def get_name(self):
-        if hasattr(self,'parameters'):
-            return self.__class__.__name__+'_'+util.dict_to_str(self.parameters)
-        else:
-            raise TypeError
