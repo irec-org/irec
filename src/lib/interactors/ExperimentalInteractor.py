@@ -10,10 +10,10 @@ import pickle
 import json
 from .Interactor import Interactor
 
-class ExperimentalInteractor(Interactor,Saveable):
-    def __init__(self,directory,parameters,*args, **kwargs):
+class ExperimentalInteractor(Interactor,Parameterizable):
+    def __init__(self,parameters,*args, **kwargs):
         Interactor.__init__(self,*args, **kwargs)
-        Saveable.__init__(self,directory,parameters)
+        Parameterizable.__init__(self,parameters)
     def train(self,train_data):
         super().train(train_data)
         self.t = 0

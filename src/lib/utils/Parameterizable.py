@@ -1,4 +1,4 @@
-class Nameable:
+class Parameterizable:
     def __init__(self,parameters=dict(),*args, **kwargs):
         super().__init__(*args, **kwargs)
         self.parameters = parameters
@@ -7,5 +7,3 @@ class Nameable:
             return self.__class__.__name__+'_'+util.dict_to_str(self.parameters)
         else:
             raise TypeError
-
-    

@@ -14,11 +14,10 @@ def _predict_sparse(users_weights, items_weights, users_items):
         results[i] = users_weights[uid] @ items_weights[iid]
     return results
 
-class MF(Saveable):
-
+class MF(Parameterizable):
     def __init__(self, num_lat=10, *args, **kwargs):
         super().__init__(*args,**kwargs)
-        self.num_lat = num_lat
+        self.parameters['num_lat'] = num_lat
 
     def normalize_matrix(self,matrix):
         return matrix/np.max(matrix)

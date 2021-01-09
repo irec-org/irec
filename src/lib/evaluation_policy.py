@@ -1,9 +1,10 @@
 from collections import defaultdict
 import scipy.sparse
+
 def EvaluationPolicy:
     pass
 
-class Interaction(EvaluationPolicy):
+class Interaction(EvaluationPolicy,Parameterizable):
     def __init__(self,parameters,*args,**kwargs):
         super().__init__(*args, **kwargs)
         self.parameters = parameters
