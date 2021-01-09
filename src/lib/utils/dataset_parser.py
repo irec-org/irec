@@ -17,13 +17,7 @@ class TRTE(DatasetParser):
         train_dataset.data = train_data
         test_dataset = copy(dataset)
         test_dataset.data = test_data
-        # num_users = len(np.unique(np.append(train_data[0],test_data[0])))
-        # num_items = len(np.unique(np.append(train_data[1],test_data[1])))
-        # unique_ratings = set(np.unique(np.append(train_data[2],test_data[2])))
-        # dataset = Dataset(data,num_users, num_items,unique_ratings)
-
         return train_dataset, test_dataset
-
 
 class MovieLens100k(DatasetParser):
     def parse_dataset(self,dataset_descriptor):
@@ -33,11 +27,6 @@ class MovieLens100k(DatasetParser):
         data[1] = data[1] - 1
         dataset = Dataset(data)
         dataset.update_from_data()
-
-        # num_users = len(np.unique(data[0]))
-        # num_items = len(np.unique(data[1]))
-        # unique_ratings = set(np.unique(data[2]))
-        # dataset = Dataset(data,num_users, num_items,unique_ratings)
         return dataset
 
 class MovieLens1M(DatasetParser):
@@ -49,11 +38,6 @@ class MovieLens1M(DatasetParser):
             iids[iid] = i
         data[1] = np.vectorize(lambda x: iids[x])(data[1])
         data[0] = data[0] - 1
-        # num_users = len(np.unique(data[0]))
-        # num_items = len(np.unique(data[1]))
-        # unique_ratings = set(np.unique(data[2]))
-        # dataset = Dataset(data,num_users, num_items,unique_ratings)
         dataset = Dataset(data)
         dataset.update_from_data()
-
         return dataset
