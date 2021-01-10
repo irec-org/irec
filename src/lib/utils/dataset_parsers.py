@@ -1,5 +1,6 @@
 import os
-from dataset import *
+# from dataset import *
+from . import dataset
 from copy import copy
 
 class DatasetParser:

@@ -7,8 +7,9 @@ import time
 import scipy.sparse
 import os
 import re
-from Saveable import Saveable
-import dataset_parsers
+# from Saveable import Saveable
+# import dataset_parsers
+from . import dataset_parsers
 from dataclasses import dataclass
 
 class DatasetDescriptor:

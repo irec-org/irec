@@ -1,8 +1,11 @@
-from .util import *
-from .Parameterizable import *
-from .Saveable import *
-from .DatasetFormatter import *
-from .MetricsEvaluator import *
-from .metrics import *
-from .InteractorsRunner import *
-from .GridSearch import *
+# from .utils import *
+# from .Parameterizable import *
+# from .dataset import *
+# from .PersistentDataManager import *
+# from .MetricsEvaluator import *
+# from .metrics import *
+# from .InteractorsRunner import *
+# from .GridSearch import *
+
+import sys
+sys.path.append('../lib')
