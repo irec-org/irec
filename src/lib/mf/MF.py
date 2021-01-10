@@ -37,6 +37,3 @@ class MF(Parameterizable):
 
     def score(self,X):
         return metrics.rmse(X.data,self.predict(X))
-
-    def filter_parameters(self,parameters):
-        return super().filter_parameters({k: v for k, v in parameters.items() if k not in ['rmse','objective_value']})
