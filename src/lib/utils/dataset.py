@@ -18,7 +18,7 @@ class DatasetDescriptor(Parameterizable):
         super().__init__(*args,**kwargs)
         self.name = name
         self.dataset_dir = dataset_dir
-        self.parameters.extend(['name'])
+        self.parameters.extend(['dataset_dir'])
 
 class Dataset:
     def __init__(self,data,num_users=None,num_items=None,rate_domain=None,uids=None):

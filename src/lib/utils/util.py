@@ -20,7 +20,7 @@ def dict_to_str(dictionary):
         if isinstance(value,dict):
             strings.append(f"{key}:{{{dict_to_str(value)}}}")
         else:
-            strings.append(f"{key}:{value}")
+            strings.append(f"{key}:{str(value).replace('/','|')}")
     return ",".join(strings)
 
 def run_parallel(func, args, use_tqdm=True):
