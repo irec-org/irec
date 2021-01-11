@@ -45,9 +45,9 @@ with open("settings"+sep+"datasets_preprocessors.yaml") as f:
         result = dataset_parsed
 
     
-    result_file_path = os.path.join(
+        result_file_path = os.path.join(
         DirectoryDependent().DIRS['dataset_preprocess'],
-        'dspp_'+
-        dataset_descriptor.get_id()+','+
-        util.dict_to_str(splitters_settings[dataset_preprocessor['splitter']])+'.pickle')
-    pickle.dump(result,open(result_file_path,'wb'))
+            'dspp_'+
+            dataset_descriptor.get_id()+','+
+            util.dict_to_str(splitters_settings[dataset_preprocessor['splitter']])+'.pickle')
+        pickle.dump(result,open(result_file_path,'wb'))
