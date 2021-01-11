@@ -11,11 +11,14 @@ import numpy as np
 import os
 from copy import copy
 from dataclasses import dataclass
+from .Parameterizable import Parameterizable
 
-class DatasetDescriptor:
-    def __init__(self,name,dataset_dir):
+class DatasetDescriptor(Parameterizable):
+    def __init__(self,name,dataset_dir,*args,**kwargs):
+        super().__init__(*args,**kwargs)
         self.name = name
         self.dataset_dir = dataset_dir
+        self.parameters.extend(['name'])
 
 class Dataset:
     def __init__(self,data,num_users=None,num_items=None,rate_domain=None,uids=None):
