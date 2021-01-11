@@ -1,0 +1,54 @@
+- COFIBA:
+   name: COFIBA
+- ThompsonSampling:
+   name: TS
+- Random:
+   name: Random
+- kNNBandit:
+   name: kNN-Bandit
+- ALMostPopular:
+   name: AL Most Popular
+- OurMethod1:
+   name: Old UCB-Learner
+- OurMethod2:
+   name: New UCB-Learner
+- MostPopular:
+   name: Most Popular
+- LinearUCB:
+   name: Linear UCB (PMF)
+- LinEGreedy:
+   name: Linear ε-Greedy (MF)
+- LinUCB:
+   name: LinUCB (MF)
+- PPELPE:
+   name: PPELPE
+- UCBLearner:
+   name: UCB-Learner (MF)
+- GLM_UCB:
+   name: GLM-UCB (PMF)
+- LinearEGreedy:
+   name: Linear ε-Greedy (PMF)
+- LinearThompsonSampling:
+   name: Linear TS (PMF)
+- EGreedy:
+   name: ε-Greedy
+- UCB:
+   name: UCB
+- MostRepresentative:
+   name: Most Representative
+- ALEntropy:
+   name: AL Entropy
+- Entropy0:
+   name: Entropy0
+- HELF:
+   name: HELF
+- PopPlusEnt:
+   name: Pop+Ent
+- DistinctPopular:
+   name: Distinct Popular
+- EMostPopular:
+   name: ε-Most Popular
+- Entropy:
+   name: Entropy
+- LogPopEnt:
+   name: log(Pop)⋅Ent

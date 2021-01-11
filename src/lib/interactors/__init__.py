@@ -30,34 +30,3 @@ from .PPELPE import *
 from .kNNBandit import *
 from .COFIBA import *
 from .OurMethod2 import *
-# from . import *
-
-INTERACTORS = {
-    'COFIBA': COFIBA,
-    'TS': ThompsonSampling,
-    'Random': Random,
-    'kNN-Bandit': kNNBandit,
-    'AL Most Popular': ALMostPopular,
-    'Old UCB-Learner': OurMethod1,
-    'New UCB-Learner': OurMethod2,
-    'Most Popular': MostPopular,
-    'Linear UCB (PMF)': LinearUCB,
-    'Linear ε-Greedy (MF)': LinEGreedy,
-    'LinUCB (MF)': LinUCB,
-    'PPELPE': PPELPE,
-    'UCB-Learner (MF)': UCBLearner,
-    'GLM-UCB (PMF)': GLM_UCB,
-    'Linear ε-Greedy (PMF)': LinearEGreedy,
-    'Linear TS (PMF)': LinearThompsonSampling,
-    'ε-Greedy': EGreedy,
-    'UCB': UCB,
-    'Most Representative': MostRepresentative,
-    'AL Entropy': ALEntropy,
-    'Entropy0': Entropy0,
-    'HELF': HELF,
-    'Pop+Ent': PopPlusEnt,
-    'Distinct Popular': DistinctPopular,
-    'ε-Most Popular': EMostPopular,
-    'Entropy': Entropy,
-    'log(Pop)⋅Ent': LogPopEnt,
-}
