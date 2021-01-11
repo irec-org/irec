@@ -35,7 +35,7 @@ class Dataset:
         self.uids = np.unique(self.data[0])
         self.mean_rating = np.mean(self.data[2])
 
-class DatasetParser:
+class DatasetParser(Parameterizable):
     pass
 
 class TRTE(DatasetParser):

@@ -2,15 +2,19 @@ from copy import copy
 import numpy as np
 import pandas as pd
 import random
+from .Parameterizable import Parameterizable
 
-class Splitter:
+class Splitter(Parameterizable):
     pass
 
 class TrainTestConsumption(Splitter):
-    def __init__(self,train_size=0.8, test_consumes=1,crono=False):
+    def __init__(self,train_size=0.8, test_consumes=1,crono=False,*args,**kwargs):
+        super().__init__(*args,**kwargs)
         self.train_size=0.8
         self.test_consumes=0.8
         self.crono = crono
+
+        self.parameters.extend(['train_size','test_consumes','crono'])
         
     def apply(self,dataset):
         data = dataset.data
