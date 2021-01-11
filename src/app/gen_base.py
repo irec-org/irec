@@ -14,6 +14,7 @@ import pickle
 from lib.DatasetManager import DatasetManager
 dm = DatasetManager()
 dm.request_dataset_preprocessor()
+dm.initialize_engines()
 dm.run_parser()
 dm.run_splitter()
 dm.save()
