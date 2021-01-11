@@ -49,26 +49,27 @@ class ICFPMFS(MF):
     def __init__(self, iterations=20, var=0.05, user_var=0.01, item_var=0.01, stop_criteria=0.0009, *args, **kwargs):
         super().__init__(*args,**kwargs)
         self.iterations = iterations
-        self.parameters['var'] = var
-        self.parameters['user_var'] = user_var
-        self.parameters['item_var'] = item_var
-        self.parameters['stop_criteria'] = stop_criteria
+        self.var = var
+        self.user_var = user_var
+        self.item_var = item_var
+        self.stop_criteria = stop_criteria
+        self.parameters.extend(['var','user_var','item_var','stop_criteria'])
 
     def get_user_lambda(self):
-        return self.parameters['var']/self.parameters['user_var']
+        return self.var/self.user_var
 
     def get_item_lambda(self):
-        return self.parameters['var']/self.parameters['item_var']
+        return self.var/self.item_var
     
     def load_var(self, training_matrix):
         decimals = 4
-        # self.parameters['var'] = np.mean(training_matrix.data**2) - np.mean(training_matrix.data)**2
-        # self.parameters['user_var'] = np.mean([np.mean(i.data**2) - np.mean(i.data)**2 if i.getnnz()>0 else 0 for i in training_matrix])
-        # self.parameters['item_var'] = np.mean([np.mean(i.data**2) - np.mean(i.data)**2 if i.getnnz()>0 else 0 for i in training_matrix.transpose()])
+        # self.var = np.mean(training_matrix.data**2) - np.mean(training_matrix.data)**2
+        # self.user_var = np.mean([np.mean(i.data**2) - np.mean(i.data)**2 if i.getnnz()>0 else 0 for i in training_matrix])
+        # self.item_var = np.mean([np.mean(i.data**2) - np.mean(i.data)**2 if i.getnnz()>0 else 0 for i in training_matrix.transpose()])
 
-        # self.parameters['var'] = np.round(self.parameters['var'],decimals)
-        # self.parameters['user_var'] = np.round(self.parameters['user_var'],decimals)
-        # self.parameters['item_var'] = np.round(self.parameters['item_var'],decimals)
+        # self.var = np.round(self.var,decimals)
+        # self.user_var = np.round(self.user_var,decimals)
+        # self.item_var = np.round(self.item_var,decimals)
 
     def fit(self,training_matrix):
         super().fit()
@@ -76,8 +77,8 @@ class ICFPMFS(MF):
         self.objective_values = []
         self.best=None
         decimals = 4
-        self.user_lambda = self.parameters['var']/self.parameters['user_var']
-        self.item_lambda = self.parameters['var']/self.parameters['item_var']
+        self.user_lambda = self.var/self.user_var
+        self.item_lambda = self.var/self.item_var
         self.r_mean = np.mean(training_matrix.data)
         # self.r_mean = np.
         self_id = id(self)
@@ -89,15 +90,15 @@ class ICFPMFS(MF):
         self.lowest_value = lowest_value = np.min(training_matrix)
         self.highest_value = highest_value = np.max(training_matrix)
         self.observed_ui = observed_ui = (training_matrix.tocoo().row,training_matrix.tocoo().col) # itens observed by some user
-        self.I = I = np.eye(self.parameters['num_lat'])
-        self.users_weights = np.random.multivariate_normal(np.zeros(self.parameters['num_lat']),self.parameters['user_var']*I,training_matrix.shape[0])
-        self.items_weights = np.random.multivariate_normal(np.zeros(self.parameters['num_lat']),self.parameters['item_var']*I,training_matrix.shape[1])
-        # self.users_weights[~np.isin(list(range(self.users_weights.shape[0])), train_uids)] = np.ones(self.parameters['num_lat'])
+        self.I = I = np.eye(self.num_lat)
+        self.users_weights = np.random.multivariate_normal(np.zeros(self.num_lat),self.user_var*I,training_matrix.shape[0])
+        self.items_weights = np.random.multivariate_normal(np.zeros(self.num_lat),self.item_var*I,training_matrix.shape[1])
+        # self.users_weights[~np.isin(list(range(self.users_weights.shape[0])), train_uids)] = np.ones(self.num_lat)
 
-        # self.users_weights = np.mean(training_matrix.data)*np.random.rand(num_users,self.parameters['num_lat'])
-        # self.items_weights = np.mean(training_matrix.data)*np.random.rand(num_items,self.parameters['num_lat'])
-        # self.users_weights = 0.1*np.random.multivariate_normal(np.zeros(self.parameters['num_lat']),self.parameters['user_var']*I,training_matrix.shape[0])
-        # self.items_weights = 0.1*np.random.multivariate_normal(np.zeros(self.parameters['num_lat']),self.parameters['item_var']*I,training_matrix.shape[1])
+        # self.users_weights = np.mean(training_matrix.data)*np.random.rand(num_users,self.num_lat)
+        # self.items_weights = np.mean(training_matrix.data)*np.random.rand(num_items,self.num_lat)
+        # self.users_weights = 0.1*np.random.multivariate_normal(np.zeros(self.num_lat),self.user_var*I,training_matrix.shape[0])
+        # self.items_weights = 0.1*np.random.multivariate_normal(np.zeros(self.num_lat),self.item_var*I,training_matrix.shape[1])
 
         self.users_observed_items = collections.defaultdict(list)
         self.items_observed_users = collections.defaultdict(list)
@@ -128,8 +129,8 @@ class ICFPMFS(MF):
                 # for to_run in random.sample([1,2],2):
                 for to_run in [1,2]:
                     if to_run == 1:
-                        self.users_means = np.zeros((num_users,self.parameters['num_lat']))
-                        self.users_covs = np.zeros((num_users,self.parameters['num_lat'],self.parameters['num_lat']))
+                        self.users_means = np.zeros((num_users,self.num_lat))
+                        self.users_covs = np.zeros((num_users,self.num_lat,self.num_lat))
                         args = [(self_id,i,) for i in train_uids]
                         results = run_parallel(self.compute_user_weight,args,use_tqdm=False)
                         for uid, (mean, cov, weight) in zip(train_uids,results):
@@ -137,8 +138,8 @@ class ICFPMFS(MF):
                             self.users_covs[uid] = cov
                             self.users_weights[uid] = weight
                     else:
-                        self.items_means = np.zeros((num_items,self.parameters['num_lat']))
-                        self.items_covs = np.zeros((num_items,self.parameters['num_lat'],self.parameters['num_lat']))
+                        self.items_means = np.zeros((num_items,self.num_lat))
+                        self.items_covs = np.zeros((num_items,self.num_lat,self.num_lat))
                         args = [(self_id,i,) for i in range(num_items)]
                         results = run_parallel(self.compute_item_weight,args,use_tqdm=False)
                         for iid, (mean, cov, weight) in enumerate(results):
@@ -151,9 +152,9 @@ class ICFPMFS(MF):
             tq.set_description('rmse={:.3f}'.format(metrics.rmse(training_matrix.data,_unnorm_ratings(predicted,self.lowest_value,self.highest_value))))
             tq.refresh()
 
-        #     # objective_value = _norm_sum_probabilities(scipy.stats.norm.pdf(training_matrix.data,predicted,self.parameters['var']))\
-        #     #     + _norm_sum_probabilities(_apply_multivariate_normal(self.users_weights,np.zeros(self.parameters['num_lat']),self.parameters['var']*self.I))\
-        #     #     + _norm_sum_probabilities(_apply_multivariate_normal(self.items_weights,np.zeros(self.parameters['num_lat']),self.parameters['var']*self.I))
+        #     # objective_value = _norm_sum_probabilities(scipy.stats.norm.pdf(training_matrix.data,predicted,self.var))\
+        #     #     + _norm_sum_probabilities(_apply_multivariate_normal(self.users_weights,np.zeros(self.num_lat),self.var*self.I))\
+        #     #     + _norm_sum_probabilities(_apply_multivariate_normal(self.items_weights,np.zeros(self.num_lat),self.var*self.I))
 
         #     objective_value = np.sum((training_matrix.data - predicted)**2)/2 +\
         #         self.user_lambda/2 * np.sum(np.linalg.norm(self.users_weights,axis=1)**2) +\
@@ -176,7 +177,7 @@ class ICFPMFS(MF):
         #     # rmse=metrics.rmse(training_matrix.data,predicted)
         #     # objective_value = rmse
         #     # print("RMSE",rmse)
-        #     # if np.fabs(objective_value - last_objective_value) <= self.parameters['stop_criteria']:
+        #     # if np.fabs(objective_value - last_objective_value) <= self.stop_criteria:
         #     #     self.objective_value = objective_value
         #     #     print("Achieved convergence with %d iterations"%(i+1))
         #     #     break
@@ -208,12 +209,12 @@ class ICFPMFS(MF):
     @staticmethod
     def _user_probability(obj_id,uid):
         self = ctypes.cast(obj_id, ctypes.py_object).value
-        return scipy.stats.multivariate_normal.pdf(self.users_weights[uid],np.zeros(self.parameters['num_lat']),self.parameters['var']*self.I)
+        return scipy.stats.multivariate_normal.pdf(self.users_weights[uid],np.zeros(self.num_lat),self.var*self.I)
 
     @staticmethod
     def _item_probability(obj_id,iid):
         self = ctypes.cast(obj_id, ctypes.py_object).value
-        return scipy.stats.multivariate_normal.pdf(self.items_weights[iid],np.zeros(self.parameters['num_lat']),self.parameters['var']*self.I)
+        return scipy.stats.multivariate_normal.pdf(self.items_weights[iid],np.zeros(self.num_lat),self.var*self.I)
 
     @staticmethod
     def compute_user_weight(obj_id,uid):
@@ -224,7 +225,7 @@ class ICFPMFS(MF):
         observed = self.users_observed_items[uid]
         tmp = np.linalg.inv((np.dot(self.items_weights[observed].T,self.items_weights[observed]) + I*self.user_lambda))
         mean = tmp.dot(self.items_weights[observed].T).dot(_norm_ratings(self.users_observed_items_ratings[uid],self.lowest_value,self.highest_value))
-        cov = tmp*self.parameters['var']
+        cov = tmp*self.var
         return mean, cov, np.random.multivariate_normal(mean,cov)
         # return mean, cov, scipy.stats.multivariate_normal.pdf(self.users_weights[uid],mean,cov)
         # return mean, cov, scipy.stats.multivariate_normal.pdf(np.random.multivariate_normal(mean,cov),mean,cov)
@@ -238,7 +239,7 @@ class ICFPMFS(MF):
         observed = self.items_observed_users[iid]
         tmp = np.linalg.inv((np.dot(self.users_weights[observed].T,self.users_weights[observed]) + I*self.item_lambda))
         mean = tmp.dot(self.users_weights[observed].T).dot(_norm_ratings(self.items_observed_users_ratings[iid], self.lowest_value,self.highest_value))
-        cov = tmp*self.parameters['var']
+        cov = tmp*self.var
         return mean, cov, np.random.multivariate_normal(mean,cov)
         # return mean, cov, scipy.stats.multivariate_normal.pdf(self.items_weights[iid],mean,cov)
         # return mean, cov, scipy.stats.multivariate_normal.pdf(np.random.multivariate_normal(mean,cov),mean,cov)

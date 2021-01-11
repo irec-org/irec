@@ -66,14 +66,15 @@ def _svdplusplus(data, indptr, indices, n_u, num_users, num_items, num_lat, lear
 class SVDPlusPlus(MF):
     def __init__(self, iterations=50, learn_rate=0.05,delta=0.015, delta_bias=0.002, bias_learn_rate=0.005, stop_criteria=0.009, init_mean=0, init_std=0.1, *args, **kwargs):
         super().__init__(*args,**kwargs)
-        self.parameters['iterations'] = iterations
-        self.parameters['learn_rate'] = learn_rate
-        self.parameters['delta'] = delta
-        self.parameters['delta_bias_bias'] = delta_bias
-        self.parameters['bias_learn_rate'] = bias_learn_rate
-        self.parameters['stop_criteria'] = stop_criteria
-        self.parameters['init_mean'] = init_mean
-        self.parameters['init_std'] = init_std
+        self.iterations = iterations
+        self.learn_rate = learn_rate
+        self.delta = delta
+        self.delta_bias = delta_bias
+        self.bias_learn_rate = bias_learn_rate
+        self.stop_criteria = stop_criteria
+        self.init_mean = init_mean
+        self.init_std = init_std
+        self.parameters.extend(['iterations','learn_rate','delta','delta_bias','bias_learn_rate','stop_criteria','init_mean','init_std'])
 
     def fit(self,training_matrix):
         super().fit()
@@ -85,9 +86,9 @@ class SVDPlusPlus(MF):
                                                                   training_matrix.indptr,
                                                                   training_matrix.indices,n_u,
                                                                   num_users,num_items,
-                                                                  self.parameters['num_lat'], self.parameters['learn_rate'],
-                                                                  self.parameters['delta'],
-                                                                  self.parameters['delta_bias_bias'], self.parameters['bias_learn_rate'],
-                                                                  self.parameters['iterations'], self.parameters['stop_criteria'],
-                                                                  self.parameters['init_mean'],self.parameters['init_std'])
+                                                                  self.num_lat, self.learn_rate,
+                                                                  self.delta,
+                                                                  self.delta_bias_bias, self.bias_learn_rate,
+                                                                  self.iterations, self.stop_criteria,
+                                                                  self.init_mean,self.init_std)
             

@@ -17,7 +17,8 @@ def _predict_sparse(users_weights, items_weights, users_items):
 class MF(Parameterizable):
     def __init__(self, num_lat=10, *args, **kwargs):
         super().__init__(*args,**kwargs)
-        self.parameters['num_lat'] = num_lat
+        self.num_lat = num_lat
+        self.parameters.extend(['num_lat'])
 
     def normalize_matrix(self,matrix):
         return matrix/np.max(matrix)

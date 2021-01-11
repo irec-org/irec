@@ -15,27 +15,28 @@ class ICFPMF(MF):
     def __init__(self, iterations=50, var=1, user_var=1, item_var=1, *args, **kwargs):
         super().__init__(*args,**kwargs)
         self.iterations = iterations
-        self.parameters['var'] = var
-        self.parameters['user_var'] = user_var
-        self.parameters['item_var'] = item_var
-        self.user_lambda = self.parameters['var']/self.parameters['user_var']
-        self.item_lambda = self.parameters['var']/self.parameters['item_var']
+        self.var = var
+        self.user_var = user_var
+        self.item_var = item_var
+        self.user_lambda = self.var/self.user_var
+        self.item_lambda = self.var/self.item_var
         self.objective_values = []
         self.best=None
+        self.parameters.extend(['var','user_var','item_var'])
 
     def load_var(self, training_matrix):
         decimals = 4
         training_matrix = self.normalize_matrix(training_matrix)
-        self.parameters['var'] = np.var(training_matrix)
-        # self.parameters['user_var'] = self.parameters['var']
-        # self.parameters['item_var'] = self.parameters['var']
-        self.parameters['user_var'] = np.mean(np.var(training_matrix,axis=1))
-        self.parameters['item_var'] = np.mean(np.var(training_matrix,axis=0))
-        self.user_lambda = self.parameters['var']/self.parameters['user_var']
-        self.item_lambda = self.parameters['var']/self.parameters['item_var']
-        self.parameters['var'] = np.round(self.parameters['var'],decimals)
-        self.parameters['user_var'] = np.round(self.parameters['user_var'],decimals)
-        self.parameters['item_var'] = np.round(self.parameters['item_var'],decimals)
+        self.var = np.var(training_matrix)
+        # self.user_var = self.var
+        # self.item_var = self.var
+        self.user_var = np.mean(np.var(training_matrix,axis=1))
+        self.item_var = np.mean(np.var(training_matrix,axis=0))
+        self.user_lambda = self.var/self.user_var
+        self.item_lambda = self.var/self.item_var
+        self.var = np.round(self.var,decimals)
+        self.user_var = np.round(self.user_var,decimals)
+        self.item_var = np.round(self.item_var,decimals)
         self.user_lambda = np.round(self.user_lambda,decimals)
         self.item_lambda = np.round(self.item_lambda,decimals)
 
@@ -49,9 +50,9 @@ class ICFPMF(MF):
         self.lowest_value = lowest_value = np.min(training_matrix)
         highest_value = np.max(training_matrix)
         self.observed_ui = observed_ui = np.nonzero(training_matrix>lowest_value) # itens observed by some user
-        self.I = I = np.eye(self.parameters['num_lat'])
-        self.users_weights = np.random.multivariate_normal(np.zeros(self.parameters['num_lat']),self.parameters['user_var']*I,training_matrix.shape[0])
-        self.items_weights = np.random.multivariate_normal(np.zeros(self.parameters['num_lat']),self.parameters['item_var']*I,training_matrix.shape[1])
+        self.I = I = np.eye(self.num_lat)
+        self.users_weights = np.random.multivariate_normal(np.zeros(self.num_lat),self.user_var*I,training_matrix.shape[0])
+        self.items_weights = np.random.multivariate_normal(np.zeros(self.num_lat),self.item_var*I,training_matrix.shape[1])
         best_objective_value = np.inf
         # without burning
         np.seterr('warn')
@@ -60,8 +61,8 @@ class ICFPMF(MF):
             with threadpool_limits(limits=1, user_api='blas'):
                 for to_run in random.sample([1,2],2):
                     if to_run == 1:
-                        self.users_means = np.zeros((num_users,self.parameters['num_lat']))
-                        self.users_covs = np.zeros((num_users,self.parameters['num_lat'],self.parameters['num_lat']))
+                        self.users_means = np.zeros((num_users,self.num_lat))
+                        self.users_covs = np.zeros((num_users,self.num_lat,self.num_lat))
                         args = [(self_id,i,) for i in range(num_users)]
                         results = run_parallel(self.compute_user_weight,args)
                         for uid, (mean, cov, weight) in enumerate(results):
@@ -69,8 +70,8 @@ class ICFPMF(MF):
                             self.users_covs[uid] = cov
                             self.users_weights[uid] = weight
                     else:
-                        self.items_means = np.zeros((num_items,self.parameters['num_lat']))
-                        self.items_covs = np.zeros((num_items,self.parameters['num_lat'],self.parameters['num_lat']))
+                        self.items_means = np.zeros((num_items,self.num_lat))
+                        self.items_covs = np.zeros((num_items,self.num_lat,self.num_lat))
                         args = [(self_id,i,) for i in range(num_items)]
                         results = run_parallel(self.compute_item_weight,args)
                         for iid, (mean, cov, weight) in enumerate(results):
@@ -79,7 +80,7 @@ class ICFPMF(MF):
                             self.items_weights[iid] = weight
                             
             rmse=np.sqrt(np.mean((self.get_predicted()[observed_ui] - training_matrix[observed_ui])**2))
-            # map_value = scipy.special.logsumexp(scipy.stats.norm.pdf(training_matrix[observed_ui],(self.users_weights @ self.items_weights.T)[observed_ui],self.parameters['var']))\
+            # map_value = scipy.special.logsumexp(scipy.stats.norm.pdf(training_matrix[observed_ui],(self.users_weights @ self.items_weights.T)[observed_ui],self.var))\
             #         * scipy.special.logsumexp([scipy.stats.multivariate_normal.pdf(weights,means,covs)
             #                                for means, covs, weights in zip(self.users_means,self.users_covs,self.users_weights)])\
             #         * scipy.special.logsumexp([scipy.stats.multivariate_normal.pdf(weights,means,covs)
@@ -115,7 +116,7 @@ class ICFPMF(MF):
         observed = training_matrix[uid,:]>lowest_value
         tmp = np.linalg.inv((np.dot(self.items_weights[observed].T,self.items_weights[observed]) + I*self.user_lambda))
         mean = tmp.dot(self.items_weights[observed].T).dot(training_matrix[uid,observed])
-        cov = tmp*self.parameters['var']
+        cov = tmp*self.var
         return mean, cov, np.random.multivariate_normal(mean,cov)
 
     @staticmethod
@@ -127,7 +128,7 @@ class ICFPMF(MF):
         observed = training_matrix[:,iid]>lowest_value
         tmp = np.linalg.inv((np.dot(self.users_weights[observed].T,self.users_weights[observed]) + I*self.item_lambda))
         mean = tmp.dot(self.users_weights[observed].T).dot(training_matrix[observed,iid])
-        cov = tmp*self.parameters['var']
+        cov = tmp*self.var
         return mean, cov, np.random.multivariate_normal(mean,cov)
 
     def __deepcopy__(self):
