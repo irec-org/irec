@@ -24,5 +24,5 @@ for value in range(0,51):
     itr.result = itr.load_result()
     for j in tqdm(range(len(KS))):
         k = KS[j]
-        me = MetricsEvaluator(name=itr.get_name(), k=k,threshold=THRESHOLD, interaction_size=INTERACTION_SIZE)
+        me = MetricsEvaluator(name=itr.get_id(), k=k,threshold=THRESHOLD, interaction_size=INTERACTION_SIZE)
         me.eval_chunk_metrics(itr.result, ground_truth, items_popularity, items_distance)

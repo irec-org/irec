@@ -15,7 +15,7 @@ model = MostPopular(dsf.matrix_users_ratings)
 model.interact(dsf.test_uids)
 
 for k in tqdm(range(1,model.interactions+1)):
-    me = MetricsEvaluator(model.get_name(), k)
+    me = MetricsEvaluator(model.get_id(), k)
     me.eval_metrics(model.result, dsf.matrix_users_ratings)
 
 
@@ -23,7 +23,7 @@ metric_values = defaultdict(dict)
 i= 'MostPopular'
 METRIC_NAME = 'precision'
 for k in tqdm(range(1,model.interactions+1)):
-    me = MetricsEvaluator(model.get_name(), k)
+    me = MetricsEvaluator(model.get_id(), k)
     me = me.load()
     print(me.metrics_mean)
     metric_values[i][k] = me.metrics_mean[METRIC_NAME]

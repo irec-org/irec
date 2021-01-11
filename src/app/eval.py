@@ -47,7 +47,7 @@ for i in answers['interactors']:
     users_consumed_items = defaultdict(list)
     for j in tqdm(range(len(KS))):
         k = KS[j]
-        me = MetricsEvaluator(name_suffix='interaction_%d'%(j),name=itr.get_name(), k=k,threshold=THRESHOLD)
+        me = MetricsEvaluator(name_suffix='interaction_%d'%(j),name=itr.get_id(), k=k,threshold=THRESHOLD)
         
         # me.eval_chunk_metrics(itr.results, dsf.consumption_matrix,5)
         tmp_results = {uid: result[j*INTERACTION_SIZE:(j+1)*INTERACTION_SIZE] for uid, result in itr.results.items()}

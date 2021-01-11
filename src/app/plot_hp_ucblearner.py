@@ -32,7 +32,7 @@ for value in range(0,51):
     
     for j in tqdm(range(len(KS))):
         k = KS[j]
-        me = MetricsEvaluator(name=itr.get_name(), k=k, threshold=THRESHOLD, interaction_size=INTERACTION_SIZE)
+        me = MetricsEvaluator(name=itr.get_id(), k=k, threshold=THRESHOLD, interaction_size=INTERACTION_SIZE)
         me = me.load()
         for metric_name in metrics_names:
             metric_values[metric_name][value] += me.metrics_mean[metric_name]

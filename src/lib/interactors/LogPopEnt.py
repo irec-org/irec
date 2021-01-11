@@ -37,7 +37,7 @@ class LogPopEnt(ExperimentalInteractor):
         # ax.hist(items_entropy,color='k')
         # ax.set_xlabel("$\log(Pop)\cdot Ent$")
         # ax.set_ylabel("#Items")
-        # fig.savefig(os.path.join(self.DIRS['img'],"logpopent_"+self.get_name()+".png"))
+        # fig.savefig(os.path.join(self.DIRS['img'],"logpopent_"+self.get_id()+".png"))
 
 
         # fig, ax = plt.subplots()
@@ -50,7 +50,7 @@ class LogPopEnt(ExperimentalInteractor):
         #         transform = ax.transAxes)
         # for start, end, color in [(0,10,'green'),(10,20,'red'),(20,30,'darkred'),(30,40,'yellow'),(40,50,'orange')]:
         #     ax.scatter(items_entropy[top_iids[start:end]],items_popularity[top_iids[start:end]],marker='D',color=color)
-        # fig.savefig(os.path.join(self.DIRS['img'],"corr_popent_"+self.get_name()+".png"))
+        # fig.savefig(os.path.join(self.DIRS['img'],"corr_popent_"+self.get_id()+".png"))
 
 
         # num_users = len(uids)

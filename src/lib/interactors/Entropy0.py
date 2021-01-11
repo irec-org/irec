@@ -52,7 +52,7 @@ class Entropy0(ExperimentalInteractor):
         # ax.hist(items_entropy,color='k')
         # ax.set_xlabel("Entropy0")
         # ax.set_ylabel("#Items")
-        # fig.savefig(os.path.join(self.DIRS['img'],"entropy0_"+self.get_name()+".png"))
+        # fig.savefig(os.path.join(self.DIRS['img'],"entropy0_"+self.get_id()+".png"))
 
         # top_iids = list(reversed(np.argsort(items_entropy)))
 

@@ -22,7 +22,7 @@ fig.subplots_adjust(top=0.85, wspace=0.3, hspace=0.5)
 
 #     model = interactors.OurMethod1(name_prefix=dsf.base)
 
-#     with open(os.path.join(dsf.DIRS['result'],"weights_"+model.get_name()+".pickle"),'rb') as f:
+#     with open(os.path.join(dsf.DIRS['result'],"weights_"+model.get_id()+".pickle"),'rb') as f:
 #         users_global_model_weights = pickle.load(f)
 
 #     xs = np.linspace(1,users_global_model_weights.shape[1],11,dtype=int)
@@ -44,7 +44,7 @@ fig.subplots_adjust(top=0.85, wspace=0.3, hspace=0.5)
 #     if i == 0:
 #         ax.set_ylabel("Parameter \Phi$",fontsize=17)
 #     ax.set_xticklabels(xs)
-#     fig.savefig(os.path.join(dsf.DIRS['img'],"weights_"+model.get_name()+".png"),bbox_inches='tight')
+#     fig.savefig(os.path.join(dsf.DIRS['img'],"weights_"+model.get_id()+".png"),bbox_inches='tight')
 #     i+= 1
 
 i = 0
@@ -56,7 +56,7 @@ for ax, base,base_name in zip(axs,['tr_te_ml_10m','tr_te_good_books','tr_te_yaho
 
     model = interactors.OurMethod1(name_prefix=dsf.base)
 
-    with open(os.path.join(dsf.DIRS['result'],"weights_"+model.get_name()+".pickle"),'rb') as f:
+    with open(os.path.join(dsf.DIRS['result'],"weights_"+model.get_id()+".pickle"),'rb') as f:
         users_global_model_weights = pickle.load(f)
 
 
@@ -75,5 +75,5 @@ for ax, base,base_name in zip(axs,['tr_te_ml_10m','tr_te_good_books','tr_te_yaho
     ax.set_xticks(np.linspace(0,100,11,dtype=int))
     ax.set_xlim(-0.95,100.5)
     # ax.set_ylim(0,1.03)
-fig.savefig(os.path.join(dsf.DIRS['img'],"weights_"+model.get_name()+".png"),bbox_inches='tight')
-fig.savefig(os.path.join(dsf.DIRS['img'],"weights_"+model.get_name()+".eps"),bbox_inches='tight')
+fig.savefig(os.path.join(dsf.DIRS['img'],"weights_"+model.get_id()+".png"),bbox_inches='tight')
+fig.savefig(os.path.join(dsf.DIRS['img'],"weights_"+model.get_id()+".eps"),bbox_inches='tight')

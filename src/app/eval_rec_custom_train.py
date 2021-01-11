@@ -66,11 +66,11 @@ for history_rate in history_rates_to_train:
         for recommender_class in recommenders_class:
             print('\t\t-',recommender_class.__name__)
             recommender_model = recommender_class(name_prefix=dsf.base,
-                                                  name_suffix=interactor_model.get_name()+'_history_rate_%.2f'%(history_rate))
+                                                  name_suffix=interactor_model.get_id()+'_history_rate_%.2f'%(history_rate))
             recommender_model.results = recommender_model.load_results()
             # print(list(map(len,recommender_model.results.values())))
             
-            me = MetricsEvaluator(name=recommender_model.get_name(),k=recommender_model.result_list_size,threshold=THRESHOLD)
+            me = MetricsEvaluator(name=recommender_model.get_id(),k=recommender_model.result_list_size,threshold=THRESHOLD)
             me.eval_metrics(recommender_model.results, ground_truth, items_popularity, items_distance, users_consumed_items)
             print(me.metrics_mean)
 

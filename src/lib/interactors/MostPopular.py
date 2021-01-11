@@ -43,7 +43,7 @@ class MostPopular(ExperimentalInteractor):
         # ax.hist(items_popularity,color='k')
         # ax.set_xlabel("Popularity")
         # ax.set_ylabel("#Items")
-        # fig.savefig(os.path.join(self.DIRS['img'],"popularity_"+self.get_name()+".png"))
+        # fig.savefig(os.path.join(self.DIRS['img'],"popularity_"+self.get_id()+".png"))
 
         # top_iids = list(reversed(np.argsort(items_popularity)))[:self.get_iterations()]
         # uids = self.test_users

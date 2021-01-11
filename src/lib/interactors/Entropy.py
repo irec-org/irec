@@ -59,7 +59,7 @@ class Entropy(ExperimentalInteractor):
         # ax.hist(items_entropy,color='k')
         # ax.set_xlabel("Entropy")
         # ax.set_ylabel("#Items")
-        # fig.savefig(os.path.join(self.DIRS['img'],"entropy_"+self.get_name()+".png"))
+        # fig.savefig(os.path.join(self.DIRS['img'],"entropy_"+self.get_id()+".png"))
         
     def predict(self,uid,candidate_items,num_req_items):
         items_score = self.items_entropy[candidate_items]

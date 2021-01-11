@@ -64,6 +64,6 @@ for history_rate in history_rates_to_train:
         for recommender_class in recommenders_class:
             print('\t\t-',recommender_class.__name__)
             recommender_model = recommender_class(name_prefix=dsf.base,
-                                                  name_suffix=interactor_model.get_name()+'_history_rate_%.2f'%(history_rate))
+                                                  name_suffix=interactor_model.get_id()+'_history_rate_%.2f'%(history_rate))
             recommender_model.train(train_matrix)
             recommender_model.predict(test_matrix)

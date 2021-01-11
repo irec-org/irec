@@ -51,7 +51,7 @@ class HELF(ExperimentalInteractor):
         # ax.set_xlabel("Entropy")
         # for start, end, color in [(0,10,'green'),(10,20,'red'),(20,30,'darkred'),(30,40,'yellow'),(40,50,'orange')]:
         #     ax.scatter(items_entropy[top_iids[start:end]],items_popularity[top_iids[start:end]],marker='D',color=color)
-        # fig.savefig(os.path.join(self.DIRS['img'],"corr_popent_"+self.get_name()+".png"))
+        # fig.savefig(os.path.join(self.DIRS['img'],"corr_popent_"+self.get_id()+".png"))
 
         # for idx_uid in tqdm(range(num_users)):
         #     uid = uids[idx_uid]

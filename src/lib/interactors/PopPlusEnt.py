@@ -38,7 +38,7 @@ class PopPlusEnt(ExperimentalInteractor):
         # ax.hist(items_entropy,color='k')
         # ax.set_xlabel("$Pop + Ent$")
         # ax.set_ylabel("#Items")
-        # fig.savefig(os.path.join(self.DIRS['img'],"popplusent_"+self.get_name()+".png"))
+        # fig.savefig(os.path.join(self.DIRS['img'],"popplusent_"+self.get_id()+".png"))
 
         # fig, ax = plt.subplots()
         # ax.scatter(items_entropy,items_popularity,marker="D",color='darkblue')
@@ -54,7 +54,7 @@ class PopPlusEnt(ExperimentalInteractor):
         #     print("[%d,%d] sum(popularity)=%.2f sum(entropy)=%.2f"%(start,end,
         #                                                          np.sum(items_popularity[top_iids[start:end]]/np.max(items_popularity)),
         #                                                          np.sum(items_entropy[top_iids[start:end]]/np.max(items_entropy))))
-        # fig.savefig(os.path.join(self.DIRS['img'],"corr_popent_"+self.get_name()+".png"))
+        # fig.savefig(os.path.join(self.DIRS['img'],"corr_popent_"+self.get_id()+".png"))
 
 
         # num_users = len(uids)

@@ -27,7 +27,7 @@ for i in np.linspace(0,1,6):
 
     itr.result = itr.load_result()
     for k in tqdm(range(1,itr.get_iterations()+1)):
-        me = MetricsEvaluator(itr.get_name(), k)
+        me = MetricsEvaluator(itr.get_id(), k)
         me = me.load()
 
         metric_values[i][k] = me.metrics_mean[METRIC_NAME]
