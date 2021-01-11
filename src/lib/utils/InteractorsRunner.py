@@ -2,7 +2,6 @@ import inquirer
 import interactors
 import numpy as np
 import mf
-from util import DatasetFormatter
 
 class InteractorsRunner():
 
@@ -22,12 +21,12 @@ class InteractorsRunner():
         self.interactors_classes = interactors_classes
         return interactors_classes
 
-    def run_bases(self,bases):
-        for base in bases:
-            dsf = DatasetFormatter(base=base)
-            dsf = dsf.load()
-            self.dsf = dsf
-            self.run_interactors()
+    # def run_bases(self,bases):
+    #     for base in bases:
+    #         dsf = DatasetFormatter(base=base)
+    #         dsf = dsf.load()
+    #         self.dsf = dsf
+    #         self.run_interactors()
 
     def create_and_run_interactor(self,itr_class):
         dsf = self.dsf

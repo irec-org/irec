@@ -1,15 +1,21 @@
+from os.path import dirname, realpath, sep, pardir
+import os
+import sys
+sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "lib")
+
 import inquirer
 import interactors
 import mf
-import util
-from util import DatasetFormatter
+from utils.InteractorsRunner import InteractorsRunner
 from sklearn.decomposition import NMF
 import numpy as np
 import scipy.sparse
-dsf = DatasetFormatter()
-dsf = dsf.load()
+from lib.DatasetManager import DatasetManager
+dm = DatasetManager()
+dm.request_dataset_preprocessor()
+dm.initialize_engines()
 
-ir = util.InteractorsRunner(dsf)
+ir = InteractorsRunner(dm)
 ir.select_interactors()
 ir.run_interactors()
 # ir.run_bases(['tr_te_yahoo_music',

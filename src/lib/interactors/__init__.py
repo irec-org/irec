@@ -1,7 +1,7 @@
 import random
 import numpy as np
 
-from .Interactor import *
+from .ExperimentalInteractor import *
 from .ICF import *
 from .LinearUCB import *
 from .LinearThompsonSampling import *
@@ -30,6 +30,7 @@ from .PPELPE import *
 from .kNNBandit import *
 from .COFIBA import *
 from .OurMethod2 import *
+# from . import *
 
 INTERACTORS = {
     'COFIBA': COFIBA,

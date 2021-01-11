@@ -1,16 +1,14 @@
 import numpy as np
 import scipy
 import scipy.stats
-import util
 import sys, os
 import random
 from threadpoolctl import threadpool_limits
-sys.path.insert(0, os.path.abspath('..'))
 import ctypes
-import util.metrics as metrics
+import utils.metrics as metrics
 from tqdm import tqdm
 
-from util import Saveable, run_parallel
+from utils.util import run_parallel
 from mf import MF
 class PMF(MF):
     def __init__(self, iterations=200, var=0.1, user_var=1, item_var=1, learning_rate=1e-3, momentum=0.6, stop_criteria=0.0009, *args, **kwargs):

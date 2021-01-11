@@ -1,7 +1,7 @@
 import numpy as np
 from tqdm import tqdm
-from .Interactor import *
-from .ExperimentalEntropy import *
+from .ExperimentalInteractor import *
+from .Entropy import *
 import matplotlib.pyplot as plt
 import os
 import scipy.sparse

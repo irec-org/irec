@@ -128,6 +128,7 @@ class COFIBA(ExperimentalInteractor):
             self.users_m.append(np.identity(self.num_latent_factors))
 
         self.users_latent_factors = [np.linalg.inv(m) @ b for b, m in zip(self.users_b,self.users_m)]
+        self.t = 0
         # users_m = np.zeros(total_num_users,num_latent_factors,num_latent_factors)
         # users_m[
         # print(items_graph)
@@ -144,10 +145,10 @@ class COFIBA(ExperimentalInteractor):
 
     def predict(self,uid,candidate_items,num_req_items):
         items_score = np.zeros(candidate_items.shape)
-            for i, item in enumerate(candidate_items):
-                users_graph, labels = self.update_user_cluster(uid,item)
-                user_connected_component = np.nonzero(labels[item] == labels)[0]
-                items_score[i] = self.score(uid,item,user_connected_component)
+        for i, item in enumerate(candidate_items):
+            users_graph, labels = self.update_user_cluster(uid,item)
+            user_connected_component = np.nonzero(labels[item] == labels)[0]
+            items_score[i] = self.score(uid,item,user_connected_component)
                 # best_items = items_not_recommended[np.argsort(items_score)][::-1][self.interaction_size]
                 # for item in best_items:
         return items_score, None
@@ -157,6 +158,7 @@ class COFIBA(ExperimentalInteractor):
         users_graph, labels = self.update_user_cluster(uid,item)
         item_cluster = self.items_clustering[item]
         self.users_graphs[item_cluster] = users_graph
+        self.t += 1
 
             # self.t += 1
             # self.results[uid].extend(best_items)

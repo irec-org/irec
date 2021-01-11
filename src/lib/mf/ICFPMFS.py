@@ -1,17 +1,15 @@
 import numpy as np
 import scipy
 import scipy.stats
-import util
 import sys, os
 import random
 from threadpoolctl import threadpool_limits
-sys.path.insert(0, os.path.abspath('..'))
 import ctypes
 import collections
-import util.metrics as metrics
+import utils.metrics as metrics
 from tqdm import tqdm
 
-from util import Saveable, run_parallel
+from utils.util import run_parallel
 from . import MF
 from numba import jit
 

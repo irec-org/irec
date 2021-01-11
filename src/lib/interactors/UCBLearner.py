@@ -2,7 +2,7 @@ from .ExperimentalInteractor import ExperimentalInteractor
 import numpy as np
 import random
 from tqdm import tqdm
-import util
+#import util
 from threadpoolctl import threadpool_limits
 import ctypes
 from .Entropy import Entropy
@@ -50,7 +50,7 @@ class UCBLearner(ExperimentalInteractor):
         current_bias = items_bias[user_candidate_items] * max(1, np.max(pred_rule))
         bias = current_bias - (current_bias * self.discount_bias(self.users_nb_items[uid],self.stop)/100)
         bias[bias<0] = 0
-        items_score = pred_rule + bias)[::-1]
+        items_score = (pred_rule + bias)[::-1]
         return items_score
 
     def update(self,uid,item,reward,additional_data):

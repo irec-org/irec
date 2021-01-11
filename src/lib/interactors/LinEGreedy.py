@@ -1,8 +1,8 @@
-from .Interactor import *
+from .ExperimentalInteractor import *
 import numpy as np
 import random
 from tqdm import tqdm
-import util
+#import util
 from threadpoolctl import threadpool_limits
 import ctypes
 class LinEGreedy(ExperimentalInteractor):

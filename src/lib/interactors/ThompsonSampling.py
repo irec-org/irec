@@ -1,6 +1,6 @@
 import numpy as np
 from tqdm import tqdm, trange
-from . import Interactor
+from . import Interactor, ExperimentalInteractor
 import os
 import random
 import scipy.stats

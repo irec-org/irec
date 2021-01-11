@@ -38,7 +38,7 @@ class Interaction(EvaluationPolicy,Parameterizable):
             # for i in range(self.parameters.interaction_size):
             for item in users_items_recommended[users_num_interactions[uid]*self.parameters.interaction_size:(users_num_interactions[uid]+1)*self.parameters.interaction_size]:
                 model.update(uid,item,test_consumption_matrix[uid,item],additional_data)
-            model.increment_time()
+            # model.increment_time()
             users_num_interactions[uid] += 1
             if users_num_interactions[uid] == self.parameters.interactions:
                 available_users = available_users - {uid}

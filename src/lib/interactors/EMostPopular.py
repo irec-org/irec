@@ -1,6 +1,6 @@
 import numpy as np
 from tqdm import tqdm
-from . import Interactor, Entropy,Entropy0, MostPopular,LogPopEnt
+from . import Interactor, Entropy,Entropy0, MostPopular,LogPopEnt, ExperimentalInteractor
 import matplotlib.pyplot as plt
 import scipy.stats
 import os

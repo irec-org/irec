@@ -1,10 +1,10 @@
 from .ICF import ICF
 import numpy as np
 from tqdm import tqdm
-import util
 from threadpoolctl import threadpool_limits
 import ctypes
 from collections import defaultdict
+
 class LinearUCB(ICF):
     def __init__(self, alpha=1.0, zeta=None,*args, **kwargs):
         super().__init__(*args, **kwargs)

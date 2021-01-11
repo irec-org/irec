@@ -1,12 +1,11 @@
 import numpy as np
 import scipy
 import scipy.stats
-import util
 import random
 from threadpoolctl import threadpool_limits
 import ctypes
 
-from util import Saveable, run_parallel
+from utils.util import run_parallel
 from mf import MF
 from numba import jit
 

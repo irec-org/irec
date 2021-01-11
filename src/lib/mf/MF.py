@@ -1,8 +1,12 @@
-from util import Saveable
+from os.path import dirname, realpath, sep, pardir
+import sys, os
+sys.path.append(dirname(realpath(__file__)) + sep + pardir)
+
 import numpy as np
 import scipy.sparse
 from numba import jit, prange
-import util.metrics as metrics
+from utils.Parameterizable import Parameterizable
+import utils.metrics as metrics
 
 @jit(nopython=True,parallel=True)
 def _predict_sparse(users_weights, items_weights, users_items):

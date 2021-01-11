@@ -1,11 +1,11 @@
 import numpy as np
 from tqdm import tqdm
-from . import Interactor, Entropy,Entropy0, MostPopular,LogPopEnt
+from . import Interactor, Entropy,Entropy0, MostPopular,LogPopEnt, ExperimentalInteractor
 import matplotlib.pyplot as plt
 import scipy.stats
 import os
 import random
-import util.metrics as metrics
+import utils.metrics as metrics
 
 class DistinctPopular(ExperimentalInteractor):
     def __init__(self,*args, **kwargs):
@@ -26,14 +26,12 @@ class DistinctPopular(ExperimentalInteractor):
         # num_items = self.train_consumption_matrix.shape[1]
 
     def predict(self,uid,candidate_items,num_req_items):
-p_iids] = 0
             if len(self.top_iids) > 0:
-                items_not_recommended_distance = np.mean(self.items_distance[self.top_iids[uid]][:,candidate_items],axis=0)
+                candidate_items_distance = np.mean(self.items_distance[self.top_iids[uid]][:,candidate_items],axis=0)
             else:
-                items_not_recommended_distance = 1
+                candidate_items_distance = 1
 
-            return items_not_recommended_distance*items_popularity[cadidate_items], None
-            # top_iids.append(best_item)
+            return candidate_items_distance*items_popularity[cadidate_items], None
 
     def update(self,uid,item,reward,additional_data):
         self.top_iids[uid].append(item)
