@@ -1,9 +1,9 @@
 from copy import copy
 
-def ModelSelection:
+def Splitter:
     pass
 
-def TrainTestConsumption(ModelSelection):
+def TrainTestConsumption(Splitter):
     def __init__(self,train_size=0.8, test_consumes=1,crono=False):
         self.train_size=0.8
         self.test_consumes=0.8

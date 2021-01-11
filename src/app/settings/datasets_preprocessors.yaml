@@ -1,16 +1,15 @@
-datasets:
   - name: MovieLens 100k
-    base_dir: ml-100k/
+    dataset_dir: ml-100k/
     dataset_parser: MovieLens100k
-    model_selection: TrainTestconsumption
+    splitter: TrainTestconsumption
   - name: MovieLens 1M
-    base_dir: ml-1m/
+    dataset_dir: ml-1m/
     dataset_parser: MovieLens1M
-    model_selection: TrainTestconsumption
+    splitter: TrainTestconsumption
   - name: MovieLens 1M
-    base_dir: train-Test_ML-1M/
+    dataset_dir: train-Test_ML-1M/
     dataset_parser: TRTE
-    model_selection: None
+    splitter: null
     # PRETTY = {'ml_100k': 'MovieLens 100k',
     #           'ml_1m': 'MovieLens 1M',
     #           'tr_te_ml_1m': 'MovieLens 1M',

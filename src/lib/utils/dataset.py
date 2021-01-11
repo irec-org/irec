@@ -13,9 +13,9 @@ from . import dataset_parsers
 from dataclasses import dataclass
 
 class DatasetDescriptor:
-    def __init__(self,name=None,base_dir=None):
+    def __init__(self,name=None,dataset_dir=None):
         name = name
-        base_dir = base_dir
+        dataset_dir = dataset_dir
 
 class Dataset:
     def __init__(self,data,num_users=None,num_items=None,rate_domain=None,uids=None):

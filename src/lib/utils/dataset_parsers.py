@@ -8,9 +8,9 @@ class DatasetParser:
 
 class TRTE(DatasetParser):
     def parse_dataset(self,dataset_descriptor):
-        base_dir = dataset_descriptor.base_dir
-        train_data = np.loadtxt(os.path.join(base_dir,'train.data'),delimiter='::')
-        test_data = np.loadtxt(os.path.join(base_dir,'test.data'),delimiter='::')
+        dataset_dir = dataset_descriptor.dataset_dir
+        train_data = np.loadtxt(os.path.join(dataset_dir,'train.data'),delimiter='::')
+        test_data = np.loadtxt(os.path.join(dataset_dir,'test.data'),delimiter='::')
 
         dataset = Dataset(np.vstack([train_data,test_data]))
         dataset.update_from_data()
@@ -22,8 +22,8 @@ class TRTE(DatasetParser):
 
 class MovieLens100k(DatasetParser):
     def parse_dataset(self,dataset_descriptor):
-        base_dir = dataset_descriptor.base_dir
-        data = np.loadtxt(os.path.join(base_dir,'u.data'),delimiter='\t')
+        dataset_dir = dataset_descriptor.dataset_dir
+        data = np.loadtxt(os.path.join(dataset_dir,'u.data'),delimiter='\t')
         data[0] = data[0] - 1
         data[1] = data[1] - 1
         dataset = Dataset(data)
@@ -32,8 +32,8 @@ class MovieLens100k(DatasetParser):
 
 class MovieLens1M(DatasetParser):
     def parse_dataset(self,dataset_descriptor):
-        base_dir = dataset_descriptor.base_dir
-        data = np.loadtxt(os.path.join(base_dir,'ratings.dat'),delimiter='::')
+        dataset_dir = dataset_descriptor.dataset_dir
+        data = np.loadtxt(os.path.join(dataset_dir,'ratings.dat'),delimiter='::')
         iids = dict()
         for i, iid in enumerate(df_cons[1].unique()):
             iids[iid] = i
