@@ -1,11 +1,11 @@
   - name: MovieLens 100k
     dataset_dir: ml-100k/
     dataset_parser: MovieLens100k
-    splitter: TrainTestconsumption
+    splitter: TrainTestConsumption
   - name: MovieLens 1M
     dataset_dir: ml-1m/
     dataset_parser: MovieLens1M
-    splitter: TrainTestconsumption
+    splitter: TrainTestConsumption
   - name: MovieLens 1M
     dataset_dir: train-Test_ML-1M/
     dataset_parser: TRTE

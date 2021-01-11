@@ -1,8 +1,9 @@
 from pathlib import Path
 import os
+from os import sep, pardir
 
 class DirectoryDependent:
-    BASE_DIR = ''
+    BASE_DIR = (pardir+sep)*2
     DIRS = {}
     DIRS['data'] = os.path.join(BASE_DIR, 'data')
     DIRS['result'] = os.path.join(DIRS['data'], 'result')
@@ -11,6 +12,7 @@ class DirectoryDependent:
     DIRS['img'] = os.path.join(DIRS['data'], 'img')
     DIRS['export'] = os.path.join(DIRS['data'], 'export')
     DIRS['metric'] = os.path.join(DIRS['state_save'], 'metric')
+    DIRS['datasets'] = os.path.join(DIRS['data'], 'datasets')
     EXISTS = False
     def __init__(self):
         if not self.EXISTS:

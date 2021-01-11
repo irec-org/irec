@@ -1,9 +1,12 @@
 from copy import copy
+import numpy as np
+import pandas as pd
+import random
 
-def Splitter:
+class Splitter:
     pass
 
-def TrainTestConsumption(Splitter):
+class TrainTestConsumption(Splitter):
     def __init__(self,train_size=0.8, test_consumes=1,crono=False):
         self.train_size=0.8
         self.test_consumes=0.8
@@ -11,7 +14,7 @@ def TrainTestConsumption(Splitter):
         
     def apply(self,dataset):
         data = dataset.data
-        num_users = len(np.unique(data[0]))
+        num_users = len(np.unique(data[:,0]))
         num_train_users = round(num_users*(self.train_size))
         num_test_users = int(num_users-num_train_users)
         data_df = pd.DataFrame(data)
@@ -22,13 +25,13 @@ def TrainTestConsumption(Splitter):
             test_uids = np.array(list(test_candidate_users[list(reversed(np.argsort(users_start_time[test_candidate_users])))])[:num_test_users])
         else:
             test_uids = np.array(random.sample(test_candidate_users,k=num_test_users))
+            # print(test_uids)
         train_uids = np.array(list(set(range(num_users))-set(test_uids)))
 
-        data_isin_test_uids = np.isin(data[0],test_uids)
+        data_isin_test_uids = np.isin(data[:,0],test_uids)
 
         train_dataset = copy(dataset)
-        train_dataset.data = data[~data_isin_test_uids]
+        train_dataset.data = data[~data_isin_test_uids,:]
         test_dataset = copy(dataset)
-        test_dataset.data = data[data_isin_test_uids]
+        test_dataset.data = data[data_isin_test_uids,:]
         return train_dataset, test_dataset
-        # return data[~data_isin_test_uids],data[data_isin_test_uids]

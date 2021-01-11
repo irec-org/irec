@@ -1,12 +1,16 @@
 from os.path import dirname, realpath, sep, pardir
+import os
 import sys
 sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "lib")
 
 import inquirer
 import utils.dataset as dataset
 import yaml
-import utils.dataset_parsers as dataset_parsers
+# import utils.dataset_parsers as dataset_parsers
+from lib.DirectoryDependent import DirectoryDependent
 import utils.splitters as splitters
+import utils.util as util
+import pickle
 
 with open("settings"+sep+"datasets_preprocessors.yaml") as f:
     loader = yaml.SafeLoader
@@ -22,11 +26,14 @@ with open("settings"+sep+"datasets_preprocessors.yaml") as f:
     ]
     answers=inquirer.prompt(q)
     dataset_preprocessor = datasets_preprocessors[answers[0]]
-
-    dataset_descriptor=dataset.DatasetDescriptor(dataset_preprocessor['name'],
-                              dataset_preprocessor['dataset_dir'])
-
-    dataset_parser = eval('dataset_parsers.'+dataset_preprocessor['dataset_parser'])()
+    
+    dataset_descriptor=dataset.DatasetDescriptor(
+        dataset_preprocessor['name'],
+        os.path.join(
+            DirectoryDependent().DIRS['datasets'],
+            dataset_preprocessor['dataset_dir']))
+    
+    dataset_parser = eval('dataset.'+dataset_preprocessor['dataset_parser'])()
     dataset_parsed = dataset_parser.parse_dataset(dataset_descriptor)
 
     if dataset_preprocessor['splitter'] != None:
@@ -38,5 +45,9 @@ with open("settings"+sep+"datasets_preprocessors.yaml") as f:
         result = dataset_parsed
 
     
-    result_file_path = os.path.join(DirectoryDependent().DIRS['dataset_preprocess'],'dspp_'+dict_to_str(dataset_descriptor)+'.pickle')
-    pickle.dump(result,result_file_path)
+    result_file_path = os.path.join(
+        DirectoryDependent().DIRS['dataset_preprocess'],
+        'dspp_'+
+        dataset_descriptor.get_name()+','+
+        util.dict_to_str(splitters_settings[dataset_preprocessor['splitter']])+'.pickle')
+    pickle.dump(result,open(result_file_path,'wb'))
