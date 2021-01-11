@@ -11,8 +11,9 @@ from numba import jit, prange
 class COFIBA(ExperimentalInteractor):
     def __init__(self, alpha=1, alpha_2=1,*args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.parameters['alpha'] = alpha
-        self.parameters['alpha_2'] = alpha_2
+        self.alpha = alpha
+        self.alpha_2 = alpha_2
+        self.parameters.extend(['alpha','alpha_2'])
 
     def cb(self, alpha, item_latent_factors, m, t):
         return alpha*np.sqrt(item_latent_factors.T @ np.linalg.inv(m) @ item_latent_factors * np.log10(t+1))
@@ -23,7 +24,7 @@ class COFIBA(ExperimentalInteractor):
         neighbors = np.nonzero(users_graph[uid])[1]
         for neighbor in neighbors:
             if np.abs(self.users_latent_factors[uid] @ self.items_latent_factors[item] - self.users_latent_factors[neighbor] @ self.items_latent_factors[item])\
-               > self.cb(self.parameters['alpha_2'],self.items_latent_factors[item],self.users_m[uid], self.t) + self.cb(self.parameters['alpha_2'],self.items_latent_factors[item],self.users_m[neighbor], self.t):
+               > self.cb(self.alpha_2,self.items_latent_factors[item],self.users_m[uid], self.t) + self.cb(self.alpha_2,self.items_latent_factors[item],self.users_m[neighbor], self.t):
                 users_graph[uid,neighbor] = 0
                 users_graph[neighbor,uid] = 0
         n_components, labels = scipy.sparse.csgraph.connected_components(users_graph)
@@ -42,7 +43,7 @@ class COFIBA(ExperimentalInteractor):
             generated_user_neighbors = {}
             for uid2 in range(self.total_num_users):
                 if np.abs(self.users_latent_factors[uid] @ self.items_latent_factors[neighbor] - self.users_latent_factors[uid2] @ self.items_latent_factors[neighbor])\
-                <= self.cb(self.parameters['alpha_2'],self.items_latent_factors[neighbor],self.users_m[uid], self.t) + self.cb(self.parameters['alpha_2'],self.items_latent_factors[neighbor],self.users_m[uid2], self.t):
+                <= self.cb(self.alpha_2,self.items_latent_factors[neighbor],self.users_m[uid], self.t) + self.cb(self.alpha_2,self.items_latent_factors[neighbor],self.users_m[uid2], self.t):
                     generated_user_neighbors.add(uid)
             if generated_user_neighbors != actual_cluster_items:
                 self.items_graph[item, neighbor] = 0
@@ -81,7 +82,7 @@ class COFIBA(ExperimentalInteractor):
         cluster_m = I + np.sum(users_m[neighbors+uid]) - num_neighbors*I
         cluster_b = np.sum(users_b[neighbors+uid])
         cluster_latent_factors = cluster_m @ cluster_b
-        return cluster_latent_factors @ self.items_latent_factors[item] + self.cb(self.parameters['alpha'],self.items_latent_factors[item],cluster_m,self.t)
+        return cluster_latent_factors @ self.items_latent_factors[item] + self.cb(self.alpha,self.items_latent_factors[item],cluster_m,self.t)
 
     # def train(self,train_dataset):
     #     super().train(train_dataset)

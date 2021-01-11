@@ -8,7 +8,8 @@ import ctypes
 class GLM_UCB(ICF):
     def __init__(self, c=1.0, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.parameters['c'] = c
+        self.c = c
+        self.parameters.extend(['c'])
 
     def sigmoid(self,x):
         return 1/(1+np.exp(-x))
@@ -63,7 +64,7 @@ class GLM_UCB(ICF):
         cov = np.linalg.inv(A)*self.var
         # for j in range(self.interaction_size):
         items_score = self.p(p[None,:] @ self.items_means[candidate_items].T) +\
-            self.parameters['c'] * np.sqrt(np.log(self.t+1)) *\
+            self.c * np.sqrt(np.log(self.t+1)) *\
             np.sqrt(np.sum(self.items_means[candidate_items].dot(cov) *\
                            self.items_means[candidate_items],axis=1))
         

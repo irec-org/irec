@@ -11,9 +11,10 @@ import pickle
 class OurMethod1(interactors.ExperimentalInteractor):
     def __init__(self, alpha=1.0, stop=None, weight_method='change',*args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.parameters['alpha'] = alpha
-        self.parameters['weight_method'] = weight_method
-        self.parameters['stop'] = stop
+        self.alpha = alpha
+        self.weight_method = weight_method
+        self.stop = stop
+        self.parameters.extend(['alpha','weight_method','stop'])
 
     def train(self,train_dataset):
         super().train(train_dataset)
@@ -55,11 +56,11 @@ class OurMethod1(interactors.ExperimentalInteractor):
 
 
     def get_global_model_weight(self,user_latent_factors_history,num_correct_items_history,distance_history):
-        if self.parameters['weight_method'] == 'stop':
-            b = self.parameters['stop']
+        if self.weight_method == 'stop':
+            b = self.stop
             a = min(np.sum(num_correct_items_history),b)
             return (1-np.round(pow(2,a)/pow(2,b),3))
-        elif self.parameters['weight_method'] == 'change':
+        elif self.weight_method == 'change':
             if len(user_latent_factors_history) == 0:
                 return 1
             times_with_reward = np.nonzero(num_correct_items_history)[0]
@@ -93,7 +94,7 @@ class OurMethod1(interactors.ExperimentalInteractor):
         global_model_weights.append(global_model_weight)
         items_uncertainty = np.sqrt(np.sum(self.items_weights[candidate_items].dot(np.linalg.inv(A)) * self.items_weights[candidate_items],axis=1))
         items_user_similarity = user_latent_factors @ self.items_weights[candidate_items].T
-        user_model_items_score = items_user_similarity + self.parameters['alpha']*items_uncertainty
+        user_model_items_score = items_user_similarity + self.alpha*items_uncertainty
         global_model_items_score = self.items_bias[candidate_items]
         user_model_items_score_min = np.min(user_model_items_score)
         user_model_items_score_max = np.max(user_model_items_score)

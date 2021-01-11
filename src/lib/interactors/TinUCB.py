@@ -10,9 +10,10 @@ class TinUCB(ExperimentalInteractor):
     def __init__(self, alpha=0.2, zeta=None,*args, **kwargs):
         super().__init__(*args, **kwargs)
         if alpha != None:
-            self.parameters['alpha'] = alpha
+            self.alpha = alpha
         elif zeta != None:
-            self.parameters['alpha'] = 1+np.sqrt(np.log(2/zeta)/2)
+            self.alpha = 1+np.sqrt(np.log(2/zeta)/2)
+        self.parameters.extend(['alpha'])
 
     def train(self,train_dataset):
         super().train(train_dataset)
@@ -41,7 +42,7 @@ class TinUCB(ExperimentalInteractor):
 
         mean = np.dot(np.linalg.inv(A),b)
         items_score = mean @ self.items_weights[candidate_items].T+\
-            self.parameters['alpha']*np.sqrt(np.sum(self.items_weights[candidate_items].dot(np.linalg.inv(A)) * self.items_weights[candidate_items],axis=1))
+            self.alpha*np.sqrt(np.sum(self.items_weights[candidate_items].dot(np.linalg.inv(A)) * self.items_weights[candidate_items],axis=1))
         return items_score, None
 
 

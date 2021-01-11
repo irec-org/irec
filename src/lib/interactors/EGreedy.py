@@ -8,7 +8,8 @@ from collections import defaultdict
 class EGreedy(ExperimentalInteractor):
     def __init__(self, epsilon=0.1,*args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.parameters['epsilon'] = epsilon
+        self.epsilon = epsilon
+        self.parameters.extend(['epsilon'])
 
     def train(self,train_dataset):
         super().train(train_dataset)
@@ -38,7 +39,7 @@ class EGreedy(ExperimentalInteractor):
                 # not_recommended = np.ones(num_items,dtype=bool)
                 # not_recommended[self.results[uid]] = 0
                 # items_not_recommended = np.nonzero(not_recommended)[0]
-        if self.parameters['epsilon'] < np.random.rand():
+        if self.epsilon < np.random.rand():
             items_score = items_mean_values[candidate_items]
         else:
             items_score = np.random.rand(len(candidate_items))

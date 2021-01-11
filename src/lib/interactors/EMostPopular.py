@@ -9,7 +9,8 @@ import random
 class EMostPopular(ExperimentalInteractor):
     def __init__(self,epsilon=0.2,*args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.parameters['epsilon'] = epsilon
+        self.epsilon = epsilon
+        self.parameters.extend(['epsilon'])
 
     def top_emostpopular(self,items_exploitation,items_exploration):
         top_iids = []
@@ -18,7 +19,7 @@ class EMostPopular(ExperimentalInteractor):
             not_recommended = np.ones(num_items,dtype=bool)
             not_recommended[top_iids] = 0
             items_not_recommended = np.nonzero(not_recommended)[0]
-            if self.parameters['epsilon'] < np.random.rand():
+            if self.epsilon < np.random.rand():
                 best_item = items_not_recommended[np.argmax(items_exploitation[items_not_recommended])]
             else:
                 # best_item = random.choices(items_not_recommended,
@@ -53,7 +54,7 @@ class EMostPopular(ExperimentalInteractor):
         #     not_recommended = np.ones(num_items,dtype=bool)
         #     not_recommended[top_iids] = 0
         #     items_not_recommended = np.nonzero(not_recommended)[0]
-        #     if self.parameters['epsilon'] < np.random.rand():
+        #     if self.epsilon < np.random.rand():
         #         best_item = items_not_recommended[np.argmax(items_popularity[items_not_recommended])]
         #     else:
         #         # best_item = random.choices(items_not_recommended,

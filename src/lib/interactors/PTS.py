@@ -12,17 +12,18 @@ def _softmax(x):
 class PTS(ExperimentalInteractor):
     def __init__(self,num_particles,var,*args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.parameters['num_particles'] = num_particles
-        self.parameters['var'] = var
+        self.num_particles = num_particles
+        self.var = var
+        self.parameters.extend(['num_particles','var'])
 
     def interact(self,items_means):
         super().interact()
         uids = self.test_users
         num_items = self.train_consumption_matrix.shape[1]
         num_lat = len(self.items_means[0])
-        particles = [{'u':np.random.normal(len(uids),num_lat),'v':items_means,'var_u':1.0, 'var_i':1.0} for i in range(self.parameters['num_particles'])]
+        particles = [{'u':np.random.normal(len(uids),num_lat),'v':items_means,'var_u':1.0, 'var_i':1.0} for i in range(self.num_particles)]
 
-        particles_ids = np.arange(self.parameters['num_particles'])
+        particles_ids = np.arange(self.num_particles)
 
         # users_history = scipy.sparse.csr(self.train_consumption.shape)
         # items_popularity = MostPopular.get_items_popularity(self.train_consumption_matrix, normalize=False)
@@ -52,17 +53,17 @@ class PTS(ExperimentalInteractor):
                     mus_u_i = []
                     v_j = particle['v'][self.results[uid]]
                     for particle in particles:
-                        lambda_u_i = 1/self.parameters['var']*(v_j.T @ v_j)+1/particle['var_u'] * np.eye(num_lat)
+                        lambda_u_i = 1/self.var*(v_j.T @ v_j)+1/particle['var_u'] * np.eye(num_lat)
                         eta_u_i = np.sum(np.array([self.get_reward(uid,result) for result in self.results[uid]]) * v_j)
                         reward = self.get_reward(uid,best_item)
                         lambdas_u_i.append(lambda_u_i)
                         etas_u_i.append(eta_u_i)
-                        mus_u_i.append(1/self.parameters['var']*(np.linalg.inv(lambda_u_i) @ eta_u_i))
+                        mus_u_i.append(1/self.var*(np.linalg.inv(lambda_u_i) @ eta_u_i))
 
                     weights = []
                     for particle, lambda_u_i, mu_u_i in zip(particles, mus_u_i, lambdas_u_i):
                         v_j = particle['v'][self.results[uid]]
-                        cov = 1/self.parameters['var'] + v_j.T @ mu_u_i @ v_j
+                        cov = 1/self.var + v_j.T @ mu_u_i @ v_j
                         w = np.random.normal(
                             v_j.T @ mu,
                             cov
@@ -70,25 +71,25 @@ class PTS(ExperimentalInteractor):
                         weights.append(w)
 
                     normalized_weights = _softmax(weights)
-                    ds = [np.random.choice(range(self.parameters['num_particles']), p=normalized_weights) for _ in range(self.parameters['num_particles'])]
+                    ds = [np.random.choice(range(self.num_particles), p=normalized_weights) for _ in range(self.num_particles)]
                     new_particles = [{"u": np.copy(particles[d]["u"]),
                       "v": np.copy(particles[d]["v"]),
                       "var_u": particles[d]["var_u"],
                       "var_i": particles[d]["var_i"]} for d in ds]
                     for idx, (particle, lambda_u_i, eta_u_i) in enumerate(zip(new_particles, lambdas_u_i, etas_u_i)):
                         v_j = particle["v"][best_item, :]
-                        lambda_u_i += 1/self.parameters['var'] * (v_j @ v_j.T)
+                        lambda_u_i += 1/self.var * (v_j @ v_j.T)
                         eta_u_i += reward * v_j
                         inv_lambda_u_i = np.linalg.inv(lambda_u_i)
-                        sampled_user_vector = np.random.multivariate_normal(1/self.parameters['var']*(inv_lambda_u_i @ eta_u_i), inv_lambda_u_i)
+                        sampled_user_vector = np.random.multivariate_normal(1/self.var*(inv_lambda_u_i @ eta_u_i), inv_lambda_u_i)
                         new_particles[idx]['u'][uid] = sampled_user_vector
 
                         u_i = particle["u"][item_users_consumed[best_item]]
-                        lambda_v_i = 1/self.parameters['var'] * (u_i.T @ u_i) + 1/particle['var_i']*np.eye(num_lat)
+                        lambda_v_i = 1/self.var * (u_i.T @ u_i) + 1/particle['var_i']*np.eye(num_lat)
 
                         eta = np.sum(u_i * np.array([self.get_reward(uid,best_item) in item_users_consumed]))
                         inv_lambda_v_i = np.linalg.inv(lambda_v_i)
-                        item_sample_vector = np.random.multivariate_normal(1/self.parameters['var']*(inv_lambda_v_i @ eta-u_i),inv_lambda_v_i)
+                        item_sample_vector = np.random.multivariate_normal(1/self.var*(inv_lambda_v_i @ eta-u_i),inv_lambda_v_i)
 
                         new_particles[idx]['v'][best_item] = item_sample_vector
                     

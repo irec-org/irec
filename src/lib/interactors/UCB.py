@@ -8,7 +8,8 @@ from collections import defaultdict
 class UCB(ExperimentalInteractor):
     def __init__(self,c=1.0,*args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.parameters['c'] = c
+        self.c = c
+        self.parameters.extend(['c'])
 
     def train(self,train_dataset):
         super().train(train_dataset)
@@ -31,7 +32,7 @@ class UCB(ExperimentalInteractor):
         self.t += np.prod(self.train_consumption_matrix[mask].shape)
 
     def predict(self,uid,candidate_items,num_req_items):
-        items_uncertainty = self.parameters['c']*np.sqrt(2*np.log(self.t)/self.items_count[candidate_items])
+        items_uncertainty = self.c*np.sqrt(2*np.log(self.t)/self.items_count[candidate_items])
         items_score = self.items_mean_values[candidate_items]+items_uncertainty
         return items_score, None
 

@@ -8,7 +8,8 @@ import ctypes
 class LinEGreedy(ExperimentalInteractor):
     def __init__(self, epsilon=0.1, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.parameters['epsilon'] = epsilon
+        self.epsilon = epsilon
+        self.parameters.extend(['epsilon'])
 
     def train(self,train_dataset):
         super().train(train_dataset)
@@ -52,7 +53,7 @@ class LinEGreedy(ExperimentalInteractor):
         max_i = np.NAN
 
         rand = np.random.rand(min(num_req_items,len(candidate_items)))
-        rand = np.where(self.parameters['epsilon']>rand, True, False) 
+        rand = np.where(self.epsilon>rand, True, False) 
 
         cnz = np.count_nonzero(rand)
         if cnz == min(self.interaction_size,len(candidate_items)):
