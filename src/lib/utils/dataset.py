@@ -13,10 +13,25 @@ from copy import copy
 from dataclasses import dataclass
 from .Parameterizable import Parameterizable
 
-class DatasetDescriptor(Parameterizable):
-    def __init__(self,name,dataset_dir,*args,**kwargs):
+class DatasetPreprocessor(Parameterizable):
+    def __init__(self, name, dataset_descriptor,preprocessor,*args,**kwargs):
         super().__init__(*args,**kwargs)
         self.name = name
+        self.dataset_descriptor = dataset_descriptor
+        self.preprocessor = preprocessor
+        self.parameters.extend(['dataset_descriptor','preprocessor'])
+
+class Preprocessor(Parameterizable):
+    def __init__(self,dataset_parser,splitter,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        # self.dataset_descriptor = dataset_descriptor
+        self.dataset_parser = dataset_parser
+        self.splitter = splitter
+        self.parameters.extend(['splitter','dataset_parser'])
+    
+class DatasetDescriptor(Parameterizable):
+    def __init__(self,dataset_dir,*args,**kwargs):
+        super().__init__(*args,**kwargs)
         self.dataset_dir = dataset_dir
         self.parameters.extend(['dataset_dir'])
 

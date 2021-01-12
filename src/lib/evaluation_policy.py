@@ -5,9 +5,8 @@ def EvaluationPolicy:
     pass
 
 class Interaction(EvaluationPolicy,Parameterizable):
-    def __init__(self,parameters,*args,**kwargs):
+    def __init__(self,*args,**kwargs):
         super().__init__(*args, **kwargs)
-        self.parameters = parameters
 
     def evaluate(self,model,train_dataset,test_dataset):
         test_users = np.unique(test_dataset.data[0])

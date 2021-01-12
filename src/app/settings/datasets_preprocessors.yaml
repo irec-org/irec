@@ -1,15 +1,21 @@
-  - name: MovieLens 100k
-    dataset_dir: ml-100k/
-    dataset_parser: MovieLens100k
-    splitter: TrainTestConsumption
-  - name: MovieLens 1M
-    dataset_dir: ml-1m/
-    dataset_parser: MovieLens1M
-    splitter: TrainTestConsumption
-  - name: MovieLens 1M
-    dataset_dir: train-Test_ML-1M/
-    dataset_parser: TRTE
-    splitter: null
+  - dataset_descriptor:
+      dataset_dir: ml-100k/
+    preprocessor:
+      dataset_parser: MovieLens100k
+      splitter: TrainTestConsumption
+    name: MovieLens 100k
+  - dataset_descriptor:
+      dataset_dir: ml-1m/
+    preprocessor:
+      dataset_parser: MovieLens1M
+      splitter: TrainTestConsumption
+    name: MovieLens 1M
+  - dataset_descriptor:
+      dataset_dir: train-Test_ML-1M/
+    preprocessor:
+      dataset_parser: TRTE
+      splitter: null
+    name: MovieLens 1M (tt)
     # PRETTY = {'ml_100k': 'MovieLens 100k',
     #           'ml_1m': 'MovieLens 1M',
     #           'tr_te_ml_1m': 'MovieLens 1M',

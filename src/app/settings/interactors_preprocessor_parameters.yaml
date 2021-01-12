@@ -1,41 +1,53 @@
 MovieLens 1M:
   COFIBA:
-    alpha: 1
-    alpha_2: 1
+    parameters:
+      alpha: 1
+      alpha_2: 1
   ThompsonSampling:
   Random:
   kNNBandit:
   ALMostPopular:
   OurMethod1:
-    alpha: 0.1
-    stop: null
-    weight_method: 'change'
+    parameters:
+        alpha: 0.1
+        stop: null
+        weight_method: 'change'
   OurMethod2:
-    alpha: 1.0
+    parameters:
+      alpha: 1.0
   MostPopular:
   LinearUCB:
-    var: null
-    user_lambda: null
-    alpha: 1.0
+    parameters:
+      var: null
+      user_lambda: null
+      alpha: 1.0
   LinEGreedy:
-    epsilon: 0.1
+    parameters:
+      epsilon: 0.1
   LinUCB:
-    alpha: 1.0
+    parameters:
+      alpha: 1.0
   PPELPE:
   UCBLearner:
-    stop: 14
+    parameters:
+      stop: 14
   GLM_UCB:
-    c: 1.0
+    parameters:
+      c: 1.0
   LinearEGreedy:
-    var: null
-    user_lambda: null
+    parameters:
+      var: null
+      user_lambda: null
   LinearThompsonSampling:
-    var: null
-    user_lambda: null
+    parameters:
+      var: null
+      user_lambda: null
   EGreedy:
-    epsilon: 0.1
+    parameters:
+      epsilon: 0.1
   UCB:
-    c: 1.0
+    parameters:
+      c: 1.0
   MostRepresentative:
   ALEntropy:
   Entropy0:
@@ -43,9 +55,11 @@ MovieLens 1M:
   PopPlusEnt:
   DistinctPopular:
   EMostPopular:
-    epsilon: 0.2
+    parameters:
+      epsilon: 0.2
   Entropy:
   LogPopEnt:
   TinUCB:
-    alpha: 0.2
+    parameters:
+      alpha: 0.2
     

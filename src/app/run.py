@@ -22,11 +22,11 @@ dm = DatasetManager()
             
 interactors_preprocessor_paramaters = yaml.load(open("settings"+sep+"interactors_preprocessor_parameters.yaml"),Loader=yaml.SafeLoader)
 print(interactors_preprocessor_paramaters)
-interactors_names = yaml.load(open("settings"+sep+"interactors_names.yaml"),Loader=yaml.SafeLoader)
-print(interactors_names)
+interactors_general_settings = yaml.load(open("settings"+sep+"interactors_general_settings.yaml"),Loader=yaml.SafeLoader)
+print(interactors_general_settings)
 
 
-ir = InteractorsRunner(dm,interactors_names,interactors_preprocessor_paramaters)
+ir = InteractorsRunner(dm,interactors_general_settings,interactors_preprocessor_paramaters)
 print(ir.select_interactors())
 
 # ir = InteractorsRunner(dm)

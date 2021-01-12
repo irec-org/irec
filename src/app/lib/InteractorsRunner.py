@@ -5,9 +5,9 @@ import mf
 
 class InteractorsRunner():
 
-    def __init__(self,dm,interactors_names,interactors_preprocessor_paramaters):
+    def __init__(self,dm,interactors_general_settings,interactors_preprocessor_paramaters):
         self.dm = dm
-        self.interactors_names = interactors_names
+        self.interactors_general_settings = interactors_general_settings
         self.interactors_preprocessor_paramaters = interactors_preprocessor_paramaters
 
     def select_interactors(self):
@@ -15,17 +15,13 @@ class InteractorsRunner():
         q = [
             inquirer.Checkbox('interactors',
                               message='Interactors to run',
-                              choices=list(self.interactors_names.values())
+                              choices=[v['name'] for v in self.interactors_general_settings.values()]
             )
         ]
         answers=inquirer.prompt(q)
-        # ddd = dict()
-        # for interactor_setting in self.interactors_names:
-        #     # list(interactor_setting.keys())[0]
-        #     ddd[]
-        interactors_class_names = dict(zip(self.interactors_names.values(),self.interactors_names.keys()))
+        interactors_class_names = dict(zip([v['name'] for v in self.interactors_general_settings.values()],self.interactors_general_settings.keys()))
+        # interactors_names = dict(zip(self.interactors_general_settings.keys(),[v['name'] for v in self.interactors_general_settings.values()]))
 
-            
         interactors_classes = list(map(lambda x:eval('interactors.'+interactors_class_names[x]),answers['interactors']))
         self.interactors_classes = interactors_classes
         return interactors_classes
@@ -38,35 +34,36 @@ class InteractorsRunner():
     #         self.run_interactors()
 
     def create_and_run_interactor(self,itr_class):
-        dm = self.dm
+        itr_class(self.interactors_general_settings[''])
+        pass
 
-        if issubclass(itr_class,interactors.ICF):
-            itr = itr_class(var=self.pmf_model.var,
-                            user_lambda=self.pmf_model.get_user_lambda(),
-                            test_consumption_matrix=dm.test_consumption_matrix,
-                            train_consumption_matrix=dm.train_consumption_matrix,
-                            name_prefix=dm.base
-            )
-        else:
-            itr = itr_class(name_prefix=dm.base,
-                            test_consumption_matrix=dm.test_consumption_matrix,
-                            train_consumption_matrix=dm.train_consumption_matrix,
-            )
+        # if issubclass(itr_class,interactors.ICF):
+        #     itr = itr_class(var=self.pmf_model.var,
+        #                     user_lambda=self.pmf_model.get_user_lambda(),
+        #                     test_consumption_matrix=dm.test_consumption_matrix,
+        #                     train_consumption_matrix=dm.train_consumption_matrix,
+        #                     name_prefix=dm.base
+        #     )
+        # else:
+        #     itr = itr_class(name_prefix=dm.base,
+        #                     test_consumption_matrix=dm.test_consumption_matrix,
+        #                     train_consumption_matrix=dm.train_consumption_matrix,
+        #     )
 
-        if itr_class in [interactors.LinearThompsonSampling]:
-            itr.interact(self.pmf_model.items_means, self.pmf_model.items_covs)
-        elif issubclass(itr_class,interactors.ICF):
-            itr.interact(self.pmf_model.items_means)
-        elif itr_class in [interactors.LinUCB,
-                        interactors.LinEGreedy,
-                        interactors.UCBLearner,
-                        interactors.MostRepresentative,
-                        interactors.OurMethod1,
-                        interactors.OurMethod2,
-                        interactors.COFIBA]:
-            itr.interact(self.mf_model.items_weights)
-        else:
-            itr.interact()
+        # if itr_class in [interactors.LinearThompsonSampling]:
+        #     itr.interact(self.pmf_model.items_means, self.pmf_model.items_covs)
+        # elif issubclass(itr_class,interactors.ICF):
+        #     itr.interact(self.pmf_model.items_means)
+        # elif itr_class in [interactors.LinUCB,
+        #                 interactors.LinEGreedy,
+        #                 interactors.UCBLearner,
+        #                 interactors.MostRepresentative,
+        #                 interactors.OurMethod1,
+        #                 interactors.OurMethod2,
+        #                 interactors.COFIBA]:
+        #     itr.interact(self.mf_model.items_weights)
+        # else:
+        #     itr.interact()
 
     def run_interactors(self):
         dm = self.dm
