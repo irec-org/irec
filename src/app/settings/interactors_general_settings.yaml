@@ -1,11 +1,11 @@
+Random:
+  name: Random
+  evaluation_policy: Interaction
 COFIBA:
   name: COFIBA
   evaluation_policy: Interaction
 ThompsonSampling:
   name: TS
-  evaluation_policy: Interaction
-Random:
-  name: Random
   evaluation_policy: Interaction
 kNNBandit:
   name: kNN-Bandit

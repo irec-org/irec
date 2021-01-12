@@ -14,9 +14,9 @@ from lib.DatasetManager import DatasetManager
 import yaml
 
 dm = DatasetManager()
-# dm.request_dataset_preprocessor()
-# dm.initialize_engines()
-# dm.load()
+dm.request_dataset_preprocessor()
+dm.initialize_engines()
+dm.load()
 
 
             
@@ -30,8 +30,8 @@ print(interactors_general_settings)
 
 
 ir = InteractorsRunner(dm,interactors_general_settings,interactors_preprocessor_paramaters,evaluation_policies_parameters)
-print(ir.select_interactors())
-
+ir.select_interactors()
+ir.run_interactors()
 # ir = InteractorsRunner(dm)
 # ir.select_interactors()
 # ir.run_interactors()

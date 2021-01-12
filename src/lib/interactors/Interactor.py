@@ -12,8 +12,9 @@ import json
 class Interactor:
     def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
-    def train(self,train_data):
-        super().train(train_data)
+    def train(self,train_dataset):
+        pass
+        # super().train(train_dataset)
     def predict(self,uid,candidate_items,num_req_items):
         return None, None
     def update(self,uid,item,reward,additional_data):

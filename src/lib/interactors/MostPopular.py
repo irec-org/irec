@@ -24,7 +24,7 @@ class MostPopular(ExperimentalInteractor):
     def train(self,train_dataset):
         super().train(train_dataset)
         self.train_dataset = train_dataset
-        self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[2],(self.train_dataset.data[0],self.train_dataset.data[1])),(self.train_dataset.users_num,self.train_dataset.items_num))
+        self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[:,2],(self.train_dataset.data[:,0],self.train_dataset.data[:,1])),(self.train_dataset.users_num,self.train_dataset.items_num))
         # num_users = len(uids)
         # mask = np.ones(self.consumption_matrix.shape[0], dtype=bool)
         # mask[uids] = 0

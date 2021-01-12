@@ -1,4 +1,4 @@
-MovieLens 1M:
+MovieLens 100k:
   COFIBA:
     parameters:
       alpha: 1

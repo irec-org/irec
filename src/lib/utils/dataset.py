@@ -44,11 +44,11 @@ class Dataset:
         self.uids = uids
 
     def update_from_data(self):
-        self.num_users = len(np.unique(self.data[0]))
-        self.num_items = len(np.unique(self.data[1]))
-        self.rate_domain  = set(np.unique(self.data[2]))
-        self.uids = np.unique(self.data[0])
-        self.mean_rating = np.mean(self.data[2])
+        self.num_users = len(np.unique(self.data[:,0]))
+        self.num_items = len(np.unique(self.data[:,1]))
+        self.rate_domain  = set(np.unique(self.data[:,2]))
+        self.uids = np.unique(self.data[:,0])
+        self.mean_rating = np.mean(self.data[:,2])
 
 class DatasetParser(Parameterizable):
     pass

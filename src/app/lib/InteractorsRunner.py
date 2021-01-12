@@ -13,7 +13,6 @@ class InteractorsRunner():
         self.evaluation_policies_parameters = evaluation_policies_parameters
 
     def select_interactors(self):
-        
         q = [
             inquirer.Checkbox('interactors',
                               message='Interactors to run',
@@ -29,10 +28,20 @@ class InteractorsRunner():
         return interactors_classes
 
     def create_and_run_interactor(self,itr_class):
-        itr = itr_class(**self.interactors_preprocessor_paramaters[self.dm.dataset_preprocessor.name]['parameters'][itr_class.__class__.__name__])
-        itr_evaluation_policy=self.interactors_general_settings[itr_class.__class__.__name__]['evaluation_policy']
+        # print(self.interactors_preprocessor_paramaters[self.dm.dataset_preprocessor.name])
+        # print(itr_class.__name__)
+        
+        if self.interactors_preprocessor_paramaters[self.dm.dataset_preprocessor.name][itr_class.__name__] != None and 'parameters' in self.interactors_preprocessor_paramaters[self.dm.dataset_preprocessor.name][itr_class.__name__]:
+            parameters = self.interactors_preprocessor_paramaters[self.dm.dataset_preprocessor.name][itr_class.__name__]['parameters']
+        else:
+            parameters = {}
+        #     parameters = 
+        
+        # print(self.interactors_preprocessor_paramaters[self.dm.dataset_preprocessor.name][itr_class.__name__])
+        itr = itr_class(**parameters)
+        itr_evaluation_policy=self.interactors_general_settings[itr_class.__name__]['evaluation_policy']
         evaluation_policy = eval('evaluation_policy.'+itr_evaluation_policy)(**self.evaluation_policies_parameters[itr_evaluation_policy])
-        evaluation_policy.evaluate(itr,self.dm.train_dataset,self.dm.test_dataset)
+        evaluation_policy.evaluate(itr,self.dm.dataset_preprocessed[0],self.dm.dataset_preprocessed[1])
         pass
 
     def run_interactors(self):

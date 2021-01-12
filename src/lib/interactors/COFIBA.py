@@ -87,15 +87,15 @@ class COFIBA(ExperimentalInteractor):
     # def train(self,train_dataset):
     #     super().train(train_dataset)
     #     self.train_dataset = train_dataset
-    #     self.train_consumption_matrix = scipy.sparse.csr_matrix((train_data[2],(train_data[0],train_data[1])),(self.train_dataset.users_num,self.train_dataset.items_num))
+    #     self.train_consumption_matrix = scipy.sparse.csr_matrix((train_data[:,2],(train_data[:,0],train_data[:,1])),(self.train_dataset.users_num,self.train_dataset.items_num))
     def train(self,train_dataset):
         super().train(train_dataset)
         self.train_dataset = train_dataset
-        self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[2],(self.train_dataset.data[0],self.train_dataset.data[1])),(self.train_dataset.users_num,self.train_dataset.items_num))
+        self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[:,2],(self.train_dataset.data[:,0],self.train_dataset.data[:,1])),(self.train_dataset.users_num,self.train_dataset.items_num))
         self.num_items = self.train_dataset.num_items
     # def train(self,train_data,total_num_users,total_num_items):
     #     super().train(train_data)
-    #     self.train_consumption_matrix = scipy.sparse.csr_matrix((train_data[2],(train_data[0],train_data[1])))
+    #     self.train_consumption_matrix = scipy.sparse.csr_matrix((train_data[:,2],(train_data[:,0],train_data[:,1])))
     #     self.num_items = self.train_consumption_matrix.shape[1]
         self.consumption_matrix = self.train_consumption_matrix.tolil()
         self.total_num_users = self.train_consumption_matrix.shape[0]

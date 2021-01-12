@@ -66,23 +66,23 @@ class DatasetManager:
             # with open("settings"+sep+"splitters.yaml") as splittersf:
             #     self.splitters_settings = yaml.load(splittersf,Loader=self.loader)
             #     self.splitter = eval('splitters.'+self.dataset_preprocessor['splitter'])(**self.splitters_settings[self.dataset_preprocessor['splitter']])
-            self.result=self.dataset_preprocessor.preprocessor.splitter.apply(self.dataset_parsed)
+            self.dataset_preprocessed=self.dataset_preprocessor.preprocessor.splitter.apply(self.dataset_parsed)
         else:
-            self.result = dataset_parsed
+            self.dataset_preprocessed = dataset_parsed
 
-        self.train_dataset = self.result[0]
-        self.test_dataset = self.result[1]
+        # self.train_dataset = self.dataset_preprocessed[0]
+        # self.test_dataset = self.dataset_preprocessed[1]
 
     def save(self):
         print(self.get_file_name())
         # print(open(self.get_file_name(),'wb'))
         Path('/'.join(self.get_file_name().split('/')[:-1])).mkdir(parents=True, exist_ok=True)
-        pickle.dump(self.result,open(self.get_file_name(),'wb'))
+        pickle.dump(self.dataset_preprocessed,open(self.get_file_name(),'wb'))
         pass
 
     def load(self):
-        self.result = pickle.load(open(self.get_file_name(),'rb'))
-        return self.result
+        self.dataset_preprocessed = pickle.load(open(self.get_file_name(),'rb'))
+        return self.dataset_preprocessed
 
     def get_file_name(self):
         # print(os.path.join(self.get_id()+'.pickle'))

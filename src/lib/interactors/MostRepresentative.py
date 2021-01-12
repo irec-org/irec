@@ -17,7 +17,7 @@ class MostRepresentative(ExperimentalInteractor):
     def train(self,train_dataset):
         super().train(train_dataset)
         self.train_dataset = train_dataset
-        self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[2],(self.train_dataset.data[0],self.train_dataset.data[1])),(self.train_dataset.users_num,self.train_dataset.items_num))
+        self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[:,2],(self.train_dataset.data[:,0],self.train_dataset.data[:,1])),(self.train_dataset.users_num,self.train_dataset.items_num))
         # uids = self.test_users
         self.items_representativeness = self.get_items_representativeness(items_latent_factors)
 

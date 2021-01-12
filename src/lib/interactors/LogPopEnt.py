@@ -17,7 +17,7 @@ class LogPopEnt(ExperimentalInteractor):
     def train(self,train_dataset):
         super().train(train_dataset)
         self.train_dataset = train_dataset
-        self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[2],(self.train_dataset.data[0],self.train_dataset.data[1])),(self.train_dataset.users_num,self.train_dataset.items_num))
+        self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[:,2],(self.train_dataset.data[:,0],self.train_dataset.data[:,1])),(self.train_dataset.users_num,self.train_dataset.items_num))
 
         items_entropy = Entropy.get_items_entropy(self.train_consumption_matrix)
         items_popularity = MostPopular.get_items_popularity(self.train_consumption_matrix,normalize=False)
