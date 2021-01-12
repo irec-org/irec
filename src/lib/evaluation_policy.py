@@ -5,8 +5,11 @@ def EvaluationPolicy:
     pass
 
 class Interaction(EvaluationPolicy,Parameterizable):
-    def __init__(self,*args,**kwargs):
+    def __init__(self, num_interactions, interaction_size, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.num_interactions = num_interactions
+        self.interaction_size = interaction_size
+        self.parameters.extend(['num_interactions','interaction_size'])
 
     def evaluate(self,model,train_dataset,test_dataset):
         test_users = np.unique(test_dataset.data[0])
@@ -23,21 +26,21 @@ class Interaction(EvaluationPolicy,Parameterizable):
         model.train(train_data)
         users_num_interactions = defaultdict(int)
         available_users = set(test_users)
-        for i in range(num_test_users*self.parameters.interactions):
+        for i in range(num_test_users*self.num_interactions):
             uid = random.sample(available_users,k=1)[0]
-            # for i in range(self.parameters.interaction_size):
+            # for i in range(self.interaction_size):
             not_recommended = np.ones(num_items,dtype=bool)
             not_recommended[users_items_recommended[uid]] = 0
             items_not_recommended = np.nonzero(not_recommended)[0]
-            items_score, additional_data = model.predict(uid,items_not_recommended,self.parameters.interaction_size)
-            best_items = list(reversed(np.argsort(items_score)))[:self.parameters.interaction_size]
+            items_score, additional_data = model.predict(uid,items_not_recommended,self.interaction_size)
+            best_items = list(reversed(np.argsort(items_score)))[:self.interaction_size]
             # best_item = items_not_recommended[np.argmax(items_score)]
             users_items_recommended[uid].extend(best_items)
 
-            # for i in range(self.parameters.interaction_size):
-            for item in users_items_recommended[users_num_interactions[uid]*self.parameters.interaction_size:(users_num_interactions[uid]+1)*self.parameters.interaction_size]:
+            # for i in range(self.interaction_size):
+            for item in users_items_recommended[users_num_interactions[uid]*self.interaction_size:(users_num_interactions[uid]+1)*self.interaction_size]:
                 model.update(uid,item,test_consumption_matrix[uid,item],additional_data)
             # model.increment_time()
             users_num_interactions[uid] += 1
-            if users_num_interactions[uid] == self.parameters.interactions:
+            if users_num_interactions[uid] == self.num_interactions:
                 available_users = available_users - {uid}
