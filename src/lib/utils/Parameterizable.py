@@ -7,4 +7,4 @@ class Parameterizable:
         return self.__class__.__name__+':{'+util.dict_to_str(
             {i: (getattr(self,i) if not isinstance(getattr(self,i),Parameterizable) else getattr(self,i).get_id())
              for i in self.parameters}
-            , num_bars)+'}'
+            ,num_bars)+'}'

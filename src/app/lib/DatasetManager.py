@@ -20,7 +20,7 @@ class DatasetManager:
         pass
 
     def get_datasets_preprocessors_settings(self):
-        with open("settings"+sep+"datasets_preprocessors.yaml") as f:
+        with open("settings"+sep+"datasets_preprocessors_parameters.yaml") as f:
             self.loader = yaml.SafeLoader
             datasets_preprocessors = yaml.load(f,Loader=self.loader)
 
@@ -43,7 +43,7 @@ class DatasetManager:
     def initialize_engines(self):
         dataset_parser = eval('dataset.'+self.dataset_preprocessor['preprocessor']['dataset_parser'])()
         if self.dataset_preprocessor['preprocessor']['splitter'] != None:
-            with open("settings"+sep+"splitters.yaml") as splittersf:
+            with open("settings"+sep+"splitters_parameters.yaml") as splittersf:
                 splitters_settings = yaml.load(splittersf,Loader=self.loader)
                 splitter = eval('splitters.'+self.dataset_preprocessor['preprocessor']['splitter'])(**splitters_settings[self.dataset_preprocessor['preprocessor']['splitter']])
         else:
@@ -69,6 +69,9 @@ class DatasetManager:
             self.result=self.dataset_preprocessor.preprocessor.splitter.apply(self.dataset_parsed)
         else:
             self.result = dataset_parsed
+
+        self.train_dataset = self.result[0]
+        self.test_dataset = self.result[1]
 
     def save(self):
         print(self.get_file_name())
