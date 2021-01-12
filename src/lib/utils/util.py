@@ -14,14 +14,14 @@ def dict_to_list_gen(d):
 def dict_to_list(d):
     return list(dict_to_list_gen(d))
 
-def dict_to_str(dictionary):
+def dict_to_str(dictionary,num_bars=0):
     strings = []
     for key, value in dictionary.items():
         if isinstance(value,dict):
             strings.append(f"{key}:{{{dict_to_str(value)}}}")
         else:
             strings.append(f"{key}:{str(value).replace('/','|')}")
-    return ",".join(strings)
+    return "/".join(strings[:num_bars])+("/" if num_bars and len(strings[num_bars:]) != 0 else "") +",".join(strings[num_bars:])
 
 def run_parallel(func, args, use_tqdm=True):
     executor = ProcessPoolExecutor()

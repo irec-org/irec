@@ -3,6 +3,7 @@ import os
 import sys
 sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + pardir + sep + "lib")
 
+from pathlib import Path
 import inquirer
 import utils.dataset as dataset
 import yaml
@@ -70,7 +71,9 @@ class DatasetManager:
             self.result = dataset_parsed
 
     def save(self):
+        print(self.get_file_name())
         # print(open(self.get_file_name(),'wb'))
+        Path('/'.join(self.get_file_name().split('/')[:-1])).mkdir(parents=True, exist_ok=True)
         pickle.dump(self.result,open(self.get_file_name(),'wb'))
         pass
 
@@ -82,6 +85,6 @@ class DatasetManager:
         # print(os.path.join(self.get_id()+'.pickle'))
         return os.path.join(DirectoryDependent().DIRS['dataset_preprocess'],os.path.join(self.get_id()+'.pickle'))
     def get_id(self):
-        return 'dspp_'+self.dataset_preprocessor.get_id()
+        return 'dspp_'+self.dataset_preprocessor.get_id(num_bars=4)
             # self.dataset_parser.get_id()+\
             # (','+self.splitter.get_id()) if self.dataset_preprocessor['splitter'] != None else ''
