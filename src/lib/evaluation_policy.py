@@ -1,7 +1,8 @@
 from collections import defaultdict
 import scipy.sparse
+from utils.Parameterizable import Parameterizable
 
-def EvaluationPolicy:
+class EvaluationPolicy:
     pass
 
 class Interaction(EvaluationPolicy,Parameterizable):

@@ -25,8 +25,11 @@ print(interactors_preprocessor_paramaters)
 interactors_general_settings = yaml.load(open("settings"+sep+"interactors_general_settings.yaml"),Loader=yaml.SafeLoader)
 print(interactors_general_settings)
 
+evaluation_policies_parameters = yaml.load(open("settings"+sep+"evaluation_policies_parameters.yaml"),Loader=yaml.SafeLoader)
+print(interactors_general_settings)
 
-ir = InteractorsRunner(dm,interactors_general_settings,interactors_preprocessor_paramaters)
+
+ir = InteractorsRunner(dm,interactors_general_settings,interactors_preprocessor_paramaters,evaluation_policies_parameters)
 print(ir.select_interactors())
 
 # ir = InteractorsRunner(dm)
