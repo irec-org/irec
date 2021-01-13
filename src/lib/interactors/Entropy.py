@@ -51,9 +51,13 @@ class Entropy(ExperimentalInteractor):
     def train(self,train_dataset):
         super().train(train_dataset)
         self.train_dataset = train_dataset
-        self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[:,2],(self.train_dataset.data[:,0],self.train_dataset.data[:,1])),(self.train_dataset.users_num,self.train_dataset.items_num))
         self.num_items = self.train_dataset.num_items
-        self.items_entropy = self.get_items_entropy(self.train_consumption_matrix)
+        self.unique_values = self.train_dataset.rate_domain
+        self.num_unique_values = len(unique_values)
+        self.items_ratings = np.zeros((self.num_items,self.num_unique_values))
+        self.unique_values_ids = dict(zip(unique_values,list(range(num_unique_values))))
+        for uid, iid, reward in train_dataset.data:
+            items_ratings[iid,reward] += 1
         # items_entropy = np.power(items_entropy+1,items_entropy+1)
         # fig, ax = plt.subplots()
         # ax.hist(items_entropy,color='k')
@@ -62,5 +66,10 @@ class Entropy(ExperimentalInteractor):
         # fig.savefig(os.path.join(self.DIRS['img'],"entropy_"+self.get_id()+".png"))
         
     def predict(self,uid,candidate_items,num_req_items):
-        items_score = self.items_entropy[candidate_items]
+        items_score =  [self.probabilities_entropy(self.items_ratings[iid]/np.sum(self.items_ratings[iid]))
+                        for iid
+                        in candidate_items]
         return items_score, None
+
+    def update(self,uid,item,reward,additional_data):
+        items_ratings[item,self.unique_values_ids[reward]] += 1 
