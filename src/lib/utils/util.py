@@ -47,3 +47,14 @@ def create_train_test_with_results(consumption_matrix,results,rate):
 
 def create_path_to_file(file_name):
     Path('/'.join(file_name.split('/')[:-1])).mkdir(parents=True, exist_ok=True)
+
+def repair_path_name(path):
+    length = len(path)
+    new_file_name = []
+    for i in path.split('/'):
+        if len(i) > 255:
+            lists = [i[j:j+255] for j in range(0, len(i), 255)]
+            new_file_name.append('/'.join(lists))
+        else:
+            new_file_name.append(i)
+    return '/'.join(new_file_name)

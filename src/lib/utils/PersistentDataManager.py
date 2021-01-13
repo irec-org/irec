@@ -5,17 +5,21 @@ import os
 import json
 from . import util
 # import joblib
+from os.path import sep
 
 class PersistentDataManager(DirectoryDependent):
     def __init__(self, directory='state_save', *args, **kwargs):
         super().__init__(*args,**kwargs)
         self.directory = directory
+        self.extension_name = 'self.pickle'
 
     def get_fp(self,path):
-        fp = os.path.join(self.DIRS[self.directory],path+'.pickle')
+        fp = os.path.join(self.DIRS[self.directory],path+self.extension_name)
+        fp = util.repair_path_name(fp)
         return fp
 
     def save(self,path,data):
+            
         fp = self.get_fp(path)
         util.create_path_to_file(fp)
         with open(fp, "wb") as f:
