@@ -8,7 +8,7 @@ import inquirer
 import utils.dataset as dataset
 import yaml
 # import utils.dataset_parsers as dataset_parsers
-from lib.DirectoryDependent import DirectoryDependent
+from .DirectoryDependent import DirectoryDependent
 import utils.splitters as splitters
 import utils.util as util
 import pickle

@@ -6,7 +6,7 @@ class DirectoryDependent:
     BASE_DIR = (pardir+sep)*2
     DIRS = {}
     DIRS['data'] = os.path.join(BASE_DIR, 'data')
-    DIRS['result'] = os.path.join(DIRS['data'], 'result')
+    DIRS['results'] = os.path.join(DIRS['data'], 'results')
     DIRS['state_save'] = os.path.join(DIRS['data'], 'state_save')
     DIRS['dataset_preprocess'] = os.path.join(DIRS['data'], 'dataset_preprocess')
     DIRS['img'] = os.path.join(DIRS['data'], 'img')

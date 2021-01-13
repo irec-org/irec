@@ -6,11 +6,11 @@ sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "lib")
 import inquirer
 import interactors
 import mf
-from lib.InteractorsRunner import InteractorsRunner
+from utils.InteractorRunner import InteractorRunner
 from sklearn.decomposition import NMF
 import numpy as np
 import scipy.sparse
-from lib.DatasetManager import DatasetManager
+from utils.DatasetManager import DatasetManager
 import yaml
 
 dm = DatasetManager()
@@ -29,10 +29,10 @@ evaluation_policies_parameters = yaml.load(open("settings"+sep+"evaluation_polic
 print(interactors_general_settings)
 
 
-ir = InteractorsRunner(dm,interactors_general_settings,interactors_preprocessor_paramaters,evaluation_policies_parameters)
+ir = InteractorRunner(dm,interactors_general_settings,interactors_preprocessor_paramaters,evaluation_policies_parameters)
 ir.select_interactors()
 ir.run_interactors()
-# ir = InteractorsRunner(dm)
+# ir = InteractorRunner(dm)
 # ir.select_interactors()
 # ir.run_interactors()
 # ir.run_bases(['tr_te_yahoo_music',

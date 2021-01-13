@@ -6,11 +6,11 @@ sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "lib")
 import inquirer
 import utils.dataset as dataset
 import yaml
-from lib.DirectoryDependent import DirectoryDependent
+from utils.DirectoryDependent import DirectoryDependent
 import utils.splitters as splitters
 import utils.util as util
 import pickle
-from lib.DatasetManager import DatasetManager
+from utils.DatasetManager import DatasetManager
 dm = DatasetManager()
 dm.request_dataset_preprocessor()
 dm.initialize_engines()

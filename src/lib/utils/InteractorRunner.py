@@ -3,8 +3,11 @@ import interactors
 import numpy as np
 import mf
 import evaluation_policy
+from utils.PersistentDataManager import PersistentDataManager
+from .InteractorCache import InteractorCache
 
-class InteractorsRunner():
+
+class InteractorRunner():
 
     def __init__(self,dm,interactors_general_settings,interactors_preprocessor_paramaters,evaluation_policies_parameters):
         self.dm = dm
@@ -27,7 +30,7 @@ class InteractorsRunner():
         self.interactors_classes = interactors_classes
         return interactors_classes
 
-    def create_and_run_interactor(self,itr_class):
+    def create_interactor(self,itr_class):
         # print(self.interactors_preprocessor_paramaters[self.dm.dataset_preprocessor.name])
         # print(itr_class.__name__)
         
@@ -39,10 +42,18 @@ class InteractorsRunner():
         
         # print(self.interactors_preprocessor_paramaters[self.dm.dataset_preprocessor.name][itr_class.__name__])
         itr = itr_class(**parameters)
-        itr_evaluation_policy=self.interactors_general_settings[itr_class.__name__]['evaluation_policy']
+        return itr
+        
+    def run_interactor(self,itr):
+        itr_evaluation_policy=self.interactors_general_settings[itr.__class__.__name__]['evaluation_policy']
         evaluation_policy = eval('evaluation_policy.'+itr_evaluation_policy)(**self.evaluation_policies_parameters[itr_evaluation_policy])
-        evaluation_policy.evaluate(itr,self.dm.dataset_preprocessed[0],self.dm.dataset_preprocessed[1])
+        history_items_recommended = evaluation_policy.evaluate(itr,self.dm.dataset_preprocessed[0],self.dm.dataset_preprocessed[1])
+
+        pdm = PersistentDataManager(directory='results')
+        pdm.save(InteractorCache().get_id(self.dm,evaluation_policy,itr),history_items_recommended)
+
 
     def run_interactors(self):
         for itr_class in self.interactors_classes:
-            self.create_and_run_interactor(itr_class)
+            itr = self.create_interactor(itr_class)
+            self.run_interactor(itr)

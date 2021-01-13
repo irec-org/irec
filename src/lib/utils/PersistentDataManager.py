@@ -1,20 +1,28 @@
 import pickle
-from Parameterizable import Parameterizable
-from DirectoryDependent import DirectoryDependent
+from .Parameterizable import Parameterizable
+from .DirectoryDependent import DirectoryDependent
 import os
 import json
+from . import util
 
 class PersistentDataManager(DirectoryDependent):
     def __init__(self, directory='state_save', *args, **kwargs):
         super().__init__(*args,**kwargs)
         self.directory = directory
-    
+
+    def get_fp(self,path):
+        fp = os.path.join(self.DIRS[self.directory],path+'.pickle')
+        return fp
+
     def save(self,path,data):
-        with open(f'{os.path.join(self.DIRS[self.directory],path)}.pickle', "wb") as f:
+        fp = self.get_fp(path)
+        util.create_path_to_file(fp)
+        with open(fp, "wb") as f:
             pickle.dump(data, f)
 
     def load(self,path):
-        with open(f'{os.path.join(self.DIRS[self.directory],path)}.pickle', "rb") as f:
+        fp = self.get_fp(path)
+        with open(fp, "rb") as f:
             return pickle.load(f)
         
     @staticmethod
