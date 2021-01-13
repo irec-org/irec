@@ -18,8 +18,11 @@ MovieLens 100k:
   MostPopular:
   LinearUCB:
     parameters:
-      var: null
-      user_lambda: null
+      var: 0.05
+      user_var: 0.01
+      item_var: 0.01
+      stop_criteria: 0.0009
+      iterations: 20
       alpha: 1.0
   LinEGreedy:
     parameters:
@@ -62,4 +65,3 @@ MovieLens 100k:
   TinUCB:
     parameters:
       alpha: 0.2
-    

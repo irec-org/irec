@@ -20,7 +20,7 @@ class LinearUCB(ICF):
         self.train_dataset = train_dataset
         self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[:,2],(self.train_dataset.data[:,0],self.train_dataset.data[:,1])),(self.train_dataset.users_num,self.train_dataset.items_num))
         self.num_items = self.train_dataset.num_items
-        mf_model = mf.ICFPMFS()
+        mf_model = mf.ICFPMFS(self.iterations,self.var,self.user_var,self.item_var,self.stop_criteria)
         mf_model.fit(self.train_consumption_matrix)
         self.items_means = mf_model.items_means
 
@@ -28,7 +28,7 @@ class LinearUCB(ICF):
 
         self.I = np.eye(self.num_latent_factors)
         bs = defaultdict(lambda: np.zeros(self.num_latent_factors))
-        As = defaultdict(lambda: self.user_lambda*I)
+        As = defaultdict(lambda: self.get_user_lambda()*I)
 
     def predict(self,uid,candidate_items,num_req_items):
         b = bs[uid]

@@ -25,12 +25,12 @@ class GLM_UCB(ICF):
 
         # self.items_means = items_means
 
-        mf_model = mf.ICFPMFS()
+        mf_model = mf.ICFPMFS(self.iterations,self.var,self.user_var,self.item_var,self.stop_criteria)
         mf_model.fit(self.train_consumption_matrix)
         self.items_means = mf_model.items_means
         self.num_latent_factors = len(self.items_latent_factors[0])
         self.I = np.eye(self.num_latent_factors)
-        A = self.user_lambda*I
+        A = self.get_user_lambda()*I
         self.As = defaultdict(lambda: np.copy(A))
         self.users_rec_rewards = defaultdict(list)
         self.users_rec_items_means = defaultdict(list)

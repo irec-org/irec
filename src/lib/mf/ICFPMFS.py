@@ -51,7 +51,7 @@ class ICFPMFS(MF):
         self.user_var = user_var
         self.item_var = item_var
         self.stop_criteria = stop_criteria
-        self.parameters.extend(['var','user_var','item_var','stop_criteria'])
+        self.parameters.extend(['iterations','var','user_var','item_var','stop_criteria'])
 
     def get_user_lambda(self):
         return self.var/self.user_var

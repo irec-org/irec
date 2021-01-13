@@ -24,8 +24,6 @@ class DatasetPreprocessor(Parameterizable):
     def get_id(self,*args,**kwargs):
         return super().get_id(len(self.parameters),*args,**kwargs)
 
-    
-
 class Preprocessor(Parameterizable):
     def __init__(self,dataset_parser,splitter,*args,**kwargs):
         super().__init__(*args,**kwargs)
@@ -54,6 +52,7 @@ class Dataset:
         self.rate_domain  = set(np.unique(self.data[:,2]))
         self.uids = np.unique(self.data[:,0])
         self.mean_rating = np.mean(self.data[:,2])
+        # self.consumption_matrix = scipy.sparse.csr_matrix((self.data[:,2],(self..data[:,0],self.train_dataset.data[:,1])),(self.train_dataset.users_num,self.train_dataset.items_num))
 
 class DatasetParser(Parameterizable):
     pass

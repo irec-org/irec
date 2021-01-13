@@ -12,4 +12,4 @@ class LinearEGreedy(ICF,LinEGreedy):
         LinEGreedy.__init__(self, *args, **kwargs)
     
     def init_A(self,num_lat):
-        return self.user_lambda*np.eye(num_lat)
+        return self.get_user_lambda()*np.eye(num_lat)
