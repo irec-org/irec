@@ -32,6 +32,8 @@ class Interaction(EvaluationPolicy,Parameterizable):
         model.train(train_dataset.data)
         users_num_interactions = defaultdict(int)
         available_users = set(test_users)
+
+        history_items_recommended = []
         for i in range(num_test_users*self.num_interactions):
             uid = random.sample(available_users,k=1)[0]
             # print(uid)
@@ -47,8 +49,11 @@ class Interaction(EvaluationPolicy,Parameterizable):
             # for i in range(self.interaction_size):
             # for item in users_items_recommended[users_num_interactions[uid]*self.interaction_size:(users_num_interactions[uid]+1)*self.interaction_size]:
             for item in best_items:
+                history_items_recommended.append((uid,item))
                 model.update(uid,item,test_consumption_matrix[uid,item],additional_data)
             # model.increment_time()
             users_num_interactions[uid] += 1
             if users_num_interactions[uid] == self.num_interactions:
                 available_users = available_users - {uid}
+        return history_items_recommended
+
