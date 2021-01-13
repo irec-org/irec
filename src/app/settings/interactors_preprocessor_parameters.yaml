@@ -39,12 +39,18 @@ MovieLens 100k:
       c: 1.0
   LinearEGreedy:
     parameters:
-      var: null
-      user_lambda: null
+      var: 0.05
+      user_var: 0.01
+      item_var: 0.01
+      stop_criteria: 0.0009
+      iterations: 20
   LinearThompsonSampling:
     parameters:
-      var: null
-      user_lambda: null
+      var: 0.05
+      user_var: 0.01
+      item_var: 0.01
+      stop_criteria: 0.0009
+      iterations: 20
   EGreedy:
     parameters:
       epsilon: 0.1
