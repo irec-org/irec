@@ -12,6 +12,7 @@ from .DirectoryDependent import DirectoryDependent
 import utils.splitters as splitters
 import utils.util as util
 import pickle
+from .PersistentDataManager import PersistentDataManager
 
 import inquirer
 class DatasetManager:
@@ -77,13 +78,19 @@ class DatasetManager:
         print(self.get_file_name())
         # print(open(self.get_file_name(),'wb'))
         # Path('/'.join(self.get_file_name().split('/')[:-1])).mkdir(parents=True, exist_ok=True)
-        util.create_path_to_file(self.get_file_name())
-        pickle.dump(self.dataset_preprocessed,open(self.get_file_name(),'wb'))
-        pass
+        pdm = PersistentDataManager('dataset_preprocess')
+        pdm.save(self.get_file_name(),self.dataset_preprocessed)
+        # util.create_path_to_file(self.get_file_name())
+        # pickle.dump(self.dataset_preprocessed,open(,'wb'))
+        # pass
 
     def load(self):
-        self.dataset_preprocessed = pickle.load(open(self.get_file_name(),'rb'))
+
+        pdm = PersistentDataManager('dataset_preprocess')
+        self.dataset_preprocessed = pdm.load(self.get_file_name())
         return self.dataset_preprocessed
+        # self.dataset_preprocessed = pickle.load(open(self.get_file_name(),'rb'))
+        # return self.dataset_preprocessed
 
     def get_file_name(self):
         # print(os.path.join(self.get_id()+'.pickle'))
