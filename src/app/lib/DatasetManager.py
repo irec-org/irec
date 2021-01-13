@@ -76,7 +76,8 @@ class DatasetManager:
     def save(self):
         print(self.get_file_name())
         # print(open(self.get_file_name(),'wb'))
-        Path('/'.join(self.get_file_name().split('/')[:-1])).mkdir(parents=True, exist_ok=True)
+        # Path('/'.join(self.get_file_name().split('/')[:-1])).mkdir(parents=True, exist_ok=True)
+        util.create_path_to_file(self.get_file_name())
         pickle.dump(self.dataset_preprocessed,open(self.get_file_name(),'wb'))
         pass
 
@@ -88,6 +89,6 @@ class DatasetManager:
         # print(os.path.join(self.get_id()+'.pickle'))
         return os.path.join(DirectoryDependent().DIRS['dataset_preprocess'],os.path.join(self.get_id()+'.pickle'))
     def get_id(self):
-        return 'dspp_'+self.dataset_preprocessor.get_id(num_bars=4)
+        return 'dspp_'+self.dataset_preprocessor.get_id()
             # self.dataset_parser.get_id()+\
             # (','+self.splitter.get_id()) if self.dataset_preprocessor['splitter'] != None else ''

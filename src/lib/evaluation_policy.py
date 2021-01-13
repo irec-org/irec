@@ -56,4 +56,3 @@ class Interaction(EvaluationPolicy,Parameterizable):
             if users_num_interactions[uid] == self.num_interactions:
                 available_users = available_users - {uid}
         return history_items_recommended
-

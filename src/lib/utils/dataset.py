@@ -21,6 +21,11 @@ class DatasetPreprocessor(Parameterizable):
         self.preprocessor = preprocessor
         self.parameters.extend(['dataset_descriptor','preprocessor'])
 
+    def get_id(self,*args,**kwargs):
+        return super().get_id(len(self.parameters),*args,**kwargs)
+
+    
+
 class Preprocessor(Parameterizable):
     def __init__(self,dataset_parser,splitter,*args,**kwargs):
         super().__init__(*args,**kwargs)

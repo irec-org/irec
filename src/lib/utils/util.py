@@ -3,6 +3,7 @@ from tqdm import tqdm
 import os
 import multiprocessing
 import numpy as np
+from pathlib import Path
 
 def dict_to_list_gen(d):
     for k, v in zip(d.keys(), d.values()):
@@ -40,3 +41,6 @@ def sigmoid(x):
 
 def create_train_test_with_results(consumption_matrix,results,rate):
     pass
+
+def create_path_to_file(file_name):
+    Path('/'.join(file_name.split('/')[:-1])).mkdir(parents=True, exist_ok=True)

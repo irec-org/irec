@@ -42,7 +42,6 @@ class InteractorsRunner():
         itr_evaluation_policy=self.interactors_general_settings[itr_class.__name__]['evaluation_policy']
         evaluation_policy = eval('evaluation_policy.'+itr_evaluation_policy)(**self.evaluation_policies_parameters[itr_evaluation_policy])
         evaluation_policy.evaluate(itr,self.dm.dataset_preprocessed[0],self.dm.dataset_preprocessed[1])
-        pass
 
     def run_interactors(self):
         for itr_class in self.interactors_classes:
