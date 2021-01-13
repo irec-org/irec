@@ -18,8 +18,6 @@ from .LinUCB import *
 from .UCBLearner import *
 from .MostRepresentative import *
 from .LinEGreedy import *
-from .ALMostPopular import *
-from .ALEntropy import *
 from .OurMethod1 import *
 from .Entropy0 import *
 from .HELF import *

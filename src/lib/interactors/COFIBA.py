@@ -128,7 +128,6 @@ class COFIBA(ExperimentalInteractor):
             self.users_m.append(np.identity(self.num_latent_factors))
 
         self.users_latent_factors = [np.linalg.inv(m) @ b for b, m in zip(self.users_b,self.users_m)]
-        self.t = 0
         # users_m = np.zeros(total_num_users,num_latent_factors,num_latent_factors)
         # users_m[
         # print(items_graph)
@@ -158,7 +157,6 @@ class COFIBA(ExperimentalInteractor):
         users_graph, labels = self.update_user_cluster(uid,item)
         item_cluster = self.items_clustering[item]
         self.users_graphs[item_cluster] = users_graph
-        self.t += 1
 
             # self.t += 1
             # self.results[uid].extend(best_items)

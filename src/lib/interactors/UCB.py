@@ -39,4 +39,3 @@ class UCB(ExperimentalInteractor):
     def update(self,uid,item,reward,additional_data):
         self.items_mean_values[best_item] = (self.items_mean_values[best_item]*self.items_count[best_item]+self.get_reward(uid,best_item))/(self.items_count[best_item] + 1)
         self.items_count[best_item] += 1
-        self.t += 1
