@@ -1,3 +1,295 @@
+Yahoo Music:
+  COFIBA:
+    parameters:
+      alpha: 1
+      alpha_2: 1
+  ThompsonSampling:
+  Random:
+  kNNBandit:
+  ALMostPopular:
+  OurMethod1:
+    parameters:
+        alpha: 0.1
+        stop: null
+        weight_method: 'change'
+  OurMethod2:
+    parameters:
+      alpha: 1.0
+  MostPopular:
+  LinearUCB:
+    parameters:
+      var: 0.05
+      user_var: 0.01
+      item_var: 0.01
+      stop_criteria: 0.0009
+      iterations: 20
+      alpha: 1.0
+  LinEGreedy:
+    parameters:
+      epsilon: 0.1
+  LinUCB:
+    parameters:
+      alpha: 1.0
+  PPELPE:
+  UCBLearner:
+    parameters:
+      stop: 14
+  GLM_UCB:
+    parameters:
+      c: 1.0
+  LinearEGreedy:
+    parameters:
+      var: 0.05
+      user_var: 0.01
+      item_var: 0.01
+      stop_criteria: 0.0009
+      iterations: 20
+  LinearThompsonSampling:
+    parameters:
+      var: 0.05
+      user_var: 0.01
+      item_var: 0.01
+      stop_criteria: 0.0009
+      iterations: 20
+  EGreedy:
+    parameters:
+      epsilon: 0.1
+  UCB:
+    parameters:
+      c: 1.0
+  MostRepresentative:
+  ALEntropy:
+  Entropy0:
+  HELF:
+  PopPlusEnt:
+  DistinctPopular:
+  EMostPopular:
+    parameters:
+      epsilon: 0.2
+  Entropy:
+  LogPopEnt:
+  TinUCB:
+    parameters:
+      alpha: 0.2
+Good Books:
+  COFIBA:
+    parameters:
+      alpha: 1
+      alpha_2: 1
+  ThompsonSampling:
+  Random:
+  kNNBandit:
+  ALMostPopular:
+  OurMethod1:
+    parameters:
+        alpha: 0.1
+        stop: null
+        weight_method: 'change'
+  OurMethod2:
+    parameters:
+      alpha: 1.0
+  MostPopular:
+  LinearUCB:
+    parameters:
+      var: 0.05
+      user_var: 0.01
+      item_var: 0.01
+      stop_criteria: 0.0009
+      iterations: 20
+      alpha: 1.0
+  LinEGreedy:
+    parameters:
+      epsilon: 0.1
+  LinUCB:
+    parameters:
+      alpha: 1.0
+  PPELPE:
+  UCBLearner:
+    parameters:
+      stop: 14
+  GLM_UCB:
+    parameters:
+      c: 1.0
+  LinearEGreedy:
+    parameters:
+      var: 0.05
+      user_var: 0.01
+      item_var: 0.01
+      stop_criteria: 0.0009
+      iterations: 20
+  LinearThompsonSampling:
+    parameters:
+      var: 0.05
+      user_var: 0.01
+      item_var: 0.01
+      stop_criteria: 0.0009
+      iterations: 20
+  EGreedy:
+    parameters:
+      epsilon: 0.1
+  UCB:
+    parameters:
+      c: 1.0
+  MostRepresentative:
+  ALEntropy:
+  Entropy0:
+  HELF:
+  PopPlusEnt:
+  DistinctPopular:
+  EMostPopular:
+    parameters:
+      epsilon: 0.2
+  Entropy:
+  LogPopEnt:
+  TinUCB:
+    parameters:
+      alpha: 0.2
+MovieLens 10M:
+  COFIBA:
+    parameters:
+      alpha: 1
+      alpha_2: 1
+  ThompsonSampling:
+  Random:
+  kNNBandit:
+  ALMostPopular:
+  OurMethod1:
+    parameters:
+        alpha: 0.1
+        stop: null
+        weight_method: 'change'
+  OurMethod2:
+    parameters:
+      alpha: 1.0
+  MostPopular:
+  LinearUCB:
+    parameters:
+      var: 0.05
+      user_var: 0.01
+      item_var: 0.01
+      stop_criteria: 0.0009
+      iterations: 20
+      alpha: 1.0
+  LinEGreedy:
+    parameters:
+      epsilon: 0.1
+  LinUCB:
+    parameters:
+      alpha: 1.0
+  PPELPE:
+  UCBLearner:
+    parameters:
+      stop: 14
+  GLM_UCB:
+    parameters:
+      c: 1.0
+  LinearEGreedy:
+    parameters:
+      var: 0.05
+      user_var: 0.01
+      item_var: 0.01
+      stop_criteria: 0.0009
+      iterations: 20
+  LinearThompsonSampling:
+    parameters:
+      var: 0.05
+      user_var: 0.01
+      item_var: 0.01
+      stop_criteria: 0.0009
+      iterations: 20
+  EGreedy:
+    parameters:
+      epsilon: 0.1
+  UCB:
+    parameters:
+      c: 1.0
+  MostRepresentative:
+  ALEntropy:
+  Entropy0:
+  HELF:
+  PopPlusEnt:
+  DistinctPopular:
+  EMostPopular:
+    parameters:
+      epsilon: 0.2
+  Entropy:
+  LogPopEnt:
+  TinUCB:
+    parameters:
+      alpha: 0.2
+MovieLens 1M:
+  COFIBA:
+    parameters:
+      alpha: 1
+      alpha_2: 1
+  ThompsonSampling:
+  Random:
+  kNNBandit:
+  ALMostPopular:
+  OurMethod1:
+    parameters:
+        alpha: 0.1
+        stop: null
+        weight_method: 'change'
+  OurMethod2:
+    parameters:
+      alpha: 1.0
+  MostPopular:
+  LinearUCB:
+    parameters:
+      var: 0.05
+      user_var: 0.01
+      item_var: 0.01
+      stop_criteria: 0.0009
+      iterations: 20
+      alpha: 1.0
+  LinEGreedy:
+    parameters:
+      epsilon: 0.1
+  LinUCB:
+    parameters:
+      alpha: 1.0
+  PPELPE:
+  UCBLearner:
+    parameters:
+      stop: 14
+  GLM_UCB:
+    parameters:
+      c: 1.0
+  LinearEGreedy:
+    parameters:
+      var: 0.05
+      user_var: 0.01
+      item_var: 0.01
+      stop_criteria: 0.0009
+      iterations: 20
+  LinearThompsonSampling:
+    parameters:
+      var: 0.05
+      user_var: 0.01
+      item_var: 0.01
+      stop_criteria: 0.0009
+      iterations: 20
+  EGreedy:
+    parameters:
+      epsilon: 0.1
+  UCB:
+    parameters:
+      c: 1.0
+  MostRepresentative:
+  ALEntropy:
+  Entropy0:
+  HELF:
+  PopPlusEnt:
+  DistinctPopular:
+  EMostPopular:
+    parameters:
+      epsilon: 0.2
+  Entropy:
+  LogPopEnt:
+  TinUCB:
+    parameters:
+      alpha: 0.2
 MovieLens 100k:
   COFIBA:
     parameters:
