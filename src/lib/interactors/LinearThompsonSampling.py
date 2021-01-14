@@ -5,6 +5,7 @@ from tqdm import tqdm
 from threadpoolctl import threadpool_limits
 import ctypes
 from numba import jit
+import scipy
 
 @jit(nopython=True)
 def _central_limit_theorem(k):

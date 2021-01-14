@@ -6,6 +6,7 @@ from tqdm import tqdm
 #import util
 from threadpoolctl import threadpool_limits
 import ctypes
+import scipy
 class LinearEGreedy(ICF,LinEGreedy):
     def __init__(self, *args, **kwargs):
         ICF.__init__(self, *args, **kwargs)

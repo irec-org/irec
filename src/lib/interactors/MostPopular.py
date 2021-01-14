@@ -4,7 +4,7 @@ from .ExperimentalInteractor import ExperimentalInteractor
 from .MostPopular import *
 import matplotlib.pyplot as plt
 import os
-import scipy.sparse
+import scipy
 from collections import defaultdict
 import random
 class MostPopular(ExperimentalInteractor):
