@@ -5,8 +5,9 @@ from tqdm import tqdm
 from threadpoolctl import threadpool_limits
 import ctypes
 import functools
+from .MFInteractor import MFInteractor
 
-class TinUCB(ExperimentalInteractor):
+class TinUCB(MFInteractor):
     def __init__(self, alpha=0.2, zeta=None,*args, **kwargs):
         super().__init__(*args, **kwargs)
         if alpha != None:

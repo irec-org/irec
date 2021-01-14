@@ -9,7 +9,9 @@ import random
 import itertools
 from numba import jit, prange
 import mf
-class COFIBA(ExperimentalInteractor):
+from .MFInteractor import MFInteractor
+
+class COFIBA(MFInteractor):
     def __init__(self, alpha=1, alpha_2=1,*args, **kwargs):
         super().__init__(*args, **kwargs)
         self.alpha = alpha

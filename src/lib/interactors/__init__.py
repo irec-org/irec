@@ -28,3 +28,5 @@ from .PPELPE import *
 from .kNNBandit import *
 from .COFIBA import *
 from .OurMethod2 import *
+from .PTS import *
+from .MFInteractor import *

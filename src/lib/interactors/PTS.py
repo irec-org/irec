@@ -6,10 +6,11 @@ import os
 import scipy.sparse
 from collections import defaultdict
 import random
+from .MFInteractor import MFInteractor
 
 def _softmax(x):
     return np.exp(x - np.max(x)) / np.sum(np.exp(x - np.max(x)))
-class PTS(ExperimentalInteractor):
+class PTS(MFInteractor):
     def __init__(self,num_particles,var, num_lat,*args, **kwargs):
         super().__init__(*args, **kwargs)
         self.num_particles = num_particles

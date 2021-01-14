@@ -1,7 +1,6 @@
 import numpy as np
 from tqdm import tqdm
 #import util
-import interactors
 from threadpoolctl import threadpool_limits
 import ctypes
 import scipy.spatial
@@ -13,8 +12,9 @@ import scipy.optimize
 import scipy
 import mf
 from collections import defaultdict
+from .MFInteractor import MFInteractor
 
-class OurMethod2(interactors.ExperimentalInteractor):
+class OurMethod2(MFInteractor):
     def __init__(self, alpha=1.0,*args, **kwargs):
         super().__init__(*args, **kwargs)
         self.alpha = alpha

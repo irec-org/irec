@@ -7,7 +7,7 @@ import scipy
 import ctypes
 import mf
 from collections import defaultdict
-class LinUCB(ExperimentalInteractor):
+class LinUCB(MFInteractor):
     def __init__(self, alpha=1.0, zeta=None,*args, **kwargs):
         super().__init__(*args, **kwargs)
         if alpha != None:

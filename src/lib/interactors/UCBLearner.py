@@ -9,8 +9,9 @@ from .Entropy import Entropy
 from .MostPopular import MostPopular
 from .LogPopEnt import LogPopEnt
 from .PopPlusEnt import *
+from .MFInteractor import MFInteractor
 
-class UCBLearner(ExperimentalInteractor):
+class UCBLearner(MFInteractor):
     def __init__(self, stop=14, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.stop = stop

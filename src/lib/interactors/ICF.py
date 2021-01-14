@@ -1,5 +1,6 @@
 from .ExperimentalInteractor import ExperimentalInteractor
-class ICF(ExperimentalInteractor):
+from .MFInteractor import MFInteractor
+class ICF(MFInteractor):
     def __init__(self, var, user_var, item_var, stop_criteria, iterations, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.var = var

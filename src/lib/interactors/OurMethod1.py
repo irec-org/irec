@@ -1,7 +1,6 @@
 import numpy as np
 from tqdm import tqdm
 #import util
-import interactors
 from threadpoolctl import threadpool_limits
 import ctypes
 import scipy.spatial
@@ -9,8 +8,9 @@ import matplotlib.pyplot as plt
 import os
 import pickle
 import mf
+from .MFInteractor import MFInteractor
 from collections import defaultdict
-class OurMethod1(interactors.ExperimentalInteractor):
+class OurMethod1(MFInteractor):
     def __init__(self, alpha=1.0, stop=None, weight_method='change',*args, **kwargs):
         super().__init__(*args, **kwargs)
         self.alpha = alpha
