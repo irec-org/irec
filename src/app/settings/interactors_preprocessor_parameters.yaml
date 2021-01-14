@@ -1,8 +1,14 @@
 Yahoo Music:
+  TPS:
+    parameters:
+      num_particles: 30
+      var: 0.5
+      num_lat: 2
   COFIBA:
     parameters:
       alpha: 1
       alpha_2: 1
+      num_lat: 10
   ThompsonSampling:
   Random:
   kNNBandit:
@@ -12,9 +18,11 @@ Yahoo Music:
         alpha: 0.1
         stop: null
         weight_method: 'change'
+        num_lat: 10
   OurMethod2:
     parameters:
       alpha: 1.0
+      num_lat: 10
   MostPopular:
   LinearUCB:
     parameters:
@@ -24,19 +32,24 @@ Yahoo Music:
       stop_criteria: 0.0009
       iterations: 20
       alpha: 1.0
+      num_lat: 10
   LinEGreedy:
     parameters:
       epsilon: 0.1
+      num_lat: 10
   LinUCB:
     parameters:
       alpha: 1.0
+      num_lat: 10
   PPELPE:
   UCBLearner:
     parameters:
       stop: 14
+      num_lat: 10
   GLM_UCB:
     parameters:
       c: 1.0
+      num_lat: 10
   LinearEGreedy:
     parameters:
       var: 0.05
@@ -44,6 +57,7 @@ Yahoo Music:
       item_var: 0.01
       stop_criteria: 0.0009
       iterations: 20
+      num_lat: 10
   LinearThompsonSampling:
     parameters:
       var: 0.05
@@ -51,6 +65,7 @@ Yahoo Music:
       item_var: 0.01
       stop_criteria: 0.0009
       iterations: 20
+      num_lat: 10
   EGreedy:
     parameters:
       epsilon: 0.1
@@ -72,10 +87,16 @@ Yahoo Music:
     parameters:
       alpha: 0.2
 Good Books:
+  TPS:
+    parameters:
+      num_particles: 30
+      var: 0.5
+      num_lat: 2
   COFIBA:
     parameters:
       alpha: 1
       alpha_2: 1
+      num_lat: 10
   ThompsonSampling:
   Random:
   kNNBandit:
@@ -85,9 +106,11 @@ Good Books:
         alpha: 0.1
         stop: null
         weight_method: 'change'
+        num_lat: 10
   OurMethod2:
     parameters:
       alpha: 1.0
+      num_lat: 10
   MostPopular:
   LinearUCB:
     parameters:
@@ -97,19 +120,24 @@ Good Books:
       stop_criteria: 0.0009
       iterations: 20
       alpha: 1.0
+      num_lat: 10
   LinEGreedy:
     parameters:
       epsilon: 0.1
+      num_lat: 10
   LinUCB:
     parameters:
       alpha: 1.0
+      num_lat: 10
   PPELPE:
   UCBLearner:
     parameters:
       stop: 14
+      num_lat: 10
   GLM_UCB:
     parameters:
       c: 1.0
+      num_lat: 10
   LinearEGreedy:
     parameters:
       var: 0.05
@@ -117,6 +145,7 @@ Good Books:
       item_var: 0.01
       stop_criteria: 0.0009
       iterations: 20
+      num_lat: 10
   LinearThompsonSampling:
     parameters:
       var: 0.05
@@ -124,6 +153,7 @@ Good Books:
       item_var: 0.01
       stop_criteria: 0.0009
       iterations: 20
+      num_lat: 10
   EGreedy:
     parameters:
       epsilon: 0.1
@@ -145,10 +175,16 @@ Good Books:
     parameters:
       alpha: 0.2
 MovieLens 10M:
+  TPS:
+    parameters:
+      num_particles: 30
+      var: 0.5
+      num_lat: 2
   COFIBA:
     parameters:
       alpha: 1
       alpha_2: 1
+      num_lat: 10
   ThompsonSampling:
   Random:
   kNNBandit:
@@ -158,9 +194,11 @@ MovieLens 10M:
         alpha: 0.1
         stop: null
         weight_method: 'change'
+        num_lat: 10
   OurMethod2:
     parameters:
       alpha: 1.0
+      num_lat: 10
   MostPopular:
   LinearUCB:
     parameters:
@@ -170,19 +208,24 @@ MovieLens 10M:
       stop_criteria: 0.0009
       iterations: 20
       alpha: 1.0
+      num_lat: 10
   LinEGreedy:
     parameters:
       epsilon: 0.1
+      num_lat: 10
   LinUCB:
     parameters:
       alpha: 1.0
+      num_lat: 10
   PPELPE:
   UCBLearner:
     parameters:
       stop: 14
+      num_lat: 10
   GLM_UCB:
     parameters:
       c: 1.0
+      num_lat: 10
   LinearEGreedy:
     parameters:
       var: 0.05
@@ -190,6 +233,7 @@ MovieLens 10M:
       item_var: 0.01
       stop_criteria: 0.0009
       iterations: 20
+      num_lat: 10
   LinearThompsonSampling:
     parameters:
       var: 0.05
@@ -197,6 +241,7 @@ MovieLens 10M:
       item_var: 0.01
       stop_criteria: 0.0009
       iterations: 20
+      num_lat: 10
   EGreedy:
     parameters:
       epsilon: 0.1
@@ -218,10 +263,16 @@ MovieLens 10M:
     parameters:
       alpha: 0.2
 MovieLens 1M:
+  TPS:
+    parameters:
+      num_particles: 30
+      var: 0.5
+      num_lat: 2
   COFIBA:
     parameters:
       alpha: 1
       alpha_2: 1
+      num_lat: 10
   ThompsonSampling:
   Random:
   kNNBandit:
@@ -231,9 +282,11 @@ MovieLens 1M:
         alpha: 0.1
         stop: null
         weight_method: 'change'
+        num_lat: 10
   OurMethod2:
     parameters:
       alpha: 1.0
+      num_lat: 10
   MostPopular:
   LinearUCB:
     parameters:
@@ -243,19 +296,24 @@ MovieLens 1M:
       stop_criteria: 0.0009
       iterations: 20
       alpha: 1.0
+      num_lat: 10
   LinEGreedy:
     parameters:
       epsilon: 0.1
+      num_lat: 10
   LinUCB:
     parameters:
       alpha: 1.0
+      num_lat: 10
   PPELPE:
   UCBLearner:
     parameters:
       stop: 14
+      num_lat: 10
   GLM_UCB:
     parameters:
       c: 1.0
+      num_lat: 10
   LinearEGreedy:
     parameters:
       var: 0.05
@@ -263,6 +321,7 @@ MovieLens 1M:
       item_var: 0.01
       stop_criteria: 0.0009
       iterations: 20
+      num_lat: 10
   LinearThompsonSampling:
     parameters:
       var: 0.05
@@ -270,6 +329,7 @@ MovieLens 1M:
       item_var: 0.01
       stop_criteria: 0.0009
       iterations: 20
+      num_lat: 10
   EGreedy:
     parameters:
       epsilon: 0.1
