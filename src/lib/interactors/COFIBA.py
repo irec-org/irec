@@ -56,7 +56,7 @@ class COFIBA(ExperimentalInteractor):
         r = range(self.items_n_components,n_components)
         self.items_n_components = n_components
         for i in r:
-            users_graph = self.new_graph(total_num_users)
+            users_graph = self.new_graph(self.total_num_users)
             self.users_graphs.append(users_graph)
             n_components, labels = scipy.sparse.csgraph.connected_components(users_graph)
             self.users_clusterings.append(labels)
@@ -77,11 +77,12 @@ class COFIBA(ExperimentalInteractor):
                 if j < i:
                     m[j,i] = m[i,j]
 
-    def score(uid, item, user_connected_component):
+    def score(self,uid, item, user_connected_component):
         neighbors = user_connected_component
         num_neighbors = len(neighbors)
-        cluster_m = I + np.sum(users_m[neighbors+uid]) - num_neighbors*I
-        cluster_b = np.sum(users_b[neighbors+uid])
+        cluster_m = self.I + np.add.reduce(self.users_m[np.append(neighbors,uid)]) - num_neighbors*self.I
+        cluster_b = np.add.reduce(self.users_b[np.append(neighbors,uid)])
+        # print(cluster_m, cluster_b)
         cluster_latent_factors = cluster_m @ cluster_b
         return cluster_latent_factors @ self.items_latent_factors[item] + self.cb(self.alpha,self.items_latent_factors[item],cluster_m,self.t)
 
@@ -99,7 +100,7 @@ class COFIBA(ExperimentalInteractor):
     #     self.train_consumption_matrix = scipy.sparse.csr_matrix((train_data[:,2],(train_data[:,0],train_data[:,1])))
     #     self.num_items = self.train_consumption_matrix.shape[1]
         self.consumption_matrix = self.train_consumption_matrix.tolil()
-        self.total_num_users = self.train_consumption_matrix.shape[0]
+        self.total_num_users = self.train_dataset.num_users
 
         mf_model = mf.SVD()
         mf_model.fit(self.train_consumption_matrix)
@@ -119,15 +120,16 @@ class COFIBA(ExperimentalInteractor):
         self.users_graphs = []
         self.users_clusterings = []
         for i in range(self.items_n_components):
-            users_graph = self.new_graph(total_num_users)
+            users_graph = self.new_graph(self.total_num_users)
             self.users_graphs.append(users_graph)
             n_components, labels = scipy.sparse.csgraph.connected_components(users_graph)
             self.users_clusterings.append(labels)
-        self.users_b = np.zeros((total_num_users,self.num_latent_factors))
+        self.users_b = np.zeros((self.total_num_users,self.num_latent_factors))
         self.users_m = []
-        for i in range(total_num_users):
+        for i in range(self.total_num_users):
             self.users_m.append(np.identity(self.num_latent_factors))
 
+        self.users_m = np.array(self.users_m)
         self.users_latent_factors = [np.linalg.inv(m) @ b for b, m in zip(self.users_b,self.users_m)]
         # users_m = np.zeros(total_num_users,num_latent_factors,num_latent_factors)
         # users_m[
