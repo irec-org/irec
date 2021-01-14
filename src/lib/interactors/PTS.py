@@ -10,11 +10,12 @@ import random
 def _softmax(x):
     return np.exp(x - np.max(x)) / np.sum(np.exp(x - np.max(x)))
 class PTS(ExperimentalInteractor):
-    def __init__(self,num_particles,var,*args, **kwargs):
+    def __init__(self,num_particles,var, num_lat,*args, **kwargs):
         super().__init__(*args, **kwargs)
         self.num_particles = num_particles
         self.var = var
-        self.parameters.extend(['num_particles','var'])
+        self.num_lat = num_lat
+        self.parameters.extend(['num_particles','var','num_lat'])
 
     def interact(self,items_means):
         super().interact()

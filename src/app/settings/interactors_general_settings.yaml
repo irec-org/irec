@@ -1,3 +1,6 @@
+PTS:
+  name: Particle Thompson Sampling
+  evaluation_policy: Interaction
 LinUCB:
   name: LinUCB (MF)
   evaluation_policy: Interaction

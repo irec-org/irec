@@ -291,6 +291,11 @@ MovieLens 1M:
     parameters:
       alpha: 0.2
 MovieLens 100k:
+  TPS:
+    parameters:
+      num_particles: 30
+      var: 0.5
+      num_lat: 2
   COFIBA:
     parameters:
       alpha: 1
