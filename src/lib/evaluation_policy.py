@@ -3,6 +3,7 @@ import scipy.sparse
 from utils.Parameterizable import Parameterizable
 import numpy as np
 import random
+from tqdm import tqdm
 
 class EvaluationPolicy:
     pass
@@ -34,7 +35,7 @@ class Interaction(EvaluationPolicy,Parameterizable):
         available_users = set(test_users)
 
         history_items_recommended = []
-        for i in range(num_test_users*self.num_interactions):
+        for i in tqdm(range(num_test_users*self.num_interactions)):
             uid = random.sample(available_users,k=1)[0]
             # print(uid)
             # for i in range(self.interaction_size):
