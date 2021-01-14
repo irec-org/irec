@@ -300,6 +300,7 @@ MovieLens 100k:
     parameters:
       alpha: 1
       alpha_2: 1
+      num_lat: 10
   ThompsonSampling:
   Random:
   kNNBandit:
@@ -309,9 +310,11 @@ MovieLens 100k:
         alpha: 0.1
         stop: null
         weight_method: 'change'
+        num_lat: 10
   OurMethod2:
     parameters:
       alpha: 1.0
+      num_lat: 10
   MostPopular:
   LinearUCB:
     parameters:
@@ -321,19 +324,24 @@ MovieLens 100k:
       stop_criteria: 0.0009
       iterations: 20
       alpha: 1.0
+      num_lat: 10
   LinEGreedy:
     parameters:
       epsilon: 0.1
+      num_lat: 10
   LinUCB:
     parameters:
       alpha: 1.0
+      num_lat: 10
   PPELPE:
   UCBLearner:
     parameters:
       stop: 14
+      num_lat: 10
   GLM_UCB:
     parameters:
       c: 1.0
+      num_lat: 10
   LinearEGreedy:
     parameters:
       var: 0.05
@@ -341,6 +349,7 @@ MovieLens 100k:
       item_var: 0.01
       stop_criteria: 0.0009
       iterations: 20
+      num_lat: 10
   LinearThompsonSampling:
     parameters:
       var: 0.05
@@ -348,6 +357,7 @@ MovieLens 100k:
       item_var: 0.01
       stop_criteria: 0.0009
       iterations: 20
+      num_lat: 10
   EGreedy:
     parameters:
       epsilon: 0.1
