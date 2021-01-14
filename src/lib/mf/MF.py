@@ -28,8 +28,7 @@ class MF(Parameterizable):
         return matrix/np.max(matrix)
 
     def fit(self):
-        print(self.get_verbose_name())
-        pass
+        self.print_parameters()
 
     def predict_sparse(self,users_items):
         return _predict_sparse(self.users_weights,self.items_weights,users_items)

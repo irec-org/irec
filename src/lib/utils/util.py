@@ -20,12 +20,21 @@ def key_value_to_str(key,value):
         return f"{key}:{{{dict_to_str(value)}}}"
     else:
         return f"{key}:{str(value).replace('/','|')}"
+
 def dict_to_str(dictionary,num_bars=0):
     strings = []
     for key, value in dictionary.items():
         strings.append(key_value_to_str(key,value))
 
     return "/".join(strings[:num_bars])+("/" if num_bars and len(strings[num_bars:]) != 0 else "") +",".join(strings[num_bars:])
+
+def print_dict(dictionary,prefix=''):
+    for key, value in dictionary.items():
+        if isinstance(value,dict):
+            print(f"{prefix}{key}:")
+            print_dict(value,prefix+'\t')
+        else:
+            print(f"{prefix}{key}: {value}")
 
 def run_parallel(func, args, use_tqdm=True):
     executor = ProcessPoolExecutor()
@@ -40,7 +49,6 @@ def run_parallel(func, args, use_tqdm=True):
 
 def sigmoid(x):
     return 1/(1+np.exp(-x))
-
 
 def create_train_test_with_results(consumption_matrix,results,rate):
     pass

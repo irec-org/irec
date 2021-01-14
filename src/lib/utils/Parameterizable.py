@@ -10,3 +10,5 @@ class Parameterizable:
             ,num_bars)+'}'
     def get_parameters_dict(self):
         return {i: (getattr(self,i) if not isinstance(getattr(self,i),Parameterizable) else getattr(self,i).get_parameters_dict()) for i in self.parameters}
+    def print_parameters(self):
+        util.print_dict(self.get_parameters_dict())
