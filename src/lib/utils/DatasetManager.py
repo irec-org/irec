@@ -71,7 +71,7 @@ class DatasetManager(Parameterizable):
             #     self.splitter = eval('splitters.'+self.dataset_preprocessor['splitter'])(**self.splitters_settings[self.dataset_preprocessor['splitter']])
             self.dataset_preprocessed=self.dataset_preprocessor.preprocessor.splitter.apply(self.dataset_parsed)
         else:
-            self.dataset_preprocessed = dataset_parsed
+            self.dataset_preprocessed = self.dataset_parsed
 
         # self.train_dataset = self.dataset_preprocessed[0]
         # self.test_dataset = self.dataset_preprocessed[1]
