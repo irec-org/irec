@@ -9,5 +9,5 @@ class ICF(ExperimentalInteractor):
         self.iterations = iterations
         self.parameters.extend(['var','user_var','item_var','stop_criteria','iterations'])
 
-    def get_get_user_lambda(self):
+    def get_user_lambda(self):
         return self.var/self.user_var

@@ -22,9 +22,6 @@ class LinearUCB(ICF):
     def train(self,train_dataset):
         super().train(train_dataset)
         self.train_dataset = train_dataset
-        print(train_dataset)
-        print(train_dataset.data)
-        print(train_dataset.data.shape)
         self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[:,2],(self.train_dataset.data[:,0],self.train_dataset.data[:,1])),(self.train_dataset.num_users,self.train_dataset.num_items))
         self.num_items = self.train_dataset.num_items
         mf_model = mf.ICFPMFS(self.iterations,self.var,self.user_var,self.item_var,self.stop_criteria)
@@ -38,15 +35,15 @@ class LinearUCB(ICF):
         
         self.items_means = mf_model.items_means
 
-        self.num_latent_factors = len(self.items_latent_factors[0])
+        self.num_latent_factors = len(self.items_means[0])
 
         self.I = np.eye(self.num_latent_factors)
-        bs = defaultdict(lambda: np.zeros(self.num_latent_factors))
-        As = defaultdict(lambda: self.get_user_lambda()*I)
+        self.bs = defaultdict(lambda: np.zeros(self.num_latent_factors))
+        self.As = defaultdict(lambda: self.get_user_lambda()*self.I)
 
     def predict(self,uid,candidate_items,num_req_items):
-        b = bs[uid]
-        A = As[uid]
+        b = self.bs[uid]
+        A = self.As[uid]
         mean = np.dot(np.linalg.inv(A),b)
         cov = np.linalg.inv(A)*self.var
         
@@ -57,5 +54,7 @@ class LinearUCB(ICF):
 
     def update(self,uid,item,reward,additional_data):
         max_item_mean = self.items_means[item]
+        b = self.bs[uid]
+        A = self.As[uid]
         A += max_item_mean[:,None].dot(max_item_mean[None,:])
         b += reward*max_item_mean

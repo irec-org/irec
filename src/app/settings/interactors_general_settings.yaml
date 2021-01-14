@@ -1,3 +1,12 @@
+LinUCB:
+  name: LinUCB (MF)
+  evaluation_policy: Interaction
+OurMethod1:
+  name: Old UCB-Learner
+  evaluation_policy: Interaction
+OurMethod2:
+  name: New UCB-Learner
+  evaluation_policy: Interaction
 LinearUCB:
   name: Linear UCB (PMF)
   evaluation_policy: Interaction
@@ -13,23 +22,11 @@ ThompsonSampling:
 kNNBandit:
   name: kNN-Bandit
   evaluation_policy: Interaction
-ALMostPopular:
-  name: AL Most Popular
-  evaluation_policy: Interaction
-OurMethod1:
-  name: Old UCB-Learner
-  evaluation_policy: Interaction
-OurMethod2:
-  name: New UCB-Learner
-  evaluation_policy: Interaction
 MostPopular:
   name: Most Popular
   evaluation_policy: Interaction
 LinEGreedy:
   name: Linear ε-Greedy (MF)
-  evaluation_policy: Interaction
-LinUCB:
-  name: LinUCB (MF)
   evaluation_policy: Interaction
 PPELPE:
   name: PPELPE
@@ -54,9 +51,6 @@ UCB:
   evaluation_policy: Interaction
 MostRepresentative:
   name: Most Representative
-  evaluation_policy: Interaction
-ALEntropy:
-  name: AL Entropy
   evaluation_policy: Interaction
 Entropy0:
   name: Entropy0

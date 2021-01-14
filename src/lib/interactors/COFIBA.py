@@ -3,11 +3,12 @@ from tqdm import tqdm
 from .ExperimentalInteractor import ExperimentalInteractor
 import matplotlib.pyplot as plt
 import os
-import scipy.sparse
+import scipy
 from collections import defaultdict
 import random
 import itertools
 from numba import jit, prange
+import mf
 class COFIBA(ExperimentalInteractor):
     def __init__(self, alpha=1, alpha_2=1,*args, **kwargs):
         super().__init__(*args, **kwargs)

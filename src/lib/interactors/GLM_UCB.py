@@ -5,6 +5,8 @@ from tqdm import tqdm
 from threadpoolctl import threadpool_limits
 import scipy.optimize
 import ctypes
+import joblib
+import scipy
 class GLM_UCB(ICF):
     def __init__(self, c=1.0, *args, **kwargs):
         super().__init__(*args, **kwargs)

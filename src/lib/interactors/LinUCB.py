@@ -3,7 +3,10 @@ import numpy as np
 from tqdm import tqdm
 #import util
 from threadpoolctl import threadpool_limits
+import scipy
 import ctypes
+import mf
+from collections import defaultdict
 class LinUCB(ExperimentalInteractor):
     def __init__(self, alpha=1.0, zeta=None,*args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -22,14 +25,15 @@ class LinUCB(ExperimentalInteractor):
         mf_model = mf.SVD()
         mf_model.fit(self.train_consumption_matrix)
         self.items_weights = mf_model.items_weights
+        self.num_latent_factors = len(self.items_weights[0])
 
         self.I = np.eye(len(self.items_weights[0]))
-        bs = defaultdict(lambda: np.zeros(self.num_latent_factors))
-        As = defaultdict(lambda: self.I.copy())
+        self.bs = defaultdict(lambda: np.zeros(self.num_latent_factors))
+        self.As = defaultdict(lambda: self.I.copy())
 
     def predict(self,uid,candidate_items,num_req_items):
-        b = bs[uid]
-        A = As[uid]
+        b = self.bs[uid]
+        A = self.As[uid]
         mean = np.dot(np.linalg.inv(A),b)
         items_uncertainty = self.alpha*np.sqrt(np.sum(self.items_weights[candidate_items].dot(np.linalg.inv(A)) * self.items_weights[candidate_items],axis=1))
         items_user_similarity = mean @ self.items_weights[candidate_items].T
@@ -38,8 +42,8 @@ class LinUCB(ExperimentalInteractor):
 
     def update(self,uid,item,reward,additional_data):
         max_item_latent_factors = self.items_weights[item]
-        b = bs[uid]
-        A = As[uid]
+        b = self.bs[uid]
+        A = self.As[uid]
         A += max_item_latent_factors[:,None].dot(max_item_latent_factors[None,:])
         b += reward*max_item_latent_factors
 

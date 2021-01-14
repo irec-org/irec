@@ -8,6 +8,8 @@ import scipy.spatial
 import matplotlib.pyplot as plt
 import os
 import pickle
+import mf
+from collections import defaultdict
 class OurMethod1(interactors.ExperimentalInteractor):
     def __init__(self, alpha=1.0, stop=None, weight_method='change',*args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -25,6 +27,7 @@ class OurMethod1(interactors.ExperimentalInteractor):
         mf_model = mf.SVD()
         mf_model.fit(self.train_consumption_matrix)
         self.items_weights = mf_model.items_weights
+        self.num_latent_factors = len(mf_model.items_weights[0])
 
 
         # self.items_weights = items_weights
@@ -38,14 +41,14 @@ class OurMethod1(interactors.ExperimentalInteractor):
         assert(self.items_bias.min() >= 0 and self.items_bias.max() == 1)
 
         self.I = np.eye(len(self.items_weights[0]))
-        bs = defaultdict(lambda: np.zeros(self.num_latent_factors))
-        As = defaultdict(lambda: self.I.copy())
+        self.bs = defaultdict(lambda: np.zeros(self.num_latent_factors))
+        self.As = defaultdict(lambda: self.I.copy())
 
-        users_num_correct_items_history= defaultdict(lambda:[0])
-        users_num_correct_items_history = defaultdict(lambda:[0])
-        users_similarity_score = defaultdict(lambda:[0])
-        users_distance_history = defaultdict(lambda:[])
-        users_global_model_weights = defaultdict(lambda:[])
+        self.users_latent_factors_history= defaultdict(lambda:np.empty(shape=(0, self.num_latent_factors)))
+        self.users_num_correct_items_history = defaultdict(lambda:[0])
+        self.users_similarity_score = defaultdict(lambda:[0])
+        self.users_distance_history = defaultdict(lambda:[])
+        self.users_global_model_weights = defaultdict(lambda:[])
 
         # user_latent_factors_history = np.empty(shape=(0, num_lat))
         # num_correct_items_history = [0]
@@ -77,18 +80,18 @@ class OurMethod1(interactors.ExperimentalInteractor):
             raise RuntimeError
 
     def predict(self,uid,candidate_items,num_req_items):
-        b = bs[uid]
-        A = As[uid]
+        b = self.bs[uid]
+        A = self.As[uid]
         
-        user_latent_factors_history = users_num_correct_items_history[uid]
-        num_correct_items_history   = users_num_correct_items_history[uid]
-        similarity_score            = users_similarity_score[uid]
-        distance_history            = users_distance_history[uid]
-        global_model_weights        = users_global_model_weights[uid]
+        self.users_latent_factors_history[uid]
+        num_correct_items_history   = self.users_num_correct_items_history[uid]
+        similarity_score            = self.users_similarity_score[uid]
+        distance_history            = self.users_distance_history[uid]
+        global_model_weights        = self.users_global_model_weights[uid]
 
         user_latent_factors = np.dot(np.linalg.inv(A),b)
-        user_latent_factors_history = np.vstack([user_latent_factors_history,user_latent_factors])
-        global_model_weight = self.get_global_model_weight(user_latent_factors_history,
+        self.users_latent_factors_history[uid] = np.vstack([self.users_latent_factors_history[uid],user_latent_factors])
+        global_model_weight = self.get_global_model_weight(self.users_latent_factors_history[uid],
                                                             num_correct_items_history,
                                                             distance_history)
         global_model_weights.append(global_model_weight)
@@ -107,10 +110,10 @@ class OurMethod1(interactors.ExperimentalInteractor):
 
     def update(self,uid,item,reward,additional_data):
         max_item_latent_factors = self.items_weights[item]
-        b = bs[uid]
-        A = As[uid]
+        b = self.bs[uid]
+        A = self.As[uid]
         A += max_item_latent_factors[:,None].dot(max_item_latent_factors[None,:])
         b += reward*max_item_latent_factors
         if reward > min(self.train_dataset.rate_domain):
-            num_correct_items_history = users_num_correct_items_history[uid]
+            num_correct_items_history = self.users_num_correct_items_history[uid]
             num_correct_items_history[-1] += 1
