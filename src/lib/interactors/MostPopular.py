@@ -28,7 +28,7 @@ class MostPopular(ExperimentalInteractor):
         super().train(train_dataset)
         self.train_dataset = train_dataset
         self.num_items = self.train_dataset.num_items
-        self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[:,2],(self.train_dataset.data[:,0],self.train_dataset.data[:,1])),(self.train_dataset.users_num,self.train_dataset.items_num))
+        self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[:,2],(self.train_dataset.data[:,0],self.train_dataset.data[:,1])),(self.train_dataset.num_users,self.train_dataset.num_items))
         self.items_popularity = self.get_items_popularity(self.train_consumption_matrix, normalize=False)
 
     def predict(self,uid,candidate_items,num_req_items):

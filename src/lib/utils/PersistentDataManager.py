@@ -29,6 +29,11 @@ class PersistentDataManager(DirectoryDependent):
         fp = self.get_fp(path)
         with open(fp, "rb") as f:
             return pickle.load(f)
+
+    def file_exists(self,path):
+        fp = self.get_fp(path)
+        return os.path.isfile(fp)
+        
         
     @staticmethod
     def json_entry_save_format(uid, items):
