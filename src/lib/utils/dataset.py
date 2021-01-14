@@ -93,3 +93,38 @@ class MovieLens1M(DatasetParser):
         dataset = Dataset(data)
         dataset.update_from_data()
         return dataset
+
+
+def _netflix_read_ratings(self, fileName):
+    file = open(fileName, "r")
+    file.readline()
+    numratings = np.sum([1 for line in open(fileName)])
+    usersId = np.zeros(numratings, dtype=np.int32)
+    itemsId = np.zeros(numratings, dtype=np.int32)
+    ratings = np.zeros(numratings, dtype=np.float16)
+    timestamp = np.zeros(numratings, dtype=np.int32)
+
+    file = open(fileName, "r")
+    file.readline()
+    cont = 0
+    for row in file:
+        values = row.split('::')
+        uid, iid,rating, ts = int(float(values[0])),int(float(values[1])),values[2], int(float(values[3].replace('\n', '')))
+        usersId[cont] = uid
+        itemsId[cont] = iid
+        ratings[cont] = rating
+        timestamp[cont] = ts
+        cont += 1
+
+    print(numratings,usersId[-1],itemsId[-1],ratings[-1])
+    file.close()
+    return usersId, itemsId, ratings, timestamp, numratings
+
+class Netflix:
+    def parse_dataset(self,dataset_descriptor):
+        # base_dir = self.BASES_DIRS[self.base]
+        u_train, i_train, r_train, t_train, numr_train = _netflix_read_ratings(dataset_descriptor.dataset_dir+'train.data')
+        u_test, i_test, r_test, t_test, numr_test = _netflix_read_ratings(dataset_descriptor.dataset_dir+'test.data')
+        test_data = np.array((u_test,i_test,r_test,t_test))
+        train_data = np.array((u_train,i_train,r_train,t_train))
+        return train_data, test_data
