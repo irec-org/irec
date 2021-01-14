@@ -15,7 +15,7 @@ class Interaction(EvaluationPolicy,Parameterizable):
         self.parameters.extend(['num_interactions','interaction_size'])
 
     def evaluate(self,model,train_dataset,test_dataset):
-        test_users = np.unique(test_dataset.data[:,0])
+        test_users = np.unique(test_dataset.data[:,0]).astype(int)
         # total_num_users = len(np.unique(np.concatenate((train_data[0],
         #                                             test_data[0]),axis=None)))
 
