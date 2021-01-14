@@ -27,7 +27,7 @@ class UCBLearner(MFInteractor):
         items_popularity = MostPopular.get_items_popularity(self.train_consumption_matrix,normalize=False)
         self.items_bias= LogPopEnt.get_items_logpopent(items_popularity,items_entropy)
 
-        mf_model = mf.SVD()
+        mf_model = mf.SVD(num_lat=self.num_lat)
         mf_model.fit(self.train_consumption_matrix)
         self.items_weights = mf_model.items_weights
         self.num_latent_factors = len(self.items_weights[0])

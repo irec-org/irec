@@ -104,7 +104,7 @@ class COFIBA(MFInteractor):
         self.consumption_matrix = self.train_consumption_matrix.tolil()
         self.total_num_users = self.train_dataset.num_users
 
-        mf_model = mf.SVD()
+        mf_model = mf.SVD(num_lat=self.num_lat)
         mf_model.fit(self.train_consumption_matrix)
         self.items_latent_factors = mf_model.items_weights
         self.num_latent_factors = len(self.items_latent_factors[0])

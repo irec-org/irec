@@ -27,7 +27,7 @@ class GLM_UCB(ICF):
 
         # self.items_means = items_means
 
-        mf_model = mf.ICFPMFS(self.iterations,self.var,self.user_var,self.item_var,self.stop_criteria)
+        mf_model = mf.ICFPMFS(self.iterations,self.var,self.user_var,self.item_var,self.stop_criteria,num_lat=self.num_lat)
         mf_model_id = joblib.hash((mf_model.get_id(),self.train_consumption_matrix))
         pdm = PersistentDataManager('state_save')
         if pdm.file_exists(mf_model_id):
