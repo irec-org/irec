@@ -43,7 +43,14 @@ class LinearThompsonSampling(ICF):
         self.num_items = self.train_dataset.num_items
 
         mf_model = mf.ICFPMFS(self.iterations,self.var,self.user_var,self.item_var,self.stop_criteria)
-        mf_model.fit(self.train_consumption_matrix)
+        mf_model_id = joblib.hash((mf_model.get_id(),self.train_consumption_matrix))
+        pdm = PersistentDataManager('state_save')
+        if pdm.file_exists(mf_model_id):
+            mf_model = pdm.load(mf_model_id)
+        else:
+            mf_model.fit(self.train_consumption_matrix)
+            pdm.save(mf_model_id,mf_model)
+
         self.items_means = mf_model.items_means
         self.items_covs = mf_model.items_covs
         self.num_latent_factors = len(self.items_latent_factors[0])
