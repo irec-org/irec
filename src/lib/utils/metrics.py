@@ -68,6 +68,28 @@ def Hits:
         if self.relevance_evaluator.is_relevant(reward):
             self.users_true_positive[uid]+=1
 
+def EPC:
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        consumption_matrix = scipy.sparse.csr_matrix(self.dataset.data[:3])
+        consumption_matrix[consumption_matrix>self.dataset.min_rating] = 1
+        self.items_popularity = np.array(np.sum(consumption_matrix,axis=0)).flatten()
+        self.items_normalized_popularity = self.items_popularity/self.dataset.num_total_users
+
+        self.users_num_items_recommended = defaultdict(int)
+        self.users_prob_not_seen_cumulated = defaultdict(float)
+
+    def compute(self,uid):
+        C_2 = 1.0/self.users_num_items_recommended[uid]
+        sum_2 = self.users_prob_not_seen_cumulated[uid]
+        EPC = C_2*sum_2
+        return EPC
+
+    def update(self,uid,item,reward):
+        self.users_num_items_recommended[uid] += 1
+        probability_seen = self.items_normalized_popularity[item]
+        self.users_prob_not_seen_cumulated[uid] += 1-probability_seen
+
 def mapk(actual, predicted, k):
     score = 0.0
     num_hits = 0.0

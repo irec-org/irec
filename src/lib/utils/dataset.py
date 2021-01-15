@@ -65,6 +65,8 @@ class Dataset:
         self.rate_domain  = set(np.unique(self.data[:,2]))
         self.uids = np.unique(self.data[:,0])
         self.mean_rating = np.mean(self.data[:,2])
+        self.min_rating = np.min(self.data[:,2])
+        self.max_rating = np.max(self.data[:,2])
     def update_num_total_users_items(self):
         self.num_total_users = self.num_users
         self.num_total_items = self.num_items
@@ -115,7 +117,6 @@ class MovieLens1M(DatasetParser):
         dataset.update_from_data()
         dataset.update_num_total_users_items()
         return dataset
-
 
 def _netflix_read_ratings(self, fileName):
     file = open(fileName, "r")
