@@ -25,8 +25,13 @@ class PTS(MFInteractor):
         self.consumption_matrix = self.train_consumption_matrix.tolil()
 
         self.num_total_items = self.train_dataset.num_total_items
+        self.num_total_users = self.train_dataset.num_total_users
 
-        self.particles = [{'u':np.random.normal(self.num_total_users,num_lat),'v':items_means,'var_u':1.0, 'var_i':1.0} for i in range(self.num_particles)]
+        self.particles = [{'u':np.random.normal(self.num_total_users,self.num_lat),
+                           'v': np.random.normal(self.num_total_items, self.num_lat),
+                           'var_u':1.0,
+                           'var_i':1.0}
+                          for i in range(self.num_particles)]
 
         self.particles_ids = np.arange(self.num_particles)
         self.item_users_consumed = defaultdict(list)
@@ -34,10 +39,11 @@ class PTS(MFInteractor):
         
     def predict(self,uid,candidate_items,num_req_items):
 
-        particle_idx = np.random.choice(particles_ids)
-        particle = particles[particle_idx]
-        items_score = particle['u'] @ particle['v'][items_not_recommended].T
-        best_items = items_not_recommended[np.argsort(items_score)[::-1]][:self.interaction_size]
+        particle_idx = np.random.choice(self.particles_ids)
+        particle = self.particles[particle_idx]
+        items_score = particle['u'] @ particle['v'][candidate_items].T
+
+        return items_score, None
 
     def update(self,uid,item,reward,additional_data):
         self.users_consumed_items[uid].append(item)
@@ -49,7 +55,7 @@ class PTS(MFInteractor):
             mus_u_i = []
             v_j = particle['v'][self.users_consumed_items[uid]]
             for particle in self.particles:
-                lambda_u_i = 1/self.var*(v_j.T @ v_j)+1/particle['var_u'] * np.eye(num_lat)
+                lambda_u_i = 1/self.var*(v_j.T @ v_j)+1/particle['var_u'] * np.eye(self.num_lat)
                 eta_u_i = np.sum(np.array([self.consumption_matrix[uid,result] for result in self.users_consumed_items[uid]]) * v_j)
                 # reward = self.get_reward(uid,best_item)
                 lambdas_u_i.append(lambda_u_i)
@@ -81,7 +87,7 @@ class PTS(MFInteractor):
                 new_particles[idx]['u'][uid] = sampled_user_vector
 
                 u_i = particle["u"][self.item_users_consumed[best_item]]
-                lambda_v_i = 1/self.var * (u_i.T @ u_i) + 1/particle['var_i']*np.eye(num_lat)
+                lambda_v_i = 1/self.var * (u_i.T @ u_i) + 1/particle['var_i']*np.eye(self.num_lat)
 
                 eta = np.sum(u_i * np.array([self.consumption_matrix[uid,best_item] in self.item_users_consumed]))
                 inv_lambda_v_i = np.linalg.inv(lambda_v_i)
