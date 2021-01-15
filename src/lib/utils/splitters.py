@@ -36,8 +36,10 @@ class TrainTestConsumption(Splitter):
 
         train_dataset = copy(dataset)
         train_dataset.data = data[~data_isin_test_uids,:]
+        dataset.update_from_data()
         test_dataset = copy(dataset)
         test_dataset.data = data[data_isin_test_uids,:]
+        dataset.update_from_data()
         print("Test shape:",test_dataset.data.shape)
         print("Train shape:",train_dataset.data.shape)
         return train_dataset, test_dataset

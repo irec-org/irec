@@ -39,12 +39,14 @@ class DatasetDescriptor(Parameterizable):
         self.parameters.extend(['dataset_dir'])
 
 class Dataset:
-    def __init__(self,data,num_users=None,num_items=None,rate_domain=None,uids=None):
+    def __init__(self,data,num_total_users=None,num_total_items=None,num_users=None,num_items=None,rate_domain=None,uids=None):
         self.data = data
         self.num_users = num_users
         self.num_items = num_items
         self.rate_domain = rate_domain
         self.uids = uids
+        self.num_total_users = num_total_users
+        self.num_total_items = num_total_items
 
     def update_from_data(self):
         self.num_users = len(np.unique(self.data[:,0]))
@@ -52,6 +54,10 @@ class Dataset:
         self.rate_domain  = set(np.unique(self.data[:,2]))
         self.uids = np.unique(self.data[:,0])
         self.mean_rating = np.mean(self.data[:,2])
+    def update_num_total_users_items(self):
+        self.num_total_users = self.num_users
+        self.num_total_items = self.num_items
+        
         # self.consumption_matrix = scipy.sparse.csr_matrix((self.data[:,2],(self..data[:,0],self.train_dataset.data[:,1])),(self.train_dataset.users_num,self.train_dataset.items_num))
 
 class DatasetParser(Parameterizable):
@@ -65,10 +71,13 @@ class TRTE(DatasetParser):
 
         dataset = Dataset(np.vstack([train_data,test_data]))
         dataset.update_from_data()
+        dataset.update_num_total_users_items()
         train_dataset = copy(dataset)
         train_dataset.data = train_data
+        train_dataset.update_from_data()
         test_dataset = copy(dataset)
         test_dataset.data = test_data
+        test_dataset.update_from_data()
         return train_dataset, test_dataset
 
 class MovieLens100k(DatasetParser):
@@ -79,6 +88,7 @@ class MovieLens100k(DatasetParser):
         data[:,1] = data[:,1] - 1
         dataset = Dataset(data)
         dataset.update_from_data()
+        dataset.update_num_total_users_items()
         return dataset
 
 class MovieLens1M(DatasetParser):
@@ -92,6 +102,7 @@ class MovieLens1M(DatasetParser):
         data[:,0] = data[:,0] - 1
         dataset = Dataset(data)
         dataset.update_from_data()
+        dataset.update_num_total_users_items()
         return dataset
 
 
