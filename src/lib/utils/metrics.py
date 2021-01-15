@@ -1,6 +1,72 @@
 import numpy as np
+
 import scipy.sparse
+from collections import defaultdict 
 np.seterr(all='raise')
+def RelevanceEvaluator:
+    def __init__(self):
+        pass
+    def is_relevant(self, reward):
+        return True
+def ThresholdRelevanceEvaluator:
+    def __init__(self,threshold):
+        self.threshold = self.threshold
+    def is_relevant(self, reward):
+        return reward>self.threshold
+    
+def Metric:
+    def __init__(self,dataset,relevance_evaluator):
+        self.dataset = dataset
+        self.relevance_evaluator = relevance_evaluator
+    def compute(self,uid):
+        return None
+    def update(self,uid,item,reward):
+        pass
+
+def Recall:
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        self.users_true_positive = defaultdict(int)
+        self.users_false_negative = defaultdict(int)
+        for row in self.dataset.data:
+            uid = int(row[0])
+            reward = row[2]
+            if self.relevance_evaluator.is_relevant(reward):
+                self.users_false_negative[uid] += 1
+
+    def compute(self,uid):
+        return self.users_true_positive[uid]/(self.users_true_positive[uid]+self.users_false_negative[uid])
+
+    def update(self,uid,item,reward):
+        if self.relevance_evaluator.is_relevant(reward):
+            self.users_true_positive[uid] += 1
+
+def Precision:
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        self.users_true_positive = defaultdict(int)
+        self.users_false_positive = defaultdict(int)
+
+    def compute(self,uid):
+        return self.users_true_positive[uid]/(self.users_true_positive[uid]+self.users_false_positive[uid])
+
+    def update(self,uid,item,reward):
+        if self.relevance_evaluator.is_relevant(reward):
+            self.users_true_positive[uid]+=1
+        else:
+            self.users_false_positive[uid]+=1
+
+def Hits:
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        self.users_true_positive = defaultdict(int)
+
+    def compute(self,uid):
+        return self.users_true_positive[uid]
+
+    def update(self,uid,item,reward):
+        if self.relevance_evaluator.is_relevant(reward):
+            self.users_true_positive[uid]+=1
 
 def mapk(actual, predicted, k):
     score = 0.0
