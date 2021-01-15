@@ -3,18 +3,19 @@ import numpy as np
 import scipy.sparse
 from collections import defaultdict 
 np.seterr(all='raise')
-def RelevanceEvaluator:
+
+class RelevanceEvaluator:
     def __init__(self):
         pass
     def is_relevant(self, reward):
         return True
-def ThresholdRelevanceEvaluator:
+class ThresholdRelevanceEvaluator:
     def __init__(self,threshold):
         self.threshold = self.threshold
     def is_relevant(self, reward):
         return reward>self.threshold
     
-def Metric:
+class Metric:
     def __init__(self,dataset,relevance_evaluator):
         self.dataset = dataset
         self.relevance_evaluator = relevance_evaluator
@@ -23,7 +24,7 @@ def Metric:
     def update(self,uid,item,reward):
         pass
 
-def Recall:
+class Recall:
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
         self.users_true_positive = defaultdict(int)
@@ -41,7 +42,7 @@ def Recall:
         if self.relevance_evaluator.is_relevant(reward):
             self.users_true_positive[uid] += 1
 
-def Precision:
+class Precision:
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
         self.users_true_positive = defaultdict(int)
@@ -56,7 +57,7 @@ def Precision:
         else:
             self.users_false_positive[uid]+=1
 
-def Hits:
+class Hits:
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
         self.users_true_positive = defaultdict(int)
@@ -68,13 +69,13 @@ def Hits:
         if self.relevance_evaluator.is_relevant(reward):
             self.users_true_positive[uid]+=1
 
-def EPC:
-    def __init__(self,*args,**kwargs):
+class EPC:
+    def __init__(self,items_normalized_popularity,*args,**kwargs):
         super().__init__(*args,**kwargs)
-        consumption_matrix = scipy.sparse.csr_matrix(self.dataset.data[:3])
-        consumption_matrix[consumption_matrix>self.dataset.min_rating] = 1
-        self.items_popularity = np.array(np.sum(consumption_matrix,axis=0)).flatten()
-        self.items_normalized_popularity = self.items_popularity/self.dataset.num_total_users
+        # consumption_matrix = scipy.sparse.csr_matrix(self.dataset.data[:3])
+        # consumption_matrix[consumption_matrix>self.dataset.min_rating] = 1
+        # self.items_popularity = np.array(np.sum(consumption_matrix,axis=0)).flatten()
+        # self.items_normalized_popularity = self.items_popularity/self.dataset.num_total_users
 
         self.users_num_items_recommended = defaultdict(int)
         self.users_prob_not_seen_cumulated = defaultdict(float)
@@ -89,6 +90,24 @@ def EPC:
         self.users_num_items_recommended[uid] += 1
         probability_seen = self.items_normalized_popularity[item]
         self.users_prob_not_seen_cumulated[uid] += 1-probability_seen
+
+class ILD:
+    def __init__(self,items_distance,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        self.items_distance = items_distance
+        self.users_items_recommended = defaultdict(list)
+        self.users_local_ild = defaultdict(float)
+
+    def compute(self,uid):
+        user_num_items_recommended = len(self.users_items_recommended[uid])
+        if user_num_items_recommended == 0 or user_num_items_recommended == 1:
+            return 1.0
+        else:
+            return self.users_local_ild[uid]/(user_num_items_recommended*(user_num_items_recommended-1)/2)
+
+    def update(self,uid,item,reward):
+        self.users_local_ild[uid] += np.sum(self.items_distance[self.users_items_recommended[uid],item])
+        self.users_items_recommended[uid].append(item)
 
 def mapk(actual, predicted, k):
     score = 0.0
