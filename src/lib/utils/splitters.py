@@ -16,7 +16,7 @@ class TrainTestConsumption(Splitter):
 
         self.parameters.extend(['train_size','test_consumes','crono'])
         
-    def apply(self,dataset):
+    def process(self,dataset):
         data = dataset.data
         num_users = len(np.unique(data[:,0]))
         num_train_users = round(num_users*(self.train_size))

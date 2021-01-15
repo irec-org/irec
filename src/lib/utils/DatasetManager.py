@@ -56,22 +56,24 @@ class DatasetManager(Parameterizable):
             os.path.join(
                 DirectoryDependent().DIRS['datasets'],
                 self.dataset_preprocessor['dataset_descriptor']['dataset_dir']))
-        preprocessor = dataset.Preprocessor(
+        preprocessor = dataset.ParserSplitterPreprocessor(
             dataset_parser,splitter
         )
         self.dataset_preprocessor = dataset.DatasetPreprocessor(self.dataset_preprocessor['name'],dataset_descriptor,preprocessor)
 
-
-    def run_parser(self):
-        self.dataset_parsed = self.dataset_preprocessor.preprocessor.dataset_parser.parse_dataset(self.dataset_preprocessor.dataset_descriptor)
-    def run_splitter(self):
-        if self.dataset_preprocessor.preprocessor.splitter != None:
+    def run_preprocessor(self):
+        self.dataset_preprocessed = self.dataset_preprocessor.preprocessor.process(self.dataset_preprocessor.dataset_descriptor)
+        self.train_dataset = self.dataset_preprocessed[0]
+        self.test_dataset = self.dataset_preprocessed[1]
+    #     self.dataset_parsed = self.dataset_preprocessor.preprocessor.dataset_parser.parse_dataset(self.dataset_preprocessor.dataset_descriptor)
+    # def run_splitter(self):
+    #     if self.dataset_preprocessor.preprocessor.splitter != None:
             # with open("settings"+sep+"splitters.yaml") as splittersf:
             #     self.splitters_settings = yaml.load(splittersf,Loader=self.loader)
             #     self.splitter = eval('splitters.'+self.dataset_preprocessor['splitter'])(**self.splitters_settings[self.dataset_preprocessor['splitter']])
-            self.dataset_preprocessed=self.dataset_preprocessor.preprocessor.splitter.apply(self.dataset_parsed)
-        else:
-            self.dataset_preprocessed = self.dataset_parsed
+        #     self.dataset_preprocessed=self.dataset_preprocessor.preprocessor.splitter.apply(self.dataset_parsed)
+        # else:
+        #     self.dataset_preprocessed = self.dataset_parsed
 
         # self.train_dataset = self.dataset_preprocessed[0]
         # self.test_dataset = self.dataset_preprocessed[1]

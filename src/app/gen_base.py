@@ -14,6 +14,5 @@ from utils.DatasetManager import DatasetManager
 dm = DatasetManager()
 dm.request_dataset_preprocessor()
 dm.initialize_engines()
-dm.run_parser()
-dm.run_splitter()
+dm.run_preprocessor()
 dm.save()

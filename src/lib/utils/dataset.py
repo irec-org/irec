@@ -25,11 +25,22 @@ class DatasetPreprocessor(Parameterizable):
         return super().get_id(len(self.parameters),*args,**kwargs)
 
 class Preprocessor(Parameterizable):
+    def __init__(self,pipeline=[],*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        self.pipeline = pipeline
+    def process(self,data):
+        buf = data
+        for element in self.pipeline:
+            if getattr(self,element) != None:
+                buf = getattr(self,element).process(buf)
+        return buf
+        
+class ParserSplitterPreprocessor(Preprocessor):
     def __init__(self,dataset_parser,splitter,*args,**kwargs):
         super().__init__(*args,**kwargs)
-        # self.dataset_descriptor = dataset_descriptor
         self.dataset_parser = dataset_parser
         self.splitter = splitter
+        self.pipeline.extend(['dataset_parser','splitter'])
         self.parameters.extend(['splitter','dataset_parser'])
     
 class DatasetDescriptor(Parameterizable):
@@ -64,7 +75,7 @@ class DatasetParser(Parameterizable):
     pass
 
 class TRTE(DatasetParser):
-    def parse_dataset(self,dataset_descriptor):
+    def process(self,dataset_descriptor):
         dataset_dir = dataset_descriptor.dataset_dir
         train_data = np.loadtxt(os.path.join(dataset_dir,'train.data'),delimiter='::')
         test_data = np.loadtxt(os.path.join(dataset_dir,'test.data'),delimiter='::')
@@ -81,7 +92,7 @@ class TRTE(DatasetParser):
         return train_dataset, test_dataset
 
 class MovieLens100k(DatasetParser):
-    def parse_dataset(self,dataset_descriptor):
+    def process(self,dataset_descriptor):
         dataset_dir = dataset_descriptor.dataset_dir
         data = np.loadtxt(os.path.join(dataset_dir,'u.data'),delimiter='\t')
         data[:,0] = data[:,0] - 1
@@ -92,7 +103,7 @@ class MovieLens100k(DatasetParser):
         return dataset
 
 class MovieLens1M(DatasetParser):
-    def parse_dataset(self,dataset_descriptor):
+    def process(self,dataset_descriptor):
         dataset_dir = dataset_descriptor.dataset_dir
         data = np.loadtxt(os.path.join(dataset_dir,'ratings.dat'),delimiter='::')
         iids = dict()
@@ -132,7 +143,7 @@ def _netflix_read_ratings(self, fileName):
     return usersId, itemsId, ratings, timestamp, numratings
 
 class Netflix:
-    def parse_dataset(self,dataset_descriptor):
+    def process(self,dataset_descriptor):
         # base_dir = self.BASES_DIRS[self.base]
         u_train, i_train, r_train, t_train, numr_train = _netflix_read_ratings(dataset_descriptor.dataset_dir+'train.data')
         u_test, i_test, r_test, t_test, numr_test = _netflix_read_ratings(dataset_descriptor.dataset_dir+'test.data')

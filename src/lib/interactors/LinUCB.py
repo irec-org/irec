@@ -7,6 +7,7 @@ import scipy
 import ctypes
 import mf
 from collections import defaultdict
+from .MFInteractor import MFInteractor
 class LinUCB(MFInteractor):
     def __init__(self, alpha=1.0, zeta=None,*args, **kwargs):
         super().__init__(*args, **kwargs)

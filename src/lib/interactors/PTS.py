@@ -28,6 +28,7 @@ class PTS(MFInteractor):
 
         self.particles_ids = np.arange(self.num_particles)
         self.item_users_consumed = defaultdict(list)
+        self.users_consumed_items = defaultdict(list)
         
     def predict(self,uid,candidate_items,num_req_items):
 
@@ -36,17 +37,17 @@ class PTS(MFInteractor):
         items_score = particle['u'] @ particle['v'][items_not_recommended].T
         best_items = items_not_recommended[np.argsort(items_score)[::-1]][:self.interaction_size]
 
-
     def update(self,uid,item,reward,additional_data):
+        self.users_consumed_items[uid].append(item)
         best_item = item
-        if self.get_reward(uid,best_item) >= self.train_dataset.mean_rating:
+        if reward >= self.train_dataset.mean_rating:
             lambdas_u_i = []
             etas_u_i  = []
             mus_u_i = []
-            v_j = particle['v'][self.results[uid]]
+            v_j = particle['v'][self.users_consumed_items[uid]]
             for particle in particles:
                 lambda_u_i = 1/self.var*(v_j.T @ v_j)+1/particle['var_u'] * np.eye(num_lat)
-                eta_u_i = np.sum(np.array([self.get_reward(uid,result) for result in self.results[uid]]) * v_j)
+                eta_u_i = np.sum(np.array([self.get_reward(uid,result) for result in self.users_consumed_items[uid]]) * v_j)
                 reward = self.get_reward(uid,best_item)
                 lambdas_u_i.append(lambda_u_i)
                 etas_u_i.append(eta_u_i)
@@ -54,7 +55,7 @@ class PTS(MFInteractor):
 
             weights = []
             for particle, lambda_u_i, mu_u_i in zip(particles, mus_u_i, lambdas_u_i):
-                v_j = particle['v'][self.results[uid]]
+                v_j = particle['v'][self.users_consumed_items[uid]]
                 cov = 1/self.var + v_j.T @ mu_u_i @ v_j
                 w = np.random.normal(
                     v_j.T @ mu,
