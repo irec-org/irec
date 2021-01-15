@@ -34,70 +34,82 @@ class PTS(MFInteractor):
 
         self.particles_ids = np.arange(self.num_particles)
         self.items_consumed_users = defaultdict(list)
-        self.items_consumed_users_ratings = defaultdict(list)
+        self.items_consumed_users_rewards = defaultdict(list)
         self.users_consumed_items = defaultdict(list)
-        self.users_consumed_items_ratings = defaultdict(list)
+        self.users_consumed_items_rewards = defaultdict(list)
         for i in tqdm(range(len(self.train_dataset.data))):
             uid = int(self.train_dataset.data[i,0])
-            iid = int(self.train_dataset.data[i,1])
+            item = int(self.train_dataset.data[i,1])
             reward = self.train_dataset.data[i,2]
-            self.update(uid,iid,reward,None)
+            self.users_consumed_items[uid].append(item)
+            self.users_consumed_items_rewards[uid].append(reward)
+            self.items_consumed_users[item].append(uid)
+            self.items_consumed_users_rewards[item].append(reward)
         
     def predict(self,uid,candidate_items,num_req_items):
-
         particle_idx = np.random.choice(self.particles_ids)
         particle = self.particles[particle_idx]
         items_score = particle['u'][uid] @ particle['v'][candidate_items].T
-
         return items_score, None
 
     def update(self,uid,item,reward,additional_data):
-        if reward >= self.train_dataset.mean_rating:
-            lambdas_u_i = []
-            zetas_u_i  = []
-            mus_u_i = []
-            for particle in self.particles:
-                v_j = particle['v'][self.users_consumed_items[uid]]
-                lambda_u_i = 1/self.var*(v_j.T @ v_j)+1/particle['var_u'] * np.eye(self.num_lat)
-                zeta_u_i = np.sum(np.multiply(v_j,np.array(self.users_consumed_items_ratings[uid]).reshape(-1, 1)),axis=0)
-                lambdas_u_i.append(lambda_u_i)
-                zetas_u_i.append(zeta_u_i)
-                mus_u_i.append(1/self.var*(np.linalg.inv(lambda_u_i) @ zeta_u_i))
+        updated_history = False
+        lambdas_u_i = []
+        zetas_u_i  = []
+        mus_u_i = []
+        for particle in self.particles:
+            v_j = particle['v'][self.users_consumed_items[uid]]
+            lambda_u_i = 1/self.var*(v_j.T @ v_j)+1/particle['var_u'] * np.eye(self.num_lat)
+            zeta_u_i = np.sum(np.multiply(v_j,np.array(self.users_consumed_items_rewards[uid]).reshape(-1, 1)),axis=0)
+            lambdas_u_i.append(lambda_u_i)
+            zetas_u_i.append(zeta_u_i)
+            mus_u_i.append(1/self.var*(np.linalg.inv(lambda_u_i) @ zeta_u_i))
 
-            weights = []
-            for particle, lambda_u_i, mu_u_i in zip(self.particles, lambdas_u_i, mus_u_i):
-                v_j = particle['v'][item,:]
-                cov = 1/self.var + np.dot(np.dot(v_j.T, lambda_u_i), v_j)
-                w = scipy.stats.norm(np.dot(v_j.T, mu_u_i),cov).pdf(reward)
-                weights.append(w)
+        weights = []
+        for particle, lambda_u_i, mu_u_i in zip(self.particles, lambdas_u_i, mus_u_i):
+            v_j = particle['v'][item,:]
+            cov = 1/self.var + np.dot(np.dot(v_j.T, lambda_u_i), v_j)
+            w = scipy.stats.norm(np.dot(v_j.T, mu_u_i),cov).pdf(reward)
+            weights.append(w)
 
-            normalized_weights = _softmax(weights)
-            # print(normalized_weights)
-            ds = np.random.choice(range(self.num_particles), p=normalized_weights,size=self.num_particles)
-            new_particles = [{"u": np.copy(self.particles[d]["u"]),
-                              "v": np.copy(self.particles[d]["v"]),
-                              "var_u": self.particles[d]["var_u"],
-                              "var_i": self.particles[d]["var_i"]} for d in ds]
-            for idx, (particle, lambda_u_i, zeta_u_i) in enumerate(zip(new_particles, lambdas_u_i, zetas_u_i)):
-                v_j = particle["v"][item, :]
-                lambda_u_i += 1/self.var * (v_j @ v_j.T)
-                zeta_u_i += reward * v_j
-                inv_lambda_u_i = np.linalg.inv(lambda_u_i)
-                sampled_user_vector = np.random.multivariate_normal(1/self.var*(inv_lambda_u_i @ zeta_u_i), inv_lambda_u_i)
-                particle['u'][uid] = sampled_user_vector
-
-                u_i = particle["u"][self.items_consumed_users[item]]
-                lambda_v_i = 1/self.var * (u_i.T @ u_i) + 1/particle['var_i']*np.eye(self.num_lat)
-
-                zeta = np.sum(np.multiply(v_j,np.array(self.items_consumed_users_ratings[item]).reshape(-1, 1)),axis=0)
-                inv_lambda_v_i = np.linalg.inv(lambda_v_i)
-                item_sample_vector = np.random.multivariate_normal(1/self.var*(inv_lambda_v_i @ zeta),inv_lambda_v_i)
-                particle['v'][item] = item_sample_vector
-
-            self.particles = new_particles
-
+        normalized_weights = _softmax(weights)
+        # print(normalized_weights)
+        ds = np.random.choice(range(self.num_particles), p=normalized_weights,size=self.num_particles)
+        new_particles = [{"u": np.copy(self.particles[d]["u"]),
+                            "v": np.copy(self.particles[d]["v"]),
+                            "var_u": self.particles[d]["var_u"],
+                            "var_i": self.particles[d]["var_i"]} for d in ds]
+        if not updated_history:
             self.users_consumed_items[uid].append(item)
-            self.users_consumed_items_ratings[uid].append(reward)
+            self.users_consumed_items_rewards[uid].append(reward)
             self.items_consumed_users[item].append(uid)
-            self.items_consumed_users_ratings[item].append(reward)
+            self.items_consumed_users_rewards[item].append(reward)
+            updated_history = True
+
+        for idx, (particle, lambda_u_i, zeta_u_i) in enumerate(zip(new_particles, lambdas_u_i, zetas_u_i)):
+            v_j = particle["v"][item, :]
+            lambda_u_i += 1/self.var * (v_j @ v_j.T)
+            zeta_u_i += reward * v_j
+
+            inv_lambda_u_i = np.linalg.inv(lambda_u_i)
+            sampled_user_vector = np.random.multivariate_normal(1/self.var*(inv_lambda_u_i @ zeta_u_i), inv_lambda_u_i)
+            particle['u'][uid] = sampled_user_vector
+
+            u_i = particle["u"][self.items_consumed_users[item],:]
+            lambda_v_i = 1/self.var * (u_i.T @ u_i) + 1/particle['var_i']*np.eye(self.num_lat)
+
+            zeta = np.sum(np.multiply(u_i,np.array(self.items_consumed_users_rewards[item]).reshape(-1, 1)),axis=0)
+            inv_lambda_v_i = np.linalg.inv(lambda_v_i)
+            item_sample_vector = np.random.multivariate_normal(1/self.var*(inv_lambda_v_i @ zeta),inv_lambda_v_i)
+            particle['v'][item] = item_sample_vector
+
+        if not updated_history:
+            self.users_consumed_items[uid].append(item)
+            self.users_consumed_items_rewards[uid].append(reward)
+            self.items_consumed_users[item].append(uid)
+            self.items_consumed_users_rewards[item].append(reward)
+            updated_history = True
+
+        self.particles = new_particles
+
 
