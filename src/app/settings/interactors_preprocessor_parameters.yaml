@@ -1,5 +1,5 @@
 Yahoo Music:
-  TPS:
+  PTS:
     parameters:
       num_particles: 30
       var: 0.5
@@ -87,7 +87,7 @@ Yahoo Music:
     parameters:
       alpha: 0.2
 Good Books:
-  TPS:
+  PTS:
     parameters:
       num_particles: 30
       var: 0.5
@@ -175,7 +175,7 @@ Good Books:
     parameters:
       alpha: 0.2
 MovieLens 10M:
-  TPS:
+  PTS:
     parameters:
       num_particles: 30
       var: 0.5
@@ -263,7 +263,7 @@ MovieLens 10M:
     parameters:
       alpha: 0.2
 MovieLens 1M:
-  TPS:
+  PTS:
     parameters:
       num_particles: 30
       var: 0.5
