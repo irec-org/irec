@@ -17,6 +17,7 @@ class ExperimentalInteractor(Interactor,Parameterizable):
         Parameterizable.__init__(self)
     def train(self,train_dataset):
         Interactor.train(self,train_dataset)
+        print("Training!")
         self.t = 0
     def increment_time(self):
         self.t += 1
