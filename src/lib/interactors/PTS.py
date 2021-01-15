@@ -75,7 +75,7 @@ class PTS(MFInteractor):
                 weights.append(w)
 
             normalized_weights = _softmax(weights)
-            ds = [np.random.choice(range(self.num_particles), p=normalized_weights) for _ in range(self.num_particles)]
+            ds = np.random.choice(range(self.num_particles), p=normalized_weights,size=self.num_particles)
             new_particles = [{"u": np.copy(self.particles[d]["u"]),
                 "v": np.copy(self.particles[d]["v"]),
                 "var_u": self.particles[d]["var_u"],
