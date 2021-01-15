@@ -17,17 +17,17 @@ class Interaction(EvaluationPolicy,Parameterizable):
 
     def evaluate(self,model,train_dataset,test_dataset):
         test_users = np.unique(test_dataset.data[:,0]).astype(int)
-        # total_num_users = len(np.unique(np.concatenate((train_data[0],
+        # total_num_total_users = len(np.unique(np.concatenate((train_data[0],
         #                                             test_data[0]),axis=None)))
 
         # total_num_items = len(np.unique(np.concatenate((train_data[1],
         #                                             test_data[1]),axis=None)))
         
-        num_items = test_dataset.num_items
-        # print(np.max(test_data[:,0]),test_dataset.num_items)
-        # print(np.max(test_data[:,1]),test_dataset.num_users)
+        num_total_items = test_dataset.num_total_items
+        # print(np.max(test_data[:,0]),test_dataset.num_total_items)
+        # print(np.max(test_data[:,1]),test_dataset.num_total_users)
         # print(test_data)
-        test_consumption_matrix = scipy.sparse.csr_matrix((test_dataset.data[:,2],(test_dataset.data[:,0].astype(int),test_dataset.data[:,1].astype(int))),shape=(test_dataset.num_users,test_dataset.num_items))
+        test_consumption_matrix = scipy.sparse.csr_matrix((test_dataset.data[:,2],(test_dataset.data[:,0].astype(int),test_dataset.data[:,1].astype(int))),shape=(test_dataset.num_total_users,test_dataset.num_total_items))
         users_items_recommended = defaultdict(list)
         num_test_users = len(test_users)
         model.train(train_dataset)
@@ -39,7 +39,7 @@ class Interaction(EvaluationPolicy,Parameterizable):
             uid = random.sample(available_users,k=1)[0]
             # print(uid)
             # for i in range(self.interaction_size):
-            not_recommended = np.ones(num_items,dtype=bool)
+            not_recommended = np.ones(num_total_items,dtype=bool)
             not_recommended[users_items_recommended[uid]] = 0
             items_not_recommended = np.nonzero(not_recommended)[0]
             items_score, additional_data = model.predict(uid,items_not_recommended,self.interaction_size)

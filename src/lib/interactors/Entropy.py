@@ -51,10 +51,10 @@ class Entropy(ExperimentalInteractor):
     def train(self,train_dataset):
         super().train(train_dataset)
         self.train_dataset = train_dataset
-        self.num_items = self.train_dataset.num_items
+        self.num_total_items = self.train_dataset.num_total_items
         self.unique_values = self.train_dataset.rate_domain
         self.num_unique_values = len(unique_values)
-        self.items_ratings = np.zeros((self.num_items,self.num_unique_values))
+        self.items_ratings = np.zeros((self.num_total_items,self.num_unique_values))
         self.unique_values_ids = dict(zip(unique_values,list(range(num_unique_values))))
         for uid, iid, reward in train_dataset.data:
             items_ratings[iid,reward] += 1

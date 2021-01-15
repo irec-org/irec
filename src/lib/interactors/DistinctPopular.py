@@ -14,8 +14,8 @@ class DistinctPopular(ExperimentalInteractor):
     def train(self,train_dataset):
         super().train(train_dataset)
         self.train_dataset = train_dataset
-        self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[:,2],(self.train_dataset.data[:,0],self.train_dataset.data[:,1])),(self.train_dataset.num_users,self.train_dataset.num_items))
-        self.num_items = self.train_dataset.num_items
+        self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[:,2],(self.train_dataset.data[:,0],self.train_dataset.data[:,1])),(self.train_dataset.num_total_users,self.train_dataset.num_total_items))
+        self.num_total_items = self.train_dataset.num_total_items
 
         self.items_entropy = Entropy.get_items_entropy(self.train_consumption_matrix)
         np.seterr('warn')
@@ -23,7 +23,7 @@ class DistinctPopular(ExperimentalInteractor):
         self.items_distance = metrics.get_items_distance(self.train_consumption_matrix)
 
         self.top_iids = defaultdict([])
-        # num_items = self.train_consumption_matrix.shape[1]
+        # num_total_items = self.train_consumption_matrix.shape[1]
 
     def predict(self,uid,candidate_items,num_req_items):
             if len(self.top_iids) > 0:
@@ -55,8 +55,8 @@ class DistinctPopular(ExperimentalInteractor):
         # fig.savefig(os.path.join(self.DIRS['img'],"corr_popent_"+self.get_id()+".png"))
 
 
-        # num_users = len(uids)
-        # for idx_uid in tqdm(range(num_users)):
+        # num_total_users = len(uids)
+        # for idx_uid in tqdm(range(num_total_users)):
         #     uid = uids[idx_uid]
         #     self.results[uid].extend(top_iids)
         # self.save_results()

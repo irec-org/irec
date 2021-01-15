@@ -20,7 +20,7 @@ class PopPlusEnt(ExperimentalInteractor):
     def train(self,train_dataset):
         super().train(train_dataset)
         self.train_dataset = train_dataset
-        self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[:,2],(self.train_dataset.data[:,0],self.train_dataset.data[:,1])),(self.train_dataset.num_users,self.train_dataset.num_items))
+        self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[:,2],(self.train_dataset.data[:,0],self.train_dataset.data[:,1])),(self.train_dataset.num_total_users,self.train_dataset.num_total_items))
 
         items_entropy = Entropy.get_items_entropy(self.train_consumption_matrix)
         items_popularity = MostPopular.get_items_popularity(self.train_consumption_matrix,normalize=False)
@@ -57,8 +57,8 @@ class PopPlusEnt(ExperimentalInteractor):
         # fig.savefig(os.path.join(self.DIRS['img'],"corr_popent_"+self.get_id()+".png"))
 
 
-        # num_users = len(uids)
-        # for idx_uid in tqdm(range(num_users)):
+        # num_total_users = len(uids)
+        # for idx_uid in tqdm(range(num_total_users)):
         #     uid = uids[idx_uid]
         #     self.results[uid].extend(top_iids)
         # self.save_results()

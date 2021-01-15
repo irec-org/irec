@@ -12,8 +12,8 @@ class Random(ExperimentalInteractor):
     def predict(self,uid,candidate_items,num_req_items):
         return np.random.rand(len(candidate_items)), None
         # uids = self.test_users
-        # num_users = len(uids)
-        # for idx_uid in tqdm(range(num_users)):
+        # num_total_users = len(uids)
+        # for idx_uid in tqdm(range(num_total_users)):
         #     uid = uids[idx_uid]
         #     iids= list(range(self.train_consumption_matrix.shape[1]))
         #     random.shuffle(iids)

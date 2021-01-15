@@ -21,8 +21,8 @@ class OurMethod1(MFInteractor):
     def train(self,train_dataset):
         super().train(train_dataset)
         self.train_dataset = train_dataset
-        self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[:,2],(self.train_dataset.data[:,0],self.train_dataset.data[:,1])),(self.train_dataset.num_users,self.train_dataset.num_items))
-        self.num_items = self.train_dataset.num_items
+        self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[:,2],(self.train_dataset.data[:,0],self.train_dataset.data[:,1])),(self.train_dataset.num_total_users,self.train_dataset.num_total_items))
+        self.num_total_items = self.train_dataset.num_total_items
 
         mf_model = mf.SVD(num_lat=self.num_lat)
         mf_model.fit(self.train_consumption_matrix)
@@ -31,7 +31,7 @@ class OurMethod1(MFInteractor):
 
 
         # self.items_weights = items_weights
-        # num_users = len(uids)
+        # num_total_users = len(uids)
 
         items_entropy = interactors.Entropy.get_items_entropy(self.train_consumption_matrix)
         items_popularity = interactors.MostPopular.get_items_popularity(self.train_consumption_matrix,normalize=False)

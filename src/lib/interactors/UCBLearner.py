@@ -20,8 +20,8 @@ class UCBLearner(MFInteractor):
     def train(self,train_dataset):
         super().train(train_dataset)
         self.train_dataset = train_dataset
-        self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[:,2],(self.train_dataset.data[:,0],self.train_dataset.data[:,1])),(self.train_dataset.num_users,self.train_dataset.num_items))
-        self.num_items = self.train_dataset.num_items
+        self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[:,2],(self.train_dataset.data[:,0],self.train_dataset.data[:,1])),(self.train_dataset.num_total_users,self.train_dataset.num_total_items))
+        self.num_total_items = self.train_dataset.num_total_items
 
         items_entropy = Entropy.get_items_entropy(self.train_consumption_matrix)
         items_popularity = MostPopular.get_items_popularity(self.train_consumption_matrix,normalize=False)
@@ -38,9 +38,9 @@ class UCBLearner(MFInteractor):
         self.users_nb_items = defaultdict(lambda: 0)
 
     @staticmethod
-    def discount_bias(num_items,stop):
+    def discount_bias(num_total_items,stop):
         limit = pow(2,stop)/100
-        return pow(2,min(stop,num_items))/limit
+        return pow(2,min(stop,num_total_items))/limit
 
     def predict(self,uid,candidate_items,num_req_items):
         b = bs[uid]

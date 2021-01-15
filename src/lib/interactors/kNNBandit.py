@@ -14,11 +14,10 @@ class kNNBandit(ExperimentalInteractor):
     def train(self,train_dataset):
         super().train(train_dataset)
         self.train_dataset = train_dataset
-        self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[:,2],(self.train_dataset.data[:,0],self.train_dataset.data[:,1])),(self.train_dataset.num_users,self.train_dataset.num_items))
-        self.num_items = self.train_dataset.num_items
+        self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[:,2],(self.train_dataset.data[:,0],self.train_dataset.data[:,1])),(self.train_dataset.num_total_users,self.train_dataset.num_total_items))
+        self.num_total_items = self.train_dataset.num_total_items
 
         self.consumption_matrix = self.train_consumption_matrix.tolil()
-        self.total_num_users = self.train_consumption_matrix.shape[0]
 
         self.users_alphas = (self.train_consumption_matrix @ self.train_consumption_matrix.T).A
         self.users_rating_sum = self.train_consumption_matrix.sum(axis=1).A.flatten()

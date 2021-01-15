@@ -44,7 +44,7 @@ class COFIBA(MFInteractor):
         generated_user_neighbors = []
         for neighbor in neighbors:
             generated_user_neighbors = {}
-            for uid2 in range(self.total_num_users):
+            for uid2 in range(self.num_total_users):
                 if np.abs(self.users_latent_factors[uid] @ self.items_latent_factors[neighbor] - self.users_latent_factors[uid2] @ self.items_latent_factors[neighbor])\
                 <= self.cb(self.alpha_2,self.items_latent_factors[neighbor],self.users_m[uid], self.t) + self.cb(self.alpha_2,self.items_latent_factors[neighbor],self.users_m[uid2], self.t):
                     generated_user_neighbors.add(uid)
@@ -58,7 +58,7 @@ class COFIBA(MFInteractor):
         r = range(self.items_n_components,n_components)
         self.items_n_components = n_components
         for i in r:
-            users_graph = self.new_graph(self.total_num_users)
+            users_graph = self.new_graph(self.num_total_users)
             self.users_graphs.append(users_graph)
             n_components, labels = scipy.sparse.csgraph.connected_components(users_graph)
             self.users_clusterings.append(labels)
@@ -91,18 +91,18 @@ class COFIBA(MFInteractor):
     # def train(self,train_dataset):
     #     super().train(train_dataset)
     #     self.train_dataset = train_dataset
-    #     self.train_consumption_matrix = scipy.sparse.csr_matrix((train_data[:,2],(train_data[:,0],train_data[:,1])),(self.train_dataset.num_users,self.train_dataset.num_items))
+    #     self.train_consumption_matrix = scipy.sparse.csr_matrix((train_data[:,2],(train_data[:,0],train_data[:,1])),(self.train_dataset.num_total_users,self.train_dataset.num_total_items))
     def train(self,train_dataset):
         super().train(train_dataset)
         self.train_dataset = train_dataset
-        self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[:,2],(self.train_dataset.data[:,0],self.train_dataset.data[:,1])),(self.train_dataset.num_users,self.train_dataset.num_items))
-        self.num_items = self.train_dataset.num_items
-    # def train(self,train_data,total_num_users,total_num_items):
+        self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[:,2],(self.train_dataset.data[:,0],self.train_dataset.data[:,1])),(self.train_dataset.num_total_users,self.train_dataset.num_total_items))
+        self.num_total_items = self.train_dataset.num_total_items
+    # def train(self,train_data,total_num_total_users,total_num_total_items):
     #     super().train(train_data)
     #     self.train_consumption_matrix = scipy.sparse.csr_matrix((train_data[:,2],(train_data[:,0],train_data[:,1])))
-    #     self.num_items = self.train_consumption_matrix.shape[1]
+    #     self.num_total_items = self.train_consumption_matrix.shape[1]
         self.consumption_matrix = self.train_consumption_matrix.tolil()
-        self.total_num_users = self.train_dataset.num_users
+        self.num_total_users = self.train_dataset.num_total_users
 
         mf_model = mf.SVD(num_lat=self.num_lat)
         mf_model.fit(self.train_consumption_matrix)
@@ -112,9 +112,9 @@ class COFIBA(MFInteractor):
         self.I = np.identity(self.num_latent_factors)
         # code her
         # ...
-        self.items_graph = self.new_graph(self.num_items)
-        # for i in range(num_items):
-        #     for j in range(num_items):
+        self.items_graph = self.new_graph(self.num_total_items)
+        # for i in range(num_total_items):
+        #     for j in range(num_total_items):
         #         if j < i:
         #             self.items_graph[j,i] = self.items_graph[i,j]
             
@@ -122,25 +122,25 @@ class COFIBA(MFInteractor):
         self.users_graphs = []
         self.users_clusterings = []
         for i in range(self.items_n_components):
-            users_graph = self.new_graph(self.total_num_users)
+            users_graph = self.new_graph(self.num_total_users)
             self.users_graphs.append(users_graph)
             n_components, labels = scipy.sparse.csgraph.connected_components(users_graph)
             self.users_clusterings.append(labels)
-        self.users_b = np.zeros((self.total_num_users,self.num_latent_factors))
+        self.users_b = np.zeros((self.num_total_users,self.num_latent_factors))
         self.users_m = []
-        for i in range(self.total_num_users):
+        for i in range(self.num_total_users):
             self.users_m.append(np.identity(self.num_latent_factors))
 
         self.users_m = np.array(self.users_m)
         self.users_latent_factors = [np.linalg.inv(m) @ b for b, m in zip(self.users_b,self.users_m)]
-        # users_m = np.zeros(total_num_users,num_latent_factors,num_latent_factors)
+        # users_m = np.zeros(total_num_total_users,num_latent_factors,num_latent_factors)
         # users_m[
         # print(items_graph)
         # print(items_graph.sum())
         # raise SystemExit
-        # for i in tqdm(range(num_users*self.interactions)):
+        # for i in tqdm(range(num_total_users*self.interactions)):
         #     uid = random.sample(available_users,k=1)[0]
-        #     not_recommended = np.ones(self.num_items,dtype=bool)
+        #     not_recommended = np.ones(self.num_total_items,dtype=bool)
         #     not_recommended[self.results[uid]] = 0
         #     items_not_recommended = np.nonzero(not_recommended)[0]
 

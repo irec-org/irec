@@ -49,8 +49,8 @@ class PPELPE(ExperimentalInteractor):
         # fig.savefig(os.path.join(self.DIRS['img'],"corr_popent_"+self.get_id()+".png"))
 
 
-        # num_users = len(uids)
-        # for idx_uid in tqdm(range(num_users)):
+        # num_total_users = len(uids)
+        # for idx_uid in tqdm(range(num_total_users)):
         #     uid = uids[idx_uid]
         #     self.results[uid].extend(top_iids)
         # self.save_results()

@@ -14,14 +14,14 @@ class EGreedy(ExperimentalInteractor):
     def train(self,train_dataset):
         super().train(train_dataset)
         self.train_dataset = train_dataset
-        self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[:,2],(self.train_dataset.data[:,0],self.train_dataset.data[:,1])),(self.train_dataset.num_users,self.train_dataset.num_items))
-        self.num_items = self.train_consumption_matrix.shape[1]
+        self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[:,2],(self.train_dataset.data[:,0],self.train_dataset.data[:,1])),(self.train_dataset.num_total_users,self.train_dataset.num_total_items))
+        self.num_total_items = self.train_consumption_matrix.shape[1]
         # uids = self.test_users
-        # num_users = len(uids)
-        # num_items = self.train_consumption_matrix.shape[1]
+        # num_total_users = len(uids)
+        # num_total_items = self.train_consumption_matrix.shape[1]
         
-        self.items_mean_values = np.zeros(self.num_items)
-        self.items_count = np.zeros(self.num_items,dtype=int)
+        self.items_mean_values = np.zeros(self.num_total_items)
+        self.items_count = np.zeros(self.num_total_items,dtype=int)
 
         # users_num_interactions = defaultdict(int)
         # available_users = set(uids)
@@ -31,12 +31,12 @@ class EGreedy(ExperimentalInteractor):
         self.items_mean_values = np.mean(self.train_consumption_matrix[self.train_dataset.uids],axis=0).A.flatten()
         self.items_count += self.train_consumption_matrix[self.train_dataset.uids].shape[0]
 
-        # for i in tqdm(range(num_users*self.interactions)):
+        # for i in tqdm(range(num_total_users*self.interactions)):
         #     uid = random.sample(available_users,k=1)[0]
 
             # for j in range(self.interaction_size):
     def predict(self,uid,candidate_items,num_req_items):
-                # not_recommended = np.ones(num_items,dtype=bool)
+                # not_recommended = np.ones(num_total_items,dtype=bool)
                 # not_recommended[self.results[uid]] = 0
                 # items_not_recommended = np.nonzero(not_recommended)[0]
         if self.epsilon < np.random.rand():
