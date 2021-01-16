@@ -16,12 +16,14 @@ class ThresholdRelevanceEvaluator:
         return reward>self.threshold
     
 class Metric:
-    def __init__(self,dataset,relevance_evaluator):
-        self.dataset = dataset
+    def __init__(self,ground_truth_dataset,train_dataset,relevance_evaluator):
+        self.ground_truth_dataset = ground_truth_dataset
         self.relevance_evaluator = relevance_evaluator
     def compute(self,uid):
         return None
-    def update(self,uid,item,reward):
+    def update_recommendation(self,uid,item,reward):
+        pass
+    def update_consumption_history(self,uid,item,reward):
         pass
 
 class Recall:
@@ -29,7 +31,7 @@ class Recall:
         super().__init__(*args,**kwargs)
         self.users_true_positive = defaultdict(int)
         self.users_false_negative = defaultdict(int)
-        for row in self.dataset.data:
+        for row in self.ground_truth_dataset.data:
             uid = int(row[0])
             reward = row[2]
             if self.relevance_evaluator.is_relevant(reward):
@@ -38,7 +40,7 @@ class Recall:
     def compute(self,uid):
         return self.users_true_positive[uid]/(self.users_true_positive[uid]+self.users_false_negative[uid])
 
-    def update(self,uid,item,reward):
+    def update_recommendation(self,uid,item,reward):
         if self.relevance_evaluator.is_relevant(reward):
             self.users_true_positive[uid] += 1
 
@@ -51,7 +53,7 @@ class Precision:
     def compute(self,uid):
         return self.users_true_positive[uid]/(self.users_true_positive[uid]+self.users_false_positive[uid])
 
-    def update(self,uid,item,reward):
+    def update_recommendation(self,uid,item,reward):
         if self.relevance_evaluator.is_relevant(reward):
             self.users_true_positive[uid]+=1
         else:
@@ -65,18 +67,13 @@ class Hits:
     def compute(self,uid):
         return self.users_true_positive[uid]
 
-    def update(self,uid,item,reward):
+    def update_recommendation(self,uid,item,reward):
         if self.relevance_evaluator.is_relevant(reward):
             self.users_true_positive[uid]+=1
 
 class EPC:
     def __init__(self,items_normalized_popularity,*args,**kwargs):
         super().__init__(*args,**kwargs)
-        # consumption_matrix = scipy.sparse.csr_matrix(self.dataset.data[:3])
-        # consumption_matrix[consumption_matrix>self.dataset.min_rating] = 1
-        # self.items_popularity = np.array(np.sum(consumption_matrix,axis=0)).flatten()
-        # self.items_normalized_popularity = self.items_popularity/self.dataset.num_total_users
-
         self.users_num_items_recommended = defaultdict(int)
         self.users_prob_not_seen_cumulated = defaultdict(float)
 
@@ -86,7 +83,7 @@ class EPC:
         EPC = C_2*sum_2
         return EPC
 
-    def update(self,uid,item,reward):
+    def update_recommendation(self,uid,item,reward):
         self.users_num_items_recommended[uid] += 1
         probability_seen = self.items_normalized_popularity[item]
         self.users_prob_not_seen_cumulated[uid] += 1-probability_seen
@@ -105,9 +102,41 @@ class ILD:
         else:
             return self.users_local_ild[uid]/(user_num_items_recommended*(user_num_items_recommended-1)/2)
 
-    def update(self,uid,item,reward):
+    def update_recommendation(self,uid,item,reward):
         self.users_local_ild[uid] += np.sum(self.items_distance[self.users_items_recommended[uid],item])
         self.users_items_recommended[uid].append(item)
+
+class EPD:
+    def __init__(self,items_distance,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        self.items_distance = items_distance
+        self.users_consumed_items = defaultdict(list)
+        self.users_items_recommended = defaultdict(list)
+        self.users_local_ild = defaultdict(float)
+
+        self.users_relevant_items = scipy.sparse.csr_matrix(self.ground_truth_dataset)
+        self.users_relevant_items[self.users_relevant_items>self.ground_truth_dataset.min_rating] = True
+
+        rel = np.zeros(self.items_distance.shape[0],dtype=bool)
+        rel[actual] = 1
+        # self.ground_truth_dataset.data
+        
+        # self.users_liked_items = relevance_evaluator.is_relevant()
+    def compute(self,uid):
+        rel = np.array(self.users_relevant_items[uid].A).flatten()
+        consumed_items = self.users_consumed_items[item]
+        predicted = self.users_items_recommended[uid]
+        res = rel[predicted][:,None] @ rel[consumed_items][None,:] * self.items_distance[predicted,:][:,consumed_items]
+        C = 1/(len(predicted)*np.sum(rel[consumed_items]))
+        return C*np.sum(res)
+
+    def update_recommendation(self,uid,item,reward):
+        self.users_local_ild[uid] += np.sum(self.items_distance[self.users_items_recommended[uid],item])
+        self.users_items_recommended[uid].append(item)
+
+    def update_consumption_history(self,uid,item,reward):
+        self.users_consumed_items[uid].append(item)
+
 
 def mapk(actual, predicted, k):
     score = 0.0
