@@ -13,6 +13,7 @@ import scipy
 import mf
 from collections import defaultdict
 from .MFInteractor import MFInteractor
+import interactors
 
 class OurMethod2(MFInteractor):
     def __init__(self, alpha=1.0,*args, **kwargs):
