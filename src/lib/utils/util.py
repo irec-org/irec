@@ -1,4 +1,5 @@
 from concurrent.futures import ProcessPoolExecutor
+import math
 from tqdm import tqdm
 import os
 import multiprocessing
@@ -39,7 +40,7 @@ def print_dict(dictionary,prefix=''):
 def run_parallel(func, args, use_tqdm=True):
     executor = ProcessPoolExecutor()
     num_args = len(args)
-    chunksize = int(num_args/multiprocessing.cpu_count())
+    chunksize = math.ceil(num_args/multiprocessing.cpu_count())
     if use_tqdm:
         ff = tqdm
     else:

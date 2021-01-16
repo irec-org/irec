@@ -5,7 +5,8 @@ import mf
 import evaluation_policy
 from utils.PersistentDataManager import PersistentDataManager
 from .InteractorCache import InteractorCache
-
+import utils.util as util
+import ctypes
 
 class InteractorRunner():
 
@@ -52,8 +53,12 @@ class InteractorRunner():
         pdm = PersistentDataManager(directory='results')
         pdm.save(InteractorCache().get_id(self.dm,evaluation_policy,itr),history_items_recommended)
 
+    @staticmethod
+    def _run_interactor(obj_id,itr):
+        self = ctypes.cast(obj_id,ctypes.py_object).value
+        self.run_interactor(itr)
 
     def run_interactors(self):
-        for itr_class in self.interactors_classes:
-            itr = self.create_interactor(itr_class)
-            self.run_interactor(itr)
+        args = [(id(self),self.create_interactor(itr_class),)for itr_class in self.interactors_classes]
+        
+        util.run_parallel(self._run_interactor,args)

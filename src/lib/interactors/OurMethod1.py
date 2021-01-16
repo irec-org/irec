@@ -10,6 +10,7 @@ import pickle
 import mf
 from .MFInteractor import MFInteractor
 from collections import defaultdict
+from . import interactors
 class OurMethod1(MFInteractor):
     def __init__(self, alpha=1.0, stop=None, weight_method='change',*args, **kwargs):
         super().__init__(*args, **kwargs)

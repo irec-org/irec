@@ -35,7 +35,12 @@ class Interaction(EvaluationPolicy,Parameterizable):
         available_users = set(test_users)
 
         history_items_recommended = []
-        for i in tqdm(range(num_test_users*self.num_interactions)):
+
+        num_trials = num_test_users*self.num_interactions
+        _intervals = num_trials//20
+        for i in range(num_trials):
+            if i % _intervals == 0:
+                print(f"{model.__class__.__name__} [{i/num_trials:.0%}]")
             uid = random.sample(available_users,k=1)[0]
             # print(uid)
             # for i in range(self.interaction_size):
