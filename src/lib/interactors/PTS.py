@@ -37,7 +37,7 @@ class PTS(MFInteractor):
         self.items_consumed_users_rewards = defaultdict(list)
         self.users_consumed_items = defaultdict(list)
         self.users_consumed_items_rewards = defaultdict(list)
-        for i in tqdm(range(len(self.train_dataset.data))):
+        for i in range(len(self.train_dataset.data)):
             uid = int(self.train_dataset.data[i,0])
             item = int(self.train_dataset.data[i,1])
             reward = self.train_dataset.data[i,2]

@@ -36,7 +36,8 @@ class OurMethod2(MFInteractor):
         items_popularity = interactors.MostPopular.get_items_popularity(self.train_consumption_matrix,normalize=False)
         # self.items_bias = interactors.PPELPE.get_items_ppelpe(items_popularity,items_entropy)
         self.items_bias = interactors.LogPopEnt.get_items_logpopent(items_popularity,items_entropy)
-        assert(self.items_bias.min() >= 0 and self.items_bias.max() == 1)
+        print(self.items_bias.min(),self.items_bias.max())
+        assert(self.items_bias.min() >= 0 and np.isclose(self.items_bias.max(), 1))
 
         # regression_model = sklearn.linear_model.LinearRegression()
         res=scipy.optimize.minimize(lambda x,items_weights,items_bias: np.linalg.norm(items_bias - x @ items_weights.T),
