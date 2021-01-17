@@ -108,9 +108,9 @@ class MovieLens1M(DatasetParser):
         dataset_dir = dataset_descriptor.dataset_dir
         data = np.loadtxt(os.path.join(dataset_dir,'ratings.dat'),delimiter='::')
         iids = dict()
-        for i, iid in enumerate(df_cons[1].unique()):
+        for i, iid in enumerate(np.unique(data[:,1])):
             iids[iid] = i
-        data[:,1] = np.vectorize(lambda x: iids[x])(data[1])
+        data[:,1] = np.vectorize(lambda x: iids[x])(data[:,1])
         data[:,0] = data[:,0] - 1
         dataset = Dataset(data)
         dataset.update_from_data()
