@@ -8,9 +8,13 @@ from collections import defaultdict
 import random
 from .MFInteractor import MFInteractor
 from tqdm import tqdm
+from numba import njit, jit
 
+
+@njit
 def _softmax(x):
     return np.exp(x - np.max(x)) / np.sum(np.exp(x - np.max(x)))
+
 class PTS(MFInteractor):
     def __init__(self,num_particles,var, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -54,23 +58,27 @@ class PTS(MFInteractor):
 
     def update(self,uid,item,reward,additional_data):
         updated_history = False
-        lambdas_u_i = []
-        zetas_u_i  = []
-        mus_u_i = []
+        lambdas_u_i = np.empty(shape=(len(self.particles),self.num_lat,self.num_lat))
+        zetas_u_i  = np.empty(shape=(len(self.particles),self.num_lat))
+        mus_u_i = np.empty(shape=(len(self.particles),self.num_lat))
+        i=0
         for particle in self.particles:
             v_j = particle['v'][self.users_consumed_items[uid]]
             lambda_u_i = 1/self.var*(v_j.T @ v_j)+1/particle['var_u'] * np.eye(self.num_lat)
             zeta_u_i = np.sum(np.multiply(v_j,np.array(self.users_consumed_items_rewards[uid]).reshape(-1, 1)),axis=0)
-            lambdas_u_i.append(lambda_u_i)
-            zetas_u_i.append(zeta_u_i)
-            mus_u_i.append(1/self.var*(np.linalg.inv(lambda_u_i) @ zeta_u_i))
+            lambdas_u_i[i]= lambda_u_i
+            zetas_u_i[i] = zeta_u_i
+            mus_u_i[i] = 1/self.var*(np.linalg.inv(lambda_u_i) @ zeta_u_i)
+            i += 1
 
-        weights = []
+        weights = np.empty(len(self.particles))
+        i=0
         for particle, lambda_u_i, mu_u_i in zip(self.particles, lambdas_u_i, mus_u_i):
             v_j = particle['v'][item,:]
             cov = 1/self.var + np.dot(np.dot(v_j.T, lambda_u_i), v_j)
             w = scipy.stats.norm(np.dot(v_j.T, mu_u_i),cov).pdf(reward)
-            weights.append(w)
+            weights[i]=w
+            i += 1
 
         normalized_weights = _softmax(weights)
         # print(normalized_weights)
