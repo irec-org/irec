@@ -40,7 +40,7 @@ class Interaction(EvaluationPolicy,Parameterizable):
 
         num_trials = num_test_users*self.num_interactions
         _intervals = num_trials//20
-        _num_items_recommended = 0
+        _num_interactions = 0
         pbar = tqdm(total=num_trials)
         pbar.set_description(f"{model.__class__.__name__}")
         for i in range(num_trials):
@@ -66,12 +66,12 @@ class Interaction(EvaluationPolicy,Parameterizable):
             if users_num_interactions[uid] == self.num_interactions:
                 available_users = available_users - {uid}
 
-            _num_items_recommended += 1
+            _num_interactions += 1
             if i % _intervals == 0 and i != 0:
-                pbar.update(_num_items_recommended)
-                _num_items_recommended = 0
+                pbar.update(_num_interactions)
+                _num_interactions = 0
 
-        pbar.update(_num_items_recommended)
-        _num_items_recommended = 0
+        pbar.update(_num_interactions)
+        _num_interactions = 0
         pbar.close()
         return history_items_recommended
