@@ -137,6 +137,24 @@ class EPD:
     def update_consumption_history(self,uid,item,reward):
         self.users_consumed_items[uid].append(item)
 
+class AP:
+    def __init__(self,items_distance,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        self.users_true_positive = defaultdict(int)
+        self.users_false_positive = defaultdict(int)
+        self.users_cumulated_precision = defaultdict(float)
+        self.users_num_recommendations = defaultdict(int)
+    def compute(self,uid):
+        return self.users_cumulated_precision[uid]/self.users_num_recommendations
+
+    def update_recommendation(self,uid,item,reward):
+        if self.relevance_evaluator.is_relevant(reward):
+            self.users_true_positive[uid] += 1
+        else:
+            self.users_false_positive[uid] += 1
+
+        self.users_cumulated_precision[uid] += self.users_true_positive[uid]/(self.users_true_positive[uid]+self.users_false_positive[uid])
+        self.users_num_recommendations[uid] += 1
 
 def mapk(actual, predicted, k):
     score = 0.0
