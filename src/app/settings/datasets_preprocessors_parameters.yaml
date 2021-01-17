@@ -3,19 +3,19 @@
     preprocessor:
       dataset_parser: MovieLens100k
       splitter: TrainTestConsumption
-    name: MovieLens 100k
+    name: MovieLens 100k (B)
   - dataset_descriptor:
       dataset_dir: ml-1m/
     preprocessor:
       dataset_parser: MovieLens1M
       splitter: TrainTestConsumption
-    name: MovieLens 1M
+    name: MovieLens 1M (B)
   - dataset_descriptor:
       dataset_dir: Train-Test_ML-1M/
     preprocessor:
       dataset_parser: TRTE
       splitter: null
-    name: MovieLens 1M (tt)
+    name: MovieLens 1M
   - dataset_descriptor:
       dataset_dir: Train-Test_ML-10M/
     preprocessor:
