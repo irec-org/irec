@@ -10,6 +10,94 @@ from .MFInteractor import MFInteractor
 from tqdm import tqdm
 from numba import njit, jit
 
+# @jit
+# def _c1(item_consumed_users,
+#         item_consumed_users_rewards,
+#         user_consumed_items,
+#         user_consumed_items_rewards,
+#         particles_us,
+#         particles_vs,
+#         particles_var_us,
+#         particles_var_is,
+#         var,
+#         num_particles,
+#         num_lat,
+#         num_total_users,
+#         num_total_items,
+#         uid,item,reward,additional_data):
+#     updated_history = 0
+#     lambdas_u_i = np.empty(shape=(num_particles,num_lat,num_lat))
+#     zetas_u_i  = np.empty(shape=(num_particles,num_lat))
+#     mus_u_i = np.empty(shape=(num_particles,num_lat))
+#     for i in range(num_particles):
+#         v_j = particles_vs[i][user_consumed_items]
+#         lambda_u_i = 1/var*(v_j.T @ v_j)+1/particles_var_us[i] * np.eye(num_lat)
+#         zeta_u_i = np.sum(np.multiply(v_j,np.array(user_consumed_items_rewards).reshape(-1, 1)),axis=0)
+#         lambdas_u_i[i]= lambda_u_i
+#         zetas_u_i[i] = zeta_u_i
+#         mus_u_i[i] = 1/var*(np.linalg.inv(lambda_u_i) @ zeta_u_i)
+
+#     weights = np.empty(num_particles)
+#     for i in range(num_particles):
+#         lambda_u_i, mu_u_i = lambdas_u_i[i], mus_u_i[i]
+#         v_j = particles_vs[i][item,:]
+#         cov = 1/var + np.dot(np.dot(v_j.T, lambda_u_i), v_j)
+#         w = scipy.stats.norm(np.dot(v_j.T, mu_u_i),cov).pdf(reward)
+#         weights[i]=w
+
+#     normalized_weights = _softmax(weights)
+#     ds = np.random.choice(range(num_particles), p=normalized_weights,size=num_particles)
+#     new_particles_us = np.empty(shape=(num_particles,num_total_users,num_lat))
+#     new_particles_vs = np.empty(shape=(num_particles,num_total_items,num_lat))
+#     new_particles_var_us = np.empty(shape=(num_particles))
+#     new_particles_var_is = np.empty(shape=(num_particles))
+
+#     for i in range(num_particles):
+#         d = ds[i]
+#         new_particles_us[i]=particles_us[d]
+#         new_particles_vs[i]=particles_vs[d]
+#         new_particles_var_us[i]=particles_var_us[d]
+#         new_particles_var_is[i]=particles_var_is[d]
+
+#     # if not updated_history:
+#     #     users_consumed_items[uid].append(item)
+#     #     users_consumed_items_rewards[uid].append(reward)
+#     #     items_consumed_users[item].append(uid)
+#     #     items_consumed_users_rewards[item].append(reward)
+#     #     updated_history = 1
+
+
+#     for i in range(num_particles):
+#         lambda_u_i, zeta_u_i = lambdas_u_i[i], zetas_u_i[i]
+#         v_j = new_particles_vs[i][item, :]
+#         lambda_u_i += 1/var * (v_j @ v_j.T)
+#         zeta_u_i += reward * v_j
+
+#         inv_lambda_u_i = np.linalg.inv(lambda_u_i)
+#         sampled_user_vector = np.random.multivariate_normal(1/var*(inv_lambda_u_i @ zeta_u_i), inv_lambda_u_i)
+#         new_particles_us[i][uid] = sampled_user_vector
+
+#         u_i = new_particles_us[i][item_consumed_users,:]
+#         lambda_v_i = 1/var * (u_i.T @ u_i) + 1/new_particles_var_is[i]*np.eye(num_lat)
+
+#         zeta = np.sum(np.multiply(u_i,np.array(item_consumed_users_rewards).reshape(-1, 1)),axis=0)
+#         inv_lambda_v_i = np.linalg.inv(lambda_v_i)
+#         item_sample_vector = np.random.multivariate_normal(1/var*(inv_lambda_v_i @ zeta),inv_lambda_v_i)
+#         new_particles_vs[i][item] = item_sample_vector
+
+    # if not updated_history:
+    #     users_consumed_items[uid].append(item)
+    #     users_consumed_items_rewards[uid].append(reward)
+    #     items_consumed_users[item].append(uid)
+    #     items_consumed_users_rewards[item].append(reward)
+    #     updated_history = 1
+
+    # particles_us=new_particles_us
+    # particles_vs=new_particles_vs
+    # particles_var_us=new_particles_var_us
+    # particles_var_is=new_particles_var_is
+    # return  particles_us, particles_vs, particles_var_us,particles_var_is
+
 @njit
 def _softmax(x):
     return np.exp(x - np.max(x)) / np.sum(np.exp(x - np.max(x)))
@@ -55,6 +143,10 @@ class PTS(MFInteractor):
         return items_score, None
 
     def update(self,uid,item,reward,additional_data):
+        # self._update(uid,item,reward,additional_data)
+        self._update(uid,item,reward,additional_data)
+
+    def _update(self,uid,item,reward,additional_data):
         updated_history = False
         lambdas_u_i = np.empty(shape=(self.num_particles,self.num_lat,self.num_lat))
         zetas_u_i  = np.empty(shape=(self.num_particles,self.num_lat))
