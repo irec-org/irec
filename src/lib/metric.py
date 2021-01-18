@@ -2,37 +2,36 @@ import numpy as np
 
 import scipy.sparse
 from collections import defaultdict 
-from Parameterizable import Parameterizable
+from utils.Parameterizable import Parameterizable
 np.seterr(all='raise')
 
 class MetricsEvaluator:
     def __init__(self,metrics_classes=[]):
         self.metrics_classes = metrics_classes
 
-class InteractionMetricsEvaluator:
+class InteractionMetricsEvaluator(MetricsEvaluator):
     def __init__(self,ground_truth_dataset,*args,**kwargs):
         super().__init__(*args,**kwargs)
         self.ground_truth_dataset = ground_truth_dataset
         self.ground_truth_consumption_matrix = scipy.sparse.csr_matrix((self.ground_truth_dataset.data[:,2],(self.ground_truth_dataset.data[:,0],self.ground_truth_dataset.data[:,1])),(self.ground_truth_dataset.num_total_users,self.ground_truth_dataset.num_total_items))
 
-    def evaluate(self,interactions,interaction_size,results):
-        users_consumed_items = defaultdict(list)
+    def evaluate(self,num_interactions,interaction_size,results):
+        users_items_recommended = defaultdict(list)
         for uid, item in results:
-            users_consumed_items[uid].append(item)
-        uids = list(users_consumed_items.keys())
+            users_items_recommended[uid].append(item)
+        uids = list(users_items_recommended.keys())
         
         metrics_values = defaultdict(list)
-
         
-        for i in interactions:
+        for i in range(num_interactions):
         # for uid, item in results:
-            for metric_class in metrics_classes:
-                metric = metric_class(
+            for metric_class in self.metrics_classes:
+                metric = metric_class(self.ground_truth_dataset,
                     ThresholdRelevanceEvaluator(
                         self.ground_truth_dataset.mean_rating))
                 for uid in uids:
-                    interaction_results = users_consumed_items[uid][i:i+interaction_size]
-                    for uid, item in interaction_results:
+                    interaction_results = users_items_recommended[uid][i:i+interaction_size]
+                    for item in interaction_results:
                         metric.update_recommendation(uid,item,self.ground_truth_consumption_matrix[uid,item])
 
                 metrics_values[metric.__class__.__name__].append(np.mean([metric.compute(uid) for uid in uids]))
@@ -49,7 +48,7 @@ class RelevanceEvaluator(Parameterizable):
 class ThresholdRelevanceEvaluator:
     def __init__(self,threshold,*args,**kwargs):
         super().__init__(*args,**kwargs)
-        self.threshold = self.threshold
+        self.threshold = threshold
     def is_relevant(self, reward):
         return reward>self.threshold
     
@@ -66,7 +65,7 @@ class Metric(Parameterizable):
     def update_consumption_history(self,uid,item,reward):
         pass
 
-class Recall:
+class Recall(Metric):
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
         self.users_true_positive = defaultdict(int)
@@ -84,7 +83,7 @@ class Recall:
         if self.relevance_evaluator.is_relevant(reward):
             self.users_true_positive[uid] += 1
 
-class Precision:
+class Precision(Metric):
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
         self.users_true_positive = defaultdict(int)
@@ -99,7 +98,7 @@ class Precision:
         else:
             self.users_false_positive[uid]+=1
 
-class Hits:
+class Hits(Metric):
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
         self.users_true_positive = defaultdict(int)
@@ -111,7 +110,7 @@ class Hits:
         if self.relevance_evaluator.is_relevant(reward):
             self.users_true_positive[uid]+=1
 
-class EPC:
+class EPC(Metric):
     def __init__(self,items_normalized_popularity,*args,**kwargs):
         super().__init__(*args,**kwargs)
         self.users_num_items_recommended = defaultdict(int)
@@ -128,7 +127,7 @@ class EPC:
         probability_seen = self.items_normalized_popularity[item]
         self.users_prob_not_seen_cumulated[uid] += 1-probability_seen
 
-class ILD:
+class ILD(Metric):
     def __init__(self,items_distance,*args,**kwargs):
         super().__init__(*args,**kwargs)
         self.items_distance = items_distance
@@ -177,7 +176,7 @@ class EPD:
     def update_consumption_history(self,uid,item,reward):
         self.users_consumed_items[uid].append(item)
 
-class AP:
+class AP(Metric):
     def __init__(self,items_distance,*args,**kwargs):
         super().__init__(*args,**kwargs)
         self.users_true_positive = defaultdict(int)

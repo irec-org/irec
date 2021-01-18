@@ -5,7 +5,7 @@ import sys, os
 import random
 from threadpoolctl import threadpool_limits
 import ctypes
-import utils.metrics as metrics
+import metric
 from tqdm import tqdm
 
 from utils.util import run_parallel
@@ -101,7 +101,7 @@ class PMF(MF):
             #     item_lambda/2 * np.sum(np.linalg.norm(self.items_weights,axis=1)**2)
             # print("Objective value",objective_value)
 
-            rmse=metrics.rmse(training_matrix.data,predicted)
+            rmse=metric.rmse(training_matrix.data,predicted)
             objective_value = rmse
             # print("RMSE",rmse)
             if objective_value > last_objective_value or np.fabs(objective_value - last_objective_value) <= self.stop_criteria:

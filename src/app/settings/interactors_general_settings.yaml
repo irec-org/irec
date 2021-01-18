@@ -1,3 +1,6 @@
+Random:
+  name: Random
+  evaluation_policy: Interaction
 PTS:
   name: Particle Thompson Sampling
   evaluation_policy: Interaction
@@ -12,9 +15,6 @@ OurMethod2:
   evaluation_policy: Interaction
 LinearUCB:
   name: Linear UCB (PMF)
-  evaluation_policy: Interaction
-Random:
-  name: Random
   evaluation_policy: Interaction
 COFIBA:
   name: COFIBA

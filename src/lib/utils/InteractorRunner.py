@@ -45,9 +45,13 @@ class InteractorRunner():
         itr = itr_class(**parameters)
         return itr
         
-    def run_interactor(self,itr):
+    def get_interactor_evaluation_policy(self,itr):
         itr_evaluation_policy=self.interactors_general_settings[itr.__class__.__name__]['evaluation_policy']
         evaluation_policy = eval('evaluation_policy.'+itr_evaluation_policy)(**self.evaluation_policies_parameters[itr_evaluation_policy])
+        return evaluation_policy
+
+    def run_interactor(self,itr):
+        evaluation_policy=self.get_interactor_evaluation_policy(itr)
         history_items_recommended = evaluation_policy.evaluate(itr,self.dm.dataset_preprocessed[0],self.dm.dataset_preprocessed[1])
 
         pdm = PersistentDataManager(directory='results')

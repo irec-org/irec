@@ -11,7 +11,7 @@ class DirectoryDependent:
     DIRS['dataset_preprocess'] = os.path.join(DIRS['data'], 'dataset_preprocess')
     DIRS['img'] = os.path.join(DIRS['data'], 'img')
     DIRS['export'] = os.path.join(DIRS['data'], 'export')
-    DIRS['metric'] = os.path.join(DIRS['state_save'], 'metric')
+    DIRS['metrics'] = os.path.join(DIRS['state_save'], 'metrics')
     DIRS['datasets'] = os.path.join(DIRS['data'], 'datasets')
     EXISTS = False
     def __init__(self):

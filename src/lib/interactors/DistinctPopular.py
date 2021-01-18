@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import scipy.stats
 import os
 import random
-import utils.metrics as metrics
+import metric
 
 class DistinctPopular(ExperimentalInteractor):
     def __init__(self,*args, **kwargs):
@@ -20,7 +20,7 @@ class DistinctPopular(ExperimentalInteractor):
         self.items_entropy = Entropy.get_items_entropy(self.train_consumption_matrix)
         np.seterr('warn')
         self.items_popularity = MostPopular.get_items_popularity(self.train_consumption_matrix,normalize=False)
-        self.items_distance = metrics.get_items_distance(self.train_consumption_matrix)
+        self.items_distance = metric.get_items_distance(self.train_consumption_matrix)
 
         self.top_iids = defaultdict([])
         # num_total_items = self.train_consumption_matrix.shape[1]

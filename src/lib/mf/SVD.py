@@ -1,6 +1,5 @@
 from . import MF
 import scipy.sparse
-import utils.metrics as metrics
 import numpy as np
 class SVD(MF):
     def fit(self,training_matrix):

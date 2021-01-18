@@ -6,7 +6,7 @@ import numpy as np
 import scipy.sparse
 from numba import jit, prange
 from utils.Parameterizable import Parameterizable
-import utils.metrics as metrics
+import metric
 
 @jit(nopython=True,parallel=True)
 def _predict_sparse(users_weights, items_weights, users_items):
@@ -40,4 +40,4 @@ class MF(Parameterizable):
         return self.predict_sparse(X)
 
     def score(self,X):
-        return metrics.rmse(X.data,self.predict(X))
+        return metric.rmse(X.data,self.predict(X))

@@ -11,7 +11,7 @@ class PersistentDataManager(DirectoryDependent):
     def __init__(self, directory='state_save', *args, **kwargs):
         super().__init__(*args,**kwargs)
         self.directory = directory
-        self.extension_name = 'self.pickle'
+        self.extension_name = '.pickle'
 
     def get_fp(self,path):
         fp = os.path.join(self.DIRS[self.directory],path+self.extension_name)
