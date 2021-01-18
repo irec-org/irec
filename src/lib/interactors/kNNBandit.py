@@ -16,6 +16,7 @@ class kNNBandit(ExperimentalInteractor):
         self.train_dataset = train_dataset
         self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[:,2],(self.train_dataset.data[:,0],self.train_dataset.data[:,1])),(self.train_dataset.num_total_users,self.train_dataset.num_total_items))
         self.num_total_items = self.train_dataset.num_total_items
+        self.num_total_users = self.train_dataset.num_total_users
 
         self.consumption_matrix = self.train_consumption_matrix.tolil()
 
@@ -23,8 +24,8 @@ class kNNBandit(ExperimentalInteractor):
         self.users_rating_sum = self.train_consumption_matrix.sum(axis=1).A.flatten()
 
     def predict(self,uid,candidate_items,num_req_items):
-        users_score = np.zeros(self.total_num_users)
-        for i, v1, v2 in zip(list(range(self.total_num_users)),self.users_alphas[uid], self.users_rating_sum-self.users_alphas[uid]):
+        users_score = np.zeros(self.num_total_users)
+        for i, v1, v2 in zip(list(range(self.num_total_users)),self.users_alphas[uid], self.users_rating_sum-self.users_alphas[uid]):
             if v1 > 0 and v2 > 0:
                 users_score[i] = np.random.beta(v1,v2)
             else:

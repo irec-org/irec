@@ -66,8 +66,6 @@ for metric_name in map(lambda x: x.__name__,metrics_classes):
     for tick in ax.xaxis.get_major_ticks()+ax.yaxis.get_major_ticks():
         tick.label.set_fontsize(14) 
 
-
-    
     fig.savefig(os.path.join(DirectoryDependent().DIRS["img"],f'plot_{metric_name}.png'))
     # df = pd.DataFrame(metric_values[metric_name])
     # df['KS'] = KS

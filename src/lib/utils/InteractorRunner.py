@@ -7,6 +7,7 @@ from utils.PersistentDataManager import PersistentDataManager
 from .InteractorCache import InteractorCache
 import utils.util as util
 import ctypes
+from collections import OrderedDict
 
 class InteractorRunner():
 
@@ -17,13 +18,30 @@ class InteractorRunner():
         self.evaluation_policies_parameters = evaluation_policies_parameters
 
     def select_interactors(self):
+        pdm = PersistentDataManager(directory='state_save')
+        choices = [v['name'] for v in self.interactors_general_settings.values()]
+        if pdm.file_exists('interactors_selection_cache'):
+            interactors_selection_cache = pdm.load('interactors_selection_cache')
+            for i in reversed(interactors_selection_cache):
+                choices.remove(i)
+                choices.insert(0,i)
+        else:
+            print("No cache in interactors selection")
         q = [
             inquirer.Checkbox('interactors',
                               message='Interactors to run',
-                              choices=[v['name'] for v in self.interactors_general_settings.values()]
+                              choices=choices
             )
         ]
         answers=inquirer.prompt(q)
+        
+        if pdm.file_exists('interactors_selection_cache'):
+            print(list(OrderedDict.fromkeys(answers['interactors']+interactors_selection_cache)))
+            pdm.save('interactors_selection_cache',list(OrderedDict.fromkeys(answers['interactors']+interactors_selection_cache)))
+        else:
+            pdm.save('interactors_selection_cache',answers['interactors'])
+            
+        
         interactors_class_names = dict(zip([v['name'] for v in self.interactors_general_settings.values()],self.interactors_general_settings.keys()))
         # interactors_names = dict(zip(self.interactors_general_settings.keys(),[v['name'] for v in self.interactors_general_settings.values()]))
 

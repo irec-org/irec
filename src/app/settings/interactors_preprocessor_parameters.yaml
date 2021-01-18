@@ -103,7 +103,7 @@ MovieLens 100k (B):
   ALMostPopular:
   OurMethod1:
     parameters:
-        alpha: 0.1
+        alpha: 1.0
         stop: null
         weight_method: 'change'
         num_lat: 10

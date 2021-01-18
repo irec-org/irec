@@ -1,8 +1,8 @@
-Random:
-  name: Random
-  evaluation_policy: Interaction
 PTS:
   name: Particle Thompson Sampling
+  evaluation_policy: Interaction
+Random:
+  name: Random
   evaluation_policy: Interaction
 LinUCB:
   name: LinUCB (MF)
