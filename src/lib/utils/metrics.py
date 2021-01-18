@@ -2,23 +2,63 @@ import numpy as np
 
 import scipy.sparse
 from collections import defaultdict 
+from Parameterizable import Parameterizable
 np.seterr(all='raise')
 
-class RelevanceEvaluator:
-    def __init__(self):
-        pass
+class MetricsEvaluator:
+    def __init__(self,metrics_classes=[]):
+        self.metrics_classes = metrics_classes
+
+class InteractionMetricsEvaluator:
+    def __init__(self,ground_truth_dataset,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        self.ground_truth_dataset = ground_truth_dataset
+        self.ground_truth_consumption_matrix = scipy.sparse.csr_matrix((self.ground_truth_dataset.data[:,2],(self.ground_truth_dataset.data[:,0],self.ground_truth_dataset.data[:,1])),(self.ground_truth_dataset.num_total_users,self.ground_truth_dataset.num_total_items))
+
+    def evaluate(self,interactions,interaction_size,results):
+        users_consumed_items = defaultdict(list)
+        for uid, item in results:
+            users_consumed_items[uid].append(item)
+        uids = list(users_consumed_items.keys())
+        
+        metrics_values = defaultdict(list)
+
+        
+        for i in interactions:
+        # for uid, item in results:
+            for metric_class in metrics_classes:
+                metric = metric_class(
+                    ThresholdRelevanceEvaluator(
+                        self.ground_truth_dataset.mean_rating))
+                for uid in uids:
+                    interaction_results = users_consumed_items[uid][i:i+interaction_size]
+                    for uid, item in interaction_results:
+                        metric.update_recommendation(uid,item,self.ground_truth_consumption_matrix[uid,item])
+
+                metrics_values[metric.__class__.__name__].append(np.mean([metric.compute(uid) for uid in uids]))
+
+        return metrics_values
+
+class RelevanceEvaluator(Parameterizable):
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+
     def is_relevant(self, reward):
         return True
+
 class ThresholdRelevanceEvaluator:
-    def __init__(self,threshold):
+    def __init__(self,threshold,*args,**kwargs):
+        super().__init__(*args,**kwargs)
         self.threshold = self.threshold
     def is_relevant(self, reward):
         return reward>self.threshold
     
-class Metric:
-    def __init__(self,ground_truth_dataset,train_dataset,relevance_evaluator):
+class Metric(Parameterizable):
+    def __init__(self,ground_truth_dataset,relevance_evaluator,*args,**kwargs):
+        super().__init__(*args,**kwargs)
         self.ground_truth_dataset = ground_truth_dataset
         self.relevance_evaluator = relevance_evaluator
+        self.parameters.extend(['relevance_evaluator'])
     def compute(self,uid):
         return None
     def update_recommendation(self,uid,item,reward):
