@@ -143,10 +143,6 @@ class PTS(MFInteractor):
         return items_score, None
 
     def update(self,uid,item,reward,additional_data):
-        # self._update(uid,item,reward,additional_data)
-        self._update(uid,item,reward,additional_data)
-
-    def _update(self,uid,item,reward,additional_data):
         updated_history = False
         lambdas_u_i = np.empty(shape=(self.num_particles,self.num_lat,self.num_lat))
         zetas_u_i  = np.empty(shape=(self.num_particles,self.num_lat))
