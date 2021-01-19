@@ -35,7 +35,7 @@ class kNNBandit(ExperimentalInteractor):
             if i != uid:
                 top_user = uid
 
-        return consumption_matrix[top_user].A.flatten()[candidate_items], {'top_user': top_user}
+        return self.consumption_matrix[top_user].A.flatten()[candidate_items], {'top_user': top_user}
         # best_items = items_not_recommended[top_items]
 
 

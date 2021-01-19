@@ -36,7 +36,6 @@ class InteractorRunner():
         answers=inquirer.prompt(q)
         
         if pdm.file_exists('interactors_selection_cache'):
-            print(list(OrderedDict.fromkeys(answers['interactors']+interactors_selection_cache)))
             pdm.save('interactors_selection_cache',list(OrderedDict.fromkeys(answers['interactors']+interactors_selection_cache)))
         else:
             pdm.save('interactors_selection_cache',answers['interactors'])
