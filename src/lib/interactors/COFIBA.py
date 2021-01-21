@@ -84,23 +84,14 @@ class COFIBA(MFInteractor):
         num_neighbors = len(neighbors)
         cluster_m = self.I + np.add.reduce(self.users_m[np.append(neighbors,uid)]) - num_neighbors*self.I
         cluster_b = np.add.reduce(self.users_b[np.append(neighbors,uid)])
-        # print(cluster_m, cluster_b)
         cluster_latent_factors = cluster_m @ cluster_b
         return cluster_latent_factors @ self.items_latent_factors[item] + self.cb(self.alpha,self.items_latent_factors[item],cluster_m,self.t)
 
-    # def train(self,train_dataset):
-    #     super().train(train_dataset)
-    #     self.train_dataset = train_dataset
-    #     self.train_consumption_matrix = scipy.sparse.csr_matrix((train_data[:,2],(train_data[:,0],train_data[:,1])),(self.train_dataset.num_total_users,self.train_dataset.num_total_items))
     def train(self,train_dataset):
         super().train(train_dataset)
         self.train_dataset = train_dataset
         self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[:,2],(self.train_dataset.data[:,0],self.train_dataset.data[:,1])),(self.train_dataset.num_total_users,self.train_dataset.num_total_items))
         self.num_total_items = self.train_dataset.num_total_items
-    # def train(self,train_data,total_num_total_users,total_num_total_items):
-    #     super().train(train_data)
-    #     self.train_consumption_matrix = scipy.sparse.csr_matrix((train_data[:,2],(train_data[:,0],train_data[:,1])))
-    #     self.num_total_items = self.train_consumption_matrix.shape[1]
         self.consumption_matrix = self.train_consumption_matrix.tolil()
         self.num_total_users = self.train_dataset.num_total_users
 
@@ -110,13 +101,8 @@ class COFIBA(MFInteractor):
         self.num_latent_factors = len(self.items_latent_factors[0])
 
         self.I = np.identity(self.num_latent_factors)
-        # code her
-        # ...
+
         self.items_graph = self.new_graph(self.num_total_items)
-        # for i in range(num_total_items):
-        #     for j in range(num_total_items):
-        #         if j < i:
-        #             self.items_graph[j,i] = self.items_graph[i,j]
             
         self.items_n_components, self.items_clustering = scipy.sparse.csgraph.connected_components(self.items_graph)
         self.users_graphs = []
@@ -133,19 +119,6 @@ class COFIBA(MFInteractor):
 
         self.users_m = np.array(self.users_m)
         self.users_latent_factors = [np.linalg.inv(m) @ b for b, m in zip(self.users_b,self.users_m)]
-        # users_m = np.zeros(total_num_total_users,num_latent_factors,num_latent_factors)
-        # users_m[
-        # print(items_graph)
-        # print(items_graph.sum())
-        # raise SystemExit
-        # for i in tqdm(range(num_total_users*self.interactions)):
-        #     uid = random.sample(available_users,k=1)[0]
-        #     not_recommended = np.ones(self.num_total_items,dtype=bool)
-        #     not_recommended[self.results[uid]] = 0
-        #     items_not_recommended = np.nonzero(not_recommended)[0]
-
-        #     # code her
-        #     # ...
 
     def predict(self,uid,candidate_items,num_req_items):
         items_score = np.zeros(candidate_items.shape)
@@ -153,8 +126,6 @@ class COFIBA(MFInteractor):
             users_graph, labels = self.update_user_cluster(uid,item)
             user_connected_component = np.nonzero(labels[item] == labels)[0]
             items_score[i] = self.score(uid,item,user_connected_component)
-                # best_items = items_not_recommended[np.argsort(items_score)][::-1][self.interaction_size]
-                # for item in best_items:
         return items_score, None
 
 
@@ -162,22 +133,3 @@ class COFIBA(MFInteractor):
         users_graph, labels = self.update_user_cluster(uid,item)
         item_cluster = self.items_clustering[item]
         self.users_graphs[item_cluster] = users_graph
-
-            # self.t += 1
-            # self.results[uid].extend(best_items)
-
-            # for item in best_items:
-            #     u1_reward = self.get_reward(uid,item)
-            #     u2_reward = self.get_reward(top_user,item,from_test_and_train=True)
-            #     tmp_val = u1_reward*u2_reward
-            #     users_alphas[uid,top_user] = tmp_val
-            #     users_alphas[top_user,uid] = tmp_val
-            #     users_rating_sum[uid] += u1_reward
-            #     consumption_matrix[uid, item] = u1_reward
-            
-        #     users_num_interactions[uid] += 1
-        #     if users_num_interactions[uid] == self.interactions:
-        #         available_users = available_users - {uid}
-        #     self.t += 1
-
-        # self.save_results()
