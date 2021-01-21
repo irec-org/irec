@@ -33,8 +33,8 @@ class UCBLearner(MFInteractor):
         self.num_latent_factors = len(self.items_weights[0])
 
         self.I = np.eye(len(self.items_weights[0]))
-        bs = defaultdict(lambda: np.zeros(self.num_latent_factors))
-        As = defaultdict(lambda: self.I.copy())
+        self.bs = defaultdict(lambda: np.zeros(self.num_latent_factors))
+        self.As = defaultdict(lambda: self.I.copy())
         self.users_nb_items = defaultdict(lambda: 0)
 
     @staticmethod
@@ -43,8 +43,8 @@ class UCBLearner(MFInteractor):
         return pow(2,min(stop,num_total_items))/limit
 
     def predict(self,uid,candidate_items,num_req_items):
-        b = bs[uid]
-        A = As[uid]
+        b = self.bs[uid]
+        A = self.As[uid]
         items_bias = self.items_bias
         mean = np.dot(np.linalg.inv(A),b)
         pred_rule = mean @ self.items_weights[user_candidate_items].T
@@ -55,6 +55,8 @@ class UCBLearner(MFInteractor):
         return items_score
 
     def update(self,uid,item,reward,additional_data):
+        b = self.bs[uid]
+        A = self.As[uid]
         max_item_weight = self.items_weights[item]
         A += max_item_weight[:,None].dot(max_item_weight[None,:])
         b += reward*max_item_weight
