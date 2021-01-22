@@ -25,30 +25,17 @@ class Entropy(ExperimentalInteractor):
     @staticmethod
     def get_items_entropy(consumption_matrix):
         lowest_value = np.min(consumption_matrix)
-        # mask = np.ones(consumption_matrix.shape[0], dtype=bool)
-        # mask[test_uids] = 0
         items_entropy = np.zeros(consumption_matrix.shape[1])
         is_spmatrix = isinstance(consumption_matrix,scipy.sparse.spmatrix)
         if is_spmatrix:
             consumption_matrix = scipy.sparse.csc_matrix(consumption_matrix)
-        # consumption_matrix=consumption_matrix.transpose()
-        # import time
         for iid in range(consumption_matrix.shape[1]):
-            # stime = time.time()
             if is_spmatrix:
-                # iid_ratings = consumption_matrix[mask].data
-                # iid_ratings = consumption_matrix[mask,:][:,iid].data
-                # consumption_matrix.getcol(iid)
-                # iid_ratings = consumption_matrix[:,iid][mask].data
                 iid_ratings = consumption_matrix[:,iid].A.flatten()
                 iid_ratings = iid_ratings[iid_ratings > lowest_value]
             else:
                 iid_ratings = consumption_matrix[:,iid]
                 iid_ratings = iid_ratings[iid_ratings > lowest_value]
-            # print(f"Elapsed time: {time.time()-stime}")
-            # unique, counts = np.unique(iid_ratings, return_counts=True)
-            # ratings_probability = counts/np.sum(counts)
-            # items_entropy[iid] = -1*np.sum(ratings_probability*np.log(ratings_probability))
             items_entropy[iid] = Entropy.values_entropy(iid_ratings)
         return items_entropy
 
@@ -64,12 +51,6 @@ class Entropy(ExperimentalInteractor):
         for uid, iid, reward, *rest in self.train_dataset.data:
             self.items_ratings[int(iid),self.unique_values_ids[reward]] += 1
             self.items_num_total_ratings[int(iid)] += 1
-        # items_entropy = np.power(items_entropy+1,items_entropy+1)
-        # fig, ax = plt.subplots()
-        # ax.hist(items_entropy,color='k')
-        # ax.set_xlabel("Entropy")
-        # ax.set_ylabel("#Items")
-        # fig.savefig(os.path.join(self.DIRS['img'],"entropy_"+self.get_id()+".png"))
         
     def predict(self,uid,candidate_items,num_req_items):
         items_score =  [self.probabilities_entropy(self.items_ratings[iid]/np.sum(self.items_ratings[iid])) if self.items_num_total_ratings[iid] > 0 else 0
