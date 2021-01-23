@@ -10,25 +10,31 @@ class MetricsEvaluator:
         self.metrics_classes = metrics_classes
 
 class CumulativeMetricsEvaluator(MetricsEvaluator):
+    NAME_ABBREVIATION = "cme"
     def __init__(self,ground_truth_dataset,*args,**kwargs):
         super().__init__(*args,**kwargs)
         self.ground_truth_dataset = ground_truth_dataset
         self.ground_truth_consumption_matrix = scipy.sparse.csr_matrix((self.ground_truth_dataset.data[:,2],(self.ground_truth_dataset.data[:,0],self.ground_truth_dataset.data[:,1])),(self.ground_truth_dataset.num_total_users,self.ground_truth_dataset.num_total_items))
 
-    def evaluate(self,results):
+    def evaluate(self, results):
+        uids = []
+        for uid, item in results:
+            uids.append(uid)
+        uids = list(set(uids))
         
+        metrics_values = defaultdict(list)
         for metric_class in self.metrics_classes:
             metric = metric_class(self.ground_truth_dataset,
                                   ThresholdRelevanceEvaluator(
                                       self.ground_truth_dataset.mean_rating))
             for uid, item in results:
                 metric.update_recommendation(uid,item,self.ground_truth_consumption_matrix[uid,item])
-
-            metrics_values[metric.__class__.__name__].append(np.mean([metric.compute(uid) for uid in uids]))
+                metrics_values[metric.__class__.__name__].append(np.mean([metric.compute(uid) for uid in uids]))
 
         return metrics_values
 
 class InteractionMetricsEvaluator(MetricsEvaluator):
+    NAME_ABBREVIATION = "ime"
     def __init__(self,ground_truth_dataset,*args,**kwargs):
         super().__init__(*args,**kwargs)
         self.ground_truth_dataset = ground_truth_dataset

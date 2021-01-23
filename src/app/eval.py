@@ -12,7 +12,7 @@ import numpy as np
 import scipy.sparse
 from utils.DatasetManager import DatasetManager
 import yaml
-from metric import InteractionMetricsEvaluator
+from metric import InteractionMetricsEvaluator, CumulativeMetricsEvaluator
 from utils.dataset import Dataset
 from utils.PersistentDataManager import PersistentDataManager
 from utils.InteractorCache import InteractorCache
@@ -42,15 +42,20 @@ dataset = Dataset(data)
 dataset.update_from_data()
 dataset.update_num_total_users_items()
 
-ime = InteractionMetricsEvaluator(dataset,metrics_classes)
+metrics_evaluators = [InteractionMetricsEvaluator(dataset,metrics_classes), CumulativeMetricsEvaluator(dataset,metrics_classes)]
 
-for itr_class in interactors_classes:
-    itr = ir.create_interactor(itr_class)
-    evaluation_policy = ir.get_interactor_evaluation_policy(itr)
-    pdm = PersistentDataManager(directory='results')
-    users_items_recommended = pdm.load(InteractorCache().get_id(dm,evaluation_policy,itr))
+for metric_evaluator in metrics_evaluators:
+    for itr_class in interactors_classes:
+        itr = ir.create_interactor(itr_class)
+        evaluation_policy = ir.get_interactor_evaluation_policy(itr)
+        pdm = PersistentDataManager(directory='results')
+        users_items_recommended = pdm.load(InteractorCache().get_id(dm,evaluation_policy,itr))
 
-    metrics_pdm = PersistentDataManager(directory='metrics')
-    metrics_values = ime.evaluate(evaluation_policy.num_interactions,evaluation_policy.interaction_size,users_items_recommended)
-    for metric_name, metric_values in metrics_values.items():
-        metrics_pdm.save(os.path.join(InteractorCache().get_id(dm,evaluation_policy,itr),metric_name),metric_values)
+        metrics_pdm = PersistentDataManager(directory='metrics')
+        if isinstance(metric_evaluator,InteractionMetricsEvaluator):
+            metrics_values = metric_evaluator.evaluate(evaluation_policy.num_interactions,evaluation_policy.interaction_size,users_items_recommended)
+        elif isinstance(metric_evaluator,CumulativeMetricsEvaluator):
+            metrics_values = metric_evaluator.evaluate(users_items_recommended)
+
+        for metric_name, metric_values in metrics_values.items():
+            metrics_pdm.save(os.path.join(InteractorCache().get_id(dm,evaluation_policy,itr),metric_evaluator.NAME_ABBREVIATION,metric_name),metric_values)
