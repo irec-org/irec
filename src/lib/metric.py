@@ -312,4 +312,3 @@ def epdk(actual, predicted, consumed_items, items_distance):
 
 def rmse(ground_truth,predicted):
     return np.sqrt(np.mean((predicted - ground_truth)**2))
-    

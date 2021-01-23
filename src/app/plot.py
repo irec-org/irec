@@ -63,7 +63,10 @@ for metric_evaluator in metrics_evaluators:
             ax.plot(range(1,len(metric_values)+1),metric_values,label=itr_class.__name__)
 
         ax.legend()
-        ax.set_xlabel("Interactions",size=18)
+        if isinstance(metric_evaluator,InteractionMetricsEvaluator):
+            ax.set_xlabel("Interactions",size=18)
+        elif isinstance(metric_evaluator,CumulativeMetricsEvaluator):
+            ax.set_xlabel("Time",size=18)
         ax.set_title(f"Top-{evaluation_policy.interaction_size} recommendation",size=18)
         ax.set_ylabel(metric_name,size=18)
         # ax.set_xticks(list(range(1,evaluation_policy.num_interactions+1,evaluation_policy.num_interactions//4)) + [evaluation_policy.num_interactions])
