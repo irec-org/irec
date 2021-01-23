@@ -25,8 +25,9 @@ class CumulativeMetricsEvaluator(MetricsEvaluator):
         metrics_values = defaultdict(list)
         for metric_class in self.metrics_classes:
             metric = metric_class(self.ground_truth_dataset,
-                                  ThresholdRelevanceEvaluator(
-                                      self.ground_truth_dataset.mean_rating))
+                                  # ThresholdRelevanceEvaluator(self.ground_truth_dataset.mean_rating)
+                                  ThresholdRelevanceEvaluator(0)
+                                  )
             for uid, item in results:
                 metric.update_recommendation(uid,item,self.ground_truth_consumption_matrix[uid,item])
                 metrics_values[metric.__class__.__name__].append(np.mean([metric.compute(uid) for uid in uids]))
@@ -52,8 +53,8 @@ class InteractionMetricsEvaluator(MetricsEvaluator):
         # for uid, item in results:
             for metric_class in self.metrics_classes:
                 metric = metric_class(self.ground_truth_dataset,
-                    ThresholdRelevanceEvaluator(
-                        self.ground_truth_dataset.mean_rating))
+                                      ThresholdRelevanceEvaluator(0)
+                                      )
                 for uid in uids:
                     interaction_results = users_items_recommended[uid][i:i+interaction_size]
                     for item in interaction_results:
