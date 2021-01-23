@@ -38,7 +38,7 @@ class LinUCB(MFInteractor):
         mean = np.dot(np.linalg.inv(A),b)
         items_uncertainty = self.alpha*np.sqrt(np.sum(self.items_weights[candidate_items].dot(np.linalg.inv(A)) * self.items_weights[candidate_items],axis=1))
         items_user_similarity = mean @ self.items_weights[candidate_items].T
-        items_score =  items_user_similarity + items_uncertainty
+        items_score = items_user_similarity + items_uncertainty
         return items_score, None
 
     def update(self,uid,item,reward,additional_data):

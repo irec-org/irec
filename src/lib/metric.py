@@ -102,6 +102,8 @@ class Recall(Metric):
                 self.users_false_negative[uid] += 1
 
     def compute(self,uid):
+        if self.users_true_positive[uid] == 0 and self.users_false_negative[uid] == 0:
+            return 0
         return self.users_true_positive[uid]/(self.users_true_positive[uid]+self.users_false_negative[uid])
 
     def update_recommendation(self,uid,item,reward):
