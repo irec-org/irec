@@ -3,6 +3,7 @@ import numpy as np
 import scipy.sparse
 from collections import defaultdict 
 from utils.Parameterizable import Parameterizable
+import time
 np.seterr(all='raise')
 
 class MetricsEvaluator(Parameterizable):
@@ -32,6 +33,7 @@ class CumulativeMetricsEvaluator(MetricsEvaluator):
                                   ThresholdRelevanceEvaluator(0)
                                   )
             start = 0
+            start_time = time.time()
             while start < len(results):
                 for i in range(start,min(start+self.buffer_size,len(results))):
                     uid = results[i][0]
@@ -39,6 +41,8 @@ class CumulativeMetricsEvaluator(MetricsEvaluator):
                     metric.update_recommendation(uid,item,self.ground_truth_consumption_matrix[uid,item])
                 start = min(start+self.buffer_size,len(results))
                 metrics_values[metric.__class__.__name__].append(np.mean([metric.compute(uid) for uid in uids]))
+
+            print(f"{self.__class__.__name__} spent {time.time()-start_time:.2f} seconds executing {metric_class.__name__} metric")
 
         return metrics_values
 
@@ -57,18 +61,21 @@ class InteractionMetricsEvaluator(MetricsEvaluator):
         
         metrics_values = defaultdict(list)
         
-        for i in range(num_interactions):
         # for uid, item in results:
-            for metric_class in self.metrics_classes:
-                metric = metric_class(self.ground_truth_dataset,
-                                      ThresholdRelevanceEvaluator(0)
-                                      )
+        for metric_class in self.metrics_classes:
+            metric = metric_class(self.ground_truth_dataset,
+                                    ThresholdRelevanceEvaluator(0)
+                                  )
+            start_time = time.time()
+            for i in range(num_interactions):
                 for uid in uids:
                     interaction_results = users_items_recommended[uid][i:i+interaction_size]
                     for item in interaction_results:
                         metric.update_recommendation(uid,item,self.ground_truth_consumption_matrix[uid,item])
 
                 metrics_values[metric.__class__.__name__].append(np.mean([metric.compute(uid) for uid in uids]))
+
+            print(f"{self.__class__.__name__} spent {time.time()-start_time:.2f} seconds executing {metric_class.__name__} metric")
 
         return metrics_values
 
