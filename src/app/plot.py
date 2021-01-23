@@ -19,7 +19,9 @@ from utils.InteractorCache import InteractorCache
 import metric
 import matplotlib.pyplot as plt
 from utils.DirectoryDependent import DirectoryDependent
-
+from cycler import cycler
+plt.rcParams['axes.prop_cycle'] = cycler(color='krbgmyc')
+plt.rcParams['lines.linewidth'] = 2
 
 metrics_classes = [metric.Precision,metric.Recall,metric.Hits]
 
@@ -66,7 +68,7 @@ for metric_name in map(lambda x: x.__name__,metrics_classes):
     for tick in ax.xaxis.get_major_ticks()+ax.yaxis.get_major_ticks():
         tick.label.set_fontsize(14) 
 
-    fig.savefig(os.path.join(DirectoryDependent().DIRS["img"],f'plot_{metric_name}.png'))
+    fig.savefig(os.path.join(DirectoryDependent().DIRS["img"],f'plot_ime_{dm.dataset_preprocessor.name}_{metric_name}.png'))
     # df = pd.DataFrame(metric_values[metric_name])
     # df['KS'] = KS
     # # df=df.set_index('KS')
