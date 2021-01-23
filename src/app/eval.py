@@ -18,9 +18,7 @@ from utils.PersistentDataManager import PersistentDataManager
 from utils.InteractorCache import InteractorCache
 import metric
 
-
 metrics_classes = [metric.Precision,metric.Recall,metric.Hits]
-
 
 dm = DatasetManager()
 dm.request_dataset_preprocessor()
@@ -42,7 +40,7 @@ dataset = Dataset(data)
 dataset.update_from_data()
 dataset.update_num_total_users_items()
 
-metrics_evaluators = [InteractionMetricsEvaluator(dataset,metrics_classes), CumulativeMetricsEvaluator(dataset,metrics_classes)]
+metrics_evaluators = [InteractionMetricsEvaluator(dataset,metrics_classes), CumulativeMetricsEvaluator(50,dataset,metrics_classes)]
 
 for metric_evaluator in metrics_evaluators:
     for itr_class in interactors_classes:
@@ -58,4 +56,4 @@ for metric_evaluator in metrics_evaluators:
             metrics_values = metric_evaluator.evaluate(users_items_recommended)
 
         for metric_name, metric_values in metrics_values.items():
-            metrics_pdm.save(os.path.join(InteractorCache().get_id(dm,evaluation_policy,itr),metric_evaluator.NAME_ABBREVIATION,metric_name),metric_values)
+            metrics_pdm.save(os.path.join(InteractorCache().get_id(dm,evaluation_policy,itr),metric_evaluator.get_id(),metric_name),metric_values)

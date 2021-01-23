@@ -47,7 +47,7 @@ dataset = Dataset(data)
 dataset.update_from_data()
 dataset.update_num_total_users_items()
 
-metrics_evaluators = [InteractionMetricsEvaluator(dataset,metrics_classes), CumulativeMetricsEvaluator(dataset,metrics_classes)]
+metrics_evaluators = [InteractionMetricsEvaluator(dataset,metrics_classes), CumulativeMetricsEvaluator(50,dataset,metrics_classes)]
 # ime = InteractionMetricsEvaluator(dataset,metrics_classes)
 
 for metric_evaluator in metrics_evaluators:
@@ -59,8 +59,11 @@ for metric_evaluator in metrics_evaluators:
             pdm = PersistentDataManager(directory='results')
 
             metrics_pdm = PersistentDataManager(directory='metrics')
-            metric_values = metrics_pdm.load(os.path.join(InteractorCache().get_id(dm,evaluation_policy,itr),metric_evaluator.NAME_ABBREVIATION,metric_name))
-            ax.plot(range(1,len(metric_values)+1),metric_values,label=itr_class.__name__)
+            metric_values = metrics_pdm.load(os.path.join(InteractorCache().get_id(dm,evaluation_policy,itr),metric_evaluator.get_id(),metric_name))
+            if isinstance(metric_evaluator,InteractionMetricsEvaluator):
+                ax.plot(range(1,len(metric_values)+1),metric_values,label=itr_class.__name__)
+            elif isinstance(metric_evaluator,CumulativeMetricsEvaluator):
+                ax.plot(range(1,len(metric_values)*50,50),metric_values,label=itr_class.__name__)
 
         ax.legend()
         if isinstance(metric_evaluator,InteractionMetricsEvaluator):
@@ -73,4 +76,4 @@ for metric_evaluator in metrics_evaluators:
         # for tick in ax.xaxis.get_major_ticks()+ax.yaxis.get_major_ticks():
         #     tick.label.set_fontsize(14) 
 
-        fig.savefig(os.path.join(DirectoryDependent().DIRS["img"],f'plot_{metric_evaluator.NAME_ABBREVIATION}_{dm.dataset_preprocessor.name}_{metric_name}.png'),bbox_inches = 'tight')
+        fig.savefig(os.path.join(DirectoryDependent().DIRS["img"],f'plot_{metric_evaluator.get_id()}_{dm.dataset_preprocessor.name}_{metric_name}.png'),bbox_inches = 'tight')
