@@ -107,6 +107,7 @@ class Recall(Metric):
     def update_recommendation(self,uid,item,reward):
         if self.relevance_evaluator.is_relevant(reward):
             self.users_true_positive[uid] += 1
+            self.users_false_negative[uid] -= 1
 
 class Precision(Metric):
     def __init__(self,*args,**kwargs):
