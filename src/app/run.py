@@ -13,22 +13,23 @@ import scipy.sparse
 from utils.DatasetManager import DatasetManager
 import yaml
 
-dm = DatasetManager()
-dm.request_dataset_preprocessor()
-dm.initialize_engines()
-dm.load()
+def main():
+    dm = DatasetManager()
+    dm.request_dataset_preprocessor()
+    dm.initialize_engines()
+    dm.load()
 
+    interactors_preprocessor_paramaters = yaml.load(open("settings"+sep+"interactors_preprocessor_parameters.yaml"),Loader=yaml.SafeLoader)
+    interactors_general_settings = yaml.load(open("settings"+sep+"interactors_general_settings.yaml"),Loader=yaml.SafeLoader)
 
-            
-interactors_preprocessor_paramaters = yaml.load(open("settings"+sep+"interactors_preprocessor_parameters.yaml"),Loader=yaml.SafeLoader)
-interactors_general_settings = yaml.load(open("settings"+sep+"interactors_general_settings.yaml"),Loader=yaml.SafeLoader)
+    evaluation_policies_parameters = yaml.load(open("settings"+sep+"evaluation_policies_parameters.yaml"),Loader=yaml.SafeLoader)
 
-evaluation_policies_parameters = yaml.load(open("settings"+sep+"evaluation_policies_parameters.yaml"),Loader=yaml.SafeLoader)
+    ir = InteractorRunner(dm,interactors_general_settings,interactors_preprocessor_paramaters,evaluation_policies_parameters)
+    ir.select_interactors()
+    ir.run_interactors()
 
-
-ir = InteractorRunner(dm,interactors_general_settings,interactors_preprocessor_paramaters,evaluation_policies_parameters)
-ir.select_interactors()
-ir.run_interactors()
+if __name__ == '__main__':
+    main()
 # ir = InteractorRunner(dm)
 # ir.select_interactors()
 # ir.run_interactors()
