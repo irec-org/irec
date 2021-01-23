@@ -73,4 +73,4 @@ for metric_evaluator in metrics_evaluators:
         # for tick in ax.xaxis.get_major_ticks()+ax.yaxis.get_major_ticks():
         #     tick.label.set_fontsize(14) 
 
-        fig.savefig(os.path.join(DirectoryDependent().DIRS["img"],f'plot_{metric_evaluator.NAME_ABBREVIATION}_{dm.dataset_preprocessor.name}_{metric_name}.png'))
+        fig.savefig(os.path.join(DirectoryDependent().DIRS["img"],f'plot_{metric_evaluator.NAME_ABBREVIATION}_{dm.dataset_preprocessor.name}_{metric_name}.png'),bbox_inches = 'tight')

@@ -90,6 +90,8 @@ class DatasetManager(Parameterizable):
     def load(self):
         pdm = PersistentDataManager('dataset_preprocess')
         self.dataset_preprocessed = pdm.load(self.get_id())
+        self.train_dataset = self.dataset_preprocessed[0]
+        self.test_dataset = self.dataset_preprocessed[1]
         return self.dataset_preprocessed
         # self.dataset_preprocessed = pickle.load(open(self.get_file_name(),'rb'))
         # return self.dataset_preprocessed
