@@ -11,7 +11,7 @@ class MetricsEvaluator(Parameterizable):
         self.metrics_classes = metrics_classes
 
 class CumulativeMetricsEvaluator(MetricsEvaluator):
-    NAME_ABBREVIATION = "cme"
+
     def __init__(self,ground_truth_dataset,*args,**kwargs):
         super().__init__(*args,**kwargs)
         self.ground_truth_dataset = ground_truth_dataset
@@ -41,7 +41,7 @@ class CumulativeMetricsEvaluator(MetricsEvaluator):
         return metrics_values
 
 class InteractionMetricsEvaluator(MetricsEvaluator):
-    NAME_ABBREVIATION = "ime"
+
     def __init__(self,ground_truth_dataset,*args,**kwargs):
         super().__init__(*args,**kwargs)
         self.ground_truth_dataset = ground_truth_dataset
