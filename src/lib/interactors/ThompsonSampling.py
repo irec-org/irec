@@ -31,5 +31,5 @@ class ThompsonSampling(ExperimentalInteractor):
     def update(self,uid,item,reward,additional_data):
         reward = reward
         reward = 1 if reward >= self.train_dataset.mean_rating else 0
-        self.alphas[best_item] += reward
-        self.betas[best_item] += 1-reward
+        self.alphas[item] += reward
+        self.betas[item] += 1-reward
