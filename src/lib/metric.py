@@ -5,8 +5,9 @@ from collections import defaultdict
 from utils.Parameterizable import Parameterizable
 np.seterr(all='raise')
 
-class MetricsEvaluator:
-    def __init__(self,metrics_classes=[]):
+class MetricsEvaluator(Parameterizable):
+    def __init__(self,metrics_classes=[],*args,**kwargs):
+        super().__init__(*args,**kwargs)
         self.metrics_classes = metrics_classes
 
 class CumulativeMetricsEvaluator(MetricsEvaluator):
@@ -16,7 +17,7 @@ class CumulativeMetricsEvaluator(MetricsEvaluator):
         self.ground_truth_dataset = ground_truth_dataset
         self.ground_truth_consumption_matrix = scipy.sparse.csr_matrix((self.ground_truth_dataset.data[:,2],(self.ground_truth_dataset.data[:,0],self.ground_truth_dataset.data[:,1])),(self.ground_truth_dataset.num_total_users,self.ground_truth_dataset.num_total_items))
 
-    def evaluate(self, results):
+    def evaluate(self, buffer_size, results):
         uids = []
         for uid, item in results:
             uids.append(uid)
@@ -28,8 +29,13 @@ class CumulativeMetricsEvaluator(MetricsEvaluator):
                                   # ThresholdRelevanceEvaluator(self.ground_truth_dataset.mean_rating)
                                   ThresholdRelevanceEvaluator(0)
                                   )
-            for uid, item in results:
-                metric.update_recommendation(uid,item,self.ground_truth_consumption_matrix[uid,item])
+            start = 0
+            while start < len(results):
+                for i in range(start,min(start+buffer_size,len(results))):
+                    uid = results[i][0]
+                    item = results[i][1]
+                    metric.update_recommendation(uid,item,self.ground_truth_consumption_matrix[uid,item])
+                start = min(start+buffer_size,len(results))
                 metrics_values[metric.__class__.__name__].append(np.mean([metric.compute(uid) for uid in uids]))
 
         return metrics_values
