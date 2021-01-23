@@ -115,6 +115,8 @@ class Precision(Metric):
         self.users_false_positive = defaultdict(int)
 
     def compute(self,uid):
+        if self.users_true_positive[uid] == 0 and self.users_false_positive[uid] == 0:
+            return 0
         return self.users_true_positive[uid]/(self.users_true_positive[uid]+self.users_false_positive[uid])
 
     def update_recommendation(self,uid,item,reward):
