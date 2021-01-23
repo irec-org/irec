@@ -64,7 +64,12 @@ consumption_matrix = scipy.sparse.csr_matrix((data[:,2],(data[:,0],data[:,1])),(
 
 consumption_time_matrix = scipy.sparse.csr_matrix((data[:,3],(data[:,0],data[:,1])),(dm.test_dataset.num_total_users,dm.test_dataset.num_total_items))
 
-users_start_time = np.where(consumption_time_matrix.A > 0,consumption_time_matrix.A,np.inf).min(axis=1)
+users_start_time = []
+for uid in range(consumption_time_matrix.shape[0]):
+    users_start_time.append(np.min(consumption_time_matrix[uid].data))
+    
+users_start_time = np.array(users_start_time)
+# users_start_time = np.where(consumption_time_matrix.A > 0,consumption_time_matrix.A,np.inf).min(axis=1)
 
 
 users_by_time = np.argsort(users_start_time)
