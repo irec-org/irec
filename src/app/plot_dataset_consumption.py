@@ -30,6 +30,7 @@ for ax, matrix, name in zip(axs[0,:],
     # dont work with sparse matrix
     # dataset = np.count_nonzero(matrix,axis=1)
     dataset = np.sum(matrix>lowest_value,axis=1).A.flatten()
+    dataset = dataset[dataset>0]
     ax.hist(dataset,color='k',bins=100)
     ax.set_xlabel('#Consumption')
     ax.set_ylabel('#Users')
@@ -73,10 +74,12 @@ axs[1,0].set_xlabel('Users')
 axs[1,0].set_ylabel('First rating')
 
 users_num_consumption = np.sum(consumption_matrix>lowest_value,axis=1)[users_by_time].A.flatten()
+hist_values = np.sum(matrix>lowest_value,axis=1).A.flatten()
+hist_values = hist_values[hist_values>0]
 
-axs[1,1].bar(x=list(range(consumption_matrix.shape[0])),height=users_num_consumption,color='k',linewidth=2)
-axs[1,1].set_xlabel('Users')
-axs[1,1].set_ylabel('#Consumption')
+axs[1,1].hist(hist_values,color='k',bins=100)
+ax.set_xlabel('#Consumption')
+ax.set_ylabel('#Users')
 
 axs[1,1].annotate('Pearson(time,#consumption) %.2f'%(scipy.stats.pearsonr(users_by_time,users_num_consumption)[0]),xy=(0.02,0.9),xycoords='axes fraction',fontsize=14,
                   bbox=dict(boxstyle="square", fc="w"))
