@@ -65,7 +65,7 @@ class COFIBA(MFInteractor):
 
     @staticmethod
     def new_graph(n):
-        graph = scipy.sparse.random(n, n, density=3*np.log(n)/n, dtype=bool).tolil()
+        graph = scipy.sparse.random(n, n, density=2*np.log(n)/n, dtype=bool).tolil()
         COFIBA.symmetrize_matrix(graph)
         for i in range(graph.shape[0]):
             graph[i,i] = 0
