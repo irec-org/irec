@@ -10,6 +10,9 @@ MovieLens 1M (B):
       alpha_2: 1
       num_lat: 10
   ThompsonSampling:
+    parameters:
+      alpha_0: 1
+      beta_0: 1
   Random:
   kNNBandit:
   ALMostPopular:
@@ -98,6 +101,9 @@ MovieLens 100k (B):
       alpha_2: 1
       num_lat: 10
   ThompsonSampling:
+    parameters:
+      alpha_0: 1
+      beta_0: 1
   Random:
   kNNBandit:
   ALMostPopular:
@@ -186,6 +192,9 @@ Yahoo Music:
       alpha_2: 1
       num_lat: 10
   ThompsonSampling:
+    parameters:
+      alpha_0: 1
+      beta_0: 1
   Random:
   kNNBandit:
   ALMostPopular:
@@ -274,6 +283,9 @@ Good Books:
       alpha_2: 1
       num_lat: 10
   ThompsonSampling:
+    parameters:
+      alpha_0: 1
+      beta_0: 1
   Random:
   kNNBandit:
   ALMostPopular:
@@ -362,6 +374,9 @@ MovieLens 10M:
       alpha_2: 1
       num_lat: 10
   ThompsonSampling:
+    parameters:
+      alpha_0: 1
+      beta_0: 1
   Random:
   kNNBandit:
   ALMostPopular:
@@ -450,6 +465,9 @@ MovieLens 1M:
       alpha_2: 1
       num_lat: 10
   ThompsonSampling:
+    parameters:
+      alpha_0: 1
+      beta_0: 1
   Random:
   kNNBandit:
   ALMostPopular:
@@ -538,6 +556,9 @@ MovieLens 100k:
       alpha_2: 1
       num_lat: 10
   ThompsonSampling:
+    parameters:
+      alpha_0: 1
+      beta_0: 1
   Random:
   kNNBandit:
   ALMostPopular:
