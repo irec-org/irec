@@ -4,6 +4,8 @@ import scipy.sparse
 from collections import defaultdict 
 from utils.Parameterizable import Parameterizable
 import time
+from utils.util import run_parallel
+import ctypes
 np.seterr(all='raise')
 
 class MetricsEvaluator(Parameterizable):
@@ -20,29 +22,39 @@ class CumulativeMetricsEvaluator(MetricsEvaluator):
         self.buffer_size = buffer_size
         self.parameters.extend(['buffer_size'])
 
+    @staticmethod
+    def _metric_evaluation(obj_id,metric_class):
+        self = ctypes.cast(obj_id,ctypes.py_object).value
+        metric = metric_class(self.ground_truth_dataset,
+                                ThresholdRelevanceEvaluator(0)
+                                )
+        start = 0
+        start_time = time.time()
+        metric_values = []
+        while start < len(self.results):
+            for i in range(start,min(start+self.buffer_size,len(self.results))):
+                uid = self.results[i][0]
+                item = self.results[i][1]
+                metric.update_recommendation(uid,item,self.ground_truth_consumption_matrix[uid,item])
+            start = min(start+self.buffer_size,len(self.results))
+            metric_values.append(np.mean([metric.compute(uid) for uid in self.uids]))
+        print(f"{self.__class__.__name__} spent {time.time()-start_time:.2f} seconds executing {metric_class.__name__} metric")
+        return metric_values
+    
     def evaluate(self, results):
         uids = []
         for uid, item in results:
             uids.append(uid)
         uids = list(set(uids))
-        
+        self.uids = uids
+        self.results = results
         metrics_values = defaultdict(list)
-        for metric_class in self.metrics_classes:
-            metric = metric_class(self.ground_truth_dataset,
-                                  # ThresholdRelevanceEvaluator(self.ground_truth_dataset.mean_rating)
-                                  ThresholdRelevanceEvaluator(0)
-                                  )
-            start = 0
-            start_time = time.time()
-            while start < len(results):
-                for i in range(start,min(start+self.buffer_size,len(results))):
-                    uid = results[i][0]
-                    item = results[i][1]
-                    metric.update_recommendation(uid,item,self.ground_truth_consumption_matrix[uid,item])
-                start = min(start+self.buffer_size,len(results))
-                metrics_values[metric.__class__.__name__].append(np.mean([metric.compute(uid) for uid in uids]))
-
-            print(f"{self.__class__.__name__} spent {time.time()-start_time:.2f} seconds executing {metric_class.__name__} metric")
+        results = run_parallel(self._metric_evaluation,
+                               [(id(self),metric_class)
+                                for metric_class in self.metrics_classes],
+                               use_tqdm=False)
+        for result, metric_class in zip(results,self.metrics_classes):
+            metrics_values[metric_class.__name__].extend(result)
 
         return metrics_values
 
