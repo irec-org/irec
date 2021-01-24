@@ -12,6 +12,7 @@ class MetricsEvaluator(Parameterizable):
     def __init__(self,metrics_classes=[],*args,**kwargs):
         super().__init__(*args,**kwargs)
         self.metrics_classes = metrics_classes
+        self.relevance_evaluator = ThresholdRelevanceEvaluator(0)
 
 class CumulativeMetricsEvaluator(MetricsEvaluator):
 
@@ -25,9 +26,16 @@ class CumulativeMetricsEvaluator(MetricsEvaluator):
     @staticmethod
     def _metric_evaluation(obj_id,metric_class):
         self = ctypes.cast(obj_id,ctypes.py_object).value
-        metric = metric_class(self.ground_truth_dataset,
-                                ThresholdRelevanceEvaluator(0)
-                                )
+        if issubclass(metric_class,Recall):
+            metric = metric_class(users_false_negative=self.users_false_negative,
+                                  ground_truth_dataset=self.ground_truth_dataset,
+                                  relevance_evaluator=self.relevance_evaluator
+                                  )
+        else:
+            metric = metric_class(ground_truth_dataset=self.ground_truth_dataset,
+                                  relevance_evaluator=self.relevance_evaluator
+                                  )
+            
         start = 0
         start_time = time.time()
         metric_values = []
@@ -42,6 +50,12 @@ class CumulativeMetricsEvaluator(MetricsEvaluator):
         return metric_values
     
     def evaluate(self, results):
+        self.users_false_negative = defaultdict(int)
+        for row in self.ground_truth_dataset.data:
+            uid = int(row[0])
+            reward = row[2]
+            if self.relevance_evaluator.is_relevant(reward):
+                self.users_false_negative[uid] += 1
         uids = []
         for uid, item in results:
             uids.append(uid)
@@ -71,9 +85,13 @@ class InteractionMetricsEvaluator(MetricsEvaluator):
         start_time = time.time()
         metric_values = []
         for i in range(num_interactions):
-            metric = metric_class(self.ground_truth_dataset,
-                                  ThresholdRelevanceEvaluator(0)
-                                  )
+            if issubclass(metric_class,Recall):
+                metric = metric_class(users_false_negative=self.users_false_negative,
+                                    ground_truth_dataset=self.ground_truth_dataset,
+                                    relevance_evaluator=self.relevance_evaluator)
+            else:
+                metric = metric_class(ground_truth_dataset=self.ground_truth_dataset,
+                                    relevance_evaluator=self.relevance_evaluator)
             for uid in self.uids:
                 interaction_results = self.users_items_recommended[uid][i:i+interaction_size]
                 for item in interaction_results:
@@ -85,6 +103,13 @@ class InteractionMetricsEvaluator(MetricsEvaluator):
         return metric_values
 
     def evaluate(self,num_interactions,interaction_size,results):
+        self.users_false_negative = defaultdict(int)
+        for row in self.ground_truth_dataset.data:
+            uid = int(row[0])
+            reward = row[2]
+            if self.relevance_evaluator.is_relevant(reward):
+                self.users_false_negative[uid] += 1
+
         self.users_items_recommended = defaultdict(list)
         for uid, item in results:
             self.users_items_recommended[uid].append(item)
@@ -129,25 +154,19 @@ class Metric(Parameterizable):
         pass
 
 class Recall(Metric):
-    def __init__(self,*args,**kwargs):
+    def __init__(self,users_false_negative, *args,**kwargs):
         super().__init__(*args,**kwargs)
         self.users_true_positive = defaultdict(int)
-        self.users_false_negative = defaultdict(int)
-        for row in self.ground_truth_dataset.data:
-            uid = int(row[0])
-            reward = row[2]
-            if self.relevance_evaluator.is_relevant(reward):
-                self.users_false_negative[uid] += 1
+        self.users_false_negative = users_false_negative
 
     def compute(self,uid):
         if self.users_true_positive[uid] == 0 and self.users_false_negative[uid] == 0:
             return 0
-        return self.users_true_positive[uid]/(self.users_true_positive[uid]+self.users_false_negative[uid])
+        return self.users_true_positive[uid]/self.users_false_negative[uid]
 
     def update_recommendation(self,uid,item,reward):
         if self.relevance_evaluator.is_relevant(reward):
             self.users_true_positive[uid] += 1
-            self.users_false_negative[uid] -= 1
 
 class Precision(Metric):
     def __init__(self,*args,**kwargs):
