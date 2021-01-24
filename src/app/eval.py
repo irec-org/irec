@@ -44,6 +44,7 @@ metrics_evaluators = [InteractionMetricsEvaluator(dataset,metrics_classes), Cumu
 
 for metric_evaluator in metrics_evaluators:
     for itr_class in interactors_classes:
+        print(f"Evaluating {itr_class.__name__} results")
         itr = ir.create_interactor(itr_class)
         evaluation_policy = ir.get_interactor_evaluation_policy(itr)
         pdm = PersistentDataManager(directory='results')
