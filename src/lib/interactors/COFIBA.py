@@ -43,7 +43,7 @@ class COFIBA(MFInteractor):
 
         generated_user_neighbors = []
         for neighbor in neighbors:
-            generated_user_neighbors = {}
+            generated_user_neighbors = set()
             for uid2 in range(self.num_total_users):
                 if np.abs(self.users_latent_factors[uid] @ self.items_latent_factors[neighbor] - self.users_latent_factors[uid2] @ self.items_latent_factors[neighbor])\
                 <= self.cb(self.alpha_2,self.items_latent_factors[neighbor],self.users_m[uid], self.t) + self.cb(self.alpha_2,self.items_latent_factors[neighbor],self.users_m[uid2], self.t):
@@ -98,9 +98,8 @@ class COFIBA(MFInteractor):
         mf_model = mf.SVD(num_lat=self.num_lat)
         mf_model.fit(self.train_consumption_matrix)
         self.items_latent_factors = mf_model.items_weights
-        self.num_latent_factors = len(self.items_latent_factors[0])
 
-        self.I = np.identity(self.num_latent_factors)
+        self.I = np.identity(self.num_lat)
 
         self.items_graph = self.new_graph(self.num_total_items)
             
@@ -112,24 +111,25 @@ class COFIBA(MFInteractor):
             self.users_graphs.append(users_graph)
             n_components, labels = scipy.sparse.csgraph.connected_components(users_graph)
             self.users_clusterings.append(labels)
-        self.users_b = np.zeros((self.num_total_users,self.num_latent_factors))
+        self.users_b = np.zeros((self.num_total_users,self.num_lat))
         self.users_m = []
         for i in range(self.num_total_users):
-            self.users_m.append(np.identity(self.num_latent_factors))
+            self.users_m.append(np.identity(self.num_lat))
 
         self.users_m = np.array(self.users_m)
         self.users_latent_factors = [np.linalg.inv(m) @ b for b, m in zip(self.users_b,self.users_m)]
+        self.t = 1
 
     def predict(self,uid,candidate_items,num_req_items):
         items_score = np.zeros(candidate_items.shape)
         for i, item in enumerate(candidate_items):
             users_graph, labels = self.update_user_cluster(uid,item)
-            user_connected_component = np.nonzero(labels[item] == labels)[0]
+            user_connected_component = np.nonzero(labels[uid] == labels)[0]
             items_score[i] = self.score(uid,item,user_connected_component)
         return items_score, None
-
 
     def update(self,uid,item,reward,additional_data):
         users_graph, labels = self.update_user_cluster(uid,item)
         item_cluster = self.items_clustering[item]
         self.users_graphs[item_cluster] = users_graph
+        self.update_item_cluster(uid,item)
