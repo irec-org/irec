@@ -51,7 +51,7 @@ class Interaction(EvaluationPolicy,Parameterizable):
             not_recommended[users_items_recommended[uid]] = 0
             items_not_recommended = np.nonzero(not_recommended)[0]
             items_score, additional_data = model.predict(uid,items_not_recommended,self.interaction_size)
-            best_items = np.argpartition(items_score,-self.interaction_size)[-self.interaction_size:]
+            best_items = items_not_recommended[np.argpartition(items_score,-self.interaction_size)[-self.interaction_size:]]
             # best_item = items_not_recommended[np.argmax(items_score)]
             users_items_recommended[uid].extend(best_items)
 
