@@ -37,6 +37,8 @@ interactors_general_settings = yaml.load(open("settings"+sep+"interactors_genera
 
 evaluation_policies_parameters = yaml.load(open("settings"+sep+"evaluation_policies_parameters.yaml"),Loader=yaml.SafeLoader)
 
+interactors_classes_names_to_names = {k: v['name'] for k, v in interactors_general_settings.items()}
+
 ir = InteractorRunner(dm,interactors_general_settings,interactors_preprocessor_paramaters,evaluation_policies_parameters)
 interactors_classes = ir.select_interactors()
 
@@ -61,9 +63,9 @@ for metric_evaluator in metrics_evaluators:
             metrics_pdm = PersistentDataManager(directory='metrics')
             metric_values = metrics_pdm.load(os.path.join(InteractorCache().get_id(dm,evaluation_policy,itr),metric_evaluator.get_id(),metric_name))
             if isinstance(metric_evaluator,InteractionMetricsEvaluator):
-                ax.plot(range(1,len(metric_values)+1),metric_values,label=itr_class.__name__)
+                ax.plot(range(1,len(metric_values)+1),metric_values,label=interactors_classes_names_to_names[itr_class.__name__])
             elif isinstance(metric_evaluator,CumulativeMetricsEvaluator):
-                ax.plot(range(1,len(metric_values)*50,50),metric_values,label=itr_class.__name__)
+                ax.plot(range(1,len(metric_values)*50,50),metric_values,label=interactors_classes_names_to_names[itr_class.__name__])
 
         ax.legend()
         if isinstance(metric_evaluator,InteractionMetricsEvaluator):
