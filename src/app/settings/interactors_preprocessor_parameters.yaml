@@ -1,7 +1,7 @@
 MovieLens 100k (B):
   PTS:
     parameters:
-      num_particles: 10
+      num_particles: 2
       var: 0.5
       var_u: 1.0
       var_v: 1.0
@@ -94,7 +94,7 @@ MovieLens 100k (B):
 MovieLens 1M (B):
   PTS:
     parameters:
-      num_particles: 10
+      num_particles: 2
       var: 0.5
       var_u: 1.0
       var_v: 1.0
@@ -187,7 +187,7 @@ MovieLens 1M (B):
 MovieLens 1M:
   PTS:
     parameters:
-      num_particles: 10
+      num_particles: 2
       var: 0.5
       var_u: 1.0
       var_v: 1.0
@@ -280,7 +280,7 @@ MovieLens 1M:
 MovieLens 10M:
   PTS:
     parameters:
-      num_particles: 10
+      num_particles: 2
       var: 0.5
       var_u: 1.0
       var_v: 1.0
@@ -373,7 +373,7 @@ MovieLens 10M:
 Good Books:
   PTS:
     parameters:
-      num_particles: 10
+      num_particles: 2
       var: 0.5
       var_u: 1.0
       var_v: 1.0
@@ -466,7 +466,7 @@ Good Books:
 Yahoo Music:
   PTS:
     parameters:
-      num_particles: 10
+      num_particles: 2
       var: 0.5
       var_u: 1.0
       var_v: 1.0
