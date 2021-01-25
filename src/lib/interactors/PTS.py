@@ -10,17 +10,22 @@ import random
 from .MFInteractor import MFInteractor
 from tqdm import tqdm
 from numba import njit, jit
+import mf
+from utils.PersistentDataManager import PersistentDataManager
+import joblib
 
 @njit
 def _softmax(x):
     return np.exp(x - np.max(x)) / np.sum(np.exp(x - np.max(x)))
 
 class PTS(MFInteractor):
-    def __init__(self,num_particles,var, *args, **kwargs):
+    def __init__(self,num_particles,var,var_u,var_v, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.num_particles = num_particles
         self.var = var
-        self.parameters.extend(['num_particles','var'])
+        self.var_u = var_u
+        self.var_v = var_v
+        self.parameters.extend(['num_particles','var','var_u','var_v'])
 
     def train(self,train_dataset):
         super().train(train_dataset)
@@ -32,8 +37,8 @@ class PTS(MFInteractor):
 
         self.particles_us = np.random.normal(size=(self.num_particles,self.num_total_users,self.num_lat))
         self.particles_vs = np.random.normal(size=(self.num_particles,self.num_total_items,self.num_lat))
-        self.particles_var_us = np.ones(shape=(self.num_particles))
-        self.particles_var_is = np.ones(shape=(self.num_particles))
+        self.particles_var_us = np.ones(shape=(self.num_particles))*self.var_u
+        self.particles_var_vs = np.ones(shape=(self.num_particles))*self.var_v
 
         self.particles_ids = np.arange(self.num_particles)
         self.items_consumed_users = defaultdict(list)
@@ -44,7 +49,34 @@ class PTS(MFInteractor):
             uid = int(self.train_dataset.data[i,0])
             item = int(self.train_dataset.data[i,1])
             reward = self.train_dataset.data[i,2]
-            self.update(uid,item,reward,None)
+            # self.update(uid,item,reward,None)
+            self.users_consumed_items[uid].append(item)
+            self.users_consumed_items_rewards[uid].append(reward)
+            self.items_consumed_users[item].append(uid)
+            self.items_consumed_users_rewards[item].append(reward)
+
+        mf_model = mf.PMF(num_lat=self.num_lat,var=self.var,user_var=self.var_u,item_var=self.var_v)
+        mf_model_id = joblib.hash((mf_model.get_id(),self.train_consumption_matrix))
+        pdm = PersistentDataManager('state_save')
+        if pdm.file_exists(mf_model_id):
+            mf_model = pdm.load(mf_model_id)
+        else:
+            mf_model.fit(self.train_consumption_matrix)
+            pdm.save(mf_model_id,mf_model)
+
+        for i in range(self.num_particles):
+            self.particles_us[i]=mf_model.users_weights
+            self.particles_vs[i]=mf_model.items_weights
+
+        # for uid in self.users_consumed_items.keys():
+        #     item = self.users_consumed_items[uid].pop()
+        #     reward = self.users_consumed_items_rewards[uid].pop()
+        #     self.update(uid,item,reward,None)
+
+        # for item in self.items_consumed_users.keys():
+        #     uid = self.items_consumed_users[item].pop()
+        #     reward = self.items_consumed_users_rewards[item].pop()
+        #     self.update(uid,item,reward,None)
         
     def predict(self,uid,candidate_items,num_req_items):
         particle_idx = np.random.choice(self.particles_ids)
@@ -54,6 +86,7 @@ class PTS(MFInteractor):
     def update(self,uid,item,reward,additional_data):
         with threadpool_limits(limits=1, user_api='blas'):
             updated_history = False
+
             lambdas_u_i = np.empty(shape=(self.num_particles,self.num_lat,self.num_lat))
             zetas_u_i  = np.empty(shape=(self.num_particles,self.num_lat))
             mus_u_i = np.empty(shape=(self.num_particles,self.num_lat))
@@ -78,14 +111,14 @@ class PTS(MFInteractor):
             new_particles_us = np.empty(shape=(self.num_particles,self.num_total_users,self.num_lat))
             new_particles_vs = np.empty(shape=(self.num_particles,self.num_total_items,self.num_lat))
             new_particles_var_us = np.empty(shape=(self.num_particles))
-            new_particles_var_is = np.empty(shape=(self.num_particles))
+            new_particles_var_vs = np.empty(shape=(self.num_particles))
 
             for i in range(self.num_particles):
                 d = ds[i]
                 new_particles_us[i]=self.particles_us[d]
                 new_particles_vs[i]=self.particles_vs[d]
                 new_particles_var_us[i]=self.particles_var_us[d]
-                new_particles_var_is[i]=self.particles_var_is[d]
+                new_particles_var_vs[i]=self.particles_var_vs[d]
 
             if not updated_history:
                 self.users_consumed_items[uid].append(item)
@@ -105,7 +138,7 @@ class PTS(MFInteractor):
                 new_particles_us[i][uid] = sampled_user_vector
 
                 u_i = new_particles_us[i][self.items_consumed_users[item],:]
-                lambda_v_i = 1/self.var * (u_i.T @ u_i) + 1/new_particles_var_is[i]*np.eye(self.num_lat)
+                lambda_v_i = 1/self.var * (u_i.T @ u_i) + 1/new_particles_var_vs[i]*np.eye(self.num_lat)
 
                 zeta = np.sum(np.multiply(u_i,np.array(self.items_consumed_users_rewards[item]).reshape(-1, 1)),axis=0)
                 inv_lambda_v_i = np.linalg.inv(lambda_v_i)
@@ -122,4 +155,4 @@ class PTS(MFInteractor):
             self.particles_us=new_particles_us
             self.particles_vs=new_particles_vs
             self.particles_var_us=new_particles_var_us
-            self.particles_var_is=new_particles_var_is
+            self.particles_var_vs=new_particles_var_vs
