@@ -21,12 +21,12 @@ class EGreedy(ExperimentalInteractor):
         self.items_mean_values = np.zeros(self.num_total_items)
         self.items_count = np.zeros(self.num_total_items,dtype=int)
 
-        self.items_mean_values = np.mean(self.train_consumption_matrix[self.train_dataset.uids],axis=0).A.flatten()
-        self.items_count += self.train_consumption_matrix[self.train_dataset.uids].shape[0]
+        self.items_mean_values = np.mean(self.train_consumption_matrix[self.train_dataset.uids.astype(int)],axis=0).A.flatten()
+        self.items_count += self.train_consumption_matrix[self.train_dataset.uids.astype(int)].shape[0]
 
     def predict(self,uid,candidate_items,num_req_items):
         if self.epsilon < np.random.rand():
-            items_score = items_mean_values[candidate_items]
+            items_score = self.items_mean_values[candidate_items]
         else:
             items_score = np.random.rand(len(candidate_items))
         return items_score, None
