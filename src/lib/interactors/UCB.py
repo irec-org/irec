@@ -23,21 +23,12 @@ class UCB(ExperimentalInteractor):
         self.items_count = np.zeros(self.num_total_items,dtype=int)
 
         self.t = 1
-
-        # users_num_interactions = defaultdict(int)
-        # available_users = set(uids)
-
         for i in range(self.train_dataset.data.shape[0]):
-            uid = self.train_dataset.data[i,0]
-            item = self.train_dataset.data[i,1]
+            uid = int(self.train_dataset.data[i,0])
+            item = int(self.train_dataset.data[i,1])
             reward = self.train_dataset.data[i,2]
             self.update(uid,item,reward,None)
             self.increment_time()
-        # mask = np.ones(self.train_consumption_matrix.shape[0], dtype=bool)
-        # mask[uids] = 0
-        # self.items_mean_values = np.mean(self.train_consumption_matrix[mask],axis=0).A.flatten()
-        # self.items_count += self.train_consumption_matrix[mask].shape[0]
-        # self.t += np.prod(self.train_consumption_matrix[mask].shape)
 
     def predict(self,uid,candidate_items,num_req_items):
         with np.errstate(divide='ignore'):

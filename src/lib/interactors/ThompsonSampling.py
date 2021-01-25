@@ -21,10 +21,12 @@ class ThompsonSampling(ExperimentalInteractor):
         self.alphas = np.ones(self.num_total_items)*self.alpha_0
         self.betas = np.ones(self.num_total_items)*self.beta_0
 
-        a = np.sum(self.train_consumption_matrix>=self.train_dataset.mean_rating,
-                                        axis=0).A.flatten()
-        self.alphas += a
-        self.betas += self.train_consumption_matrix.shape[0] - a
+        for i in range(self.train_dataset.data.shape[0]):
+            uid = int(self.train_dataset.data[i,0])
+            item = int(self.train_dataset.data[i,1])
+            reward = self.train_dataset.data[i,2]
+            self.update(uid,item,reward,None)
+            self.increment_time()
 
     def predict(self,uid,candidate_items,num_req_items):
         items_score = np.random.beta(self.alphas[candidate_items],
@@ -32,7 +34,6 @@ class ThompsonSampling(ExperimentalInteractor):
         return items_score, None
 
     def update(self,uid,item,reward,additional_data):
-        reward = reward
-        reward = 1 if reward >= self.train_dataset.mean_rating else 0
+        reward = 1 if (reward >= self.train_dataset.mean_rating) else 0
         self.alphas[item] += reward
         self.betas[item] += 1-reward
