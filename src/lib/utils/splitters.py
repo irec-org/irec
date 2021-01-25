@@ -11,7 +11,7 @@ class TrainTestConsumption(Splitter):
     def __init__(self,train_size=0.8, test_consumes=1,crono=False,*args,**kwargs):
         super().__init__(*args,**kwargs)
         self.train_size=0.8
-        self.test_consumes=0.8
+        self.test_consumes=test_consumes
         self.crono = crono
 
         self.parameters.extend(['train_size','test_consumes','crono'])
@@ -42,4 +42,17 @@ class TrainTestConsumption(Splitter):
         dataset.update_from_data()
         print("Test shape:",test_dataset.data.shape)
         print("Train shape:",train_dataset.data.shape)
+        return train_dataset, test_dataset
+
+class TRTETrainValidation(Splitter):
+    def __init__(self,train_size=0.8, test_consumes=1,crono=False,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        self.train_size=0.8
+        self.test_consumes=test_consumes
+        self.crono = crono
+        self.parameters.extend(['train_size','test_consumes','crono'])
+
+    def process(self, train_dataset, test_dataset):
+        ttc = TrainTestConsumption(self.train_size, self.test_consumes, self.crono)
+        train_dataset, test_dataset = ttc.process(train_dataset)
         return train_dataset, test_dataset
