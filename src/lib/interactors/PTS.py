@@ -40,14 +40,11 @@ class PTS(MFInteractor):
         self.items_consumed_users_rewards = defaultdict(list)
         self.users_consumed_items = defaultdict(list)
         self.users_consumed_items_rewards = defaultdict(list)
-        for i in range(len(self.train_dataset.data)):
+        for i in tqdm(range(len(self.train_dataset.data))):
             uid = int(self.train_dataset.data[i,0])
             item = int(self.train_dataset.data[i,1])
             reward = self.train_dataset.data[i,2]
-            self.users_consumed_items[uid].append(item)
-            self.users_consumed_items_rewards[uid].append(reward)
-            self.items_consumed_users[item].append(uid)
-            self.items_consumed_users_rewards[item].append(reward)
+            self.update(uid,item,reward,None)
         
     def predict(self,uid,candidate_items,num_req_items):
         particle_idx = np.random.choice(self.particles_ids)
