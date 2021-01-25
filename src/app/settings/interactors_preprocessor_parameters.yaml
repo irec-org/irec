@@ -3,7 +3,7 @@ MovieLens 100k (B):
     parameters:
       num_particles: 5
       var: 0.5
-      num_lat: 10
+      num_lat: 2
   COFIBA:
     parameters:
       alpha: 1
@@ -92,9 +92,9 @@ MovieLens 100k (B):
 MovieLens 1M (B):
   PTS:
     parameters:
-      num_particles: 5
+      num_particles: 2
       var: 0.5
-      num_lat: 10
+      num_lat: 2
   COFIBA:
     parameters:
       alpha: 1
@@ -183,9 +183,9 @@ MovieLens 1M (B):
 MovieLens 1M (B):
   PTS:
     parameters:
-      num_particles: 5
+      num_particles: 2
       var: 0.5
-      num_lat: 10
+      num_lat: 2
   COFIBA:
     parameters:
       alpha: 1
@@ -274,9 +274,9 @@ MovieLens 1M (B):
 MovieLens 1M (B):
   PTS:
     parameters:
-      num_particles: 5
+      num_particles: 2
       var: 0.5
-      num_lat: 10
+      num_lat: 2
   COFIBA:
     parameters:
       alpha: 1
@@ -365,9 +365,9 @@ MovieLens 1M (B):
 MovieLens 1M (B):
   PTS:
     parameters:
-      num_particles: 5
+      num_particles: 2
       var: 0.5
-      num_lat: 10
+      num_lat: 2
   COFIBA:
     parameters:
       alpha: 1
@@ -456,9 +456,9 @@ MovieLens 1M (B):
 MovieLens 1M (B):
   PTS:
     parameters:
-      num_particles: 5
+      num_particles: 2
       var: 0.5
-      num_lat: 10
+      num_lat: 2
   COFIBA:
     parameters:
       alpha: 1
@@ -547,9 +547,9 @@ MovieLens 1M (B):
 MovieLens 1M:
   PTS:
     parameters:
-      num_particles: 5
+      num_particles: 2
       var: 0.5
-      num_lat: 10
+      num_lat: 2
   COFIBA:
     parameters:
       alpha: 1
@@ -638,9 +638,9 @@ MovieLens 1M:
 MovieLens 10M:
   PTS:
     parameters:
-      num_particles: 5
+      num_particles: 2
       var: 0.5
-      num_lat: 10
+      num_lat: 2
   COFIBA:
     parameters:
       alpha: 1
@@ -729,9 +729,9 @@ MovieLens 10M:
 Good Books:
   PTS:
     parameters:
-      num_particles: 5
+      num_particles: 2
       var: 0.5
-      num_lat: 10
+      num_lat: 2
   COFIBA:
     parameters:
       alpha: 1
@@ -820,9 +820,9 @@ Good Books:
 Yahoo Music:
   PTS:
     parameters:
-      num_particles: 5
+      num_particles: 2
       var: 0.5
-      num_lat: 10
+      num_lat: 2
   COFIBA:
     parameters:
       alpha: 1

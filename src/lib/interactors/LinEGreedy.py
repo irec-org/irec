@@ -4,6 +4,7 @@ import random
 from tqdm import tqdm
 #import util
 from threadpoolctl import threadpool_limits
+import mf
 import ctypes
 from .MFInteractor import MFInteractor
 class LinEGreedy(MFInteractor):
@@ -23,8 +24,8 @@ class LinEGreedy(MFInteractor):
         self.items_weights = mf_model.items_weights
 
 
-        bs = defaultdict(lambda: np.zeros(self.num_latent_factors))
-        As = defaultdict(lambda: self.init_A(self.num_latent_factors))
+        self.bs = defaultdict(lambda: np.zeros(self.num_lat))
+        self.As = defaultdict(lambda: self.init_A(self.num_lat))
         # uids = self.test_users
         # self.items_weights = items_weights
         # num_total_users = len(uids)
@@ -47,8 +48,8 @@ class LinEGreedy(MFInteractor):
         return np.eye(num_lat)
 
     def predict(self,uid,candidate_items,num_req_items):
-        b = bs[uid]
-        A = As[uid]
+        b = self.bs[uid]
+        A = self.As[uid]
 
         mean = np.dot(np.linalg.inv(A),b)
         max_i = np.NAN
@@ -57,18 +58,20 @@ class LinEGreedy(MFInteractor):
         rand = np.where(self.epsilon>rand, True, False) 
 
         cnz = np.count_nonzero(rand)
-        if cnz == min(self.interaction_size,len(candidate_items)):
-            items_score = mean @ self.items_weights[candidate_items].T
-        else:
+        if cnz == min(num_req_items,len(candidate_items)):
             items_score = np.zeros(len(candidate_items))
+        else:
+        # if cnz == min(num_req_items,len(candidate_items)):
+            items_score = mean @ self.items_weights[candidate_items].T
+        # else:
 
         randind= random.sample(list(range(len(candidate_items))),k=np.count_nonzero(rand))
         items_score[randind] = np.inf
-        # rand = np.random.rand(min(self.interaction_size,len(candidate_items)))
-            
         return items_score, None
+
     def update(self,uid,item,reward,additional_data):
-        # for max_i in result[i*self.interaction_size:(i+1)*self.interaction_size]:
+        b = self.bs[uid]
+        A = self.As[uid]
         max_item_mean = self.items_weights[item]
         A += max_item_mean[:,None].dot(max_item_mean[None,:])
         b += reward*max_item_mean
