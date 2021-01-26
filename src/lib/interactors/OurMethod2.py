@@ -16,7 +16,7 @@ from .MFInteractor import MFInteractor
 import interactors
 
 class OurMethod2(MFInteractor):
-    def __init__(self, alpha=1.0,*args, **kwargs):
+    def __init__(self, alpha,*args, **kwargs):
         super().__init__(*args, **kwargs)
         self.alpha = alpha
         self.parameters.extend(['alpha'])
