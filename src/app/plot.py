@@ -67,7 +67,9 @@ for metric_evaluator in metrics_evaluators:
             elif isinstance(metric_evaluator,CumulativeMetricsEvaluator):
                 ax.plot(range(1,len(metric_values)*50,50),metric_values,label=interactors_classes_names_to_names[itr_class.__name__])
 
-        ax.legend()
+        plt.legend(bbox_to_anchor=(0-0.1,1.1,1+2*0.1,0.2), loc="lower left",
+                mode="expand", borderaxespad=0, ncol=4,fontsize=12)
+
         if isinstance(metric_evaluator,InteractionMetricsEvaluator):
             ax.set_xlabel("Interactions",size=18)
         elif isinstance(metric_evaluator,CumulativeMetricsEvaluator):
