@@ -107,7 +107,7 @@ class InteractionMetricsEvaluator(MetricsEvaluator):
                 metric = metric_class(ground_truth_dataset=self.ground_truth_dataset,
                                     relevance_evaluator=self.relevance_evaluator)
             for uid in self.uids:
-                interaction_results = self.users_items_recommended[uid][i:i+interaction_size]
+                interaction_results = self.users_items_recommended[uid][i*interaction_size:i*interaction_size+interaction_size]
                 for item in interaction_results:
                     metric.update_recommendation(uid,item,self.ground_truth_consumption_matrix[uid,item])
 
