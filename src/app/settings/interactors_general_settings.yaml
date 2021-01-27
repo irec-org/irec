@@ -1,5 +1,5 @@
 PTS:
-  name: Particle Thompson Sampling
+  name: PTS
   evaluation_policy: Interaction
 Random:
   name: Random
