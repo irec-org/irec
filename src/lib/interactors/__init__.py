@@ -30,3 +30,4 @@ from .COFIBA import *
 from .OurMethod2 import *
 from .PTS import *
 from .MFInteractor import *
+from .NICF import NICF

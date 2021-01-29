@@ -1,3 +1,6 @@
+NICF:
+  name: NICF
+  evaluation_policy: Interaction
 PTS:
   name: PTS
   evaluation_policy: Interaction
