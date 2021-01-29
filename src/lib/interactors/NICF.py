@@ -511,9 +511,7 @@ class NICF(ExperimentalInteractor):
             done = True
         self.short[action] = 1
         t = self.state[1] + [[action, reward, done]]
-        info = {"precision": self.precision(t),
-                "recall": self.recall(t, self.state[0][0]),
-                "rate":rate}
+        info = {"rate":rate}
         self.state[1].append([action, reward, done, info])
         return self.state, reward, done, info
 
@@ -560,8 +558,8 @@ class NICF(ExperimentalInteractor):
         self.tau = 0
 
         args = Namespace(**{i: getattr(self,i) for i in self.parameters},
-                item_num=self.train_dataset.num_total_items,
-                utype_num = self.train_dataset.num_total_users)
+                item_num=self.train_dataset.num_total_items+1,
+                utype_num = self.train_dataset.num_total_users+1)
         self.args = args
         self.fa = FA.create_model_without_distributed(args)
         self.memory = []
@@ -584,6 +582,7 @@ class NICF(ExperimentalInteractor):
         pass
         
     def predict(self,uid,candidate_items,num_req_items):
+        uid += 1
         if uid not in self.test_users_states:
             self.test_users_states[uid] = [(uid,1),[]]
         state = self.test_users_states[uid]
@@ -601,12 +600,24 @@ class NICF(ExperimentalInteractor):
         return items_score, None
 
     def update(self,uid,item,reward,additional_data):
+        uid += 1
+        item += 1
         if uid not in self.test_users_states:
             self.test_users_states[uid] = [(uid,1),[]]
         state = self.test_users_states[uid]
         self.state = state
-        self.step(item)
 
+        action = item
+        done = False
+        rate = reward
+        if rate>=4:
+            reward = 1
+        else:
+            reward = 0
+
+        t = self.state[1] + [[action, reward, done]]
+        info = {"rate":rate}
+        self.state[1].append([action, reward, done, info])
 
     def convert_batch2dict(self,batch,epoch):
         uids = []
