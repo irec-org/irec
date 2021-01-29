@@ -107,6 +107,21 @@ MovieLens 100k (B):
     parameters:
       alpha: 0.2
 MovieLens 1M (B):
+  NICF:
+          parameters:
+                  time_step: 3
+                  latent_factor: 10
+                  learning_rate: 0.01
+                  training_epoch: 30000
+                  rnn_layer: 1
+                  inner_epoch: 50
+                  batch: 128
+                  gamma: 0.0
+                  clip_param: 0.2
+                  restore_model: false
+                  num_blocks: 2
+                  num_heads: 1
+                  dropout_rate: 0.1
   PTS:
     parameters:
       num_particles: 2
@@ -200,6 +215,21 @@ MovieLens 1M (B):
     parameters:
       alpha: 0.2
 MovieLens 1M:
+  NICF:
+          parameters:
+                  time_step: 3
+                  latent_factor: 10
+                  learning_rate: 0.01
+                  training_epoch: 30000
+                  rnn_layer: 1
+                  inner_epoch: 50
+                  batch: 128
+                  gamma: 0.0
+                  clip_param: 0.2
+                  restore_model: false
+                  num_blocks: 2
+                  num_heads: 1
+                  dropout_rate: 0.1
   PTS:
     parameters:
       num_particles: 2
@@ -293,6 +323,21 @@ MovieLens 1M:
     parameters:
       alpha: 0.2
 MovieLens 10M:
+  NICF:
+          parameters:
+                  time_step: 3
+                  latent_factor: 10
+                  learning_rate: 0.01
+                  training_epoch: 30000
+                  rnn_layer: 1
+                  inner_epoch: 50
+                  batch: 128
+                  gamma: 0.0
+                  clip_param: 0.2
+                  restore_model: false
+                  num_blocks: 2
+                  num_heads: 1
+                  dropout_rate: 0.1
   PTS:
     parameters:
       num_particles: 2
@@ -386,6 +431,21 @@ MovieLens 10M:
     parameters:
       alpha: 0.2
 Good Books:
+  NICF:
+          parameters:
+                  time_step: 3
+                  latent_factor: 10
+                  learning_rate: 0.01
+                  training_epoch: 30000
+                  rnn_layer: 1
+                  inner_epoch: 50
+                  batch: 128
+                  gamma: 0.0
+                  clip_param: 0.2
+                  restore_model: false
+                  num_blocks: 2
+                  num_heads: 1
+                  dropout_rate: 0.1
   PTS:
     parameters:
       num_particles: 2
@@ -479,6 +539,21 @@ Good Books:
     parameters:
       alpha: 0.2
 Yahoo Music:
+  NICF:
+          parameters:
+                  time_step: 3
+                  latent_factor: 10
+                  learning_rate: 0.01
+                  training_epoch: 30000
+                  rnn_layer: 1
+                  inner_epoch: 50
+                  batch: 128
+                  gamma: 0.0
+                  clip_param: 0.2
+                  restore_model: false
+                  num_blocks: 2
+                  num_heads: 1
+                  dropout_rate: 0.1
   PTS:
     parameters:
       num_particles: 2
