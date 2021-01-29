@@ -4,7 +4,7 @@ MovieLens 100k (B):
                   time_step: 3
                   latent_factor: 10
                   learning_rate: 0.01
-                  training_epoch: 30000
+                  training_epoch: 300
                   rnn_layer: 1
                   inner_epoch: 50
                   batch: 128

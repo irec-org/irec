@@ -1,6 +1,3 @@
 Interaction:
   num_interactions: 10
   interaction_size: 5
-InteractionSItems:
-  num_interactions: 15
-  interaction_size: 5

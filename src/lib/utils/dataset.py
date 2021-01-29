@@ -23,25 +23,17 @@ class DatasetPreprocessor(Parameterizable):
     def get_id(self,*args,**kwargs):
         return super().get_id(len(self.parameters),*args,**kwargs)
 
-class Preprocessor(Parameterizable):
-    def __init__(self,pipeline=[],*args,**kwargs):
+class Pipeline(Parameterizable):
+    def __init__(self,steps=[],*args,**kwargs):
         super().__init__(*args,**kwargs)
-        self.pipeline = pipeline
+        self.steps = steps
+        self.parameters.extend(['steps'])
     def process(self,data):
         buf = data
-        for element in self.pipeline:
-            if getattr(self,element) != None:
-                buf = getattr(self,element).process(buf)
+        for element in self.steps:
+            buf = element.process(buf)
         return buf
         
-class ParserSplitterPreprocessor(Preprocessor):
-    def __init__(self,dataset_parser,splitter,*args,**kwargs):
-        super().__init__(*args,**kwargs)
-        self.dataset_parser = dataset_parser
-        self.splitter = splitter
-        self.pipeline.extend(['dataset_parser','splitter'])
-        self.parameters.extend(['splitter','dataset_parser'])
-    
 class DatasetDescriptor(Parameterizable):
     def __init__(self,dataset_dir,*args,**kwargs):
         super().__init__(*args,**kwargs)
@@ -72,10 +64,10 @@ class Dataset:
         
         # self.consumption_matrix = scipy.sparse.csr_matrix((self.data[:,2],(self..data[:,0],self.train_dataset.data[:,1])),(self.train_dataset.users_num,self.train_dataset.items_num))
 
-class DatasetParser(Parameterizable):
+class DataProcessor(Parameterizable):
     pass
 
-class TRTE(DatasetParser):
+class TRTE(DataProcessor):
     def process(self,dataset_descriptor):
         dataset_dir = dataset_descriptor.dataset_dir
         train_data = np.loadtxt(os.path.join(dataset_dir,'train.data'),delimiter='::')
@@ -92,7 +84,9 @@ class TRTE(DatasetParser):
         test_dataset.update_from_data()
         return train_dataset, test_dataset
 
-class MovieLens100k(DatasetParser):
+
+
+class MovieLens100k(DataProcessor):
     def process(self,dataset_descriptor):
         dataset_dir = dataset_descriptor.dataset_dir
         data = np.loadtxt(os.path.join(dataset_dir,'u.data'),delimiter='\t')
@@ -103,7 +97,7 @@ class MovieLens100k(DatasetParser):
         dataset.update_num_total_users_items()
         return dataset
 
-class MovieLens1M(DatasetParser):
+class MovieLens1M(DataProcessor):
     def process(self,dataset_descriptor):
         dataset_dir = dataset_descriptor.dataset_dir
         data = np.loadtxt(os.path.join(dataset_dir,'ratings.dat'),delimiter='::')
@@ -150,3 +144,54 @@ class Netflix:
         test_data = np.array((u_test,i_test,r_test,t_test))
         train_data = np.array((u_train,i_train,r_train,t_train))
         return train_data, test_data
+
+
+class TrainTestConsumption(DataProcessor):
+    def __init__(self,train_size=0.8, test_consumes=1,crono=False,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        self.train_size=0.8
+        self.test_consumes=test_consumes
+        self.crono = crono
+
+        self.parameters.extend(['train_size','test_consumes','crono'])
+        
+    def process(self,dataset):
+        data = dataset.data
+        num_users = len(np.unique(data[:,0]))
+        num_train_users = round(num_users*(self.train_size))
+        num_test_users = int(num_users-num_train_users)
+        data_df = pd.DataFrame(data)
+        users_items_consumed=data_df.groupby(0).count().iloc[:,0]
+        test_candidate_users=list(users_items_consumed[users_items_consumed>=self.test_consumes].to_dict().keys())
+        if self.crono:
+            users_start_time = data_df.groupby(0).min()[3].to_numpy()
+            test_uids = np.array(list(test_candidate_users[list(reversed(np.argsort(users_start_time[test_candidate_users])))])[:num_test_users])
+        else:
+            test_uids = np.array(random.sample(test_candidate_users,k=num_test_users))
+            # print(test_uids)
+        train_uids = np.array(list(set(range(num_users))-set(test_uids)))
+
+        data_isin_test_uids = np.isin(data[:,0],test_uids)
+
+        train_dataset = copy(dataset)
+        train_dataset.data = data[~data_isin_test_uids,:]
+        dataset.update_from_data()
+        test_dataset = copy(dataset)
+        test_dataset.data = data[data_isin_test_uids,:]
+        dataset.update_from_data()
+        print("Test shape:",test_dataset.data.shape)
+        print("Train shape:",train_dataset.data.shape)
+        return train_dataset, test_dataset
+
+class TRTETrainValidation(DataProcessor):
+    def __init__(self,train_size=0.8, test_consumes=1,crono=False,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        self.train_size=0.8
+        self.test_consumes=test_consumes
+        self.crono = crono
+        self.parameters.extend(['train_size','test_consumes','crono'])
+
+    def process(self, train_dataset, test_dataset):
+        ttc = TrainTestConsumption(self.train_size, self.test_consumes, self.crono)
+        train_dataset, test_dataset = ttc.process(train_dataset)
+        return train_dataset, test_dataset

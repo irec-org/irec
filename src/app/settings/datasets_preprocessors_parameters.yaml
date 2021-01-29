@@ -1,54 +1,47 @@
   - dataset_descriptor:
       dataset_dir: ml-100k/
     preprocessor:
-      dataset_parser: MovieLens100k
-      splitter: TrainTestConsumption
+      - MovieLens100k
+      - TrainTestConsumption
     name: MovieLens 100k (B)
   - dataset_descriptor:
       dataset_dir: ml-1m/
     preprocessor:
-      dataset_parser: MovieLens1M
-      splitter: TrainTestConsumption
+      - MovieLens1M
+      - TrainTestConsumption
     name: MovieLens 1M (B)
   - dataset_descriptor:
       dataset_dir: Train-Test_ML-1M/
     preprocessor:
-      dataset_parser: TRTE
-      splitter: null
+      - TRTE
     name: MovieLens 1M
   - dataset_descriptor:
       dataset_dir: Train-Test_ML-10M/
     preprocessor:
-      dataset_parser: TRTE
-      splitter: null
+      - TRTE
     name: MovieLens 10M
   - dataset_descriptor:
       dataset_dir: Train-Test_Good-Books/
     preprocessor:
-      dataset_parser: TRTE
-      splitter: null
+      - TRTE
     name: Good Books
   - dataset_descriptor:
       dataset_dir: Train-Test_Ciao-DVD/
     preprocessor:
-      dataset_parser: TRTE
-      splitter: null
+      - TRTE
     name: Ciao DVD
   - dataset_descriptor:
       dataset_dir: Train-Test_Amazon-Kindle-Store/
     preprocessor:
-      dataset_parser: TRTE
-      splitter: null
+      - TRTE
     name: Amazon Kindle Store
   - dataset_descriptor:
       dataset_dir: Train-Test_Netflix/
     preprocessor:
-      dataset_parser: Netflix
-      splitter: null
+      - Netflix
     name: Netflix
   - dataset_descriptor:
       dataset_dir: Train-Test_Yahoo-Music/
     preprocessor:
-      dataset_parser: TRTE
-      splitter: null
+      - TRTE
     name: Yahoo Music

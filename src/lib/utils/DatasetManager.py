@@ -44,48 +44,29 @@ class DatasetManager(Parameterizable):
         self.dataset_preprocessor = datasets_preprocessors[answers['dspp']]
         
     def initialize_engines(self):
-        dataset_parser = eval('dataset.'+self.dataset_preprocessor['preprocessor']['dataset_parser'])()
-        if self.dataset_preprocessor['preprocessor']['splitter'] != None:
-            with open("settings"+sep+"splitters_parameters.yaml") as splittersf:
-                splitters_settings = yaml.load(splittersf,Loader=self.loader)
-                splitter = eval('splitters.'+self.dataset_preprocessor['preprocessor']['splitter'])(**splitters_settings[self.dataset_preprocessor['preprocessor']['splitter']])
-        else:
-            splitter = None
-
+        pipeline = dataset.Pipeline()
+        with open("settings"+sep+"processors_parameters.yaml") as processors_parameters_f:
+            processors_parameters = yaml.load(processors_parameters_f,Loader=self.loader)
+            for data_processor in self.dataset_preprocessor['preprocessor']:
+                if data_processor in processors_parameters:
+                    pipeline.steps.append(eval('dataset.'+data_processor)(**processors_parameters[data_processor]))
+                else:
+                    pipeline.steps.append(eval('dataset.'+data_processor)())
         dataset_descriptor=dataset.DatasetDescriptor(
             os.path.join(
                 DirectoryDependent().DIRS['datasets'],
                 self.dataset_preprocessor['dataset_descriptor']['dataset_dir']))
-        preprocessor = dataset.ParserSplitterPreprocessor(
-            dataset_parser,splitter
-        )
+        preprocessor = pipeline
         self.dataset_preprocessor = dataset.DatasetPreprocessor(self.dataset_preprocessor['name'],dataset_descriptor,preprocessor)
 
     def run_preprocessor(self):
         self.dataset_preprocessed = self.dataset_preprocessor.preprocessor.process(self.dataset_preprocessor.dataset_descriptor)
         self.train_dataset = self.dataset_preprocessed[0]
         self.test_dataset = self.dataset_preprocessed[1]
-    #     self.dataset_parsed = self.dataset_preprocessor.preprocessor.dataset_parser.parse_dataset(self.dataset_preprocessor.dataset_descriptor)
-    # def run_splitter(self):
-    #     if self.dataset_preprocessor.preprocessor.splitter != None:
-            # with open("settings"+sep+"splitters.yaml") as splittersf:
-            #     self.splitters_settings = yaml.load(splittersf,Loader=self.loader)
-            #     self.splitter = eval('splitters.'+self.dataset_preprocessor['splitter'])(**self.splitters_settings[self.dataset_preprocessor['splitter']])
-        #     self.dataset_preprocessed=self.dataset_preprocessor.preprocessor.splitter.apply(self.dataset_parsed)
-        # else:
-        #     self.dataset_preprocessed = self.dataset_parsed
-
-        # self.train_dataset = self.dataset_preprocessed[0]
-        # self.test_dataset = self.dataset_preprocessed[1]
 
     def save(self):
-        # print(open(self.get_file_name(),'wb'))
-        # Path('/'.join(self.get_file_name().split('/')[:-1])).mkdir(parents=True, exist_ok=True)
         pdm = PersistentDataManager('dataset_preprocess')
         pdm.save(self.get_id(),self.dataset_preprocessed)
-        # util.create_path_to_file(self.get_file_name())
-        # pickle.dump(self.dataset_preprocessed,open(,'wb'))
-        # pass
 
     def load(self):
         pdm = PersistentDataManager('dataset_preprocess')
@@ -93,13 +74,3 @@ class DatasetManager(Parameterizable):
         self.train_dataset = self.dataset_preprocessed[0]
         self.test_dataset = self.dataset_preprocessed[1]
         return self.dataset_preprocessed
-        # self.dataset_preprocessed = pickle.load(open(self.get_file_name(),'rb'))
-        # return self.dataset_preprocessed
-
-    # def get_file_name(self):
-    #     # print(os.path.join(self.get_id()+'.pickle'))
-    #     return os.path.join(self.get_id())
-    # def get_id(self):
-    #     return 'dspp_'+self.dataset_preprocessor.get_id()
-            # self.dataset_parser.get_id()+\
-            # (','+self.splitter.get_id()) if self.dataset_preprocessor['splitter'] != None else ''

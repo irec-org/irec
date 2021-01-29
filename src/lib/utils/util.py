@@ -5,6 +5,7 @@ import os
 import multiprocessing
 import numpy as np
 from pathlib import Path
+from . import Parameterizable
 
 def dict_to_list_gen(d):
     for k, v in zip(d.keys(), d.values()):
@@ -16,18 +17,28 @@ def dict_to_list_gen(d):
 def dict_to_list(d):
     return list(dict_to_list_gen(d))
 
-def key_value_to_str(key,value):
+def value_to_str(value):
     if isinstance(value,dict):
-        return f"{key}:{{{dict_to_str(value)}}}"
+        return f"{{{dict_to_str(value)}}}"
+    elif isinstance(value, list):
+        return f"{join_strings(list(map(lambda x: value_to_str(x), value)))}"
+    elif isinstance(value, Parameterizable.Parameterizable):
+        return value.get_id()
     else:
-        return f"{key}:{str(value).replace('/','|')}"
+        return f"{str(value).replace('/','|')}"
+
+def key_value_to_str(key,value):
+    return f"{key}:{value_to_str(value)}"
+
+def join_strings(strings,num_bars=0):
+    return "/".join(strings[:num_bars])+("/" if num_bars and len(strings[num_bars:]) != 0 else "") +",".join(strings[num_bars:])
 
 def dict_to_str(dictionary,num_bars=0):
     strings = []
     for key, value in dictionary.items():
         strings.append(key_value_to_str(key,value))
 
-    return "/".join(strings[:num_bars])+("/" if num_bars and len(strings[num_bars:]) != 0 else "") +",".join(strings[num_bars:])
+    return join_strings(strings,num_bars=num_bars)
 
 def print_dict(dictionary,prefix=''):
     for key, value in dictionary.items():
