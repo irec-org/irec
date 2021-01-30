@@ -63,3 +63,21 @@
     - TRTE
     - TRTETrainValidation
   name: Good Books Validation
+- dataset_descriptor:
+    dataset_dir: Train-Test_Yahoo-Music/
+  preprocessor:
+    - TRTE
+    - TRTESample
+  name: Yahoo Music Sampled
+- dataset_descriptor:
+    dataset_dir: Train-Test_ML-10M/
+  preprocessor:
+    - TRTE
+    - TRTESample
+  name: MovieLens 10M Sampled
+- dataset_descriptor:
+    dataset_dir: Train-Test_Good-Books/
+  preprocessor:
+    - TRTE
+    - TRTESample
+  name: Good Books Sampled

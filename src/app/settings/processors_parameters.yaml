@@ -8,3 +8,6 @@ TRTETrainValidation:
   test_consumes: 1
   crono: False
   random_seed: 0
+TRTESample:
+  items_rate: 0.8
+  sample_method: 'popularity'
