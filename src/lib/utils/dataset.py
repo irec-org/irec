@@ -84,8 +84,6 @@ class TRTE(DataProcessor):
         test_dataset.update_from_data()
         return train_dataset, test_dataset
 
-
-
 class MovieLens100k(DataProcessor):
     def process(self,dataset_descriptor):
         dataset_dir = dataset_descriptor.dataset_dir
@@ -147,15 +145,16 @@ class Netflix:
 
 
 class TrainTestConsumption(DataProcessor):
-    def __init__(self,train_size=0.8, test_consumes=1,crono=False,*args,**kwargs):
+    def __init__(self,train_size, test_consumes,crono,random_seed,*args,**kwargs):
         super().__init__(*args,**kwargs)
-        self.train_size=0.8
+        self.train_size=train_size
         self.test_consumes=test_consumes
         self.crono = crono
-
-        self.parameters.extend(['train_size','test_consumes','crono'])
+        self.random_seed = random_seed
+        self.parameters.extend(['train_size','test_consumes','crono','random_seed'])
         
     def process(self,dataset):
+        np.random.seed(random_seed)
         data = dataset.data
         num_users = len(np.unique(data[:,0]))
         num_train_users = round(num_users*(self.train_size))

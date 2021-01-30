@@ -2,3 +2,4 @@ TrainTestConsumption:
   train_size: 0.8
   test_consumes: 1
   crono: False
+  random_seed: 0
