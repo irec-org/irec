@@ -17,6 +17,9 @@ class InteractorRunner():
         self.interactors_preprocessor_paramaters = interactors_preprocessor_paramaters
         self.evaluation_policies_parameters = evaluation_policies_parameters
 
+    def get_interactor_name(self,interactor_class_name):
+        return self.interactors_general_settings[interactor_class_name]['name']
+
     def select_interactors(self):
         pdm = PersistentDataManager(directory='state_save')
         choices = [v['name'] for v in self.interactors_general_settings.values()]
@@ -39,19 +42,14 @@ class InteractorRunner():
             pdm.save('interactors_selection_cache',list(OrderedDict.fromkeys(answers['interactors']+interactors_selection_cache)))
         else:
             pdm.save('interactors_selection_cache',answers['interactors'])
-            
         
         interactors_class_names = dict(zip([v['name'] for v in self.interactors_general_settings.values()],self.interactors_general_settings.keys()))
-        # interactors_names = dict(zip(self.interactors_general_settings.keys(),[v['name'] for v in self.interactors_general_settings.values()]))
 
         interactors_classes = list(map(lambda x:eval('interactors.'+interactors_class_names[x]),answers['interactors']))
         self.interactors_classes = interactors_classes
         return interactors_classes
 
     def create_interactor(self,itr_class):
-        # print(self.interactors_preprocessor_paramaters[self.dm.dataset_preprocessor.name])
-        # print(itr_class.__name__)
-        
         if self.interactors_preprocessor_paramaters[self.dm.dataset_preprocessor.name][itr_class.__name__] != None and 'parameters' in self.interactors_preprocessor_paramaters[self.dm.dataset_preprocessor.name][itr_class.__name__]:
             parameters = self.interactors_preprocessor_paramaters[self.dm.dataset_preprocessor.name][itr_class.__name__]['parameters']
         else:
@@ -62,9 +60,9 @@ class InteractorRunner():
         itr = itr_class(**parameters)
         return itr
         
-    def get_interactor_evaluation_policy(self,itr):
-        itr_evaluation_policy=self.interactors_general_settings[itr.__class__.__name__]['evaluation_policy']
-        evaluation_policy = eval('evaluation_policy.'+itr_evaluation_policy)(**self.evaluation_policies_parameters[itr_evaluation_policy])
+    def get_interactors_evaluation_policy(self):
+        evaluation_policy_name = open("settings/interactors_evaluation_policy.txt").read().replace('\n', '')
+        evaluation_policy = eval('evaluation_policy.'+evaluation_policy_name)(**self.evaluation_policies_parameters[evaluation_policy_name])
         return evaluation_policy
 
     def run_interactor(self,itr):

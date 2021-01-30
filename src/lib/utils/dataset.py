@@ -191,7 +191,7 @@ class TrainTestConsumption(DataProcessor):
             ['train_size', 'test_consumes', 'crono', 'random_seed'])
 
     def process(self, dataset):
-        np.random.seed(random_seed)
+        np.random.seed(self.random_seed)
         data = dataset.data
         num_users = len(np.unique(data[:, 0]))
         num_train_users = round(num_users * (self.train_size))

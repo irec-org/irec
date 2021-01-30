@@ -1,81 +1,54 @@
 NICF:
   name: NICF
-  evaluation_policy: Interaction
 PTS:
   name: PTS
-  evaluation_policy: Interaction
 Random:
   name: Random
-  evaluation_policy: Interaction
 LinUCB:
   name: LinUCB (MF)
-  evaluation_policy: Interaction
 OurMethod1:
   name: Old UCB-Learner
-  evaluation_policy: Interaction
 OurMethod2:
   name: New UCB-Learner
-  evaluation_policy: Interaction
 LinearUCB:
   name: Linear UCB (PMF)
-  evaluation_policy: Interaction
 COFIBA:
   name: COFIBA
-  evaluation_policy: Interaction
 ThompsonSampling:
   name: TS
-  evaluation_policy: Interaction
 kNNBandit:
   name: kNN-Bandit
-  evaluation_policy: Interaction
 MostPopular:
   name: Most Popular
-  evaluation_policy: Interaction
 LinEGreedy:
   name: Linear ε-Greedy (MF)
-  evaluation_policy: Interaction
 PPELPE:
   name: PPELPE
-  evaluation_policy: Interaction
 UCBLearner:
   name: UCB-Learner (MF)
-  evaluation_policy: Interaction
 GLM_UCB:
   name: GLM-UCB (PMF)
-  evaluation_policy: Interaction
 LinearEGreedy:
   name: Linear ε-Greedy (PMF)
-  evaluation_policy: Interaction
 LinearThompsonSampling:
   name: Linear TS (PMF)
-  evaluation_policy: Interaction
 EGreedy:
   name: ε-Greedy
-  evaluation_policy: Interaction
 UCB:
   name: UCB
-  evaluation_policy: Interaction
 MostRepresentative:
   name: Most Representative
-  evaluation_policy: Interaction
 Entropy0:
   name: Entropy0
-  evaluation_policy: Interaction
 HELF:
   name: HELF
-  evaluation_policy: Interaction
 PopPlusEnt:
   name: Pop+Ent
-  evaluation_policy: Interaction
 DistinctPopular:
   name: Distinct Popular
-  evaluation_policy: Interaction
 EMostPopular:
   name: ε-Most Popular
-  evaluation_policy: Interaction
 Entropy:
   name: Entropy
-  evaluation_policy: Interaction
 LogPopEnt:
   name: log(Pop)⋅Ent
-  evaluation_policy: Interaction

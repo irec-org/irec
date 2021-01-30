@@ -20,6 +20,8 @@ import metric
 from utils.util import run_parallel
 import ctypes
 
+BUFFER_SIZE_EVALUATOR = 50
+
 metrics_classes = [metric.Precision, metric.Recall, metric.Hits]
 
 dm = DatasetManager()
@@ -50,18 +52,20 @@ dataset = Dataset(data)
 dataset.update_from_data()
 dataset.update_num_total_users_items()
 
+
 metrics_evaluators = [
     InteractionMetricsEvaluator(dataset, metrics_classes),
-    CumulativeMetricsEvaluator(50, dataset, metrics_classes)
+    CumulativeMetricsEvaluator(BUFFER_SIZE_EVALUATOR, dataset, metrics_classes)
 ]
 
+
+evaluation_policy = ir.get_interactors_evaluation_policy()
 
 def evaluate_itr(metric_evaluator_id, dm_id, itr_class):
     metric_evaluator = ctypes.cast(metric_evaluator_id, ctypes.py_object).value
     dm = ctypes.cast(dm_id, ctypes.py_object).value
     print(f"Evaluating {itr_class.__name__} results")
     itr = ir.create_interactor(itr_class)
-    evaluation_policy = ir.get_interactor_evaluation_policy(itr)
     pdm = PersistentDataManager(directory='results')
     users_items_recommended = pdm.load(InteractorCache().get_id(
         dm, evaluation_policy, itr))

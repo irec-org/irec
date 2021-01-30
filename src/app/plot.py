@@ -24,6 +24,8 @@ plt.rcParams['axes.prop_cycle'] = cycler(color='krbgmyc')
 plt.rcParams['lines.linewidth'] = 2
 plt.rcParams['font.size'] = 15
 
+BUFFER_SIZE_EVALUATOR = 50
+
 metrics_classes = [metric.Precision,metric.Recall,metric.Hits]
 
 
@@ -49,15 +51,15 @@ dataset = Dataset(data)
 dataset.update_from_data()
 dataset.update_num_total_users_items()
 
-metrics_evaluators = [InteractionMetricsEvaluator(dataset,metrics_classes), CumulativeMetricsEvaluator(50,dataset,metrics_classes)]
-# ime = InteractionMetricsEvaluator(dataset,metrics_classes)
+metrics_evaluators = [InteractionMetricsEvaluator(dataset,metrics_classes), CumulativeMetricsEvaluator(BUFFER_SIZE_EVALUATOR,dataset,metrics_classes)]
+
+evaluation_policy = ir.get_interactors_evaluation_policy()
 
 for metric_evaluator in metrics_evaluators:
     for metric_name in map(lambda x: x.__name__,metrics_classes):
         fig, ax = plt.subplots()
         for itr_class in interactors_classes:
             itr = ir.create_interactor(itr_class)
-            evaluation_policy = ir.get_interactor_evaluation_policy(itr)
             pdm = PersistentDataManager(directory='results')
 
             metrics_pdm = PersistentDataManager(directory='metrics')
@@ -65,7 +67,7 @@ for metric_evaluator in metrics_evaluators:
             if isinstance(metric_evaluator,InteractionMetricsEvaluator):
                 ax.plot(range(1,len(metric_values)+1),metric_values,label=interactors_classes_names_to_names[itr_class.__name__])
             elif isinstance(metric_evaluator,CumulativeMetricsEvaluator):
-                ax.plot(range(1,len(metric_values)*50,50),metric_values,label=interactors_classes_names_to_names[itr_class.__name__])
+                ax.plot(range(1,len(metric_values)*BUFFER_SIZE_EVALUATOR,BUFFER_SIZE_EVALUATOR),metric_values,label=interactors_classes_names_to_names[itr_class.__name__])
 
         plt.legend(bbox_to_anchor=(0-0.1,1.1,1+2*0.1,0.2), loc="lower left",
                 mode="expand", borderaxespad=0, ncol=3,fontsize=12)
