@@ -45,3 +45,21 @@
     preprocessor:
       - TRTE
     name: Yahoo Music
+  - dataset_descriptor:
+      dataset_dir: Train-Test_Yahoo-Music/
+    preprocessor:
+      - TRTE
+      - TRTETrainValidation
+    name: Yahoo Music Validation
+  - dataset_descriptor:
+      dataset_dir: Train-Test_ML-10M/
+    preprocessor:
+      - TRTE
+      - TRTETrainValidation
+    name: MovieLens 10M Validation
+  - dataset_descriptor:
+      dataset_dir: Train-Test_Good-Books/
+    preprocessor:
+      - TRTE
+      - TRTETrainValidation
+    name: Good Books Validation

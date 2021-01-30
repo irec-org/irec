@@ -3,3 +3,8 @@ TrainTestConsumption:
   test_consumes: 1
   crono: False
   random_seed: 0
+TRTETrainValidation:
+  train_size: 0.8
+  test_consumes: 1
+  crono: False
+  random_seed: 0

@@ -183,14 +183,15 @@ class TrainTestConsumption(DataProcessor):
         return train_dataset, test_dataset
 
 class TRTETrainValidation(DataProcessor):
-    def __init__(self,train_size=0.8, test_consumes=1,crono=False,*args,**kwargs):
+    def __init__(self,train_size=0.8, test_consumes=1,crono=False,random_seed=0,*args,**kwargs):
         super().__init__(*args,**kwargs)
         self.train_size=0.8
         self.test_consumes=test_consumes
         self.crono = crono
-        self.parameters.extend(['train_size','test_consumes','crono'])
+        self.random_seed = self.random_seed
+        self.parameters.extend(['train_size','test_consumes','crono','random_seed'])
 
     def process(self, train_dataset, test_dataset):
-        ttc = TrainTestConsumption(self.train_size, self.test_consumes, self.crono)
+        ttc = TrainTestConsumption(self.train_size, self.test_consumes, self.crono, self.random_seed)
         train_dataset, test_dataset = ttc.process(train_dataset)
         return train_dataset, test_dataset
