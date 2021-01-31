@@ -66,7 +66,7 @@ metrics_evaluators = [
 
 evaluation_policy = ir.get_interactors_evaluation_policy()
 
-fig, axs = plt.subplots(nrows=2, ncols=3, figsize=(18, 17))
+fig, axs = plt.subplots(nrows=len(metrics_evaluators), ncols=len(metrics_classes), figsize=(18, 17))
 fig.suptitle(
     f"Top-{evaluation_policy.interaction_size} recommendation, {dm.dataset_preprocessor.name}"
 )
