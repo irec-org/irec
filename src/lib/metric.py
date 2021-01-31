@@ -6,7 +6,8 @@ from utils.Parameterizable import Parameterizable
 import time
 from utils.util import run_parallel
 import ctypes
-import utils.dataset as dataset
+# import utils.dataset as dataset
+from utils import dataset
 np.seterr(all='raise')
 
 
