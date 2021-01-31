@@ -29,9 +29,12 @@ class DatasetPreprocessor(Parameterizable):
 
 class Pipeline(Parameterizable):
 
-    def __init__(self, steps=[], *args, **kwargs):
+    def __init__(self, steps=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.steps = steps
+        if steps is None:
+            self.steps = []
+        else:
+            self.steps = steps
         self.parameters.extend(['steps'])
 
     def process(self, data):
