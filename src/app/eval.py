@@ -12,7 +12,7 @@ import numpy as np
 import scipy.sparse
 from utils.DatasetManager import DatasetManager
 import yaml
-from metric import InteractionMetricsEvaluator, CumulativeMetricsEvaluator
+from metric import InteractionMetricsEvaluator, CumulativeMetricsEvaluator, CumulativeInteractionMetricsEvaluator
 from utils.dataset import Dataset
 from utils.PersistentDataManager import PersistentDataManager
 from utils.InteractorCache import InteractorCache
@@ -52,14 +52,14 @@ dataset = Dataset(data)
 dataset.update_from_data()
 dataset.update_num_total_users_items()
 
-
 metrics_evaluators = [
     InteractionMetricsEvaluator(dataset, metrics_classes),
-    CumulativeMetricsEvaluator(BUFFER_SIZE_EVALUATOR, dataset, metrics_classes)
+    CumulativeMetricsEvaluator(BUFFER_SIZE_EVALUATOR, dataset, metrics_classes),
+    CumulativeInteractionMetricsEvaluator(dataset, metrics_classes)
 ]
 
-
 evaluation_policy = ir.get_interactors_evaluation_policy()
+
 
 def evaluate_itr(metric_evaluator_id, dm_id, itr_class):
     metric_evaluator = ctypes.cast(metric_evaluator_id, ctypes.py_object).value
