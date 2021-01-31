@@ -61,7 +61,7 @@ dataset.update_num_total_users_items()
 
 metrics_evaluators = [
     InteractionMetricsEvaluator(dataset, metrics_classes),
-    CumulativeMetricsEvaluator(50, dataset, metrics_classes)
+    CumulativeMetricsEvaluator(BUFFER_SIZE_EVALUATOR, dataset, metrics_classes)
 ]
 
 evaluation_policy = ir.get_interactors_evaluation_policy()
