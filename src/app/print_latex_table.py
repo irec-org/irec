@@ -52,29 +52,31 @@ ir = InteractorRunner(dm, interactors_general_settings,
                       evaluation_policies_parameters)
 interactors_classes = ir.select_interactors()
 
-metrics_evaluator = CumulativeInteractionMetricsEvaluator(
-    None, metrics_classes)
+metrics_evaluator = CumulativeInteractionMetricsEvaluator(None, metrics_classes)
 
 evaluation_policy = ir.get_interactors_evaluation_policy()
 
 nums_interactions_to_show = [5, 10, 20, 40]
 
+
 def generate_table_spec():
     res = '|'
-    for i in range(1 +
-            len(nums_interactions_to_show) * len(datasets_preprocessors)):
+    for i in range(1 + len(nums_interactions_to_show) *
+                   len(datasets_preprocessors)):
         res += 'c'
-        if i % (len(nums_interactions_to_show))==0:
+        if i % (len(nums_interactions_to_show)) == 0:
             res += '|'
     return res
 
+
 rtex_header = r"""
 \documentclass{article}
+\usepackage[landscape, paperwidth=15cm, paperheight=30cm, margin=0mm]{geometry}
 \usepackage{multirow}
 \begin{document}
 \begin{tabular}{%s}
 \hline
-Dataset & %s \\""" % (generate_table_spec(),' & '.join([
+Dataset & %s \\""" % (generate_table_spec(), ' & '.join([
     r"\multicolumn{%d}{c|}{%s}" % (len(nums_interactions_to_show), i['name'])
     for i in datasets_preprocessors
 ]))
@@ -84,8 +86,8 @@ rtex_footer = r"""
 """
 rtex = ""
 
-datasets_metrics_values = defaultdict(lambda:defaultdict(lambda:defaultdict(list)))
-
+datasets_metrics_values = defaultdict(
+    lambda: defaultdict(lambda: defaultdict(list)))
 
 for dataset_preprocessor in datasets_preprocessors:
     dm.initialize_engines(dataset_preprocessor)
@@ -100,10 +102,12 @@ for dataset_preprocessor in datasets_preprocessors:
                 os.path.join(
                     InteractorCache().get_id(dm, evaluation_policy, itr),
                     metrics_evaluator.get_id(), metric_class_name))
-            datasets_metrics_values[dataset_preprocessor['name']][metric_class_name][itr_class.__name__].extend([metric_values[i-1] for i in nums_interactions_to_show])
+            datasets_metrics_values[dataset_preprocessor['name']][
+                metric_class_name][itr_class.__name__].extend(
+                    [metric_values[i - 1] for i in nums_interactions_to_show])
 
-
-for metric_name, metric_class_name in zip(metrics_names,map(lambda x: x.__name__, metrics_classes)):
+for metric_name, metric_class_name in zip(
+        metrics_names, map(lambda x: x.__name__, metrics_classes)):
     rtex += r"""
 \hline
 \hline
@@ -115,15 +119,30 @@ T & %s \\
 """ % (' & '.join(
         map(
             lambda x: r"\multicolumn{%d}{c|}{%s}" %
-            (len(nums_interactions_to_show), x), [metric_name] * len(datasets_preprocessors))),
-        ' & '.join([' & '.join(
-            map(str, nums_interactions_to_show))]*len(datasets_preprocessors)
-            ))
+            (len(nums_interactions_to_show), x),
+            [metric_name] * len(datasets_preprocessors))), ' & '.join(
+                [' & '.join(map(str, nums_interactions_to_show))] *
+                len(datasets_preprocessors)))
     for itr_class in interactors_classes:
         rtex += "%s & " % (ir.get_interactor_name(itr_class.__name__))
-        rtex += ' & '.join([' & '.join(map(lambda x: f"{x:.4f}",datasets_metrics_values[dataset_preprocessor['name']][metric_class_name][itr_class.__name__]))
-            for dataset_preprocessor in datasets_preprocessors])
-        rtex += r'\\\hline'  + '\n'
-            
+        rtex += ' & '.join([
+            ' & '.join(
+                map(
+                    lambda x: f"{x:.4f}",
+                    datasets_metrics_values[dataset_preprocessor['name']]
+                    [metric_class_name][itr_class.__name__]))
+            for dataset_preprocessor in datasets_preprocessors
+        ])
+        rtex += r'\\\hline' + '\n'
 
-print(rtex_header + rtex + rtex_footer)
+res = rtex_header + rtex + rtex_footer
+
+tmp = '_'.join([
+    dataset_preprocessor['name']
+    for dataset_preprocessor in datasets_preprocessors
+])
+open(os.path.join(DirectoryDependent().DIRS['tex'], f'table_{tmp}.tex'),
+     'w+').write(res)
+os.system(
+    f"pdflatex -output-directory=\"{DirectoryDependent().DIRS['pdf']}\" \"{os.path.join(DirectoryDependent().DIRS['tex'],f'table_{tmp}.tex')}\""
+)

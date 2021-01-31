@@ -13,6 +13,8 @@ class DirectoryDependent:
     DIRS['export'] = os.path.join(DIRS['data'], 'export')
     DIRS['metrics'] = os.path.join(DIRS['state_save'], 'metrics')
     DIRS['datasets'] = os.path.join(DIRS['data'], 'datasets')
+    DIRS['tex'] = os.path.join(DIRS['data'], 'tex')
+    DIRS['pdf'] = os.path.join(DIRS['data'], 'pdf')
     EXISTS = False
     def __init__(self):
         if not self.EXISTS:
