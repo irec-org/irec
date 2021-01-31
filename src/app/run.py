@@ -16,8 +16,8 @@ import yaml
 
 def main():
     dm = DatasetManager()
-    dm.request_dataset_preprocessor()
-    dm.initialize_engines()
+    dataset_preprocessor = dm.request_dataset_preprocessor()
+    dm.initialize_engines(dataset_preprocessor)
     dm.load()
 
     interactors_preprocessor_paramaters = yaml.load(

@@ -12,7 +12,7 @@ import utils.util as util
 import pickle
 from utils.DatasetManager import DatasetManager
 dm = DatasetManager()
-dm.request_dataset_preprocessor()
-dm.initialize_engines()
+dataset_preprocessor = dm.request_dataset_preprocessor()
+dm.initialize_engines(dataset_preprocessor)
 dm.run_preprocessor()
 dm.save()

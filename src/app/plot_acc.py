@@ -28,8 +28,8 @@ BUFFER_SIZE_EVALUATOR = 50
 metrics_classes = [metric.Precision, metric.Recall, metric.Hits]
 
 dm = DatasetManager()
-dm.request_dataset_preprocessor()
-dm.initialize_engines()
+dataset_preprocessor = dm.request_dataset_preprocessor()
+dm.initialize_engines(dataset_preprocessor)
 dm.load()
 
 interactors_preprocessor_paramaters = yaml.load(
