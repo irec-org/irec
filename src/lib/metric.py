@@ -6,6 +6,7 @@ from utils.Parameterizable import Parameterizable
 import time
 from utils.util import run_parallel
 import ctypes
+import utils.dataset as dataset
 np.seterr(all='raise')
 
 
@@ -113,12 +114,13 @@ class InteractionMetricsEvaluator(MetricsEvaluator):
     def __init__(self, ground_truth_dataset, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.ground_truth_dataset = ground_truth_dataset
-        self.ground_truth_consumption_matrix = scipy.sparse.csr_matrix(
-            (self.ground_truth_dataset.data[:, 2],
-             (self.ground_truth_dataset.data[:, 0],
-              self.ground_truth_dataset.data[:, 1])),
-            (self.ground_truth_dataset.num_total_users,
-             self.ground_truth_dataset.num_total_items))
+        if isinstance(ground_truth_dataset,dataset.Dataset):
+            self.ground_truth_consumption_matrix = scipy.sparse.csr_matrix(
+                (self.ground_truth_dataset.data[:, 2],
+                 (self.ground_truth_dataset.data[:, 0],
+                  self.ground_truth_dataset.data[:, 1])),
+                (self.ground_truth_dataset.num_total_users,
+                 self.ground_truth_dataset.num_total_items))
 
     @staticmethod
     def _metric_evaluation(obj_id, num_interactions, interaction_size,

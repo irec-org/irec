@@ -24,8 +24,8 @@ class DatasetManager(Parameterizable):
 
     def get_datasets_preprocessors_settings(self):
         with open("settings"+sep+"datasets_preprocessors_parameters.yaml") as f:
-            self.loader = yaml.SafeLoader
-            datasets_preprocessors = yaml.load(f,Loader=self.loader)
+            loader = yaml.SafeLoader
+            datasets_preprocessors = yaml.load(f,Loader=loader)
 
             datasets_preprocessors = {setting['name']: setting
                                       for setting in datasets_preprocessors}
@@ -41,13 +41,26 @@ class DatasetManager(Parameterizable):
                           )
         ]
         answers=inquirer.prompt(q)
-        self.dataset_preprocessor = datasets_preprocessors[answers['dspp']]
+        return datasets_preprocessors[answers['dspp']]
+
+    def request_datasets_preprocessors(self):
+
+        datasets_preprocessors = self.get_datasets_preprocessors_settings()
+        q = [
+            inquirer.Checkbox('dspp',
+                          message='Datasets Preprocessors',
+                          choices=list(datasets_preprocessors.keys())
+                          )
+        ]
+        answers=inquirer.prompt(q)
+        return list(map(lambda x: datasets_preprocessors[x], answers['dspp']))
         
-    def initialize_engines(self):
+    def initialize_engines(self,dataset_preprocessor):
         pipeline = dataset.Pipeline()
         with open("settings"+sep+"processors_parameters.yaml") as processors_parameters_f:
-            processors_parameters = yaml.load(processors_parameters_f,Loader=self.loader)
-            for data_processor in self.dataset_preprocessor['preprocessor']:
+            loader = yaml.SafeLoader
+            processors_parameters = yaml.load(processors_parameters_f,Loader=loader)
+            for data_processor in dataset_preprocessor['preprocessor']:
                 if data_processor in processors_parameters:
                     pipeline.steps.append(eval('dataset.'+data_processor)(**processors_parameters[data_processor]))
                 else:
@@ -55,9 +68,9 @@ class DatasetManager(Parameterizable):
         dataset_descriptor=dataset.DatasetDescriptor(
             os.path.join(
                 DirectoryDependent().DIRS['datasets'],
-                self.dataset_preprocessor['dataset_descriptor']['dataset_dir']))
+                dataset_preprocessor['dataset_descriptor']['dataset_dir']))
         preprocessor = pipeline
-        self.dataset_preprocessor = dataset.DatasetPreprocessor(self.dataset_preprocessor['name'],dataset_descriptor,preprocessor)
+        self.dataset_preprocessor = dataset.DatasetPreprocessor(dataset_preprocessor['name'],dataset_descriptor,preprocessor)
 
     def run_preprocessor(self):
         self.dataset_preprocessed = self.dataset_preprocessor.preprocessor.process(self.dataset_preprocessor.dataset_descriptor)
