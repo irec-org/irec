@@ -12,3 +12,5 @@ data/
 *.vscode
 *.eps
 *.png
+*.aux
+*.log
