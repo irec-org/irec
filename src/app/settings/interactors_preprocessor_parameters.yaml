@@ -72,6 +72,7 @@ MovieLens 100k (B):
       num_lat: 10
   LinearEGreedy:
     parameters:
+      epsilon: 0.1
       var: 0.05
       user_var: 0.01
       item_var: 0.01
@@ -180,6 +181,7 @@ MovieLens 1M (B):
       num_lat: 10
   LinearEGreedy:
     parameters:
+      epsilon: 0.1
       var: 0.05
       user_var: 0.01
       item_var: 0.01
@@ -288,6 +290,7 @@ MovieLens 1M:
       num_lat: 10
   LinearEGreedy:
     parameters:
+      epsilon: 0.1
       var: 0.05
       user_var: 0.01
       item_var: 0.01
@@ -396,6 +399,7 @@ MovieLens 10M:
       num_lat: 10
   LinearEGreedy:
     parameters:
+      epsilon: 0.1
       var: 0.05
       user_var: 0.01
       item_var: 0.01
@@ -504,6 +508,7 @@ Good Books:
       num_lat: 10
   LinearEGreedy:
     parameters:
+      epsilon: 0.1
       var: 0.05
       user_var: 0.01
       item_var: 0.01
@@ -612,6 +617,7 @@ Yahoo Music:
       num_lat: 10
   LinearEGreedy:
     parameters:
+      epsilon: 0.1
       var: 0.05
       user_var: 0.01
       item_var: 0.01
@@ -720,6 +726,7 @@ Yahoo Music Sampled:
       num_lat: 10
   LinearEGreedy:
     parameters:
+      epsilon: 0.1
       var: 0.05
       user_var: 0.01
       item_var: 0.01
@@ -828,6 +835,7 @@ MovieLens 10M Sampled:
       num_lat: 10
   LinearEGreedy:
     parameters:
+      epsilon: 0.1
       var: 0.05
       user_var: 0.01
       item_var: 0.01
@@ -936,6 +944,7 @@ Good Books Sampled:
       num_lat: 10
   LinearEGreedy:
     parameters:
+      epsilon: 0.1
       var: 0.05
       user_var: 0.01
       item_var: 0.01

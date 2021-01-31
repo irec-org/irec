@@ -3,7 +3,7 @@ from . import util
 
 class Parameterizable:
     def __init__(self,*args, **kwargs):
-        super().__init__(*args, **kwargs)
+        # super().__init__(*args, **kwargs)
         self.parameters = []
 
     def get_id(self,num_bars=0):
