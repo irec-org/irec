@@ -62,7 +62,7 @@ class InteractorRunner():
         self.interactors_classes = interactors_classes
         return interactors_classes
 
-    def create_interactor(self, itr_class, parameters):
+    def create_interactor(self, itr_class):
         if self.interactors_preprocessor_paramaters[
                 self.dm.dataset_preprocessor.name][
                     itr_class.
