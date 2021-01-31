@@ -13,7 +13,6 @@ import os
 from copy import copy
 from .Parameterizable import Parameterizable
 
-
 class DatasetPreprocessor(Parameterizable):
 
     def __init__(self, name, dataset_descriptor, preprocessor, *args, **kwargs):
