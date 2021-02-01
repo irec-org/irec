@@ -245,7 +245,9 @@ class TRTETrainValidation(DataProcessor):
         self.parameters.extend(
             ['train_size', 'test_consumes', 'crono', 'random_seed'])
 
-    def process(self, train_dataset, test_dataset):
+    def process(self, train_dataset_and_test_dataset):
+        train_dataset = train_dataset_and_test_dataset[0]
+        test_dataset = train_dataset_and_test_dataset[1]
         ttc = TrainTestConsumption(self.train_size, self.test_consumes,
                                    self.crono, self.random_seed)
         train_dataset, test_dataset = ttc.process(train_dataset)
