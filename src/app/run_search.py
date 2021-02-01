@@ -63,6 +63,8 @@ def main():
                                 interactors_classes,
                                 interactors_search_parameters)
             futures.append(f)
+            if len(futures) >= os.cpu_count():
+                completed, futures = wait(futures, return_when=FIRST_COMPLETED)
         for future in futures:
             future.result()
 

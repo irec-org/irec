@@ -12,7 +12,8 @@ import numpy as np
 import scipy.sparse
 from utils.DatasetManager import DatasetManager
 import yaml
-from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures import ProcessPoolExecutor, wait, FIRST_COMPLETED
+import time
 
 
 def run_interactors_in_base(dataset_preprocessor, interactors_general_settings,
@@ -54,8 +55,12 @@ def main():
                                 evaluation_policies_parameters,
                                 interactors_classes)
             futures.append(f)
-        for future in futures:
-            future.result()
+
+            if len(futures) >= os.cpu_count():
+                completed, futures = wait(futures, return_when=FIRST_COMPLETED)
+
+        for f in futures:
+            f.result()
 
 
 if __name__ == '__main__':
