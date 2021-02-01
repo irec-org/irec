@@ -12,14 +12,21 @@ import numpy as np
 import scipy.sparse
 from utils.DatasetManager import DatasetManager
 import yaml
+from concurrent.futures import ProcessPoolExecutor
 
-
-def main():
+def run_interactors_in_base(dataset_preprocessor,
+        interactors_general_settings,
+        interactors_preprocessor_paramaters,
+        evaluation_policies_parameters, interactors_classes):
     dm = DatasetManager()
-    dataset_preprocessor = dm.request_dataset_preprocessor()
     dm.initialize_engines(dataset_preprocessor)
     dm.load()
+    ir = InteractorRunner(dm, interactors_general_settings,
+            interactors_preprocessor_paramaters,
+            evaluation_policies_parameters)
+    ir.run_interactors(interactors_classes)
 
+def main():
     interactors_preprocessor_paramaters = yaml.load(
         open("settings" + sep + "interactors_preprocessor_parameters.yaml"),
         Loader=yaml.SafeLoader)
@@ -30,12 +37,22 @@ def main():
     evaluation_policies_parameters = yaml.load(
         open("settings" + sep + "evaluation_policies_parameters.yaml"),
         Loader=yaml.SafeLoader)
-
-    ir = InteractorRunner(dm, interactors_general_settings,
-                          interactors_preprocessor_paramaters,
-                          evaluation_policies_parameters)
-    ir.select_interactors()
-    ir.run_interactors()
+    dm = DatasetManager()
+    datasets_preprocessors = dm.request_datasets_preprocessors()
+    ir = InteractorRunner(None, interactors_general_settings,
+            interactors_preprocessor_paramaters,
+            evaluation_policies_parameters)
+    interactors_classes = ir.select_interactors()
+    with ProcessPoolExecutor() as executor:
+        futures = []
+        for dataset_preprocessor in datasets_preprocessors:
+            f = executor.submit(run_interactors_in_base,dataset_preprocessor,
+                    interactors_general_settings,
+                    interactors_preprocessor_paramaters,
+                    evaluation_policies_parameters, interactors_classes)
+            futures.append(f)
+        for future in futures:
+            future.result()
 
 
 if __name__ == '__main__':

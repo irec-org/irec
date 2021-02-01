@@ -59,7 +59,6 @@ class InteractorRunner():
         interactors_classes = list(
             map(lambda x: eval('interactors.' + interactors_class_names[x]),
                 answers['interactors']))
-        self.interactors_classes = interactors_classes
         return interactors_classes
 
     def create_interactor(self, itr_class):
@@ -102,16 +101,16 @@ class InteractorRunner():
         self = ctypes.cast(obj_id, ctypes.py_object).value
         self.run_interactor(itr)
 
-    def run_interactors(self):
+    def run_interactors(self,interactors_classes):
         args = [(
             id(self),
             self.create_interactor(itr_class),
-        ) for itr_class in self.interactors_classes]
+        ) for itr_class in interactors_classes]
 
         util.run_parallel(self._run_interactor, args)
-    def run_interactors_search(self,interactors_search_parameters):
+    def run_interactors_search(self,interactors_classes,interactors_search_parameters):
         args = []
-        for itr_class in self.interactors_classes:
+        for itr_class in interactors_classes:
             for parameters in interactors_search_parameters[itr_class.__name__]:
                 args.append((id(self),itr_class(**parameters)))
 
