@@ -616,7 +616,7 @@ class NICF(ExperimentalInteractor):
             reward = 0
 
         t = self.state[1] + [[action, reward, done]]
-        info = {"rate":rate}
+        info = rate
         self.state[1].append([action, reward, done, info])
 
     def convert_batch2dict(self,batch,epoch):
@@ -630,14 +630,14 @@ class NICF(ExperimentalInteractor):
             uids.append(item[0][0][1])
             ep = item[0][1]
             for xxx in range(6):
-                pos_recs[xxx].append([0] + [j[0] for j in ep if j[3]["rate"]==xxx])
+                pos_recs[xxx].append([0] + [j[0] for j in ep if j[3]==xxx])
             iids.append(item[1])
             goals.append(item[2])
             if item[3]:dones.append(0.0)
             else:dones.append(1.0)
             ep = item[4][1]
             for xxx in range(6):
-                next_pos[xxx].append([0] + [j[0] for j in ep if j[3]["rate"] == xxx])
+                next_pos[xxx].append([0] + [j[0] for j in ep if j[3] == xxx])
         data = {"uid":uids}
         for xxx in range(6):
             p_r, pnt = convert_item_seq2matrix(next_pos[xxx])
