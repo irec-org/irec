@@ -54,7 +54,7 @@ def main():
                           evaluation_policies_parameters)
     interactors_classes = ir.select_interactors()
     with ProcessPoolExecutor() as executor:
-        futures = []
+        futures = set()
         for dataset_preprocessor in datasets_preprocessors:
             f = executor.submit(run_interactors_in_base, dataset_preprocessor,
                                 interactors_general_settings,
@@ -62,7 +62,7 @@ def main():
                                 evaluation_policies_parameters,
                                 interactors_classes,
                                 interactors_search_parameters)
-            futures.append(f)
+            futures.add(f)
             if len(futures) >= os.cpu_count():
                 completed, futures = wait(futures, return_when=FIRST_COMPLETED)
         for future in futures:
