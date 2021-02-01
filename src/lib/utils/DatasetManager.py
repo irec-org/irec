@@ -53,6 +53,18 @@ class DatasetManager(Parameterizable):
                           )
         ]
         answers=inquirer.prompt(q)
+        return list(map(lambda x: datasets_preprocessors[x],answers['dspp']))
+
+    def request_datasets_preprocessors(self):
+
+        datasets_preprocessors = self.get_datasets_preprocessors_settings()
+        q = [
+            inquirer.Checkbox('dspp',
+                          message='Datasets Preprocessors',
+                          choices=list(datasets_preprocessors.keys())
+                          )
+        ]
+        answers=inquirer.prompt(q)
         return list(map(lambda x: datasets_preprocessors[x], answers['dspp']))
         
     def initialize_engines(self,dataset_preprocessor):
