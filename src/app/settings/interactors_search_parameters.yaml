@@ -325,11 +325,87 @@ NICF:
     time_step: 3
     training_epoch: 300
 PTS:
-  - num_particles: 2
+  - num_lat: 2
+    num_particles: 2
     var: 0.5
     var_u: 1.0
     var_v: 1.0
-    num_lat: 2
+  - num_lat: 2
+    num_particles: 8
+    var: 0.5
+    var_u: 1.0
+    var_v: 1.0
+  - num_lat: 2
+    num_particles: 14
+    var: 0.5
+    var_u: 1.0
+    var_v: 1.0
+  - num_lat: 2
+    num_particles: 20
+    var: 0.5
+    var_u: 1.0
+    var_v: 1.0
+  - num_lat: 6
+    num_particles: 2
+    var: 0.5
+    var_u: 1.0
+    var_v: 1.0
+  - num_lat: 6
+    num_particles: 8
+    var: 0.5
+    var_u: 1.0
+    var_v: 1.0
+  - num_lat: 6
+    num_particles: 14
+    var: 0.5
+    var_u: 1.0
+    var_v: 1.0
+  - num_lat: 6
+    num_particles: 20
+    var: 0.5
+    var_u: 1.0
+    var_v: 1.0
+  - num_lat: 10
+    num_particles: 2
+    var: 0.5
+    var_u: 1.0
+    var_v: 1.0
+  - num_lat: 10
+    num_particles: 8
+    var: 0.5
+    var_u: 1.0
+    var_v: 1.0
+  - num_lat: 10
+    num_particles: 14
+    var: 0.5
+    var_u: 1.0
+    var_v: 1.0
+  - num_lat: 10
+    num_particles: 20
+    var: 0.5
+    var_u: 1.0
+    var_v: 1.0
+  - num_lat: 14
+    num_particles: 2
+    var: 0.5
+    var_u: 1.0
+    var_v: 1.0
+  - num_lat: 14
+    num_particles: 8
+    var: 0.5
+    var_u: 1.0
+    var_v: 1.0
+  - num_lat: 14
+    num_particles: 14
+    var: 0.5
+    var_u: 1.0
+    var_v: 1.0
+  - num_lat: 14
+    num_particles: 20
+    var: 0.5
+    var_u: 1.0
+    var_v: 1.0
+
 COFIBA:
   - alpha: 1
     alpha_2: 1
@@ -341,28 +417,364 @@ Random:
 kNNBandit:
 ALMostPopular:
 OurMethod1:
-  - alpha: 1.0
+  - alpha: 0.25
+    num_lat: 10
     stop: null
-    weight_method: 'change'
+    weight_method: change
+  - alpha: 0.25
+    num_lat: 20
+    stop: null
+    weight_method: change
+  - alpha: 0.25
+    num_lat: 30
+    stop: null
+    weight_method: change
+  - alpha: 0.25
+    num_lat: 40
+    stop: null
+    weight_method: change
+  - alpha: 0.25
+    num_lat: 50
+    stop: null
+    weight_method: change
+  - alpha: 0.5
     num_lat: 10
+    stop: null
+    weight_method: change
+  - alpha: 0.5
+    num_lat: 20
+    stop: null
+    weight_method: change
+  - alpha: 0.5
+    num_lat: 30
+    stop: null
+    weight_method: change
+  - alpha: 0.5
+    num_lat: 40
+    stop: null
+    weight_method: change
+  - alpha: 0.5
+    num_lat: 50
+    stop: null
+    weight_method: change
+  - alpha: 0.75
+    num_lat: 10
+    stop: null
+    weight_method: change
+  - alpha: 0.75
+    num_lat: 20
+    stop: null
+    weight_method: change
+  - alpha: 0.75
+    num_lat: 30
+    stop: null
+    weight_method: change
+  - alpha: 0.75
+    num_lat: 40
+    stop: null
+    weight_method: change
+  - alpha: 0.75
+    num_lat: 50
+    stop: null
+    weight_method: change
+  - alpha: 1
+    num_lat: 10
+    stop: null
+    weight_method: change
+  - alpha: 1
+    num_lat: 20
+    stop: null
+    weight_method: change
+  - alpha: 1
+    num_lat: 30
+    stop: null
+    weight_method: change
+  - alpha: 1
+    num_lat: 40
+    stop: null
+    weight_method: change
+  - alpha: 1
+    num_lat: 50
+    stop: null
+    weight_method: change
+
 OurMethod2:
-  - alpha: 1.0
+  - alpha: 0.25
     num_lat: 10
+  - alpha: 0.25
+    num_lat: 20
+  - alpha: 0.25
+    num_lat: 30
+  - alpha: 0.25
+    num_lat: 40
+  - alpha: 0.25
+    num_lat: 50
+  - alpha: 0.5
+    num_lat: 10
+  - alpha: 0.5
+    num_lat: 20
+  - alpha: 0.5
+    num_lat: 30
+  - alpha: 0.5
+    num_lat: 40
+  - alpha: 0.5
+    num_lat: 50
+  - alpha: 0.75
+    num_lat: 10
+  - alpha: 0.75
+    num_lat: 20
+  - alpha: 0.75
+    num_lat: 30
+  - alpha: 0.75
+    num_lat: 40
+  - alpha: 0.75
+    num_lat: 50
+  - alpha: 1
+    num_lat: 10
+  - alpha: 1
+    num_lat: 20
+  - alpha: 1
+    num_lat: 30
+  - alpha: 1
+    num_lat: 40
+  - alpha: 1
+    num_lat: 50
+
 MostPopular:
 LinearUCB:
-  - var: 0.05
-    user_var: 0.01
+  - alpha: 0.25
     item_var: 0.01
-    stop_criteria: 0.0009
     iterations: 20
-    alpha: 1.0
     num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 0.25
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 0.25
+    item_var: 0.01
+    iterations: 20
+    num_lat: 30
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 0.25
+    item_var: 0.01
+    iterations: 20
+    num_lat: 40
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 0.25
+    item_var: 0.01
+    iterations: 20
+    num_lat: 50
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 0.5
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 0.5
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 0.5
+    item_var: 0.01
+    iterations: 20
+    num_lat: 30
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 0.5
+    item_var: 0.01
+    iterations: 20
+    num_lat: 40
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 0.5
+    item_var: 0.01
+    iterations: 20
+    num_lat: 50
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 0.75
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 0.75
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 0.75
+    item_var: 0.01
+    iterations: 20
+    num_lat: 30
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 0.75
+    item_var: 0.01
+    iterations: 20
+    num_lat: 40
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 0.75
+    item_var: 0.01
+    iterations: 20
+    num_lat: 50
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 1
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 1
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 1
+    item_var: 0.01
+    iterations: 20
+    num_lat: 30
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 1
+    item_var: 0.01
+    iterations: 20
+    num_lat: 40
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 1
+    item_var: 0.01
+    iterations: 20
+    num_lat: 50
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+
 LinEGreedy:
   - epsilon: 0.1
     num_lat: 10
-LinUCB:
-  - alpha: 1.0
+  - epsilon: 0.1
+    num_lat: 20
+  - epsilon: 0.1
+    num_lat: 30
+  - epsilon: 0.1
+    num_lat: 40
+  - epsilon: 0.1
+    num_lat: 50
+  - epsilon: 0.2
     num_lat: 10
+  - epsilon: 0.2
+    num_lat: 20
+  - epsilon: 0.2
+    num_lat: 30
+  - epsilon: 0.2
+    num_lat: 40
+  - epsilon: 0.2
+    num_lat: 50
+  - epsilon: 0.3
+    num_lat: 10
+  - epsilon: 0.3
+    num_lat: 20
+  - epsilon: 0.3
+    num_lat: 30
+  - epsilon: 0.3
+    num_lat: 40
+  - epsilon: 0.3
+    num_lat: 50
+  - epsilon: 0.4
+    num_lat: 10
+  - epsilon: 0.4
+    num_lat: 20
+  - epsilon: 0.4
+    num_lat: 30
+  - epsilon: 0.4
+    num_lat: 40
+  - epsilon: 0.4
+    num_lat: 50
+  - epsilon: 0.5
+    num_lat: 10
+  - epsilon: 0.5
+    num_lat: 20
+  - epsilon: 0.5
+    num_lat: 30
+  - epsilon: 0.5
+    num_lat: 40
+  - epsilon: 0.5
+    num_lat: 50
+LinUCB:
+  - alpha: 0.25
+    num_lat: 10
+  - alpha: 0.25
+    num_lat: 20
+  - alpha: 0.25
+    num_lat: 30
+  - alpha: 0.25
+    num_lat: 40
+  - alpha: 0.25
+    num_lat: 50
+  - alpha: 0.5
+    num_lat: 10
+  - alpha: 0.5
+    num_lat: 20
+  - alpha: 0.5
+    num_lat: 30
+  - alpha: 0.5
+    num_lat: 40
+  - alpha: 0.5
+    num_lat: 50
+  - alpha: 0.75
+    num_lat: 10
+  - alpha: 0.75
+    num_lat: 20
+  - alpha: 0.75
+    num_lat: 30
+  - alpha: 0.75
+    num_lat: 40
+  - alpha: 0.75
+    num_lat: 50
+  - alpha: 1
+    num_lat: 10
+  - alpha: 1
+    num_lat: 20
+  - alpha: 1
+    num_lat: 30
+  - alpha: 1
+    num_lat: 40
+  - alpha: 1
+    num_lat: 50
 PPELPE:
 UCBLearner:
   - stop: 14
@@ -377,6 +789,30 @@ LinearEGreedy:
     stop_criteria: 0.0009
     iterations: 20
     num_lat: 10
+  - var: 0.05
+    user_var: 0.01
+    item_var: 0.01
+    stop_criteria: 0.0009
+    iterations: 20
+    num_lat: 20
+  - var: 0.05
+    user_var: 0.01
+    item_var: 0.01
+    stop_criteria: 0.0009
+    iterations: 20
+    num_lat: 30
+  - var: 0.05
+    user_var: 0.01
+    item_var: 0.01
+    stop_criteria: 0.0009
+    iterations: 20
+    num_lat: 40
+  - var: 0.05
+    user_var: 0.01
+    item_var: 0.01
+    stop_criteria: 0.0009
+    iterations: 20
+    num_lat: 50
 LinearThompsonSampling:
   - var: 0.05
     user_var: 0.01
