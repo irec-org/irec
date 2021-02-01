@@ -238,10 +238,10 @@ class TRTETrainValidation(DataProcessor):
                  *args,
                  **kwargs):
         super().__init__(*args, **kwargs)
-        self.train_size = 0.8
+        self.train_size = train_size
         self.test_consumes = test_consumes
         self.crono = crono
-        self.random_seed = self.random_seed
+        self.random_seed = random_seed
         self.parameters.extend(
             ['train_size', 'test_consumes', 'crono', 'random_seed'])
 
