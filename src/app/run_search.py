@@ -13,7 +13,13 @@ import scipy.sparse
 from utils.DatasetManager import DatasetManager
 import yaml
 from concurrent.futures import ProcessPoolExecutor
+import argparse
 
+parser = argparse.ArgumentParser(description='Grid search')
+
+parser.add_argument('--num_tasks', type=int, default=os.cpu_count())
+args = parser.parse_args()
+print(args.num_tasks)
 
 def run_interactors_in_base(dataset_preprocessor, interactors_general_settings,
                             interactors_preprocessor_paramaters,
@@ -26,7 +32,7 @@ def run_interactors_in_base(dataset_preprocessor, interactors_general_settings,
                           interactors_preprocessor_paramaters,
                           evaluation_policies_parameters)
     ir.run_interactors_search(interactors_classes,
-                              interactors_search_parameters)
+                              interactors_search_parameters,args.num_tasks)
 
 
 def main():
@@ -63,7 +69,7 @@ def main():
                                 interactors_classes,
                                 interactors_search_parameters)
             futures.add(f)
-            if len(futures) >= os.cpu_count():
+            if len(futures) >= args.num_tasks:
                 completed, futures = wait(futures, return_when=FIRST_COMPLETED)
         for future in futures:
             future.result()

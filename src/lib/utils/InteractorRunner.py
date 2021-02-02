@@ -111,7 +111,9 @@ class InteractorRunner():
         ) for itr_class in interactors_classes]
 
         util.run_parallel(self._run_interactor, args)
-    def run_interactors_search(self,interactors_classes,interactors_search_parameters):
+    def run_interactors_search(self,interactors_classes,interactors_search_parameters,num_tasks=None):
+        if not num_tasks:
+            num_tasks = os.cpu_count()
 
         with ProcessPoolExecutor() as executor:
             futures = set()
@@ -120,7 +122,7 @@ class InteractorRunner():
                     f = executor.submit(self._run_interactor,id(self),itr_class(**parameters))
                     futures.add(f)
 
-                    if len(futures) >= os.cpu_count():
+                    if len(futures) >= num_tasks:
                         completed, futures = wait(futures, return_when=FIRST_COMPLETED)
 
             for f in futures:
