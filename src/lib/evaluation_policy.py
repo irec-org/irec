@@ -19,6 +19,7 @@ class Interaction(EvaluationPolicy,Parameterizable):
         test_users = np.unique(test_dataset.data[:,0]).astype(int)
         num_total_items = test_dataset.num_total_items
         test_consumption_matrix = scipy.sparse.csr_matrix((test_dataset.data[:,2],(test_dataset.data[:,0].astype(int),test_dataset.data[:,1].astype(int))),shape=(test_dataset.num_total_users,test_dataset.num_total_items))
+
         users_items_recommended = defaultdict(list)
         num_test_users = len(test_users)
         print(f"Starting {model.__class__.__name__} Training")

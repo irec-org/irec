@@ -511,7 +511,7 @@ class NICF(ExperimentalInteractor):
             done = True
         self.short[action] = 1
         t = self.state[1] + [[action, reward, done]]
-        info = {"rate":rate}
+        info = rate
         self.state[1].append([action, reward, done, info])
         return self.state, reward, done, info
 
@@ -524,7 +524,7 @@ class NICF(ExperimentalInteractor):
             while not done:
                 data = {"uid": [state[0][1]]}
                 for i in range(6):
-                    p_r,pnt = convert_item_seq2matrix([[0]+[item[0] for item in state[1] if item[3]["rate"] == i]])
+                    p_r,pnt = convert_item_seq2matrix([[0]+[item[0] for item in state[1] if item[3] == i]])
                     data["p"+str(i)+"_rec"] = p_r
                     data["p"+str(i)+"t"] = pnt
                 policy = self.fa["model"].predict(self.fa["sess"],data)[0]
@@ -588,7 +588,7 @@ class NICF(ExperimentalInteractor):
         state = self.test_users_states[uid]
         data = {"uid": [state[0][1]]}
         for i in range(6):
-            p_r,pnt = convert_item_seq2matrix([[0]+[item[0] for item in state[1] if item[3]["rate"] == i]])
+            p_r,pnt = convert_item_seq2matrix([[0]+[item[0] for item in state[1] if item[3] == i]])
             data["p"+str(i)+"_rec"] = p_r
             data["p"+str(i)+"t"] = pnt
 
