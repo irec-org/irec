@@ -65,26 +65,29 @@ evaluation_policy = ir.get_interactors_evaluation_policy()
 
 
 def evaluate_itr(metric_evaluator_id, dm_id, itr_class, parameters):
-    metric_evaluator = ctypes.cast(metric_evaluator_id, ctypes.py_object).value
-    dm = ctypes.cast(dm_id, ctypes.py_object).value
-    print(f"Evaluating {itr_class.__name__} results")
-    itr = itr_class(**parameters)
-    pdm = PersistentDataManager(directory='results')
-    users_items_recommended = pdm.load(InteractorCache().get_id(
-        dm, evaluation_policy, itr))
+    try:
+        metric_evaluator = ctypes.cast(metric_evaluator_id, ctypes.py_object).value
+        dm = ctypes.cast(dm_id, ctypes.py_object).value
+        print(f"Evaluating {itr_class.__name__} results")
+        itr = itr_class(**parameters)
+        pdm = PersistentDataManager(directory='results')
+        users_items_recommended = pdm.load(InteractorCache().get_id(
+            dm, evaluation_policy, itr))
 
-    metrics_pdm = PersistentDataManager(directory='metrics')
-    if isinstance(metric_evaluator, InteractionMetricsEvaluator):
-        metrics_values = metric_evaluator.evaluate(
-            evaluation_policy.num_interactions,
-            evaluation_policy.interaction_size, users_items_recommended)
-    elif isinstance(metric_evaluator, CumulativeMetricsEvaluator):
-        metrics_values = metric_evaluator.evaluate(users_items_recommended)
+        metrics_pdm = PersistentDataManager(directory='metrics')
+        if isinstance(metric_evaluator, InteractionMetricsEvaluator):
+            metrics_values = metric_evaluator.evaluate(
+                evaluation_policy.num_interactions,
+                evaluation_policy.interaction_size, users_items_recommended)
+        elif isinstance(metric_evaluator, CumulativeMetricsEvaluator):
+            metrics_values = metric_evaluator.evaluate(users_items_recommended)
 
-    for metric_name, metric_values in metrics_values.items():
-        metrics_pdm.save(
-            os.path.join(InteractorCache().get_id(dm, evaluation_policy, itr),
-                         metric_evaluator.get_id(), metric_name), metric_values)
+        for metric_name, metric_values in metrics_values.items():
+            metrics_pdm.save(
+                os.path.join(InteractorCache().get_id(dm, evaluation_policy, itr),
+                             metric_evaluator.get_id(), metric_name), metric_values)
+    except:
+        pass
 
 
 with ProcessPoolExecutor() as executor:

@@ -69,12 +69,15 @@ for dataset_preprocessor in datasets_preprocessors:
                 pdm = PersistentDataManager(directory='results')
 
                 metrics_pdm = PersistentDataManager(directory='metrics')
-                metric_values = metrics_pdm.load(
-                    os.path.join(
-                        InteractorCache().get_id(dm, evaluation_policy, itr),
-                        metrics_evaluator.get_id(), metric_class_name))
-                datasets_metrics_values[dataset_preprocessor['name']][
-                    metric_class_name][itr_class.__name__][','.join(map(str,list(parameters.values())))] = metric_values[-1]
+                try:
+                    metric_values = metrics_pdm.load(
+                        os.path.join(
+                            InteractorCache().get_id(dm, evaluation_policy, itr),
+                            metrics_evaluator.get_id(), metric_class_name))
+                    datasets_metrics_values[dataset_preprocessor['name']][
+                        metric_class_name][itr_class.__name__][','.join(map(str,list(parameters.values())))] = metric_values[-1]
+                except:
+                    pass
 
 
 for k1, v1 in datasets_metrics_values.items():
