@@ -81,3 +81,9 @@
     - TRTE
     - TRTESample
   name: Good Books Sampled
+- dataset_descriptor:
+    dataset_dir: Train-Test_ML-1M/
+  preprocessor:
+    - TRTE
+    - TRTETrainValidation
+  name: MovieLens 1M Validation
