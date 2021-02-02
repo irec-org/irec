@@ -79,13 +79,13 @@ class basic_model(object):
 
     @classmethod
     def create_model_without_distributed(cls, config, variable_scope = "target", trainable = True, graph_name="DEFAULT"):
-        if not graph_name in cls.GRAPHS:
-            cls.GRAPHS[graph_name] = tf.Graph()
+        # if not graph_name in cls.GRAPHS:
+        cls.GRAPHS[graph_name] = tf.Graph()
         with cls.GRAPHS[graph_name].as_default():
             model = cls(config, variable_scope=variable_scope, trainable=trainable)
-            if not graph_name in cls.SESS:
-                cls.SESS[graph_name] = tf.compat.v1.Session(config=tf.compat.v1.ConfigProto(gpu_options=tf.compat.v1.GPUOptions(allow_growth=True)))
-                cls.SAVER[graph_name] = tf.compat.v1.train.Saver(max_to_keep=50)
+            # if not graph_name in cls.SESS:
+            cls.SESS[graph_name] = tf.compat.v1.Session(config=tf.compat.v1.ConfigProto(gpu_options=tf.compat.v1.GPUOptions(allow_growth=True)))
+            cls.SAVER[graph_name] = tf.compat.v1.train.Saver(max_to_keep=50)
             cls.SESS[graph_name].run(model.init)
         return {"graph": cls.GRAPHS[graph_name],
                "sess": cls.SESS[graph_name],
