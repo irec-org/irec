@@ -75,7 +75,7 @@ for dataset_preprocessor in datasets_preprocessors:
                             InteractorCache().get_id(dm, evaluation_policy, itr),
                             metrics_evaluator.get_id(), metric_class_name))
                     datasets_metrics_values[dataset_preprocessor['name']][
-                        metric_class_name][itr_class.__name__][','.join(map(str,list(parameters.values())))] = metric_values[-1]
+                            metric_class_name][itr_class.__name__][','.join(map(lambda x: str(x[0])+'='+str(x[1]),list(parameters.items())))] = metric_values[-1]
                 except:
                     pass
 
