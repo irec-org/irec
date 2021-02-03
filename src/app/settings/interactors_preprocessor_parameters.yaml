@@ -220,8 +220,8 @@ MovieLens 1M:
   NICF:
           parameters:
                   time_step: 3
-                  latent_factor: 10
-                  learning_rate: 0.01
+                  latent_factor: 50
+                  learning_rate: 0.001
                   training_epoch: 30000
                   rnn_layer: 1
                   inner_epoch: 50
