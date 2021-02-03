@@ -4,7 +4,7 @@ MovieLens 100k (B):
       time_step: 3
       latent_factor: 50
       learning_rate: 0.001
-      training_epoch: 30000
+      training_epoch: 8000
       rnn_layer: 1
       inner_epoch: 50
       batch: 128
@@ -113,7 +113,7 @@ MovieLens 1M (B):
                   time_step: 3
                   latent_factor: 10
                   learning_rate: 0.01
-                  training_epoch: 30000
+                  training_epoch: 8000
                   rnn_layer: 1
                   inner_epoch: 50
                   batch: 128
@@ -222,7 +222,7 @@ MovieLens 1M:
                   time_step: 3
                   latent_factor: 50
                   learning_rate: 0.001
-                  training_epoch: 30000
+                  training_epoch: 8000
                   rnn_layer: 1
                   inner_epoch: 50
                   batch: 128
@@ -331,7 +331,7 @@ MovieLens 10M:
                   time_step: 3
                   latent_factor: 10
                   learning_rate: 0.01
-                  training_epoch: 30000
+                  training_epoch: 8000
                   rnn_layer: 1
                   inner_epoch: 50
                   batch: 128
@@ -440,7 +440,7 @@ Good Books:
                   time_step: 3
                   latent_factor: 10
                   learning_rate: 0.01
-                  training_epoch: 30000
+                  training_epoch: 8000
                   rnn_layer: 1
                   inner_epoch: 50
                   batch: 128
@@ -549,7 +549,7 @@ Yahoo Music:
                   time_step: 3
                   latent_factor: 10
                   learning_rate: 0.01
-                  training_epoch: 30000
+                  training_epoch: 8000
                   rnn_layer: 1
                   inner_epoch: 50
                   batch: 128
@@ -658,7 +658,7 @@ Yahoo Music Sampled:
                   time_step: 3
                   latent_factor: 10
                   learning_rate: 0.01
-                  training_epoch: 30000
+                  training_epoch: 8000
                   rnn_layer: 1
                   inner_epoch: 50
                   batch: 128
@@ -767,7 +767,7 @@ MovieLens 10M Sampled:
                   time_step: 3
                   latent_factor: 10
                   learning_rate: 0.01
-                  training_epoch: 30000
+                  training_epoch: 8000
                   rnn_layer: 1
                   inner_epoch: 50
                   batch: 128
@@ -876,7 +876,7 @@ Good Books Sampled:
                   time_step: 3
                   latent_factor: 10
                   learning_rate: 0.01
-                  training_epoch: 30000
+                  training_epoch: 8000
                   rnn_layer: 1
                   inner_epoch: 50
                   batch: 128
