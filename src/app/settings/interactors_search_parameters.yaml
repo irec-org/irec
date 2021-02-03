@@ -325,51 +325,51 @@ NICF:
     time_step: 3
     training_epoch: 30000
 PTS:
-- num_lat: 2
-  num_particles: 2
-  var: 0.5
-  var_u: 1.0
-  var_v: 1.0
-- num_lat: 2
-  num_particles: 10
-  var: 0.5
-  var_u: 1.0
-  var_v: 1.0
-- num_lat: 2
-  num_particles: 16
-  var: 0.5
-  var_u: 1.0
-  var_v: 1.0
-- num_lat: 8
-  num_particles: 2
-  var: 0.5
-  var_u: 1.0
-  var_v: 1.0
-- num_lat: 8
-  num_particles: 10
-  var: 0.5
-  var_u: 1.0
-  var_v: 1.0
-- num_lat: 8
-  num_particles: 16
-  var: 0.5
-  var_u: 1.0
-  var_v: 1.0
-- num_lat: 14
-  num_particles: 2
-  var: 0.5
-  var_u: 1.0
-  var_v: 1.0
-- num_lat: 14
-  num_particles: 10
-  var: 0.5
-  var_u: 1.0
-  var_v: 1.0
-- num_lat: 14
-  num_particles: 16
-  var: 0.5
-  var_u: 1.0
-  var_v: 1.0
+  - num_lat: 2
+    num_particles: 2
+    var: 0.5
+    var_u: 1.0
+    var_v: 1.0
+  - num_lat: 2
+    num_particles: 10
+    var: 0.5
+    var_u: 1.0
+    var_v: 1.0
+  - num_lat: 2
+    num_particles: 16
+    var: 0.5
+    var_u: 1.0
+    var_v: 1.0
+  - num_lat: 8
+    num_particles: 2
+    var: 0.5
+    var_u: 1.0
+    var_v: 1.0
+  - num_lat: 8
+    num_particles: 10
+    var: 0.5
+    var_u: 1.0
+    var_v: 1.0
+  - num_lat: 8
+    num_particles: 16
+    var: 0.5
+    var_u: 1.0
+    var_v: 1.0
+  - num_lat: 14
+    num_particles: 2
+    var: 0.5
+    var_u: 1.0
+    var_v: 1.0
+  - num_lat: 14
+    num_particles: 10
+    var: 0.5
+    var_u: 1.0
+    var_v: 1.0
+  - num_lat: 14
+    num_particles: 16
+    var: 0.5
+    var_u: 1.0
+    var_v: 1.0
 
 COFIBA:
   - alpha: 1
@@ -677,7 +677,28 @@ GLM_UCB:
   - c: 1.0
     num_lat: 10
 LinearEGreedy:
-  - epsilon: 0.25
+  - epsilon: 0.1
+    item_var: 0.01
+    iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.2
+    item_var: 0.01
+    iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.3
+    item_var: 0.01
+    iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.4
     item_var: 0.01
     iterations: 20
     num_lat: 5
@@ -691,21 +712,28 @@ LinearEGreedy:
     stop_criteria: 0.0009
     user_var: 0.01
     var: 0.05
-  - epsilon: 0.75
+  - epsilon: 0.1
     item_var: 0.01
     iterations: 20
-    num_lat: 5
+    num_lat: 10
     stop_criteria: 0.0009
     user_var: 0.01
     var: 0.05
-  - epsilon: 1
+  - epsilon: 0.2
     item_var: 0.01
     iterations: 20
-    num_lat: 5
+    num_lat: 10
     stop_criteria: 0.0009
     user_var: 0.01
     var: 0.05
-  - epsilon: 0.25
+  - epsilon: 0.3
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.4
     item_var: 0.01
     iterations: 20
     num_lat: 10
@@ -719,21 +747,28 @@ LinearEGreedy:
     stop_criteria: 0.0009
     user_var: 0.01
     var: 0.05
-  - epsilon: 0.75
+  - epsilon: 0.1
     item_var: 0.01
     iterations: 20
-    num_lat: 10
+    num_lat: 20
     stop_criteria: 0.0009
     user_var: 0.01
     var: 0.05
-  - epsilon: 1
+  - epsilon: 0.2
     item_var: 0.01
     iterations: 20
-    num_lat: 10
+    num_lat: 20
     stop_criteria: 0.0009
     user_var: 0.01
     var: 0.05
-  - epsilon: 0.25
+  - epsilon: 0.3
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.4
     item_var: 0.01
     iterations: 20
     num_lat: 20
@@ -747,21 +782,6 @@ LinearEGreedy:
     stop_criteria: 0.0009
     user_var: 0.01
     var: 0.05
-  - epsilon: 0.75
-    item_var: 0.01
-    iterations: 20
-    num_lat: 20
-    stop_criteria: 0.0009
-    user_var: 0.01
-    var: 0.05
-  - epsilon: 1
-    item_var: 0.01
-    iterations: 20
-    num_lat: 20
-    stop_criteria: 0.0009
-    user_var: 0.01
-    var: 0.05
-
 
 LinearThompsonSampling:
   - var: 0.05

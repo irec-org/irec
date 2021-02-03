@@ -41,8 +41,8 @@ MovieLens 100k (B):
       num_lat: 10
   OurMethod2:
     parameters:
-      alpha: 1.0
-      num_lat: 10
+      alpha: 0.5
+      num_lat: 20
   MostPopular:
   LinearUCB:
     parameters:
@@ -586,8 +586,8 @@ Yahoo Music:
       num_lat: 10
   OurMethod2:
     parameters:
-      alpha: 1.0
-      num_lat: 10
+      alpha: 0.5
+      num_lat: 20
   MostPopular:
   LinearUCB:
     parameters:
@@ -597,7 +597,7 @@ Yahoo Music:
       stop_criteria: 0.0009
       iterations: 20
       alpha: 1.0
-      num_lat: 10
+      num_lat: 5
   LinEGreedy:
     parameters:
       epsilon: 0.1
