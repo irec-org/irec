@@ -36,7 +36,6 @@ class LinearEGreedy(LinearICF):
             items_score = mean @ self.items_means[candidate_items].T
             randind = random.sample(list(range(len(candidate_items))),
                                     k=np.count_nonzero(rand))
-            print(items_score)
             items_score[randind] = np.inf
 
         return items_score, None
