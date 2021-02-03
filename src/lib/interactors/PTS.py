@@ -68,6 +68,7 @@ class PTS(MFInteractor):
             self.particles_us[i]=mf_model.users_weights
             self.particles_vs[i]=mf_model.items_weights
 
+
         # for uid in self.users_consumed_items.keys():
         #     item = self.users_consumed_items[uid].pop()
         #     reward = self.users_consumed_items_rewards[uid].pop()

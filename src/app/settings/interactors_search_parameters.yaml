@@ -325,86 +325,51 @@ NICF:
     time_step: 3
     training_epoch: 30000
 PTS:
-  - num_lat: 2
-    num_particles: 2
-    var: 0.5
-    var_u: 1.0
-    var_v: 1.0
-  - num_lat: 2
-    num_particles: 8
-    var: 0.5
-    var_u: 1.0
-    var_v: 1.0
-  - num_lat: 2
-    num_particles: 14
-    var: 0.5
-    var_u: 1.0
-    var_v: 1.0
-  - num_lat: 2
-    num_particles: 20
-    var: 0.5
-    var_u: 1.0
-    var_v: 1.0
-  - num_lat: 6
-    num_particles: 2
-    var: 0.5
-    var_u: 1.0
-    var_v: 1.0
-  - num_lat: 6
-    num_particles: 8
-    var: 0.5
-    var_u: 1.0
-    var_v: 1.0
-  - num_lat: 6
-    num_particles: 14
-    var: 0.5
-    var_u: 1.0
-    var_v: 1.0
-  - num_lat: 6
-    num_particles: 20
-    var: 0.5
-    var_u: 1.0
-    var_v: 1.0
-  - num_lat: 10
-    num_particles: 2
-    var: 0.5
-    var_u: 1.0
-    var_v: 1.0
-  - num_lat: 10
-    num_particles: 8
-    var: 0.5
-    var_u: 1.0
-    var_v: 1.0
-  - num_lat: 10
-    num_particles: 14
-    var: 0.5
-    var_u: 1.0
-    var_v: 1.0
-  - num_lat: 10
-    num_particles: 20
-    var: 0.5
-    var_u: 1.0
-    var_v: 1.0
-  - num_lat: 14
-    num_particles: 2
-    var: 0.5
-    var_u: 1.0
-    var_v: 1.0
-  - num_lat: 14
-    num_particles: 8
-    var: 0.5
-    var_u: 1.0
-    var_v: 1.0
-  - num_lat: 14
-    num_particles: 14
-    var: 0.5
-    var_u: 1.0
-    var_v: 1.0
-  - num_lat: 14
-    num_particles: 20
-    var: 0.5
-    var_u: 1.0
-    var_v: 1.0
+- num_lat: 2
+  num_particles: 2
+  var: 0.5
+  var_u: 1.0
+  var_v: 1.0
+- num_lat: 2
+  num_particles: 10
+  var: 0.5
+  var_u: 1.0
+  var_v: 1.0
+- num_lat: 2
+  num_particles: 16
+  var: 0.5
+  var_u: 1.0
+  var_v: 1.0
+- num_lat: 8
+  num_particles: 2
+  var: 0.5
+  var_u: 1.0
+  var_v: 1.0
+- num_lat: 8
+  num_particles: 10
+  var: 0.5
+  var_u: 1.0
+  var_v: 1.0
+- num_lat: 8
+  num_particles: 16
+  var: 0.5
+  var_u: 1.0
+  var_v: 1.0
+- num_lat: 14
+  num_particles: 2
+  var: 0.5
+  var_u: 1.0
+  var_v: 1.0
+- num_lat: 14
+  num_particles: 10
+  var: 0.5
+  var_u: 1.0
+  var_v: 1.0
+- num_lat: 14
+  num_particles: 16
+  var: 0.5
+  var_u: 1.0
+  var_v: 1.0
 
 COFIBA:
   - alpha: 1
