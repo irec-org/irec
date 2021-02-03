@@ -494,6 +494,55 @@ LinearUCB:
   - alpha: 0.25
     item_var: 0.01
     iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 0.5
+    item_var: 0.01
+    iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 0.75
+    item_var: 0.01
+    iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 1
+    item_var: 0.01
+    iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 0.25
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 0.5
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 0.75
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 1
+    item_var: 0.01
+    iterations: 20
     num_lat: 10
     stop_criteria: 0.0009
     user_var: 0.01
@@ -505,66 +554,10 @@ LinearUCB:
     stop_criteria: 0.0009
     user_var: 0.01
     var: 0.05
-  - alpha: 0.25
-    item_var: 0.01
-    iterations: 20
-    num_lat: 30
-    stop_criteria: 0.0009
-    user_var: 0.01
-    var: 0.05
-  - alpha: 0.25
-    item_var: 0.01
-    iterations: 20
-    num_lat: 40
-    stop_criteria: 0.0009
-    user_var: 0.01
-    var: 0.05
-  - alpha: 0.25
-    item_var: 0.01
-    iterations: 20
-    num_lat: 50
-    stop_criteria: 0.0009
-    user_var: 0.01
-    var: 0.05
-  - alpha: 0.5
-    item_var: 0.01
-    iterations: 20
-    num_lat: 10
-    stop_criteria: 0.0009
-    user_var: 0.01
-    var: 0.05
   - alpha: 0.5
     item_var: 0.01
     iterations: 20
     num_lat: 20
-    stop_criteria: 0.0009
-    user_var: 0.01
-    var: 0.05
-  - alpha: 0.5
-    item_var: 0.01
-    iterations: 20
-    num_lat: 30
-    stop_criteria: 0.0009
-    user_var: 0.01
-    var: 0.05
-  - alpha: 0.5
-    item_var: 0.01
-    iterations: 20
-    num_lat: 40
-    stop_criteria: 0.0009
-    user_var: 0.01
-    var: 0.05
-  - alpha: 0.5
-    item_var: 0.01
-    iterations: 20
-    num_lat: 50
-    stop_criteria: 0.0009
-    user_var: 0.01
-    var: 0.05
-  - alpha: 0.75
-    item_var: 0.01
-    iterations: 20
-    num_lat: 10
     stop_criteria: 0.0009
     user_var: 0.01
     var: 0.05
@@ -575,34 +568,6 @@ LinearUCB:
     stop_criteria: 0.0009
     user_var: 0.01
     var: 0.05
-  - alpha: 0.75
-    item_var: 0.01
-    iterations: 20
-    num_lat: 30
-    stop_criteria: 0.0009
-    user_var: 0.01
-    var: 0.05
-  - alpha: 0.75
-    item_var: 0.01
-    iterations: 20
-    num_lat: 40
-    stop_criteria: 0.0009
-    user_var: 0.01
-    var: 0.05
-  - alpha: 0.75
-    item_var: 0.01
-    iterations: 20
-    num_lat: 50
-    stop_criteria: 0.0009
-    user_var: 0.01
-    var: 0.05
-  - alpha: 1
-    item_var: 0.01
-    iterations: 20
-    num_lat: 10
-    stop_criteria: 0.0009
-    user_var: 0.01
-    var: 0.05
   - alpha: 1
     item_var: 0.01
     iterations: 20
@@ -610,27 +575,7 @@ LinearUCB:
     stop_criteria: 0.0009
     user_var: 0.01
     var: 0.05
-  - alpha: 1
-    item_var: 0.01
-    iterations: 20
-    num_lat: 30
-    stop_criteria: 0.0009
-    user_var: 0.01
-    var: 0.05
-  - alpha: 1
-    item_var: 0.01
-    iterations: 20
-    num_lat: 40
-    stop_criteria: 0.0009
-    user_var: 0.01
-    var: 0.05
-  - alpha: 1
-    item_var: 0.01
-    iterations: 20
-    num_lat: 50
-    stop_criteria: 0.0009
-    user_var: 0.01
-    var: 0.05
+
 
 LinEGreedy:
   - epsilon: 0.1
@@ -732,98 +677,35 @@ GLM_UCB:
   - c: 1.0
     num_lat: 10
 LinearEGreedy:
-  - epsilon: 0.1
+  - epsilon: 0.25
     item_var: 0.01
     iterations: 20
-    num_lat: 2
-    stop_criteria: 0.0009
-    user_var: 0.01
-    var: 0.05
-  - epsilon: 0.2
-    item_var: 0.01
-    iterations: 20
-    num_lat: 2
-    stop_criteria: 0.0009
-    user_var: 0.01
-    var: 0.05
-  - epsilon: 0.3
-    item_var: 0.01
-    iterations: 20
-    num_lat: 2
-    stop_criteria: 0.0009
-    user_var: 0.01
-    var: 0.05
-  - epsilon: 0.4
-    item_var: 0.01
-    iterations: 20
-    num_lat: 2
+    num_lat: 5
     stop_criteria: 0.0009
     user_var: 0.01
     var: 0.05
   - epsilon: 0.5
     item_var: 0.01
     iterations: 20
-    num_lat: 2
+    num_lat: 5
     stop_criteria: 0.0009
     user_var: 0.01
     var: 0.05
-  - epsilon: 0.1
+  - epsilon: 0.75
     item_var: 0.01
     iterations: 20
-    num_lat: 6
+    num_lat: 5
     stop_criteria: 0.0009
     user_var: 0.01
     var: 0.05
-  - epsilon: 0.2
+  - epsilon: 1
     item_var: 0.01
     iterations: 20
-    num_lat: 6
+    num_lat: 5
     stop_criteria: 0.0009
     user_var: 0.01
     var: 0.05
-  - epsilon: 0.3
-    item_var: 0.01
-    iterations: 20
-    num_lat: 6
-    stop_criteria: 0.0009
-    user_var: 0.01
-    var: 0.05
-  - epsilon: 0.4
-    item_var: 0.01
-    iterations: 20
-    num_lat: 6
-    stop_criteria: 0.0009
-    user_var: 0.01
-    var: 0.05
-  - epsilon: 0.5
-    item_var: 0.01
-    iterations: 20
-    num_lat: 6
-    stop_criteria: 0.0009
-    user_var: 0.01
-    var: 0.05
-  - epsilon: 0.1
-    item_var: 0.01
-    iterations: 20
-    num_lat: 10
-    stop_criteria: 0.0009
-    user_var: 0.01
-    var: 0.05
-  - epsilon: 0.2
-    item_var: 0.01
-    iterations: 20
-    num_lat: 10
-    stop_criteria: 0.0009
-    user_var: 0.01
-    var: 0.05
-  - epsilon: 0.3
-    item_var: 0.01
-    iterations: 20
-    num_lat: 10
-    stop_criteria: 0.0009
-    user_var: 0.01
-    var: 0.05
-  - epsilon: 0.4
+  - epsilon: 0.25
     item_var: 0.01
     iterations: 20
     num_lat: 10
@@ -837,41 +719,49 @@ LinearEGreedy:
     stop_criteria: 0.0009
     user_var: 0.01
     var: 0.05
-  - epsilon: 0.1
+  - epsilon: 0.75
     item_var: 0.01
     iterations: 20
-    num_lat: 14
+    num_lat: 10
     stop_criteria: 0.0009
     user_var: 0.01
     var: 0.05
-  - epsilon: 0.2
+  - epsilon: 1
     item_var: 0.01
     iterations: 20
-    num_lat: 14
+    num_lat: 10
     stop_criteria: 0.0009
     user_var: 0.01
     var: 0.05
-  - epsilon: 0.3
+  - epsilon: 0.25
     item_var: 0.01
     iterations: 20
-    num_lat: 14
-    stop_criteria: 0.0009
-    user_var: 0.01
-    var: 0.05
-  - epsilon: 0.4
-    item_var: 0.01
-    iterations: 20
-    num_lat: 14
+    num_lat: 20
     stop_criteria: 0.0009
     user_var: 0.01
     var: 0.05
   - epsilon: 0.5
     item_var: 0.01
     iterations: 20
-    num_lat: 14
+    num_lat: 20
     stop_criteria: 0.0009
     user_var: 0.01
     var: 0.05
+  - epsilon: 0.75
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 1
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+
 
 LinearThompsonSampling:
   - var: 0.05
