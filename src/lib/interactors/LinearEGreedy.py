@@ -8,40 +8,38 @@ import ctypes
 import scipy
 import joblib
 from utils.PersistentDataManager import PersistentDataManager
+from .LinearICF import LinearICF
 
+class LinearEGreedy(LinearICF):
 
-class LinearEGreedy(LinEGreedy, ICF):
-
-    def __init__(self, *args, **kwargs):
-        ICF.__init__(self, *args, **kwargs)
-        LinEGreedy.__init__(self, *args, **kwargs)
-
-    def init_A(self, num_lat):
-        return self.get_user_lambda() * np.eye(num_lat)
-
-    def _init_items_weights(self):
-        mf_model = mf.ICFPMFS(self.iterations,
-                              self.var,
-                              self.user_var,
-                              self.item_var,
-                              self.stop_criteria,
-                              num_lat=self.num_lat)
-        mf_model_id = joblib.hash(
-            (mf_model.get_id(), self.train_consumption_matrix))
-        pdm = PersistentDataManager('state_save')
-        if pdm.file_exists(mf_model_id):
-            mf_model = pdm.load(mf_model_id)
-        else:
-            mf_model.fit(self.train_consumption_matrix)
-            pdm.save(mf_model_id, mf_model)
-
-        self.items_weights = mf_model.items_means
+    def __init__(self, epsilon, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.epsilon = epsilon
+        self.parameters.extend(['epsilon'])
 
     def train(self, train_dataset):
-        return super(LinEGreedy,self).train(train_dataset)
+        super().train(train_dataset)
 
     def predict(self, uid, candidate_items, num_req_items):
-        return super(LinEGreedy,self).predict(uid, candidate_items, num_req_items)
+        b = self.bs[uid]
+        A = self.As[uid]
+
+        mean = np.dot(np.linalg.inv(A), b)
+
+        rand = np.random.rand(min(num_req_items, len(candidate_items)))
+        rand = self.epsilon > rand
+
+        cnz = np.count_nonzero(rand)
+        if cnz == min(num_req_items, len(candidate_items)):
+            items_score = np.random.rand(len(candidate_items))
+        else:
+            items_score = mean @ self.items_means[candidate_items].T
+            randind = random.sample(list(range(len(candidate_items))),
+                                    k=np.count_nonzero(rand))
+            print(items_score)
+            items_score[randind] = np.inf
+
+        return items_score, None
 
     def update(self, uid, item, reward, additional_data):
-        return super(LinEGreedy,self).update(uid, item, reward, additional_data)
+        return super().update(uid, item, reward, additional_data)
