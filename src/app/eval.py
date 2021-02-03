@@ -25,10 +25,7 @@ BUFFER_SIZE_EVALUATOR = 50
 metrics_classes = [metric.Precision, metric.Recall, metric.Hits]
 
 dm = DatasetManager()
-dataset_preprocessor = dm.request_dataset_preprocessor()
-dm.initialize_engines(dataset_preprocessor)
-dm.load()
-
+datasets_preprocessors = dm.request_datasets_preprocessors()
 interactors_preprocessor_paramaters = yaml.load(
     open("settings" + sep + "interactors_preprocessor_parameters.yaml"),
     Loader=yaml.SafeLoader)
@@ -44,47 +41,53 @@ ir = InteractorRunner(dm, interactors_general_settings,
                       interactors_preprocessor_paramaters,
                       evaluation_policies_parameters)
 interactors_classes = ir.select_interactors()
+for dataset_preprocessor in datasets_preprocessors:
+    
+    dm.initialize_engines(dataset_preprocessor)
+    dm.load()
 
-data = np.vstack(
-    (dm.dataset_preprocessed[0].data, dm.dataset_preprocessed[1].data))
+    ir = InteractorRunner(dm, interactors_general_settings,
+                          interactors_preprocessor_paramaters,
+                          evaluation_policies_parameters)
 
-dataset = Dataset(data)
-dataset.update_from_data()
-dataset.update_num_total_users_items()
+    data = np.vstack(
+        (dm.dataset_preprocessed[0].data, dm.dataset_preprocessed[1].data))
 
-metrics_evaluators = [
-    InteractionMetricsEvaluator(dataset, metrics_classes),
-    CumulativeMetricsEvaluator(BUFFER_SIZE_EVALUATOR, dataset, metrics_classes),
-    CumulativeInteractionMetricsEvaluator(dataset, metrics_classes)
-]
+    dataset = Dataset(data)
+    dataset.update_from_data()
+    dataset.update_num_total_users_items()
 
-evaluation_policy = ir.get_interactors_evaluation_policy()
+    metrics_evaluators = [
+        InteractionMetricsEvaluator(dataset, metrics_classes),
+        CumulativeMetricsEvaluator(BUFFER_SIZE_EVALUATOR, dataset, metrics_classes),
+        CumulativeInteractionMetricsEvaluator(dataset, metrics_classes)
+    ]
 
+    evaluation_policy = ir.get_interactors_evaluation_policy()
 
-def evaluate_itr(metric_evaluator_id, dm_id, itr_class):
-    metric_evaluator = ctypes.cast(metric_evaluator_id, ctypes.py_object).value
-    dm = ctypes.cast(dm_id, ctypes.py_object).value
-    print(f"Evaluating {itr_class.__name__} results")
-    itr = ir.create_interactor(itr_class)
-    pdm = PersistentDataManager(directory='results')
-    users_items_recommended = pdm.load(InteractorCache().get_id(
-        dm, evaluation_policy, itr))
+    def evaluate_itr(metric_evaluator_id, dm_id, itr_class):
+        metric_evaluator = ctypes.cast(metric_evaluator_id, ctypes.py_object).value
+        dm = ctypes.cast(dm_id, ctypes.py_object).value
+        print(f"Evaluating {itr_class.__name__} results")
+        itr = ir.create_interactor(itr_class)
+        pdm = PersistentDataManager(directory='results')
+        users_items_recommended = pdm.load(InteractorCache().get_id(
+            dm, evaluation_policy, itr))
 
-    metrics_pdm = PersistentDataManager(directory='metrics')
-    if isinstance(metric_evaluator, InteractionMetricsEvaluator):
-        metrics_values = metric_evaluator.evaluate(
-            evaluation_policy.num_interactions,
-            evaluation_policy.interaction_size, users_items_recommended)
-    elif isinstance(metric_evaluator, CumulativeMetricsEvaluator):
-        metrics_values = metric_evaluator.evaluate(users_items_recommended)
+        metrics_pdm = PersistentDataManager(directory='metrics')
+        if isinstance(metric_evaluator, InteractionMetricsEvaluator):
+            metrics_values = metric_evaluator.evaluate(
+                evaluation_policy.num_interactions,
+                evaluation_policy.interaction_size, users_items_recommended)
+        elif isinstance(metric_evaluator, CumulativeMetricsEvaluator):
+            metrics_values = metric_evaluator.evaluate(users_items_recommended)
 
-    for metric_name, metric_values in metrics_values.items():
-        metrics_pdm.save(
-            os.path.join(InteractorCache().get_id(dm, evaluation_policy, itr),
-                         metric_evaluator.get_id(), metric_name), metric_values)
+        for metric_name, metric_values in metrics_values.items():
+            metrics_pdm.save(
+                os.path.join(InteractorCache().get_id(dm, evaluation_policy, itr),
+                             metric_evaluator.get_id(), metric_name), metric_values)
 
-
-for metric_evaluator in metrics_evaluators:
-    args = [(id(metric_evaluator), id(dm), itr_class)
-            for itr_class in interactors_classes]
-    run_parallel(evaluate_itr, args, use_tqdm=False)
+    for metric_evaluator in metrics_evaluators:
+        args = [(id(metric_evaluator), id(dm), itr_class)
+                for itr_class in interactors_classes]
+        run_parallel(evaluate_itr, args, use_tqdm=False)
