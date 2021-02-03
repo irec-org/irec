@@ -20,6 +20,7 @@ from utils.InteractorCache import InteractorCache
 import metric
 from utils.util import run_parallel
 import ctypes
+from copy import copy
 
 BUFFER_SIZE_EVALUATOR = 50
 
@@ -53,9 +54,11 @@ interactors_classes = ir.select_interactors()
 data = np.vstack(
     (dm.dataset_preprocessed[0].data, dm.dataset_preprocessed[1].data))
 
-dataset = Dataset(data)
+dataset = copy(dm.dataset_preprocessed[0])
+dataset.data = data
+# dataset = Dataset(data)
 dataset.update_from_data()
-dataset.update_num_total_users_items()
+# dataset.update_num_total_users_items()
 
 metrics_evaluators = [
     CumulativeInteractionMetricsEvaluator(dataset, metrics_classes)

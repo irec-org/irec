@@ -231,10 +231,10 @@ class TrainTestConsumption(DataProcessor):
 class TRTETrainValidation(DataProcessor):
 
     def __init__(self,
-                 train_size=0.8,
-                 test_consumes=1,
-                 crono=False,
-                 random_seed=0,
+                 train_size,
+                 test_consumes,
+                 crono,
+                 random_seed,
                  *args,
                  **kwargs):
         super().__init__(*args, **kwargs)
