@@ -18,8 +18,10 @@ import argparse
 parser = argparse.ArgumentParser(description='Grid search')
 
 parser.add_argument('--num_tasks', type=int, default=os.cpu_count())
+parser.add_argument('--forced_run', default=False, action='store_true')
 args = parser.parse_args()
 print(args.num_tasks)
+
 
 def run_interactors_in_base(dataset_preprocessor, interactors_general_settings,
                             interactors_preprocessor_paramaters,
@@ -32,7 +34,8 @@ def run_interactors_in_base(dataset_preprocessor, interactors_general_settings,
                           interactors_preprocessor_paramaters,
                           evaluation_policies_parameters)
     ir.run_interactors_search(interactors_classes,
-                              interactors_search_parameters,args.num_tasks)
+                              interactors_search_parameters, args.num_tasks,
+                              args.forced_run)
 
 
 def main():

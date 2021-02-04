@@ -89,10 +89,10 @@ class InteractorRunner():
             **self.evaluation_policies_parameters[evaluation_policy_name])
         return evaluation_policy
 
-    def run_interactor(self, itr):
+    def run_interactor(self, itr,forced_run):
         pdm = PersistentDataManager(directory='results')
         evaluation_policy = self.get_interactors_evaluation_policy()
-        if not pdm.file_exists(InteractorCache().get_id(self.dm, evaluation_policy, itr)):
+        if forced_run or not pdm.file_exists(InteractorCache().get_id(self.dm, evaluation_policy, itr)):
             history_items_recommended = evaluation_policy.evaluate(
                 itr, self.dm.dataset_preprocessed[0],
                 self.dm.dataset_preprocessed[1])
@@ -105,9 +105,9 @@ class InteractorRunner():
 
 
     @staticmethod
-    def _run_interactor(obj_id, itr):
+    def _run_interactor(obj_id, itr, forced_run):
         self = ctypes.cast(obj_id, ctypes.py_object).value
-        self.run_interactor(itr)
+        self.run_interactor(itr,forced_run)
 
     def run_interactors(self,interactors_classes):
         args = [(
@@ -116,7 +116,7 @@ class InteractorRunner():
         ) for itr_class in interactors_classes]
 
         util.run_parallel(self._run_interactor, args)
-    def run_interactors_search(self,interactors_classes,interactors_search_parameters,num_tasks=None):
+    def run_interactors_search(self,interactors_classes,interactors_search_parameters,num_tasks=None,forced_run=False):
         if not num_tasks:
             num_tasks = os.cpu_count()
 
@@ -124,7 +124,7 @@ class InteractorRunner():
             futures = set()
             for itr_class in interactors_classes:
                 for parameters in interactors_search_parameters[itr_class.__name__]:
-                    f = executor.submit(self._run_interactor,id(self),itr_class(**parameters))
+                    f = executor.submit(self._run_interactor,id(self),itr_class(**parameters),forced_run)
                     futures.add(f)
 
                     if len(futures) >= num_tasks:
