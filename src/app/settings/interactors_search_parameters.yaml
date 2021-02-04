@@ -335,11 +335,6 @@ PTS:
     var: 0.5
     var_u: 1.0
     var_v: 1.0
-  - num_lat: 5
-    num_particles: 10
-    var: 0.5
-    var_u: 1.0
-    var_v: 1.0
   - num_lat: 10
     num_particles: 2
     var: 0.5
@@ -350,11 +345,6 @@ PTS:
     var: 0.5
     var_u: 1.0
     var_v: 1.0
-  - num_lat: 10
-    num_particles: 10
-    var: 0.5
-    var_u: 1.0
-    var_v: 1.0
   - num_lat: 20
     num_particles: 2
     var: 0.5
@@ -362,11 +352,6 @@ PTS:
     var_v: 1.0
   - num_lat: 20
     num_particles: 5
-    var: 0.5
-    var_u: 1.0
-    var_v: 1.0
-  - num_lat: 20
-    num_particles: 10
     var: 0.5
     var_u: 1.0
     var_v: 1.0
