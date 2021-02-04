@@ -456,7 +456,7 @@ Good Books:
       var: 0.5
       var_u: 1.0
       var_v: 1.0
-      num_lat: 2
+      num_lat: 5
   COFIBA:
     parameters:
       alpha: 1
