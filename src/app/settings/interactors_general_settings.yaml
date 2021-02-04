@@ -19,7 +19,7 @@ ThompsonSampling:
 kNNBandit:
   name: kNN-Bandit
 MostPopular:
-  name: Most Popular
+  name: Popular
 LinEGreedy:
   name: Linear ε-Greedy (MF)
 PPELPE:
