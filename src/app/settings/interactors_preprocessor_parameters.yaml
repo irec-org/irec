@@ -477,7 +477,7 @@ Good Books:
       num_lat: 10
   OurMethod2:
     parameters:
-      alpha: 1.0
+      alpha: 0.75
       num_lat: 10
   MostPopular:
   LinearUCB:
