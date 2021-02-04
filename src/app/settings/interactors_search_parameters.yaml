@@ -786,12 +786,10 @@ EGreedy:
   - epsilon: 0.05
   - epsilon: 0.01
 UCB:
-  - c: 1.5
   - c: 1.0
-  - c: 0.7
+  - c: 0.75
   - c: 0.5
-  - c: 0.3
-  - c: 0.1
+  - c: 0.25
 MostRepresentative:
 ALEntropy:
 Entropy0:
