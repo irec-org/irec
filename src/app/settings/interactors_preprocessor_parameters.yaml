@@ -379,7 +379,7 @@ MovieLens 10M:
       stop_criteria: 0.0009
       iterations: 20
       alpha: 1.0
-      num_lat: 10
+      num_lat: 20
   LinEGreedy:
     parameters:
       epsilon: 0.1
@@ -399,7 +399,7 @@ MovieLens 10M:
       num_lat: 10
   LinearEGreedy:
     parameters:
-      epsilon: 0.1
+      epsilon: 0.5
       var: 0.05
       user_var: 0.01
       item_var: 0.01
