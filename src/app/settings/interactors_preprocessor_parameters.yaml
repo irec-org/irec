@@ -545,20 +545,20 @@ Good Books:
       alpha: 0.2
 Yahoo Music:
   NICF:
-          parameters:
-                  time_step: 3
-                  latent_factor: 10
-                  learning_rate: 0.1
-                  training_epoch: 30000
-                  rnn_layer: 1
-                  inner_epoch: 50
-                  batch: 128
-                  gamma: 0.0
-                  clip_param: 0.2
-                  restore_model: false
-                  num_blocks: 2
-                  num_heads: 1
-                  dropout_rate: 0.1
+    parameters:
+      time_step: 3
+      latent_factor: 10
+      learning_rate: 0.1
+      training_epoch: 30000
+      rnn_layer: 1
+      inner_epoch: 50
+      batch: 128
+      gamma: 0.0
+      clip_param: 0.2
+      restore_model: false
+      num_blocks: 2
+      num_heads: 1
+      dropout_rate: 0.1
   PTS:
     parameters:
       num_particles: 5
