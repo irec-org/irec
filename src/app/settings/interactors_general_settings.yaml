@@ -9,7 +9,7 @@ LinUCB:
 OurMethod1:
   name: Old UCB-Learner
 OurMethod2:
-  name: New UCB-Learner
+  name: WSCB
 LinearUCB:
   name: Linear UCB (PMF)
 COFIBA:
