@@ -362,6 +362,10 @@ COFIBA:
 ThompsonSampling:
   - alpha_0: 1
     beta_0: 1
+  - alpha_0: 1
+    beta_0: 10
+  - alpha_0: 1
+    beta_0: 100
 Random:
 kNNBandit:
 ALMostPopular:
