@@ -11,8 +11,11 @@ import itertools
 
 class kNNBandit(ExperimentalInteractor):
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, alpha_0, beta_0, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.alpha_0 = alpha_0
+        self.beta_0 = beta_0
+        self.parameters.extend(['alpha_0', 'beta_0'])
 
     def train(self, train_dataset):
         super().train(train_dataset)
