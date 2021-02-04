@@ -76,6 +76,7 @@ rtex_header = r"""
 \begin{document}
 \begin{tabular}{%s}
 \hline
+\rowcolor{StrongGray}
 Dataset & %s \\""" % (generate_table_spec(), ' & '.join([
     r"\multicolumn{%d}{c|}{%s}" % (len(nums_interactions_to_show), i['name'])
     for i in datasets_preprocessors
@@ -111,8 +112,10 @@ for metric_name, metric_class_name in zip(
     rtex += r"""
 \hline
 \hline
+\rowcolor{Gray}
 Measure & %s \\
 \hline
+\rowcolor{Gray}
 T & %s \\
 \hline
 \hline
