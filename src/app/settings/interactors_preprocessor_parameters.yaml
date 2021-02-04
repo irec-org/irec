@@ -637,7 +637,7 @@ Yahoo Music:
       epsilon: 0.1
   UCB:
     parameters:
-      c: 1.0
+      c: 0.25
   MostRepresentative:
   ALEntropy:
   Entropy0:
