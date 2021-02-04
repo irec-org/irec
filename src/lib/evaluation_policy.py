@@ -48,7 +48,6 @@ class Interaction(EvaluationPolicy,Parameterizable):
                 history_items_recommended.append((uid,item))
                 model.update(uid,item,test_consumption_matrix[uid,item],additional_data)
             model.increment_time()
-            # model.increment_time()
             users_num_interactions[uid] += 1
             if users_num_interactions[uid] == self.num_interactions:
                 available_users = available_users - {uid}
