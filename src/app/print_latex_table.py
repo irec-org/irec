@@ -56,7 +56,7 @@ metrics_evaluator = CumulativeInteractionMetricsEvaluator(None, metrics_classes)
 
 evaluation_policy = ir.get_interactors_evaluation_policy()
 
-nums_interactions_to_show = [5, 10, 25, 50, 75, 100]
+nums_interactions_to_show = [5, 10, 20, 50, 100]
 
 
 def generate_table_spec():
