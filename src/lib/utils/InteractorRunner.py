@@ -91,8 +91,8 @@ class InteractorRunner():
 
     def run_interactor(self, itr):
         pdm = PersistentDataManager(directory='results')
+        evaluation_policy = self.get_interactors_evaluation_policy()
         if not pdm.file_exists(InteractorCache().get_id(self.dm, evaluation_policy, itr)):
-            evaluation_policy = self.get_interactors_evaluation_policy()
             history_items_recommended = evaluation_policy.evaluate(
                 itr, self.dm.dataset_preprocessed[0],
                 self.dm.dataset_preprocessed[1])
