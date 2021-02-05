@@ -117,7 +117,7 @@ for dataset_preprocessor in datasets_preprocessors:
                     [np.mean(metric_values[i - 1]) for i in nums_interactions_to_show])
             datasets_metrics_users_values[dataset_preprocessor['name']][
                 metric_class_name][itr_class.__name__].extend(
-                    [metric_values[i - 1] for i in nums_interactions_to_show])
+                    np.array([metric_values[i - 1] for i in nums_interactions_to_show]))
 
 import copy
 datasets_metrics_gain = defaultdict(
@@ -142,13 +142,11 @@ for dataset_preprocessor in datasets_preprocessors:
 
                     metric_class_name][best_itr] = best_itr_val
 
-            best_itr_users_val = datasets_metrics_values[dataset_preprocessor['name']][
-                metric_class_name][best_itr]
-            second_best_itr_users_val = datasets_metrics_values[dataset_preprocessor['name']][
-                metric_class_name][second_best_itr]
+            best_itr_users_val = datasets_metrics_users_values[dataset_preprocessor['name']][
+                metric_class_name][best_itr][i]
+            second_best_itr_users_val = datasets_metrics_users_values[dataset_preprocessor['name']][
+                metric_class_name][second_best_itr][i]
 
-            print(best_itr_users_val)
-            print(second_best_itr_users_val)
             statistic, pvalue = scipy.stats.ttest_rel(
                     best_itr_users_val,
                     second_best_itr_users_val,
