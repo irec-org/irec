@@ -27,7 +27,7 @@ plt.rcParams['lines.linewidth'] = 2
 plt.rcParams['font.size'] = 15
 
 metrics_classes = [metric.Hits, metric.Recall]
-metrics_names = ['Cumulative Hits', 'Cumulative Recall']
+metrics_names = ['Cumulative Precision', 'Cumulative Recall']
 
 dm = DatasetManager()
 datasets_preprocessors = dm.request_datasets_preprocessors()
