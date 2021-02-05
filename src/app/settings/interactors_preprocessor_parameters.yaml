@@ -329,8 +329,8 @@ MovieLens 10M:
   NICF:
     parameters:
       time_step: 3
-      latent_factor: 10
-      learning_rate: 0.01
+      latent_factor: 20
+      learning_rate: 0.1
       training_epoch: 30000
       rnn_layer: 1
       inner_epoch: 50
