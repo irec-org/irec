@@ -131,16 +131,18 @@ for dataset_preprocessor in datasets_preprocessors:
         # for itr_class in interactors_classes:
             best_itr = max(datasets_metrics_values[dataset_preprocessor['name']][
                 metric_class_name].items(),key=lambda x: x[1][i])[0]
-            best_itr_val = datasets_metrics_values[dataset_preprocessor['name']][
+            best_itr_vals = datasets_metrics_values[dataset_preprocessor['name']][
                     metric_class_name].pop(best_itr)
+            best_itr_val = best_itr_vals[i]
             second_best_itr = max(datasets_metrics_values[dataset_preprocessor['name']][
                 metric_class_name].items(),key=lambda x: x[1][i])[0]
-            second_best_itr_val = datasets_metrics_values[dataset_preprocessor['name']][
+            second_best_itr_vals = datasets_metrics_values[dataset_preprocessor['name']][
                     metric_class_name][second_best_itr]
+            second_best_itr_val = second_best_itr_vals[i]
             # come back with value in dict
             datasets_metrics_values[dataset_preprocessor['name']][
 
-                    metric_class_name][best_itr] = best_itr_val
+                    metric_class_name][best_itr] = best_itr_vals
 
             best_itr_users_val = datasets_metrics_users_values[dataset_preprocessor['name']][
                 metric_class_name][best_itr][i]
