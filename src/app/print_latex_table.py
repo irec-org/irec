@@ -73,6 +73,10 @@ rtex_header = r"""
 \documentclass{article}
 \usepackage[landscape, paperwidth=15cm, paperheight=30cm, margin=0mm]{geometry}
 \usepackage{multirow}
+\usepackage{color, colortbl}
+\usepackage{xcolor, soul}
+\definecolor{Gray}{gray}{0.9}
+\definecolor{StrongGray}{gray}{0.7}
 \begin{document}
 \begin{tabular}{%s}
 \hline
