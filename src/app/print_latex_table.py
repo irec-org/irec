@@ -4,6 +4,7 @@ import sys
 sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "lib")
 
 import inquirer
+import copy
 import scipy
 import interactors
 import mf
@@ -22,6 +23,13 @@ import matplotlib.pyplot as plt
 from utils.DirectoryDependent import DirectoryDependent
 from cycler import cycler
 from collections import defaultdict
+import argparse
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--reference', type=str, default=None)
+args = parser.parse_args()
+
 plt.rcParams['axes.prop_cycle'] = cycler(color='krbgmyc')
 plt.rcParams['lines.linewidth'] = 2
 plt.rcParams['font.size'] = 15
@@ -119,7 +127,6 @@ for dataset_preprocessor in datasets_preprocessors:
                 metric_class_name][itr_class.__name__].extend(
                     np.array([metric_values[i - 1] for i in nums_interactions_to_show]))
 
-import copy
 datasets_metrics_gain = defaultdict(
         lambda: defaultdict(lambda: defaultdict(lambda: ['']*len(nums_interactions_to_show))))
 bullet_str = r'\textcolor[rgb]{0.7,0.7,0.0}{$\bullet$}'
@@ -129,8 +136,11 @@ for dataset_preprocessor in datasets_preprocessors:
     for metric_class_name in map(lambda x: x.__name__, metrics_classes):
         for i, num in enumerate(nums_interactions_to_show):
         # for itr_class in interactors_classes:
-            best_itr = max(datasets_metrics_values[dataset_preprocessor['name']][
-                metric_class_name].items(),key=lambda x: x[1][i])[0]
+            if args.reference != None:
+                best_itr = args.reference
+            else:
+                best_itr = max(datasets_metrics_values[dataset_preprocessor['name']][
+                    metric_class_name].items(),key=lambda x: x[1][i])[0]
             best_itr_vals = datasets_metrics_values[dataset_preprocessor['name']][
                     metric_class_name].pop(best_itr)
             best_itr_val = best_itr_vals[i]
