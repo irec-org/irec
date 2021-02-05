@@ -61,7 +61,7 @@ dataset.update_from_data()
 # dataset.update_num_total_users_items()
 
 metrics_evaluators = [
-    CumulativeInteractionMetricsEvaluator(dataset, metrics_classes)
+    CumulativeInteractionMetricsEvaluator(dataset, metrics_classes),
 ]
 
 evaluation_policy = ir.get_interactors_evaluation_policy()

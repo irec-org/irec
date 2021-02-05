@@ -12,7 +12,7 @@ import numpy as np
 import scipy.sparse
 from utils.DatasetManager import DatasetManager
 import yaml
-from metric import InteractionMetricsEvaluator, CumulativeMetricsEvaluator, CumulativeInteractionMetricsEvaluator
+from metric import InteractionMetricsEvaluator, CumulativeMetricsEvaluator, CumulativeInteractionMetricsEvaluator, UserCumulativeInteractionMetricsEvaluator
 from utils.dataset import Dataset
 from utils.PersistentDataManager import PersistentDataManager
 from utils.InteractorCache import InteractorCache
@@ -22,7 +22,9 @@ import ctypes
 
 BUFFER_SIZE_EVALUATOR = 50
 
-metrics_classes = [metric.Precision, metric.Recall, metric.Hits]
+nums_interactions_to_show = [5, 10, 20, 50, 100]
+
+metrics_classes = [metric.Recall, metric.Hits]
 
 dm = DatasetManager()
 datasets_preprocessors = dm.request_datasets_preprocessors()
@@ -58,9 +60,7 @@ for dataset_preprocessor in datasets_preprocessors:
     dataset.update_num_total_users_items()
 
     metrics_evaluators = [
-        InteractionMetricsEvaluator(dataset, metrics_classes),
-        CumulativeMetricsEvaluator(BUFFER_SIZE_EVALUATOR, dataset, metrics_classes),
-        CumulativeInteractionMetricsEvaluator(dataset, metrics_classes)
+        UserCumulativeInteractionMetricsEvaluator(dataset, metrics_classes)
     ]
 
     evaluation_policy = ir.get_interactors_evaluation_policy()
@@ -75,6 +75,10 @@ for dataset_preprocessor in datasets_preprocessors:
             dm, evaluation_policy, itr))
 
         metrics_pdm = PersistentDataManager(directory='metrics')
+        if isinstance(metric_evaluator, CumulativeInteractionMetricsEvaluator):
+            metrics_values = metric_evaluator.evaluate(
+                evaluation_policy.num_interactions,
+                evaluation_policy.interaction_size, users_items_recommended,interactions_to_evaluate=nums_interactions_to_show)
         if isinstance(metric_evaluator, InteractionMetricsEvaluator):
             metrics_values = metric_evaluator.evaluate(
                 evaluation_policy.num_interactions,

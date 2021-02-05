@@ -4,6 +4,7 @@ import sys
 sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "lib")
 
 import inquirer
+import scipy
 import interactors
 import mf
 from utils.InteractorRunner import InteractorRunner
@@ -12,7 +13,7 @@ import numpy as np
 import scipy.sparse
 from utils.DatasetManager import DatasetManager
 import yaml
-from metric import CumulativeInteractionMetricsEvaluator
+from metric import CumulativeInteractionMetricsEvaluator, UserCumulativeInteractionMetricsEvaluator
 from utils.dataset import Dataset
 from utils.PersistentDataManager import PersistentDataManager
 from utils.InteractorCache import InteractorCache
@@ -52,7 +53,7 @@ ir = InteractorRunner(dm, interactors_general_settings,
                       evaluation_policies_parameters)
 interactors_classes = ir.select_interactors()
 
-metrics_evaluator = CumulativeInteractionMetricsEvaluator(None, metrics_classes)
+metrics_evaluator = UserCumulativeInteractionMetricsEvaluator(None, metrics_classes)
 
 evaluation_policy = ir.get_interactors_evaluation_policy()
 
@@ -75,6 +76,7 @@ rtex_header = r"""
 \usepackage{multirow}
 \usepackage{color, colortbl}
 \usepackage{xcolor, soul}
+\usepackage{amssymb}
 \definecolor{Gray}{gray}{0.9}
 \definecolor{StrongGray}{gray}{0.7}
 \begin{document}
@@ -94,6 +96,9 @@ rtex = ""
 datasets_metrics_values = defaultdict(
     lambda: defaultdict(lambda: defaultdict(list)))
 
+datasets_metrics_users_values = defaultdict(
+    lambda: defaultdict(lambda: defaultdict(list)))
+
 for dataset_preprocessor in datasets_preprocessors:
     dm.initialize_engines(dataset_preprocessor)
 
@@ -109,7 +114,56 @@ for dataset_preprocessor in datasets_preprocessors:
                     metrics_evaluator.get_id(), metric_class_name))
             datasets_metrics_values[dataset_preprocessor['name']][
                 metric_class_name][itr_class.__name__].extend(
+                    [np.mean(metric_values[i - 1]) for i in nums_interactions_to_show])
+            datasets_metrics_users_values[dataset_preprocessor['name']][
+                metric_class_name][itr_class.__name__].extend(
                     [metric_values[i - 1] for i in nums_interactions_to_show])
+
+import copy
+datasets_metrics_gain = defaultdict(
+        lambda: defaultdict(lambda: defaultdict(lambda: ['']*len(nums_interactions_to_show))))
+bullet_str = r'\textcolor[rgb]{0.7,0.7,0.0}{$\bullet$}'
+triangle_up_str = r'\textcolor[rgb]{00,0.45,0.10}{$\blacktriangle$}'
+triangle_down_str = r'\textcolor[rgb]{0.7,00,00}{$\blacktriangledown$}'
+for dataset_preprocessor in datasets_preprocessors:
+    for metric_class_name in map(lambda x: x.__name__, metrics_classes):
+        for i, num in enumerate(nums_interactions_to_show):
+        # for itr_class in interactors_classes:
+            best_itr = max(datasets_metrics_values[dataset_preprocessor['name']][
+                metric_class_name].items(),key=lambda x: x[1][i])[0]
+            best_itr_val = datasets_metrics_values[dataset_preprocessor['name']][
+                    metric_class_name].pop(best_itr)
+            second_best_itr = max(datasets_metrics_values[dataset_preprocessor['name']][
+                metric_class_name].items(),key=lambda x: x[1][i])[0]
+            second_best_itr_val = datasets_metrics_values[dataset_preprocessor['name']][
+                    metric_class_name][second_best_itr]
+            # come back with value in dict
+            datasets_metrics_values[dataset_preprocessor['name']][
+
+                    metric_class_name][best_itr] = best_itr_val
+
+            best_itr_users_val = datasets_metrics_values[dataset_preprocessor['name']][
+                metric_class_name][best_itr]
+            second_best_itr_users_val = datasets_metrics_values[dataset_preprocessor['name']][
+                metric_class_name][second_best_itr]
+
+            print(best_itr_users_val)
+            print(second_best_itr_users_val)
+            statistic, pvalue = scipy.stats.ttest_rel(
+                    best_itr_users_val,
+                    second_best_itr_users_val,
+                    )
+
+            if pvalue > 0.05:
+                datasets_metrics_gain[dataset_preprocessor['name']][metric_class_name][best_itr][i]=bullet_str
+            else:
+                if best_itr_val < second_best_itr_val:
+                    datasets_metrics_gain[dataset_preprocessor['name']][metric_class_name][best_itr][i]=triangle_down_str
+                elif best_itr_val > second_best_itr_val:
+                    datasets_metrics_gain[dataset_preprocessor['name']][metric_class_name][best_itr][i]=triangle_up_str
+                else:
+                    datasets_metrics_gain[dataset_preprocessor['name']][metric_class_name][best_itr][i]=bullet_str
+
 
 for metric_name, metric_class_name in zip(
         metrics_names, map(lambda x: x.__name__, metrics_classes)):
@@ -135,9 +189,11 @@ T & %s \\
         rtex += ' & '.join([
             ' & '.join(
                 map(
-                    lambda x: f"{x:.4f}",
+                    lambda x,y: f"{x:.4f}{y}",
                     datasets_metrics_values[dataset_preprocessor['name']]
-                    [metric_class_name][itr_class.__name__]))
+                    [metric_class_name][itr_class.__name__],
+                    datasets_metrics_gain[dataset_preprocessor['name']][metric_class_name][itr_class.__name__]
+                    ))
             for dataset_preprocessor in datasets_preprocessors
         ])
         rtex += r'\\\hline' + '\n'

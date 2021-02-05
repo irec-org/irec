@@ -125,7 +125,7 @@ class InteractionMetricsEvaluator(MetricsEvaluator):
 
     @staticmethod
     def _metric_evaluation(obj_id, num_interactions, interaction_size,
-                           metric_class):
+                           metric_class, interactions_to_evaluate):
         self = ctypes.cast(obj_id, ctypes.py_object).value
         start_time = time.time()
         metric_values = []
@@ -156,7 +156,9 @@ class InteractionMetricsEvaluator(MetricsEvaluator):
         )
         return metric_values
 
-    def evaluate(self, num_interactions, interaction_size, results):
+    def evaluate(self, num_interactions, interaction_size, results, interactions_to_evaluate=None):
+        if interactions_to_evaluate == None:
+            interactions_to_evaluate = list(range(num_interactions))
         self.users_false_negative = defaultdict(int)
         for row in self.ground_truth_dataset.data:
             uid = int(row[0])
@@ -172,7 +174,7 @@ class InteractionMetricsEvaluator(MetricsEvaluator):
         metrics_values = defaultdict(list)
         results = run_parallel(
             self._metric_evaluation,
-            [(id(self), num_interactions, interaction_size, metric_class)
+            [(id(self), num_interactions, interaction_size, metric_class, interactions_to_evaluate)
              for metric_class in self.metrics_classes],
             use_tqdm=False)
         for result, metric_class in zip(results, self.metrics_classes):
@@ -181,10 +183,13 @@ class InteractionMetricsEvaluator(MetricsEvaluator):
         return metrics_values
 
 class CumulativeInteractionMetricsEvaluator(InteractionMetricsEvaluator):
-
+    @staticmethod
+    def metric_summarize(users_metric_values):
+        return np.mean(users_metric_values)
+        
     @staticmethod
     def _metric_evaluation(obj_id, num_interactions, interaction_size,
-                           metric_class):
+                           metric_class, interactions_to_evaluate):
         self = ctypes.cast(obj_id, ctypes.py_object).value
         start_time = time.time()
         metric_values = []
@@ -207,13 +212,21 @@ class CumulativeInteractionMetricsEvaluator(InteractionMetricsEvaluator):
                         uid, item, self.ground_truth_consumption_matrix[uid,
                                                                         item])
 
-            metric_values.append(
-                np.mean([metric.compute(uid) for uid in self.uids]))
+            if i in interactions_to_evaluate:
+                metric_values.append(
+                    self.metric_summarize([metric.compute(uid) for uid in self.uids]))
 
         print(
             f"{self.__class__.__name__} spent {time.time()-start_time:.2f} seconds executing {metric_class.__name__} metric"
         )
         return metric_values
+
+
+class UserCumulativeInteractionMetricsEvaluator(CumulativeInteractionMetricsEvaluator):
+    @staticmethod
+    def metric_summarize(users_metric_values):
+        return users_metric_values
+    
 
 class Metric(Parameterizable):
 
