@@ -90,6 +90,7 @@ def evaluate_itr(metric_evaluator_id, dm_id, itr_class, parameters):
                 os.path.join(InteractorCache().get_id(dm, evaluation_policy, itr),
                              metric_evaluator.get_id(), metric_name), metric_values)
     except:
+        print("Error in evaluation, could not evaluate")
         pass
 
 
