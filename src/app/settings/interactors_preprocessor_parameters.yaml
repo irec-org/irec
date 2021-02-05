@@ -436,20 +436,20 @@ MovieLens 10M:
       alpha: 0.2
 Good Books:
   NICF:
-          parameters:
-                  time_step: 3
-                  latent_factor: 10
-                  learning_rate: 0.01
-                  training_epoch: 30000
-                  rnn_layer: 1
-                  inner_epoch: 50
-                  batch: 128
-                  gamma: 0.0
-                  clip_param: 0.2
-                  restore_model: false
-                  num_blocks: 2
-                  num_heads: 1
-                  dropout_rate: 0.1
+    parameters:
+      time_step: 3
+      latent_factor: 30
+      learning_rate: 0.1
+      training_epoch: 30000
+      rnn_layer: 1
+      inner_epoch: 50
+      batch: 128
+      gamma: 0.0
+      clip_param: 0.2
+      restore_model: false
+      num_blocks: 2
+      num_heads: 1
+      dropout_rate: 0.1
   PTS:
     parameters:
       num_particles: 2
@@ -465,7 +465,7 @@ Good Books:
   ThompsonSampling:
     parameters:
       alpha_0: 1
-      beta_0: 1
+      beta_0: 100
   Random:
   kNNBandit:
   ALMostPopular:
@@ -477,7 +477,7 @@ Good Books:
       num_lat: 10
   OurMethod2:
     parameters:
-      alpha: 0.75
+      alpha: 0.25
       num_lat: 10
   MostPopular:
   LinearUCB:
@@ -528,7 +528,7 @@ Good Books:
       epsilon: 0.1
   UCB:
     parameters:
-      c: 1.0
+      c: 0.25
   MostRepresentative:
   ALEntropy:
   Entropy0:
