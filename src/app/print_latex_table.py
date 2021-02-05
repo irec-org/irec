@@ -149,7 +149,7 @@ for dataset_preprocessor in datasets_preprocessors:
             second_best_itr_users_val = datasets_metrics_users_values[dataset_preprocessor['name']][
                 metric_class_name][second_best_itr][i]
 
-            statistic, pvalue = scipy.stats.ttest_rel(
+            statistic, pvalue = scipy.stats.wilcoxon(
                     best_itr_users_val,
                     second_best_itr_users_val,
                     )
