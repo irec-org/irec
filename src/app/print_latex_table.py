@@ -199,7 +199,7 @@ T & %s \\
         rtex += ' & '.join([
             ' & '.join(
                 map(
-                    lambda x,y: f"{x:.4f}{y}",
+                    lambda x,y: f"{x:.3f}{y}",
                     datasets_metrics_values[dataset_preprocessor['name']]
                     [metric_class_name][itr_class.__name__],
                     datasets_metrics_gain[dataset_preprocessor['name']][metric_class_name][itr_class.__name__]
