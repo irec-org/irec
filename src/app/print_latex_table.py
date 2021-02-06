@@ -129,6 +129,9 @@ for dataset_preprocessor in datasets_preprocessors:
 
 datasets_metrics_gain = defaultdict(
         lambda: defaultdict(lambda: defaultdict(lambda: ['']*len(nums_interactions_to_show))))
+
+datasets_metrics_best = defaultdict(
+        lambda: defaultdict(lambda: defaultdict(lambda:[False]*len(nums_interactions_to_show))))
 bullet_str = r'\textcolor[rgb]{0.7,0.7,0.0}{$\bullet$}'
 triangle_up_str = r'\textcolor[rgb]{00,0.45,0.10}{$\blacktriangle$}'
 triangle_down_str = r'\textcolor[rgb]{0.7,00,00}{$\blacktriangledown$}'
@@ -136,6 +139,9 @@ for dataset_preprocessor in datasets_preprocessors:
     for metric_class_name in map(lambda x: x.__name__, metrics_classes):
         for i, num in enumerate(nums_interactions_to_show):
         # for itr_class in interactors_classes:
+
+            datasets_metrics_best[dataset_preprocessor['name']][metric_class_name][max(datasets_metrics_values[dataset_preprocessor['name']][
+                    metric_class_name].items(),key=lambda x: x[1][i])[0]][i] = True
             if args.reference != None:
                 best_itr = args.reference
             else:
@@ -199,10 +205,11 @@ T & %s \\
         rtex += ' & '.join([
             ' & '.join(
                 map(
-                    lambda x,y: f"{x:.3f}{y}",
+                    lambda x,y,z: (r"\textbf{" if z else "") + f"{x:.3f}{y}" + (r"}" if z else ""),
                     datasets_metrics_values[dataset_preprocessor['name']]
                     [metric_class_name][itr_class.__name__],
-                    datasets_metrics_gain[dataset_preprocessor['name']][metric_class_name][itr_class.__name__]
+                    datasets_metrics_gain[dataset_preprocessor['name']][metric_class_name][itr_class.__name__],
+                    datasets_metrics_best[dataset_preprocessor['name']][metric_class_name][itr_class.__name__]
                     ))
             for dataset_preprocessor in datasets_preprocessors
         ])
