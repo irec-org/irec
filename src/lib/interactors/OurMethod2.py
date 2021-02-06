@@ -42,7 +42,9 @@ class OurMethod2(MFInteractor):
         # regression_model = sklearn.linear_model.LinearRegression()
         res=scipy.optimize.minimize(lambda x,items_weights,items_bias: np.linalg.norm(items_bias - x @ items_weights.T),
                                     np.ones(self.num_latent_factors),
-                                    args=(self.items_weights,self.items_bias))
+                                    args=(self.items_weights,self.items_bias),
+                                    method='BFGS',
+                                    )
         self.initial_b = res.x 
 
         print(np.corrcoef(self.items_bias,self.initial_b @ self.items_weights.T)[0,1])
