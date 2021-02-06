@@ -40,7 +40,7 @@ class OurMethod2(MFInteractor):
         assert(self.items_bias.min() >= 0 and np.isclose(self.items_bias.max(), 1))
 
         # regression_model = sklearn.linear_model.LinearRegression()
-        res=scipy.optimize.minimize(lambda x,items_weights,items_bias: np.linalg.norm(items_bias - x @ items_weights.T),
+        res=scipy.optimize.minimize(lambda x,items_weights,items_bias: np.sum((items_bias - x @ items_weights.T)**2),
                                     np.ones(self.num_latent_factors),
                                     args=(self.items_weights,self.items_bias),
                                     method='BFGS',
