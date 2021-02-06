@@ -15,6 +15,13 @@ import yaml
 from concurrent.futures import ProcessPoolExecutor, wait, FIRST_COMPLETED
 import time
 
+import argparse
+
+parser = argparse.ArgumentParser()
+
+parser.add_argument('--num_tasks', type=int, default=os.cpu_count())
+parser.add_argument('--forced_run', default=False, action='store_true')
+args = parser.parse_args()
 
 def run_interactors_in_base(dataset_preprocessor, interactors_general_settings,
                             interactors_preprocessor_paramaters,
@@ -26,7 +33,7 @@ def run_interactors_in_base(dataset_preprocessor, interactors_general_settings,
     ir = InteractorRunner(dm, interactors_general_settings,
                           interactors_preprocessor_paramaters,
                           evaluation_policies_parameters)
-    ir.run_interactors(interactors_classes)
+    ir.run_interactors(interactors_classes,forced_run=args.forced_run)
 
 
 def main():
@@ -56,7 +63,7 @@ def main():
                                 interactors_classes)
             futures.add(f)
 
-            if len(futures) >= os.cpu_count():
+            if len(futures) >= args.num_tasks:
                 completed, futures = wait(futures, return_when=FIRST_COMPLETED)
 
         for f in futures:
