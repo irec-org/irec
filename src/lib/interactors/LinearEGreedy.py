@@ -19,7 +19,6 @@ class LinearEGreedy(LinearICF):
 
     def train(self, train_dataset):
         super().train(train_dataset)
-        self.bs = defaultdict(lambda: np.ones(self.num_lat))
 
     def predict(self, uid, candidate_items, num_req_items):
         b = self.bs[uid]
