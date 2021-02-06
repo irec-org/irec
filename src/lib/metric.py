@@ -34,7 +34,7 @@ class MetricsEvaluator(Parameterizable):
 
     def __init__(self,
                  metrics_classes=[],
-                 relevance_evaluator=ThresholdRelevanceEvaluator(0),
+                 relevance_evaluator=ThresholdRelevanceEvaluator(3.999),
                  *args,
                  **kwargs):
         super().__init__(*args, **kwargs)
