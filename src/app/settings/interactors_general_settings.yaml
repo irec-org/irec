@@ -10,6 +10,8 @@ OurMethod1:
   name: Old UCB-Learner
 OurMethod2:
   name: WSCB
+OurMethod3:
+  name: WSCB Test
 LinearUCB:
   name: Linear UCB (PMF)
 COFIBA:

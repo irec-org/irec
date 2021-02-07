@@ -32,6 +32,10 @@ MovieLens 100k (B):
       beta_0: 1
   Random:
   kNNBandit:
+    parameters:
+      alpha_0: 1
+      beta_0: 1
+      k: 1
   ALMostPopular:
   OurMethod1:
     parameters:
@@ -40,6 +44,10 @@ MovieLens 100k (B):
       weight_method: 'change'
       num_lat: 10
   OurMethod2:
+    parameters:
+      alpha: 0.5
+      num_lat: 20
+  OurMethod3:
     parameters:
       alpha: 0.5
       num_lat: 20
