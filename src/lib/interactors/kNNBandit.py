@@ -21,7 +21,7 @@ class kNNBandit(ExperimentalInteractor):
     def train(self, train_dataset):
         super().train(train_dataset)
         self.train_dataset = train_dataset
-        self.train_consumption_matrix = scipy.sparse.csr_matrix(
+        self.train_consumption_matrix = scipy.sparse.csc_matrix(
             (self.train_dataset.data[:, 2],
              (self.train_dataset.data[:, 0], self.train_dataset.data[:, 1])),
             (self.train_dataset.num_total_users,
@@ -32,10 +32,21 @@ class kNNBandit(ExperimentalInteractor):
         self.num_total_items = self.train_dataset.num_total_items
         self.consumption_matrix = self.train_consumption_matrix.tolil()
 
-        self.users_alphas = (
-            self.train_consumption_matrix @ self.train_consumption_matrix.T).A
-        self.users_rating_sum = self.train_consumption_matrix.sum(
-            axis=1).A.flatten() + self.alpha_0 + self.beta_0
+        self.users_alphas = np.zeros((self.num_total_users,self.num_total_users))
+        self.users_rating_sum = np.zeros((self.num_total_users)) + self.alpha_0 + self.beta_0
+        for i in tqdm(range(len(self.train_dataset.data))):
+            uid = int(self.train_dataset.data[i,0])
+            item = int(self.train_dataset.data[i,1])
+            reward = self.train_dataset.data[i,2]
+            u1_reward = reward>=4
+            self.users_rating_sum[uid] += u1_reward
+            u2_reward = self.train_consumption_matrix[:,item].A.flatten()
+            tmp_val = np.sum(u1_reward * u2_reward)
+            self.users_alphas[uid,:] += tmp_val
+        # self.users_alphas = (
+            # self.train_consumption_matrix @ self.train_consumption_matrix.T).A
+        # self.users_rating_sum = self.train_consumption_matrix.sum(
+            # axis=1).A.flatten() + self.alpha_0 + self.beta_0
         
         del self.train_consumption_matrix
 
@@ -64,5 +75,5 @@ class kNNBandit(ExperimentalInteractor):
         # u2_reward = self.consumption_matrix[uids, item].A.flatten()
         u2_reward = self.consumption_matrix[:,item].A.flatten()
         tmp_val = np.sum(u1_reward * u2_reward)
-        self.users_alphas[uid, :] += tmp_val
-        self.users_alphas[:, uid] += tmp_val
+        self.users_alphas[uid,:] += tmp_val
+        # self.users_alphas[:, uid] += tmp_val
