@@ -110,11 +110,15 @@ class InteractorRunner():
         self = ctypes.cast(obj_id, ctypes.py_object).value
         self.run_interactor(itr, forced_run)
 
-    def run_interactors(self, interactors_classes, forced_run=False):
+    def run_interactors(self, interactors_classes, forced_run=False,parallel=False):
+
         args = [(id(self), self.create_interactor(itr_class), forced_run)
                 for itr_class in interactors_classes]
-
-        util.run_parallel(self._run_interactor, args)
+        if parallel:
+            util.run_parallel(self._run_interactor, args)
+        else:
+            for i, itr_class in enumerate(interactors_classes):
+                self._run_interactor(*args[i])
 
     def run_interactors_search(self,
                                interactors_classes,
