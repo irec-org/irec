@@ -19,9 +19,9 @@ COFIBA:
 ThompsonSampling:
   name: TS
 kNNBandit:
-  name: kNN-Bandit
+  name: kNN
 MostPopular:
-  name: Popular
+  name: Pop
 LinEGreedy:
   name: Linear ε-Greedy (MF)
 PPELPE:
