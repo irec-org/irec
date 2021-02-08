@@ -149,6 +149,10 @@ MovieLens 1M (B):
       beta_0: 1
   Random:
   kNNBandit:
+    parameters:
+      alpha_0: 1
+      beta_0: 1
+      k: 1
   ALMostPopular:
   OurMethod1:
     parameters:

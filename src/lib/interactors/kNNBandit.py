@@ -7,6 +7,7 @@ import scipy.sparse
 from collections import defaultdict
 import random
 import itertools
+import random
 
 
 class kNNBandit(ExperimentalInteractor):
@@ -34,24 +35,30 @@ class kNNBandit(ExperimentalInteractor):
 
         self.users_alphas = np.zeros((self.num_total_users,self.num_total_users))
         self.users_rating_sum = np.zeros((self.num_total_users)) + self.alpha_0 + self.beta_0
-        for i in tqdm(range(len(self.train_dataset.data))):
+        # l_ = list(range(len(self.train_dataset.data)))
+        l_ = range(len(self.train_dataset.data))
+        self.items_consumed_users = defaultdict(list)
+        self.items_consumed_users_ratings = defaultdict(list)
+        # random.shuffle(l_)
+        for i in tqdm(l_):
             uid = int(self.train_dataset.data[i,0])
             item = int(self.train_dataset.data[i,1])
             reward = self.train_dataset.data[i,2]
-            u1_reward = reward>=4
-            self.users_rating_sum[uid] += u1_reward
-            u2_reward = self.train_consumption_matrix[:,item].A.flatten()
-            tmp_val = np.sum(u1_reward * u2_reward)
-            self.users_alphas[uid,:] += tmp_val
-        # self.users_alphas = (
-            # self.train_consumption_matrix @ self.train_consumption_matrix.T).A
-        # self.users_rating_sum = self.train_consumption_matrix.sum(
-            # axis=1).A.flatten() + self.alpha_0 + self.beta_0
+            reward = reward>=4
+            self.users_rating_sum[uid] += reward
+            if len(self.items_consumed_users[item])>0:
+                item_consumed_uids = np.array([i for i in self.items_consumed_users[item]])
+                item_ratings = np.array([i for i in self.items_consumed_users_ratings[item]])
+                self.users_alphas[uid,item_consumed_uids] += reward * item_ratings
+            self.items_consumed_users[item].append(uid) 
+            self.items_consumed_users_ratings[item].append(reward) 
         
+        print(self.users_alphas)
+        print(self.users_rating_sum)
         del self.train_consumption_matrix
 
     def predict(self, uid, candidate_items, num_req_items):
-        users_score = np.zeros(self.num_total_users)
+        users_score = np.zeros(self.num_total_users-1)
         uids = np.array(list(set(range(self.num_total_users)) - {uid}))
         vs1 = self.users_alphas[uid,uids]
         vs2 = self.users_rating_sum[uids] - self.users_alphas[uid,uids]
@@ -59,21 +66,26 @@ class kNNBandit(ExperimentalInteractor):
             v1 = vs1[i]
             v2 = vs2[i]
             if v1 > 0 and v2 > 0:
-                users_score[uid_] = np.random.beta(v1, v2)
+                users_score[i] = np.random.beta(v1, v2)
+        idxs = np.argpartition(users_score,-self.k)[-self.k:]
+        top_uids = uids[idxs]
 
-        top_uids = np.argpartition(users_score,-self.k)[-self.k:]
-
-        items_score = (users_score[top_uids].reshape(-1,1)*self.consumption_matrix[top_uids,:][:,candidate_items].A).sum(axis=0)
+        if self.k == 1:
+            items_score = self.consumption_matrix[top_uids,candidate_items].A.flatten()
+        else:
+            items_score = (users_score[idxs].reshape(-1,1)*self.consumption_matrix[top_uids,:][:,candidate_items].A).sum(axis=0)
 
         return items_score, None
 
     def update(self, uid, item, reward, additional_data):
-        u1_reward = reward>=4
-        self.users_rating_sum[uid] += u1_reward
-        self.consumption_matrix[uid, item] = u1_reward
+        reward = reward>=4
 
-        # u2_reward = self.consumption_matrix[uids, item].A.flatten()
-        u2_reward = self.consumption_matrix[:,item].A.flatten()
-        tmp_val = np.sum(u1_reward * u2_reward)
-        self.users_alphas[uid,:] += tmp_val
-        # self.users_alphas[:, uid] += tmp_val
+        if len(self.items_consumed_users[item])>0:
+            item_consumed_uids = np.array([i for i in self.items_consumed_users[item]])
+            item_ratings = np.array([i for i in self.items_consumed_users_ratings[item]])
+            self.users_alphas[uid,item_consumed_uids] += reward * item_ratings
+
+        self.users_rating_sum[uid] += reward
+        self.consumption_matrix[uid, item] = reward
+        self.items_consumed_users[item].append(uid) 
+        self.items_consumed_users_ratings[item].append(reward) 
