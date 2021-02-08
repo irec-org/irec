@@ -35,6 +35,7 @@ class kNNBandit(ExperimentalInteractor):
 
         self.users_alphas = np.zeros((self.num_total_users,self.num_total_users))
         self.users_rating_sum = np.zeros((self.num_total_users)) + self.alpha_0 + self.beta_0
+        # self.users_rating_sum = np.zeros((self.num_total_users))
         # l_ = list(range(len(self.train_dataset.data)))
         l_ = range(len(self.train_dataset.data))
         self.items_consumed_users = defaultdict(list)
@@ -53,8 +54,6 @@ class kNNBandit(ExperimentalInteractor):
             self.items_consumed_users[item].append(uid) 
             self.items_consumed_users_ratings[item].append(reward) 
         
-        print(self.users_alphas)
-        print(self.users_rating_sum)
         del self.train_consumption_matrix
 
     def predict(self, uid, candidate_items, num_req_items):
@@ -65,15 +64,16 @@ class kNNBandit(ExperimentalInteractor):
         for i, uid_ in enumerate(uids):
             v1 = vs1[i]
             v2 = vs2[i]
-            if v1 > 0 and v2 > 0:
-                users_score[i] = np.random.beta(v1, v2)
+            users_score[i] = np.random.beta(v1+self.alpha_0, v2+self.beta_0)
         idxs = np.argpartition(users_score,-self.k)[-self.k:]
         top_uids = uids[idxs]
 
-        if self.k == 1:
-            items_score = self.consumption_matrix[top_uids,candidate_items].A.flatten()
-        else:
-            items_score = (users_score[idxs].reshape(-1,1)*self.consumption_matrix[top_uids,:][:,candidate_items].A).sum(axis=0)
+        # if self.k == 1:
+        items_score = self.consumption_matrix[top_uids,candidate_items].A.flatten()
+        # else:
+        # items_score = np.zeros(len(candidate_items))
+        # for idx, top_uid in zip(idxs,top_uids):
+            # items_score += users_score[idx]*self.consumption_matrix[top_uid,candidate_items].A.flatten()
 
         return items_score, None
 
