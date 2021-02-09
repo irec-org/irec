@@ -368,6 +368,42 @@ ThompsonSampling:
     beta_0: 100
 Random:
 kNNBandit:
+  - alpha_0: 1
+    beta_0: 1
+    k: 1
+  - alpha_0: 1
+    beta_0: 10
+    k: 1
+  - alpha_0: 1
+    beta_0: 100
+    k: 1
+  - alpha_0: 1
+    beta_0: 1
+    k: 10
+  - alpha_0: 1
+    beta_0: 10
+    k: 10
+  - alpha_0: 1
+    beta_0: 100
+    k: 10
+  - alpha_0: 1
+    beta_0: 1
+    k: 100
+  - alpha_0: 1
+    beta_0: 10
+    k: 100
+  - alpha_0: 1
+    beta_0: 100
+    k: 100
+  - alpha_0: 1
+    beta_0: 1
+    k: 1000
+  - alpha_0: 1
+    beta_0: 10
+    k: 1000
+  - alpha_0: 1
+    beta_0: 100
+    k: 1000
 ALMostPopular:
 OurMethod1:
   - alpha: 0.25
