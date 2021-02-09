@@ -33,7 +33,7 @@ class kNNBandit(ExperimentalInteractor):
         self.num_total_items = self.train_dataset.num_total_items
         self.consumption_matrix = self.train_consumption_matrix.tolil()
 
-        self.users_alphas = np.zeros((self.num_total_users,self.num_total_users))
+        self.users_alphas = np.zeros((self.num_total_users,self.num_total_users),dtype='float32')
         self.users_rating_sum = np.zeros((self.num_total_users)) + self.alpha_0 + self.beta_0
         l_ = range(len(self.train_dataset.data))
         self.items_consumed_users = defaultdict(list)
