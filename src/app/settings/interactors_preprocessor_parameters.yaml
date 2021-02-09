@@ -355,7 +355,7 @@ MovieLens 10M:
       dropout_rate: 0.1
   PTS:
     parameters:
-      num_particles: 2
+      num_particles: 5
       var: 0.5
       var_u: 1.0
       var_v: 1.0
