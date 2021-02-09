@@ -68,7 +68,9 @@ class kNNBandit(ExperimentalInteractor):
 
         top_users_score = users_score[idxs]
 
-        items_score = np.sum(top_users_score.reshape(-1,1)*self.consumption_matrix[top_uids,candidate_items].A.flatten(),axis=0)
+        items_score = np.zeros(len(candidate_items))
+        for top_user_score, top_uid in zip(top_users_score, top_uids):
+            items_score += top_user_score * self.consumption_matrix[top_uid].A.flatten()[candidate_items]
 
         idxs = np.where(np.max(items_score) == items_score)[0]
         items_score[idxs] += np.random.rand(len(idxs))

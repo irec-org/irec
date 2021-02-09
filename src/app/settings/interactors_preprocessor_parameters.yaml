@@ -34,7 +34,7 @@ MovieLens 100k (B):
   kNNBandit:
     parameters:
       alpha_0: 1
-      beta_0: 1
+      beta_0: 100
       k: 1
   ALMostPopular:
   OurMethod1:
