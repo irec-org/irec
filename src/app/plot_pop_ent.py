@@ -95,6 +95,8 @@ for dataset_preprocessor in datasets_preprocessors:
         ax.set_title(interactors_general_settings[itr_class.__name__]['name'])
         ax.set_xlabel("Entropy")
         ax.set_ylabel("Popularity")
+        ax.set_xlim(xmin=np.min(items_entropy),xmax=np.max(items_entropy))
+        ax.set_ylim(ymin=np.min(items_popularity),ymax=np.max(items_popularity))
         ax.legend()
 
         fig.savefig(os.path.join(DirectoryDependent().DIRS["img"],f'pop_ent_{dm.dataset_preprocessor.name}_{itr_class.__name__}.png'),bbox_inches = 'tight')
