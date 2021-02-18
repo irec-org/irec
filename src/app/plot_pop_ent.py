@@ -87,6 +87,9 @@ for dataset_preprocessor in datasets_preprocessors:
             top_item = max(counter, key=counter.get)
             position_most_recommended_item[pos] = top_item
         previous_pos = 0
+        ax.scatter(items_entropy,
+                items_popularity,
+                color='gray')
         for pos in np.sort(nums_interactions_to_print):
             ax.scatter([items_entropy[position_most_recommended_item[i]] for i in range(previous_pos,pos)],
                     [items_popularity[position_most_recommended_item[i]] for i in range(previous_pos,pos)],
