@@ -271,7 +271,7 @@ MovieLens 1M:
       num_lat: 10
   OurMethod2:
     parameters:
-      alpha: 1.0
+      alpha: 0.25
       num_lat: 10
   MostPopular:
   LinearUCB:
