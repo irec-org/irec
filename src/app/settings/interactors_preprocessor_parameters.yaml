@@ -507,7 +507,7 @@ Good Books:
       num_lat: 10
   LinUCB:
     parameters:
-      alpha: 1.0
+      alpha: 0.5
       num_lat: 10
   PPELPE:
   UCBLearner:
@@ -617,7 +617,7 @@ Yahoo Music:
   LinUCB:
     parameters:
       alpha: 1.0
-      num_lat: 10
+      num_lat: 5
   PPELPE:
   UCBLearner:
     parameters:
