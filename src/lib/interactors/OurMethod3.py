@@ -47,79 +47,33 @@ class OurMethod3(MFInteractor):
             self.train_consumption_matrix)
         items_popularity = interactors.MostPopular.get_items_popularity(
             self.train_consumption_matrix, normalize=False)
-        # self.items_bias = interactors.PPELPE.get_items_ppelpe(items_popularity,items_entropy)
         self.items_bias = interactors.LogPopEnt.get_items_logpopent(
             items_popularity, items_entropy)
-        print(self.items_bias.min(), self.items_bias.max())
         assert (self.items_bias.min() >= 0 and
                 np.isclose(self.items_bias.max(), 1))
-
-        # regression_model = sklearn.linear_model.LinearRegression()
-        print("Optimizing")
-
-        def _fun(X, items_weights, items_bias, alpha, info):
-            # info['i'] += 1
-            # print(info['i'])
-            # b = X[:self.num_lat]
-            A = X.reshape(self.num_lat, self.num_lat)
-            # x = np.dot(np.linalg.inv(A), b)
-            return np.linalg.norm(
-                items_bias - (
-                    # x @ items_weights.T +
-                    alpha * np.sqrt(
-                    np.sum(items_weights.dot(np.linalg.inv(A)) * items_weights,
-                           axis=1))))
-
-        res = scipy.optimize.minimize(_fun,
-                                      # np.concatenate(
-                                          # (np.ones(self.num_lat),
-                                           np.eye(self.num_lat).flatten()
-                                           # )
-        # )
-        ,
-                                      args=(self.items_weights, self.items_bias,
-                                            self.alpha, {
-                                                'i': 0
-                                            }),
-                                      method='BFGS',
-                                      # options={'maxiter': 20},
-                                      )
-
-        print("Finished Optimizing")
-        # print(res)
-
-        self.initial_b = np.zeros(self.num_lat)
-        self.initial_A = res.x.reshape(self.num_lat,self.num_lat)
-            # print(f"b = {self.initial_b}")
-            # print(f"A = {self.initial_A}")
-
-        # print(
-        # np.corrcoef(self.items_bias,
-        # self.initial_b @ self.items_weights.T)[0, 1])
-        b = self.initial_b
-        A = self.initial_A
-        x = np.dot(np.linalg.inv(A), b)
-
-        print(
-            np.corrcoef(self.items_bias,
-                        _ucb(x, A, self.alpha, self.items_weights)))
-
+        self.initial_b = np.ones(self.num_lat)
         self.I = np.eye(len(self.items_weights[0]))
         self.bs = defaultdict(lambda: self.initial_b.copy())
         self.As = defaultdict(lambda: self.I.copy())
+        self.num_recommended_items= defaultdict(int)
 
     def predict(self, uid, candidate_items, num_req_items):
-        b = self.bs[uid]
-        A = self.As[uid]
-        user_latent_factors = np.dot(np.linalg.inv(A), b)
-        items_uncertainty = np.sqrt(
-            np.sum(self.items_weights[candidate_items].dot(np.linalg.inv(A)) *
-                   self.items_weights[candidate_items],
-                   axis=1))
-        items_user_similarity = user_latent_factors @ self.items_weights[
-            candidate_items].T
-        user_model_items_score = items_user_similarity + self.alpha * items_uncertainty
-        items_score = user_model_items_score
+        if self.num_recommended_items[uid] < 20:
+            items_score = self.items_bias[candidate_items]
+        else:
+            b = self.bs[uid]
+            A = self.As[uid]
+            user_latent_factors = np.dot(np.linalg.inv(A), b)
+            items_uncertainty = np.sqrt(
+                np.sum(self.items_weights[candidate_items].dot(np.linalg.inv(A)) *
+                       self.items_weights[candidate_items],
+                       axis=1))
+            items_user_similarity = user_latent_factors @ self.items_weights[
+                candidate_items].T
+            user_model_items_score = items_user_similarity + self.alpha * items_uncertainty
+            items_score = user_model_items_score
+
+        self.num_recommended_items[uid] += num_req_items
         return items_score, None
 
     def update(self, uid, item, reward, additional_data):
