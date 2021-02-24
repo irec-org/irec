@@ -32,3 +32,4 @@ from .PTS import *
 from .MFInteractor import *
 from .NICF import NICF
 from .OurMethod3 import OurMethod3
+from .OurMethod4 import OurMethod4
