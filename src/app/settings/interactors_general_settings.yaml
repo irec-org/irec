@@ -11,7 +11,7 @@ OurMethod1:
 OurMethod2:
   name: WSCB
 OurMethod3:
-  name: WSCB Test
+  name: WSCB Oracle
 OurMethod4:
   name: WSCB Parameters-based
 LinearUCB:
