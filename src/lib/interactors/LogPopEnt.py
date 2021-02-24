@@ -10,8 +10,11 @@ class LogPopEnt(ExperimentalInteractor):
         super().__init__(*args, **kwargs)
 
     @staticmethod
-    def get_items_logpopent(items_popularity,items_entropy):
-        items_logpopent = items_entropy * np.ma.log(items_popularity).filled(0)
+    def get_items_logpopent(items_popularity,items_entropy,k=None):
+        if k is not None:
+            items_logpopent = (items_entropy**k) * np.ma.log(items_popularity).filled(0)**(1-k)
+        else:
+            items_logpopent = items_entropy * np.ma.log(items_popularity).filled(0)
         return np.dot(items_logpopent,1/np.max(items_logpopent))
 
     def train(self,train_dataset):

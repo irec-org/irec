@@ -513,6 +513,40 @@ OurMethod2:
   - alpha: 1
     num_lat: 20
 
+OurMethod4:
+  - alpha: 0.75
+    num_lat: 10
+    k: 0.0
+  - alpha: 0.75
+    num_lat: 10
+    k: 0.1
+  - alpha: 0.75
+    num_lat: 10
+    k: 0.2
+  - alpha: 0.75
+    num_lat: 10
+    k: 0.3
+  - alpha: 0.75
+    num_lat: 10
+    k: 0.4
+  - alpha: 0.75
+    num_lat: 10
+    k: 0.5
+  - alpha: 0.75
+    num_lat: 10
+    k: 0.6
+  - alpha: 0.75
+    num_lat: 10
+    k: 0.7
+  - alpha: 0.75
+    num_lat: 10
+    k: 0.8
+  - alpha: 0.75
+    num_lat: 10
+    k: 0.9
+  - alpha: 0.75
+    num_lat: 10
+    k: 1.0
 MostPopular:
 LinearUCB:
   - alpha: 0.25
