@@ -36,7 +36,7 @@ class OurMethod4(MFInteractor):
         items_entropy = interactors.Entropy.get_items_entropy(self.train_consumption_matrix)
         items_popularity = interactors.MostPopular.get_items_popularity(self.train_consumption_matrix,normalize=False)
         # self.items_bias = interactors.PPELPE.get_items_ppelpe(items_popularity,items_entropy)
-        self.items_bias = interactors.LogPopEnt.get_items_logpopent(items_popularity,items_entropy,k)
+        self.items_bias = interactors.LogPopEnt.get_items_logpopent(items_popularity,items_entropy,self.k)
         print(self.items_bias.min(),self.items_bias.max())
         assert(self.items_bias.min() >= 0 and np.isclose(self.items_bias.max(), 1))
 
