@@ -16,11 +16,11 @@ from .MFInteractor import MFInteractor
 import interactors
 
 class OurMethod4(MFInteractor):
-    def __init__(self, alpha, k,*args, **kwargs):
+    def __init__(self, alpha, lambda_,*args, **kwargs):
         super().__init__(*args, **kwargs)
         self.alpha = alpha
-        self.k = k
-        self.parameters.extend(['alpha','k'])
+        self.lambda_ = lambda_
+        self.parameters.extend(['alpha','lambda_'])
 
     def train(self,train_dataset):
         super().train(train_dataset)
@@ -36,7 +36,7 @@ class OurMethod4(MFInteractor):
         items_entropy = interactors.Entropy.get_items_entropy(self.train_consumption_matrix)
         items_popularity = interactors.MostPopular.get_items_popularity(self.train_consumption_matrix,normalize=False)
         # self.items_bias = interactors.PPELPE.get_items_ppelpe(items_popularity,items_entropy)
-        self.items_bias = interactors.LogPopEnt.get_items_logpopent(items_popularity,items_entropy,self.k)
+        self.items_bias = interactors.LogPopEnt.get_items_logpopent(items_popularity,items_entropy,self.lambda_)
         print(self.items_bias.min(),self.items_bias.max())
         assert(self.items_bias.min() >= 0 and np.isclose(self.items_bias.max(), 1))
 
