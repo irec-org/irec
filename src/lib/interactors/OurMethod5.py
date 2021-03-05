@@ -15,7 +15,7 @@ from collections import defaultdict
 from .MFInteractor import MFInteractor
 import interactors
 
-class OurMethod2(MFInteractor):
+class OurMethod5(MFInteractor):
     def __init__(self, alpha,*args, **kwargs):
         super().__init__(*args, **kwargs)
         self.alpha = alpha
