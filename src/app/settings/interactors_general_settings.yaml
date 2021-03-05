@@ -14,6 +14,8 @@ OurMethod3:
   name: WSCB Oracle
 OurMethod4:
   name: WSCB Parameters-based
+OurMethod5:
+  name: WSCB time-aware
 LinearUCB:
   name: Linear UCB (PMF)
 COFIBA:
