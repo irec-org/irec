@@ -24,7 +24,7 @@ from copy import copy
 
 BUFFER_SIZE_EVALUATOR = 50
 
-metrics_classes = [metric.Precision, metric.Recall, metric.Hits]
+metrics_classes = [metric.Hits]
 
 dm = DatasetManager()
 dataset_preprocessor = dm.request_dataset_preprocessor()
