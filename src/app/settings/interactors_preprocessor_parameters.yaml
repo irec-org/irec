@@ -386,6 +386,10 @@ MovieLens 10M:
     parameters:
       alpha: 0.75
       num_lat: 10
+  OurMethod5:
+    parameters:
+      alpha: 0.25
+      num_lat: 10
   MostPopular:
   LinearUCB:
     parameters:
@@ -611,6 +615,10 @@ Yahoo Music:
   OurMethod3:
     parameters:
       alpha: 0.5
+      num_lat: 20
+  OurMethod5:
+    parameters:
+      alpha: 0.25
       num_lat: 20
   MostPopular:
   LinearUCB:
