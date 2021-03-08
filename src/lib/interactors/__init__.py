@@ -34,3 +34,4 @@ from .NICF import NICF
 from .OurMethod3 import OurMethod3
 from .OurMethod4 import OurMethod4
 from .OurMethod5 import OurMethod5
+from .OurMethodBalanced import OurMethodBalanced
