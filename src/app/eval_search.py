@@ -82,8 +82,6 @@ def evaluate_itr(metric_evaluator_id, dm_id, itr_class, parameters):
         print(f"Evaluating {itr_class.__name__} results")
         itr = itr_class(**parameters)
         pdm = PersistentDataManager(directory='results')
-        users_items_recommended = pdm.load(InteractorCache().get_id(
-            dm, evaluation_policy, itr))
 
         metrics_pdm = PersistentDataManager(directory='metrics')
 
@@ -91,6 +89,9 @@ def evaluate_itr(metric_evaluator_id, dm_id, itr_class, parameters):
             os.path.join(InteractorCache().get_id(dm, evaluation_policy, itr),
                 metric_evaluator.get_id(), metric_name)):
             raise SystemError
+
+        users_items_recommended = pdm.load(InteractorCache().get_id(
+            dm, evaluation_policy, itr))
 
         if isinstance(metric_evaluator, InteractionMetricsEvaluator):
             metrics_values = metric_evaluator.evaluate(
