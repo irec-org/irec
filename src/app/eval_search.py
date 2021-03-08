@@ -22,6 +22,12 @@ from utils.util import run_parallel
 import ctypes
 from copy import copy
 
+parser = argparse.ArgumentParser(description='Grid search')
+
+parser.add_argument('--num_tasks', type=int, default=os.cpu_count())
+parser.add_argument('--forced_run', default=False, action='store_true')
+args = parser.parse_args()
+
 BUFFER_SIZE_EVALUATOR = 50
 
 metrics_classes = [metric.Hits]
@@ -69,7 +75,8 @@ evaluation_policy = ir.get_interactors_evaluation_policy()
 
 def evaluate_itr(metric_evaluator_id, dm_id, itr_class, parameters):
     try:
-        metric_evaluator = ctypes.cast(metric_evaluator_id, ctypes.py_object).value
+        metric_evaluator = ctypes.cast(metric_evaluator_id,
+                                       ctypes.py_object).value
         dm = ctypes.cast(dm_id, ctypes.py_object).value
         print(f"Evaluating {itr_class.__name__} results")
         itr = itr_class(**parameters)
@@ -78,6 +85,12 @@ def evaluate_itr(metric_evaluator_id, dm_id, itr_class, parameters):
             dm, evaluation_policy, itr))
 
         metrics_pdm = PersistentDataManager(directory='metrics')
+
+        if not args.forced_run and metrics_pdm.file_exists(
+            os.path.join(InteractorCache().get_id(dm, evaluation_policy, itr),
+                metric_evaluator.get_id(), metric_name)):
+            raise SystemError
+
         if isinstance(metric_evaluator, InteractionMetricsEvaluator):
             metrics_values = metric_evaluator.evaluate(
                 evaluation_policy.num_interactions,
@@ -87,8 +100,9 @@ def evaluate_itr(metric_evaluator_id, dm_id, itr_class, parameters):
 
         for metric_name, metric_values in metrics_values.items():
             metrics_pdm.save(
-                os.path.join(InteractorCache().get_id(dm, evaluation_policy, itr),
-                             metric_evaluator.get_id(), metric_name), metric_values)
+                os.path.join(
+                    InteractorCache().get_id(dm, evaluation_policy, itr),
+                    metric_evaluator.get_id(), metric_name), metric_values)
     except:
         print("Error in evaluation, could not evaluate")
         pass
@@ -99,7 +113,8 @@ with ProcessPoolExecutor() as executor:
     for metric_evaluator in metrics_evaluators:
         for itr_class in interactors_classes:
             for parameters in interactors_search_parameters[itr_class.__name__]:
-                f = executor.submit(evaluate_itr,id(metric_evaluator), id(dm), itr_class, parameters)
+                f = executor.submit(evaluate_itr, id(metric_evaluator), id(dm),
+                                    itr_class, parameters)
                 futures.add(f)
         if len(futures) >= os.cpu_count():
             completed, futures = wait(futures, return_when=FIRST_COMPLETED)
