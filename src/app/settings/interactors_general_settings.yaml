@@ -60,3 +60,5 @@ Entropy:
   name: Entropy
 LogPopEnt:
   name: log(Pop)⋅Ent
+OurMethodInit:
+  name: WSCB Init
