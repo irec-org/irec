@@ -51,7 +51,7 @@ class OurMethodInit(MFInteractor):
             self.items_bias = np.random.rand(self.train_dataset.num_total_items)
 
         self.items_bias = self.items_bias - np.min(self.items_bias)
-        self.items_bias self.items_bias/np.max(self.items_bias)
+        self.items_bias = self.items_bias/np.max(self.items_bias)
 
         assert(self.items_bias.min() >= 0 and np.isclose(self.items_bias.max(), 1))
 
