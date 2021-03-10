@@ -80,7 +80,7 @@ def generate_table_spec():
 
 rtex_header = r"""
 \documentclass{standalone}
-\usepackage[landscape, paperwidth=15cm, paperheight=30cm, margin=0mm]{geometry}
+%\usepackage[landscape, paperwidth=15cm, paperheight=30cm, margin=0mm]{geometry}
 \usepackage{multirow}
 \usepackage{color, colortbl}
 \usepackage{xcolor, soul}
