@@ -394,6 +394,11 @@ MovieLens 10M:
     parameters:
       alpha: 1
       num_lat: 20
+  OurMethodBalanced:
+    parameters:
+      alpha: 0.5
+      num_lat: 10
+      init: entropy
   MostPopular:
   LinearUCB:
     parameters:
@@ -515,6 +520,11 @@ Good Books:
     parameters:
       alpha: 0.5
       num_lat: 10
+  OurMethodInit:
+    parameters:
+      alpha: 0.25
+      num_lat: 10
+      init: entropy
   MostPopular:
   LinearUCB:
     parameters:
@@ -636,6 +646,11 @@ Yahoo Music:
     parameters:
       alpha: 0.75
       num_lat: 20
+  OurMethodInit:
+    parameters:
+      alpha: 0.75
+      num_lat: 20
+      init: random
   MostPopular:
   LinearUCB:
     parameters:
