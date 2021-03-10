@@ -85,11 +85,6 @@ def evaluate_itr(metric_evaluator_id, dm_id, itr_class, parameters):
 
         metrics_pdm = PersistentDataManager(directory='metrics')
 
-        if not args.forced_run and metrics_pdm.file_exists(
-            os.path.join(InteractorCache().get_id(dm, evaluation_policy, itr),
-                metric_evaluator.get_id(), metric_name)):
-            raise SystemError
-
         users_items_recommended = pdm.load(InteractorCache().get_id(
             dm, evaluation_policy, itr))
 
@@ -101,13 +96,17 @@ def evaluate_itr(metric_evaluator_id, dm_id, itr_class, parameters):
             metrics_values = metric_evaluator.evaluate(users_items_recommended)
 
         for metric_name, metric_values in metrics_values.items():
+            if not args.forced_run and metrics_pdm.file_exists(
+                    os.path.join(
+                        InteractorCache().get_id(dm, evaluation_policy, itr),
+                        metric_evaluator.get_id(), metric_name)):
+                raise SystemError
             metrics_pdm.save(
                 os.path.join(
                     InteractorCache().get_id(dm, evaluation_policy, itr),
                     metric_evaluator.get_id(), metric_name), metric_values)
-    except:
-        print("Error in evaluation, could not evaluate")
-        pass
+    except Exception as e:
+        print(f"{e} ||| Error in evaluation, could not evaluate")
 
 
 with ProcessPoolExecutor() as executor:
