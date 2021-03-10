@@ -394,7 +394,7 @@ MovieLens 10M:
     parameters:
       alpha: 1
       num_lat: 20
-  OurMethodBalanced:
+  OurMethodInit:
     parameters:
       alpha: 0.5
       num_lat: 10
