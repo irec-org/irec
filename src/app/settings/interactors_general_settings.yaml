@@ -62,3 +62,11 @@ LogPopEnt:
   name: log(Pop)⋅Ent
 OurMethodInit:
   name: WSCB Init
+OurMethodEntropy:
+  name: WSCB Entropy
+OurMethodPopularity:
+  name: WSCB Pop
+OurMethodRandPopularity:
+  name: WSCB Rand Pop
+OurMethodRandom:
+  name: WSCB Random

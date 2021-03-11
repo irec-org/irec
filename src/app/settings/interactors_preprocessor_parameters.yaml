@@ -51,6 +51,10 @@ MovieLens 100k (B):
     parameters:
       alpha: 0.5
       num_lat: 20
+  OurMethodEntropy:
+    parameters:
+      alpha: 0.5
+      num_lat: 20
   MostPopular:
   LinearUCB:
     parameters:
@@ -399,6 +403,22 @@ MovieLens 10M:
       alpha: 0.5
       num_lat: 10
       init: entropy
+  OurMethodEntropy:
+    parameters:
+      alpha: 0.5
+      num_lat: 10
+  OurMethodPopularity:
+    parameters:
+      alpha: 0.25
+      num_lat: 10
+  OurMethodRandPopularity:
+    parameters:
+      alpha: 0.25
+      num_lat: 10
+  OurMethodRandom:
+    parameters:
+      alpha: 0.5
+      num_lat: 10
   MostPopular:
   LinearUCB:
     parameters:
@@ -525,6 +545,22 @@ Good Books:
       alpha: 0.25
       num_lat: 10
       init: entropy
+  OurMethodEntropy:
+    parameters:
+      alpha: 0.25
+      num_lat: 10
+  OurMethodPopularity:
+    parameters:
+      alpha: 0.25
+      num_lat: 20
+  OurMethodRandPopularity:
+    parameters:
+      alpha: 0.25
+      num_lat: 20
+  OurMethodRandom:
+    parameters:
+      alpha: 0.25
+      num_lat: 10
   MostPopular:
   LinearUCB:
     parameters:
@@ -651,6 +687,22 @@ Yahoo Music:
       alpha: 0.75
       num_lat: 20
       init: random
+  OurMethodEntropy:
+    parameters:
+      alpha: 0.75
+      num_lat: 20
+  OurMethodPopularity:
+    parameters:
+      alpha: 0.75
+      num_lat: 20
+  OurMethodRandPopularity:
+    parameters:
+      alpha: 0.75
+      num_lat: 20
+  OurMethodRandom:
+    parameters:
+      alpha: 0.75
+      num_lat: 20
   MostPopular:
   LinearUCB:
     parameters:
