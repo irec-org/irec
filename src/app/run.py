@@ -33,7 +33,7 @@ def run_interactors_in_base(dataset_preprocessor, interactors_general_settings,
     ir = InteractorRunner(dm, interactors_general_settings,
                           interactors_preprocessor_paramaters,
                           evaluation_policies_parameters)
-    ir.run_interactors(interactors_classes,forced_run=args.forced_run)
+    ir.run_interactors(interactors_classes,forced_run=args.forced_run, parallel=True)
 
 
 def main():
