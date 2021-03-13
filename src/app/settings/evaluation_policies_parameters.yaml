@@ -1,3 +1,7 @@
 Interaction:
   num_interactions: 100
   interaction_size: 1
+InteractionSample:
+  num_interactions: 100
+  interaction_size: 1
+  rseed: 23
