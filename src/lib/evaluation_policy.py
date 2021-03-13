@@ -146,10 +146,9 @@ class InteractionSample(EvaluationPolicy,Parameterizable):
         pbar.update(_num_interactions)
         _num_interactions = 0
         pbar.close()
+        items_entropy = interactors.Entropy.get_items_entropy(consumption_matrix)
+        items_popularity = interactors.MostPopular.get_items_popularity(consumption_matrix,normalize=False)
         for uid, items in users_items_recommended.items():
-            
-            items_entropy = interactors.Entropy.get_items_entropy(consumption_matrix)
-            items_popularity = interactors.MostPopular.get_items_popularity(consumption_matrix,normalize=False)
 
             colors = mpl.cm.rainbow(np.linspace(0, 1, len(items)))
             sns.palplot(colors)

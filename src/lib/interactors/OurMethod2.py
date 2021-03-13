@@ -60,6 +60,10 @@ class OurMethod2(MFInteractor):
         items_uncertainty = np.sqrt(np.sum(self.items_weights[candidate_items].dot(np.linalg.inv(A)) * self.items_weights[candidate_items],axis=1))
         items_user_similarity = user_latent_factors @ self.items_weights[candidate_items].T
         user_model_items_score = items_user_similarity + self.alpha*items_uncertainty
+
+        best_item = candidate_items[np.argmax(user_model_items_score)]
+        print(uid,best_item,items_users_similarity[best_item],self.alpha*items_uncertainty[best_item])
+
         items_score = user_model_items_score
         return items_score, None
 
