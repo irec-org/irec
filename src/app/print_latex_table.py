@@ -27,7 +27,8 @@ import argparse
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--reference', type=str, default=None)
+parser.add_argument('-r', type=str, default=None)
+parser.add_argument('-i', default=[5,10,20,50,100],nargs='*')
 args = parser.parse_args()
 
 plt.rcParams['axes.prop_cycle'] = cycler(color='krbgmyc')
@@ -65,7 +66,7 @@ metrics_evaluator = UserCumulativeInteractionMetricsEvaluator(None, metrics_clas
 
 evaluation_policy = ir.get_interactors_evaluation_policy()
 
-nums_interactions_to_show = [5, 10, 20, 50, 100]
+nums_interactions_to_show = list(map(int,args.i))
 
 
 def generate_table_spec():
@@ -142,8 +143,8 @@ for dataset_preprocessor in datasets_preprocessors:
 
             datasets_metrics_best[dataset_preprocessor['name']][metric_class_name][max(datasets_metrics_values[dataset_preprocessor['name']][
                     metric_class_name].items(),key=lambda x: x[1][i])[0]][i] = True
-            if args.reference != None:
-                best_itr = args.reference
+            if args.r != None:
+                best_itr = args.r
             else:
                 best_itr = max(datasets_metrics_values[dataset_preprocessor['name']][
                     metric_class_name].items(),key=lambda x: x[1][i])[0]
