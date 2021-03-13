@@ -50,7 +50,7 @@ class LinUCB(MFInteractor):
         items_user_similarity = mean @ self.items_weights[candidate_items].T
         items_score = items_user_similarity + items_uncertainty
 
-        best_item = candidate_items[np.argmax(user_model_items_score)]
+        best_item = candidate_items[np.argmax(items_score)]
         print(uid,best_item,items_users_similarity[best_item],items_uncertainty[best_item])
         return items_score, None
 
