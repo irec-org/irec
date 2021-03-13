@@ -151,12 +151,13 @@ class InteractionSample(EvaluationPolicy,Parameterizable):
         for uid, items in users_items_recommended.items():
 
             colors = mpl.cm.rainbow(np.linspace(0, 1, len(items)))
-            sns.palplot(colors)
             fig = plt.figure(figsize=(8,5))
+            # plt.colorbar(colors)
             plt.rcParams.update({'font.size': 14})
             plt.scatter(items_entropy, items_popularity, s=100, color='#d1d1d1')
-            for p, c in zip(range(0,len(items)), colors):
-                plt.scatter(items_entropy[p], items_popularity[p], s=100, color=c)
+
+            plt.scatter(items_entropy[items], items_popularity[items], s=100, color=colors)
+
             plt.text(0, 1.5, 'Correlation: %.4f' % scipy.stats.pearsonr(items_entropy, items_popularity)[0],
                     bbox={'facecolor': 'red', 'alpha': 0.5, 'pad': 5})
             plt.xlabel('Entropy')
