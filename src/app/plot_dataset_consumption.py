@@ -9,15 +9,26 @@ import matplotlib.pyplot as plt
 import numpy as np
 from datetime import datetime
 import scipy.stats
+import pandas as pd
 dm = DatasetManager()
-dm.request_dataset_preprocessor()
-dm.initialize_engines()
+dataset_preprocessor = dm.request_dataset_preprocessor()
+dm.initialize_engines(dataset_preprocessor)
 dm.load()
 data = np.vstack((dm.dataset_preprocessed[0].data,
                   dm.dataset_preprocessed[1].data))
 
 fig, axs = plt.subplots(nrows=2,ncols=2,figsize=(10,10))
 
+# self.var = np.var(training_matrix)
+# self.user_var = np.mean(np.var(training_matrix,axis=1))
+# self.item_var = np.mean(np.var(training_matrix,axis=0))
+df = pd.DataFrame(dm.train_dataset.data)
+print('var',df[2].var())
+print('user_var',df.groupby(0).var()[2].mean())
+print('item_var',df.groupby(1).var()[2].mean())
+del df
+
+raise SystemExit
 print(scipy.stats.describe(data))
 lowest_value = 0
 
