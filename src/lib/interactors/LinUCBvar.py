@@ -10,7 +10,7 @@ from collections import defaultdict
 from .MFInteractor import MFInteractor
 
 
-class LinUCB(MFInteractor):
+class LinUCBvar(MFInteractor):
 
     def __init__(self, alpha, lambda_u, zeta=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
