@@ -23,9 +23,13 @@ fig, axs = plt.subplots(nrows=2,ncols=2,figsize=(10,10))
 # self.user_var = np.mean(np.var(training_matrix,axis=1))
 # self.item_var = np.mean(np.var(training_matrix,axis=0))
 df = pd.DataFrame(dm.train_dataset.data)
-print('var',df[2].var())
-print('user_var',df.groupby(0).var()[2].mean())
-print('item_var',df.groupby(1).var()[2].mean())
+var=df[2].var()
+user_var=df.groupby(0).var()[2].mean()
+item_var=df.groupby(1).var()[2].mean()
+print('var',var)
+print('user_var',user_var)
+print('item_var',item_var)
+print('user_lambda',var/user_var)
 del df
 
 raise SystemExit
