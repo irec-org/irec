@@ -927,6 +927,91 @@ OurMethod4:
 
 
 MostPopular:
+LinearUCB1:
+  - alpha: 0.25
+    item_var: 0.01
+    iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 0.5
+    item_var: 0.01
+    iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 0.75
+    item_var: 0.01
+    iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 1
+    item_var: 0.01
+    iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 0.25
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 0.5
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 0.75
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 1
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 0.25
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 0.5
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 0.75
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - alpha: 1
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
 LinearUCB:
   - alpha: 0.25
     item_var: 0.01
@@ -1066,31 +1151,6 @@ LinEGreedy:
   - epsilon: 0.5
     num_lat: 50
 LinUCB:
-  - alpha: 0.25
-    num_lat: 5
-  - alpha: 0.5
-    num_lat: 5
-  - alpha: 0.75
-    num_lat: 5
-  - alpha: 1
-    num_lat: 5
-  - alpha: 0.25
-    num_lat: 10
-  - alpha: 0.5
-    num_lat: 10
-  - alpha: 0.75
-    num_lat: 10
-  - alpha: 1
-    num_lat: 10
-  - alpha: 0.25
-    num_lat: 20
-  - alpha: 0.5
-    num_lat: 20
-  - alpha: 0.75
-    num_lat: 20
-  - alpha: 1
-    num_lat: 20
-LinUCB1:
   - alpha: 0.25
     num_lat: 5
   - alpha: 0.5

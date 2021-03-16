@@ -6,8 +6,6 @@ Random:
   name: Random
 LinUCB:
   name: LinUCB (MF)
-LinUCB1:
-  name: LinUCB1 (MF)
 OurMethod1:
   name: Old UCB-Learner
 OurMethod2:
@@ -22,6 +20,8 @@ OurMethodBalanced:
   name: WSCB uncertainty-based
 LinearUCB:
   name: Linear UCB (PMF)
+LinearUCB1:
+  name: Linear UCB1 (PMF)
 COFIBA:
   name: COFIBA
 ThompsonSampling:
