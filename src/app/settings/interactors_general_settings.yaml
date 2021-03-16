@@ -6,6 +6,8 @@ Random:
   name: Random
 LinUCB:
   name: LinUCB (MF)
+LinUCBvar:
+  name: LinUCBvar (MF)
 OurMethod1:
   name: Old UCB-Learner
 OurMethod2:

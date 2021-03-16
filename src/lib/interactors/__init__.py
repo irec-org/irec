@@ -37,3 +37,4 @@ from .OurMethod5 import OurMethod5
 from .OurMethodBalanced import OurMethodBalanced
 from .OurMethodInit import *
 from .LinearUCB1 import *
+from .LinUCBvar import *
