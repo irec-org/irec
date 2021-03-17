@@ -429,6 +429,15 @@ MovieLens 10M:
       iterations: 20
       alpha: 1.0
       num_lat: 20
+  LinearUCB1:
+    parameters:
+      var: 0.05
+      user_var: 0.01
+      item_var: 0.01
+      stop_criteria: 0.0009
+      iterations: 20
+      alpha: 1.0
+      num_lat: 20
   LinEGreedy:
     parameters:
       epsilon: 0.1
@@ -576,6 +585,15 @@ Good Books:
       iterations: 20
       alpha: 1.0
       num_lat: 10
+  LinearUCB1:
+    parameters:
+      var: 0.05
+      user_var: 0.01
+      item_var: 0.01
+      stop_criteria: 0.0009
+      iterations: 20
+      alpha: 1.0
+      num_lat: 5
   LinEGreedy:
     parameters:
       epsilon: 0.1
@@ -723,6 +741,15 @@ Yahoo Music:
       iterations: 20
       alpha: 1.0
       num_lat: 5
+  LinearUCB1:
+    parameters:
+      var: 0.05
+      user_var: 0.01
+      item_var: 0.01
+      stop_criteria: 0.0009
+      iterations: 20
+      alpha: 1.0
+      num_lat: 20
   LinEGreedy:
     parameters:
       epsilon: 0.1
