@@ -39,3 +39,4 @@ from .OurMethodInit import *
 from .LinearUCB1 import *
 from .LinUCBvar import *
 from .OurMethod2var import *
+from .LinearUCBInit import *

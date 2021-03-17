@@ -38,3 +38,4 @@ class LinearUCB(LinearICF):
 
     def update(self, uid, item, reward, additional_data):
         return super().update(uid, item, reward, additional_data)
+

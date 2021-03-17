@@ -76,3 +76,13 @@ OurMethodRandom:
   name: WSCB Random
 OurMethod2var:
   name: WSCB var
+LinearUCBInit:
+  name: Linear UCB (PMF) Init
+LinearUCBEntropy:
+  name: Linear UCB (PMF) Entropy
+LinearUCBPopularity:
+  name: Linear UCB (PMF) Pop
+LinearUCBRandPopularity:
+  name: Linear UCB (PMF) Rand Pop
+LinearUCBRandom:
+  name: Linear UCB (PMF) Random
