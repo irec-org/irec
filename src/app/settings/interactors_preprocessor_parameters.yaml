@@ -386,6 +386,11 @@ MovieLens 10M:
     parameters:
       alpha: 0.75
       num_lat: 10
+  OurMethod2var:
+    parameters:
+      alpha: 0.5
+      num_lat: 10
+      lambda_u: 1.4824
   OurMethod3:
     parameters:
       alpha: 0.75
@@ -542,6 +547,11 @@ Good Books:
     parameters:
       alpha: 0.25
       num_lat: 10
+  OurMethod2var:
+    parameters:
+      alpha: 0.25
+      num_lat: 10
+      lambda_u: 1.4824
   OurMethod3:
     parameters:
       alpha: 0.25
@@ -698,6 +708,11 @@ Yahoo Music:
     parameters:
       alpha: 0.5
       num_lat: 20
+  OurMethod2var:
+    parameters:
+      alpha: 1.0
+      num_lat: 10
+      lambda_u: 0.01
   OurMethod3:
     parameters:
       alpha: 0.5
