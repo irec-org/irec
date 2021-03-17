@@ -3,6 +3,7 @@ import os
 import sys
 sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "lib")
 
+import json
 import inquirer
 import interactors
 import mf
@@ -21,6 +22,13 @@ import matplotlib.pyplot as plt
 from utils.DirectoryDependent import DirectoryDependent
 from cycler import cycler
 from collections import defaultdict
+import argparse
+
+parser = argparse.ArgumentParser(description='Grid search')
+parser.add_argument('-t', default=False, action='store_true',help='Print only top 1')
+parser.add_argument('-b', default=False, action='store_true',help='Save best')
+args = parser.parse_args()
+
 
 metrics_classes = [metric.Hits]
 metrics_names = ['Cumulative Hits']
@@ -75,10 +83,10 @@ for dataset_preprocessor in datasets_preprocessors:
                             InteractorCache().get_id(dm, evaluation_policy, itr),
                             metrics_evaluator.get_id(), metric_class_name))
                     datasets_metrics_values[dataset_preprocessor['name']][
-                            metric_class_name][itr_class.__name__][','.join(map(lambda x: str(x[0])+'='+str(x[1]),list(parameters.items())))] = metric_values[-1]
+                            metric_class_name][itr_class.__name__][json.dumps(parameters)] = metric_values[-1]
                 except:
                     pass
-
+# ','.join(map(lambda x: str(x[0])+'='+str(x[1]),list(parameters.items())))
 
 for k1, v1 in datasets_metrics_values.items():
     for k2, v2 in v1.items():
@@ -88,6 +96,20 @@ for k1, v1 in datasets_metrics_values.items():
             idxs = np.argsort(values)[::-1]
             keys = [keys[i] for i in idxs]
             values = [values[i] for i in idxs]
-            
-            for k4, v4 in zip(keys,values):
-                print(f"{k3}({k4}) {v4:.5f}")
+            if args.b:
+                interactors_preprocessor_paramaters[k1][k3] = json.loads(keys[0])
+            if args.t:
+                print(f"{k3}:")
+                print('\tparameters:')
+                parameters, metric_value = json.loads(keys[0]),values[0]
+                for name, value in parameters.items():
+                    print(f'\t\t{name}: {value}')
+            else:
+                for k4, v4 in zip(keys,values):
+                    k4 = json.loads(k4)
+                    k4 = ','.join(map(lambda x: str(x[0])+'='+str(x[1]),list(k4.items())))
+                    print(f"{k3}({k4}) {v4:.5f}")
+
+if args.b:
+    print("Saved parameters!")
+    open("settings" + sep + "interactors_preprocessor_parameters.yaml",'w').write(yaml.dump(interactors_preprocessor_paramaters))

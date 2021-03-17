@@ -1,548 +1,97 @@
-MovieLens 100k (B):
-  NICF:
-    parameters:
-      time_step: 3
-      latent_factor: 50
-      learning_rate: 0.001
-      training_epoch: 30000
-      rnn_layer: 1
-      inner_epoch: 50
-      batch: 128
-      gamma: 0.0
-      clip_param: 0.2
-      restore_model: false
-      num_blocks: 2
-      num_heads: 1
-      dropout_rate: 0.1
-  PTS:
-    parameters:
-      num_particles: 2
-      var: 0.5
-      var_u: 1.0
-      var_v: 1.0
-      num_lat: 2
+Good Books:
+  ALEntropy: null
+  ALMostPopular: null
   COFIBA:
     parameters:
       alpha: 1
       alpha_2: 1
       num_lat: 10
-  ThompsonSampling:
-    parameters:
-      alpha_0: 1
-      beta_0: 1
-  Random:
-  kNNBandit:
-    parameters:
-      alpha_0: 1
-      beta_0: 100
-      k: 1
-  ALMostPopular:
-  OurMethod1:
-    parameters:
-      alpha: 1.0
-      stop: null
-      weight_method: 'change'
-      num_lat: 10
-  OurMethod2:
-    parameters:
-      alpha: 0.5
-      num_lat: 20
-  OurMethod3:
-    parameters:
-      alpha: 0.5
-      num_lat: 20
-  OurMethodEntropy:
-    parameters:
-      alpha: 0.5
-      num_lat: 20
-  MostPopular:
-  LinearUCB:
-    parameters:
-      var: 0.05
-      user_var: 0.01
-      item_var: 0.01
-      stop_criteria: 0.0009
-      iterations: 20
-      alpha: 1.0
-      num_lat: 10
-  LinEGreedy:
+  DistinctPopular: null
+  EGreedy:
     parameters:
       epsilon: 0.1
-      num_lat: 10
-  LinUCB:
+  EMostPopular:
     parameters:
-      alpha: 1.0
-      num_lat: 10
-  PPELPE:
-  UCBLearner:
-    parameters:
-      stop: 14
-      num_lat: 10
+      epsilon: 0.2
+  Entropy: null
+  Entropy0: null
   GLM_UCB:
     parameters:
       c: 1.0
       num_lat: 10
-  LinearEGreedy:
-    parameters:
-      epsilon: 0.1
-      var: 0.05
-      user_var: 0.01
-      item_var: 0.01
-      stop_criteria: 0.0009
-      iterations: 20
-      num_lat: 10
-  LinearThompsonSampling:
-    parameters:
-      var: 0.05
-      user_var: 0.01
-      item_var: 0.01
-      stop_criteria: 0.0009
-      iterations: 20
-      num_lat: 10
-  EGreedy:
-    parameters:
-      epsilon: 0.1
-  UCB:
-    parameters:
-      c: 1.0
-  MostRepresentative:
-  ALEntropy:
-  Entropy0:
-  HELF:
-  PopPlusEnt:
-  DistinctPopular:
-  EMostPopular:
-    parameters:
-      epsilon: 0.2
-  Entropy:
-  LogPopEnt:
-  TinUCB:
-    parameters:
-      alpha: 0.2
-MovieLens 1M (B):
-  NICF:
-          parameters:
-                  time_step: 3
-                  latent_factor: 10
-                  learning_rate: 0.01
-                  training_epoch: 30000
-                  rnn_layer: 1
-                  inner_epoch: 50
-                  batch: 128
-                  gamma: 0.0
-                  clip_param: 0.2
-                  restore_model: false
-                  num_blocks: 2
-                  num_heads: 1
-                  dropout_rate: 0.1
-  PTS:
-    parameters:
-      num_particles: 2
-      var: 0.5
-      var_u: 1.0
-      var_v: 1.0
-      num_lat: 2
-  COFIBA:
-    parameters:
-      alpha: 1
-      alpha_2: 1
-      num_lat: 10
-  ThompsonSampling:
-    parameters:
-      alpha_0: 1
-      beta_0: 1
-  Random:
-  kNNBandit:
-    parameters:
-      alpha_0: 1
-      beta_0: 1
-      k: 1
-  ALMostPopular:
-  OurMethod1:
-    parameters:
-      alpha: 1.0
-      stop: null
-      weight_method: 'change'
-      num_lat: 10
-  OurMethod2:
-    parameters:
-      alpha: 1.0
-      num_lat: 10
-  MostPopular:
-  LinearUCB:
-    parameters:
-      var: 0.05
-      user_var: 0.01
-      item_var: 0.01
-      stop_criteria: 0.0009
-      iterations: 20
-      alpha: 1.0
-      num_lat: 10
+  HELF: null
   LinEGreedy:
     parameters:
       epsilon: 0.1
       num_lat: 10
   LinUCB:
     parameters:
-      alpha: 1.0
-      num_lat: 10
-  PPELPE:
-  UCBLearner:
-    parameters:
-      stop: 14
-      num_lat: 10
-  GLM_UCB:
-    parameters:
-      c: 1.0
-      num_lat: 10
-  LinearEGreedy:
-    parameters:
-      epsilon: 0.1
-      var: 0.05
-      user_var: 0.01
-      item_var: 0.01
-      stop_criteria: 0.0009
-      iterations: 20
-      num_lat: 10
-  LinearThompsonSampling:
-    parameters:
-      var: 0.05
-      user_var: 0.01
-      item_var: 0.01
-      stop_criteria: 0.0009
-      iterations: 20
-      num_lat: 10
-  EGreedy:
-    parameters:
-      epsilon: 0.1
-  UCB:
-    parameters:
-      c: 1.0
-  MostRepresentative:
-  ALEntropy:
-  Entropy0:
-  HELF:
-  PopPlusEnt:
-  DistinctPopular:
-  EMostPopular:
-    parameters:
-      epsilon: 0.2
-  Entropy:
-  LogPopEnt:
-  TinUCB:
-    parameters:
-      alpha: 0.2
-MovieLens 1M:
-  NICF:
-          parameters:
-                  time_step: 3
-                  latent_factor: 50
-                  learning_rate: 0.001
-                  training_epoch: 30000
-                  rnn_layer: 1
-                  inner_epoch: 50
-                  batch: 128
-                  gamma: 0.0
-                  clip_param: 0.2
-                  restore_model: false
-                  num_blocks: 2
-                  num_heads: 1
-                  dropout_rate: 0.1
-  PTS:
-    parameters:
-      num_particles: 2
-      var: 0.5
-      var_u: 1.0
-      var_v: 1.0
-      num_lat: 2
-  COFIBA:
-    parameters:
-      alpha: 1
-      alpha_2: 1
-      num_lat: 10
-  ThompsonSampling:
-    parameters:
-      alpha_0: 1
-      beta_0: 1
-  Random:
-  kNNBandit:
-  ALMostPopular:
-  OurMethod1:
-    parameters:
-      alpha: 1.0
-      stop: null
-      weight_method: 'change'
-      num_lat: 10
-  OurMethod2:
-    parameters:
-      alpha: 0.25
-      num_lat: 10
-  MostPopular:
-  LinearUCB:
-    parameters:
-      var: 0.05
-      user_var: 0.01
-      item_var: 0.01
-      stop_criteria: 0.0009
-      iterations: 20
-      alpha: 1.0
-      num_lat: 10
-  LinEGreedy:
-    parameters:
-      epsilon: 0.1
-      num_lat: 10
-  LinUCB:
-    parameters:
-      alpha: 1.0
-      num_lat: 10
-  PPELPE:
-  UCBLearner:
-    parameters:
-      stop: 14
-      num_lat: 10
-  GLM_UCB:
-    parameters:
-      c: 1.0
-      num_lat: 10
-  LinearEGreedy:
-    parameters:
-      epsilon: 0.1
-      var: 0.05
-      user_var: 0.01
-      item_var: 0.01
-      stop_criteria: 0.0009
-      iterations: 20
-      num_lat: 10
-  LinearThompsonSampling:
-    parameters:
-      var: 0.05
-      user_var: 0.01
-      item_var: 0.01
-      stop_criteria: 0.0009
-      iterations: 20
-      num_lat: 10
-  EGreedy:
-    parameters:
-      epsilon: 0.1
-  UCB:
-    parameters:
-      c: 1.0
-  MostRepresentative:
-  ALEntropy:
-  Entropy0:
-  HELF:
-  PopPlusEnt:
-  DistinctPopular:
-  EMostPopular:
-    parameters:
-      epsilon: 0.2
-  Entropy:
-  LogPopEnt:
-  TinUCB:
-    parameters:
-      alpha: 0.2
-MovieLens 10M:
-  NICF:
-    parameters:
-      time_step: 3
-      latent_factor: 20
-      learning_rate: 0.1
-      training_epoch: 30000
-      rnn_layer: 1
-      inner_epoch: 50
-      batch: 128
-      gamma: 0.0
-      clip_param: 0.2
-      restore_model: false
-      num_blocks: 2
-      num_heads: 1
-      dropout_rate: 0.1
-  PTS:
-    parameters:
-      num_particles: 5
-      var: 0.5
-      var_u: 1.0
-      var_v: 1.0
-      num_lat: 20
-  COFIBA:
-    parameters:
-      alpha: 1
-      alpha_2: 1
-      num_lat: 10
-  ThompsonSampling:
-    parameters:
-      alpha_0: 1
-      beta_0: 100
-  Random:
-  kNNBandit:
-  ALMostPopular:
-  OurMethod1:
-    parameters:
-      alpha: 1.0
-      stop: null
-      weight_method: 'change'
-      num_lat: 10
-  OurMethod2:
-    parameters:
-      alpha: 0.75
-      num_lat: 10
-  OurMethod2var:
-    parameters:
       alpha: 0.5
-      num_lat: 10
-      lambda_u: 1.4824
-  OurMethod3:
-    parameters:
-      alpha: 0.75
-      num_lat: 10
-  OurMethod5:
-    parameters:
-      alpha: 0.25
-      num_lat: 10
-  OurMethodBalanced:
-    parameters:
-      alpha: 1
-      num_lat: 20
-  OurMethodInit:
-    parameters:
-      alpha: 0.5
-      num_lat: 10
-      init: entropy
-  OurMethodEntropy:
-    parameters:
-      alpha: 0.5
-      num_lat: 10
-  OurMethodPopularity:
-    parameters:
-      alpha: 0.25
-      num_lat: 10
-  OurMethodRandPopularity:
-    parameters:
-      alpha: 0.25
-      num_lat: 10
-  OurMethodRandom:
-    parameters:
-      alpha: 0.5
-      num_lat: 10
-  MostPopular:
-  LinearUCB:
-    parameters:
-      var: 0.05
-      user_var: 0.01
-      item_var: 0.01
-      stop_criteria: 0.0009
-      iterations: 20
-      alpha: 1.0
-      num_lat: 20
-  LinearUCB1:
-    parameters:
-      var: 0.05
-      user_var: 0.01
-      item_var: 0.01
-      stop_criteria: 0.0009
-      iterations: 20
-      alpha: 1.0
-      num_lat: 20
-  LinEGreedy:
-    parameters:
-      epsilon: 0.1
-      num_lat: 10
-  LinUCB:
-    parameters:
-      alpha: 1.0
       num_lat: 10
   LinUCBvar:
     parameters:
-      alpha: 0.75
-      num_lat: 10
-      lambda_u: 0.1
-  PPELPE:
-  UCBLearner:
-    parameters:
-      stop: 14
-      num_lat: 10
-  GLM_UCB:
-    parameters:
-      c: 1.0
+      alpha: 0.25
+      lambda_u: 0.001
       num_lat: 10
   LinearEGreedy:
     parameters:
       epsilon: 0.5
-      var: 0.05
-      user_var: 0.01
       item_var: 0.01
-      stop_criteria: 0.0009
       iterations: 20
-      num_lat: 10
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
   LinearThompsonSampling:
     parameters:
-      var: 0.05
-      user_var: 0.01
       item_var: 0.01
-      stop_criteria: 0.0009
       iterations: 20
       num_lat: 10
-  EGreedy:
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCB:
     parameters:
-      epsilon: 0.1
-  UCB:
+      alpha: 1.0
+      item_var: 0.01
+      iterations: 20
+      num_lat: 10
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCB1:
     parameters:
-      c: 0.25
-  MostRepresentative:
-  ALEntropy:
-  Entropy0:
-  HELF:
-  PopPlusEnt:
-  DistinctPopular:
-  EMostPopular:
-    parameters:
-      epsilon: 0.2
-  Entropy:
-  LogPopEnt:
-  TinUCB:
-    parameters:
-      alpha: 0.2
-Good Books:
+      alpha: 1.0
+      item_var: 0.01
+      iterations: 20
+      num_lat: 5
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LogPopEnt: null
+  MostPopular: null
+  MostRepresentative: null
   NICF:
     parameters:
-      time_step: 3
+      batch: 128
+      clip_param: 0.2
+      dropout_rate: 0.1
+      gamma: 0.0
+      inner_epoch: 50
       latent_factor: 30
       learning_rate: 0.1
-      training_epoch: 30000
-      rnn_layer: 1
-      inner_epoch: 50
-      batch: 128
-      gamma: 0.0
-      clip_param: 0.2
-      restore_model: false
       num_blocks: 2
       num_heads: 1
-      dropout_rate: 0.1
-  PTS:
-    parameters:
-      num_particles: 2
-      var: 0.5
-      var_u: 1.0
-      var_v: 1.0
-      num_lat: 5
-  COFIBA:
-    parameters:
-      alpha: 1
-      alpha_2: 1
-      num_lat: 10
-  ThompsonSampling:
-    parameters:
-      alpha_0: 1
-      beta_0: 100
-  Random:
-  kNNBandit:
-  ALMostPopular:
+      restore_model: false
+      rnn_layer: 1
+      time_step: 3
+      training_epoch: 30000
   OurMethod1:
     parameters:
       alpha: 1.0
-      stop: null
-      weight_method: 'change'
       num_lat: 10
+      stop: null
+      weight_method: change
   OurMethod2:
     parameters:
       alpha: 0.25
@@ -550,8 +99,8 @@ Good Books:
   OurMethod2var:
     parameters:
       alpha: 0.25
-      num_lat: 10
       lambda_u: 1.4824
+      num_lat: 10
   OurMethod3:
     parameters:
       alpha: 0.25
@@ -564,14 +113,14 @@ Good Books:
     parameters:
       alpha: 0.5
       num_lat: 10
-  OurMethodInit:
-    parameters:
-      alpha: 0.25
-      num_lat: 10
-      init: entropy
   OurMethodEntropy:
     parameters:
       alpha: 0.25
+      num_lat: 10
+  OurMethodInit:
+    parameters:
+      alpha: 0.25
+      init: entropy
       num_lat: 10
   OurMethodPopularity:
     parameters:
@@ -585,125 +134,846 @@ Good Books:
     parameters:
       alpha: 0.25
       num_lat: 10
-  MostPopular:
-  LinearUCB:
+  PPELPE: null
+  PTS:
     parameters:
-      var: 0.05
-      user_var: 0.01
-      item_var: 0.01
-      stop_criteria: 0.0009
-      iterations: 20
-      alpha: 1.0
-      num_lat: 10
-  LinearUCB1:
-    parameters:
-      var: 0.05
-      user_var: 0.01
-      item_var: 0.01
-      stop_criteria: 0.0009
-      iterations: 20
-      alpha: 1.0
       num_lat: 5
+      num_particles: 2
+      var: 0.5
+      var_u: 1.0
+      var_v: 1.0
+  PopPlusEnt: null
+  Random: null
+  ThompsonSampling:
+    parameters:
+      alpha_0: 1
+      beta_0: 100
+  TinUCB:
+    parameters:
+      alpha: 0.2
+  UCB:
+    parameters:
+      c: 0.25
+  UCBLearner:
+    parameters:
+      num_lat: 10
+      stop: 14
+  kNNBandit: null
+Good Books Sampled:
+  ALEntropy: null
+  ALMostPopular: null
+  COFIBA:
+    parameters:
+      alpha: 1
+      alpha_2: 1
+      num_lat: 10
+  DistinctPopular: null
+  EGreedy:
+    parameters:
+      epsilon: 0.1
+  EMostPopular:
+    parameters:
+      epsilon: 0.2
+  Entropy: null
+  Entropy0: null
+  GLM_UCB:
+    parameters:
+      c: 1.0
+      num_lat: 10
+  HELF: null
   LinEGreedy:
     parameters:
       epsilon: 0.1
       num_lat: 10
   LinUCB:
     parameters:
-      alpha: 0.5
+      alpha: 1.0
       num_lat: 10
-  LinUCBvar:
+  LinearEGreedy:
     parameters:
-      alpha: 0.25
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
       num_lat: 10
-      lambda_u: 0.001
-  PPELPE:
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearThompsonSampling:
+    parameters:
+      item_var: 0.01
+      iterations: 20
+      num_lat: 10
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCB:
+    parameters:
+      alpha: 1.0
+      item_var: 0.01
+      iterations: 20
+      num_lat: 10
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LogPopEnt: null
+  MostPopular: null
+  MostRepresentative: null
+  NICF:
+    parameters:
+      batch: 128
+      clip_param: 0.2
+      dropout_rate: 0.1
+      gamma: 0.0
+      inner_epoch: 50
+      latent_factor: 10
+      learning_rate: 0.01
+      num_blocks: 2
+      num_heads: 1
+      restore_model: false
+      rnn_layer: 1
+      time_step: 3
+      training_epoch: 30000
+  OurMethod1:
+    parameters:
+      alpha: 1.0
+      num_lat: 10
+      stop: null
+      weight_method: change
+  OurMethod2:
+    parameters:
+      alpha: 1.0
+      num_lat: 10
+  PPELPE: null
+  PTS:
+    parameters:
+      num_lat: 2
+      num_particles: 2
+      var: 0.5
+      var_u: 1.0
+      var_v: 1.0
+  PopPlusEnt: null
+  Random: null
+  ThompsonSampling:
+    parameters:
+      alpha_0: 1
+      beta_0: 1
+  TinUCB:
+    parameters:
+      alpha: 0.2
+  UCB:
+    parameters:
+      c: 1.0
   UCBLearner:
     parameters:
-      stop: 14
       num_lat: 10
+      stop: 14
+  kNNBandit: null
+MovieLens 100k (B):
+  ALEntropy: null
+  ALMostPopular: null
+  COFIBA:
+    parameters:
+      alpha: 1
+      alpha_2: 1
+      num_lat: 10
+  DistinctPopular: null
+  EGreedy:
+    parameters:
+      epsilon: 0.1
+  EMostPopular:
+    parameters:
+      epsilon: 0.2
+  Entropy: null
+  Entropy0: null
   GLM_UCB:
     parameters:
       c: 1.0
       num_lat: 10
-  LinearEGreedy:
-    parameters:
-      epsilon: 0.5
-      var: 0.05
-      user_var: 0.01
-      item_var: 0.01
-      stop_criteria: 0.0009
-      iterations: 20
-      num_lat: 20
-  LinearThompsonSampling:
-    parameters:
-      var: 0.05
-      user_var: 0.01
-      item_var: 0.01
-      stop_criteria: 0.0009
-      iterations: 20
-      num_lat: 10
-  EGreedy:
+  HELF: null
+  LinEGreedy:
     parameters:
       epsilon: 0.1
-  UCB:
+      num_lat: 10
+  LinUCB:
     parameters:
-      c: 0.25
-  MostRepresentative:
-  ALEntropy:
-  Entropy0:
-  HELF:
-  PopPlusEnt:
-  DistinctPopular:
-  EMostPopular:
+      alpha: 1.0
+      num_lat: 10
+  LinearEGreedy:
     parameters:
-      epsilon: 0.2
-  Entropy:
-  LogPopEnt:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 10
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearThompsonSampling:
+    parameters:
+      item_var: 0.01
+      iterations: 20
+      num_lat: 10
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCB:
+    parameters:
+      alpha: 1.0
+      item_var: 0.01
+      iterations: 20
+      num_lat: 10
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LogPopEnt: null
+  MostPopular: null
+  MostRepresentative: null
+  NICF:
+    parameters:
+      batch: 128
+      clip_param: 0.2
+      dropout_rate: 0.1
+      gamma: 0.0
+      inner_epoch: 50
+      latent_factor: 50
+      learning_rate: 0.001
+      num_blocks: 2
+      num_heads: 1
+      restore_model: false
+      rnn_layer: 1
+      time_step: 3
+      training_epoch: 30000
+  OurMethod1:
+    parameters:
+      alpha: 1.0
+      num_lat: 10
+      stop: null
+      weight_method: change
+  OurMethod2:
+    parameters:
+      alpha: 0.5
+      num_lat: 20
+  OurMethod3:
+    parameters:
+      alpha: 0.5
+      num_lat: 20
+  OurMethodEntropy:
+    parameters:
+      alpha: 0.5
+      num_lat: 20
+  PPELPE: null
+  PTS:
+    parameters:
+      num_lat: 2
+      num_particles: 2
+      var: 0.5
+      var_u: 1.0
+      var_v: 1.0
+  PopPlusEnt: null
+  Random: null
+  ThompsonSampling:
+    parameters:
+      alpha_0: 1
+      beta_0: 1
   TinUCB:
     parameters:
       alpha: 0.2
-Yahoo Music:
+  UCB:
+    c: 0.5
+  UCBLearner:
+    parameters:
+      num_lat: 10
+      stop: 14
+  kNNBandit:
+    parameters:
+      alpha_0: 1
+      beta_0: 100
+      k: 1
+MovieLens 10M:
+  ALEntropy: null
+  ALMostPopular: null
+  COFIBA:
+    parameters:
+      alpha: 1
+      alpha_2: 1
+      num_lat: 10
+  DistinctPopular: null
+  EGreedy:
+    parameters:
+      epsilon: 0.1
+  EMostPopular:
+    parameters:
+      epsilon: 0.2
+  Entropy: null
+  Entropy0: null
+  GLM_UCB:
+    parameters:
+      c: 1.0
+      num_lat: 10
+  HELF: null
+  LinEGreedy:
+    parameters:
+      epsilon: 0.1
+      num_lat: 10
+  LinUCB:
+    parameters:
+      alpha: 1.0
+      num_lat: 10
+  LinUCBvar:
+    parameters:
+      alpha: 0.75
+      lambda_u: 0.1
+      num_lat: 10
+  LinearEGreedy:
+    parameters:
+      epsilon: 0.5
+      item_var: 0.01
+      iterations: 20
+      num_lat: 10
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearThompsonSampling:
+    parameters:
+      item_var: 0.01
+      iterations: 20
+      num_lat: 10
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCB:
+    parameters:
+      alpha: 1.0
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCB1:
+    parameters:
+      alpha: 1.0
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LogPopEnt: null
+  MostPopular: null
+  MostRepresentative: null
   NICF:
     parameters:
-      time_step: 3
-      latent_factor: 10
-      learning_rate: 0.1
-      training_epoch: 30000
-      rnn_layer: 1
-      inner_epoch: 50
       batch: 128
-      gamma: 0.0
       clip_param: 0.2
-      restore_model: false
+      dropout_rate: 0.1
+      gamma: 0.0
+      inner_epoch: 50
+      latent_factor: 20
+      learning_rate: 0.1
       num_blocks: 2
       num_heads: 1
-      dropout_rate: 0.1
+      restore_model: false
+      rnn_layer: 1
+      time_step: 3
+      training_epoch: 30000
+  OurMethod1:
+    parameters:
+      alpha: 1.0
+      num_lat: 10
+      stop: null
+      weight_method: change
+  OurMethod2:
+    parameters:
+      alpha: 0.75
+      num_lat: 10
+  OurMethod2var:
+    parameters:
+      alpha: 0.5
+      lambda_u: 1.4824
+      num_lat: 10
+  OurMethod3:
+    parameters:
+      alpha: 0.75
+      num_lat: 10
+  OurMethod5:
+    parameters:
+      alpha: 0.25
+      num_lat: 10
+  OurMethodBalanced:
+    parameters:
+      alpha: 1
+      num_lat: 20
+  OurMethodEntropy:
+    parameters:
+      alpha: 0.5
+      num_lat: 10
+  OurMethodInit:
+    parameters:
+      alpha: 0.5
+      init: entropy
+      num_lat: 10
+  OurMethodPopularity:
+    parameters:
+      alpha: 0.25
+      num_lat: 10
+  OurMethodRandPopularity:
+    parameters:
+      alpha: 0.25
+      num_lat: 10
+  OurMethodRandom:
+    parameters:
+      alpha: 0.5
+      num_lat: 10
+  PPELPE: null
   PTS:
     parameters:
+      num_lat: 20
       num_particles: 5
       var: 0.5
       var_u: 1.0
       var_v: 1.0
-      num_lat: 20
+  PopPlusEnt: null
+  Random: null
+  ThompsonSampling:
+    parameters:
+      alpha_0: 1
+      beta_0: 100
+  TinUCB:
+    parameters:
+      alpha: 0.2
+  UCB:
+    parameters:
+      c: 0.25
+  UCBLearner:
+    parameters:
+      num_lat: 10
+      stop: 14
+  kNNBandit: null
+MovieLens 10M Sampled:
+  ALEntropy: null
+  ALMostPopular: null
   COFIBA:
     parameters:
       alpha: 1
       alpha_2: 1
       num_lat: 10
-  ThompsonSampling:
+  DistinctPopular: null
+  EGreedy:
     parameters:
-      alpha_0: 1
-      beta_0: 100
-  Random:
-  kNNBandit:
-  ALMostPopular:
+      epsilon: 0.1
+  EMostPopular:
+    parameters:
+      epsilon: 0.2
+  Entropy: null
+  Entropy0: null
+  GLM_UCB:
+    parameters:
+      c: 1.0
+      num_lat: 10
+  HELF: null
+  LinEGreedy:
+    parameters:
+      epsilon: 0.1
+      num_lat: 10
+  LinUCB:
+    parameters:
+      alpha: 1.0
+      num_lat: 10
+  LinearEGreedy:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 10
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearThompsonSampling:
+    parameters:
+      item_var: 0.01
+      iterations: 20
+      num_lat: 10
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCB:
+    parameters:
+      alpha: 1.0
+      item_var: 0.01
+      iterations: 20
+      num_lat: 10
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LogPopEnt: null
+  MostPopular: null
+  MostRepresentative: null
+  NICF:
+    parameters:
+      batch: 128
+      clip_param: 0.2
+      dropout_rate: 0.1
+      gamma: 0.0
+      inner_epoch: 50
+      latent_factor: 10
+      learning_rate: 0.01
+      num_blocks: 2
+      num_heads: 1
+      restore_model: false
+      rnn_layer: 1
+      time_step: 3
+      training_epoch: 30000
   OurMethod1:
     parameters:
       alpha: 1.0
-      stop: null
-      weight_method: 'change'
       num_lat: 10
+      stop: null
+      weight_method: change
+  OurMethod2:
+    parameters:
+      alpha: 1.0
+      num_lat: 10
+  PPELPE: null
+  PTS:
+    parameters:
+      num_lat: 2
+      num_particles: 2
+      var: 0.5
+      var_u: 1.0
+      var_v: 1.0
+  PopPlusEnt: null
+  Random: null
+  ThompsonSampling:
+    parameters:
+      alpha_0: 1
+      beta_0: 1
+  TinUCB:
+    parameters:
+      alpha: 0.2
+  UCB:
+    parameters:
+      c: 1.0
+  UCBLearner:
+    parameters:
+      num_lat: 10
+      stop: 14
+  kNNBandit: null
+MovieLens 1M:
+  ALEntropy: null
+  ALMostPopular: null
+  COFIBA:
+    parameters:
+      alpha: 1
+      alpha_2: 1
+      num_lat: 10
+  DistinctPopular: null
+  EGreedy:
+    parameters:
+      epsilon: 0.1
+  EMostPopular:
+    parameters:
+      epsilon: 0.2
+  Entropy: null
+  Entropy0: null
+  GLM_UCB:
+    parameters:
+      c: 1.0
+      num_lat: 10
+  HELF: null
+  LinEGreedy:
+    parameters:
+      epsilon: 0.1
+      num_lat: 10
+  LinUCB:
+    parameters:
+      alpha: 1.0
+      num_lat: 10
+  LinearEGreedy:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 10
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearThompsonSampling:
+    parameters:
+      item_var: 0.01
+      iterations: 20
+      num_lat: 10
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCB:
+    parameters:
+      alpha: 1.0
+      item_var: 0.01
+      iterations: 20
+      num_lat: 10
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LogPopEnt: null
+  MostPopular: null
+  MostRepresentative: null
+  NICF:
+    parameters:
+      batch: 128
+      clip_param: 0.2
+      dropout_rate: 0.1
+      gamma: 0.0
+      inner_epoch: 50
+      latent_factor: 50
+      learning_rate: 0.001
+      num_blocks: 2
+      num_heads: 1
+      restore_model: false
+      rnn_layer: 1
+      time_step: 3
+      training_epoch: 30000
+  OurMethod1:
+    parameters:
+      alpha: 1.0
+      num_lat: 10
+      stop: null
+      weight_method: change
+  OurMethod2:
+    parameters:
+      alpha: 0.25
+      num_lat: 10
+  PPELPE: null
+  PTS:
+    parameters:
+      num_lat: 2
+      num_particles: 2
+      var: 0.5
+      var_u: 1.0
+      var_v: 1.0
+  PopPlusEnt: null
+  Random: null
+  ThompsonSampling:
+    parameters:
+      alpha_0: 1
+      beta_0: 1
+  TinUCB:
+    parameters:
+      alpha: 0.2
+  UCB:
+    parameters:
+      c: 1.0
+  UCBLearner:
+    parameters:
+      num_lat: 10
+      stop: 14
+  kNNBandit: null
+MovieLens 1M (B):
+  ALEntropy: null
+  ALMostPopular: null
+  COFIBA:
+    parameters:
+      alpha: 1
+      alpha_2: 1
+      num_lat: 10
+  DistinctPopular: null
+  EGreedy:
+    parameters:
+      epsilon: 0.1
+  EMostPopular:
+    parameters:
+      epsilon: 0.2
+  Entropy: null
+  Entropy0: null
+  GLM_UCB:
+    parameters:
+      c: 1.0
+      num_lat: 10
+  HELF: null
+  LinEGreedy:
+    parameters:
+      epsilon: 0.1
+      num_lat: 10
+  LinUCB:
+    parameters:
+      alpha: 1.0
+      num_lat: 10
+  LinearEGreedy:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 10
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearThompsonSampling:
+    parameters:
+      item_var: 0.01
+      iterations: 20
+      num_lat: 10
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCB:
+    parameters:
+      alpha: 1.0
+      item_var: 0.01
+      iterations: 20
+      num_lat: 10
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LogPopEnt: null
+  MostPopular: null
+  MostRepresentative: null
+  NICF:
+    parameters:
+      batch: 128
+      clip_param: 0.2
+      dropout_rate: 0.1
+      gamma: 0.0
+      inner_epoch: 50
+      latent_factor: 10
+      learning_rate: 0.01
+      num_blocks: 2
+      num_heads: 1
+      restore_model: false
+      rnn_layer: 1
+      time_step: 3
+      training_epoch: 30000
+  OurMethod1:
+    parameters:
+      alpha: 1.0
+      num_lat: 10
+      stop: null
+      weight_method: change
+  OurMethod2:
+    parameters:
+      alpha: 1.0
+      num_lat: 10
+  PPELPE: null
+  PTS:
+    parameters:
+      num_lat: 2
+      num_particles: 2
+      var: 0.5
+      var_u: 1.0
+      var_v: 1.0
+  PopPlusEnt: null
+  Random: null
+  ThompsonSampling:
+    parameters:
+      alpha_0: 1
+      beta_0: 1
+  TinUCB:
+    parameters:
+      alpha: 0.2
+  UCB:
+    parameters:
+      c: 1.0
+  UCBLearner:
+    parameters:
+      num_lat: 10
+      stop: 14
+  kNNBandit:
+    parameters:
+      alpha_0: 1
+      beta_0: 1
+      k: 1
+Yahoo Music:
+  ALEntropy: null
+  ALMostPopular: null
+  COFIBA:
+    parameters:
+      alpha: 1
+      alpha_2: 1
+      num_lat: 10
+  DistinctPopular: null
+  EGreedy:
+    parameters:
+      epsilon: 0.1
+  EMostPopular:
+    parameters:
+      epsilon: 0.2
+  Entropy: null
+  Entropy0: null
+  GLM_UCB:
+    parameters:
+      c: 1.0
+      num_lat: 10
+  HELF: null
+  LinEGreedy:
+    parameters:
+      epsilon: 0.1
+      num_lat: 10
+  LinUCB:
+    parameters:
+      alpha: 1.0
+      num_lat: 5
+  LinUCBvar:
+    parameters:
+      alpha: 1.0
+      lambda_u: 0.1
+      num_lat: 10
+  LinearEGreedy:
+    parameters:
+      epsilon: 0.5
+      item_var: 0.01
+      iterations: 20
+      num_lat: 5
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearThompsonSampling:
+    parameters:
+      item_var: 0.01
+      iterations: 20
+      num_lat: 10
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCB:
+    parameters:
+      alpha: 1.0
+      item_var: 0.01
+      iterations: 20
+      num_lat: 5
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCB1:
+    parameters:
+      alpha: 1.0
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LogPopEnt: null
+  MostPopular: null
+  MostRepresentative: null
+  NICF:
+    parameters:
+      batch: 128
+      clip_param: 0.2
+      dropout_rate: 0.1
+      gamma: 0.0
+      inner_epoch: 50
+      latent_factor: 10
+      learning_rate: 0.1
+      num_blocks: 2
+      num_heads: 1
+      restore_model: false
+      rnn_layer: 1
+      time_step: 3
+      training_epoch: 30000
+  OurMethod1:
+    parameters:
+      alpha: 1.0
+      num_lat: 10
+      stop: null
+      weight_method: change
   OurMethod2:
     parameters:
       alpha: 0.5
@@ -711,8 +981,8 @@ Yahoo Music:
   OurMethod2var:
     parameters:
       alpha: 1.0
-      num_lat: 10
       lambda_u: 0.01
+      num_lat: 10
   OurMethod3:
     parameters:
       alpha: 0.5
@@ -725,14 +995,14 @@ Yahoo Music:
     parameters:
       alpha: 0.75
       num_lat: 20
-  OurMethodInit:
-    parameters:
-      alpha: 0.75
-      num_lat: 20
-      init: random
   OurMethodEntropy:
     parameters:
       alpha: 0.75
+      num_lat: 20
+  OurMethodInit:
+    parameters:
+      alpha: 0.75
+      init: random
       num_lat: 20
   OurMethodPopularity:
     parameters:
@@ -746,139 +1016,53 @@ Yahoo Music:
     parameters:
       alpha: 0.75
       num_lat: 20
-  MostPopular:
-  LinearUCB:
+  PPELPE: null
+  PTS:
     parameters:
-      var: 0.05
-      user_var: 0.01
-      item_var: 0.01
-      stop_criteria: 0.0009
-      iterations: 20
-      alpha: 1.0
-      num_lat: 5
-  LinearUCB1:
-    parameters:
-      var: 0.05
-      user_var: 0.01
-      item_var: 0.01
-      stop_criteria: 0.0009
-      iterations: 20
-      alpha: 1.0
       num_lat: 20
-  LinEGreedy:
+      num_particles: 5
+      var: 0.5
+      var_u: 1.0
+      var_v: 1.0
+  PopPlusEnt: null
+  Random: null
+  ThompsonSampling:
     parameters:
-      epsilon: 0.1
-      num_lat: 10
-  LinUCB:
+      alpha_0: 1
+      beta_0: 100
+  TinUCB:
     parameters:
-      alpha: 1.0
-      num_lat: 5
-  LinUCBvar:
-    parameters:
-      alpha: 1.0
-      num_lat: 10
-      lambda_u: 0.1
-  PPELPE:
-  UCBLearner:
-    parameters:
-      stop: 14
-      num_lat: 10
-  GLM_UCB:
-    parameters:
-      c: 1.0
-      num_lat: 10
-  LinearEGreedy:
-    parameters:
-      epsilon: 0.5
-      var: 0.05
-      user_var: 0.01
-      item_var: 0.01
-      stop_criteria: 0.0009
-      iterations: 20
-      num_lat: 5
-  LinearThompsonSampling:
-    parameters:
-      var: 0.05
-      user_var: 0.01
-      item_var: 0.01
-      stop_criteria: 0.0009
-      iterations: 20
-      num_lat: 10
-  EGreedy:
-    parameters:
-      epsilon: 0.1
+      alpha: 0.2
   UCB:
     parameters:
       c: 0.25
-  MostRepresentative:
-  ALEntropy:
-  Entropy0:
-  HELF:
-  PopPlusEnt:
-  DistinctPopular:
-  EMostPopular:
+  UCBLearner:
     parameters:
-      epsilon: 0.2
-  Entropy:
-  LogPopEnt:
-  TinUCB:
-    parameters:
-      alpha: 0.2
+      num_lat: 10
+      stop: 14
+  kNNBandit: null
 Yahoo Music Sampled:
-  NICF:
-          parameters:
-                  time_step: 3
-                  latent_factor: 10
-                  learning_rate: 0.01
-                  training_epoch: 30000
-                  rnn_layer: 1
-                  inner_epoch: 50
-                  batch: 128
-                  gamma: 0.0
-                  clip_param: 0.2
-                  restore_model: false
-                  num_blocks: 2
-                  num_heads: 1
-                  dropout_rate: 0.1
-  PTS:
-    parameters:
-      num_particles: 2
-      var: 0.5
-      var_u: 1.0
-      var_v: 1.0
-      num_lat: 2
+  ALEntropy: null
+  ALMostPopular: null
   COFIBA:
     parameters:
       alpha: 1
       alpha_2: 1
       num_lat: 10
-  ThompsonSampling:
+  DistinctPopular: null
+  EGreedy:
     parameters:
-      alpha_0: 1
-      beta_0: 1
-  Random:
-  kNNBandit:
-  ALMostPopular:
-  OurMethod1:
+      epsilon: 0.1
+  EMostPopular:
     parameters:
-      alpha: 1.0
-      stop: null
-      weight_method: 'change'
+      epsilon: 0.2
+  Entropy: null
+  Entropy0: null
+  GLM_UCB:
+    parameters:
+      c: 1.0
       num_lat: 10
-  OurMethod2:
-    parameters:
-      alpha: 1.0
-      num_lat: 10
-  MostPopular:
-  LinearUCB:
-    parameters:
-      var: 0.05
-      user_var: 0.01
-      item_var: 0.01
-      stop_criteria: 0.0009
-      iterations: 20
-      alpha: 1.0
-      num_lat: 10
+  HELF: null
   LinEGreedy:
     parameters:
       epsilon: 0.1
@@ -887,267 +1071,82 @@ Yahoo Music Sampled:
     parameters:
       alpha: 1.0
       num_lat: 10
-  PPELPE:
-  UCBLearner:
-    parameters:
-      stop: 14
-      num_lat: 10
-  GLM_UCB:
-    parameters:
-      c: 1.0
-      num_lat: 10
   LinearEGreedy:
     parameters:
       epsilon: 0.1
-      var: 0.05
-      user_var: 0.01
       item_var: 0.01
-      stop_criteria: 0.0009
       iterations: 20
       num_lat: 10
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
   LinearThompsonSampling:
     parameters:
-      var: 0.05
-      user_var: 0.01
       item_var: 0.01
-      stop_criteria: 0.0009
       iterations: 20
       num_lat: 10
-  EGreedy:
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCB:
     parameters:
-      epsilon: 0.1
-  UCB:
-    parameters:
-      c: 1.0
-  MostRepresentative:
-  ALEntropy:
-  Entropy0:
-  HELF:
-  PopPlusEnt:
-  DistinctPopular:
-  EMostPopular:
-    parameters:
-      epsilon: 0.2
-  Entropy:
-  LogPopEnt:
-  TinUCB:
-    parameters:
-      alpha: 0.2
-MovieLens 10M Sampled:
-  NICF:
-          parameters:
-                  time_step: 3
-                  latent_factor: 10
-                  learning_rate: 0.01
-                  training_epoch: 30000
-                  rnn_layer: 1
-                  inner_epoch: 50
-                  batch: 128
-                  gamma: 0.0
-                  clip_param: 0.2
-                  restore_model: false
-                  num_blocks: 2
-                  num_heads: 1
-                  dropout_rate: 0.1
-  PTS:
-    parameters:
-      num_particles: 2
-      var: 0.5
-      var_u: 1.0
-      var_v: 1.0
-      num_lat: 2
-  COFIBA:
-    parameters:
-      alpha: 1
-      alpha_2: 1
+      alpha: 1.0
+      item_var: 0.01
+      iterations: 20
       num_lat: 10
-  ThompsonSampling:
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LogPopEnt: null
+  MostPopular: null
+  MostRepresentative: null
+  NICF:
     parameters:
-      alpha_0: 1
-      beta_0: 1
-  Random:
-  kNNBandit:
-  ALMostPopular:
+      batch: 128
+      clip_param: 0.2
+      dropout_rate: 0.1
+      gamma: 0.0
+      inner_epoch: 50
+      latent_factor: 10
+      learning_rate: 0.01
+      num_blocks: 2
+      num_heads: 1
+      restore_model: false
+      rnn_layer: 1
+      time_step: 3
+      training_epoch: 30000
   OurMethod1:
     parameters:
       alpha: 1.0
-      stop: null
-      weight_method: 'change'
       num_lat: 10
+      stop: null
+      weight_method: change
   OurMethod2:
     parameters:
       alpha: 1.0
       num_lat: 10
-  MostPopular:
-  LinearUCB:
-    parameters:
-      var: 0.05
-      user_var: 0.01
-      item_var: 0.01
-      stop_criteria: 0.0009
-      iterations: 20
-      alpha: 1.0
-      num_lat: 10
-  LinEGreedy:
-    parameters:
-      epsilon: 0.1
-      num_lat: 10
-  LinUCB:
-    parameters:
-      alpha: 1.0
-      num_lat: 10
-  PPELPE:
-  UCBLearner:
-    parameters:
-      stop: 14
-      num_lat: 10
-  GLM_UCB:
-    parameters:
-      c: 1.0
-      num_lat: 10
-  LinearEGreedy:
-    parameters:
-      epsilon: 0.1
-      var: 0.05
-      user_var: 0.01
-      item_var: 0.01
-      stop_criteria: 0.0009
-      iterations: 20
-      num_lat: 10
-  LinearThompsonSampling:
-    parameters:
-      var: 0.05
-      user_var: 0.01
-      item_var: 0.01
-      stop_criteria: 0.0009
-      iterations: 20
-      num_lat: 10
-  EGreedy:
-    parameters:
-      epsilon: 0.1
-  UCB:
-    parameters:
-      c: 1.0
-  MostRepresentative:
-  ALEntropy:
-  Entropy0:
-  HELF:
-  PopPlusEnt:
-  DistinctPopular:
-  EMostPopular:
-    parameters:
-      epsilon: 0.2
-  Entropy:
-  LogPopEnt:
-  TinUCB:
-    parameters:
-      alpha: 0.2
-Good Books Sampled:
-  NICF:
-          parameters:
-                  time_step: 3
-                  latent_factor: 10
-                  learning_rate: 0.01
-                  training_epoch: 30000
-                  rnn_layer: 1
-                  inner_epoch: 50
-                  batch: 128
-                  gamma: 0.0
-                  clip_param: 0.2
-                  restore_model: false
-                  num_blocks: 2
-                  num_heads: 1
-                  dropout_rate: 0.1
+  PPELPE: null
   PTS:
     parameters:
+      num_lat: 2
       num_particles: 2
       var: 0.5
       var_u: 1.0
       var_v: 1.0
-      num_lat: 2
-  COFIBA:
-    parameters:
-      alpha: 1
-      alpha_2: 1
-      num_lat: 10
+  PopPlusEnt: null
+  Random: null
   ThompsonSampling:
     parameters:
       alpha_0: 1
       beta_0: 1
-  Random:
-  kNNBandit:
-  ALMostPopular:
-  OurMethod1:
-    parameters:
-      alpha: 1.0
-      stop: null
-      weight_method: 'change'
-      num_lat: 10
-  OurMethod2:
-    parameters:
-      alpha: 1.0
-      num_lat: 10
-  MostPopular:
-  LinearUCB:
-    parameters:
-      var: 0.05
-      user_var: 0.01
-      item_var: 0.01
-      stop_criteria: 0.0009
-      iterations: 20
-      alpha: 1.0
-      num_lat: 10
-  LinEGreedy:
-    parameters:
-      epsilon: 0.1
-      num_lat: 10
-  LinUCB:
-    parameters:
-      alpha: 1.0
-      num_lat: 10
-  PPELPE:
-  UCBLearner:
-    parameters:
-      stop: 14
-      num_lat: 10
-  GLM_UCB:
-    parameters:
-      c: 1.0
-      num_lat: 10
-  LinearEGreedy:
-    parameters:
-      epsilon: 0.1
-      var: 0.05
-      user_var: 0.01
-      item_var: 0.01
-      stop_criteria: 0.0009
-      iterations: 20
-      num_lat: 10
-  LinearThompsonSampling:
-    parameters:
-      var: 0.05
-      user_var: 0.01
-      item_var: 0.01
-      stop_criteria: 0.0009
-      iterations: 20
-      num_lat: 10
-  EGreedy:
-    parameters:
-      epsilon: 0.1
-  UCB:
-    parameters:
-      c: 1.0
-  MostRepresentative:
-  ALEntropy:
-  Entropy0:
-  HELF:
-  PopPlusEnt:
-  DistinctPopular:
-  EMostPopular:
-    parameters:
-      epsilon: 0.2
-  Entropy:
-  LogPopEnt:
   TinUCB:
     parameters:
       alpha: 0.2
+  UCB:
+    parameters:
+      c: 1.0
+  UCBLearner:
+    parameters:
+      num_lat: 10
+      stop: 14
+  kNNBandit: null
