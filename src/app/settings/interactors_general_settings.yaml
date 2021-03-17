@@ -86,3 +86,11 @@ LinearUCBRandPopularity:
   name: Linear UCB (PMF) Rand Pop
 LinearUCBRandom:
   name: Linear UCB (PMF) Random
+LinearEGreedyEntropy:
+  name: Linear e-Greedy (PMF) Entropy
+LinearEGreedyPopularity:
+  name: Linear e-Greedy (PMF) Pop
+LinearEGreedyRandPopularity:
+  name: Linear e-Greedy (PMF) Rand Pop
+LinearEGreedyRandom:
+  name: Linear e-Greedy (PMF) Random

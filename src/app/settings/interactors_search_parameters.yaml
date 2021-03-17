@@ -2351,3 +2351,427 @@ LinearUCBRandom:
     stop_criteria: 0.0009
     user_var: 0.01
     var: 0.05
+LinearEGreedyEntropy:
+  - epsilon: 0.1
+    item_var: 0.01
+    iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.2
+    item_var: 0.01
+    iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.3
+    item_var: 0.01
+    iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.4
+    item_var: 0.01
+    iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.5
+    item_var: 0.01
+    iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.1
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.2
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.3
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.4
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.5
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.1
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.2
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.3
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.4
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.5
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+LinearEGreedyPopularity:
+  - epsilon: 0.1
+    item_var: 0.01
+    iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.2
+    item_var: 0.01
+    iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.3
+    item_var: 0.01
+    iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.4
+    item_var: 0.01
+    iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.5
+    item_var: 0.01
+    iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.1
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.2
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.3
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.4
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.5
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.1
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.2
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.3
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.4
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.5
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+LinearEGreedyRandPopularity:
+  - epsilon: 0.1
+    item_var: 0.01
+    iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.2
+    item_var: 0.01
+    iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.3
+    item_var: 0.01
+    iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.4
+    item_var: 0.01
+    iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.5
+    item_var: 0.01
+    iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.1
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.2
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.3
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.4
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.5
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.1
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.2
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.3
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.4
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.5
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+LinearEGreedyRandom:
+  - epsilon: 0.1
+    item_var: 0.01
+    iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.2
+    item_var: 0.01
+    iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.3
+    item_var: 0.01
+    iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.4
+    item_var: 0.01
+    iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.5
+    item_var: 0.01
+    iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.1
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.2
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.3
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.4
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.5
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.1
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.2
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.3
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.4
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - epsilon: 0.5
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
