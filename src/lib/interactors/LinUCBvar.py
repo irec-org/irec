@@ -37,8 +37,8 @@ class LinUCBvar(MFInteractor):
         self.num_latent_factors = len(self.items_weights[0])
 
         self.I = np.eye(len(self.items_weights[0]))
-        self.bs = defaultdict(lambda: self.lambda_u*np.ones(self.num_latent_factors))
-        self.As = defaultdict(lambda: self.I.copy())
+        self.bs = defaultdict(lambda: np.ones(self.num_latent_factors))
+        self.As = defaultdict(lambda: self.lambda_u*self.I.copy())
 
     def predict(self, uid, candidate_items, num_req_items):
         b = self.bs[uid]

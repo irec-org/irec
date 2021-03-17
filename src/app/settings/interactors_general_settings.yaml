@@ -74,3 +74,5 @@ OurMethodRandPopularity:
   name: WSCB Rand Pop
 OurMethodRandom:
   name: WSCB Random
+OurMethodvar:
+  name: WSCB var

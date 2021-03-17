@@ -1754,4 +1754,256 @@ LinUCBvar:
   - alpha: 1
     lambda_u: 0.001
     num_lat: 20
-
+OurMethod2var:
+  - alpha: 0.25
+    lambda_u: 1.164322
+    num_lat: 5
+  - alpha: 0.25
+    lambda_u: 1.2315279
+    num_lat: 5
+  - alpha: 0.25
+    lambda_u: 1.482435
+    num_lat: 5
+  - alpha: 0.25
+    lambda_u: 0.5
+    num_lat: 5
+  - alpha: 0.25
+    lambda_u: 0.1
+    num_lat: 5
+  - alpha: 0.25
+    lambda_u: 0.01
+    num_lat: 5
+  - alpha: 0.25
+    lambda_u: 0.001
+    num_lat: 5
+  - alpha: 0.5
+    lambda_u: 1.164322
+    num_lat: 5
+  - alpha: 0.5
+    lambda_u: 1.2315279
+    num_lat: 5
+  - alpha: 0.5
+    lambda_u: 1.482435
+    num_lat: 5
+  - alpha: 0.5
+    lambda_u: 0.5
+    num_lat: 5
+  - alpha: 0.5
+    lambda_u: 0.1
+    num_lat: 5
+  - alpha: 0.5
+    lambda_u: 0.01
+    num_lat: 5
+  - alpha: 0.5
+    lambda_u: 0.001
+    num_lat: 5
+  - alpha: 0.75
+    lambda_u: 1.164322
+    num_lat: 5
+  - alpha: 0.75
+    lambda_u: 1.2315279
+    num_lat: 5
+  - alpha: 0.75
+    lambda_u: 1.482435
+    num_lat: 5
+  - alpha: 0.75
+    lambda_u: 0.5
+    num_lat: 5
+  - alpha: 0.75
+    lambda_u: 0.1
+    num_lat: 5
+  - alpha: 0.75
+    lambda_u: 0.01
+    num_lat: 5
+  - alpha: 0.75
+    lambda_u: 0.001
+    num_lat: 5
+  - alpha: 1
+    lambda_u: 1.164322
+    num_lat: 5
+  - alpha: 1
+    lambda_u: 1.2315279
+    num_lat: 5
+  - alpha: 1
+    lambda_u: 1.482435
+    num_lat: 5
+  - alpha: 1
+    lambda_u: 0.5
+    num_lat: 5
+  - alpha: 1
+    lambda_u: 0.1
+    num_lat: 5
+  - alpha: 1
+    lambda_u: 0.01
+    num_lat: 5
+  - alpha: 1
+    lambda_u: 0.001
+    num_lat: 5
+  - alpha: 0.25
+    lambda_u: 1.164322
+    num_lat: 10
+  - alpha: 0.25
+    lambda_u: 1.2315279
+    num_lat: 10
+  - alpha: 0.25
+    lambda_u: 1.482435
+    num_lat: 10
+  - alpha: 0.25
+    lambda_u: 0.5
+    num_lat: 10
+  - alpha: 0.25
+    lambda_u: 0.1
+    num_lat: 10
+  - alpha: 0.25
+    lambda_u: 0.01
+    num_lat: 10
+  - alpha: 0.25
+    lambda_u: 0.001
+    num_lat: 10
+  - alpha: 0.5
+    lambda_u: 1.164322
+    num_lat: 10
+  - alpha: 0.5
+    lambda_u: 1.2315279
+    num_lat: 10
+  - alpha: 0.5
+    lambda_u: 1.482435
+    num_lat: 10
+  - alpha: 0.5
+    lambda_u: 0.5
+    num_lat: 10
+  - alpha: 0.5
+    lambda_u: 0.1
+    num_lat: 10
+  - alpha: 0.5
+    lambda_u: 0.01
+    num_lat: 10
+  - alpha: 0.5
+    lambda_u: 0.001
+    num_lat: 10
+  - alpha: 0.75
+    lambda_u: 1.164322
+    num_lat: 10
+  - alpha: 0.75
+    lambda_u: 1.2315279
+    num_lat: 10
+  - alpha: 0.75
+    lambda_u: 1.482435
+    num_lat: 10
+  - alpha: 0.75
+    lambda_u: 0.5
+    num_lat: 10
+  - alpha: 0.75
+    lambda_u: 0.1
+    num_lat: 10
+  - alpha: 0.75
+    lambda_u: 0.01
+    num_lat: 10
+  - alpha: 0.75
+    lambda_u: 0.001
+    num_lat: 10
+  - alpha: 1
+    lambda_u: 1.164322
+    num_lat: 10
+  - alpha: 1
+    lambda_u: 1.2315279
+    num_lat: 10
+  - alpha: 1
+    lambda_u: 1.482435
+    num_lat: 10
+  - alpha: 1
+    lambda_u: 0.5
+    num_lat: 10
+  - alpha: 1
+    lambda_u: 0.1
+    num_lat: 10
+  - alpha: 1
+    lambda_u: 0.01
+    num_lat: 10
+  - alpha: 1
+    lambda_u: 0.001
+    num_lat: 10
+  - alpha: 0.25
+    lambda_u: 1.164322
+    num_lat: 20
+  - alpha: 0.25
+    lambda_u: 1.2315279
+    num_lat: 20
+  - alpha: 0.25
+    lambda_u: 1.482435
+    num_lat: 20
+  - alpha: 0.25
+    lambda_u: 0.5
+    num_lat: 20
+  - alpha: 0.25
+    lambda_u: 0.1
+    num_lat: 20
+  - alpha: 0.25
+    lambda_u: 0.01
+    num_lat: 20
+  - alpha: 0.25
+    lambda_u: 0.001
+    num_lat: 20
+  - alpha: 0.5
+    lambda_u: 1.164322
+    num_lat: 20
+  - alpha: 0.5
+    lambda_u: 1.2315279
+    num_lat: 20
+  - alpha: 0.5
+    lambda_u: 1.482435
+    num_lat: 20
+  - alpha: 0.5
+    lambda_u: 0.5
+    num_lat: 20
+  - alpha: 0.5
+    lambda_u: 0.1
+    num_lat: 20
+  - alpha: 0.5
+    lambda_u: 0.01
+    num_lat: 20
+  - alpha: 0.5
+    lambda_u: 0.001
+    num_lat: 20
+  - alpha: 0.75
+    lambda_u: 1.164322
+    num_lat: 20
+  - alpha: 0.75
+    lambda_u: 1.2315279
+    num_lat: 20
+  - alpha: 0.75
+    lambda_u: 1.482435
+    num_lat: 20
+  - alpha: 0.75
+    lambda_u: 0.5
+    num_lat: 20
+  - alpha: 0.75
+    lambda_u: 0.1
+    num_lat: 20
+  - alpha: 0.75
+    lambda_u: 0.01
+    num_lat: 20
+  - alpha: 0.75
+    lambda_u: 0.001
+    num_lat: 20
+  - alpha: 1
+    lambda_u: 1.164322
+    num_lat: 20
+  - alpha: 1
+    lambda_u: 1.2315279
+    num_lat: 20
+  - alpha: 1
+    lambda_u: 1.482435
+    num_lat: 20
+  - alpha: 1
+    lambda_u: 0.5
+    num_lat: 20
+  - alpha: 1
+    lambda_u: 0.1
+    num_lat: 20
+  - alpha: 1
+    lambda_u: 0.01
+    num_lat: 20
+  - alpha: 1
+    lambda_u: 0.001
+    num_lat: 20
