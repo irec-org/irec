@@ -97,7 +97,7 @@ for k1, v1 in datasets_metrics_values.items():
             keys = [keys[i] for i in idxs]
             values = [values[i] for i in idxs]
             if args.b:
-                interactors_preprocessor_paramaters[k1][k3] = json.loads(keys[0])
+                interactors_preprocessor_paramaters[k1][k3] = {'parameters':json.loads(keys[0])}
             if args.t:
                 print(f"{k3}:")
                 print('\tparameters:')

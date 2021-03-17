@@ -378,7 +378,8 @@ MovieLens 100k (B):
     parameters:
       alpha: 0.2
   UCB:
-    c: 0.5
+    parameters:
+      c: 0.5
   UCBLearner:
     parameters:
       num_lat: 10
