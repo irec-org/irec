@@ -437,6 +437,11 @@ MovieLens 10M:
     parameters:
       alpha: 1.0
       num_lat: 10
+  LinUCBvar:
+    parameters:
+      alpha: 0.75
+      num_lat: 10
+      lambda_u: 0.1
   PPELPE:
   UCBLearner:
     parameters:
@@ -579,6 +584,11 @@ Good Books:
     parameters:
       alpha: 0.5
       num_lat: 10
+  LinUCBvar:
+    parameters:
+      alpha: 0.25
+      num_lat: 10
+      lambda_u: 0.001
   PPELPE:
   UCBLearner:
     parameters:
@@ -721,6 +731,11 @@ Yahoo Music:
     parameters:
       alpha: 1.0
       num_lat: 5
+  LinUCBvar:
+    parameters:
+      alpha: 1.0
+      num_lat: 10
+      lambda_u: 0.1
   PPELPE:
   UCBLearner:
     parameters:
