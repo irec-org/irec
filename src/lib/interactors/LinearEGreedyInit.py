@@ -68,3 +68,7 @@ class LinearEGreedyRandPopularity(LinearEGreedyInit):
 class LinearEGreedyRandom(LinearEGreedyInit):
     def __init__(self,*args, **kwargs):
         super().__init__(init='random',*args, **kwargs)
+
+class LinearEGreedyLogPopEnt(LinearEGreedyInit):
+    def __init__(self,*args, **kwargs):
+        super().__init__(init='logpopent',*args, **kwargs)

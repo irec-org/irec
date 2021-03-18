@@ -68,3 +68,7 @@ class LinearUCBRandPopularity(LinearUCBInit):
 class LinearUCBRandom(LinearUCBInit):
     def __init__(self,*args, **kwargs):
         super().__init__(init='random',*args, **kwargs)
+
+class LinearUCBLogPopEnt(LinearUCBInit):
+    def __init__(self,*args, **kwargs):
+        super().__init__(init='logpopent',*args, **kwargs)

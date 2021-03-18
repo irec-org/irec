@@ -86,6 +86,8 @@ LinearUCBRandPopularity:
   name: Linear UCB (PMF) Rand Pop
 LinearUCBRandom:
   name: Linear UCB (PMF) Random
+LinearUCBLogPopEnt:
+  name: Linear UCB (PMF) log(Pop)*Ent
 LinearEGreedyEntropy:
   name: Linear e-Greedy (PMF) Entropy
 LinearEGreedyPopularity:
@@ -94,3 +96,5 @@ LinearEGreedyRandPopularity:
   name: Linear e-Greedy (PMF) Rand Pop
 LinearEGreedyRandom:
   name: Linear e-Greedy (PMF) Random
+LinearEGreedyLogPopEnt:
+  name: Linear e-Greedy (PMF) log(Pop)*Ent
