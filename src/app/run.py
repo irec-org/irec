@@ -21,6 +21,7 @@ parser = argparse.ArgumentParser()
 
 parser.add_argument('--num_tasks', type=int, default=os.cpu_count())
 parser.add_argument('--forced_run', default=False, action='store_true')
+parser.add_argument('--parallel', default=False, action='store_true')
 args = parser.parse_args()
 
 def run_interactors_in_base(dataset_preprocessor, interactors_general_settings,
@@ -33,7 +34,7 @@ def run_interactors_in_base(dataset_preprocessor, interactors_general_settings,
     ir = InteractorRunner(dm, interactors_general_settings,
                           interactors_preprocessor_paramaters,
                           evaluation_policies_parameters)
-    ir.run_interactors(interactors_classes,forced_run=args.forced_run, parallel=True)
+    ir.run_interactors(interactors_classes,forced_run=args.forced_run, parallel=args.parallel)
 
 
 def main():
