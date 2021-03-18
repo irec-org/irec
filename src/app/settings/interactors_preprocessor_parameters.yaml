@@ -268,6 +268,80 @@ Good Books Sampled:
       num_lat: 10
       stop: 14
   kNNBandit: null
+Good Books Validation:
+  LinearEGreedyEntropy:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearEGreedyPopularity:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearEGreedyRandPopularity:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearEGreedyRandom:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBEntropy:
+    parameters:
+      alpha: 1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBPopularity:
+    parameters:
+      alpha: 0.25
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBRandPopularity:
+    parameters:
+      alpha: 1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBRandom:
+    parameters:
+      alpha: 0.5
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  kNNBandit: null
 MovieLens 100k (B):
   ALEntropy: null
   ALMostPopular: null
@@ -658,6 +732,80 @@ MovieLens 10M Sampled:
     parameters:
       num_lat: 10
       stop: 14
+  kNNBandit: null
+MovieLens 10M Validation:
+  LinearEGreedyEntropy:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearEGreedyPopularity:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearEGreedyRandPopularity:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearEGreedyRandom:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBEntropy:
+    parameters:
+      alpha: 1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBPopularity:
+    parameters:
+      alpha: 1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBRandPopularity:
+    parameters:
+      alpha: 1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBRandom:
+    parameters:
+      alpha: 1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
   kNNBandit: null
 MovieLens 1M:
   ALEntropy: null
@@ -1152,8 +1300,76 @@ Yahoo Music Sampled:
       stop: 14
   kNNBandit: null
 Yahoo Music Validation:
-  kNNBandit: null
-MovieLens 10M Validation:
-  kNNBandit: null
-Good Books Validation:
+  LinearEGreedyEntropy:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 10
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearEGreedyPopularity:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 5
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearEGreedyRandPopularity:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 5
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearEGreedyRandom:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 10
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBEntropy:
+    parameters:
+      alpha: 1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 5
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBPopularity:
+    parameters:
+      alpha: 1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 5
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBRandPopularity:
+    parameters:
+      alpha: 1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 5
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBRandom:
+    parameters:
+      alpha: 1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 5
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
   kNNBandit: null
