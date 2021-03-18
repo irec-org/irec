@@ -1,4 +1,76 @@
 Good Books:
+  LinearEGreedyEntropy:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearEGreedyPopularity:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearEGreedyRandPopularity:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearEGreedyRandom:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBEntropy:
+    parameters:
+      alpha: 1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBPopularity:
+    parameters:
+      alpha: 0.25
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBRandPopularity:
+    parameters:
+      alpha: 1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBRandom:
+    parameters:
+      alpha: 0.5
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
   ALEntropy: null
   ALMostPopular: null
   COFIBA:
@@ -464,6 +536,78 @@ MovieLens 100k (B):
       beta_0: 100
       k: 1
 MovieLens 10M:
+  LinearEGreedyEntropy:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearEGreedyPopularity:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearEGreedyRandPopularity:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearEGreedyRandom:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBEntropy:
+    parameters:
+      alpha: 1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBPopularity:
+    parameters:
+      alpha: 1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBRandPopularity:
+    parameters:
+      alpha: 1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBRandom:
+    parameters:
+      alpha: 1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
   ALEntropy: null
   ALMostPopular: null
   COFIBA:
@@ -1030,6 +1174,78 @@ MovieLens 1M (B):
       beta_0: 1
       k: 1
 Yahoo Music:
+  LinearEGreedyEntropy:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 10
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearEGreedyPopularity:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 5
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearEGreedyRandPopularity:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 5
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearEGreedyRandom:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 10
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBEntropy:
+    parameters:
+      alpha: 1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 5
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBPopularity:
+    parameters:
+      alpha: 1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 5
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBRandPopularity:
+    parameters:
+      alpha: 1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 5
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBRandom:
+    parameters:
+      alpha: 1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 5
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
   ALEntropy: null
   ALMostPopular: null
   COFIBA:
