@@ -1,70 +1,16 @@
 Good Books:
-  LinearEGreedyEntropy:
+  LinearUCBLogPopEnt:
+    parameters:
+      alpha: 0.75
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearEGreedyLogPopEnt:
     parameters:
       epsilon: 0.1
-      item_var: 0.01
-      iterations: 20
-      num_lat: 20
-      stop_criteria: 0.0009
-      user_var: 0.01
-      var: 0.05
-  LinearEGreedyPopularity:
-    parameters:
-      epsilon: 0.1
-      item_var: 0.01
-      iterations: 20
-      num_lat: 20
-      stop_criteria: 0.0009
-      user_var: 0.01
-      var: 0.05
-  LinearEGreedyRandPopularity:
-    parameters:
-      epsilon: 0.1
-      item_var: 0.01
-      iterations: 20
-      num_lat: 20
-      stop_criteria: 0.0009
-      user_var: 0.01
-      var: 0.05
-  LinearEGreedyRandom:
-    parameters:
-      epsilon: 0.1
-      item_var: 0.01
-      iterations: 20
-      num_lat: 20
-      stop_criteria: 0.0009
-      user_var: 0.01
-      var: 0.05
-  LinearUCBEntropy:
-    parameters:
-      alpha: 1
-      item_var: 0.01
-      iterations: 20
-      num_lat: 20
-      stop_criteria: 0.0009
-      user_var: 0.01
-      var: 0.05
-  LinearUCBPopularity:
-    parameters:
-      alpha: 0.25
-      item_var: 0.01
-      iterations: 20
-      num_lat: 20
-      stop_criteria: 0.0009
-      user_var: 0.01
-      var: 0.05
-  LinearUCBRandPopularity:
-    parameters:
-      alpha: 1
-      item_var: 0.01
-      iterations: 20
-      num_lat: 20
-      stop_criteria: 0.0009
-      user_var: 0.01
-      var: 0.05
-  LinearUCBRandom:
-    parameters:
-      alpha: 0.5
       item_var: 0.01
       iterations: 20
       num_lat: 20
@@ -114,6 +60,42 @@ Good Books:
       stop_criteria: 0.0009
       user_var: 0.01
       var: 0.05
+  LinearEGreedyEntropy:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearEGreedyPopularity:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearEGreedyRandPopularity:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearEGreedyRandom:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
   LinearThompsonSampling:
     parameters:
       item_var: 0.01
@@ -137,6 +119,42 @@ Good Books:
       item_var: 0.01
       iterations: 20
       num_lat: 5
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBEntropy:
+    parameters:
+      alpha: 1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBPopularity:
+    parameters:
+      alpha: 0.25
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBRandPopularity:
+    parameters:
+      alpha: 1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBRandom:
+    parameters:
+      alpha: 0.5
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
       stop_criteria: 0.0009
       user_var: 0.01
       var: 0.05
@@ -350,6 +368,15 @@ Good Books Validation:
       stop_criteria: 0.0009
       user_var: 0.01
       var: 0.05
+  LinearEGreedyLogPopEnt:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
   LinearEGreedyPopularity:
     parameters:
       epsilon: 0.1
@@ -380,6 +407,15 @@ Good Books Validation:
   LinearUCBEntropy:
     parameters:
       alpha: 1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBLogPopEnt:
+    parameters:
+      alpha: 0.75
       item_var: 0.01
       iterations: 20
       num_lat: 20
@@ -536,43 +572,7 @@ MovieLens 100k (B):
       beta_0: 100
       k: 1
 MovieLens 10M:
-  LinearEGreedyEntropy:
-    parameters:
-      epsilon: 0.1
-      item_var: 0.01
-      iterations: 20
-      num_lat: 20
-      stop_criteria: 0.0009
-      user_var: 0.01
-      var: 0.05
-  LinearEGreedyPopularity:
-    parameters:
-      epsilon: 0.1
-      item_var: 0.01
-      iterations: 20
-      num_lat: 20
-      stop_criteria: 0.0009
-      user_var: 0.01
-      var: 0.05
-  LinearEGreedyRandPopularity:
-    parameters:
-      epsilon: 0.1
-      item_var: 0.01
-      iterations: 20
-      num_lat: 20
-      stop_criteria: 0.0009
-      user_var: 0.01
-      var: 0.05
-  LinearEGreedyRandom:
-    parameters:
-      epsilon: 0.1
-      item_var: 0.01
-      iterations: 20
-      num_lat: 20
-      stop_criteria: 0.0009
-      user_var: 0.01
-      var: 0.05
-  LinearUCBEntropy:
+  LinearUCBLogPopEnt:
     parameters:
       alpha: 1
       item_var: 0.01
@@ -581,27 +581,9 @@ MovieLens 10M:
       stop_criteria: 0.0009
       user_var: 0.01
       var: 0.05
-  LinearUCBPopularity:
+  LinearEGreedyLogPopEnt:
     parameters:
-      alpha: 1
-      item_var: 0.01
-      iterations: 20
-      num_lat: 20
-      stop_criteria: 0.0009
-      user_var: 0.01
-      var: 0.05
-  LinearUCBRandPopularity:
-    parameters:
-      alpha: 1
-      item_var: 0.01
-      iterations: 20
-      num_lat: 20
-      stop_criteria: 0.0009
-      user_var: 0.01
-      var: 0.05
-  LinearUCBRandom:
-    parameters:
-      alpha: 1
+      epsilon: 0.1
       item_var: 0.01
       iterations: 20
       num_lat: 20
@@ -651,6 +633,42 @@ MovieLens 10M:
       stop_criteria: 0.0009
       user_var: 0.01
       var: 0.05
+  LinearEGreedyEntropy:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearEGreedyPopularity:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearEGreedyRandPopularity:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearEGreedyRandom:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
   LinearThompsonSampling:
     parameters:
       item_var: 0.01
@@ -671,6 +689,42 @@ MovieLens 10M:
   LinearUCB1:
     parameters:
       alpha: 1.0
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBEntropy:
+    parameters:
+      alpha: 1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBPopularity:
+    parameters:
+      alpha: 1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBRandPopularity:
+    parameters:
+      alpha: 1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBRandom:
+    parameters:
+      alpha: 1
       item_var: 0.01
       iterations: 20
       num_lat: 20
@@ -887,6 +941,15 @@ MovieLens 10M Validation:
       stop_criteria: 0.0009
       user_var: 0.01
       var: 0.05
+  LinearEGreedyLogPopEnt:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
   LinearEGreedyPopularity:
     parameters:
       epsilon: 0.1
@@ -915,6 +978,15 @@ MovieLens 10M Validation:
       user_var: 0.01
       var: 0.05
   LinearUCBEntropy:
+    parameters:
+      alpha: 1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBLogPopEnt:
     parameters:
       alpha: 1
       item_var: 0.01
@@ -1174,16 +1246,7 @@ MovieLens 1M (B):
       beta_0: 1
       k: 1
 Yahoo Music:
-  LinearEGreedyEntropy:
-    parameters:
-      epsilon: 0.1
-      item_var: 0.01
-      iterations: 20
-      num_lat: 10
-      stop_criteria: 0.0009
-      user_var: 0.01
-      var: 0.05
-  LinearEGreedyPopularity:
+  LinearEGreedyLogPopEnt:
     parameters:
       epsilon: 0.1
       item_var: 0.01
@@ -1192,52 +1255,7 @@ Yahoo Music:
       stop_criteria: 0.0009
       user_var: 0.01
       var: 0.05
-  LinearEGreedyRandPopularity:
-    parameters:
-      epsilon: 0.1
-      item_var: 0.01
-      iterations: 20
-      num_lat: 5
-      stop_criteria: 0.0009
-      user_var: 0.01
-      var: 0.05
-  LinearEGreedyRandom:
-    parameters:
-      epsilon: 0.1
-      item_var: 0.01
-      iterations: 20
-      num_lat: 10
-      stop_criteria: 0.0009
-      user_var: 0.01
-      var: 0.05
-  LinearUCBEntropy:
-    parameters:
-      alpha: 1
-      item_var: 0.01
-      iterations: 20
-      num_lat: 5
-      stop_criteria: 0.0009
-      user_var: 0.01
-      var: 0.05
-  LinearUCBPopularity:
-    parameters:
-      alpha: 1
-      item_var: 0.01
-      iterations: 20
-      num_lat: 5
-      stop_criteria: 0.0009
-      user_var: 0.01
-      var: 0.05
-  LinearUCBRandPopularity:
-    parameters:
-      alpha: 1
-      item_var: 0.01
-      iterations: 20
-      num_lat: 5
-      stop_criteria: 0.0009
-      user_var: 0.01
-      var: 0.05
-  LinearUCBRandom:
+  LinearUCBLogPopEnt:
     parameters:
       alpha: 1
       item_var: 0.01
@@ -1289,6 +1307,42 @@ Yahoo Music:
       stop_criteria: 0.0009
       user_var: 0.01
       var: 0.05
+  LinearEGreedyEntropy:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 10
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearEGreedyPopularity:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 5
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearEGreedyRandPopularity:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 5
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearEGreedyRandom:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 10
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
   LinearThompsonSampling:
     parameters:
       item_var: 0.01
@@ -1312,6 +1366,42 @@ Yahoo Music:
       item_var: 0.01
       iterations: 20
       num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBEntropy:
+    parameters:
+      alpha: 1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 5
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBPopularity:
+    parameters:
+      alpha: 1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 5
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBRandPopularity:
+    parameters:
+      alpha: 1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 5
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBRandom:
+    parameters:
+      alpha: 1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 5
       stop_criteria: 0.0009
       user_var: 0.01
       var: 0.05
@@ -1525,6 +1615,15 @@ Yahoo Music Validation:
       stop_criteria: 0.0009
       user_var: 0.01
       var: 0.05
+  LinearEGreedyLogPopEnt:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 5
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
   LinearEGreedyPopularity:
     parameters:
       epsilon: 0.1
@@ -1553,6 +1652,15 @@ Yahoo Music Validation:
       user_var: 0.01
       var: 0.05
   LinearUCBEntropy:
+    parameters:
+      alpha: 1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 5
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBLogPopEnt:
     parameters:
       alpha: 1
       item_var: 0.01
