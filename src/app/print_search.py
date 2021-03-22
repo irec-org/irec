@@ -34,7 +34,7 @@ metrics_classes = [metric.Hits]
 metrics_names = ['Cumulative Hits']
 
 dm = DatasetManager()
-datasets_preprocessors = dm.request_datasets_preprocessors()
+# datasets_preprocessors = dm.request_datasets_preprocessors()
 
 interactors_search_parameters = yaml.load(
     open("settings" + sep + "interactors_search_parameters.yaml"),
@@ -51,6 +51,12 @@ evaluation_policies_parameters = yaml.load(
     open("settings" + sep + "evaluation_policies_parameters.yaml"),
     Loader=yaml.SafeLoader)
 
+with open("settings"+sep+"datasets_preprocessors_parameters.yaml") as f:
+    loader = yaml.SafeLoader
+    datasets_preprocessors = yaml.load(f,Loader=loader)
+
+    datasets_preprocessors = {setting['name']: setting
+                              for setting in datasets_preprocessors}
 interactors_classes_names_to_names = {
     k: v['name'] for k, v in interactors_general_settings.items()
 }
@@ -58,7 +64,9 @@ interactors_classes_names_to_names = {
 ir = InteractorRunner(dm, interactors_general_settings,
                       interactors_preprocessor_paramaters,
                       evaluation_policies_parameters)
-interactors_classes = ir.select_interactors()
+# interactors_classes = ir.select_interactors()
+interactors_classes = [eval('interactors.'+interactor) for interactor in args.m]
+datasets_preprocessors = [datasets_preprocessors[base] for base in args.b]
 
 metrics_evaluator = CumulativeInteractionMetricsEvaluator(None, metrics_classes)
 
