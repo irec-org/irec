@@ -26,7 +26,9 @@ import argparse
 
 parser = argparse.ArgumentParser(description='Grid search')
 parser.add_argument('-t', default=False, action='store_true',help='Print only top 1')
-parser.add_argument('-b', default=False, action='store_true',help='Save best')
+parser.add_argument('-d', default=False, action='store_true',help='Save best')
+parser.add_argument('-m',nargs='*')
+parser.add_argument('-b',nargs='*')
 args = parser.parse_args()
 
 
@@ -104,7 +106,7 @@ for k1, v1 in datasets_metrics_values.items():
             idxs = np.argsort(values)[::-1]
             keys = [keys[i] for i in idxs]
             values = [values[i] for i in idxs]
-            if args.b:
+            if args.d:
                 interactors_preprocessor_paramaters[k1][k3] = {'parameters':json.loads(keys[0])}
             if args.t:
                 print(f"{k3}:")
@@ -118,6 +120,6 @@ for k1, v1 in datasets_metrics_values.items():
                     k4 = ','.join(map(lambda x: str(x[0])+'='+str(x[1]),list(k4.items())))
                     print(f"{k3}({k4}) {v4:.5f}")
 
-if args.b:
+if args.d:
     print("Saved parameters!")
     open("settings" + sep + "interactors_preprocessor_parameters.yaml",'w').write(yaml.dump(interactors_preprocessor_paramaters))
