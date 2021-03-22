@@ -130,7 +130,7 @@ for dataset_preprocessor in datasets_preprocessors:
                     f = executor.submit(evaluate_itr, id(metric_evaluator), id(dm),
                                         itr_class, parameters)
                     futures.add(f)
-            if len(futures) >= os.cpu_count():
+            if len(futures) >= args.num_tasks:
                 completed, futures = wait(futures, return_when=FIRST_COMPLETED)
         for future in futures:
             future.result()
