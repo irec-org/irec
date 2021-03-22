@@ -19,6 +19,8 @@ parser = argparse.ArgumentParser(description='Grid search')
 
 parser.add_argument('--num_tasks', type=int, default=os.cpu_count())
 parser.add_argument('--forced_run', default=False, action='store_true')
+parser.add_argument('-m',nargs='*')
+parser.add_argument('-b',nargs='*')
 args = parser.parse_args()
 print(args.num_tasks)
 
@@ -56,12 +58,26 @@ def main():
         open("settings" + sep + "evaluation_policies_parameters.yaml"),
         Loader=yaml.SafeLoader)
 
+    with open("settings"+sep+"datasets_preprocessors_parameters.yaml") as f:
+        loader = yaml.SafeLoader
+        datasets_preprocessors = yaml.load(f,Loader=loader)
+
+        datasets_preprocessors = {setting['name']: setting
+                                  for setting in datasets_preprocessors}
+
     dm = DatasetManager()
-    datasets_preprocessors = dm.request_datasets_preprocessors()
+
+    if args.b == None:
+        datasets_preprocessors = dm.request_datasets_preprocessors()
+    else:
+        datasets_preprocessors = [datasets_preprocessors[base] for base in args.b]
     ir = InteractorRunner(None, interactors_general_settings,
                           interactors_preprocessor_paramaters,
                           evaluation_policies_parameters)
-    interactors_classes = ir.select_interactors()
+    if args.m == None:
+        interactors_classes = ir.select_interactors()
+    else:
+        interactors_classes = [eval('interactors.'+interactor) for interactor in args.m]
     with ProcessPoolExecutor() as executor:
         futures = set()
         for dataset_preprocessor in datasets_preprocessors:

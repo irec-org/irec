@@ -1,3 +1,10 @@
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-m',nargs='*')
+parser.add_argument('-b',nargs='*')
+args = parser.parse_args()
+
 from os.path import dirname, realpath, sep, pardir
 import os
 import sys
@@ -20,14 +27,41 @@ import metric
 from utils.util import run_parallel
 import ctypes
 
+
+def evaluate_itr(metric_evaluator_id, dm_id, itr_class):
+    metric_evaluator = ctypes.cast(metric_evaluator_id, ctypes.py_object).value
+    dm = ctypes.cast(dm_id, ctypes.py_object).value
+    print(f"Evaluating {itr_class.__name__} results")
+    itr = ir.create_interactor(itr_class)
+    pdm = PersistentDataManager(directory='results')
+    users_items_recommended = pdm.load(InteractorCache().get_id(
+        dm, evaluation_policy, itr))
+
+    metrics_pdm = PersistentDataManager(directory='metrics')
+    if isinstance(metric_evaluator, CumulativeInteractionMetricsEvaluator):
+        metrics_values = metric_evaluator.evaluate(
+            evaluation_policy.num_interactions,
+            evaluation_policy.interaction_size, users_items_recommended,interactions_to_evaluate=nums_interactions_to_show)
+    if isinstance(metric_evaluator, InteractionMetricsEvaluator):
+        metrics_values = metric_evaluator.evaluate(
+            evaluation_policy.num_interactions,
+            evaluation_policy.interaction_size, users_items_recommended)
+    elif isinstance(metric_evaluator, CumulativeMetricsEvaluator):
+        metrics_values = metric_evaluator.evaluate(users_items_recommended)
+
+    for metric_name, metric_values in metrics_values.items():
+        metrics_pdm.save(
+            os.path.join(InteractorCache().get_id(dm, evaluation_policy, itr),
+                         metric_evaluator.get_id(), metric_name), metric_values)
+
+
+parser = argparse.ArgumentParser(description='Grid search')
 BUFFER_SIZE_EVALUATOR = 50
 
 nums_interactions_to_show = [5, 10, 20, 50, 100]
 
 metrics_classes = [metric.Recall, metric.Hits]
 
-dm = DatasetManager()
-datasets_preprocessors = dm.request_datasets_preprocessors()
 interactors_preprocessor_paramaters = yaml.load(
     open("settings" + sep + "interactors_preprocessor_parameters.yaml"),
     Loader=yaml.SafeLoader)
@@ -38,11 +72,20 @@ interactors_general_settings = yaml.load(
 evaluation_policies_parameters = yaml.load(
     open("settings" + sep + "evaluation_policies_parameters.yaml"),
     Loader=yaml.SafeLoader)
+with open("settings"+sep+"datasets_preprocessors_parameters.yaml") as f:
+    loader = yaml.SafeLoader
+    datasets_preprocessors = yaml.load(f,Loader=loader)
+
+    datasets_preprocessors = {setting['name']: setting
+                              for setting in datasets_preprocessors}
+datasets_preprocessors = [datasets_preprocessors[base] for base in args.b]
+
+dm = DatasetManager()
 
 ir = InteractorRunner(dm, interactors_general_settings,
                       interactors_preprocessor_paramaters,
                       evaluation_policies_parameters)
-interactors_classes = ir.select_interactors()
+interactors_classes = [eval('interactors.'+interactor) for interactor in args.m]
 for dataset_preprocessor in datasets_preprocessors:
     
     dm.initialize_engines(dataset_preprocessor)
@@ -65,31 +108,6 @@ for dataset_preprocessor in datasets_preprocessors:
 
     evaluation_policy = ir.get_interactors_evaluation_policy()
 
-    def evaluate_itr(metric_evaluator_id, dm_id, itr_class):
-        metric_evaluator = ctypes.cast(metric_evaluator_id, ctypes.py_object).value
-        dm = ctypes.cast(dm_id, ctypes.py_object).value
-        print(f"Evaluating {itr_class.__name__} results")
-        itr = ir.create_interactor(itr_class)
-        pdm = PersistentDataManager(directory='results')
-        users_items_recommended = pdm.load(InteractorCache().get_id(
-            dm, evaluation_policy, itr))
-
-        metrics_pdm = PersistentDataManager(directory='metrics')
-        if isinstance(metric_evaluator, CumulativeInteractionMetricsEvaluator):
-            metrics_values = metric_evaluator.evaluate(
-                evaluation_policy.num_interactions,
-                evaluation_policy.interaction_size, users_items_recommended,interactions_to_evaluate=nums_interactions_to_show)
-        if isinstance(metric_evaluator, InteractionMetricsEvaluator):
-            metrics_values = metric_evaluator.evaluate(
-                evaluation_policy.num_interactions,
-                evaluation_policy.interaction_size, users_items_recommended)
-        elif isinstance(metric_evaluator, CumulativeMetricsEvaluator):
-            metrics_values = metric_evaluator.evaluate(users_items_recommended)
-
-        for metric_name, metric_values in metrics_values.items():
-            metrics_pdm.save(
-                os.path.join(InteractorCache().get_id(dm, evaluation_policy, itr),
-                             metric_evaluator.get_id(), metric_name), metric_values)
 
     for metric_evaluator in metrics_evaluators:
         args = [(id(metric_evaluator), id(dm), itr_class)
