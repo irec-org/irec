@@ -1,22 +1,10 @@
 Good Books:
-  LinearUCBLogPopEnt:
+  OurMethod1Mod:
     parameters:
-      alpha: 0.75
-      item_var: 0.01
-      iterations: 20
-      num_lat: 20
-      stop_criteria: 0.0009
-      user_var: 0.01
-      var: 0.05
-  LinearEGreedyLogPopEnt:
-    parameters:
-      epsilon: 0.1
-      item_var: 0.01
-      iterations: 20
-      num_lat: 20
-      stop_criteria: 0.0009
-      user_var: 0.01
-      var: 0.05
+      alpha: 1
+      num_lat: 5
+      stop: null
+      weight_method: change
   ALEntropy: null
   ALMostPopular: null
   COFIBA:
@@ -61,6 +49,15 @@ Good Books:
       user_var: 0.01
       var: 0.05
   LinearEGreedyEntropy:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearEGreedyLogPopEnt:
     parameters:
       epsilon: 0.1
       item_var: 0.01
@@ -125,6 +122,15 @@ Good Books:
   LinearUCBEntropy:
     parameters:
       alpha: 1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBLogPopEnt:
+    parameters:
+      alpha: 0.75
       item_var: 0.01
       iterations: 20
       num_lat: 20
@@ -449,6 +455,12 @@ Good Books Validation:
       stop_criteria: 0.0009
       user_var: 0.01
       var: 0.05
+  OurMethod1Mod:
+    parameters:
+      alpha: 1
+      num_lat: 5
+      stop: null
+      weight_method: change
   kNNBandit: null
 MovieLens 100k (B):
   ALEntropy: null
@@ -572,24 +584,12 @@ MovieLens 100k (B):
       beta_0: 100
       k: 1
 MovieLens 10M:
-  LinearUCBLogPopEnt:
+  OurMethod1Mod:
     parameters:
-      alpha: 1
-      item_var: 0.01
-      iterations: 20
+      alpha: 0.75
       num_lat: 20
-      stop_criteria: 0.0009
-      user_var: 0.01
-      var: 0.05
-  LinearEGreedyLogPopEnt:
-    parameters:
-      epsilon: 0.1
-      item_var: 0.01
-      iterations: 20
-      num_lat: 20
-      stop_criteria: 0.0009
-      user_var: 0.01
-      var: 0.05
+      stop: null
+      weight_method: change
   ALEntropy: null
   ALMostPopular: null
   COFIBA:
@@ -634,6 +634,15 @@ MovieLens 10M:
       user_var: 0.01
       var: 0.05
   LinearEGreedyEntropy:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearEGreedyLogPopEnt:
     parameters:
       epsilon: 0.1
       item_var: 0.01
@@ -696,6 +705,15 @@ MovieLens 10M:
       user_var: 0.01
       var: 0.05
   LinearUCBEntropy:
+    parameters:
+      alpha: 1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 20
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBLogPopEnt:
     parameters:
       alpha: 1
       item_var: 0.01
@@ -1022,6 +1040,12 @@ MovieLens 10M Validation:
       stop_criteria: 0.0009
       user_var: 0.01
       var: 0.05
+  OurMethod1Mod:
+    parameters:
+      alpha: 0.75
+      num_lat: 20
+      stop: null
+      weight_method: change
   kNNBandit: null
 MovieLens 1M:
   ALEntropy: null
@@ -1246,24 +1270,12 @@ MovieLens 1M (B):
       beta_0: 1
       k: 1
 Yahoo Music:
-  LinearEGreedyLogPopEnt:
-    parameters:
-      epsilon: 0.1
-      item_var: 0.01
-      iterations: 20
-      num_lat: 5
-      stop_criteria: 0.0009
-      user_var: 0.01
-      var: 0.05
-  LinearUCBLogPopEnt:
+  OurMethod1Mod:
     parameters:
       alpha: 1
-      item_var: 0.01
-      iterations: 20
       num_lat: 5
-      stop_criteria: 0.0009
-      user_var: 0.01
-      var: 0.05
+      stop: null
+      weight_method: change
   ALEntropy: null
   ALMostPopular: null
   COFIBA:
@@ -1313,6 +1325,15 @@ Yahoo Music:
       item_var: 0.01
       iterations: 20
       num_lat: 10
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearEGreedyLogPopEnt:
+    parameters:
+      epsilon: 0.1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 5
       stop_criteria: 0.0009
       user_var: 0.01
       var: 0.05
@@ -1370,6 +1391,15 @@ Yahoo Music:
       user_var: 0.01
       var: 0.05
   LinearUCBEntropy:
+    parameters:
+      alpha: 1
+      item_var: 0.01
+      iterations: 20
+      num_lat: 5
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  LinearUCBLogPopEnt:
     parameters:
       alpha: 1
       item_var: 0.01
@@ -1696,4 +1726,10 @@ Yahoo Music Validation:
       stop_criteria: 0.0009
       user_var: 0.01
       var: 0.05
+  OurMethod1Mod:
+    parameters:
+      alpha: 1
+      num_lat: 5
+      stop: null
+      weight_method: change
   kNNBandit: null
