@@ -1,10 +1,4 @@
 Good Books:
-  OurMethod1Mod:
-    parameters:
-      alpha: 1
-      num_lat: 5
-      stop: null
-      weight_method: change
   ALEntropy: null
   ALMostPopular: null
   COFIBA:
@@ -184,8 +178,14 @@ Good Books:
       training_epoch: 30000
   OurMethod1:
     parameters:
-      alpha: 1.0
-      num_lat: 10
+      alpha: 1
+      num_lat: 20
+      stop: null
+      weight_method: change
+  OurMethod1Mod:
+    parameters:
+      alpha: 1
+      num_lat: 5
       stop: null
       weight_method: change
   OurMethod2:
@@ -455,6 +455,12 @@ Good Books Validation:
       stop_criteria: 0.0009
       user_var: 0.01
       var: 0.05
+  OurMethod1:
+    parameters:
+      alpha: 1
+      num_lat: 20
+      stop: null
+      weight_method: change
   OurMethod1Mod:
     parameters:
       alpha: 1
@@ -584,12 +590,6 @@ MovieLens 100k (B):
       beta_0: 100
       k: 1
 MovieLens 10M:
-  OurMethod1Mod:
-    parameters:
-      alpha: 0.75
-      num_lat: 20
-      stop: null
-      weight_method: change
   ALEntropy: null
   ALMostPopular: null
   COFIBA:
@@ -769,8 +769,14 @@ MovieLens 10M:
       training_epoch: 30000
   OurMethod1:
     parameters:
-      alpha: 1.0
-      num_lat: 10
+      alpha: 1
+      num_lat: 20
+      stop: null
+      weight_method: change
+  OurMethod1Mod:
+    parameters:
+      alpha: 0.75
+      num_lat: 20
       stop: null
       weight_method: change
   OurMethod2:
@@ -1040,6 +1046,12 @@ MovieLens 10M Validation:
       stop_criteria: 0.0009
       user_var: 0.01
       var: 0.05
+  OurMethod1:
+    parameters:
+      alpha: 1
+      num_lat: 20
+      stop: null
+      weight_method: change
   OurMethod1Mod:
     parameters:
       alpha: 0.75
@@ -1270,12 +1282,6 @@ MovieLens 1M (B):
       beta_0: 1
       k: 1
 Yahoo Music:
-  OurMethod1Mod:
-    parameters:
-      alpha: 1
-      num_lat: 5
-      stop: null
-      weight_method: change
   ALEntropy: null
   ALMostPopular: null
   COFIBA:
@@ -1455,8 +1461,14 @@ Yahoo Music:
       training_epoch: 30000
   OurMethod1:
     parameters:
-      alpha: 1.0
-      num_lat: 10
+      alpha: 1
+      num_lat: 20
+      stop: null
+      weight_method: change
+  OurMethod1Mod:
+    parameters:
+      alpha: 1
+      num_lat: 5
       stop: null
       weight_method: change
   OurMethod2:
@@ -1726,6 +1738,12 @@ Yahoo Music Validation:
       stop_criteria: 0.0009
       user_var: 0.01
       var: 0.05
+  OurMethod1:
+    parameters:
+      alpha: 1
+      num_lat: 20
+      stop: null
+      weight_method: change
   OurMethod1Mod:
     parameters:
       alpha: 1
