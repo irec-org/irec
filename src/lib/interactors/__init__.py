@@ -41,3 +41,4 @@ from .LinUCBvar import *
 from .OurMethod2var import *
 from .LinearUCBInit import *
 from .LinearEGreedyInit import *
+from .OurMethod1Mod import *

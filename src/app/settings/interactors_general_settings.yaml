@@ -98,3 +98,5 @@ LinearEGreedyRandom:
   name: Linear e-Greedy (PMF) Random
 LinearEGreedyLogPopEnt:
   name: Linear e-Greedy (PMF) log(Pop)*Ent
+OurMethod1Mod:
+  name: UCB-Learner Mod
