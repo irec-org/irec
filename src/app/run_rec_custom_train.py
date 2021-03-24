@@ -29,7 +29,7 @@ import scipy.sparse
 # import recommenders
 import evaluation_policy
 import yaml
-import utils.dataset as dataset
+import utils.dataset
 from utils.InteractorCache import InteractorCache
 from utils.PersistentDataManager import PersistentDataManager
 
@@ -62,7 +62,7 @@ ir = InteractorRunner(None, interactors_general_settings,
 interactors_classes = [eval('interactors.'+interactor) for interactor in args.m]
 history_rates_to_train = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8]
 
-def process():
+def process(history_rate,dataset_preprocessor,dataset,consumption_matrix,dm):
     itr = interactor_class(**interactors_preprocessor_paramaters[dataset_preprocessor['name']][interactor_class.__name__]['parameters'])
 
     start_evaluation_policy = eval('evaluation_policy.'+args.estart)(**evaluation_policies_parameters[args.estart])
@@ -118,7 +118,7 @@ with concurrent.futures.ProcessPoolExecutor() as executor:
         dm.load()
         data = np.vstack(
             (dm.dataset_preprocessed[0].data, dm.dataset_preprocessed[1].data))
-        dataset = dataset.Dataset(data)
+        dataset = utils.dataset.Dataset(data)
         dataset.update_from_data()
         dataset.update_num_total_users_items()
         consumption_matrix = scipy.sparse.csr_matrix((dataset.data[:,2],(dataset.data[:,0].astype(int),dataset.data[:,1].astype(int))),shape=(dataset.num_total_users,dataset.num_total_items))
@@ -126,7 +126,7 @@ with concurrent.futures.ProcessPoolExecutor() as executor:
             print('%.2f%% of history'%(history_rate*100))
             for interactor_class in interactors_classes:
 
-                executor.submit(process)
+                f=executor.submit(process,history_rate,dataset_preprocessor,dataset,consumption_matrix,dm)
                 futures.add(f)
 
                 if len(futures) >= args.num_tasks:
