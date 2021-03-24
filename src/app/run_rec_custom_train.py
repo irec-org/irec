@@ -111,28 +111,28 @@ def process(history_rate,dataset_preprocessor,dataset,consumption_matrix,dm):
         print("File already exists")
 
 
-with concurrent.futures.ProcessPoolExecutor() as executor:
-    futures = set()
-    for dataset_preprocessor in datasets_preprocessors:
-        dm.initialize_engines(dataset_preprocessor)
-        dm.load()
-        data = np.vstack(
-            (dm.dataset_preprocessed[0].data, dm.dataset_preprocessed[1].data))
-        dataset = utils.dataset.Dataset(data)
-        dataset.update_from_data()
-        dataset.update_num_total_users_items()
-        consumption_matrix = scipy.sparse.csr_matrix((dataset.data[:,2],(dataset.data[:,0].astype(int),dataset.data[:,1].astype(int))),shape=(dataset.num_total_users,dataset.num_total_items))
-        for history_rate in history_rates_to_train:
-            print('%.2f%% of history'%(history_rate*100))
-            for interactor_class in interactors_classes:
+# with concurrent.futures.ProcessPoolExecutor() as executor:
+    # futures = set()
+for dataset_preprocessor in datasets_preprocessors:
+    dm.initialize_engines(dataset_preprocessor)
+    dm.load()
+    data = np.vstack(
+        (dm.dataset_preprocessed[0].data, dm.dataset_preprocessed[1].data))
+    dataset = utils.dataset.Dataset(data)
+    dataset.update_from_data()
+    dataset.update_num_total_users_items()
+    consumption_matrix = scipy.sparse.csr_matrix((dataset.data[:,2],(dataset.data[:,0].astype(int),dataset.data[:,1].astype(int))),shape=(dataset.num_total_users,dataset.num_total_items))
+    for history_rate in history_rates_to_train:
+        print('%.2f%% of history'%(history_rate*100))
+        for interactor_class in interactors_classes:
+            process(history_rate,dataset_preprocessor,dataset,consumption_matrix,dm)
+                # f=executor.submit(process,history_rate,dataset_preprocessor,dataset,consumption_matrix,dm)
+                # futures.add(f)
 
-                f=executor.submit(process,history_rate,dataset_preprocessor,dataset,consumption_matrix,dm)
-                futures.add(f)
-
-                if len(futures) >= args.num_tasks:
-                    completed, futures = wait(futures, return_when=FIRST_COMPLETED)
-    for f in futures:
-        f.result()
+                # if len(futures) >= args.num_tasks:
+                    # completed, futures = wait(futures, return_when=FIRST_COMPLETED)
+    # for f in futures:
+        # f.result()
 
         # for f in futures:
             # f.result()
