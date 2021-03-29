@@ -112,7 +112,7 @@ def process(history_rate,dataset_preprocessor,dataset,consumption_matrix,dm):
 
 
 with concurrent.futures.ProcessPoolExecutor(max_workers=args.num_tasks) as executor:
-    # futures = set()
+    futures = set()
     for dataset_preprocessor in datasets_preprocessors:
         dm.initialize_engines(dataset_preprocessor)
         dm.load()
@@ -127,12 +127,12 @@ with concurrent.futures.ProcessPoolExecutor(max_workers=args.num_tasks) as execu
             for interactor_class in interactors_classes:
                 # process(history_rate,dataset_preprocessor,dataset,consumption_matrix,dm)
                     f=executor.submit(process,history_rate,dataset_preprocessor,dataset,consumption_matrix,dm)
-                    # futures.add(f)
+                    futures.add(f)
 
-                    # if len(futures) >= args.num_tasks:
-                        # completed, futures = wait(futures, return_when=FIRST_COMPLETED)
-        for f in futures:
-            f.result()
+                    if len(futures) >= args.num_tasks:
+                        completed, futures = wait(futures, return_when=FIRST_COMPLETED)
+    for f in futures:
+        f.result()
 
         # for f in futures:
             # f.result()
