@@ -91,7 +91,8 @@ def process(history_rate, dataset_preprocessor, dataset, consumption_matrix,
         num_interactions = len(history_items_recommended)/num_users_test
         file_name = 's_num_interactions' + str(history_rate) + '_' + InteractorCache().get_id(
             dm, start_evaluation_policy, itr)
-        fp = pdm.get_fp(file_name)
+        pdm_out = PersistentDataManager(directory='metrics',extension_name='.txt')
+        fp = pdm_out.get_fp(file_name)
         open(fp,'w+').write(num_interactions)
         print("File already exists")
 
@@ -109,6 +110,7 @@ def process(history_rate, dataset_preprocessor, dataset, consumption_matrix,
     else:
         history_items_recommended = pdm.load(file_name)
         metrics_values = metric_evaluator.evaluate(history_items_recommended)
+        metrics_pdm = PersistentDataManager(directory='metrics')
 
         for metric_name, metric_values in metrics_values.items():
             metrics_pdm.save(
