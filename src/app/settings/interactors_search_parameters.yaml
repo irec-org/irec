@@ -2985,3 +2985,29 @@ OurMethod1Mod:
     stop: null
     weight_method: change
 
+
+OurMethod2PCA:
+  - alpha: 0.25
+    num_lat: 5
+  - alpha: 0.5
+    num_lat: 5
+  - alpha: 0.75
+    num_lat: 5
+  - alpha: 1
+    num_lat: 5
+  - alpha: 0.25
+    num_lat: 10
+  - alpha: 0.5
+    num_lat: 10
+  - alpha: 0.75
+    num_lat: 10
+  - alpha: 1
+    num_lat: 10
+  - alpha: 0.25
+    num_lat: 20
+  - alpha: 0.5
+    num_lat: 20
+  - alpha: 0.75
+    num_lat: 20
+  - alpha: 1
+    num_lat: 20
