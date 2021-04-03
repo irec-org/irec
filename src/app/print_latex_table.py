@@ -29,6 +29,8 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('-r', type=str, default=None)
 parser.add_argument('-i', default=[5,10,20,50,100],nargs='*')
+parser.add_argument('-m',nargs='*')
+parser.add_argument('-b',nargs='*')
 args = parser.parse_args()
 
 plt.rcParams['axes.prop_cycle'] = cycler(color='krbgmyc')
@@ -38,10 +40,19 @@ plt.rcParams['font.size'] = 15
 metrics_classes = [metric.Hits, metric.Recall]
 metrics_names = ['Cumulative Precision', 'Cumulative Recall']
 
-dm = DatasetManager()
-datasets_preprocessors = dm.request_datasets_preprocessors()
+# dm = DatasetManager()
+# datasets_preprocessors = dm.request_datasets_preprocessors()
 # print(datasets_preprocessors_classes)
 
+with open("settings"+sep+"datasets_preprocessors_parameters.yaml") as f:
+    loader = yaml.SafeLoader
+    datasets_preprocessors = yaml.load(f,Loader=loader)
+
+    datasets_preprocessors = {setting['name']: setting
+                              for setting in datasets_preprocessors}
+evaluation_policies_parameters = yaml.load(
+    open("settings" + sep + "evaluation_policies_parameters.yaml"),
+    Loader=yaml.SafeLoader)
 interactors_preprocessor_paramaters = yaml.load(
     open("settings" + sep + "interactors_preprocessor_parameters.yaml"),
     Loader=yaml.SafeLoader)
@@ -57,10 +68,17 @@ interactors_classes_names_to_names = {
     k: v['name'] for k, v in interactors_general_settings.items()
 }
 
+dm = DatasetManager()
+datasets_preprocessors = [datasets_preprocessors[base] for base in args.b]
 ir = InteractorRunner(dm, interactors_general_settings,
                       interactors_preprocessor_paramaters,
                       evaluation_policies_parameters)
-interactors_classes = ir.select_interactors()
+interactors_classes = [eval('interactors.'+interactor) for interactor in args.m]
+
+# ir = InteractorRunner(dm, interactors_general_settings,
+                      # interactors_preprocessor_paramaters,
+                      # evaluation_policies_parameters)
+# interactors_classes = ir.select_interactors()
 
 metrics_evaluator = UserCumulativeInteractionMetricsEvaluator(None, metrics_classes)
 

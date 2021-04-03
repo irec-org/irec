@@ -1060,6 +1060,10 @@ MovieLens 10M Validation:
       weight_method: change
   kNNBandit: null
 MovieLens 1M:
+  OurMethod2PCA:
+    parameters:
+      alpha: 0.25
+      num_lat: 5
   ALEntropy: null
   ALMostPopular: null
   COFIBA:

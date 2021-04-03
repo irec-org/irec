@@ -33,6 +33,8 @@ def run_interactors_in_base(dataset_preprocessor, interactors_general_settings,
     dm = DatasetManager()
     dm.initialize_engines(dataset_preprocessor)
     dm.load()
+    # print(dm.dataset_preprocessed[0])
+    # print(dm.dataset_preprocessed[1])
     ir = InteractorRunner(dm, interactors_general_settings,
                           interactors_preprocessor_paramaters,
                           evaluation_policies_parameters)

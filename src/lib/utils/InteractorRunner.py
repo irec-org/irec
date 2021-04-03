@@ -90,13 +90,19 @@ class InteractorRunner():
         return evaluation_policy
 
     def run_interactor(self, itr, forced_run):
+        # print("11111")
         pdm = PersistentDataManager(directory='results')
         evaluation_policy = self.get_interactors_evaluation_policy()
         if forced_run or not pdm.file_exists(InteractorCache().get_id(
                 self.dm, evaluation_policy, itr)):
+            # print("22222")
+            # print(self.dm)
+            # print(self.dm.dataset_preprocessed[0])
+            # print(self.dm.dataset_preprocessed[1])
             history_items_recommended = evaluation_policy.evaluate(
                 itr, self.dm.dataset_preprocessed[0],
                 self.dm.dataset_preprocessed[1])
+            # print("33333")
 
             pdm = PersistentDataManager(directory='results')
             pdm.save(InteractorCache().get_id(self.dm, evaluation_policy, itr),
@@ -125,9 +131,11 @@ class InteractorRunner():
                                interactors_search_parameters,
                                num_tasks=None,
                                forced_run=False):
+        # print("ewq ejiwqeijqw iewq jieqw jewqjieqwi")
         if num_tasks == None:
             num_tasks = os.cpu_count()
             # print("ewqewjiqewjiewijq ijewqijwqe",num_tasks)
+        # print("ewqewjiqewjiewijq ijewqijwqe",num_tasks)
 
         with ProcessPoolExecutor() as executor:
             futures = set()

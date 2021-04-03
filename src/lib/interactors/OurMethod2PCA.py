@@ -30,9 +30,17 @@ class OurMethod2PCA(MFInteractor):
 
         # mf_model = mf.SVD(num_lat=self.num_lat)
         # mf_model.fit(self.train_consumption_matrix)
-        transformer = sklearn.decomposition.SparsePCA(n_components=self.num_lat)
-        transformer.fit(self.train_consumption_matrix)
-        items_weights = transformer.transform(X)
+        transformer = sklearn.decomposition.TruncatedSVD(n_components=self.num_lat)
+        # x = self.train_dataset.data[:,:2]
+        # y = self.train_dataset.data[:,2]
+        x = self.train_dataset.data[:,:3]
+        transformer.fit(self.train_consumption_matrix.T)
+        # transformer.fit(x)
+        items_weights = transformer.transform(self.train_consumption_matrix.T)
+        # items_weights = transformer.transform(x)
+        # print(self.train_consumption_matrix.shape)
+        # print(items_weights.shape)
+        # raise SystemExit
         self.items_weights = items_weights
         self.num_latent_factors = self.num_lat
 
