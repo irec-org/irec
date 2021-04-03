@@ -69,7 +69,7 @@ history_rates_to_train = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]
 def process(history_rate, dataset_preprocessor, dataset, consumption_matrix,
             dm):
 
-    metric_evaluator = metric.TotalInteractionMetricsEvaluator(dataset, metrics_classes)
+    metric_evaluator = metric.TotalMetricsEvaluator(dataset, metrics_classes)
     itr = interactor_class(**interactors_preprocessor_paramaters[
         dataset_preprocessor['name']][interactor_class.__name__]['parameters'])
 
