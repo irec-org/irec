@@ -1,77 +1,147 @@
+import os
+from os.path import dirname, realpath, sep, pardir
+import sys
+from copy import copy
+sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "lib")
+import argparse
+parser = argparse.ArgumentParser()
+# parser.add_argument('--forced_run', default=False, action='store_true')
+# parser.add_argument('--parallel', default=False, action='store_true')
+parser.add_argument('-m', nargs='*')
+parser.add_argument('-b', nargs='*')
+parser.add_argument('--num_tasks', type=int, default=os.cpu_count())
+parser.add_argument('-estart', default='LimitedInteraction')
+parser.add_argument('-elast', default='Interaction')
+args = parser.parse_args()
 import inquirer
 import interactors
+from utils.InteractorRunner import InteractorRunner
+import joblib
+import concurrent.futures
+from utils.DatasetManager import DatasetManager
+from concurrent.futures import ProcessPoolExecutor, wait, FIRST_COMPLETED
 import mf
-import util
-import util.metrics as metrics
-from util import DatasetFormatter, MetricsEvaluator
+import utils.util as util
+# from util import DatasetFormatter, MetricsEvaluator
 from sklearn.decomposition import NMF
 import numpy as np
 import scipy.sparse
-import recommenders
-dsf = DatasetFormatter()
-dsf = dsf.load()
-THRESHOLD = interactors.Interactor().threshold
+# import recommenders
+import evaluation_policy
+import yaml
+import utils.dataset
+from utils.InteractorCache import InteractorCache
+from utils.PersistentDataManager import PersistentDataManager
+import metric
 
-ground_truth = MetricsEvaluator.get_ground_truth(dsf.consumption_matrix,THRESHOLD)
+metrics_classes = [metric.Hits]
 
-test_matrix = dsf.test_consumption_matrix
+interactors_preprocessor_paramaters = yaml.load(
+    open("settings" + sep + "interactors_preprocessor_parameters.yaml"),
+    Loader=yaml.SafeLoader)
+interactors_general_settings = yaml.load(
+    open("settings" + sep + "interactors_general_settings.yaml"),
+    Loader=yaml.SafeLoader)
 
-# history_rates_to_train = [1.0]
-history_rates_to_train = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8]
+evaluation_policies_parameters = yaml.load(
+    open("settings" + sep + "evaluation_policies_parameters.yaml"),
+    Loader=yaml.SafeLoader)
 
-recommenders_class = [recommenders.ItemKNN]
+with open("settings" + sep + "datasets_preprocessors_parameters.yaml") as f:
+    loader = yaml.SafeLoader
+    datasets_preprocessors = yaml.load(f, Loader=loader)
 
-items_popularity = interactors.MostPopular.get_items_popularity(dsf.consumption_matrix,normalize=True)
-items_distance = metrics.get_items_distance(dsf.consumption_matrix)
+    datasets_preprocessors = {
+        setting['name']: setting for setting in datasets_preprocessors
+    }
 
-for history_rate in history_rates_to_train:
-    print('%.2f%% of history'%(history_rate*100))
-    for interactor_class in [
-            interactors.Entropy,
-            interactors.MostPopular,
-            interactors.Random,
-            interactors.LogPopEnt,
-            interactors.LinUCB,
-            interactors.LinEGreedy,
-            interactors.OurMethod1,
-    ]:
-        interactor_model = interactor_class(
-            name_prefix=dsf.base)
-            # interactions=dsf.num_items,
-            # interaction_size=1)
-            # interactions=100,
-            # interaction_size=5)
+dm = DatasetManager()
+datasets_preprocessors = [datasets_preprocessors[base] for base in args.b]
+ir = InteractorRunner(None, interactors_general_settings,
+                      interactors_preprocessor_paramaters,
+                      evaluation_policies_parameters)
+interactors_classes = [
+    eval('interactors.' + interactor) for interactor in args.m
+]
+history_rates_to_train = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]
 
-        interactor_model.results = interactor_model.load_results()
-        train_matrix = dsf.train_consumption_matrix.tolil()
-        users_rel_items_history = dict()
 
-        for uid, items in interactor_model.results.items():
-            items = np.array(items)
-            users_rel_items_history[uid] = []
-            user_history_size = 0
-            aux = np.isin(items,ground_truth[uid])
-            user_num_consumed_items = np.count_nonzero(aux)
-            for item in items[aux]:
-                if user_history_size <= history_rate*user_num_consumed_items:
-                    users_rel_items_history[uid].append((item,dsf.consumption_matrix[uid,item]))
-                    train_matrix[uid,item] = dsf.consumption_matrix[uid,item]
-                    user_history_size += 1
-        train_matrix = train_matrix.tocsr()
+def process(history_rate, dataset_preprocessor, dataset, consumption_matrix,
+            dm):
 
-        test_users = np.nonzero(np.sum(test_matrix>0,axis=1).A.flatten())[0]
-        users_consumed_items = {uid: list(set(ground_truth[uid]) & set(np.nonzero(train_matrix[uid].A.flatten())[0])) for uid in test_users}
-        print('\t*',interactor_class.__name__)
-        
-        for recommender_class in recommenders_class:
-            print('\t\t-',recommender_class.__name__)
-            recommender_model = recommender_class(name_prefix=dsf.base,
-                                                  name_suffix=interactor_model.get_id()+'_history_rate_%.2f'%(history_rate))
-            recommender_model.results = recommender_model.load_results()
-            # print(list(map(len,recommender_model.results.values())))
-            
-            me = MetricsEvaluator(name=recommender_model.get_id(),k=recommender_model.result_list_size,threshold=THRESHOLD)
-            me.eval_metrics(recommender_model.results, ground_truth, items_popularity, items_distance, users_consumed_items)
-            print(me.metrics_mean)
+    metric_evaluator = metric.TotalInteractionMetricsEvaluator(dataset, metrics_classes)
+    itr = interactor_class(**interactors_preprocessor_paramaters[
+        dataset_preprocessor['name']][interactor_class.__name__]['parameters'])
 
-            
+    start_evaluation_policy = eval('evaluation_policy.' + args.estart)(
+        **evaluation_policies_parameters[args.estart])
+    start_evaluation_policy.recommend_test_data_rate_limit = history_rate
+    # no need history rate s but i will put it because of consistency
+    file_name = 's_' + str(history_rate) + '_' + InteractorCache().get_id(
+        dm, start_evaluation_policy, itr)
+
+    pdm = PersistentDataManager(directory='results',)
+    if not pdm.file_exists(file_name):
+        print(f"File doesnt exists {file_name}")
+        pass
+    else:
+        history_items_recommended = pdm.load(file_name)
+        history_items_recommended = np.array(history_items_recommended)
+        num_users_test = len(np.unique(history_items_recommended[:,0]))
+        num_interactions = len(history_items_recommended)/num_users_test
+        file_name = 's_num_interactions' + str(history_rate) + '_' + InteractorCache().get_id(
+            dm, start_evaluation_policy, itr)
+        fp = pdm.get_fp(file_name)
+        open(fp,'w+').write(num_interactions)
+        print("File already exists")
+
+    itr = interactor_class(**interactors_preprocessor_paramaters[
+        dataset_preprocessor['name']][interactor_class.__name__]['parameters'])
+
+    last_evaluation_policy = eval('evaluation_policy.' + args.elast)(
+        **evaluation_policies_parameters[args.elast])
+    file_name = 'e_' + str(history_rate) + '_' + InteractorCache().get_id(
+        dm, last_evaluation_policy, itr)
+
+    if not pdm.file_exists(file_name):
+        print(f"File doenst exists {file_name}")
+        pass
+    else:
+        history_items_recommended = pdm.load(file_name)
+        metrics_values = metric_evaluator.evaluate(history_items_recommended)
+
+        for metric_name, metric_values in metrics_values.items():
+            metrics_pdm.save(
+                os.path.join(InteractorCache().get_id(dm, evaluation_policy, itr),
+                             metric_evaluator.get_id(), metric_name), metric_values)
+
+        print("File already exists")
+
+
+with concurrent.futures.ProcessPoolExecutor(
+        max_workers=args.num_tasks) as executor:
+    futures = set()
+    for dataset_preprocessor in datasets_preprocessors:
+        dm.initialize_engines(dataset_preprocessor)
+        dm.load()
+        data = np.vstack(
+            (dm.dataset_preprocessed[0].data, dm.dataset_preprocessed[1].data))
+        dataset = utils.dataset.Dataset(data)
+        dataset.update_from_data()
+        dataset.update_num_total_users_items()
+        consumption_matrix = scipy.sparse.csr_matrix(
+            (dataset.data[:, 2],
+             (dataset.data[:, 0].astype(int), dataset.data[:, 1].astype(int))),
+            shape=(dataset.num_total_users, dataset.num_total_items))
+        for history_rate in history_rates_to_train:
+            print('%.2f%% of history' % (history_rate * 100))
+            for interactor_class in interactors_classes:
+                f = executor.submit(process, history_rate, dataset_preprocessor,
+                                    dataset, consumption_matrix, dm)
+                futures.add(f)
+
+                if len(futures) >= args.num_tasks:
+                    completed, futures = wait(futures,
+                                              return_when=FIRST_COMPLETED)
+    for f in futures:
+        f.result()

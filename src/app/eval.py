@@ -108,7 +108,6 @@ for dataset_preprocessor in datasets_preprocessors:
 
     evaluation_policy = ir.get_interactors_evaluation_policy()
 
-
     for metric_evaluator in metrics_evaluators:
         args = [(id(metric_evaluator), id(dm), itr_class)
                 for itr_class in interactors_classes]

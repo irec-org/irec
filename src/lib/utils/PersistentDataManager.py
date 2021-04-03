@@ -8,10 +8,10 @@ from . import util
 from os.path import sep
 
 class PersistentDataManager(DirectoryDependent):
-    def __init__(self, directory='state_save', *args, **kwargs):
+    def __init__(self, directory='state_save',extension_name='.pickle', *args, **kwargs):
         super().__init__(*args,**kwargs)
         self.directory = directory
-        self.extension_name = '.pickle'
+        self.extension_name = extension_name
 
     def get_fp(self,path):
         fp = os.path.join(self.DIRS[self.directory],path+self.extension_name)
