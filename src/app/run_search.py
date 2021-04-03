@@ -4,6 +4,7 @@ import sys
 sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "lib")
 
 import inquirer
+from concurrent.futures import ProcessPoolExecutor, wait, FIRST_COMPLETED
 import interactors
 import mf
 from utils.InteractorRunner import InteractorRunner
@@ -36,8 +37,8 @@ def run_interactors_in_base(dataset_preprocessor, interactors_general_settings,
                           interactors_preprocessor_paramaters,
                           evaluation_policies_parameters)
     ir.run_interactors_search(interactors_classes,
-                              interactors_search_parameters, args.num_tasks,
-                              args.forced_run)
+                              interactors_search_parameters, num_tasks= args.num_tasks,
+                              forced_run=args.forced_run)
 
 
 def main():
@@ -67,17 +68,17 @@ def main():
 
     dm = DatasetManager()
 
-    if args.b == None:
-        datasets_preprocessors = dm.request_datasets_preprocessors()
-    else:
-        datasets_preprocessors = [datasets_preprocessors[base] for base in args.b]
+    # if args.b == None:
+        # datasets_preprocessors = dm.request_datasets_preprocessors()
+    # else:
+    datasets_preprocessors = [datasets_preprocessors[base] for base in args.b]
     ir = InteractorRunner(None, interactors_general_settings,
                           interactors_preprocessor_paramaters,
                           evaluation_policies_parameters)
-    if args.m == None:
-        interactors_classes = ir.select_interactors()
-    else:
-        interactors_classes = [eval('interactors.'+interactor) for interactor in args.m]
+    # if args.m == None:
+        # interactors_classes = ir.select_interactors()
+    # else:
+    interactors_classes = [eval('interactors.'+interactor) for interactor in args.m]
     with ProcessPoolExecutor() as executor:
         futures = set()
         for dataset_preprocessor in datasets_preprocessors:
@@ -88,7 +89,7 @@ def main():
                                 interactors_classes,
                                 interactors_search_parameters)
             futures.add(f)
-            if len(futures) >= args.num_tasks:
+            if len(futures) >= 1:
                 completed, futures = wait(futures, return_when=FIRST_COMPLETED)
         for future in futures:
             future.result()

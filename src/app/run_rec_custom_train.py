@@ -71,6 +71,7 @@ def process(history_rate,dataset_preprocessor,dataset,consumption_matrix,dm):
     file_name = 's_'+str(history_rate)+'_'+InteractorCache().get_id(dm,start_evaluation_policy,itr)
 
     pdm = PersistentDataManager(directory='results')
+    print(pdm.get_fp(file_name))
     if not pdm.file_exists(file_name):
         history_items_recommended = start_evaluation_policy.evaluate(
             itr, dm.dataset_preprocessed[0],
@@ -86,6 +87,7 @@ def process(history_rate,dataset_preprocessor,dataset,consumption_matrix,dm):
     last_evaluation_policy = eval('evaluation_policy.'+args.elast)(**evaluation_policies_parameters[args.elast])
     file_name = 'e_'+str(history_rate)+'_'+InteractorCache().get_id(dm,last_evaluation_policy,itr)
 
+    print(pdm.get_fp(file_name))
     if not pdm.file_exists(file_name):
         new_data = []
         for (user, item) in history_items_recommended:

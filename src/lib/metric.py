@@ -97,6 +97,7 @@ class TotalMetricsEvaluator(MetricsEvaluator):
         for uid, item in results:
             uids.append(uid)
         uids = list(set(uids))
+        self.uids=uids
         self.results = results
         metrics_values = defaultdict(list)
         results = run_parallel(

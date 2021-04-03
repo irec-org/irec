@@ -100,3 +100,5 @@ LinearEGreedyLogPopEnt:
   name: Linear e-Greedy (PMF) log(Pop)*Ent
 OurMethod1Mod:
   name: UCB-Learner Mod
+OurMethod2PCA:
+  name: WSCB PCA
