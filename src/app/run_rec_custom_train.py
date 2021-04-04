@@ -60,7 +60,8 @@ ir = InteractorRunner(None, interactors_general_settings,
                       interactors_preprocessor_paramaters,
                       evaluation_policies_parameters)
 interactors_classes = [eval('interactors.'+interactor) for interactor in args.m]
-history_rates_to_train = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8]
+# history_rates_to_train = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8]
+history_rates_to_train = [0.1,0.3,0.5,0.7,0.8]
 
 def process(history_rate,dataset_preprocessor,dataset,consumption_matrix,dm):
     itr = interactor_class(**interactors_preprocessor_paramaters[dataset_preprocessor['name']][interactor_class.__name__]['parameters'])
