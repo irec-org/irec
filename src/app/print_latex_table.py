@@ -37,8 +37,9 @@ plt.rcParams['axes.prop_cycle'] = cycler(color='krbgmyc')
 plt.rcParams['lines.linewidth'] = 2
 plt.rcParams['font.size'] = 15
 
-metrics_classes = [metric.Hits, metric.Recall]
-metrics_names = ['Cumulative Precision', 'Cumulative Recall']
+# metrics_classes = [metric.Hits, metric.Recall]
+metrics_classes = [metric.Recall, metric.Hits, metric.ILD, metric.EPC, metric.UsersCoverage]
+metrics_names = ['Cumulative Precision', 'Cumulative Recall', 'Cumulative ILD', 'Cumulative EPC', 'Cumulative Users Coverage']
 
 # dm = DatasetManager()
 # datasets_preprocessors = dm.request_datasets_preprocessors()

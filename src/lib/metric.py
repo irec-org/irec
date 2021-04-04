@@ -1,5 +1,7 @@
 import numpy as np
 
+import interactors
+
 import scipy.sparse
 from collections import defaultdict
 from utils.Parameterizable import Parameterizable
@@ -47,7 +49,7 @@ class TotalMetricsEvaluator(MetricsEvaluator):
     def __init__(self, ground_truth_dataset, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.ground_truth_dataset = ground_truth_dataset
-        if isinstance(ground_truth_dataset,dataset.Dataset):
+        if isinstance(ground_truth_dataset, dataset.Dataset):
             self.ground_truth_consumption_matrix = scipy.sparse.csr_matrix(
                 (self.ground_truth_dataset.data[:, 2],
                  (self.ground_truth_dataset.data[:, 0],
@@ -75,8 +77,7 @@ class TotalMetricsEvaluator(MetricsEvaluator):
             uid = self.results[i][0]
             item = self.results[i][1]
             metric.update_recommendation(
-                uid, item, self.ground_truth_consumption_matrix[uid,
-                                                                item])
+                uid, item, self.ground_truth_consumption_matrix[uid, item])
             i += 1
 
         metric_values.append([metric.compute(uid) for uid in self.uids])
@@ -97,18 +98,20 @@ class TotalMetricsEvaluator(MetricsEvaluator):
         for uid, item in results:
             uids.append(uid)
         uids = list(set(uids))
-        self.uids=uids
+        self.uids = uids
         self.results = results
         metrics_values = defaultdict(list)
+        get_items_distance(self.ground_truth_dataset[self.uids].A)
+
         results = run_parallel(
             self._metric_evaluation,
-            [(id(self), metric_class)
-             for metric_class in self.metrics_classes],
+            [(id(self), metric_class) for metric_class in self.metrics_classes],
             use_tqdm=False)
         for result, metric_class in zip(results, self.metrics_classes):
             metrics_values[metric_class.__name__].extend(result)
 
         return metrics_values
+
 
 class CumulativeMetricsEvaluator(MetricsEvaluator):
 
@@ -184,7 +187,7 @@ class InteractionMetricsEvaluator(MetricsEvaluator):
     def __init__(self, ground_truth_dataset, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.ground_truth_dataset = ground_truth_dataset
-        if isinstance(ground_truth_dataset,dataset.Dataset):
+        if isinstance(ground_truth_dataset, dataset.Dataset):
             self.ground_truth_consumption_matrix = scipy.sparse.csr_matrix(
                 (self.ground_truth_dataset.data[:, 2],
                  (self.ground_truth_dataset.data[:, 0],
@@ -202,6 +205,17 @@ class InteractionMetricsEvaluator(MetricsEvaluator):
             if issubclass(metric_class, Recall):
                 metric = metric_class(
                     users_false_negative=self.users_false_negative,
+                    ground_truth_dataset=self.ground_truth_dataset,
+                    relevance_evaluator=self.relevance_evaluator)
+            elif issubclass(metric_class, ILD):
+                metric = metric_class(
+                    items_distance=self.items_distance,
+                    ground_truth_dataset=self.ground_truth_dataset,
+                    relevance_evaluator=self.relevance_evaluator)
+            elif issubclass(metric_class, EPC):
+                metric = metric_class(
+                    items_normalized_popularity=self.
+                    items_normalized_popularity,
                     ground_truth_dataset=self.ground_truth_dataset,
                     relevance_evaluator=self.relevance_evaluator)
             else:
@@ -225,7 +239,11 @@ class InteractionMetricsEvaluator(MetricsEvaluator):
         )
         return metric_values
 
-    def evaluate(self, num_interactions, interaction_size, results, interactions_to_evaluate=None):
+    def evaluate(self,
+                 num_interactions,
+                 interaction_size,
+                 results,
+                 interactions_to_evaluate=None):
         if interactions_to_evaluate == None:
             interactions_to_evaluate = list(range(num_interactions))
         self.users_false_negative = defaultdict(int)
@@ -239,23 +257,31 @@ class InteractionMetricsEvaluator(MetricsEvaluator):
         for uid, item in results:
             self.users_items_recommended[uid].append(item)
         self.uids = list(self.users_items_recommended.keys())
+        if ILD in self.metrics_classes:
+            self.items_distance = get_items_distance(
+                self.ground_truth_consumption_matrix)
+        if EPC in self.metrics_classes:
+            self.items_normalized_popularity = interactors.MostPopular.get_items_popularity(
+                self.ground_truth_consumption_matrix)
 
         metrics_values = defaultdict(list)
-        results = run_parallel(
-            self._metric_evaluation,
-            [(id(self), num_interactions, interaction_size, metric_class, interactions_to_evaluate)
-             for metric_class in self.metrics_classes],
-            use_tqdm=False)
+        results = run_parallel(self._metric_evaluation,
+                               [(id(self), num_interactions, interaction_size,
+                                 metric_class, interactions_to_evaluate)
+                                for metric_class in self.metrics_classes],
+                               use_tqdm=False)
         for result, metric_class in zip(results, self.metrics_classes):
             metrics_values[metric_class.__name__].extend(result)
 
         return metrics_values
 
+
 class CumulativeInteractionMetricsEvaluator(InteractionMetricsEvaluator):
+
     @staticmethod
     def metric_summarize(users_metric_values):
         return np.mean(users_metric_values)
-        
+
     @staticmethod
     def _metric_evaluation(obj_id, num_interactions, interaction_size,
                            metric_class, interactions_to_evaluate):
@@ -265,6 +291,16 @@ class CumulativeInteractionMetricsEvaluator(InteractionMetricsEvaluator):
         if issubclass(metric_class, Recall):
             metric = metric_class(
                 users_false_negative=self.users_false_negative,
+                ground_truth_dataset=self.ground_truth_dataset,
+                relevance_evaluator=self.relevance_evaluator)
+        elif issubclass(metric_class, ILD):
+            metric = metric_class(
+                items_distance=self.items_distance,
+                ground_truth_dataset=self.ground_truth_dataset,
+                relevance_evaluator=self.relevance_evaluator)
+        elif issubclass(metric_class, EPC):
+            metric = metric_class(
+                items_normalized_popularity=self.items_normalized_popularity,
                 ground_truth_dataset=self.ground_truth_dataset,
                 relevance_evaluator=self.relevance_evaluator)
         else:
@@ -283,7 +319,8 @@ class CumulativeInteractionMetricsEvaluator(InteractionMetricsEvaluator):
 
             if i in interactions_to_evaluate:
                 metric_values.append(
-                    self.metric_summarize([metric.compute(uid) for uid in self.uids]))
+                    self.metric_summarize(
+                        [metric.compute(uid) for uid in self.uids]))
 
         print(
             f"{self.__class__.__name__} spent {time.time()-start_time:.2f} seconds executing {metric_class.__name__} metric"
@@ -291,11 +328,13 @@ class CumulativeInteractionMetricsEvaluator(InteractionMetricsEvaluator):
         return metric_values
 
 
-class UserCumulativeInteractionMetricsEvaluator(CumulativeInteractionMetricsEvaluator):
+class UserCumulativeInteractionMetricsEvaluator(
+        CumulativeInteractionMetricsEvaluator):
+
     @staticmethod
     def metric_summarize(users_metric_values):
         return users_metric_values
-    
+
 
 class Metric(Parameterizable):
 
@@ -375,6 +414,7 @@ class EPC(Metric):
         super().__init__(*args, **kwargs)
         self.users_num_items_recommended = defaultdict(int)
         self.users_prob_not_seen_cumulated = defaultdict(float)
+        self.items_normalized_popularity = items_normalized_popularity
 
     def compute(self, uid):
         C_2 = 1.0 / self.users_num_items_recommended[uid]
@@ -425,12 +465,13 @@ class EPD:
         self.users_relevant_items[self.users_relevant_items >
                                   self.ground_truth_dataset.min_rating] = True
 
-        rel = np.zeros(self.items_distance.shape[0], dtype=bool)
-        rel[actual] = 1
+        # rel = np.zeros(self.items_distance.shape[0], dtype=bool)
+        # rel[actual] = 1
         # self.ground_truth_dataset.data
 
         # self.users_liked_items = relevance_evaluator.is_relevant()
     def compute(self, uid):
+
         rel = np.array(self.users_relevant_items[uid].A).flatten()
         consumed_items = self.users_consumed_items[item]
         predicted = self.users_items_recommended[uid]
@@ -450,7 +491,7 @@ class EPD:
 
 class AP(Metric):
 
-    def __init__(self, items_distance, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.users_true_positive = defaultdict(int)
         self.users_false_positive = defaultdict(int)
@@ -470,6 +511,24 @@ class AP(Metric):
         self.users_cumulated_precision[uid] += self.users_true_positive[uid] / (
             self.users_true_positive[uid] + self.users_false_positive[uid])
         self.users_num_recommendations[uid] += 1
+
+
+class UsersCoverage(Metric):
+
+    def __init__(self, users_covered=defaultdict(bool), *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.users_covered = users_covered
+
+    def compute(self, uid):
+        l = np.array(list(self.users_covered.values()))
+        return np.sum(l) / len(l)
+
+    def update_recommendation(self, uid, item, reward):
+        if self.users_covered[uid] == False:
+            if self.relevance_evaluator.is_relevant(reward):
+                self.users_covered[uid] = True
+            else:
+                self.users_covered[uid] = False
 
 
 def mapk(actual, predicted, k):

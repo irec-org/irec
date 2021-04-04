@@ -60,7 +60,7 @@ BUFFER_SIZE_EVALUATOR = 50
 
 nums_interactions_to_show = [5, 10, 20, 50, 100]
 
-metrics_classes = [metric.Recall, metric.Hits]
+metrics_classes = [metric.Recall, metric.Hits, metric.ILD, metric.EPC, metric.UsersCoverage]
 
 interactors_preprocessor_paramaters = yaml.load(
     open("settings" + sep + "interactors_preprocessor_parameters.yaml"),
@@ -109,6 +109,8 @@ for dataset_preprocessor in datasets_preprocessors:
     evaluation_policy = ir.get_interactors_evaluation_policy()
 
     for metric_evaluator in metrics_evaluators:
-        args = [(id(metric_evaluator), id(dm), itr_class)
-                for itr_class in interactors_classes]
-        run_parallel(evaluate_itr, args, use_tqdm=False)
+        # args = [(id(metric_evaluator), id(dm), itr_class)
+                # for itr_class in interactors_classes]
+        # run_parallel(evaluate_itr, args, use_tqdm=False)
+        for itr_class in interactors_classes:
+            evaluate_itr(id(metric_evaluator), id(dm), itr_class)
