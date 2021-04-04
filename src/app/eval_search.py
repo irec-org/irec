@@ -11,6 +11,7 @@ import mf
 from utils.InteractorRunner import InteractorRunner
 from sklearn.decomposition import NMF
 import numpy as np
+import traceback
 import scipy.sparse
 from utils.DatasetManager import DatasetManager
 import yaml
@@ -119,6 +120,7 @@ for dataset_preprocessor in datasets_preprocessors:
                         InteractorCache().get_id(dm, evaluation_policy, itr),
                         metric_evaluator.get_id(), metric_name), metric_values)
         except Exception as e:
+            traceback.print_exc()
             print(f"{e} ||| Error in evaluation, could not evaluate")
 
 

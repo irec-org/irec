@@ -67,8 +67,7 @@ class InteractorRunner():
     def create_interactor(self, itr_class):
         if self.interactors_preprocessor_paramaters[
                 self.dm.dataset_preprocessor.name][
-                    itr_class.
-                    __name__] != None and 'parameters' in self.interactors_preprocessor_paramaters[
+                    itr_class.__name__] != None and 'parameters' in self.interactors_preprocessor_paramaters[
                         self.dm.dataset_preprocessor.name][itr_class.__name__]:
             parameters = self.interactors_preprocessor_paramaters[
                 self.dm.dataset_preprocessor.name][
