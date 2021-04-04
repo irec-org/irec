@@ -30,6 +30,8 @@ print('var',var)
 print('user_var',user_var)
 print('item_var',item_var)
 print('user_lambda',var/user_var)
+print(dm.dataset_preprocessed[0].num_users)
+print(dm.dataset_preprocessed[0].num_items)
 del df
 
 raise SystemExit

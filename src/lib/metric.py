@@ -317,7 +317,7 @@ class CumulativeInteractionMetricsEvaluator(InteractionMetricsEvaluator):
                         uid, item, self.ground_truth_consumption_matrix[uid,
                                                                         item])
 
-            if i in interactions_to_evaluate:
+            if (i+1) in interactions_to_evaluate:
                 metric_values.append(
                     self.metric_summarize(
                         [metric.compute(uid) for uid in self.uids]))
@@ -524,11 +524,10 @@ class UsersCoverage(Metric):
         return np.sum(l) / len(l)
 
     def update_recommendation(self, uid, item, reward):
-        if self.users_covered[uid] == False:
-            if self.relevance_evaluator.is_relevant(reward):
-                self.users_covered[uid] = True
-            else:
-                self.users_covered[uid] = False
+        if self.users_covered[uid] == False and self.relevance_evaluator.is_relevant(reward):
+            self.users_covered[uid] = True
+            # else:
+                # self.users_covered[uid] = False
 
 
 def mapk(actual, predicted, k):

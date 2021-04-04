@@ -42,7 +42,7 @@ def evaluate_itr(metric_evaluator_id, dm_id, itr_class):
         metrics_values = metric_evaluator.evaluate(
             evaluation_policy.num_interactions,
             evaluation_policy.interaction_size, users_items_recommended,interactions_to_evaluate=nums_interactions_to_show)
-    if isinstance(metric_evaluator, InteractionMetricsEvaluator):
+    elif isinstance(metric_evaluator, InteractionMetricsEvaluator):
         metrics_values = metric_evaluator.evaluate(
             evaluation_policy.num_interactions,
             evaluation_policy.interaction_size, users_items_recommended)
@@ -60,7 +60,9 @@ BUFFER_SIZE_EVALUATOR = 50
 
 nums_interactions_to_show = [5, 10, 20, 50, 100]
 
-metrics_classes = [metric.Recall, metric.Hits, metric.EPC, metric.UsersCoverage]
+metrics_classes = [metric.Recall, metric.Hits, metric.EPC, metric.UsersCoverage, metric.ILD]
+#metrics_classes = [metric.Recall, metric.Hits, metric.EPC]
+# metrics_classes = [metric.ILD,metric.UsersCoverage]
 
 interactors_preprocessor_paramaters = yaml.load(
     open("settings" + sep + "interactors_preprocessor_parameters.yaml"),

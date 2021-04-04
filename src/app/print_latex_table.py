@@ -38,8 +38,18 @@ plt.rcParams['lines.linewidth'] = 2
 plt.rcParams['font.size'] = 15
 
 # metrics_classes = [metric.Hits, metric.Recall]
-metrics_classes = [metric.Hits,metric.Recall , metric.EPC, metric.UsersCoverage]
-metrics_names = ['Cumulative Precision', 'Cumulative Recall', 'Cumulative EPC', 'Cumulative Users Coverage']
+metrics_classes = [metric.Hits,
+        metric.Recall ,
+        metric.EPC,
+        metric.UsersCoverage, 
+        metric.ILD
+        ]
+metrics_names = ['Cumulative Precision', 
+        'Cumulative Recall', 
+        'Cumulative EPC', 
+        'Cumulative Users Coverage',
+        'Cumulative ILD'
+        ]
 
 # dm = DatasetManager()
 # datasets_preprocessors = dm.request_datasets_preprocessors()
@@ -140,12 +150,13 @@ for dataset_preprocessor in datasets_preprocessors:
                 os.path.join(
                     InteractorCache().get_id(dm, evaluation_policy, itr),
                     metrics_evaluator.get_id(), metric_class_name))
+            # print(len(metric_values))
             datasets_metrics_values[dataset_preprocessor['name']][
                 metric_class_name][itr_class.__name__].extend(
-                    [np.mean(metric_values[i - 1]) for i in nums_interactions_to_show])
+                    [np.mean(metric_values[i]) for i in range(len(nums_interactions_to_show))])
             datasets_metrics_users_values[dataset_preprocessor['name']][
                 metric_class_name][itr_class.__name__].extend(
-                    np.array([metric_values[i - 1] for i in nums_interactions_to_show]))
+                    np.array([metric_values[i] for i in range(len(nums_interactions_to_show))]))
 
 datasets_metrics_gain = defaultdict(
         lambda: defaultdict(lambda: defaultdict(lambda: ['']*len(nums_interactions_to_show))))
@@ -185,10 +196,14 @@ for dataset_preprocessor in datasets_preprocessors:
             second_best_itr_users_val = datasets_metrics_users_values[dataset_preprocessor['name']][
                 metric_class_name][second_best_itr][i]
 
-            statistic, pvalue = scipy.stats.wilcoxon(
-                    best_itr_users_val,
-                    second_best_itr_users_val,
-                    )
+            try:
+                statistic, pvalue = scipy.stats.wilcoxon(
+                        best_itr_users_val,
+                        second_best_itr_users_val,
+                        )
+            except:
+                print("Wilcoxon error")
+                datasets_metrics_gain[dataset_preprocessor['name']][metric_class_name][best_itr][i]=bullet_str
 
             if pvalue > 0.05:
                 datasets_metrics_gain[dataset_preprocessor['name']][metric_class_name][best_itr][i]=bullet_str
