@@ -15,6 +15,7 @@ parser.add_argument('-elast',default='Interaction')
 args = parser.parse_args()
 import inquirer
 import interactors
+import traceback
 from utils.InteractorRunner import InteractorRunner
 import joblib
 import concurrent.futures
@@ -60,58 +61,67 @@ ir = InteractorRunner(None, interactors_general_settings,
                       interactors_preprocessor_paramaters,
                       evaluation_policies_parameters)
 interactors_classes = [eval('interactors.'+interactor) for interactor in args.m]
+# print(interactors_classes)
 # history_rates_to_train = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8]
-history_rates_to_train = [0.1,0.3,0.5,0.7,0.8]
+# history_rates_to_train = [0.1,0.3,0.5,0.6,0.8]
+# history_rates_to_train = [0.1,0.3,0.5,0.8]
+history_rates_to_train = [0.1,0.3,0.5,0.6]
+# history_rates_to_train = [0.8]
 
-def process(history_rate,dataset_preprocessor,dataset,consumption_matrix,dm):
-    itr = interactor_class(**interactors_preprocessor_paramaters[dataset_preprocessor['name']][interactor_class.__name__]['parameters'])
+def process(history_rate,dataset_preprocessor,dataset,consumption_matrix,dm,interactor_class):
+    try:
+        itr = interactor_class(**interactors_preprocessor_paramaters[dataset_preprocessor['name']][interactor_class.__name__]['parameters'])
 
-    start_evaluation_policy = eval('evaluation_policy.'+args.estart)(**evaluation_policies_parameters[args.estart])
-    start_evaluation_policy.recommend_test_data_rate_limit = history_rate
-    # no need history rate s but i will put it because of consistency
-    file_name = 's_'+str(history_rate)+'_'+InteractorCache().get_id(dm,start_evaluation_policy,itr)
+        start_evaluation_policy = eval('evaluation_policy.'+args.estart)(**evaluation_policies_parameters[args.estart])
+        start_evaluation_policy.recommend_test_data_rate_limit = history_rate
+        # no need history rate s but i will put it because of consistency
+        file_name = 's_'+str(history_rate)+'_'+InteractorCache().get_id(dm,start_evaluation_policy,itr)
 
-    pdm = PersistentDataManager(directory='results')
-    print(pdm.get_fp(file_name))
-    if not pdm.file_exists(file_name):
-        history_items_recommended = start_evaluation_policy.evaluate(
-            itr, dm.dataset_preprocessed[0],
-            dm.dataset_preprocessed[1])
-        pdm.save(file_name,
-                 history_items_recommended)
-    else:
-        history_items_recommended = pdm.load(file_name )
-        print("File already exists")
+        pdm = PersistentDataManager(directory='results')
+        print(pdm.get_fp(file_name))
+        if not pdm.file_exists(file_name):
+            history_items_recommended = start_evaluation_policy.evaluate(
+                itr, dm.dataset_preprocessed[0],
+                dm.dataset_preprocessed[1])
+            pdm.save(file_name,
+                     history_items_recommended)
+        else:
+            history_items_recommended = pdm.load(file_name )
+            print("File already exists")
 
-    itr = interactor_class(**interactors_preprocessor_paramaters[dataset_preprocessor['name']][interactor_class.__name__]['parameters'])
+        itr = interactor_class(**interactors_preprocessor_paramaters[dataset_preprocessor['name']][interactor_class.__name__]['parameters'])
 
-    last_evaluation_policy = eval('evaluation_policy.'+args.elast)(**evaluation_policies_parameters[args.elast])
-    file_name = 'e_'+str(history_rate)+'_'+InteractorCache().get_id(dm,last_evaluation_policy,itr)
+        last_evaluation_policy = eval('evaluation_policy.'+args.elast)(**evaluation_policies_parameters[args.elast])
+        file_name = 'e_'+str(history_rate)+'_'+InteractorCache().get_id(dm,last_evaluation_policy,itr)
 
-    print(pdm.get_fp(file_name))
-    if not pdm.file_exists(file_name):
-        new_data = []
-        for (user, item) in history_items_recommended:
-            new_data.append((user,item,consumption_matrix[user,item]))
-        new_train_data = np.array(new_data)
-        train_data = dm.dataset_preprocessed[0].data
-        new_train_data = np.vstack(
-                (train_data[:,0:3], new_data))
-        test_data = dm.dataset_preprocessed[1].data
-        new_test_data=test_data[~(np.isin(test_data[:,0],set(new_train_data[:,0])) & np.isin(test_data[:,1],set(new_train_data[:,1])))]
-        train_dataset = copy(dataset)
-        train_dataset.data = new_train_data
-        train_dataset.update_from_data()
-        test_dataset = copy(dataset)
-        test_dataset.data = new_test_data
-        test_dataset.update_from_data()
-        history_items_recommended = last_evaluation_policy.evaluate(
-            itr, train_dataset,
-            test_dataset)
-        pdm.save(file_name,
-                 history_items_recommended)
-    else:
-        print("File already exists")
+        print(pdm.get_fp(file_name))
+        if not pdm.file_exists(file_name):
+            new_data = []
+            for (user, item) in history_items_recommended:
+                new_data.append((user,item,consumption_matrix[user,item]))
+            new_train_data = np.array(new_data)
+            train_data = dm.dataset_preprocessed[0].data
+            new_train_data = np.vstack(
+                    (train_data[:,0:3], new_data))
+            test_data = dm.dataset_preprocessed[1].data
+            new_test_data=test_data[~(np.isin(test_data[:,0],set(new_train_data[:,0])) & np.isin(test_data[:,1],set(new_train_data[:,1])))]
+            train_dataset = copy(dataset)
+            train_dataset.data = new_train_data
+            train_dataset.update_from_data()
+            test_dataset = copy(dataset)
+            test_dataset.data = new_test_data
+            test_dataset.update_from_data()
+            history_items_recommended = last_evaluation_policy.evaluate(
+                itr, train_dataset,
+                test_dataset)
+            pdm.save(file_name,
+                     history_items_recommended)
+        else:
+            print("File already exists")
+    except:
+        print("Error Ocurred !!!!!!!!")
+        traceback.print_exc()
+        raise SystemError
 
 
 with concurrent.futures.ProcessPoolExecutor(max_workers=args.num_tasks) as executor:
@@ -129,14 +139,10 @@ with concurrent.futures.ProcessPoolExecutor(max_workers=args.num_tasks) as execu
             print('%.2f%% of history'%(history_rate*100))
             for interactor_class in interactors_classes:
                 # process(history_rate,dataset_preprocessor,dataset,consumption_matrix,dm)
-                    f=executor.submit(process,history_rate,dataset_preprocessor,dataset,consumption_matrix,dm)
+                    f=executor.submit(process,history_rate,dataset_preprocessor,dataset,consumption_matrix,dm,interactor_class)
                     futures.add(f)
 
                     if len(futures) >= args.num_tasks:
                         completed, futures = wait(futures, return_when=FIRST_COMPLETED)
     for f in futures:
         f.result()
-
-        # for f in futures:
-            # f.result()
-

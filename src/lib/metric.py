@@ -101,7 +101,6 @@ class TotalMetricsEvaluator(MetricsEvaluator):
         self.uids = uids
         self.results = results
         metrics_values = defaultdict(list)
-        get_items_distance(self.ground_truth_dataset[self.uids].A)
 
         results = run_parallel(
             self._metric_evaluation,
