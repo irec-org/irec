@@ -95,7 +95,7 @@ class TotalMetricsEvaluator(MetricsEvaluator):
             if self.relevance_evaluator.is_relevant(reward):
                 self.users_false_negative[uid] += 1
         uids = []
-        for uid, item in results:
+        for uid, _ in results:
             uids.append(uid)
         uids = list(set(uids))
         self.uids = uids
@@ -165,7 +165,7 @@ class CumulativeMetricsEvaluator(MetricsEvaluator):
             if self.relevance_evaluator.is_relevant(reward):
                 self.users_false_negative[uid] += 1
         uids = []
-        for uid, item in results:
+        for uid, _ in results:
             uids.append(uid)
         uids = list(set(uids))
         self.uids = uids
@@ -317,6 +317,7 @@ class CumulativeInteractionMetricsEvaluator(InteractionMetricsEvaluator):
                                                                         item])
 
             if (i+1) in interactions_to_evaluate:
+                print(f"Computing interaction {i+1} with {self.__class__.__name__}")
                 metric_values.append(
                     self.metric_summarize(
                         [metric.compute(uid) for uid in self.uids]))
@@ -510,6 +511,32 @@ class AP(Metric):
         self.users_cumulated_precision[uid] += self.users_true_positive[uid] / (
             self.users_true_positive[uid] + self.users_false_positive[uid])
         self.users_num_recommendations[uid] += 1
+
+
+class GiniCoefficient(Metric):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.items_frequency = defaultdict(int)
+        for item in np.unique(self.ground_truth_dataset.data[:,1]):
+            self.items_frequency[item]
+        self.is_computation_updated = False
+        self.computation_cache = None
+
+    def compute(self, uid):
+        if self.is_computation_updated == False:
+            self.is_computation_updated = True
+            x = np.array(list(self.items_frequency.values()))
+            diff_sum = 0
+            for i, xi in enumerate(x[:-1], 1):
+                diff_sum += np.sum(np.abs(xi - x[i:]))
+            self.computation_cache=diff_sum / (len(x)**2 * np.mean(x))
+        return self.computation_cache
+
+    def update_recommendation(self, uid, item, reward):
+        self.items_frequency[item] += 1
+        if self.is_computation_updated:
+            self.is_computation_updated = False
 
 
 class UsersCoverage(Metric):
