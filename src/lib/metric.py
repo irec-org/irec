@@ -513,7 +513,7 @@ class AP(Metric):
         self.users_num_recommendations[uid] += 1
 
 
-class GiniCoefficient(Metric):
+class GiniCoefficientInv(Metric):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -531,7 +531,7 @@ class GiniCoefficient(Metric):
             for i, xi in enumerate(x[:-1], 1):
                 diff_sum += np.sum(np.abs(xi - x[i:]))
             self.computation_cache=diff_sum / (len(x)**2 * np.mean(x))
-        return self.computation_cache
+        return 1 - self.computation_cache
 
     def update_recommendation(self, uid, item, reward):
         self.items_frequency[item] += 1

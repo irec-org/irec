@@ -78,19 +78,16 @@ def process(history_rate,dataset_preprocessor,dataset,consumption_matrix,dm,inte
         start_evaluation_policy = eval('evaluation_policy.'+args.estart)(**evaluation_policies_parameters[args.estart])
         start_evaluation_policy.recommend_test_data_rate_limit = history_rate
         # no need history rate s but i will put it because of consistency
-        file_name = 's_'+str(history_rate)+'_'+InteractorCache().get_id(dm,start_evaluation_policy,itr)
+        file_name_s = 's_'+str(history_rate)+'_'+InteractorCache().get_id(dm,start_evaluation_policy,itr)
 
         pdm = PersistentDataManager(directory='results')
-        print(pdm.get_fp(file_name))
-        if not pdm.file_exists(file_name) or args.f1:
+        print(pdm.get_fp(file_name_s))
+        if not pdm.file_exists(file_name_s) or args.f1:
             history_items_recommended = start_evaluation_policy.evaluate(
                 itr, dm.dataset_preprocessed[0],
                 dm.dataset_preprocessed[1])
-            pdm.save(file_name,
+            pdm.save(file_name_s,
                      history_items_recommended)
-        else:
-            history_items_recommended = pdm.load(file_name )
-            print("File already exists")
 
         itr = interactor_class(**interactors_preprocessor_paramaters[dataset_preprocessor['name']][interactor_class.__name__]['parameters'])
 
@@ -99,6 +96,9 @@ def process(history_rate,dataset_preprocessor,dataset,consumption_matrix,dm,inte
 
         print(pdm.get_fp(file_name))
         if not pdm.file_exists(file_name) or args.f2:
+            if not(not pdm.file_exists(file_name_s) or args.f1):
+                history_items_recommended = pdm.load(file_name_s)
+                print("File already exists")
             new_data = []
             for (user, item) in history_items_recommended:
                 if consumption_matrix[user,item]>0:

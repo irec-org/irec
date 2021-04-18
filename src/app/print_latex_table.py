@@ -42,13 +42,15 @@ metrics_classes = [metric.Hits,
         metric.Recall ,
         metric.EPC,
         metric.UsersCoverage, 
-        metric.ILD
+        metric.ILD,
+        metric.GiniCoefficientInv,
         ]
 metrics_names = ['Cumulative Precision', 
         'Cumulative Recall', 
         'Cumulative EPC', 
         'Cumulative Users Coverage',
-        'Cumulative ILD'
+        'Cumulative ILD',
+        '1-(Gini-Index)'
         ]
 
 # dm = DatasetManager()
