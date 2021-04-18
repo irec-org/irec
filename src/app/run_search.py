@@ -81,20 +81,14 @@ def main():
         # interactors_classes = ir.select_interactors()
     # else:
     interactors_classes = [eval('interactors.'+interactor) for interactor in args.m]
-    with ProcessPoolExecutor() as executor:
-        futures = set()
-        for dataset_preprocessor in datasets_preprocessors:
-            f = executor.submit(run_interactors_in_base, dataset_preprocessor,
-                                interactors_general_settings,
-                                interactors_preprocessor_paramaters,
-                                evaluation_policies_parameters,
-                                interactors_classes,
-                                interactors_search_parameters)
-            futures.add(f)
-            if len(futures) >= 1:
-                completed, futures = wait(futures, return_when=FIRST_COMPLETED)
-        for future in futures:
-            future.result()
+    print(interactors_classes)
+    for dataset_preprocessor in datasets_preprocessors:
+        run_interactors_in_base(dataset_preprocessor,
+                            interactors_general_settings,
+                            interactors_preprocessor_paramaters,
+                            evaluation_policies_parameters,
+                            interactors_classes,
+                            interactors_search_parameters)
 
 
 if __name__ == '__main__':

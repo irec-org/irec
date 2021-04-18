@@ -134,7 +134,6 @@ class InteractorRunner():
         if num_tasks == None:
             num_tasks = os.cpu_count()
             # print("ewqewjiqewjiewijq ijewqijwqe",num_tasks)
-        # print("ewqewjiqewjiewijq ijewqijwqe",num_tasks)
 
         with ProcessPoolExecutor() as executor:
             futures = set()
