@@ -1,4 +1,6 @@
 Good Books:
+  LinUCBPCA:
+    parameters: {alpha: 0.25, num_lat: 20}
   OurMethod2PCA:
     parameters: {alpha: 0.25, num_lat: 20}
   ALEntropy: null
@@ -258,6 +260,8 @@ MovieLens 100k (B):
   kNNBandit:
     parameters: {alpha_0: 1, beta_0: 100, k: 1}
 MovieLens 10M:
+  LinUCBPCA:
+    parameters: {alpha: 0.5, num_lat: 10}
   OurMethod2PCA:
     parameters: {alpha: 0.5, num_lat: 10}
   ALEntropy: null
@@ -568,6 +572,8 @@ MovieLens 1M (B):
   kNNBandit:
     parameters: {alpha_0: 1, beta_0: 1, k: 1}
 Yahoo Music:
+  LinUCBPCA:
+    parameters: {alpha: 0.5, num_lat: 20}
   OurMethod2PCA:
     parameters: {alpha: 0.5, num_lat: 20}
   ALEntropy: null

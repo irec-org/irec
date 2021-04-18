@@ -32,6 +32,14 @@ class Interaction(EvaluationPolicy,Parameterizable):
             test_consumption_matrix = scipy.sparse.csr_matrix((test_dataset.data[:,2],(test_dataset.data[:,0].astype(int),test_dataset.data[:,1].astype(int))),shape=(test_dataset.num_total_users,test_dataset.num_total_items))
 
             users_items_recommended = defaultdict(list)
+
+            for i in range(len(train_dataset.data)):
+                uid = int(train_dataset.data[i,0])
+                if uid in test_users:
+                    iid = int(train_dataset.data[i,1])
+                    reward = train_dataset.data[i,2]
+                    users_items_recommended[uid].append(iid)
+
             num_test_users = len(test_users)
             print(f"Starting {model.__class__.__name__} Training")
             model.train(train_dataset)

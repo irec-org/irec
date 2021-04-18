@@ -12,6 +12,8 @@ parser.add_argument('-b',nargs='*')
 parser.add_argument('--num_tasks', type=int, default=os.cpu_count())
 parser.add_argument('-estart',default='LimitedInteraction')
 parser.add_argument('-elast',default='Interaction')
+parser.add_argument('-f1', default=False, action='store_true')
+parser.add_argument('-f2', default=False, action='store_true')
 args = parser.parse_args()
 import inquirer
 import interactors
@@ -63,9 +65,10 @@ ir = InteractorRunner(None, interactors_general_settings,
 interactors_classes = [eval('interactors.'+interactor) for interactor in args.m]
 # print(interactors_classes)
 # history_rates_to_train = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8]
-# history_rates_to_train = [0.1,0.3,0.5,0.6,0.8]
+history_rates_to_train = [0.1,0.3,0.5,0.6,0.8]
 # history_rates_to_train = [0.1,0.3,0.5,0.8]
-history_rates_to_train = [0.1,0.3,0.5,0.6]
+# history_rates_to_train = [0.1,0.3,0.5,0.6]
+# history_rates_to_train = [0.1,0.3]
 # history_rates_to_train = [0.8]
 
 def process(history_rate,dataset_preprocessor,dataset,consumption_matrix,dm,interactor_class):
@@ -79,7 +82,7 @@ def process(history_rate,dataset_preprocessor,dataset,consumption_matrix,dm,inte
 
         pdm = PersistentDataManager(directory='results')
         print(pdm.get_fp(file_name))
-        if not pdm.file_exists(file_name):
+        if not pdm.file_exists(file_name) or args.f1:
             history_items_recommended = start_evaluation_policy.evaluate(
                 itr, dm.dataset_preprocessed[0],
                 dm.dataset_preprocessed[1])
@@ -95,10 +98,11 @@ def process(history_rate,dataset_preprocessor,dataset,consumption_matrix,dm,inte
         file_name = 'e_'+str(history_rate)+'_'+InteractorCache().get_id(dm,last_evaluation_policy,itr)
 
         print(pdm.get_fp(file_name))
-        if not pdm.file_exists(file_name):
+        if not pdm.file_exists(file_name) or args.f2:
             new_data = []
             for (user, item) in history_items_recommended:
-                new_data.append((user,item,consumption_matrix[user,item]))
+                if consumption_matrix[user,item]>0:
+                    new_data.append((user,item,consumption_matrix[user,item]))
             new_train_data = np.array(new_data)
             train_data = dm.dataset_preprocessed[0].data
             new_train_data = np.vstack(

@@ -23,7 +23,7 @@ OurMethodBalanced:
 LinearUCB:
   name: Linear UCB (PMF)
 LinearUCB1:
-  name: Linear UCB1 (PMF)
+  name: Linear UCB (p=1) (PMF)
 COFIBA:
   name: COFIBA
 ThompsonSampling:
@@ -102,3 +102,5 @@ OurMethod1Mod:
   name: UCB-Learner Mod
 OurMethod2PCA:
   name: WSCB PCA
+LinUCBPCA:
+  name: LinUCB PCA

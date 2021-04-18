@@ -43,3 +43,4 @@ from .LinearUCBInit import *
 from .LinearEGreedyInit import *
 from .OurMethod1Mod import *
 from .OurMethod2PCA import *
+from .LinUCBPCA import *

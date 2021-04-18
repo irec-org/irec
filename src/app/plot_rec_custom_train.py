@@ -14,7 +14,11 @@ parser.add_argument('-estart', default='LimitedInteraction')
 parser.add_argument('-elast', default='Interaction')
 args = parser.parse_args()
 import inquirer
+import matplotlib
+from utils.DirectoryDependent import DirectoryDependent
+from collections import defaultdict
 import interactors
+import matplotlib.pyplot as plt
 from utils.InteractorRunner import InteractorRunner
 import joblib
 import concurrent.futures
@@ -34,6 +38,9 @@ from utils.InteractorCache import InteractorCache
 from utils.PersistentDataManager import PersistentDataManager
 import metric
 
+datasets_metrics_rate_values = defaultdict(
+    lambda:defaultdict(
+    lambda: defaultdict(lambda: defaultdict(dict))))
 metrics_classes = [metric.Hits]
 
 interactors_preprocessor_paramaters = yaml.load(
@@ -63,7 +70,11 @@ ir = InteractorRunner(None, interactors_general_settings,
 interactors_classes = [
     eval('interactors.' + interactor) for interactor in args.m
 ]
-history_rates_to_train = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]
+# history_rates_to_train = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]
+# history_rates_to_train = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]
+# history_rates_to_train = [0.1,0.3,0.5,0.6]
+
+history_rates_to_train = [0.1,0.3,0.5,0.6,0.8]
 
 for dataset_preprocessor in datasets_preprocessors:
     dm.initialize_engines(dataset_preprocessor)
@@ -82,10 +93,23 @@ for dataset_preprocessor in datasets_preprocessors:
             file_name = 's_num_interactions_' + str(
                 history_rate) + '_' + InteractorCache().get_id(
                     dm, start_evaluation_policy, itr)
+
+            # file_name = 's_num_interactions_' + str(history_rate) + '_' + InteractorCache().get_id(
+                # dm, start_evaluation_policy, itr)
+            # pdm_out = PersistentDataManager(directory='metrics',extension_name='.txt')
+            # fp = pdm_out.get_fp(file_name)
+            # print(fp)
+            # raise SystemError
+            # util.create_path_to_file(fp)
+            # print(history_rate)
+
             pdm_out = PersistentDataManager(directory='metrics',
                                             extension_name='.txt')
             fp = pdm_out.get_fp(file_name)
-            num_interactions = float(open(fp, 'r').read())
+            with open(fp,'r') as fi:
+                datasets_metrics_rate_values[dataset_preprocessor['name']][
+                        'num_interactions'][interactor_class.__name__][history_rate]=float(fi.read())
+            # num_interactions = float(open(fp, 'r').read())
 
             itr = interactor_class(**interactors_preprocessor_paramaters[
                 dataset_preprocessor['name']][interactor_class.__name__]
@@ -98,6 +122,51 @@ for dataset_preprocessor in datasets_preprocessors:
             metrics_values = dict()
             for metric_name in list(map(lambda x: x.__name__, metrics_classes)):
                 metrics_values[metric_name] = metrics_pdm.load(
-                    os.path.join(
-                        InteractorCache().get_id(dm, last_evaluation_policy, itr),
-                        metric_evaluator.get_id(), metric_name))
+                    os.path.join(InteractorCache().get_id(dm, last_evaluation_policy, itr),
+                                     metric_evaluator.get_id(), metric_name+'_'+str(history_rate)))
+                # datasets_metrics_values
+                metrics_values[metric_name] = np.mean(metrics_values[metric_name][0])
+                datasets_metrics_rate_values[dataset_preprocessor['name']][
+                                metric_name][interactor_class.__name__][history_rate]  = metrics_values[metric_name]
+
+
+print(datasets_metrics_rate_values)
+font = {'family' : 'normal',
+        # 'weight' : 'bold',
+        'size'   : 20}
+
+matplotlib.rc('font', **font)
+fig, axs = plt.subplots(nrows=1+len(metrics_classes),ncols=len(args.b),figsize=(12,12))
+
+j=0
+# MAUT = 0
+for dataset, metrics_rate_values in datasets_metrics_rate_values.items():
+    i = 0
+    for metric, itr_rate_values in metrics_rate_values.items():
+        if metric == 'Hits':
+            metric = 'Cum. Precision'
+        if metric == 'num_interactions':
+            metric = 'Number of interactions'
+        else:
+            metric += '@10'
+        # metric = metric == 'num_interactions' ? 'Number of interactions' : metric
+        axs[i].set_ylabel(metric)
+        axs[i].set_xlabel('Recall')
+        axs[i].set_title(dataset)
+        print(itr_rate_values)
+        for itr_name, rate_values in itr_rate_values.items():
+            x=list(rate_values.keys())
+            y=list(rate_values.values())
+            print(x)
+            print(y)
+            axs[i].plot(x,y,label=itr_name)
+
+        i+=1
+    # axs
+    j+=1
+
+handles, labels = axs[0].get_legend_handles_labels()
+fig.legend(handles, labels, loc='upper center',ncol = 5,bbox_to_anchor=(0.75, 1.05),
+          fancybox=True, shadow=True)
+fig.tight_layout()
+fig.savefig(os.path.join(DirectoryDependent().DIRS["img"],f'plot_custom_train.png'),bbox_inches = 'tight')

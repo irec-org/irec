@@ -33,7 +33,6 @@ class OurMethod2PCA(MFInteractor):
         transformer = sklearn.decomposition.TruncatedSVD(n_components=self.num_lat)
         # x = self.train_dataset.data[:,:2]
         # y = self.train_dataset.data[:,2]
-        x = self.train_dataset.data[:,:3]
         transformer.fit(self.train_consumption_matrix.T)
         # transformer.fit(x)
         items_weights = transformer.transform(self.train_consumption_matrix.T)
