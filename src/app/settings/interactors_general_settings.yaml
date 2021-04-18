@@ -33,7 +33,7 @@ kNNBandit:
 MostPopular:
   name: Pop
 LinEGreedy:
-  name: Linear ε-Greedy (MF)
+  name: Linear e-Greedy (MF)
 PPELPE:
   name: PPELPE
 UCBLearner:
@@ -41,11 +41,11 @@ UCBLearner:
 GLM_UCB:
   name: GLM-UCB (PMF)
 LinearEGreedy:
-  name: Linear ε-Greedy (PMF)
+  name: Linear e-Greedy (PMF)
 LinearThompsonSampling:
   name: Linear TS (PMF)
 EGreedy:
-  name: ε-Greedy
+  name: e-Greedy
 UCB:
   name: UCB
 MostRepresentative:
@@ -59,7 +59,7 @@ PopPlusEnt:
 DistinctPopular:
   name: Distinct Popular
 EMostPopular:
-  name: ε-Most Popular
+  name: e-Most Popular
 Entropy:
   name: Entropy
 LogPopEnt:
