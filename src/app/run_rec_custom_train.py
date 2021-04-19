@@ -65,11 +65,11 @@ ir = InteractorRunner(None, interactors_general_settings,
 interactors_classes = [eval('interactors.'+interactor) for interactor in args.m]
 # print(interactors_classes)
 # history_rates_to_train = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8]
-history_rates_to_train = [0.1,0.3,0.5,0.6,0.8]
+# history_rates_to_train = [0.1,0.3,0.5,0.6,0.8]
 # history_rates_to_train = [0.1,0.3,0.5,0.8]
 # history_rates_to_train = [0.1,0.3,0.5,0.6]
 # history_rates_to_train = [0.1,0.3]
-# history_rates_to_train = [0.8]
+history_rates_to_train = [0.8]
 
 def process(history_rate,dataset_preprocessor,dataset,consumption_matrix,dm,interactor_class):
     try:

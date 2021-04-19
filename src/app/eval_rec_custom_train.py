@@ -69,7 +69,8 @@ interactors_classes = [
 
 # history_rates_to_train = [0.1,0.3,0.5,0.6]
 
-history_rates_to_train = [0.1,0.3,0.5,0.6,0.8]
+# history_rates_to_train = [0.1,0.3,0.5,0.6,0.8]
+history_rates_to_train = [0.8]
 # def process(history_rate, dataset_preprocessor, dataset, consumption_matrix,
             # dm):
 
@@ -137,6 +138,7 @@ for dataset_preprocessor in datasets_preprocessors:
 
             if pdm.file_exists(file_name):
                 print("File already exists")
+                print(pdm.get_fp(file_name))
                 history_items_recommended = pdm.load(file_name)
                 metrics_values = metric_evaluator.evaluate(history_items_recommended)
                 metrics_pdm = PersistentDataManager(directory='metrics')
