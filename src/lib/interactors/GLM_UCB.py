@@ -1,4 +1,5 @@
 from .ICF import ICF
+from .LinearICF import LinearICF
 import numpy as np
 from tqdm import tqdm
 #import util
@@ -10,7 +11,7 @@ import scipy
 import mf
 from utils.PersistentDataManager import PersistentDataManager
 
-class GLM_UCB(ICF):
+class GLM_UCB(LinearICF):
     def __init__(self, c=1.0, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.c = c
@@ -24,23 +25,23 @@ class GLM_UCB(ICF):
 
     def train(self,train_dataset):
         super().train(train_dataset)
-        self.train_dataset = train_dataset
-        self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[:,2],(self.train_dataset.data[:,0],self.train_dataset.data[:,1])),(self.train_dataset.num_total_users,self.train_dataset.num_total_items))
-        self.num_total_items = self.train_dataset.num_total_items
+        # self.train_dataset = train_dataset
+        # self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[:,2],(self.train_dataset.data[:,0],self.train_dataset.data[:,1])),(self.train_dataset.num_total_users,self.train_dataset.num_total_items))
+        # self.num_total_items = self.train_dataset.num_total_items
 
         # self.items_means = items_means
 
-        mf_model = mf.ICFPMFS(self.iterations,self.var,self.user_var,self.item_var,self.stop_criteria,num_lat=self.num_lat)
-        mf_model_id = joblib.hash((mf_model.get_id(),self.train_consumption_matrix))
-        pdm = PersistentDataManager('state_save')
-        if pdm.file_exists(mf_model_id):
-            mf_model = pdm.load(mf_model_id)
-        else:
-            mf_model.fit(self.train_consumption_matrix)
-            pdm.save(mf_model_id,mf_model)
+        # mf_model = mf.ICFPMFS(self.iterations,self.var,self.user_var,self.item_var,self.stop_criteria,num_lat=self.num_lat)
+        # mf_model_id = joblib.hash((mf_model.get_id(),self.train_consumption_matrix))
+        # pdm = PersistentDataManager('state_save')
+        # if pdm.file_exists(mf_model_id):
+            # mf_model = pdm.load(mf_model_id)
+        # else:
+            # mf_model.fit(self.train_consumption_matrix)
+            # pdm.save(mf_model_id,mf_model)
 
-        self.items_means = mf_model.items_means
-        self.num_latent_factors = len(self.items_latent_factors[0])
+        # self.items_means = mf_model.items_means
+        # self.num_latent_factors = len(self.items_latent_factors[0])
         self.I = np.eye(self.num_latent_factors)
         A = self.get_user_lambda()*I
         self.As = defaultdict(lambda: np.copy(A))
