@@ -1,4 +1,5 @@
 import inquirer
+import traceback
 import interactors
 import numpy as np
 import os
@@ -98,9 +99,13 @@ class InteractorRunner():
             # print(self.dm)
             # print(self.dm.dataset_preprocessed[0])
             # print(self.dm.dataset_preprocessed[1])
-            history_items_recommended = evaluation_policy.evaluate(
-                itr, self.dm.dataset_preprocessed[0],
-                self.dm.dataset_preprocessed[1])
+            try:
+                history_items_recommended = evaluation_policy.evaluate(
+                    itr, self.dm.dataset_preprocessed[0],
+                    self.dm.dataset_preprocessed[1])
+            except:
+                print(traceback.print_exc())
+                raise SystemError
             # print("33333")
 
             pdm = PersistentDataManager(directory='results')

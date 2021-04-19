@@ -1,6 +1,6 @@
 Interaction:
-  num_interactions: 10
-  interaction_size: 5
+  num_interactions: 50
+  interaction_size: 1
 LimitedInteraction:
   interaction_size: 1
   recommend_test_data_rate_limit: 0.1
