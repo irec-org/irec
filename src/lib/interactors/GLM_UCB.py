@@ -6,6 +6,7 @@ from tqdm import tqdm
 from threadpoolctl import threadpool_limits
 import scipy.optimize
 import ctypes
+from collections import defaultdict
 import joblib
 import scipy
 import mf
@@ -25,6 +26,7 @@ class GLM_UCB(LinearICF):
 
     def train(self,train_dataset):
         super().train(train_dataset)
+        # print(self.items_means.shape)
         # self.train_dataset = train_dataset
         # self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[:,2],(self.train_dataset.data[:,0],self.train_dataset.data[:,1])),(self.train_dataset.num_total_users,self.train_dataset.num_total_items))
         # self.num_total_items = self.train_dataset.num_total_items
@@ -42,13 +44,18 @@ class GLM_UCB(LinearICF):
 
         # self.items_means = mf_model.items_means
         # self.num_latent_factors = len(self.items_latent_factors[0])
-        self.I = np.eye(self.num_latent_factors)
-        A = self.get_user_lambda()*I
-        self.As = defaultdict(lambda: np.copy(A))
+        # self.I = np.eye(self.num_latent_factors)
+        # A = self.get_user_lambda()*self.I
+        # self.As = defaultdict(lambda: np.copy(A))
         self.users_rec_rewards = defaultdict(list)
         self.users_rec_items_means = defaultdict(list)
+        self.p_vals = dict()
 
     def error_user_weight_function(self,p,u_rec_rewards,u_rec_items_means):
+        # print(p.shape,len(u_rec_rewards),len(u_rec_items_means))
+        # print(p.shape,u_rec_rewards,u_rec_items_means)
+        # if len(u_rec_items_means) == 0:
+            # return 0
         return np.sum(np.array(
             [(u_rec_rewards[t] - self.p(p.T @ u_rec_items_means[t]))*u_rec_items_means[t]
              for t in range(0,len(u_rec_items_means))]),0)
@@ -63,32 +70,36 @@ class GLM_UCB(LinearICF):
         # user_candidate_items = list(range(len(self.items_means)))
         # # u_rec_rewards = []
         # # u_rec_items_means = []
-        self.users_rec_rewards[uid]
-        self.users_rec_items_means[uid]
+        # self.users_rec_rewards[uid]
+        # self.users_rec_items_means[uid]
         A = self.As[uid]
         # result = []
         # for i in range(self.interactions):
-        if len(users_rec_items_means[uid]) == 0:
-            p = np.zeros(num_lat)
+        if len(self.users_rec_items_means[uid]) == 0:
+            self.p_vals[uid] = np.zeros(self.num_latent_factors)
         else:
-            p = scipy.optimize.root(self.error_user_weight_function,
-                                    p,
-                                    (users_rec_rewards[uid],users_rec_items_means[uid])).x
+            self.p_vals[uid] = scipy.optimize.root(self.error_user_weight_function,
+                                    self.p_vals[uid],
+                                    (self.users_rec_rewards[uid],self.users_rec_items_means[uid])).x
         cov = np.linalg.inv(A)*self.var
         # for j in range(self.interaction_size):
-        items_score = self.p(p[None,:] @ self.items_means[candidate_items].T) +\
+        items_score = self.p(self.p_vals[uid][None,:] @ self.items_means[candidate_items].T) +\
             self.c * np.sqrt(np.log(self.t+1)) *\
             np.sqrt(np.sum(self.items_means[candidate_items].dot(cov) *\
                            self.items_means[candidate_items],axis=1))
-        
+        items_score = items_score.flatten()
         return items_score, None
         # user_candidate_items.remove(max_i)
         # result.append(max_i)
 
         # for max_i in result[i*self.interaction_size:(i+1)*self.interaction_size]:
     def update(self,uid,item,reward,additional_data):
-        max_item_mean = self.items_means[item]
-        users_rec_rewards[uid].append(reward)
-        users_rec_items_means[uid].append(item)
+        # print(self.items_means.shape)
+        max_item_mean = self.items_means[item,:]
+        # print('item',item,max_item_mean.shape)
+        # print(max_item_mean[:,None].shape)
+        # print(max_item_mean[None,:].shape)
+        self.users_rec_rewards[uid].append(reward)
+        self.users_rec_items_means[uid].append(max_item_mean)
         self.As[uid] += max_item_mean[:,None].dot(max_item_mean[None,:])
         # return result
