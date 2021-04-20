@@ -31,6 +31,7 @@ parser.add_argument('-m',nargs='*')
 parser.add_argument('-b',nargs='*')
 args = parser.parse_args()
 
+# print(args.b,args.m)
 
 metrics_classes = [metric.Hits]
 metrics_names = ['Cumulative Hits']
@@ -76,6 +77,7 @@ evaluation_policy = ir.get_interactors_evaluation_policy()
 
 datasets_metrics_values = defaultdict(
     lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(float))))
+print(datasets_preprocessors)
 
 for dataset_preprocessor in datasets_preprocessors:
     dm.initialize_engines(dataset_preprocessor)
@@ -83,6 +85,7 @@ for dataset_preprocessor in datasets_preprocessors:
     for metric_class_name in map(lambda x: x.__name__, metrics_classes):
         for itr_class in interactors_classes:
             for parameters in interactors_search_parameters[itr_class.__name__]:
+                # print(parameters)
                 itr = itr_class(**parameters)
                 pdm = PersistentDataManager(directory='results')
 
@@ -95,9 +98,11 @@ for dataset_preprocessor in datasets_preprocessors:
                     datasets_metrics_values[dataset_preprocessor['name']][
                             metric_class_name][itr_class.__name__][json.dumps(parameters)] = metric_values[-1]
                 except:
+                    print(f"Could not load metric {dataset_preprocessor['name']} {itr_class.__name__}")
                     pass
 # ','.join(map(lambda x: str(x[0])+'='+str(x[1]),list(parameters.items())))
 
+# print(datasets_metrics_values)
 for k1, v1 in datasets_metrics_values.items():
     for k2, v2 in v1.items():
         for k3, v3 in v2.items():
