@@ -157,7 +157,7 @@ def plot_hits_users_coverage(methods_users_hits, title="Users Coverage x Hits"):
     plt.yticks(list(range(0, len(hits)+10, 10)))
 
     return fig
-
+ 
 
 def count_hits(methods_users_hits, num_items=100):
     list_hits = dict.fromkeys(methods_users_hits, [])
