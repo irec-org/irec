@@ -143,6 +143,8 @@ class InteractorRunner():
         with ProcessPoolExecutor() as executor:
             futures = set()
             for itr_class in interactors_classes:
+                if interactors_search_parameters[itr_class.__name__] == None:
+                    raise SystemError(f'Interactor doesnt has search parameters ({itr_class.__name__})')
                 for parameters in interactors_search_parameters[
                         itr_class.__name__]:
                     f = executor.submit(self._run_interactor, id(self),
