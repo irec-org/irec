@@ -1,8 +1,4 @@
 Good Books:
-  LinUCBPCA:
-    parameters: {alpha: 0.25, num_lat: 20}
-  OurMethod2PCA:
-    parameters: {alpha: 0.25, num_lat: 20}
   ALEntropy: null
   ALMostPopular: null
   COFIBA:
@@ -15,12 +11,15 @@ Good Books:
   Entropy: null
   Entropy0: null
   GLM_UCB:
-    parameters: {c: 1.0, num_lat: 10}
+    parameters: {c: 1, item_var: 0.01, iterations: 20, num_lat: 20, stop_criteria: 0.0009,
+      user_var: 0.01, var: 0.05}
   HELF: null
   LinEGreedy:
     parameters: {epsilon: 0.1, num_lat: 10}
   LinUCB:
     parameters: {alpha: 0.5, num_lat: 10}
+  LinUCBPCA:
+    parameters: {alpha: 0.25, num_lat: 20}
   LinUCBvar:
     parameters: {alpha: 0.25, lambda_u: 0.001, num_lat: 10}
   LinearEGreedy:
@@ -78,6 +77,8 @@ Good Books:
     parameters: {alpha: 1, num_lat: 5, stop: null, weight_method: change}
   OurMethod2:
     parameters: {alpha: 0.25, num_lat: 10}
+  OurMethod2PCA:
+    parameters: {alpha: 0.25, num_lat: 20}
   OurMethod2var:
     parameters: {alpha: 0.25, lambda_u: 1.4824, num_lat: 10}
   OurMethod3:
@@ -260,10 +261,6 @@ MovieLens 100k (B):
   kNNBandit:
     parameters: {alpha_0: 1, beta_0: 100, k: 1}
 MovieLens 10M:
-  LinUCBPCA:
-    parameters: {alpha: 0.5, num_lat: 10}
-  OurMethod2PCA:
-    parameters: {alpha: 0.5, num_lat: 10}
   ALEntropy: null
   ALMostPopular: null
   COFIBA:
@@ -276,12 +273,15 @@ MovieLens 10M:
   Entropy: null
   Entropy0: null
   GLM_UCB:
-    parameters: {c: 1.0, num_lat: 10}
+    parameters: {c: 2, item_var: 0.01, iterations: 20, num_lat: 5, stop_criteria: 0.0009,
+      user_var: 0.01, var: 0.05}
   HELF: null
   LinEGreedy:
     parameters: {epsilon: 0.1, num_lat: 10}
   LinUCB:
     parameters: {alpha: 1.0, num_lat: 10}
+  LinUCBPCA:
+    parameters: {alpha: 0.5, num_lat: 10}
   LinUCBvar:
     parameters: {alpha: 0.75, lambda_u: 0.1, num_lat: 10}
   LinearEGreedy:
@@ -339,6 +339,8 @@ MovieLens 10M:
     parameters: {alpha: 0.75, num_lat: 20, stop: null, weight_method: change}
   OurMethod2:
     parameters: {alpha: 0.75, num_lat: 10}
+  OurMethod2PCA:
+    parameters: {alpha: 0.5, num_lat: 10}
   OurMethod2var:
     parameters: {alpha: 0.5, lambda_u: 1.4824, num_lat: 10}
   OurMethod3:
@@ -572,10 +574,6 @@ MovieLens 1M (B):
   kNNBandit:
     parameters: {alpha_0: 1, beta_0: 1, k: 1}
 Yahoo Music:
-  LinUCBPCA:
-    parameters: {alpha: 0.5, num_lat: 20}
-  OurMethod2PCA:
-    parameters: {alpha: 0.5, num_lat: 20}
   ALEntropy: null
   ALMostPopular: null
   COFIBA:
@@ -588,12 +586,15 @@ Yahoo Music:
   Entropy: null
   Entropy0: null
   GLM_UCB:
-    parameters: {c: 1.0, num_lat: 10}
+    parameters: {c: 8, item_var: 0.01, iterations: 20, num_lat: 10, stop_criteria: 0.0009,
+      user_var: 0.01, var: 0.05}
   HELF: null
   LinEGreedy:
     parameters: {epsilon: 0.1, num_lat: 10}
   LinUCB:
     parameters: {alpha: 1.0, num_lat: 5}
+  LinUCBPCA:
+    parameters: {alpha: 0.5, num_lat: 20}
   LinUCBvar:
     parameters: {alpha: 1.0, lambda_u: 0.1, num_lat: 10}
   LinearEGreedy:
@@ -650,6 +651,8 @@ Yahoo Music:
   OurMethod1Mod:
     parameters: {alpha: 1, num_lat: 5, stop: null, weight_method: change}
   OurMethod2:
+    parameters: {alpha: 0.5, num_lat: 20}
+  OurMethod2PCA:
     parameters: {alpha: 0.5, num_lat: 20}
   OurMethod2var:
     parameters: {alpha: 1.0, lambda_u: 0.01, num_lat: 10}
