@@ -24,6 +24,7 @@ from utils.DirectoryDependent import DirectoryDependent
 from cycler import cycler
 from collections import defaultdict
 import argparse
+import matplotlib.ticker as mtick
 
 
 parser = argparse.ArgumentParser()
@@ -128,7 +129,7 @@ for dataset_preprocessor in datasets_preprocessors:
                 metric_class_name][interactors_general_settings[itr_class.__name__]['name']]=                   np.array(metric_values[-1])
 
 
-def plot_hits_users_coverage(methods_users_hits, title="Users Coverage x Hits"):
+def plot_hits_users_coverage(methods_users_hits, title="Users Coverage x Hits",xlabel="Hits",ylabel="Users Coverage %"):
     """
     Args:
       methods_users_hits (dict): Dict where keys are names of methods 
@@ -144,12 +145,13 @@ def plot_hits_users_coverage(methods_users_hits, title="Users Coverage x Hits"):
     plt.rcParams.update({'font.size': 20})
     plt.subplots_adjust(top=0.80)
 
-    ax1.set_xlabel("Hits", fontsize='medium')
-    ax1.set_ylabel("Users Coverage %", fontsize='medium')
+    ax1.set_xlabel(xlabel, fontsize='medium')
+    ax1.set_ylabel(ylabel, fontsize='medium')
+    ax1.yaxis.set_major_formatter(mtick.PercentFormatter())
     
-    colors = ["b--", "g--", "y--", "b--", "c--", "m--", "r-*", "b-d", "g-o"]
+    colors = ["b", "g", "y", "tab:brown", "c", "m", "r", "tab:orange", "tab:pink"]
     for i, (method, hits) in enumerate(methods_users_hits.items()):
-        ax1.plot(list(range(0, len(hits))), hits, colors[i], label=method)
+        ax1.plot(list(range(0, len(hits))), hits, colors[i], label=method,linestyle='dashed')
 
     ax1.legend(ncol=1)
     ax1.tick_params(labelsize=18)
@@ -176,6 +178,10 @@ for dataset_preprocessor in datasets_preprocessors:
     fig = plot_hits_users_coverage(count_hits(methods_users_hits),f"Users Coverage $\\times$ Hits ({dataset_preprocessor['name']})")
 
     fig.savefig(os.path.join(DirectoryDependent().DIRS["img"],f'plot_hits_users_coverage_{dataset_preprocessor["name"]}.png'),bbox_inches = 'tight')
+
+    fig = plot_hits_users_coverage({k:np.cumsum(v) for k,v in count_hits(methods_users_hits).items()},f"Users Coverage $\\times$ Hits ({dataset_preprocessor['name']})",ylabel="Users Coverage Cumulated %")
+
+    fig.savefig(os.path.join(DirectoryDependent().DIRS["img"],f'plot_hits_users_coverage_cumulated_{dataset_preprocessor["name"]}.png'),bbox_inches = 'tight')
     
 
 # datasets_metrics_users_values[]
