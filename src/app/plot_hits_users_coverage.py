@@ -151,7 +151,7 @@ def plot_hits_users_coverage(methods_users_hits, title="Users Coverage x Hits"):
     for i, (method, hits) in enumerate(methods_users_hits.items()):
         ax1.plot(list(range(0, len(hits))), hits, colors[i], label=method)
 
-    ax1.legend(ncol=1)
+    ax1.legend(ncol=2)
     ax1.tick_params(labelsize=18)
     plt.xticks(list(range(0, len(hits)+10, 10)))
     plt.yticks(list(range(0, len(hits)+10, 10)))
