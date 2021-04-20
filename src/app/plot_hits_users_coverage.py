@@ -128,22 +128,50 @@ for dataset_preprocessor in datasets_preprocessors:
                 metric_class_name][interactors_general_settings[itr_class.__name__]['name']]=                   np.array(metric_values[-1])
 
 
-def plot_hits_users_coverage(methods_users_hits):
+def plot_hits_users_coverage(methods_users_hits, title="Users Coverage x Hits"):
     """
     Args:
-        methods_users_hits (dict): Dict where keys are names of methods and values are np.array containing number of hits achieved by each user
+      methods_users_hits (dict): Dict where keys are names of methods 
+      and values are np.array containing number of hits achieved by each user
     Returns:
-        matplotlib.pyplot.figure: A figure of the users-coverage
+      matplotlib.pyplot.figure: A figure of the users-coverage
     """
+    
+    fig, ax1 = plt.subplots()
+    fig.set_size_inches(8, 6)
+    fig.suptitle(title, fontsize=20, y=0.88)
 
-    fig, ax = plt.subplots()
+    plt.rcParams.update({'font.size': 20})
+    plt.subplots_adjust(top=0.80)
+
+    ax1.set_xlabel("Hits", fontsize='medium')
+    ax1.set_ylabel("Users Coverage %", fontsize='medium')
+    
+    colors = ["b--", "g--", "y--", "b--", "c--", "m--", "r-*", "b-d", "g-o"]
+    for i, (method, hits) in enumerate(methods_users_hits.items()):
+        ax1.plot(list(range(0, len(hits))), hits, colors[i], label=method)
+
+    ax1.legend(ncol=1)
+    ax1.tick_params(labelsize=18)
+
     return fig
 
+
+def count_hits(methods_users_hits, num_items=100):
+    list_hits = dict.fromkeys(methods_users_hits, [])
+    num_users = len(methods_users_hits["WSCB"])
+
+    for method, hits in methods_users_hits.items():
+        list_hits[method] = [(list(hits).count(i)/num_users)*100 for i in range(0, num_items)]
+
+    return list_hits
+
+plot_hits_users_coverage(list_hits)
 for dataset_preprocessor in datasets_preprocessors:
     methods_users_hits =dict(datasets_metrics_users_values[dataset_preprocessor['name']]['Hits'])
     # with open('outlk.txt','w') as f:
         # f.write(str(methods_users_hits))
-    fig = plot_hits_users_coverage(methods_users_hits)
+    fig = plot_hits_users_coverage(count_hits(methods_users_hits))
 
     fig.savefig(os.path.join(DirectoryDependent().DIRS["img"],f'plot_hits_users_coverage.png'),bbox_inches = 'tight')
     
