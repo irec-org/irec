@@ -166,14 +166,14 @@ def count_hits(methods_users_hits, num_items=100):
 
     return list_hits
 
-plot_hits_users_coverage(list_hits)
+# plot_hits_users_coverage(list_hits)
 for dataset_preprocessor in datasets_preprocessors:
-    methods_users_hits =dict(datasets_metrics_users_values[dataset_preprocessor['name']]['Hits'])
+    methods_users_hits = dict(datasets_metrics_users_values[dataset_preprocessor['name']]['Hits'])
     # with open('outlk.txt','w') as f:
         # f.write(str(methods_users_hits))
-    fig = plot_hits_users_coverage(count_hits(methods_users_hits))
+    fig = plot_hits_users_coverage(count_hits(methods_users_hits),f"Users Coverage $\\times$ Hits ({dataset_preprocessor['name']})")
 
-    fig.savefig(os.path.join(DirectoryDependent().DIRS["img"],f'plot_hits_users_coverage.png'),bbox_inches = 'tight')
+    fig.savefig(os.path.join(DirectoryDependent().DIRS["img"],f'plot_hits_users_coverage_{dataset_preprocessor["name"]}.png'),bbox_inches = 'tight')
     
 
 # datasets_metrics_users_values[]
