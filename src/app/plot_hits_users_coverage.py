@@ -129,7 +129,7 @@ for dataset_preprocessor in datasets_preprocessors:
                 metric_class_name][interactors_general_settings[itr_class.__name__]['name']]=                   np.array(metric_values[-1])
 
 
-def plot_hits_users_coverage(methods_users_hits, title="Users Coverage x Hits",xlabel="Hits",ylabel="Users Coverage %"):
+def plot_hits_users_coverage(methods_users_hits, title="Users Coverage x Cum. Precision", xlabel="Cumulative Precision", ylabel='Users Coverage - P(X ≤ x)'):
     """
     Args:
       methods_users_hits (dict): Dict where keys are names of methods 
@@ -139,25 +139,27 @@ def plot_hits_users_coverage(methods_users_hits, title="Users Coverage x Hits",x
     """
     
     fig, ax1 = plt.subplots()
-    fig.set_size_inches(8, 6)
-    fig.suptitle(title, fontsize=20, y=0.88)
+    fig.set_size_inches(5, 4)
+    fig.suptitle(title, fontsize=14, y=0.88)
 
-    plt.rcParams.update({'font.size': 20})
+    plt.rcParams.update({'font.size': 10})
     plt.subplots_adjust(top=0.80)
 
     ax1.set_xlabel(xlabel, fontsize='medium')
     ax1.set_ylabel(ylabel, fontsize='medium')
     ax1.yaxis.set_major_formatter(mtick.PercentFormatter())
     
-    colors = ["b", "g", "y", "tab:brown", "c", "m", "r", "tab:orange", "tab:pink"]
+    colors = ["b-4", "g-1", "y->", "tab:brown", "c-*", "m-3", "tab:orange", "r-2", "tab:pink"]
+    styles = ["-", "-", "-", "dotted", "-", "-", "dashdot", "-", "dashed"]
+
     for i, (method, hits) in enumerate(methods_users_hits.items()):
-        ax1.plot(list(range(0, len(hits))), hits, colors[i], label=method,linestyle='dashed')
+        method = method.replace(" (PMF)", "")
+        ax1.plot(list(range(0, len(hits))), hits, colors[i], label=method, linestyle=styles[i])
 
     ax1.legend(ncol=1) 
-    ax1.tick_params(labelsize=18)
+    ax1.tick_params(labelsize=12) 
     plt.xticks(list(range(0, len(hits)+10, 10)))
-    plt.yticks(list(range(0, len(hits)+10, 10)))
-
+    
     return fig
  
 
