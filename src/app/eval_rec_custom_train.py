@@ -67,10 +67,10 @@ interactors_classes = [
 ]
 # history_rates_to_train = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]
 
-# history_rates_to_train = [0.1,0.3,0.5,0.6]
+history_rates_to_train = [0.1,0.3,0.5,0.6]
 
 # history_rates_to_train = [0.1,0.3,0.5,0.6,0.8]
-history_rates_to_train = [0.8]
+# history_rates_to_train = [0.8]
 # def process(history_rate, dataset_preprocessor, dataset, consumption_matrix,
             # dm):
 

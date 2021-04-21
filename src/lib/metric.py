@@ -555,7 +555,6 @@ class UsersCoverage(Metric):
             # else:
                 # self.users_covered[uid] = False
 
-
 def mapk(actual, predicted, k):
     score = 0.0
     num_hits = 0.0
