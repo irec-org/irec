@@ -3,7 +3,8 @@ NICF:
 PTS:
   name: PTS
 Random:
-  name: Random
+  #name: Random
+  name: Rand
 LinUCB:
   name: LinUCB (MF)
 LinUCBvar:
@@ -21,7 +22,8 @@ OurMethod5:
 OurMethodBalanced:
   name: WSCB uncertainty-based
 LinearUCB:
-  name: Linear UCB (PMF)
+  #name: Linear UCB (PMF)
+  name: LinUCB
 LinearUCB1:
   name: Linear UCB (p=1) (PMF)
 COFIBA:
@@ -41,7 +43,8 @@ UCBLearner:
 GLM_UCB:
   name: GLM-UCB (PMF)
 LinearEGreedy:
-  name: Linear e-Greedy (PMF)
+  #name: Linear e-Greedy
+  name: ε-Greedy
 LinearThompsonSampling:
   name: Linear TS (PMF)
 EGreedy:
