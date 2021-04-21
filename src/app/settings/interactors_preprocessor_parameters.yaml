@@ -1,4 +1,7 @@
 Good Books:
+  GLM_UCB:
+    parameters: {c: 4, item_var: 0.01, iterations: 20, num_lat: 10, stop_criteria: 0.0009,
+      user_var: 0.01, var: 0.05}
   ALEntropy: null
   ALMostPopular: null
   COFIBA:
@@ -10,9 +13,6 @@ Good Books:
     parameters: {epsilon: 0.2}
   Entropy: null
   Entropy0: null
-  GLM_UCB:
-    parameters: {c: 1, item_var: 0.01, iterations: 20, num_lat: 20, stop_criteria: 0.0009,
-      user_var: 0.01, var: 0.05}
   HELF: null
   LinEGreedy:
     parameters: {epsilon: 0.1, num_lat: 10}
@@ -165,6 +165,9 @@ Good Books Sampled:
     parameters: {num_lat: 10, stop: 14}
   kNNBandit: null
 Good Books Validation:
+  GLM_UCB:
+    parameters: {c: 4, item_var: 0.01, iterations: 20, num_lat: 10, stop_criteria: 0.0009,
+      user_var: 0.01, var: 0.05}
   LinearEGreedyEntropy:
     parameters: {epsilon: 0.1, item_var: 0.01, iterations: 20, num_lat: 20, stop_criteria: 0.0009,
       user_var: 0.01, var: 0.05}
@@ -261,6 +264,9 @@ MovieLens 100k (B):
   kNNBandit:
     parameters: {alpha_0: 1, beta_0: 100, k: 1}
 MovieLens 10M:
+  GLM_UCB:
+    parameters: {c: 2, item_var: 0.01, iterations: 20, num_lat: 10, stop_criteria: 0.0009,
+      user_var: 0.01, var: 0.05}
   ALEntropy: null
   ALMostPopular: null
   COFIBA:
@@ -427,6 +433,9 @@ MovieLens 10M Sampled:
     parameters: {num_lat: 10, stop: 14}
   kNNBandit: null
 MovieLens 10M Validation:
+  GLM_UCB:
+    parameters: {c: 2, item_var: 0.01, iterations: 20, num_lat: 10, stop_criteria: 0.0009,
+      user_var: 0.01, var: 0.05}
   LinearEGreedyEntropy:
     parameters: {epsilon: 0.1, item_var: 0.01, iterations: 20, num_lat: 20, stop_criteria: 0.0009,
       user_var: 0.01, var: 0.05}
@@ -574,6 +583,9 @@ MovieLens 1M (B):
   kNNBandit:
     parameters: {alpha_0: 1, beta_0: 1, k: 1}
 Yahoo Music:
+  GLM_UCB:
+    parameters: {c: 8, item_var: 0.01, iterations: 20, num_lat: 10, stop_criteria: 0.0009,
+      user_var: 0.01, var: 0.05}
   ALEntropy: null
   ALMostPopular: null
   COFIBA:
@@ -585,9 +597,6 @@ Yahoo Music:
     parameters: {epsilon: 0.2}
   Entropy: null
   Entropy0: null
-  GLM_UCB:
-    parameters: {c: 8, item_var: 0.01, iterations: 20, num_lat: 10, stop_criteria: 0.0009,
-      user_var: 0.01, var: 0.05}
   HELF: null
   LinEGreedy:
     parameters: {epsilon: 0.1, num_lat: 10}
@@ -740,6 +749,9 @@ Yahoo Music Sampled:
     parameters: {num_lat: 10, stop: 14}
   kNNBandit: null
 Yahoo Music Validation:
+  GLM_UCB:
+    parameters: {c: 8, item_var: 0.01, iterations: 20, num_lat: 10, stop_criteria: 0.0009,
+      user_var: 0.01, var: 0.05}
   LinearEGreedyEntropy:
     parameters: {epsilon: 0.1, item_var: 0.01, iterations: 20, num_lat: 10, stop_criteria: 0.0009,
       user_var: 0.01, var: 0.05}
