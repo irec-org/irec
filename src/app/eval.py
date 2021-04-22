@@ -60,8 +60,9 @@ BUFFER_SIZE_EVALUATOR = 50
 
 nums_interactions_to_show = [5, 10, 20, 50, 100]
 
-metrics_classes = [metric.Recall, metric.Hits, metric.EPC, metric.UsersCoverage, metric.ILD]
-metrics_classes = [metric.GiniCoefficientInv]
+metrics_classes = [metric.Recall, metric.Hits, metric.EPC, metric.UsersCoverage, metric.ILD,metric.GiniCoefficientInv]
+# metrics_classes = [metric.Recall, metric.Hits, metric.EPC, metric.UsersCoverage, metric.ILD]
+# metrics_classes = [metric.GiniCoefficientInv]
 #metrics_classes = [metric.Recall, metric.Hits, metric.EPC]
 # metrics_classes = [metric.ILD,metric.UsersCoverage]
 
