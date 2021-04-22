@@ -177,13 +177,17 @@ for dataset_preprocessor in datasets_preprocessors:
     methods_users_hits = dict(datasets_metrics_users_values[dataset_preprocessor['name']]['Hits'])
     # with open('outlk.txt','w') as f:
         # f.write(str(methods_users_hits))
-    fig = plot_hits_users_coverage(count_hits(methods_users_hits),f"Users Coverage $\\times$ Hits ({dataset_preprocessor['name']})")
+    fig = plot_hits_users_coverage(count_hits(methods_users_hits),f"Users Coverage $\\times$ Hits ({dataset_preprocessor['name']})",ylabel="Users Coverage %")
 
     fig.savefig(os.path.join(DirectoryDependent().DIRS["img"],f'plot_hits_users_coverage_{dataset_preprocessor["name"]}.png'),bbox_inches = 'tight')
+# 
+    fig = plot_hits_users_coverage({k:np.cumsum(v) for k,v in count_hits(methods_users_hits).items()},f"Users Coverage $\\times$ Hits ({dataset_preprocessor['name']})",ylabel='Users Coverage - P(X ≤ x)')
 
-    fig = plot_hits_users_coverage({k:np.cumsum(v) for k,v in count_hits(methods_users_hits).items()},f"Users Coverage $\\times$ Hits ({dataset_preprocessor['name']})",ylabel="Users Coverage Cumulated %")
+    fig.savefig(os.path.join(DirectoryDependent().DIRS["img"],f'plot_hits_users_coverage_cdf_{dataset_preprocessor["name"]}.png'),bbox_inches = 'tight')
 
-    fig.savefig(os.path.join(DirectoryDependent().DIRS["img"],f'plot_hits_users_coverage_cumulated_{dataset_preprocessor["name"]}.png'),bbox_inches = 'tight')
+    fig = plot_hits_users_coverage({k:(np.cumsum(np.array(v)[::-1]))[::-1]-np.array(v) for k,v in count_hits(methods_users_hits).items()},f"Users Coverage $\\times$ Hits ({dataset_preprocessor['name']})",ylabel='Users Coverage - P(X > x)')
+
+    fig.savefig(os.path.join(DirectoryDependent().DIRS["img"],f'plot_hits_users_coverage_ccdf_{dataset_preprocessor["name"]}.png'),bbox_inches = 'tight')
     
 
 # datasets_metrics_users_values[]
