@@ -1,4 +1,5 @@
 from os.path import dirname, realpath, sep, pardir
+import pickle
 import os
 import sys
 sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "lib")
@@ -32,6 +33,7 @@ parser.add_argument('-r', type=str, default=None)
 # parser.add_argument('-i', default=[5,10,20,50,100],nargs='*')
 parser.add_argument('-m',nargs='*')
 parser.add_argument('-b',nargs='*')
+parser.add_argument('--dump', default=False, action='store_true')
 args = parser.parse_args()
 
 plt.rcParams['axes.prop_cycle'] = cycler(color='krbgmyc')
@@ -175,7 +177,9 @@ def count_hits(methods_users_hits, num_items=100):
 # plot_hits_users_coverage(list_hits)
 for dataset_preprocessor in datasets_preprocessors:
     methods_users_hits = dict(datasets_metrics_users_values[dataset_preprocessor['name']]['Hits'])
-    # with open('outlk.txt','w') as f:
+    if args.dump:
+        with open('methods_users_hits_{}.pickle'.format(dataset_preprocessor['name']),'wb') as f:
+            pickle.dump(methods_users_hits,f)
         # f.write(str(methods_users_hits))
     fig = plot_hits_users_coverage(count_hits(methods_users_hits),f"Users Coverage $\\times$ Hits ({dataset_preprocessor['name']})",ylabel="Users Coverage %")
 
