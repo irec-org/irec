@@ -5,6 +5,7 @@ sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "lib")
 
 import inquirer
 import interactors
+import random
 import mf
 from utils.InteractorRunner import InteractorRunner
 from sklearn.decomposition import NMF
@@ -14,6 +15,7 @@ from utils.DatasetManager import DatasetManager
 import yaml
 from concurrent.futures import ProcessPoolExecutor, wait, FIRST_COMPLETED
 import time
+from collections import defaultdict
 
 import argparse
 
@@ -50,13 +52,43 @@ def main():
         dm.initialize_engines(dataset_preprocessor)
         dm.load()
         data=  dm.dataset_preprocessed[0].data
-        with open('train_ncf_{}.csv'.format(dataset_preprocessor['name']),'w+') as f:
+        users_consumed_items = defaultdict(set)
+        all_items = set(list(range(dm.dataset_preprocessed[0].num_items)))
+        with open('{}.train.rating'.format(dataset_preprocessor['name']),'w+') as f:
             for i in range(len(data)):
                 uid = int(data[i,0])
                 iid = int(data[i,1])
                 rating = data[i,2]
                 timestamp = int(data[i,3])
                 f.write('{}\t{}\t{}\t{}\n'.format(uid,iid,rating,timestamp))
+                users_consumed_items[uid].add(iid)
+        data=  dm.dataset_preprocessed[1].data
+        with open('{}.test.rating'.format(dataset_preprocessor['name']),'w+') as f:
+            for i in range(len(data)):
+                uid = int(data[i,0])
+                iid = int(data[i,1])
+                rating = data[i,2]
+                timestamp = int(data[i,3])
+                f.write('{}\t{}\t{}\t{}\n'.format(uid,iid,rating,timestamp))
+                users_consumed_items[uid].add(iid)
+        
+        users_negative_items = {uid: list(map(str,list(all_items-items))) for uid, items in users_consumed_items.items()}
+            
+        with open('{}.test.negative'.format(dataset_preprocessor['name']),'w+') as f:
+            for i in range(len(data)):
+                uid = int(data[i,0])
+                sampled_negative_items = random.sample(users_negative_items[uid],99)
+                f.write('({},{})\t{}\n'.format(uid,iid,'\t'.join(sampled_negative_items)))
+
+
+        # data=  dm.dataset_preprocessed[1].data
+        # with open('test_ncf_{}.csv'.format(dataset_preprocessor['name']),'w+') as f:
+            # for i in range(len(data)):
+                # uid = int(data[i,0])
+                # iid = int(data[i,1])
+                # rating = data[i,2]
+                # timestamp = int(data[i,3])
+                # f.write('{}\t{}\t{}\t{}\n'.format(uid,iid,rating,timestamp))
 
 
 if __name__ == '__main__':
