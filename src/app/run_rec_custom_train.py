@@ -69,11 +69,17 @@ interactors_classes = [eval('interactors.'+interactor) for interactor in args.m]
 # history_rates_to_train = [0.1,0.3,0.5,0.8]
 # history_rates_to_train = [0.1,0.3,0.5,0.6]
 # history_rates_to_train = [0.1,0.3]
-history_rates_to_train = [0.8]
+# history_rates_to_train = [0.8]
+history_rates_to_train = [0.1]
 
 def process(history_rate,dataset_preprocessor,dataset,consumption_matrix,dm,interactor_class):
     try:
-        itr = interactor_class(**interactors_preprocessor_paramaters[dataset_preprocessor['name']][interactor_class.__name__]['parameters'])
+        parameters = interactors_preprocessor_paramaters[dataset_preprocessor['name']][interactor_class.__name__]
+        if parameters == None:
+            parameters = dict()
+        else:
+            parameters = parameters['parameters']
+        itr = interactor_class(**parameters)
 
         start_evaluation_policy = eval('evaluation_policy.'+args.estart)(**evaluation_policies_parameters[args.estart])
         start_evaluation_policy.recommend_test_data_rate_limit = history_rate
@@ -89,7 +95,12 @@ def process(history_rate,dataset_preprocessor,dataset,consumption_matrix,dm,inte
             pdm.save(file_name_s,
                      history_items_recommended)
 
-        itr = interactor_class(**interactors_preprocessor_paramaters[dataset_preprocessor['name']][interactor_class.__name__]['parameters'])
+        parameters = interactors_preprocessor_paramaters[dataset_preprocessor['name']][interactor_class.__name__]
+        if parameters == None:
+            parameters = dict()
+        else:
+            parameters = parameters['parameters']
+        itr = interactor_class(**parameters)
 
         last_evaluation_policy = eval('evaluation_policy.'+args.elast)(**evaluation_policies_parameters[args.elast])
         file_name = 'e_'+str(history_rate)+'_'+InteractorCache().get_id(dm,last_evaluation_policy,itr)
