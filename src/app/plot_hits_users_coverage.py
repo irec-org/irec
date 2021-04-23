@@ -177,7 +177,7 @@ def plot_hits_users_coverage(dataset_methods_users_hits, title="Users Coverage x
  
 
 def count_hits(methods_users_hits, num_items=100):
-    list_hits = dict.fromkeys(methods_users_hits, [])
+    list_hits = dict.fromkeys(methods_users_hits, [])  
     num_users = len(methods_users_hits["WSCB"])
 
     for method, hits in methods_users_hits.items():
