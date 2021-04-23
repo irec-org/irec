@@ -41,7 +41,8 @@ PPELPE:
 UCBLearner:
   name: UCB-Learner (MF)
 GLM_UCB:
-  name: GLM-UCB (PMF)
+  #name: GLM-UCB (PMF)
+  name: GLM-UCB
 LinearEGreedy:
   #name: Linear e-Greedy
   name: ε-Greedy
