@@ -27,6 +27,9 @@ from collections import defaultdict
 import argparse
 import matplotlib.ticker as mtick
 
+import warnings
+warnings.filterwarnings("ignore",category=plt.cbook.mplDeprecation)
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-r', type=str, default=None)
