@@ -131,7 +131,7 @@ def process(history_rate,dataset_preprocessor,dataset,consumption_matrix,dm,inte
         users_consumed_items = defaultdict(set)
         data= train_dataset.data
 
-        with open('{}.train.rating'.format(dataset_preprocessor['name']),'w+') as f:
+        with open('{}.train.rating'.format(dataset_preprocessor['name']),'w') as f:
             for i in range(len(data)):
                 uid = int(data[i,0])
                 iid = int(data[i,1])
@@ -140,7 +140,7 @@ def process(history_rate,dataset_preprocessor,dataset,consumption_matrix,dm,inte
                 f.write('{}\t{}\t{}\t{}\n'.format(uid,iid,rating,timestamp))
                 users_consumed_items[uid].add(iid)
         data= test_dataset.data
-        with open('{}.test.rating'.format(dataset_preprocessor['name']),'w+') as f:
+        with open('{}.test.rating'.format(dataset_preprocessor['name']),'w') as f:
             for i in range(len(data)):
                 uid = int(data[i,0])
                 iid = int(data[i,1])
@@ -151,7 +151,7 @@ def process(history_rate,dataset_preprocessor,dataset,consumption_matrix,dm,inte
         
         users_negative_items = {uid: list(map(str,list(all_items-items))) for uid, items in users_consumed_items.items()}
             
-        with open('{}.test.negative'.format(dataset_preprocessor['name']),'w+') as f:
+        with open('{}.test.negative'.format(dataset_preprocessor['name']),'w') as f:
             for i in range(len(data)):
                 uid = int(data[i,0])
                 sampled_negative_items = random.sample(users_negative_items[uid],99)
