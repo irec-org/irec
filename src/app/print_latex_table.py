@@ -45,6 +45,7 @@ metrics_classes = [metric.Hits,
         metric.ILD,
         metric.GiniCoefficientInv,
         ]
+metrics_classes_names = list(map(lambda x: x.__name__, metrics_classes))
 metrics_names = ['Cumulative Precision', 
         'Cumulative Recall', 
         'Cumulative EPC', 
@@ -52,10 +53,8 @@ metrics_names = ['Cumulative Precision',
         'Cumulative ILD',
         '1-(Gini-Index)'
         ]
-
-# dm = DatasetManager()
-# datasets_preprocessors = dm.request_datasets_preprocessors()
-# print(datasets_preprocessors_classes)
+metrics_weights = {'Hits': 0.3,'Recall':0.3,'EPC':0.1,'UsersCoverage':0.1,'ILD':0.1,'GiniCoefficientInv':0.1}
+# metrics_weights ={i: 1/len(metrics_classes_names) for i in metrics_classes_names}
 
 with open("settings"+sep+"datasets_preprocessors_parameters.yaml") as f:
     loader = yaml.SafeLoader
@@ -142,7 +141,7 @@ datasets_metrics_users_values = defaultdict(
 for dataset_preprocessor in datasets_preprocessors:
     dm.initialize_engines(dataset_preprocessor)
 
-    for metric_class_name in map(lambda x: x.__name__, metrics_classes):
+    for metric_class_name in metrics_classes_names:
         for itr_class in interactors_classes:
             itr = ir.create_interactor(itr_class)
             pdm = PersistentDataManager(directory='results')
@@ -160,6 +159,52 @@ for dataset_preprocessor in datasets_preprocessors:
                 metric_class_name][itr_class.__name__].extend(
                     np.array([metric_values[i] for i in range(len(nums_interactions_to_show))]))
 
+            # print(datasets_metrics_values[dataset_preprocessor['name']][
+                # metric_class_name][itr_class.__name__])
+            # print(datasets_metrics_users_values[dataset_preprocessor['name']][
+                # metric_class_name][itr_class.__name__])
+
+
+utility_scores = defaultdict(
+        lambda: defaultdict(lambda: defaultdict(
+        lambda:dict())))
+method_utility_scores = defaultdict(
+        lambda: defaultdict(lambda: dict))
+for num_interaction in range(len(nums_interactions_to_show)):
+    for dataset_preprocessor in datasets_preprocessors:
+        dm.initialize_engines(dataset_preprocessor)
+        for metric_class_name in metrics_classes_names:
+            for itr_class in interactors_classes:
+                metric_max_value = np.max(list(map(lambda x:x[num_interaction],datasets_metrics_values[dataset_preprocessor['name']][
+                    metric_class_name].values())))
+                metric_min_value = np.min(list(map(lambda x:x[num_interaction],datasets_metrics_values[dataset_preprocessor['name']][
+                    metric_class_name].values())))
+                metric_value = datasets_metrics_values[dataset_preprocessor['name']][
+                                metric_class_name][itr_class.__name__][num_interaction]
+                utility_scores[dataset_preprocessor['name']][metric_class_name][itr_class.__name__][num_interaction] =\
+                        (metric_value - metric_min_value)/(metric_max_value-metric_min_value)
+
+# methods_utilities = defaultdict(
+        # lambda: defaultdict(lambda: dict()))
+for num_interaction in range(len(nums_interactions_to_show)):
+    for dataset_preprocessor in datasets_preprocessors:
+        dm.initialize_engines(dataset_preprocessor)
+        # for metric_class_name in map(lambda x: x.__name__, metrics_classes):
+        for itr_class in interactors_classes:
+            # print([utility_scores[dataset_preprocessor['name']][metric_class_name][itr_class.__name__][num_interaction]*metrics_weights[metric_class_name] for metric_class_name in metrics_classes_names])
+            us= [utility_scores[dataset_preprocessor['name']][metric_class_name][itr_class.__name__][num_interaction]*metrics_weights[metric_class_name] for metric_class_name in metrics_classes_names]
+            # print(us)
+            maut = np.sum(us)
+            datasets_metrics_values[dataset_preprocessor['name']]['MAUT'][itr_class.__name__] = []
+            datasets_metrics_users_values[dataset_preprocessor['name']]['MAUT'][itr_class.__name__] = []
+            datasets_metrics_values[dataset_preprocessor['name']]['MAUT'][itr_class.__name__] = np.array([maut]*len(nums_interactions_to_show))
+            datasets_metrics_users_values[dataset_preprocessor['name']]['MAUT'][itr_class.__name__] = np.array([[maut]*5]*len(nums_interactions_to_show))
+            # print('maut',maut,datasets_metrics_values[dataset_preprocessor['name']]['MAUT'][itr_class.__name__],datasets_metrics_users_values[dataset_preprocessor['name']]['MAUT'][itr_class.__name__])
+            
+
+metrics_classes_names.append('MAUT')
+metrics_names.append('MAUT')
+
 datasets_metrics_gain = defaultdict(
         lambda: defaultdict(lambda: defaultdict(lambda: ['']*len(nums_interactions_to_show))))
 
@@ -169,10 +214,9 @@ bullet_str = r'\textcolor[rgb]{0.7,0.7,0.0}{$\bullet$}'
 triangle_up_str = r'\textcolor[rgb]{00,0.45,0.10}{$\blacktriangle$}'
 triangle_down_str = r'\textcolor[rgb]{0.7,00,00}{$\blacktriangledown$}'
 for dataset_preprocessor in datasets_preprocessors:
-    for metric_class_name in map(lambda x: x.__name__, metrics_classes):
+    for metric_class_name in metrics_classes_names:
         for i, num in enumerate(nums_interactions_to_show):
         # for itr_class in interactors_classes:
-
             datasets_metrics_best[dataset_preprocessor['name']][metric_class_name][max(datasets_metrics_values[dataset_preprocessor['name']][
                     metric_class_name].items(),key=lambda x: x[1][i])[0]][i] = True
             if args.r != None:
@@ -219,7 +263,7 @@ for dataset_preprocessor in datasets_preprocessors:
 
 
 for metric_name, metric_class_name in zip(
-        metrics_names, map(lambda x: x.__name__, metrics_classes)):
+        metrics_names, metrics_classes_names):
     rtex += r"""
 \hline
 \hline
