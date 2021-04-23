@@ -54,6 +54,7 @@ metrics_names = ['Cumulative Precision',
         '1-(Gini-Index)'
         ]
 metrics_weights = {'Hits': 0.3,'Recall':0.3,'EPC':0.1,'UsersCoverage':0.1,'ILD':0.1,'GiniCoefficientInv':0.1}
+# metrics_weights = {'Hits': 0.25,'Recall':0.25,'EPC':0.125,'UsersCoverage':0.125,'ILD':0.125,'GiniCoefficientInv':0.125}
 # metrics_weights ={i: 1/len(metrics_classes_names) for i in metrics_classes_names}
 
 with open("settings"+sep+"datasets_preprocessors_parameters.yaml") as f:
@@ -183,6 +184,7 @@ for num_interaction in range(len(nums_interactions_to_show)):
                                 metric_class_name][itr_class.__name__][num_interaction]
                 utility_scores[dataset_preprocessor['name']][metric_class_name][itr_class.__name__][num_interaction] =\
                         (metric_value - metric_min_value)/(metric_max_value-metric_min_value)
+                # print(f"({metric_value} - {metric_min_value})/({metric_max_value}-{metric_min_value})")
 
 # methods_utilities = defaultdict(
         # lambda: defaultdict(lambda: dict()))
@@ -195,12 +197,16 @@ for num_interaction in range(len(nums_interactions_to_show)):
             us= [utility_scores[dataset_preprocessor['name']][metric_class_name][itr_class.__name__][num_interaction]*metrics_weights[metric_class_name] for metric_class_name in metrics_classes_names]
             # print(us)
             maut = np.sum(us)
-            datasets_metrics_values[dataset_preprocessor['name']]['MAUT'][itr_class.__name__] = []
-            datasets_metrics_users_values[dataset_preprocessor['name']]['MAUT'][itr_class.__name__] = []
-            datasets_metrics_values[dataset_preprocessor['name']]['MAUT'][itr_class.__name__] = np.array([maut]*len(nums_interactions_to_show))
-            datasets_metrics_users_values[dataset_preprocessor['name']]['MAUT'][itr_class.__name__] = np.array([[maut]*5]*len(nums_interactions_to_show))
+            # datasets_metrics_values[dataset_preprocessor['name']]['MAUT'][itr_class.__name__] = []
+            # datasets_metrics_users_values[dataset_preprocessor['name']]['MAUT'][itr_class.__name__] = []
+            datasets_metrics_values[dataset_preprocessor['name']]['MAUT'][itr_class.__name__].append(maut)
+            # if datasets_metrics_users_values[dataset_preprocessor['name']]['MAUT'][itr_class.__name__] == None:
+            datasets_metrics_users_values[dataset_preprocessor['name']]['MAUT'][itr_class.__name__].append(np.array([maut]*100))
+
+            # print(num_interaction,us,maut,datasets_metrics_values[dataset_preprocessor['name']]['MAUT'][itr_class.__name__])
             # print('maut',maut,datasets_metrics_values[dataset_preprocessor['name']]['MAUT'][itr_class.__name__],datasets_metrics_users_values[dataset_preprocessor['name']]['MAUT'][itr_class.__name__])
             
+# print(datasets_metrics_values['Yahoo Music']['MAUT'])
 
 metrics_classes_names.append('MAUT')
 metrics_names.append('MAUT')
