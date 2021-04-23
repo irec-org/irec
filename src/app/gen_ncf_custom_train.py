@@ -130,6 +130,7 @@ def process(history_rate,dataset_preprocessor,dataset,consumption_matrix,dm,inte
         all_items = set(list(range(train_dataset.num_items)))
         users_consumed_items = defaultdict(set)
         data= train_dataset.data
+        print("Writing training data")
 
         with open('{}.train.rating'.format(dataset_preprocessor['name']),'w') as f:
             for i in range(len(data)):
@@ -140,6 +141,8 @@ def process(history_rate,dataset_preprocessor,dataset,consumption_matrix,dm,inte
                 f.write('{}\t{}\t{}\t{}\n'.format(uid,iid,rating,timestamp))
                 users_consumed_items[uid].add(iid)
         data= test_dataset.data
+            
+        print("Test writing")
         with open('{}.test.rating'.format(dataset_preprocessor['name']),'w') as f:
             for i in range(len(data)):
                 uid = int(data[i,0])
@@ -148,13 +151,17 @@ def process(history_rate,dataset_preprocessor,dataset,consumption_matrix,dm,inte
                 timestamp = int(data[i,3])
                 f.write('{}\t{}\t{}\t{}\n'.format(uid,iid,rating,timestamp))
                 users_consumed_items[uid].add(iid)
+        print("Test writing finished")
         
-        users_negative_items = {uid: list(map(str,list(all_items-items))) for uid, items in users_consumed_items.items()}
+        # users_negative_items = {uid: list(map(str,list(all_items-items))) for uid, items in users_consumed_items.items()}
+        # users_negative_items = {uid: list(map(str,list(all_items-items))) for uid, items in users_consumed_items.items()
             
+        print("Test negative writing")
         with open('{}.test.negative'.format(dataset_preprocessor['name']),'w') as f:
             for i in range(len(data)):
                 uid = int(data[i,0])
-                sampled_negative_items = random.sample(users_negative_items[uid],99)
+                user_negative_items = list(map(str,list(all_items-users_consumed_items[uid])))
+                sampled_negative_items = random.sample(user_negative_items,99)
                 f.write('({},{})\t{}\n'.format(uid,iid,'\t'.join(sampled_negative_items)))
     except:
         print("Error Ocurred !!!!!!!!")
