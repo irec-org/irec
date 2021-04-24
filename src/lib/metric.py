@@ -636,8 +636,8 @@ def get_items_distance(matrix):
         # items_similarity = cov_matrix/np.sqrt(np.outer(cov_diag,cov_diag))
     else:
         items_similarity = np.corrcoef(matrix.T)
-    # items_similarity = (items_similarity+1)/2
-    items_similarity[items_similarity < 0] = 0
+    items_similarity = (items_similarity+1)/2
+    # items_similarity[items_similarity < 0] = 0
     return 1 - items_similarity
 
 

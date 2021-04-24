@@ -54,6 +54,7 @@ metrics_names = ['Cumulative Precision',
         '1-(Gini-Index)'
         ]
 metrics_weights = {'Hits': 0.3,'Recall':0.3,'EPC':0.1,'UsersCoverage':0.1,'ILD':0.1,'GiniCoefficientInv':0.1}
+# metrics_weights = {'Hits': 0.3,'Recall':0.3,'EPC':0.16666,'UsersCoverage':0.16666,'ILD':0.16666}
 # metrics_weights = {'Hits': 0.25,'Recall':0.25,'EPC':0.125,'UsersCoverage':0.125,'ILD':0.125,'GiniCoefficientInv':0.125}
 # metrics_weights ={i: 1/len(metrics_classes_names) for i in metrics_classes_names}
 
