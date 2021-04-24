@@ -1,6 +1,8 @@
 from os.path import dirname, realpath, sep, pardir
+import pickle
 import os
 import sys
+import json
 sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "lib")
 
 import inquirer
@@ -31,6 +33,7 @@ parser.add_argument('-r', type=str, default=None)
 parser.add_argument('-i', default=[5,10,20,50,100],nargs='*')
 parser.add_argument('-m',nargs='*')
 parser.add_argument('-b',nargs='*')
+parser.add_argument('--dump', default=False, action='store_true')
 args = parser.parse_args()
 
 plt.rcParams['axes.prop_cycle'] = cycler(color='krbgmyc')
@@ -207,7 +210,14 @@ for num_interaction in range(len(nums_interactions_to_show)):
             # print(num_interaction,us,maut,datasets_metrics_values[dataset_preprocessor['name']]['MAUT'][itr_class.__name__])
             # print('maut',maut,datasets_metrics_values[dataset_preprocessor['name']]['MAUT'][itr_class.__name__],datasets_metrics_users_values[dataset_preprocessor['name']]['MAUT'][itr_class.__name__])
             
+if args.dump:
+    # with open('datasets_metrics_values.pickle','wb') as f:
+        # pickle.dump(datasets_metrics_values,f)
+    with open('datasets_metrics_values.pickle','wb') as f:
+        pickle.dump(json.loads(json.dumps(datasets_metrics_values)),f)
+        # f.write(str(methods_users_hits))
 # print(datasets_metrics_values['Yahoo Music']['MAUT'])
+
 
 metrics_classes_names.append('MAUT')
 metrics_names.append('MAUT')
