@@ -160,6 +160,9 @@ def process(history_rate,dataset_preprocessor,dataset,consumption_matrix,dm,inte
         with open('{}.test.negative'.format(dataset_preprocessor['name']),'w') as f:
             for i in range(len(data)):
                 uid = int(data[i,0])
+                iid = int(data[i,1])
+                # rating = data[i,2]
+                # timestamp = int(data[i,3])
                 user_negative_items = list(map(str,list(all_items-users_consumed_items[uid])))
                 sampled_negative_items = random.sample(user_negative_items,99)
                 f.write('({},{})\t{}\n'.format(uid,iid,'\t'.join(sampled_negative_items)))
