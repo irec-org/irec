@@ -103,8 +103,8 @@ class ICTRTS(MFInteractor):
             topic = particle.select_z_topic(uid,item,reward)
             particle.update_parameters(uid,item,reward,topic)
             particle.sample_random_variables(uid,item,topic)
-            if i > 1000:
-                break
+            # if i > 1000:
+                # break
             # self.update(uid,item,reward,None)
 
         self.particles = [copy.deepcopy(particle) for _ in range(self.num_particles)]
