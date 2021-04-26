@@ -94,12 +94,20 @@ class ICTRTS(MFInteractor):
 
         self.num_total_items = self.train_dataset.num_total_items
         self.num_total_users = self.train_dataset.num_total_users
-        self.particles = [_Particle(self.num_total_users,self.num_total_items,self.num_lat) for i in range(self.num_particles)]
+        # self.particles = [_Particle(self.num_total_users,self.num_total_items,self.num_lat) for i in range(self.num_particles)]
+        particle = _Particle(self.num_total_users,self.num_total_items,self.num_lat)
         for i in tqdm(range(len(self.train_dataset.data))):
             uid = int(self.train_dataset.data[i,0])
             item = int(self.train_dataset.data[i,1])
             reward = self.train_dataset.data[i,2]
-            self.update(uid,item,reward,None)
+            topic = particle.select_z_topic(uid,item,reward)
+            particle.update_parameters(uid,item,reward,topic)
+            particle.sample_random_variables(uid,item,topic)
+            if i > 1000:
+                break
+            # self.update(uid,item,reward,None)
+
+        self.particles = [copy.deepcopy(particle) for _ in range(self.num_particles)]
         
     def predict(self,uid,candidate_items,num_req_items):
         items_score = np.zeros(len(candidate_items))

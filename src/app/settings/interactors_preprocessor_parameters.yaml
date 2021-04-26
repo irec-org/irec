@@ -206,6 +206,8 @@ Good Books Validation:
     parameters: {alpha: 0.25, num_lat: 20}
   kNNBandit: null
 MovieLens 100k (B):
+  ICTRTS:
+    parameters: {num_lat: 5, num_particles: 2}
   ALEntropy: null
   ALMostPopular: null
   COFIBA:

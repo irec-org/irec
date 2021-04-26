@@ -60,12 +60,12 @@ BUFFER_SIZE_EVALUATOR = 50
 
 nums_interactions_to_show = [5, 10, 20, 50, 100]
 
-# metrics_classes = [metric.Recall, metric.Hits, metric.EPC, metric.UsersCoverage, metric.ILD,metric.GiniCoefficientInv]
+metrics_classes = [metric.Recall, metric.Hits, metric.EPC, metric.UsersCoverage, metric.ILD,metric.GiniCoefficientInv]
 # metrics_classes = [metric.Recall, metric.Hits, metric.EPC, metric.UsersCoverage, metric.ILD]
 # metrics_classes = [metric.GiniCoefficientInv]
 #metrics_classes = [metric.Recall, metric.Hits, metric.EPC]
 # metrics_classes = [metric.ILD,metric.UsersCoverage]
-metrics_classes = [metric.ILD]
+# metrics_classes = [metric.ILD]
 
 interactors_preprocessor_paramaters = yaml.load(
     open("settings" + sep + "interactors_preprocessor_parameters.yaml"),
