@@ -104,7 +104,8 @@ class ICTRTS(MFInteractor):
     def predict(self,uid,candidate_items,num_req_items):
         items_score = np.zeros(len(candidate_items))
         for particle in self.particles:
-            items_score += particle.p[uid] @ particle.q[candidate_items]
+            # print(particle.p[uid].shape,particle.q[candidate_items].shape)
+            items_score += particle.q[candidate_items,:]@particle.p[uid,:]
         items_score/=self.num_particles
         return items_score, None
 
