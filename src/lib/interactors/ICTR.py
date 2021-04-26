@@ -16,18 +16,23 @@ import mf
 from utils.PersistentDataManager import PersistentDataManager
 import joblib
 
+@njit
+def _softmax(x):
+    return np.exp(x - np.max(x)) / np.sum(np.exp(x - np.max(x)))
+
 class _Particle:
     def __init__(self,num_users,num_items,num_lat):
-        self.alpha = 0
-        self.beta = 0
-        self.lambda_ = np.empty(shape=(num_users,num_lat))
-        self.eta = np.empty(shape=(num_lat,num_items))
-        self.mu = np.empty(shape=(num_items,num_lat))
-        self.Sigma = np.empty(shape=(num_items,num_lat,num_lat))
+        self.alpha = 1
+        self.beta = 1
+        self.lambda_ = np.ones(shape=(num_users,num_lat))
+        self.eta = np.ones(shape=(num_lat,num_items))
+        self.mu = np.ones(shape=(num_items,num_lat))
+        # self.Sigma = np.zeros(shape=(num_items,num_lat,num_lat))
+        self.Sigma = np.array([np.identity(num_lat) for _ in range(num_items)])
         self.sigma_n_2 = 1
-        self.p = np.empty(shape=(num_users,num_lat))
-        self.q = np.empty(shape=(num_items,num_lat))
-        self.Phi = np.empty(shape=(num_lat,num_items))
+        self.p = np.zeros(shape=(num_users,num_lat))
+        self.q = np.zeros(shape=(num_items,num_lat))
+        self.Phi = np.zeros(shape=(num_lat,num_items))
     # def p_expectations(self,uid,topic=None,reward=None):
     def p_expectations(self,uid,reward=None):
         computed_sum = np.sum(self.lambda_[uid])
@@ -41,10 +46,11 @@ class _Particle:
         computed_sum = np.sum(self.eta,axis=1)
         item_eta =self.eta[:,item]
         if reward!=None:
-            item_eta[item] += reward
+            item_eta += reward
             computed_sum += reward
         return item_eta/computed_sum
     def particle_weight(self,uid,item,reward):
+        # print(self.p[uid],self.q[item])
         norm_val = scipy.stats.norm(self.p[uid]@self.q[item],self.sigma_n_2).pdf(reward)
         return np.sum(norm_val+self.p_expectations(uid) * self.Phi_expectations(item))
     def compute_theta(self,uid,item,reward):
@@ -54,11 +60,11 @@ class _Particle:
         topic = np.argmax(np.random.multinomial(1,theta)[0])
         return topic
     def update_parameters(self,uid,item,reward,topic):
-        new_Sigma = np.linalg.inv(np.linalg.inv(self.Sigma[item]) + self.p[item][:,None]@self.p[item][None,:])
-        new_mu = new_Sigma@(np.linalg.inv(self.Sigma[item])@self.mu[item] + self.p[uid]@reward)
+        new_Sigma = np.linalg.inv(np.linalg.inv(self.Sigma[item]) + self.p[uid][:,None]@self.p[uid][None,:])
+        new_mu = new_Sigma@(np.linalg.inv(self.Sigma[item])@self.mu[item] + self.p[uid]*reward)
         new_alpha = self.alpha + 1/2
         new_beta = self.beta + 1/2*(
-                self.mu[item].T @ np.linalg.inv(self.Sigma[item]) @ self.mu[item]+reward.T@reward - new_mu.T@np.linalg.inv(new_Sigma)@new_mu
+                self.mu[item].T @ np.linalg.inv(self.Sigma[item]) @ self.mu[item]+reward*reward - new_mu.T@np.linalg.inv(new_Sigma)@new_mu
                 )
         new_lambda_k = self.lambda_[topic]+reward
         new_eta_k = self.eta[topic,item]+reward
@@ -72,8 +78,8 @@ class _Particle:
     def sample_random_variables(self,uid,item,topic):
         self.sigma_n_2 = scipy.stats.invgamma(self.alpha,self.beta).rvs()
         self.q[item] = np.random.multivariate_normal(self.mu[item],self.sigma_n_2*self.Sigma[item])
-        self.p[item] = np.random.dirichlet(self.lambda_)
-        self.Phi[topic] = np.random.dirichlet(self.eta)
+        self.p[uid] = np.random.dirichlet(self.lambda_[uid])
+        self.Phi[topic] = np.random.dirichlet(self.eta[topic])
 
 class ICTRTS(MFInteractor):
     def __init__(self,num_particles, *args, **kwargs):
@@ -104,7 +110,10 @@ class ICTRTS(MFInteractor):
 
     def update(self,uid,item,reward,additional_data):
         # for particle in self.particles:
+        # with np.errstate(under='ignore'):
         weights = [particle.particle_weight(uid,item,reward) for particle in self.particles]
+        weights=np.array(weights)
+        weights=_softmax(weights)
         # copy.deepcopy
         ds = np.random.choice(range(self.num_particles), p=weights,size=self.num_particles)
         new_particles = []
@@ -113,5 +122,5 @@ class ICTRTS(MFInteractor):
         self.particles = new_particles
         for particle in self.particles:
             topic = particle.select_z_topic(uid,item,reward)
-            self.update_parameters(uid,item,reward,topic)
-            self.sample_random_variables(uid,item,topic)
+            particle.update_parameters(uid,item,reward,topic)
+            particle.sample_random_variables(uid,item,topic)
