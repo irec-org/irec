@@ -52,7 +52,7 @@ class _Particle:
     def particle_weight(self,uid,item,reward):
         # print(self.p[uid],self.q[item])
         norm_val = scipy.stats.norm(self.p[uid]@self.q[item],self.sigma_n_2).pdf(reward)
-        return np.sum(norm_val+self.p_expectations(uid) * self.Phi_expectations(item))
+        return np.sum(norm_val*self.p_expectations(uid) * self.Phi_expectations(item))
     def compute_theta(self,uid,item,reward):
         return self.p_expectations(uid,reward=reward)*self.Phi_expectations(item,reward=reward)
     def select_z_topic(self,uid,item,reward):
@@ -107,9 +107,9 @@ class ICTRTS(MFInteractor):
             topic = particle.select_z_topic(uid,item,reward)
             particle.update_parameters(uid,item,reward,topic)
             particle.sample_random_variables(uid,item,topic)
-            # if i > 1000:
-                # break
             # self.update(uid,item,reward,None)
+            # if i > 10000:
+                # break
 
         self.particles = [copy.deepcopy(particle) for _ in range(self.num_particles)]
         
@@ -118,6 +118,7 @@ class ICTRTS(MFInteractor):
         for particle in self.particles:
             # print(particle.p[uid].shape,particle.q[candidate_items].shape)
             items_score += particle.q[candidate_items,:]@particle.p[uid,:]
+
         items_score/=self.num_particles
         return items_score, None
 
