@@ -207,7 +207,7 @@ Good Books Validation:
   kNNBandit: null
 MovieLens 100k (B):
   ICTRTS:
-    parameters: {num_lat: 5, num_particles: 2}
+    parameters: {num_lat: 5, num_particles: 10}
   ALEntropy: null
   ALMostPopular: null
   COFIBA:

@@ -57,7 +57,11 @@ class _Particle:
         return self.p_expectations(uid,reward=reward)*self.Phi_expectations(item,reward=reward)
     def select_z_topic(self,uid,item,reward):
         theta = self.compute_theta(uid,item,reward)
-        topic = np.argmax(np.random.multinomial(1,theta)[0])
+        theta = _softmax(theta)
+        # print(np.random.multinomial(1,theta))
+        topic = np.argmax(np.random.multinomial(1,theta))
+        # print()
+        # print(topic,theta)
         return topic
     def update_parameters(self,uid,item,reward,topic):
         new_Sigma = np.linalg.inv(np.linalg.inv(self.Sigma[item]) + self.p[uid][:,None]@self.p[uid][None,:])
