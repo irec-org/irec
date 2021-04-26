@@ -1,4 +1,5 @@
 from threadpoolctl import threadpool_limits
+import copy
 import numpy as np
 from tqdm import tqdm
 from .ExperimentalInteractor import ExperimentalInteractor
@@ -87,14 +88,30 @@ class ICTRTS(MFInteractor):
 
         self.num_total_items = self.train_dataset.num_total_items
         self.num_total_users = self.train_dataset.num_total_users
+        self.particles = [_Particle(self.num_total_users,self.num_total_items,self.num_lat) for i in range(self.num_particles)]
         for i in tqdm(range(len(self.train_dataset.data))):
             uid = int(self.train_dataset.data[i,0])
             item = int(self.train_dataset.data[i,1])
             reward = self.train_dataset.data[i,2]
+            self.update(uid,item,reward,None)
         
     def predict(self,uid,candidate_items,num_req_items):
-        items_score=None
+        items_score = np.zeros(len(candidate_items))
+        for particle in self.particles:
+            items_score += particle.p[uid] @ particle.q[candidate_items]
+        items_score/=self.num_particles
         return items_score, None
 
     def update(self,uid,item,reward,additional_data):
-        pass
+        # for particle in self.particles:
+        weights = [particle.particle_weight(uid,item,reward) for particle in self.particles]
+        # copy.deepcopy
+        ds = np.random.choice(range(self.num_particles), p=weights,size=self.num_particles)
+        new_particles = []
+        for i in range(self.num_particles):
+            new_particles.append(copy.deepcopy(self.particles[ds[i]]))
+        self.particles = new_particles
+        for particle in self.particles:
+            topic = particle.select_z_topic(uid,item,reward)
+            self.update_parameters(uid,item,reward,topic)
+            self.sample_random_variables(uid,item,topic)

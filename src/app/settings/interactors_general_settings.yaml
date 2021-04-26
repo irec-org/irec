@@ -108,3 +108,5 @@ OurMethod2PCA:
   name: WSCB PCA
 LinUCBPCA:
   name: LinUCB PCA
+ICTRTS:
+  name: IcTRTS
