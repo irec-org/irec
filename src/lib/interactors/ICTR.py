@@ -34,25 +34,29 @@ class _Particle:
         self.mu = np.ones(shape=(num_items,num_lat))
         # self.Sigma = np.zeros(shape=(num_items,num_lat,num_lat))
         self.Sigma = np.array([np.identity(num_lat) for _ in range(num_items)])
-        self.sigma_n_2 = 1
-        self.p = np.zeros(shape=(num_users,num_lat))
-        self.q = np.zeros(shape=(num_items,num_lat))
-        self.Phi = np.zeros(shape=(num_lat,num_items))
+        # self.sigma_n_2 = 1
+        self.sigma_n_2 = scipy.stats.invgamma(self.alpha,self.beta).rvs()
+        # self.p = np.random.dirichlet(self.lambda_,shape=(num_users,num_lat))
+        self.p = np.array([np.random.dirichlet(self.lambda_) for _ in range(num_users)])
+        # self.q = np.ones(shape=(num_items,num_lat))
+        self.q = np.array([np.random.multivariate_normal(self.mu[i,:], self.sigma_n_2*self.Sigma[i,:]) for i in range(num_items)])
+        # self.Phi = np.ones(shape=(num_lat,num_items))
+        self.Phi = np.array([np.random.dirichlet(self.eta[i,:]) for i in range(num_lat)])
     # def p_expectations(self,uid,topic=None,reward=None):
-    def p_expectations(self,uid,reward=None):
+    def p_expectations(self,uid,topic=None,reward=None):
         computed_sum = np.sum(self.lambda_)
         user_lambda = np.copy(self.lambda_)
         if reward!=None:
             # user_lambda[topic] += reward
-            user_lambda += reward
+            user_lambda[topic] += reward
             computed_sum += reward
         return user_lambda/computed_sum
-    def Phi_expectations(self,item,topic=None,reward=None):
+    def Phi_expectations(self,item,reward=None):
         # eta = np.copy(self.eta)
         computed_sum = np.sum(self.eta,axis=1)
         item_eta =self.eta[:,item]
         if reward!=None:
-            item_eta[topic] += reward
+            item_eta += reward
             computed_sum += reward
         return item_eta/computed_sum
     def particle_weight(self,uid,item,reward):
@@ -60,7 +64,7 @@ class _Particle:
         norm_val = scipy.stats.norm(self.p[uid]@self.q[item],self.sigma_n_2).pdf(reward)
         return np.sum(norm_val*self.p_expectations(uid) * self.Phi_expectations(item))
     def compute_theta(self,uid,item,reward,topic):
-        return self.p_expectations(uid,reward=reward)*self.Phi_expectations(item,reward=reward,topic=topic)
+        return self.p_expectations(uid,reward=reward,topic=topic)*self.Phi_expectations(item,reward=reward)
     def select_z_topic(self,uid,item,reward):
         topic = np.argmax(np.random.multinomial(1,self.p[uid]))
         theta = self.compute_theta(uid,item,reward,topic)
@@ -79,14 +83,15 @@ class _Particle:
                 )
         # new_lambda_k = self.lambda_[topic]+reward
         new_lambda_k = self.lambda_[topic]+reward
-        new_eta_k = self.eta[:,item]+reward
+        new_eta_k = self.eta[topic,item]+reward
 
         self.Sigma[item] = new_Sigma
         self.mu[item] = new_mu
         self.alpha = new_alpha
         self.beta = new_beta
         self.lambda_[topic] = new_lambda_k
-        self.eta[:,item] = new_eta_k
+        # self.eta[:,item] = new_eta_k
+        self.eta[topic,item] = new_eta_k
     def sample_random_variables(self,uid,item,topic):
         self.sigma_n_2 = scipy.stats.invgamma(self.alpha,self.beta).rvs()
         self.q[item] = np.random.multivariate_normal(self.mu[item],self.sigma_n_2*self.Sigma[item])
@@ -112,6 +117,7 @@ class ICTRTS(MFInteractor):
             uid = int(self.train_dataset.data[i,0])
             item = int(self.train_dataset.data[i,1])
             reward = self.train_dataset.data[i,2]
+            reward = int(reward>=4)
             topic = particle.select_z_topic(uid,item,reward)
             particle.update_parameters(uid,item,reward,topic)
             particle.sample_random_variables(uid,item,topic)
@@ -131,6 +137,7 @@ class ICTRTS(MFInteractor):
         return items_score, None
 
     def update(self,uid,item,reward,additional_data):
+        reward = int(reward>=4)
         # for particle in self.particles:
         # with np.errstate(under='ignore'):
         weights = [particle.particle_weight(uid,item,reward) for particle in self.particles]

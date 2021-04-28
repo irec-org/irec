@@ -208,6 +208,7 @@ Good Books Validation:
 MovieLens 100k (B):
   ICTRTS:
     parameters: {num_lat: 5, num_particles: 10}
+    #parameters: {num_lat: 20, num_particles: 4}
   ALEntropy: null
   ALMostPopular: null
   COFIBA:
