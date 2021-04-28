@@ -3266,3 +3266,16 @@ OurMethodEntropy:
     num_lat: 20
   - alpha: 1
     num_lat: 20
+ICTRTS:
+  - num_particles: 5
+    num_lat: 2
+  - num_particles: 10
+    num_lat: 2
+  - num_particles: 10
+    num_lat: 3
+  - num_particles: 10
+    num_lat: 5
+  - num_particles: 10
+    num_lat: 7
+  - num_particles: 20
+    num_lat: 7
