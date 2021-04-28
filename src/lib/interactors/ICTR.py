@@ -30,8 +30,8 @@ class _Particle:
         self.beta = 1
         # self.lambda_ = np.ones(shape=(num_users,num_lat))
         # self.lambda_ = np.ones(shape=(num_lat,num_users))
-        # self.lambda_ = np.ones(shape=(num_lat,num_users))
-        self.lambda_ = np.ones(shape=(num_lat))
+        self.lambda_ = np.ones(shape=(num_lat,num_users))
+        # self.lambda_ = np.ones(shape=(num_lat))
         self.eta = np.ones(shape=(num_lat,num_items))
         self.mu = np.ones(shape=(num_items,num_lat))
         # self.Sigma = np.zeros(shape=(num_items,num_lat,num_lat))
@@ -39,27 +39,27 @@ class _Particle:
         # self.sigma_n_2 = 1
         self.sigma_n_2 = scipy.stats.invgamma(self.alpha,self.beta).rvs()
         # self.p = np.random.dirichlet(self.lambda_,shape=(num_users,num_lat))
-        self.p = np.array([np.random.dirichlet(self.lambda_[:]) for i in range(num_users)])
+        self.p = np.array([np.random.dirichlet(self.lambda_[:,uid]) for uid in range(num_users)])
         # self.q = np.ones(shape=(num_items,num_lat))
         self.q = np.array([np.random.multivariate_normal(self.mu[i,:], self.sigma_n_2*self.Sigma[i,:]) for i in range(num_items)])
         # self.Phi = np.ones(shape=(num_lat,num_items))
         self.Phi = np.array([np.random.dirichlet(self.eta[i,:]) for i in range(num_lat)])
     # def p_expectations(self,uid,topic=None,reward=None):
     def p_expectations(self,uid,topic=None,reward=None):
-        computed_sum = np.sum(self.lambda_[:])
-        user_lambda = np.copy(self.lambda_[:])
-        # if reward!=None:
-            # # user_lambda[topic] += reward
+        computed_sum = np.sum(self.lambda_[:,uid])
+        user_lambda = np.copy(self.lambda_[:,uid])
+        if reward!=None:
             # user_lambda[topic] += reward
-            # computed_sum += reward
+            user_lambda[topic] += reward
+            computed_sum += reward
         return user_lambda/computed_sum
     def Phi_expectations(self,item,reward=None):
         # eta = np.copy(self.eta)
         computed_sum = np.sum(self.eta,axis=1)
-        item_eta =self.eta[:,item]
-        # if reward!=None:
-            # item_eta += reward
-            # computed_sum += reward
+        item_eta =np.copy(self.eta[:,item])
+        if reward!=None:
+            item_eta += reward
+            computed_sum += reward
         return item_eta/computed_sum
     def particle_weight(self,uid,item,reward):
         # print(self.p[uid],self.q[item])
@@ -69,13 +69,17 @@ class _Particle:
         return self.p_expectations(uid,reward=reward,topic=topic)*self.Phi_expectations(item,reward=reward)
     def select_z_topic(self,uid,item,reward):
         # topic = np.argmax(np.random.multinomial(1,self.p[uid]))
-        topic = None
+        # topic = None
+        topic = np.argmax(np.random.multinomial(1,[1/self.num_lat]*self.num_lat))
         theta = self.compute_theta(uid,item,reward,topic)
         # print(np.sum(theta))
-        theta = _softmax(theta)
+        # theta = _softmax(theta)
         # print(np.sum(theta))
-        # theta = theta/np.sum(theta)
+        theta = theta/np.sum(theta)
         topic = np.argmax(np.random.multinomial(1,theta))
+        # if uid == 57 or uid == 98 or uid == 47:
+        if uid == 47:
+            print(uid,item,theta,topic)
         return topic
     def update_parameters(self,uid,item,reward,topic):
         new_Sigma = np.linalg.inv(np.linalg.inv(self.Sigma[item]) + self.p[uid][:,None]@self.p[uid][None,:])
@@ -85,20 +89,20 @@ class _Particle:
                 self.mu[item].T @ np.linalg.inv(self.Sigma[item]) @ self.mu[item]+reward*reward - new_mu.T@np.linalg.inv(new_Sigma)@new_mu
                 )
         # new_lambda_k = self.lambda_[topic]+reward
-        new_lambda_k = self.lambda_[topic]+reward
+        new_lambda_k = self.lambda_[topic,uid]+reward
         new_eta_k = self.eta[topic,item]+reward
 
         self.Sigma[item] = new_Sigma
         self.mu[item] = new_mu
         self.alpha = new_alpha
         self.beta = new_beta
-        self.lambda_[topic] = new_lambda_k
+        self.lambda_[topic,uid] = new_lambda_k
         # self.eta[:,item] = new_eta_k
         self.eta[topic,item] = new_eta_k
     def sample_random_variables(self,uid,item,topic):
         self.sigma_n_2 = scipy.stats.invgamma(self.alpha,self.beta).rvs()
         self.q[item] = np.random.multivariate_normal(self.mu[item],self.sigma_n_2*self.Sigma[item])
-        self.p[uid] = np.random.dirichlet(self.lambda_[:])
+        self.p[uid] = np.random.dirichlet(self.lambda_[:,uid])
         self.Phi[topic] = np.random.dirichlet(self.eta[topic])
 
 class ICTRTS(MFInteractor):
@@ -114,7 +118,7 @@ class ICTRTS(MFInteractor):
 
         self.num_total_items = self.train_dataset.num_total_items
         self.num_total_users = self.train_dataset.num_total_users
-        self.items_popularity = MostPopular.get_items_popularity(self.train_consumption_matrix, normalize=False)
+        # self.items_popularity = MostPopular.get_items_popularity(self.train_consumption_matrix, normalize=False)
         # self.particles = [_Particle(self.num_total_users,self.num_total_items,self.num_lat) for i in range(self.num_particles)]
         particle = _Particle(self.num_total_users,self.num_total_items,self.num_lat)
         for i in tqdm(range(len(self.train_dataset.data))):
@@ -132,8 +136,10 @@ class ICTRTS(MFInteractor):
         self.particles = [copy.deepcopy(particle) for _ in range(self.num_particles)]
         
     def predict(self,uid,candidate_items,num_req_items):
-        items_pool_size = max(int(len(candidate_items)*0.1),num_req_items)
-        candidate_items = candidate_items[np.argsort(self.items_popularity[candidate_items])[::-1][:items_pool_size]]
+        # items_pool_size = max(int(len(candidate_items)*0.1),num_req_items)
+        # items_pool_size = max(int(len(candidate_items)*0.1),num_req_items)
+        # items_pool_size = max(min(len(candidate_items),100),num_req_items)
+        # candidate_items = candidate_items[np.argsort(self.items_popularity[candidate_items])[::-1][:items_pool_size]]
         items_score = np.zeros(len(candidate_items))
         for particle in self.particles:
             # print(particle.p[uid].shape,particle.q[candidate_items].shape)
@@ -143,8 +149,8 @@ class ICTRTS(MFInteractor):
         return items_score, None
 
     def update(self,uid,item,reward,additional_data):
-        if reward > 0:
-            self.items_popularity[item] += 1
+        # if reward > 0:
+            # self.items_popularity[item] += 1
         # reward = int(reward>=4)
         # for particle in self.particles:
         # with np.errstate(under='ignore'):
