@@ -4,6 +4,7 @@ import os
 import sys
 sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "lib")
 
+import json
 import inquirer
 import copy
 import scipy
@@ -192,7 +193,11 @@ def count_hits(methods_users_hits, num_items=100):
 dataset_methods_users_hits = {}
 for dataset_preprocessor in datasets_preprocessors:
     methods_users_hits = dict(datasets_metrics_users_values[dataset_preprocessor['name']]['Hits'])
-    dataset_methods_users_hits[dataset_preprocessor["name"]] = {k:(np.cumsum(np.array(v)[::-1]))[::-1]-np.array(v) for k,v in count_hits(methods_users_hits).items()}
+    dataset_methods_users_hits[dataset_preprocessor["name"]] = {k:list((np.cumsum(np.array(v)[::-1]))[::-1]-np.array(v)) for k,v in count_hits(methods_users_hits).items()}
+if args.dump:
+    with open('dataset_methods_users_hits.pickle','wb') as f:
+        pickle.dump(dataset_methods_users_hits,f)
+    # f.write(str(json.loads(json.dumps(dataset_methods_users_hits))))
 
 fig = plot_hits_users_coverage(dataset_methods_users_hits, f"Users Coverage $\\times$ Hits ({dataset_preprocessor['name']})",ylabel='Users Coverage - P(X > x)')
 
