@@ -76,6 +76,15 @@ history_rates_to_train = [0.1]
 
 def process(history_rate,dataset_preprocessor,dataset,consumption_matrix,dm,interactor_class,timestamp_matrix):
     try:
+
+        data = dm.dataset_preprocessed[0].data
+        with open('user_task_meta_train.csv'.format(dataset_preprocessor['name']),'w') as f:
+            for i in range(len(data)):
+                uid = int(data[i,0])
+                iid = int(data[i,1])
+                rating = data[i,2]
+                # timestamp = int(data[i,3])
+                f.write('{},{},{}\n'.format(uid,iid,rating))
         parameters = interactors_preprocessor_paramaters[dataset_preprocessor['name']][interactor_class.__name__]
         if parameters == None:
             parameters = dict()
@@ -110,6 +119,17 @@ def process(history_rate,dataset_preprocessor,dataset,consumption_matrix,dm,inte
         if not(not pdm.file_exists(file_name_s) or args.f1):
             history_items_recommended = pdm.load(file_name_s)
             print("File already exists")
+
+        data = np.array(history_items_recommended)
+        with open('support.csv'.format(dataset_preprocessor['name']),'w') as f:
+            for i in range(len(data)):
+                uid = int(data[i,0])
+                iid = int(data[i,1])
+                if consumption_matrix[uid,iid]>0:
+                    rating = int(consumption_matrix[uid,iid]>0)
+                    # timestamp = int(data[i,3])
+                    f.write('{},{},{}\n'.format(uid,iid,rating))
+
         new_data = []
         for (user, item) in history_items_recommended:
             if consumption_matrix[user,item]>0:
@@ -152,6 +172,14 @@ def process(history_rate,dataset_preprocessor,dataset,consumption_matrix,dm,inte
                 f.write('{}\t{}\t{}\t{}\n'.format(uid,iid,rating,timestamp))
                 users_consumed_items[uid].add(iid)
         print("Test writing finished")
+
+        with open('query.csv'.format(dataset_preprocessor['name']),'w') as f:
+            for i in range(len(data)):
+                uid = int(data[i,0])
+                iid = int(data[i,1])
+                rating = int(data[i,2]>0)
+                # timestamp = int(data[i,3])
+                f.write('{},{},{}\n'.format(uid,iid,rating))
         
         # users_negative_items = {uid: list(map(str,list(all_items-items))) for uid, items in users_consumed_items.items()}
         # users_negative_items = {uid: list(map(str,list(all_items-items))) for uid, items in users_consumed_items.items()
