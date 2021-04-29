@@ -336,6 +336,58 @@ class UserCumulativeInteractionMetricsEvaluator(
         return users_metric_values
 
 
+class IterationsMetricsEvaluator(InteractionMetricsEvaluator):
+
+    @staticmethod
+    def metric_summarize(users_metric_values):
+        return np.mean(users_metric_values)
+
+    @staticmethod
+    def _metric_evaluation(obj_id, num_interactions, interaction_size,
+                           metric_class, iterations_to_evaluate):
+        self = ctypes.cast(obj_id, ctypes.py_object).value
+        start_time = time.time()
+        metric_values = []
+        if issubclass(metric_class, Recall):
+            metric = metric_class(
+                users_false_negative=self.users_false_negative,
+                ground_truth_dataset=self.ground_truth_dataset,
+                relevance_evaluator=self.relevance_evaluator)
+        elif issubclass(metric_class, ILD):
+            metric = metric_class(
+                items_distance=self.items_distance,
+                ground_truth_dataset=self.ground_truth_dataset,
+                relevance_evaluator=self.relevance_evaluator)
+        elif issubclass(metric_class, EPC):
+            metric = metric_class(
+                items_normalized_popularity=self.items_normalized_popularity,
+                ground_truth_dataset=self.ground_truth_dataset,
+                relevance_evaluator=self.relevance_evaluator)
+        else:
+            metric = metric_class(
+                ground_truth_dataset=self.ground_truth_dataset,
+                relevance_evaluator=self.relevance_evaluator)
+        if 0 not in iterations_to_evaluate:
+            iterations_to_evaluate=[0]+iterations_to_evaluate
+        for i in range(len(iterations_to_evaluate)-1):
+            for uid in self.uids:
+                interaction_results = self.users_items_recommended[
+                    uid][iterations_to_evaluate[i]:iterations_to_evaluate[i+1]]
+                for item in interaction_results:
+                    metric.update_recommendation(
+                        uid, item, self.ground_truth_consumption_matrix[uid,
+                                                                        item])
+            # if (i+1) in interactions_to_evaluate:
+            print(f"Computing iteration {iterations_to_evaluate[i]} with {self.__class__.__name__}")
+            metric_values.append(
+                self.metric_summarize(
+                    [metric.compute(uid) for uid in self.uids]))
+
+        print(
+            f"{self.__class__.__name__} spent {time.time()-start_time:.2f} seconds executing {metric_class.__name__} metric"
+        )
+        return metric_values
+
 class Metric(Parameterizable):
 
     def __init__(self, ground_truth_dataset, relevance_evaluator, *args,
