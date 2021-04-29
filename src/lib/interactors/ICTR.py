@@ -30,7 +30,8 @@ class _Particle:
         self.beta = 1
         # self.lambda_ = np.ones(shape=(num_users,num_lat))
         # self.lambda_ = np.ones(shape=(num_lat,num_users))
-        self.lambda_ = np.ones(shape=(num_lat,num_users))
+        # self.lambda_ = np.ones(shape=(num_lat,num_users))
+        self.lambda_ = np.ones(shape=(num_lat))
         # self.lambda_ = np.ones(shape=(num_lat))
         self.eta = np.ones(shape=(num_lat,num_items))
         self.mu = np.ones(shape=(num_items,num_lat))
@@ -39,15 +40,15 @@ class _Particle:
         # self.sigma_n_2 = 1
         self.sigma_n_2 = scipy.stats.invgamma(self.alpha,self.beta).rvs()
         # self.p = np.random.dirichlet(self.lambda_,shape=(num_users,num_lat))
-        self.p = np.array([np.random.dirichlet(self.lambda_[:,uid]) for uid in range(num_users)])
+        self.p = np.array([np.random.dirichlet(self.lambda_[:]) for uid in range(num_users)])
         # self.q = np.ones(shape=(num_items,num_lat))
         self.q = np.array([np.random.multivariate_normal(self.mu[i,:], self.sigma_n_2*self.Sigma[i,:]) for i in range(num_items)])
         # self.Phi = np.ones(shape=(num_lat,num_items))
         self.Phi = np.array([np.random.dirichlet(self.eta[i,:]) for i in range(num_lat)])
     # def p_expectations(self,uid,topic=None,reward=None):
     def p_expectations(self,uid,topic=None,reward=None):
-        computed_sum = np.sum(self.lambda_[:,uid])
-        user_lambda = np.copy(self.lambda_[:,uid])
+        computed_sum = np.sum(self.lambda_[:])
+        user_lambda = np.copy(self.lambda_[:])
         if reward!=None:
             # user_lambda[topic] += reward
             user_lambda[topic] += reward
@@ -89,20 +90,20 @@ class _Particle:
                 self.mu[item].T @ np.linalg.inv(self.Sigma[item]) @ self.mu[item]+reward*reward - new_mu.T@np.linalg.inv(new_Sigma)@new_mu
                 )
         # new_lambda_k = self.lambda_[topic]+reward
-        new_lambda_k = self.lambda_[topic,uid]+reward
+        new_lambda_k = self.lambda_[topic]+reward
         new_eta_k = self.eta[topic,item]+reward
 
         self.Sigma[item] = new_Sigma
         self.mu[item] = new_mu
         self.alpha = new_alpha
         self.beta = new_beta
-        self.lambda_[topic,uid] = new_lambda_k
+        self.lambda_[topic] = new_lambda_k
         # self.eta[:,item] = new_eta_k
         self.eta[topic,item] = new_eta_k
     def sample_random_variables(self,uid,item,topic):
         self.sigma_n_2 = scipy.stats.invgamma(self.alpha,self.beta).rvs()
         self.q[item] = np.random.multivariate_normal(self.mu[item],self.sigma_n_2*self.Sigma[item])
-        self.p[uid] = np.random.dirichlet(self.lambda_[:,uid])
+        self.p[uid] = np.random.dirichlet(self.lambda_[:])
         self.Phi[topic] = np.random.dirichlet(self.eta[topic])
 
 class ICTRTS(MFInteractor):
