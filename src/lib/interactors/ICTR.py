@@ -79,8 +79,8 @@ class _Particle:
         theta = theta/np.sum(theta)
         topic = np.argmax(np.random.multinomial(1,theta))
         # if uid == 57 or uid == 98 or uid == 47:
-        if uid == 47:
-            print(uid,item,theta,topic)
+        # if uid == 47:
+            # print(uid,item,theta,topic)
         return topic
     def update_parameters(self,uid,item,reward,topic):
         new_Sigma = np.linalg.inv(np.linalg.inv(self.Sigma[item]) + self.p[uid][:,None]@self.p[uid][None,:])
