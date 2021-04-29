@@ -16,6 +16,7 @@ parser.add_argument('-f1', default=False, action='store_true')
 parser.add_argument('-f2', default=False, action='store_true')
 args = parser.parse_args()
 import inquirer
+from sklearn.model_selection import GroupShuffleSplit
 import interactors
 import traceback
 import random
@@ -78,13 +79,58 @@ def process(history_rate,dataset_preprocessor,dataset,consumption_matrix,dm,inte
     try:
 
         data = dm.dataset_preprocessed[0].data
-        with open('user_task_meta_train.csv'.format(dataset_preprocessor['name']),'w') as f:
+        with open('user_task_meta_train.csv','w') as f:
             for i in range(len(data)):
                 uid = int(data[i,0])
                 iid = int(data[i,1])
                 rating = data[i,2]
-                # timestamp = int(data[i,3])
                 f.write('{},{},{}\n'.format(uid,iid,rating))
+        gss = GroupShuffleSplit(n_splits=1, train_size=.7, random_state=42)
+        train_data= dm.dataset_preprocessed[0].data
+        train_idx, test_idx = next(gss.split(train_data,groups=train_data[:,0].astype(int)))
+        data = train_data[train_idx]
+        with open('user_task_train_oracle_rating.csv','w') as f:
+            for i in range(len(data)):
+                uid = int(data[i,0])
+                iid = int(data[i,1])
+                rating = data[i,2]
+                f.write('{},{},{}\n'.format(uid,iid,rating))
+
+        data = train_data[test_idx]
+        with open('user_task_valid_oracle_rating.csv','w') as f:
+            for i in range(len(data)):
+                uid = int(data[i,0])
+                iid = int(data[i,1])
+                rating = data[i,2]
+                f.write('{},{},{}\n'.format(uid,iid,rating))
+
+
+        data = dm.dataset_preprocessed[0].data
+        with open('item_task_meta_train.csv','w') as f:
+            for i in range(len(data)):
+                uid = int(data[i,0])
+                iid = int(data[i,1])
+                rating = data[i,2]
+                f.write('{},{},{}\n'.format(uid,iid,rating))
+        gss = GroupShuffleSplit(n_splits=1, train_size=.7, random_state=42)
+        train_data= dm.dataset_preprocessed[0].data
+        train_idx, test_idx = next(gss.split(train_data,groups=train_data[:,1].astype(int)))
+        data = train_data[train_idx]
+        with open('item_task_train_oracle_rating.csv','w') as f:
+            for i in range(len(data)):
+                uid = int(data[i,0])
+                iid = int(data[i,1])
+                rating = data[i,2]
+                f.write('{},{},{}\n'.format(uid,iid,rating))
+
+        data = train_data[test_idx]
+        with open('item_task_valid_oracle_rating.csv','w') as f:
+            for i in range(len(data)):
+                uid = int(data[i,0])
+                iid = int(data[i,1])
+                rating = data[i,2]
+                f.write('{},{},{}\n'.format(uid,iid,rating))
+
         parameters = interactors_preprocessor_paramaters[dataset_preprocessor['name']][interactor_class.__name__]
         if parameters == None:
             parameters = dict()
