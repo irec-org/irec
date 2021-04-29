@@ -1,4 +1,6 @@
 Good Books:
+  ICTRTS:
+    parameters: {num_lat: 5, num_particles: 10}
   GLM_UCB:
     parameters: {c: 4, item_var: 0.01, iterations: 20, num_lat: 10, stop_criteria: 0.0009,
       user_var: 0.01, var: 0.05}
@@ -267,6 +269,8 @@ MovieLens 100k (B):
   kNNBandit:
     parameters: {alpha_0: 1, beta_0: 100, k: 1}
 MovieLens 10M:
+  ICTRTS:
+    parameters: {num_lat: 5, num_particles: 10}
   GLM_UCB:
     parameters: {c: 2, item_var: 0.01, iterations: 20, num_lat: 10, stop_criteria: 0.0009,
       user_var: 0.01, var: 0.05}
@@ -586,6 +590,8 @@ MovieLens 1M (B):
   kNNBandit:
     parameters: {alpha_0: 1, beta_0: 1, k: 1}
 Yahoo Music:
+  ICTRTS:
+    parameters: {num_lat: 5, num_particles: 10}
   GLM_UCB:
     parameters: {c: 8, item_var: 0.01, iterations: 20, num_lat: 10, stop_criteria: 0.0009,
       user_var: 0.01, var: 0.05}
