@@ -1,9 +1,4 @@
 Good Books:
-  ICTRTS:
-    parameters: {num_lat: 5, num_particles: 10}
-  GLM_UCB:
-    parameters: {c: 4, item_var: 0.01, iterations: 20, num_lat: 10, stop_criteria: 0.0009,
-      user_var: 0.01, var: 0.05}
   ALEntropy: null
   ALMostPopular: null
   COFIBA:
@@ -15,7 +10,12 @@ Good Books:
     parameters: {epsilon: 0.2}
   Entropy: null
   Entropy0: null
+  GLM_UCB:
+    parameters: {c: 4, item_var: 0.01, iterations: 20, num_lat: 10, stop_criteria: 0.0009,
+      user_var: 0.01, var: 0.05}
   HELF: null
+  ICTRTS:
+    parameters: {num_lat: 2, num_particles: 5}
   LinEGreedy:
     parameters: {epsilon: 0.1, num_lat: 10}
   LinUCB:
@@ -170,6 +170,8 @@ Good Books Validation:
   GLM_UCB:
     parameters: {c: 4, item_var: 0.01, iterations: 20, num_lat: 10, stop_criteria: 0.0009,
       user_var: 0.01, var: 0.05}
+  ICTRTS:
+    parameters: {num_lat: 2, num_particles: 5}
   LinearEGreedyEntropy:
     parameters: {epsilon: 0.1, item_var: 0.01, iterations: 20, num_lat: 20, stop_criteria: 0.0009,
       user_var: 0.01, var: 0.05}
@@ -208,9 +210,6 @@ Good Books Validation:
     parameters: {alpha: 0.25, num_lat: 20}
   kNNBandit: null
 MovieLens 100k (B):
-  ICTRTS:
-    parameters: {num_lat: 5, num_particles: 10}
-    #parameters: {num_lat: 20, num_particles: 4}
   ALEntropy: null
   ALMostPopular: null
   COFIBA:
@@ -225,6 +224,8 @@ MovieLens 100k (B):
   GLM_UCB:
     parameters: {c: 1.0, num_lat: 10}
   HELF: null
+  ICTRTS:
+    parameters: {num_lat: 5, num_particles: 10}
   LinEGreedy:
     parameters: {epsilon: 0.1, num_lat: 10}
   LinUCB:
@@ -269,11 +270,6 @@ MovieLens 100k (B):
   kNNBandit:
     parameters: {alpha_0: 1, beta_0: 100, k: 1}
 MovieLens 10M:
-  ICTRTS:
-    parameters: {num_lat: 5, num_particles: 10}
-  GLM_UCB:
-    parameters: {c: 2, item_var: 0.01, iterations: 20, num_lat: 10, stop_criteria: 0.0009,
-      user_var: 0.01, var: 0.05}
   ALEntropy: null
   ALMostPopular: null
   COFIBA:
@@ -289,6 +285,8 @@ MovieLens 10M:
     parameters: {c: 2, item_var: 0.01, iterations: 20, num_lat: 5, stop_criteria: 0.0009,
       user_var: 0.01, var: 0.05}
   HELF: null
+  ICTRTS:
+    parameters: {num_lat: 5, num_particles: 10}
   LinEGreedy:
     parameters: {epsilon: 0.1, num_lat: 10}
   LinUCB:
@@ -443,6 +441,8 @@ MovieLens 10M Validation:
   GLM_UCB:
     parameters: {c: 2, item_var: 0.01, iterations: 20, num_lat: 10, stop_criteria: 0.0009,
       user_var: 0.01, var: 0.05}
+  ICTRTS:
+    parameters: {num_lat: 5, num_particles: 10}
   LinearEGreedyEntropy:
     parameters: {epsilon: 0.1, item_var: 0.01, iterations: 20, num_lat: 20, stop_criteria: 0.0009,
       user_var: 0.01, var: 0.05}
@@ -590,11 +590,6 @@ MovieLens 1M (B):
   kNNBandit:
     parameters: {alpha_0: 1, beta_0: 1, k: 1}
 Yahoo Music:
-  ICTRTS:
-    parameters: {num_lat: 5, num_particles: 10}
-  GLM_UCB:
-    parameters: {c: 8, item_var: 0.01, iterations: 20, num_lat: 10, stop_criteria: 0.0009,
-      user_var: 0.01, var: 0.05}
   ALEntropy: null
   ALMostPopular: null
   COFIBA:
@@ -606,7 +601,12 @@ Yahoo Music:
     parameters: {epsilon: 0.2}
   Entropy: null
   Entropy0: null
+  GLM_UCB:
+    parameters: {c: 8, item_var: 0.01, iterations: 20, num_lat: 10, stop_criteria: 0.0009,
+      user_var: 0.01, var: 0.05}
   HELF: null
+  ICTRTS:
+    parameters: {num_lat: 2, num_particles: 5}
   LinEGreedy:
     parameters: {epsilon: 0.1, num_lat: 10}
   LinUCB:
@@ -761,6 +761,8 @@ Yahoo Music Validation:
   GLM_UCB:
     parameters: {c: 8, item_var: 0.01, iterations: 20, num_lat: 10, stop_criteria: 0.0009,
       user_var: 0.01, var: 0.05}
+  ICTRTS:
+    parameters: {num_lat: 2, num_particles: 5}
   LinearEGreedyEntropy:
     parameters: {epsilon: 0.1, item_var: 0.01, iterations: 20, num_lat: 10, stop_criteria: 0.0009,
       user_var: 0.01, var: 0.05}
