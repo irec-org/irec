@@ -286,7 +286,7 @@ MovieLens 10M:
       user_var: 0.01, var: 0.05}
   HELF: null
   ICTRTS:
-    parameters: {num_lat: 5, num_particles: 10}
+    parameters: {num_lat: 2, num_particles: 5}
   LinEGreedy:
     parameters: {epsilon: 0.1, num_lat: 10}
   LinUCB:
