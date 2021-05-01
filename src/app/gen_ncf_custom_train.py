@@ -171,8 +171,8 @@ def process(history_rate,dataset_preprocessor,dataset,consumption_matrix,dm,inte
             for i in range(len(data)):
                 uid = int(data[i,0])
                 iid = int(data[i,1])
-                if consumption_matrix[uid,iid]>0:
-                    rating = int(consumption_matrix[uid,iid]>0)
+                if consumption_matrix[uid,iid]>=4:
+                    rating = int(consumption_matrix[uid,iid]>=4)
                     # timestamp = int(data[i,3])
                     f.write('{},{},{}\n'.format(uid,iid,rating))
 
@@ -223,7 +223,7 @@ def process(history_rate,dataset_preprocessor,dataset,consumption_matrix,dm,inte
             for i in range(len(data)):
                 uid = int(data[i,0])
                 iid = int(data[i,1])
-                rating = int(data[i,2]>0)
+                rating = int(data[i,2]>=4)
                 # timestamp = int(data[i,3])
                 f.write('{},{},{}\n'.format(uid,iid,rating))
         
