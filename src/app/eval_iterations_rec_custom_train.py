@@ -96,7 +96,7 @@ for dataset_preprocessor in datasets_preprocessors:
     for history_rate in history_rates_to_train:
         print('%.2f%% of history' % (history_rate * 100))
         for interactor_class in interactors_classes:
-            metric_evaluator = metric.IterationsMetricsEvaluator(dataset, metrics_classes)
+            metric_evaluator = metric.IterationsMetricsEvaluator(dataset, metrics_classes,relevance_evaluator=metric.ThresholdRelevanceEvaluator(3.99))
             itr = interactor_class(**interactors_preprocessor_paramaters[
                 dataset_preprocessor['name']][interactor_class.__name__]['parameters'])
 

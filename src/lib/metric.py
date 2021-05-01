@@ -378,7 +378,7 @@ class IterationsMetricsEvaluator(InteractionMetricsEvaluator):
                         uid, item, self.ground_truth_consumption_matrix[uid,
                                                                         item])
             # if (i+1) in interactions_to_evaluate:
-            print(f"Computing iteration {iterations_to_evaluate[i]} with {self.__class__.__name__}")
+            print(f"Computing iteration {iterations_to_evaluate[i+1]} with {self.__class__.__name__}")
             metric_values.append(
                 self.metric_summarize(
                     [metric.compute(uid) for uid in self.uids]))
