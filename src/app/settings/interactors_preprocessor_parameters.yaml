@@ -590,6 +590,8 @@ MovieLens 1M (B):
   kNNBandit:
     parameters: {alpha_0: 1, beta_0: 1, k: 1}
 Yahoo Music:
+  PTSLogPopEnt:
+    parameters: {num_lat: 20, num_particles: 5, var: 0.5, var_u: 1.0, var_v: 1.0}
   ALEntropy: null
   ALMostPopular: null
   COFIBA:

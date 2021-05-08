@@ -110,3 +110,5 @@ LinUCBPCA:
   name: LinUCB PCA
 ICTRTS:
   name: ICTRTS
+PTSLogPopEnt:
+  name: PTS (lpe)

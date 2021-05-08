@@ -3279,3 +3279,34 @@ ICTRTS:
     num_lat: 7
   - num_particles: 20
     num_lat: 7
+PTSLogPopEnt:
+  - num_lat: 5
+    num_particles: 2
+    var: 0.5
+    var_u: 1.0
+    var_v: 1.0
+  - num_lat: 5
+    num_particles: 5
+    var: 0.5
+    var_u: 1.0
+    var_v: 1.0
+  - num_lat: 10
+    num_particles: 2
+    var: 0.5
+    var_u: 1.0
+    var_v: 1.0
+  - num_lat: 10
+    num_particles: 5
+    var: 0.5
+    var_u: 1.0
+    var_v: 1.0
+  - num_lat: 20
+    num_particles: 2
+    var: 0.5
+    var_u: 1.0
+    var_v: 1.0
+  - num_lat: 20
+    num_particles: 5
+    var: 0.5
+    var_u: 1.0
+    var_v: 1.0
