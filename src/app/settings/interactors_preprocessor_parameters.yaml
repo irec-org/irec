@@ -378,6 +378,8 @@ MovieLens 10M:
     parameters: {alpha: 0.25, num_lat: 10}
   OurMethodRandom:
     parameters: {alpha: 0.5, num_lat: 10}
+  PTSLogPopEnt:
+    parameters: {num_lat: 20, num_particles: 5, var: 0.5, var_u: 1.0, var_v: 1.0}
   PPELPE: null
   PTS:
     parameters: {num_lat: 20, num_particles: 5, var: 0.5, var_u: 1.0, var_v: 1.0}
