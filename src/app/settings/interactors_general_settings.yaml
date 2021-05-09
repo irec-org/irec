@@ -111,4 +111,6 @@ LinUCBPCA:
 ICTRTS:
   name: ICTRTS
 PTSLogPopEnt:
-  name: PTS (lpe)
+  name: PTS+
+GLM_UCBLogPopEnt:
+  name: GLM_UCB+

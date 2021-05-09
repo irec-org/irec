@@ -13,6 +13,9 @@ Good Books:
   GLM_UCB:
     parameters: {c: 4, item_var: 0.01, iterations: 20, num_lat: 10, stop_criteria: 0.0009,
       user_var: 0.01, var: 0.05}
+  GLM_UCBLogPopEnt:
+    parameters: {c: 4, item_var: 0.01, iterations: 20, num_lat: 10, stop_criteria: 0.0009,
+      user_var: 0.01, var: 0.05}
   HELF: null
   ICTRTS:
     parameters: {num_lat: 2, num_particles: 5}
@@ -101,6 +104,8 @@ Good Books:
     parameters: {alpha: 0.25, num_lat: 10}
   PPELPE: null
   PTS:
+    parameters: {num_lat: 5, num_particles: 2, var: 0.5, var_u: 1.0, var_v: 1.0}
+  PTSLogPopEnt:
     parameters: {num_lat: 5, num_particles: 2, var: 0.5, var_u: 1.0, var_v: 1.0}
   PopPlusEnt: null
   Random: null
@@ -282,6 +287,9 @@ MovieLens 10M:
   Entropy: null
   Entropy0: null
   GLM_UCB:
+    parameters: {c: 2, item_var: 0.01, iterations: 20, num_lat: 5, stop_criteria: 0.0009,
+      user_var: 0.01, var: 0.05}
+  GLM_UCBLogPopEnt:
     parameters: {c: 2, item_var: 0.01, iterations: 20, num_lat: 5, stop_criteria: 0.0009,
       user_var: 0.01, var: 0.05}
   HELF: null
@@ -604,6 +612,9 @@ Yahoo Music:
   Entropy: null
   Entropy0: null
   GLM_UCB:
+    parameters: {c: 8, item_var: 0.01, iterations: 20, num_lat: 10, stop_criteria: 0.0009,
+      user_var: 0.01, var: 0.05}
+  GLM_UCBLogPopEnt:
     parameters: {c: 8, item_var: 0.01, iterations: 20, num_lat: 10, stop_criteria: 0.0009,
       user_var: 0.01, var: 0.05}
   HELF: null

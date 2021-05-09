@@ -3310,3 +3310,130 @@ PTSLogPopEnt:
     var: 0.5
     var_u: 1.0
     var_v: 1.0
+GLM_UCBLogPopEnt:
+  - c: 0.1
+    item_var: 0.01
+    iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - c: 0.5
+    item_var: 0.01
+    iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - c: 1
+    item_var: 0.01
+    iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - c: 2
+    item_var: 0.01
+    iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - c: 4
+    item_var: 0.01
+    iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - c: 8
+    item_var: 0.01
+    iterations: 20
+    num_lat: 5
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - c: 0.1
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - c: 0.5
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - c: 1
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - c: 2
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - c: 4
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - c: 8
+    item_var: 0.01
+    iterations: 20
+    num_lat: 10
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - c: 0.1
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - c: 0.5
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - c: 1
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - c: 2
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - c: 4
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
+  - c: 8
+    item_var: 0.01
+    iterations: 20
+    num_lat: 20
+    stop_criteria: 0.0009
+    user_var: 0.01
+    var: 0.05
