@@ -3,6 +3,7 @@ import pickle
 import os
 import sys
 import json
+from util import *
 sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "lib")
 
 import inquirer
@@ -281,23 +282,7 @@ for dataset_preprocessor in datasets_preprocessors:
 
 for metric_name, metric_class_name in zip(
         metrics_names, metrics_classes_names):
-    rtex += r"""
-\hline
-\hline
-\rowcolor{Gray}
-Measure & %s \\
-\hline
-\rowcolor{Gray}
-T & %s \\
-\hline
-\hline
-""" % (' & '.join(
-        map(
-            lambda x: r"\multicolumn{%d}{c|}{%s}" %
-            (len(nums_interactions_to_show), x),
-            [metric_name] * len(datasets_preprocessors))), ' & '.join(
-                [' & '.join(map(str, nums_interactions_to_show))] *
-                len(datasets_preprocessors)))
+    rtex += generate_metric_interactions_header(nums_interactions_to_show,len(datasets_preprocessors),metric_name)
     for itr_class in interactors_classes:
         rtex += "%s & " % (ir.get_interactor_name(itr_class.__name__))
         rtex += ' & '.join([
