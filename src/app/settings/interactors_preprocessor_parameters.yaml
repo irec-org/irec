@@ -407,6 +407,15 @@ Good Books Validation:
       stop_criteria: 0.0009
       user_var: 0.01
       var: 0.05
+  GLM_UCBLogPopEnt:
+    parameters:
+      c: 4
+      item_var: 0.01
+      iterations: 20
+      num_lat: 10
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
   ICTRTS:
     parameters:
       num_lat: 2
@@ -672,7 +681,7 @@ MovieLens 10M:
       c: 2
       item_var: 0.01
       iterations: 20
-      num_lat: 5
+      num_lat: 10
       stop_criteria: 0.0009
       user_var: 0.01
       var: 0.05
@@ -681,7 +690,7 @@ MovieLens 10M:
       c: 2
       item_var: 0.01
       iterations: 20
-      num_lat: 5
+      num_lat: 10
       stop_criteria: 0.0009
       user_var: 0.01
       var: 0.05
@@ -1051,6 +1060,15 @@ MovieLens 10M Sampled:
   kNNBandit: null
 MovieLens 10M Validation:
   GLM_UCB:
+    parameters:
+      c: 2
+      item_var: 0.01
+      iterations: 20
+      num_lat: 10
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  GLM_UCBLogPopEnt:
     parameters:
       c: 2
       item_var: 0.01
@@ -1804,6 +1822,15 @@ Yahoo Music Sampled:
   kNNBandit: null
 Yahoo Music Validation:
   GLM_UCB:
+    parameters:
+      c: 8
+      item_var: 0.01
+      iterations: 20
+      num_lat: 10
+      stop_criteria: 0.0009
+      user_var: 0.01
+      var: 0.05
+  GLM_UCBLogPopEnt:
     parameters:
       c: 8
       item_var: 0.01
