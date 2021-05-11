@@ -136,6 +136,7 @@ for dataset_preprocessor in datasets_preprocessors:
 
         datasets_interactors_items_recommended[dataset_preprocessor['name']][itr_class.__name__] = users_items_recommended
 
+methods_names= set()
 for dataset_preprocessor in datasets_preprocessors:
     dm.initialize_engines(dataset_preprocessor)
     for ii, itr_class_1 in enumerate(interactors_classes):
@@ -157,142 +158,29 @@ for dataset_preprocessor in datasets_preprocessors:
                     vals.append(len(x.intersection(y))/len(x | y))
 
                 datasets_metrics_values[dataset_preprocessor['name']]['Jaccard Similarity'][name].extend(vals)
+                methods_names.add(name)
                 # print(vals)
 
-# print(datasets_metrics_values)
-utility_scores = defaultdict(
-    lambda: defaultdict(lambda: defaultdict(lambda: dict())))
-method_utility_scores = defaultdict(lambda: defaultdict(lambda: dict))
-# for num_interaction in range(len(nums_interactions_to_show)):
-    # for dataset_preprocessor in datasets_preprocessors:
-        # dm.initialize_engines(dataset_preprocessor)
-        # for metric_class_name in metrics_classes_names:
-            # for itr_class in interactors_classes:
-                # metric_max_value = np.max(
-                    # list(
-                        # map(
-                            # lambda x: x[num_interaction],
-                            # datasets_metrics_values[dataset_preprocessor[
-                                # 'name']][metric_class_name].values())))
-                # metric_min_value = np.min(
-                    # list(
-                        # map(
-                            # lambda x: x[num_interaction],
-                            # datasets_metrics_values[dataset_preprocessor[
-                                # 'name']][metric_class_name].values())))
-                # metric_value = datasets_metrics_values[
-                    # dataset_preprocessor['name']][metric_class_name][
-                        # itr_class.__name__][num_interaction]
-                # utility_scores[dataset_preprocessor['name']][metric_class_name][itr_class.__name__][num_interaction] =\
-                        # (metric_value - metric_min_value)/(metric_max_value-metric_min_value)
-                # print(f"({metric_value} - {metric_min_value})/({metric_max_value}-{metric_min_value})")
-
-# methods_utilities = defaultdict(
-# lambda: defaultdict(lambda: dict()))
-
 if args.dump:
-    # with open('datasets_metrics_values.pickle','wb') as f:
-    # pickle.dump(datasets_metrics_values,f)
     with open('datasets_metrics_values.pickle', 'wb') as f:
         pickle.dump(json.loads(json.dumps(datasets_metrics_values)), f)
-        # f.write(str(methods_users_hits))
-# print(datasets_metrics_values['Yahoo Music']['MAUT'])
 
-# metrics_classes_names.append('MAUT')
-# metrics_names.append('MAUT')
-
-datasets_metrics_gain = defaultdict(lambda: defaultdict(lambda: defaultdict(
-    lambda: [''] * len(nums_interactions_to_show))))
-
-datasets_metrics_best = defaultdict(lambda: defaultdict(lambda: defaultdict(
-    lambda: [False] * len(nums_interactions_to_show))))
-bullet_str = r'\textcolor[rgb]{0.7,0.7,0.0}{$\bullet$}'
-triangle_up_str = r'\textcolor[rgb]{00,0.45,0.10}{$\blacktriangle$}'
-triangle_down_str = r'\textcolor[rgb]{0.7,00,00}{$\blacktriangledown$}'
-for dataset_preprocessor in datasets_preprocessors:
-    for metric_class_name in metrics_classes_names:
-        for i, num in enumerate(nums_interactions_to_show):
-            # for itr_class in interactors_classes:
-            datasets_metrics_best[
-                dataset_preprocessor['name']][metric_class_name][max(
-                    datasets_metrics_values[dataset_preprocessor['name']]
-                    [metric_class_name].items(),
-                    key=lambda x: x[1][i])[0]][i] = True
-            if args.r != None:
-                best_itr = args.r
-            else:
-                best_itr = max(datasets_metrics_values[
-                    dataset_preprocessor['name']][metric_class_name].items(),
-                               key=lambda x: x[1][i])[0]
-            best_itr_vals = datasets_metrics_values[
-                dataset_preprocessor['name']][metric_class_name].pop(best_itr)
-            best_itr_val = best_itr_vals[i]
-            # print(datasets_metrics_values[
-                # ])
-            # print(dataset_preprocessor['name'],metric_class_name)
-            # print(dataset_preprocessor['name'],metric_class_name,datasets_metrics_values[
-                # dataset_preprocessor['name']])
-            # print(datasets_metrics_values)
-            second_best_itr = max(datasets_metrics_values[
-                dataset_preprocessor['name']][metric_class_name].items(),
-                                  key=lambda x: x[1][i])[0]
-            second_best_itr_vals = datasets_metrics_values[dataset_preprocessor[
-                'name']][metric_class_name][second_best_itr]
-            second_best_itr_val = second_best_itr_vals[i]
-            # come back with value in dict
-            datasets_metrics_values[dataset_preprocessor['name']][
-                metric_class_name][best_itr] = best_itr_vals
-
-            best_itr_users_val = datasets_metrics_users_values[
-                dataset_preprocessor['name']][metric_class_name][best_itr][i]
-            second_best_itr_users_val = datasets_metrics_users_values[
-                dataset_preprocessor['name']][metric_class_name][
-                    second_best_itr][i]
-
-            try:
-                statistic, pvalue = scipy.stats.wilcoxon(
-                    best_itr_users_val,
-                    second_best_itr_users_val,
-                )
-            except:
-                print("Wilcoxon error")
-                datasets_metrics_gain[dataset_preprocessor['name']][
-                    metric_class_name][best_itr][i] = bullet_str
-
-            if pvalue > 0.05:
-                datasets_metrics_gain[dataset_preprocessor['name']][
-                    metric_class_name][best_itr][i] = bullet_str
-            else:
-                if best_itr_val < second_best_itr_val:
-                    datasets_metrics_gain[dataset_preprocessor['name']][
-                        metric_class_name][best_itr][i] = triangle_down_str
-                elif best_itr_val > second_best_itr_val:
-                    datasets_metrics_gain[dataset_preprocessor['name']][
-                        metric_class_name][best_itr][i] = triangle_up_str
-                else:
-                    datasets_metrics_gain[dataset_preprocessor['name']][
-                        metric_class_name][best_itr][i] = bullet_str
-
-for metric_name, metric_class_name in zip(metrics_names, metrics_classes_names):
-    rtex += generate_metric_interactions_header(nums_interactions_to_show,
-                                                len(datasets_preprocessors),
-                                                metric_name)
-    for itr_class in interactors_classes:
-        rtex += "%s & " % (ir.get_interactor_name(itr_class.__name__))
-        rtex += ' & '.join([
-            ' & '.join(
+for metric_name, metric_class_name in zip(
+        metrics_names, metrics_classes_names):
+    rtex += generate_metric_interactions_header(nums_interactions_to_show,len(datasets_preprocessors),metric_name)
+    for method_name in methods_names:
+        rtex += "{} & ".format(method_name)
+        bases_values = []
+        for dataset_preprocessor in datasets_preprocessors:
+            bases_values.append(' & '.join(
                 map(
-                    lambda x, y, z: (r"\textbf{" if z else "") + f"{x:.3f}{y}" +
-                    (r"}" if z else ""),
+                    lambda x: f"{x:.3f}",
                     datasets_metrics_values[dataset_preprocessor['name']]
-                    [metric_class_name][itr_class.__name__],
-                    datasets_metrics_gain[dataset_preprocessor['name']]
-                    [metric_class_name][itr_class.__name__],
-                    datasets_metrics_best[dataset_preprocessor['name']]
-                    [metric_class_name][itr_class.__name__]))
-            for dataset_preprocessor in datasets_preprocessors
-        ])
-        rtex += r'\\\hline' + '\n'
+                    [metric_class_name][method_name],
+                    )))
+            print(bases_values)
+        rtex+= ' & '.join(bases_values)
+        rtex+=r'\\\hline'+'\n'
 
 res = rtex_header + rtex + rtex_footer
 
@@ -300,8 +188,8 @@ tmp = '_'.join([
     dataset_preprocessor['name']
     for dataset_preprocessor in datasets_preprocessors
 ])
-open(os.path.join(DirectoryDependent().DIRS['tex'], f'table_{tmp}.tex'),
+open(os.path.join(DirectoryDependent().DIRS['tex'], f'table_jaccard_{tmp}.tex'),
      'w+').write(res)
 os.system(
-    f"pdflatex -output-directory=\"{DirectoryDependent().DIRS['pdf']}\" \"{os.path.join(DirectoryDependent().DIRS['tex'],f'table_{tmp}.tex')}\""
+    f"pdflatex -output-directory=\"{DirectoryDependent().DIRS['pdf']}\" \"{os.path.join(DirectoryDependent().DIRS['tex'],f'table_jaccard_{tmp}.tex')}\""
 )
