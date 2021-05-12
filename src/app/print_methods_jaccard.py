@@ -35,6 +35,9 @@ parser.add_argument('-m', nargs='*')
 parser.add_argument('-b', nargs='*')
 parser.add_argument('--dump', default=False, action='store_true')
 parser.add_argument('--users', default=False, action='store_true')
+evaluation_policies_parameters = yaml.load(
+    open("settings" + sep + "evaluation_policies_parameters.yaml"),
+    Loader=yaml.SafeLoader)
 args = parser.parse_args()
 
 plt.rcParams['axes.prop_cycle'] = cycler(color='krbgmyc')
@@ -55,9 +58,6 @@ with open("settings" + sep + "datasets_preprocessors_parameters.yaml") as f:
     datasets_preprocessors = {
         setting['name']: setting for setting in datasets_preprocessors
     }
-evaluation_policies_parameters = yaml.load(
-    open("settings" + sep + "evaluation_policies_parameters.yaml"),
-    Loader=yaml.SafeLoader)
 interactors_preprocessor_paramaters = yaml.load(
     open("settings" + sep + "interactors_preprocessor_parameters.yaml"),
     Loader=yaml.SafeLoader)
@@ -65,9 +65,6 @@ interactors_general_settings = yaml.load(
     open("settings" + sep + "interactors_general_settings.yaml"),
     Loader=yaml.SafeLoader)
 
-evaluation_policies_parameters = yaml.load(
-    open("settings" + sep + "evaluation_policies_parameters.yaml"),
-    Loader=yaml.SafeLoader)
 
 interactors_classes_names_to_names = {
     k: v['name'] for k, v in interactors_general_settings.items()
@@ -177,16 +174,12 @@ for dataset_preprocessor in datasets_preprocessors:
                     for i in nums_interactions_to_show:
                         x = set()
                         for uid,items in itr_1_recs.items():
-                            for it in items:
-                                if ground_truth_consumption_matrix[uid,it] >= 4:
-                                    x.add(uid)
-                                    break
+                            if np.sum(ground_truth_consumption_matrix[uid,items[:i]] >= 4)>0:
+                                x.add(uid)
                         y = set()
                         for uid,items in itr_2_recs.items():
-                            for it in items:
-                                if ground_truth_consumption_matrix[uid,it] >= 4:
-                                    y.add(uid)
-                                    break
+                            if np.sum(ground_truth_consumption_matrix[uid,items[:i]] >= 4)>0:
+                                y.add(uid)
                         vals.append(len(x.intersection(y))/len(x | y))
 
 
