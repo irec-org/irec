@@ -8,6 +8,8 @@ sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "lib")
 
 import inquirer
 import copy
+import pandas as pd
+import seaborn as sn
 import scipy
 import interactors
 import mf
@@ -152,6 +154,11 @@ for dataset_preprocessor in datasets_preprocessors:
               ground_truth_dataset.data[:, 1])),
             (ground_truth_dataset.num_total_users,
              ground_truth_dataset.num_total_items))
+    dfs = dict()
+    for nits in nums_interactions_to_show:
+        array = [[0]*len(interactors_classes)]*len(interactors_classes)
+        dfs[nits] = pd.DataFrame(array, index = [interactors_classes_names_to_names[i.__name__] for i in interactors_classes],
+                          columns = [interactors_classes_names_to_names[i.__name__] for i in interactors_classes])
     for ii, itr_class_1 in enumerate(interactors_classes):
         itr_1 = ir.create_interactor(itr_class_1)
         for jj, itr_class_2 in enumerate(interactors_classes):
@@ -160,6 +167,7 @@ for dataset_preprocessor in datasets_preprocessors:
                 name = interactors_classes_names_to_names[itr_class_1.__name__]+r' $\times $ '+interactors_classes_names_to_names[itr_class_2.__name__]
                 itr_1_recs = datasets_interactors_items_recommended[dataset_preprocessor['name']][itr_class_1.__name__]
                 itr_2_recs = datasets_interactors_items_recommended[dataset_preprocessor['name']][itr_class_2.__name__]
+                df_cm
                 vals = []
                 if args.users == False:
                     for i in nums_interactions_to_show:
@@ -183,9 +191,19 @@ for dataset_preprocessor in datasets_preprocessors:
                         vals.append(len(x.intersection(y))/len(x | y))
 
 
+                for iii, nits in enumerate(nums_interactions_to_show):
+                    dfs[nits][interactors_classes_names_to_names[itr_class_1.__name__]][interactors_classes_names_to_names[itr_class_2.__name__]] = vals[iii]
+                    dfs[nits][interactors_classes_names_to_names[itr_class_2.__name__]][interactors_classes_names_to_names[itr_class_1.__name__]] = vals[iii]
+
                 datasets_metrics_values[dataset_preprocessor['name']]['Jaccard Similarity'][name].extend(vals)
                 methods_names.add(name)
+
                 # print(vals)
+    for iii, nits in enumerate(nums_interactions_to_show):
+        # fig = plt.figure(figsize = (10,7))
+        sns_plot=sn.heatmap(dfs[nits], annot=True)
+        sns_plot.set_title(f"top-{nits} {dataset_preprocessor['name']}")
+        sns_plot.savefig(os.path.join(DirectoryDependent().DIRS['img'], f'cm_jaccard_{nits}_{dataset_preprocessor["name"]}.png'))
 
 if args.dump:
     with open('datasets_metrics_values.pickle', 'wb') as f:
