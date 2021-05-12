@@ -17,7 +17,7 @@ import numpy as np
 import scipy.sparse
 from utils.DatasetManager import DatasetManager
 import yaml
-from metric import CumulativeInteractionMetricsEvaluator, UserCumulativeInteractionMetricsEvaluator
+from metric import CumulativeInteractionMetricsEvaluator, UserCumulativeInteractionMetricsEvaluator, UsersCoverage
 from utils.dataset import Dataset
 from utils.PersistentDataManager import PersistentDataManager
 from utils.InteractorCache import InteractorCache
@@ -34,6 +34,7 @@ parser.add_argument('-i', default=[5, 10, 20, 50, 100], nargs='*')
 parser.add_argument('-m', nargs='*')
 parser.add_argument('-b', nargs='*')
 parser.add_argument('--dump', default=False, action='store_true')
+parser.add_argument('--users', default=False, action='store_true')
 args = parser.parse_args()
 
 plt.rcParams['axes.prop_cycle'] = cycler(color='krbgmyc')
@@ -139,6 +140,21 @@ for dataset_preprocessor in datasets_preprocessors:
 methods_names= set()
 for dataset_preprocessor in datasets_preprocessors:
     dm.initialize_engines(dataset_preprocessor)
+    if args.users:
+        dm.load()
+        data = np.vstack(
+            (dm.dataset_preprocessed[0].data, dm.dataset_preprocessed[1].data))
+
+        dataset = Dataset(data)
+        dataset.update_from_data()
+        dataset.update_num_total_users_items()
+        ground_truth_dataset= dataset
+        ground_truth_consumption_matrix = scipy.sparse.csr_matrix(
+            (ground_truth_dataset.data[:, 2],
+             (ground_truth_dataset.data[:, 0],
+              ground_truth_dataset.data[:, 1])),
+            (ground_truth_dataset.num_total_users,
+             ground_truth_dataset.num_total_items))
     for ii, itr_class_1 in enumerate(interactors_classes):
         itr_1 = ir.create_interactor(itr_class_1)
         for jj, itr_class_2 in enumerate(interactors_classes):
@@ -148,14 +164,31 @@ for dataset_preprocessor in datasets_preprocessors:
                 itr_1_recs = datasets_interactors_items_recommended[dataset_preprocessor['name']][itr_class_1.__name__]
                 itr_2_recs = datasets_interactors_items_recommended[dataset_preprocessor['name']][itr_class_2.__name__]
                 vals = []
-                for i in nums_interactions_to_show:
-                    x = set()
-                    for uid,items in itr_1_recs.items():
-                        x |= set(items[:i])
-                    y = set()
-                    for uid,items in itr_2_recs.items():
-                        y |= set(items[:i])
-                    vals.append(len(x.intersection(y))/len(x | y))
+                if args.users == False:
+                    for i in nums_interactions_to_show:
+                        x = set()
+                        for uid,items in itr_1_recs.items():
+                            x |= set(items[:i])
+                        y = set()
+                        for uid,items in itr_2_recs.items():
+                            y |= set(items[:i])
+                        vals.append(len(x.intersection(y))/len(x | y))
+                else:
+                    for i in nums_interactions_to_show:
+                        x = set()
+                        for uid,items in itr_1_recs.items():
+                            for it in items:
+                                if ground_truth_consumption_matrix[uid,it] >= 4:
+                                    x.add(uid)
+                                    break
+                        y = set()
+                        for uid,items in itr_2_recs.items():
+                            for it in items:
+                                if ground_truth_consumption_matrix[uid,it] >= 4:
+                                    y.add(uid)
+                                    break
+                        vals.append(len(x.intersection(y))/len(x | y))
+
 
                 datasets_metrics_values[dataset_preprocessor['name']]['Jaccard Similarity'][name].extend(vals)
                 methods_names.add(name)
