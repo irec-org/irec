@@ -41,7 +41,17 @@ parser.add_argument('--users', default=False, action='store_true')
 evaluation_policies_parameters = yaml.load(
     open("settings" + sep + "evaluation_policies_parameters.yaml"),
     Loader=yaml.SafeLoader)
+evaluation_policies_parameters_flatten=util.flatten_dict(evaluation_policies_parameters)
+for k,v in evaluation_policies_parameters_flatten.items():
+    parser.add_argument(f'--{k}',default=v)
 args = parser.parse_args()
+
+args_dict = vars(args)
+for i in set(args_dict.keys()).intersection(set(evaluation_policies_parameters_flatten.keys())):
+    tmp = evaluation_policies_parameters
+    for j in i.split('.')[:-1]:
+        tmp = tmp[j]
+    tmp[i.split('.')[-1]] = args_dict[i]
 
 plt.rcParams['axes.prop_cycle'] = cycler(color='krbgmyc')
 plt.rcParams['lines.linewidth'] = 2
