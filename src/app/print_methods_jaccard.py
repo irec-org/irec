@@ -29,6 +29,7 @@ from utils.DirectoryDependent import DirectoryDependent
 from cycler import cycler
 from collections import defaultdict
 import argparse
+import utils.util as util
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-r', type=str, default=None)
@@ -156,7 +157,7 @@ for dataset_preprocessor in datasets_preprocessors:
              ground_truth_dataset.num_total_items))
     dfs = dict()
     for nits in nums_interactions_to_show:
-        array = [[0]*len(interactors_classes)]*len(interactors_classes)
+        array = np.array([[1]*len(interactors_classes)]*len(interactors_classes),dtype=float)
         dfs[nits] = pd.DataFrame(array, index = [interactors_classes_names_to_names[i.__name__] for i in interactors_classes],
                           columns = [interactors_classes_names_to_names[i.__name__] for i in interactors_classes])
     for ii, itr_class_1 in enumerate(interactors_classes):
@@ -167,7 +168,6 @@ for dataset_preprocessor in datasets_preprocessors:
                 name = interactors_classes_names_to_names[itr_class_1.__name__]+r' $\times $ '+interactors_classes_names_to_names[itr_class_2.__name__]
                 itr_1_recs = datasets_interactors_items_recommended[dataset_preprocessor['name']][itr_class_1.__name__]
                 itr_2_recs = datasets_interactors_items_recommended[dataset_preprocessor['name']][itr_class_2.__name__]
-                df_cm
                 vals = []
                 if args.users == False:
                     for i in nums_interactions_to_show:
@@ -200,10 +200,13 @@ for dataset_preprocessor in datasets_preprocessors:
 
                 # print(vals)
     for iii, nits in enumerate(nums_interactions_to_show):
-        # fig = plt.figure(figsize = (10,7))
-        sns_plot=sn.heatmap(dfs[nits], annot=True)
-        sns_plot.set_title(f"top-{nits} {dataset_preprocessor['name']}")
-        sns_plot.savefig(os.path.join(DirectoryDependent().DIRS['img'], f'cm_jaccard_{nits}_{dataset_preprocessor["name"]}.png'))
+        fig = plt.figure(figsize = (16,16))
+        print(dfs[nits])
+        sns_plot=sn.heatmap(dfs[nits], annot=True,cmap="Blues",vmin=0,vmax=1)
+        sns_plot.set_title(f"T={nits} {dataset_preprocessor['name']}")
+        file_name=os.path.join(DirectoryDependent().DIRS['img'],f'{dataset_preprocessor["name"]}',f'cm_{evaluation_policy.num_interactions}_{evaluation_policy.interaction_size}',f'cm_jaccard_{nits}.png')
+        util.create_path_to_file(file_name)
+        fig.savefig(file_name)
 
 if args.dump:
     with open('datasets_metrics_values.pickle', 'wb') as f:
