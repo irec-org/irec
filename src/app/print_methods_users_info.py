@@ -40,6 +40,7 @@ settings = utils.load_settings()
 utils.load_settings_to_parser(settings,parser)
 
 args = parser.parse_args()
+print(args)
 settings = utils.sync_settings_from_args(settings,args)
 
 interactors_classes_names_to_names = {
@@ -47,21 +48,11 @@ interactors_classes_names_to_names = {
 }
 
 dm = DatasetManager()
-settings['datasets_preprocessors'] = [settings['datasets_preprocessors'][base] for base in args.b]
-ir = InteractorRunner(dm, settings['interactors_general_settings'],
-                      settings['interactors_preprocessor_paramaters'],
-                      settings['evaluation_policies_parameters'])
+datasets_preprocessors = [settings['datasets_preprocessors_parameters'][base] for base in args.b]
+
 interactors_classes = [
     eval('interactors.' + interactor) for interactor in args.m
 ]
-
-# ir = InteractorRunner(dm, interactors_general_settings,
-# interactors_preprocessor_paramaters,
-# evaluation_policies_parameters)
-# interactors_classes = ir.select_interactors()
-
-# metrics_evaluator = UserCumulativeInteractionMetricsEvaluator(
-    # None, metrics_classes)
 
 evaluation_policy = ir.get_interactors_evaluation_policy()
 
@@ -81,9 +72,9 @@ rtex_header = r"""
 \hline
 \rowcolor{StrongGray}
 Dataset & %s \\""" % (
-    utils.generate_table_spec(nums_interactions_to_show, len(settings['datasets_preprocessors'])),
+    utils.generate_table_spec(nums_interactions_to_show, len(datasets_preprocessors)),
     utils.generate_datasets_line(nums_interactions_to_show,
-                           [i['name'] for i in settings['datasets_preprocessors']]))
+                           [i['name'] for i in datasets_preprocessors]))
 rtex_footer = r"""
 \end{tabular}
 \end{document}
@@ -95,7 +86,7 @@ datasets_metrics_values = defaultdict(
 datasets_interactors_items_recommended = defaultdict(
     lambda: defaultdict(lambda: defaultdict(list)))
 
-for dataset_preprocessor in settings['datasets_preprocessors']:
+for dataset_preprocessor in datasets_preprocessors:
     dm.initialize_engines(dataset_preprocessor)
     for itr_class in interactors_classes:
         itr = ir.create_interactor(itr_class)
@@ -111,7 +102,7 @@ for dataset_preprocessor in settings['datasets_preprocessors']:
         datasets_interactors_items_recommended[dataset_preprocessor['name']][itr_class.__name__] = users_items_recommended
 
 methods_names= set()
-for dataset_preprocessor in settings['datasets_preprocessors']:
+for dataset_preprocessor in datasets_preprocessors:
     dm.initialize_engines(dataset_preprocessor)
     if args.users:
         dm.load()

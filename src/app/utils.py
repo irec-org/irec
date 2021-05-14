@@ -85,38 +85,40 @@ def flatten_dict(d, parent_key='', sep='.'):
 
 def load_settings():
     d = dict()
+    loader = yaml.SafeLoader
     d['interactors_preprocessor_paramaters'] = yaml.load(
         open(dirname(realpath(__file__)) + sep +"settings" + sep + "interactors_preprocessor_parameters.yaml"),
-        Loader=yaml.SafeLoader)
+        Loader=loader)
 
     d['interactors_general_settings'] = yaml.load(
         open(dirname(realpath(__file__)) + sep +"settings" + sep + "interactors_general_settings.yaml"),
-        Loader=yaml.SafeLoader)
+        Loader=loader)
 
     d['interactors_search_parameters'] = yaml.load(
         open(dirname(realpath(__file__)) + sep +"settings" + sep + "interactors_search_parameters.yaml"),
-        Loader=yaml.SafeLoader)
+        Loader=loader)
 
     d['evaluation_policies_parameters'] = yaml.load(
         open(dirname(realpath(__file__)) + sep +"settings" + sep + "evaluation_policies_parameters.yaml"),
-        Loader=yaml.SafeLoader)
+        Loader=loader)
 
     with open(dirname(realpath(__file__)) + sep +"settings"+sep+"datasets_preprocessors_parameters.yaml") as f:
-        loader = yaml.SafeLoader
-        d['datasets_preprocessors'] = yaml.load(f,Loader=loader)
-        d['datasets_preprocessors'] = {k: {**setting, **{'name':k}}
-                                  for k, setting in d['datasets_preprocessors'].items()}
+        d['datasets_preprocessors_parameters'] = yaml.load(f,Loader=loader)
+        d['datasets_preprocessors_parameters'] = {k: {**setting, **{'name':k}}
+                                  for k, setting in d['datasets_preprocessors_parameters'].items()}
+    with open(dirname(realpath(__file__)) + sep +"settings"+sep+"defaults.yaml") as f:
+        d['defaults'] = yaml.load(f,Loader=loader)
     return d
 
 def load_settings_to_parser(settings,parser):
     settings_flatten=flatten_dict(settings)
     for k,v in settings_flatten.items():
         parser.add_argument(f'--{k}',default=v)
+        # parser.add_argument(f'--{k}')
 
 def sync_settings_from_args(settings,args, sep='.'):
     settings = copy.deepcopy(settings)
     args_dict = vars(args)
-    print(settings.keys())
     settings_flatten=flatten_dict(settings)
     for i in set(args_dict.keys()).intersection(set(settings_flatten.keys())):
         tmp = settings
@@ -124,3 +126,4 @@ def sync_settings_from_args(settings,args, sep='.'):
             tmp = tmp[j]
         tmp[i.split(sep)[-1]] = args_dict[i]
     return settings
+
