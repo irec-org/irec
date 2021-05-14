@@ -6,7 +6,7 @@ import random
 from threadpoolctl import threadpool_limits
 import ctypes
 import collections
-import metric
+import metrics
 from tqdm import tqdm
 
 from lib.utils.utils import run_parallel
@@ -147,7 +147,7 @@ class ICFPMFS(MF):
 
             predicted = self.predict(observed_ui)
            
-            tq.set_description('rmse={:.3f}'.format(metric.rmse(training_matrix.data,_unnorm_ratings(predicted,self.lowest_value,self.highest_value))))
+            tq.set_description('rmse={:.3f}'.format(metrics.rmse(training_matrix.data,_unnorm_ratings(predicted,self.lowest_value,self.highest_value))))
             tq.refresh()
 
         #     # objective_value = _norm_sum_probabilities(scipy.stats.norm.pdf(training_matrix.data,predicted,self.var))\

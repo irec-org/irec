@@ -8,7 +8,7 @@ from numba import jit, prange
 # from lib.utils.Parameterizable import Parameterizable
 # from .. import lib.utils
 from lib.utils.Parameterizable import Parameterizable
-import metric
+import metrics
 
 @jit(nopython=True,parallel=True)
 def _predict_sparse(users_weights, items_weights, users_items):
@@ -42,4 +42,4 @@ class MF(Parameterizable):
         return self.predict_sparse(X)
 
     def score(self,X):
-        return metric.rmse(X.data,self.predict(X))
+        return metrics.rmse(X.data,self.predict(X))

@@ -15,11 +15,11 @@ import traceback
 import scipy.sparse
 from lib.utils.DatasetManager import DatasetManager
 import yaml
-from metric import InteractionMetricsEvaluator, CumulativeMetricsEvaluator, CumulativeInteractionMetricsEvaluator
+from metrics import InteractionMetricsEvaluator, CumulativeMetricsEvaluator, CumulativeInteractionMetricsEvaluator
 from lib.utils.dataset import Dataset
 from lib.utils.PersistentDataManager import PersistentDataManager
 from lib.utils.InteractorCache import InteractorCache
-import metric
+import metrics
 from lib.utils.utils import run_parallel
 import ctypes
 from copy import copy
@@ -34,7 +34,7 @@ args = parser.parse_args()
 
 BUFFER_SIZE_EVALUATOR = 50
 
-metrics_classes = [metric.Hits]
+metrics_classes = [metrics.Hits]
 
 
 interactors_search_parameters = yaml.load(

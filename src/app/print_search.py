@@ -13,11 +13,11 @@ import numpy as np
 import scipy.sparse
 from lib.utils.DatasetManager import DatasetManager
 import yaml
-from metric import CumulativeInteractionMetricsEvaluator
+from metrics import CumulativeInteractionMetricsEvaluator
 from lib.utils.dataset import Dataset
 from lib.utils.PersistentDataManager import PersistentDataManager
 from lib.utils.InteractorCache import InteractorCache
-import metric
+import metrics
 import matplotlib.pyplot as plt
 from lib.utils.DirectoryDependent import DirectoryDependent
 from cycler import cycler
@@ -33,7 +33,7 @@ args = parser.parse_args()
 
 # print(args.b,args.m)
 
-metrics_classes = [metric.Hits]
+metrics_classes = [metrics.Hits]
 metrics_names = ['Cumulative Hits']
 
 dm = DatasetManager()

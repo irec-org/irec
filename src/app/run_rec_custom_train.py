@@ -30,7 +30,7 @@ from sklearn.decomposition import NMF
 import numpy as np
 import scipy.sparse
 # import recommenders
-import evaluation_policy
+import evaluation_policies
 import yaml
 import lib.utils.dataset
 from lib.utils.InteractorCache import InteractorCache

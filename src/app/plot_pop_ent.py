@@ -15,11 +15,11 @@ import scipy.sparse
 from lib.utils.DatasetManager import DatasetManager
 from lib.utils.DirectoryDependent import DirectoryDependent
 import yaml
-from metric import InteractionMetricsEvaluator, CumulativeMetricsEvaluator, CumulativeInteractionMetricsEvaluator, UserCumulativeInteractionMetricsEvaluator
+from metrics import InteractionMetricsEvaluator, CumulativeMetricsEvaluator, CumulativeInteractionMetricsEvaluator, UserCumulativeInteractionMetricsEvaluator
 from lib.utils.dataset import Dataset
 from lib.utils.PersistentDataManager import PersistentDataManager
 from lib.utils.InteractorCache import InteractorCache
-import metric
+import metrics
 from lib.utils.utils import run_parallel
 import ctypes
 import matplotlib

@@ -19,11 +19,11 @@ import numpy as np
 import scipy.sparse
 from lib.utils.DatasetManager import DatasetManager
 import yaml
-from metric import InteractionMetricsEvaluator, CumulativeMetricsEvaluator, CumulativeInteractionMetricsEvaluator, UserCumulativeInteractionMetricsEvaluator
+from metrics import InteractionMetricsEvaluator, CumulativeMetricsEvaluator, CumulativeInteractionMetricsEvaluator, UserCumulativeInteractionMetricsEvaluator
 from lib.utils.dataset import Dataset
 from lib.utils.PersistentDataManager import PersistentDataManager
 from lib.utils.InteractorCache import InteractorCache
-import metric
+import metrics
 from lib.utils.utils import run_parallel
 import ctypes
 
@@ -60,12 +60,12 @@ BUFFER_SIZE_EVALUATOR = 50
 
 nums_interactions_to_show = [5, 10, 20, 50, 100]
 
-metrics_classes = [metric.Recall, metric.Hits, metric.EPC, metric.UsersCoverage, metric.ILD,metric.GiniCoefficientInv]
-# metrics_classes = [metric.Recall, metric.Hits, metric.EPC, metric.UsersCoverage, metric.ILD]
-# metrics_classes = [metric.GiniCoefficientInv]
-#metrics_classes = [metric.Recall, metric.Hits, metric.EPC]
-# metrics_classes = [metric.ILD,metric.UsersCoverage]
-# metrics_classes = [metric.ILD]
+metrics_classes = [metrics.Recall, metrics.Hits, metrics.EPC, metrics.UsersCoverage, metrics.ILD,metrics.GiniCoefficientInv]
+# metrics_classes = [metrics.Recall, metrics.Hits, metrics.EPC, metrics.UsersCoverage, metrics.ILD]
+# metrics_classes = [metrics.GiniCoefficientInv]
+#metrics_classes = [metrics.Recall, metrics.Hits, metrics.EPC]
+# metrics_classes = [metrics.ILD,metrics.UsersCoverage]
+# metrics_classes = [metrics.ILD]
 
 interactors_preprocessor_paramaters = yaml.load(
     open("settings" + sep + "interactors_preprocessor_parameters.yaml"),

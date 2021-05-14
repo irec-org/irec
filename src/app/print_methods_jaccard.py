@@ -19,11 +19,11 @@ import numpy as np
 import scipy.sparse
 from lib.utils.DatasetManager import DatasetManager
 import yaml
-from metric import CumulativeInteractionMetricsEvaluator, UserCumulativeInteractionMetricsEvaluator, UsersCoverage
+from metrics import CumulativeInteractionMetricsEvaluator, UserCumulativeInteractionMetricsEvaluator, UsersCoverage
 from lib.utils.dataset import Dataset
 from lib.utils.PersistentDataManager import PersistentDataManager
 from lib.utils.InteractorCache import InteractorCache
-import metric
+import metrics
 import matplotlib.pyplot as plt
 from lib.utils.DirectoryDependent import DirectoryDependent
 from cycler import cycler
@@ -57,7 +57,7 @@ plt.rcParams['axes.prop_cycle'] = cycler(color='krbgmyc')
 plt.rcParams['lines.linewidth'] = 2
 plt.rcParams['font.size'] = 15
 
-# metrics_classes = [metric.Hits, metric.Recall]
+# metrics_classes = [metrics.Hits, metrics.Recall]
 metrics_classes_names = ['Jaccard Similarity']
 metrics_names = ['Jaccard Similarity']
 # metrics_weights = {'Hits': 0.3,'Recall':0.3,'EPC':0.16666,'UsersCoverage':0.16666,'ILD':0.16666}

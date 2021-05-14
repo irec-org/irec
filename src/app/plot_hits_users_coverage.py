@@ -16,11 +16,11 @@ import numpy as np
 import scipy.sparse
 from lib.utils.DatasetManager import DatasetManager
 import yaml
-from metric import CumulativeInteractionMetricsEvaluator, UserCumulativeInteractionMetricsEvaluator
+from metrics import CumulativeInteractionMetricsEvaluator, UserCumulativeInteractionMetricsEvaluator
 from lib.utils.dataset import Dataset
 from lib.utils.PersistentDataManager import PersistentDataManager
 from lib.utils.InteractorCache import InteractorCache
-import metric
+import metrics
 import matplotlib.pyplot as plt
 from lib.utils.DirectoryDependent import DirectoryDependent
 from cycler import cycler
@@ -44,13 +44,13 @@ plt.rcParams['axes.prop_cycle'] = cycler(color='krbgmyc')
 plt.rcParams['lines.linewidth'] = 2
 plt.rcParams['font.size'] = 15
 
-# metrics_classes = [metric.Hits, metric.Recall]
-metrics_classes = [metric.Hits]
-        # metric.Recall ,
-        # metric.EPC,
-        # metric.UsersCoverage, 
-        # metric.ILD,
-        # metric.GiniCoefficientInv,
+# metrics_classes = [metrics.Hits, metrics.Recall]
+metrics_classes = [metrics.Hits]
+        # metrics.Recall ,
+        # metrics.EPC,
+        # metrics.UsersCoverage, 
+        # metrics.ILD,
+        # metrics.GiniCoefficientInv,
         # ]
 # metrics_names = ['Cumulative Precision', 
         # 'Cumulative Recall', 

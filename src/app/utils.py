@@ -126,4 +126,3 @@ def sync_settings_from_args(settings,args, sep='.'):
             tmp = tmp[j]
         tmp[i.split(sep)[-1]] = args_dict[i]
     return settings
-

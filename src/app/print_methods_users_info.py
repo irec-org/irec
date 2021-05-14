@@ -11,6 +11,7 @@ import pandas as pd
 import seaborn as sn
 import scipy
 import lib.interactors
+import lib.evaluation_policies
 import mf
 from lib.utils.InteractorRunner import InteractorRunner
 from sklearn.decomposition import NMF
@@ -18,11 +19,11 @@ import numpy as np
 import scipy.sparse
 from lib.utils.DatasetManager import DatasetManager
 import yaml
-from metric import CumulativeInteractionMetricsEvaluator, UserCumulativeInteractionMetricsEvaluator, UsersCoverage
+from metrics import CumulativeInteractionMetricsEvaluator, UserCumulativeInteractionMetricsEvaluator, UsersCoverage
 from lib.utils.dataset import Dataset
 from lib.utils.PersistentDataManager import PersistentDataManager
 from lib.utils.InteractorCache import InteractorCache
-import metric
+import metrics
 import matplotlib.pyplot as plt
 from lib.utils.DirectoryDependent import DirectoryDependent
 from cycler import cycler
@@ -40,7 +41,6 @@ settings = utils.load_settings()
 utils.load_settings_to_parser(settings,parser)
 
 args = parser.parse_args()
-print(args)
 settings = utils.sync_settings_from_args(settings,args)
 
 interactors_classes_names_to_names = {
@@ -54,7 +54,11 @@ interactors_classes = [
     eval('interactors.' + interactor) for interactor in args.m
 ]
 
-evaluation_policy = ir.get_interactors_evaluation_policy()
+evaluation_policy_name = settings['defaults']['interactors_evaluation_policy']
+evaluation_policy_parameters = settings['evaluation_policies_parameters'][evaluation_policy_name]
+# eval('lib.evaluation_policy'+)
+
+# evaluation_policy = ir.get_interactors_evaluation_policy()
 
 nums_interactions_to_show = list(map(int, args.i))
 

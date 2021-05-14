@@ -4,7 +4,7 @@ import interactors
 import numpy as np
 import os
 import mf
-import evaluation_policy
+import evaluation_policies
 from lib.utils.PersistentDataManager import PersistentDataManager
 from .InteractorCache import InteractorCache
 import lib.utils.utils as util
@@ -87,7 +87,7 @@ class InteractorRunner():
                 '\n', '')
         evaluation_policy = eval('evaluation_policy.' + evaluation_policy_name)(
             **self.evaluation_policies_parameters[evaluation_policy_name])
-        return evaluation_policy
+        return evaluation_policies
 
     def run_interactor(self, itr, forced_run):
         # print("11111")
