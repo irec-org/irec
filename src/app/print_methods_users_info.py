@@ -36,53 +36,21 @@ parser.add_argument('-r', type=str, default=None)
 parser.add_argument('-i', default=[5, 10, 20, 50, 100], nargs='*')
 parser.add_argument('-m', nargs='*')
 parser.add_argument('-b', nargs='*')
-parser.add_argument('--dump', default=False, action='store_true')
-parser.add_argument('--users', default=False, action='store_true')
-
 settings = utils.load_settings()
 utils.load_settings_to_parser(settings,parser)
 
 args = parser.parse_args()
-settings = sync_settings_from_args(settings,args)
-# evaluation_policies_parameters = yaml.load(
-    # open("settings" + sep + "evaluation_policies_parameters.yaml"),
-    # Loader=yaml.SafeLoader)
-
-plt.rcParams['axes.prop_cycle'] = cycler(color='krbgmyc')
-plt.rcParams['lines.linewidth'] = 2
-plt.rcParams['font.size'] = 15
-
-# metrics_classes = [metric.Hits, metric.Recall]
-metrics_classes_names = ['Jaccard Similarity']
-metrics_names = ['Jaccard Similarity']
-# metrics_weights = {'Hits': 0.3,'Recall':0.3,'EPC':0.16666,'UsersCoverage':0.16666,'ILD':0.16666}
-# metrics_weights = {'Hits': 0.25,'Recall':0.25,'EPC':0.125,'UsersCoverage':0.125,'ILD':0.125,'GiniCoefficientInv':0.125}
-# metrics_weights ={i: 1/len(metrics_classes_names) for i in metrics_classes_names}
-
-with open("settings" + sep + "datasets_preprocessors_parameters.yaml") as f:
-    loader = yaml.SafeLoader
-    datasets_preprocessors = yaml.load(f, Loader=loader)
-
-    datasets_preprocessors = {
-        setting['name']: setting for setting in datasets_preprocessors
-    }
-interactors_preprocessor_paramaters = yaml.load(
-    open("settings" + sep + "interactors_preprocessor_parameters.yaml"),
-    Loader=yaml.SafeLoader)
-interactors_general_settings = yaml.load(
-    open("settings" + sep + "interactors_general_settings.yaml"),
-    Loader=yaml.SafeLoader)
-
+settings = utils.sync_settings_from_args(settings,args)
 
 interactors_classes_names_to_names = {
-    k: v['name'] for k, v in interactors_general_settings.items()
+    k: v['name'] for k, v in settings['interactors_general_settings'].items()
 }
 
 dm = DatasetManager()
-datasets_preprocessors = [datasets_preprocessors[base] for base in args.b]
-ir = InteractorRunner(dm, interactors_general_settings,
-                      interactors_preprocessor_paramaters,
-                      evaluation_policies_parameters)
+settings['datasets_preprocessors'] = [settings['datasets_preprocessors'][base] for base in args.b]
+ir = InteractorRunner(dm, settings['interactors_general_settings'],
+                      settings['interactors_preprocessor_paramaters'],
+                      settings['evaluation_policies_parameters'])
 interactors_classes = [
     eval('interactors.' + interactor) for interactor in args.m
 ]
@@ -113,9 +81,9 @@ rtex_header = r"""
 \hline
 \rowcolor{StrongGray}
 Dataset & %s \\""" % (
-    generate_table_spec(nums_interactions_to_show, len(datasets_preprocessors)),
-    generate_datasets_line(nums_interactions_to_show,
-                           [i['name'] for i in datasets_preprocessors]))
+    utils.generate_table_spec(nums_interactions_to_show, len(settings['datasets_preprocessors'])),
+    utils.generate_datasets_line(nums_interactions_to_show,
+                           [i['name'] for i in settings['datasets_preprocessors']]))
 rtex_footer = r"""
 \end{tabular}
 \end{document}
@@ -127,7 +95,7 @@ datasets_metrics_values = defaultdict(
 datasets_interactors_items_recommended = defaultdict(
     lambda: defaultdict(lambda: defaultdict(list)))
 
-for dataset_preprocessor in datasets_preprocessors:
+for dataset_preprocessor in settings['datasets_preprocessors']:
     dm.initialize_engines(dataset_preprocessor)
     for itr_class in interactors_classes:
         itr = ir.create_interactor(itr_class)
@@ -143,7 +111,7 @@ for dataset_preprocessor in datasets_preprocessors:
         datasets_interactors_items_recommended[dataset_preprocessor['name']][itr_class.__name__] = users_items_recommended
 
 methods_names= set()
-for dataset_preprocessor in datasets_preprocessors:
+for dataset_preprocessor in settings['datasets_preprocessors']:
     dm.initialize_engines(dataset_preprocessor)
     if args.users:
         dm.load()
@@ -204,44 +172,3 @@ for dataset_preprocessor in datasets_preprocessors:
                 methods_names.add(name)
 
                 # print(vals)
-    for iii, nits in enumerate(nums_interactions_to_show):
-        fig = plt.figure(figsize = (16,16))
-        print(dfs[nits])
-        sns_plot=sn.heatmap(dfs[nits], annot=True,cmap="Blues",vmin=0,vmax=1)
-        sns_plot.set_title(f"T={nits} {dataset_preprocessor['name']}")
-        file_name=os.path.join(DirectoryDependent().DIRS['img'],f'{dataset_preprocessor["name"]}',f'cm_{evaluation_policy.num_interactions}_{evaluation_policy.interaction_size}',f'cm_jaccard_{nits}.png')
-        lib.utils.utils.create_path_to_file(file_name)
-        fig.savefig(file_name)
-
-if args.dump:
-    with open('datasets_metrics_values.pickle', 'wb') as f:
-        pickle.dump(json.loads(json.dumps(datasets_metrics_values)), f)
-
-for metric_name, metric_class_name in zip(
-        metrics_names, metrics_classes_names):
-    rtex += generate_metric_interactions_header(nums_interactions_to_show,len(datasets_preprocessors),metric_name)
-    for method_name in methods_names:
-        rtex += "{} & ".format(method_name)
-        bases_values = []
-        for dataset_preprocessor in datasets_preprocessors:
-            bases_values.append(' & '.join(
-                map(
-                    lambda x: f"{x:.3f}",
-                    datasets_metrics_values[dataset_preprocessor['name']]
-                    [metric_class_name][method_name],
-                    )))
-            print(bases_values)
-        rtex+= ' & '.join(bases_values)
-        rtex+=r'\\\hline'+'\n'
-
-res = rtex_header + rtex + rtex_footer
-
-tmp = '_'.join([
-    dataset_preprocessor['name']
-    for dataset_preprocessor in datasets_preprocessors
-])
-open(os.path.join(DirectoryDependent().DIRS['tex'], f'table_jaccard_{tmp}.tex'),
-     'w+').write(res)
-os.system(
-    f"pdflatex -output-directory=\"{DirectoryDependent().DIRS['pdf']}\" \"{os.path.join(DirectoryDependent().DIRS['tex'],f'table_jaccard_{tmp}.tex')}\""
-)
