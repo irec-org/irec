@@ -5,7 +5,8 @@ sys.path.append(dirname(realpath(__file__)) + sep + pardir)
 import numpy as np
 import scipy.sparse
 
-from utils.Parameterizable import Parameterizable
+# from .. import lib.utils
+from lib.utils.Parameterizable import Parameterizable
 from collections import defaultdict
 import pickle
 import json

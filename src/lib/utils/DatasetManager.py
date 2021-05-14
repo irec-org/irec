@@ -5,12 +5,12 @@ sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + pardir + sep 
 
 from pathlib import Path
 import inquirer
-import utils.dataset as dataset
+import lib.utils.dataset as dataset
 import yaml
-# import utils.dataset_parsers as dataset_parsers
+# import lib.utils.dataset_parsers as dataset_parsers
 from .DirectoryDependent import DirectoryDependent
-import utils.splitters as splitters
-import utils.util as util
+import lib.utils.splitters as splitters
+import lib.utils.utils as util
 import pickle
 from .PersistentDataManager import PersistentDataManager
 from .Parameterizable import Parameterizable

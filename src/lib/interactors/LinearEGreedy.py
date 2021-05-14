@@ -7,7 +7,7 @@ from threadpoolctl import threadpool_limits
 import ctypes
 import scipy
 import joblib
-from utils.PersistentDataManager import PersistentDataManager
+from lib.utils.PersistentDataManager import PersistentDataManager
 from .LinearICF import LinearICF
 
 class LinearEGreedy(LinearICF):

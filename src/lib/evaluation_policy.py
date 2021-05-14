@@ -1,7 +1,7 @@
 from collections import defaultdict
 from threadpoolctl import threadpool_limits
 import scipy.sparse
-from utils.Parameterizable import Parameterizable
+from lib.utils.Parameterizable import Parameterizable
 import numpy as np
 import random
 from tqdm import tqdm
@@ -10,7 +10,7 @@ import interactors
 
 import matplotlib as mpl
 import seaborn as sns
-from utils.DirectoryDependent import DirectoryDependent
+from lib.utils.DirectoryDependent import DirectoryDependent
 import matplotlib.pyplot as plt
 import scipy.stats
 import os
@@ -98,7 +98,7 @@ class InteractionSample(EvaluationPolicy,Parameterizable):
 
         data = np.vstack(
             (train_dataset.data, test_dataset.data))
-        from utils.dataset import Dataset
+        from lib.utils.dataset import Dataset
 
         dataset = Dataset(data)
         dataset.update_from_data()

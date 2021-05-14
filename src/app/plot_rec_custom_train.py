@@ -15,17 +15,17 @@ parser.add_argument('-elast', default='Interaction')
 args = parser.parse_args()
 import inquirer
 import matplotlib
-from utils.DirectoryDependent import DirectoryDependent
+from lib.utils.DirectoryDependent import DirectoryDependent
 from collections import defaultdict
 import interactors
 import matplotlib.pyplot as plt
-from utils.InteractorRunner import InteractorRunner
+from lib.utils.InteractorRunner import InteractorRunner
 import joblib
 import concurrent.futures
-from utils.DatasetManager import DatasetManager
+from lib.utils.DatasetManager import DatasetManager
 from concurrent.futures import ProcessPoolExecutor, wait, FIRST_COMPLETED
 import mf
-import utils.util as util
+import lib.utils.utils as util
 # from util import DatasetFormatter, MetricsEvaluator
 from sklearn.decomposition import NMF
 import numpy as np
@@ -33,9 +33,9 @@ import scipy.sparse
 # import recommenders
 import evaluation_policy
 import yaml
-import utils.dataset
-from utils.InteractorCache import InteractorCache
-from utils.PersistentDataManager import PersistentDataManager
+import lib.utils.dataset
+from lib.utils.InteractorCache import InteractorCache
+from lib.utils.PersistentDataManager import PersistentDataManager
 import metric
 
 datasets_metrics_rate_values = defaultdict(

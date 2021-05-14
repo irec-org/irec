@@ -9,7 +9,7 @@ while true; do
 								#MESSAGE="/tmp/Mail.out"
 								#TO="daygeek@gmail.com"
 
-								killall python3.6
+								killall python3
 					#			break
 				fi
 				sleep 0.4

@@ -13,7 +13,7 @@ from .MFInteractor import MFInteractor
 from tqdm import tqdm
 from numba import njit, jit
 import mf
-from utils.PersistentDataManager import PersistentDataManager
+from lib.utils.PersistentDataManager import PersistentDataManager
 import joblib
 from .MostPopular import *
 

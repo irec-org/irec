@@ -8,19 +8,19 @@ import interactors
 import mf
 import matplotlib.pyplot as plt
 from collections import defaultdict
-from utils.InteractorRunner import InteractorRunner
+from lib.utils.InteractorRunner import InteractorRunner
 from sklearn.decomposition import NMF
 import numpy as np
 import scipy.sparse
-from utils.DatasetManager import DatasetManager
-from utils.DirectoryDependent import DirectoryDependent
+from lib.utils.DatasetManager import DatasetManager
+from lib.utils.DirectoryDependent import DirectoryDependent
 import yaml
 from metric import InteractionMetricsEvaluator, CumulativeMetricsEvaluator, CumulativeInteractionMetricsEvaluator, UserCumulativeInteractionMetricsEvaluator
-from utils.dataset import Dataset
-from utils.PersistentDataManager import PersistentDataManager
-from utils.InteractorCache import InteractorCache
+from lib.utils.dataset import Dataset
+from lib.utils.PersistentDataManager import PersistentDataManager
+from lib.utils.InteractorCache import InteractorCache
 import metric
-from utils.util import run_parallel
+from lib.utils.utils import run_parallel
 import ctypes
 import matplotlib
 

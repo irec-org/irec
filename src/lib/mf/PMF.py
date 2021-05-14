@@ -8,7 +8,7 @@ import ctypes
 import metric
 from tqdm import tqdm
 
-from utils.util import run_parallel
+from lib.utils.utils import run_parallel
 from mf import MF
 class PMF(MF):
     def __init__(self, iterations=200, var=0.1, user_var=1, item_var=1, learning_rate=1e-3, momentum=0.6, stop_criteria=0.0009, *args, **kwargs):

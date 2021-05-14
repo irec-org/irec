@@ -1,89 +1,91 @@
-- dataset_descriptor:
+MovieLens 100k (B):
+  dataset_descriptor:
     dataset_dir: ml-100k/
   preprocessor:
     - MovieLens100k
     - TrainTestConsumption
-  name: MovieLens 100k (B)
-- dataset_descriptor:
+  #name: MovieLens 100k (B)
+MovieLens 1M (B):
+  dataset_descriptor:
     dataset_dir: ml-1m/
   preprocessor:
     - MovieLens1M
     - TrainTestConsumption
-  name: MovieLens 1M (B)
-- dataset_descriptor:
+  #name: MovieLens 1M (B)
+MovieLens 1M:
+  dataset_descriptor:
     dataset_dir: Train-Test_ML-1M/
   preprocessor:
     - TRTE
-  name: MovieLens 1M
-- dataset_descriptor:
+MovieLens 10M:
+  dataset_descriptor:
     dataset_dir: Train-Test_ML-10M/
   preprocessor:
     - TRTE
-  name: MovieLens 10M
-- dataset_descriptor:
+Good Books:
+  dataset_descriptor:
     dataset_dir: Train-Test_Good-Books/
   preprocessor:
     - TRTE
-  name: Good Books
-- dataset_descriptor:
+Ciao DVD:
+  dataset_descriptor:
     dataset_dir: Train-Test_Ciao-DVD/
   preprocessor:
     - TRTE
-  name: Ciao DVD
-- dataset_descriptor:
+Amazon Kindle Store:
+  dataset_descriptor:
     dataset_dir: Train-Test_Amazon-Kindle-Store/
   preprocessor:
     - TRTE
-  name: Amazon Kindle Store
-- dataset_descriptor:
+Netflix:
+  dataset_descriptor:
     dataset_dir: Train-Test_Netflix/
   preprocessor:
     - Netflix
-  name: Netflix
-- dataset_descriptor:
+Yahoo Music:
+  dataset_descriptor:
     dataset_dir: Train-Test_Yahoo-Music/
   preprocessor:
     - TRTE
-  name: Yahoo Music
-- dataset_descriptor:
+Yahoo Music Validation:
+  dataset_descriptor:
     dataset_dir: Train-Test_Yahoo-Music/
   preprocessor:
     - TRTE
     - TRTETrainValidation
-  name: Yahoo Music Validation
-- dataset_descriptor:
+MovieLens 10M Validation:
+  dataset_descriptor:
     dataset_dir: Train-Test_ML-10M/
   preprocessor:
     - TRTE
     - TRTETrainValidation
-  name: MovieLens 10M Validation
-- dataset_descriptor:
+Good Books Validation:
+  dataset_descriptor:
     dataset_dir: Train-Test_Good-Books/
   preprocessor:
     - TRTE
     - TRTETrainValidation
-  name: Good Books Validation
-- dataset_descriptor:
+Yahoo Music Sampled:
+  dataset_descriptor:
     dataset_dir: Train-Test_Yahoo-Music/
   preprocessor:
     - TRTE
     - TRTESample
-  name: Yahoo Music Sampled
-- dataset_descriptor:
+MovieLens 10M Sampled:
+  dataset_descriptor:
     dataset_dir: Train-Test_ML-10M/
   preprocessor:
     - TRTE
     - TRTESample
-  name: MovieLens 10M Sampled
-- dataset_descriptor:
+Good Books Sampled:
+  dataset_descriptor:
     dataset_dir: Train-Test_Good-Books/
   preprocessor:
     - TRTE
     - TRTESample
-  name: Good Books Sampled
-- dataset_descriptor:
+MovieLens 1M Validation:
+  dataset_descriptor:
     dataset_dir: Train-Test_ML-1M/
   preprocessor:
     - TRTE
     - TRTETrainValidation
-  name: MovieLens 1M Validation

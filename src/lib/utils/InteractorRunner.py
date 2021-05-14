@@ -5,9 +5,9 @@ import numpy as np
 import os
 import mf
 import evaluation_policy
-from utils.PersistentDataManager import PersistentDataManager
+from lib.utils.PersistentDataManager import PersistentDataManager
 from .InteractorCache import InteractorCache
-import utils.util as util
+import lib.utils.utils as util
 import ctypes
 from collections import OrderedDict
 from concurrent.futures import ProcessPoolExecutor, wait, FIRST_COMPLETED

@@ -5,7 +5,7 @@ import random
 from threadpoolctl import threadpool_limits
 import ctypes
 
-from utils.util import run_parallel
+from lib.utils.utils import run_parallel
 from mf import MF
 from numba import jit
 

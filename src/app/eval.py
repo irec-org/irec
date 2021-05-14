@@ -13,18 +13,18 @@ sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "lib")
 import inquirer
 import interactors
 import mf
-from utils.InteractorRunner import InteractorRunner
+from lib.utils.InteractorRunner import InteractorRunner
 from sklearn.decomposition import NMF
 import numpy as np
 import scipy.sparse
-from utils.DatasetManager import DatasetManager
+from lib.utils.DatasetManager import DatasetManager
 import yaml
 from metric import InteractionMetricsEvaluator, CumulativeMetricsEvaluator, CumulativeInteractionMetricsEvaluator, UserCumulativeInteractionMetricsEvaluator
-from utils.dataset import Dataset
-from utils.PersistentDataManager import PersistentDataManager
-from utils.InteractorCache import InteractorCache
+from lib.utils.dataset import Dataset
+from lib.utils.PersistentDataManager import PersistentDataManager
+from lib.utils.InteractorCache import InteractorCache
 import metric
-from utils.util import run_parallel
+from lib.utils.utils import run_parallel
 import ctypes
 
 

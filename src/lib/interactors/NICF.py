@@ -10,7 +10,7 @@ import random
 from .MFInteractor import MFInteractor
 from numba import njit, jit
 import mf
-from utils.PersistentDataManager import PersistentDataManager
+from lib.utils.PersistentDataManager import PersistentDataManager
 import joblib
 import tensorflow as tf
 import copy

@@ -9,7 +9,7 @@ import collections
 import metric
 from tqdm import tqdm
 
-from utils.util import run_parallel
+from lib.utils.utils import run_parallel
 from . import MF
 from numba import jit
 

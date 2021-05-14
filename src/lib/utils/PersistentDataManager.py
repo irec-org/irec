@@ -3,7 +3,7 @@ from .Parameterizable import Parameterizable
 from .DirectoryDependent import DirectoryDependent
 import os
 import json
-from . import util
+from . import utils
 # import joblib
 from os.path import sep
 

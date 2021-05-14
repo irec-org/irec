@@ -4,13 +4,13 @@ import sys
 sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "lib")
 
 import inquirer
-import utils.dataset as dataset
+import lib.utils.dataset as dataset
 import yaml
-from utils.DirectoryDependent import DirectoryDependent
-import utils.splitters as splitters
-import utils.util as util
+from lib.utils.DirectoryDependent import DirectoryDependent
+import lib.utils.splitters as splitters
+import lib.utils.utils as util
 import pickle
-from utils.DatasetManager import DatasetManager
+from lib.utils.DatasetManager import DatasetManager
 dm = DatasetManager()
 datasets_preprocessors = dm.request_datasets_preprocessors()
 for dataset_preprocessor in datasets_preprocessors:

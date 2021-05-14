@@ -3,8 +3,8 @@ import os
 import sys
 sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "lib")
 
-from utils.DirectoryDependent import DirectoryDependent
-from utils.DatasetManager import DatasetManager
+from lib.utils.DirectoryDependent import DirectoryDependent
+from lib.utils.DatasetManager import DatasetManager
 import matplotlib.pyplot as plt
 import numpy as np
 from datetime import datetime

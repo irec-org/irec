@@ -1,4 +1,4 @@
-from . import util
+from . import utils
 
 
 class Parameterizable:

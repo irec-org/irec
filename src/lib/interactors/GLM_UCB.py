@@ -10,7 +10,7 @@ from collections import defaultdict
 import joblib
 import scipy
 import mf
-from utils.PersistentDataManager import PersistentDataManager
+from lib.utils.PersistentDataManager import PersistentDataManager
 import interactors
 
 class GLM_UCB(LinearICF):

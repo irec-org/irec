@@ -4,12 +4,12 @@ import interactors
 
 import scipy.sparse
 from collections import defaultdict
-from utils.Parameterizable import Parameterizable
+from lib.utils.Parameterizable import Parameterizable
 import time
-from utils.util import run_parallel
+from lib.utils.utils import run_parallel
 import ctypes
-# import utils.dataset as dataset
-from utils import dataset
+# import lib.utils.dataset as dataset
+from lib.utils import dataset
 np.seterr(all='raise')
 
 
