@@ -1,18 +1,23 @@
 import argparse
+import utils
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-m',nargs='*')
 parser.add_argument('-b',nargs='*')
+settings = utils.load_settings()
+utils.load_settings_to_parser(settings,parser)
 args = parser.parse_args()
+settings = utils.sync_settings_from_args(settings,args)
 
 from os.path import dirname, realpath, sep, pardir
 import os
 import sys
-sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "lib")
+sys.path.append(dirname(realpath(__file__)) + sep + pardir )
 
+import lib.evaluation_policies
 import inquirer
-import interactors
-import mf
+import lib.interactors
+import lib.mf
 from lib.utils.InteractorRunner import InteractorRunner
 from sklearn.decomposition import NMF
 import numpy as np
@@ -55,50 +60,35 @@ def evaluate_itr(metric_evaluator_id, dm_id, itr_class):
                          metric_evaluator.get_id(), metric_name), metric_values)
 
 
-parser = argparse.ArgumentParser(description='Grid search')
+# parser = argparse.ArgumentParser(description='Grid search')
 BUFFER_SIZE_EVALUATOR = 50
 
 nums_interactions_to_show = [5, 10, 20, 50, 100]
 
-metrics_classes = [metrics.Recall, metrics.Hits, metrics.EPC, metrics.UsersCoverage, metrics.ILD,metrics.GiniCoefficientInv]
+# metrics_classes = [metrics.Recall, metrics.Hits, metrics.EPC, metrics.UsersCoverage, metrics.ILD,metrics.GiniCoefficientInv]
+metrics_classes = [metrics.Recall, metrics.Hits]
 # metrics_classes = [metrics.Recall, metrics.Hits, metrics.EPC, metrics.UsersCoverage, metrics.ILD]
 # metrics_classes = [metrics.GiniCoefficientInv]
 #metrics_classes = [metrics.Recall, metrics.Hits, metrics.EPC]
 # metrics_classes = [metrics.ILD,metrics.UsersCoverage]
 # metrics_classes = [metrics.ILD]
 
-interactors_preprocessor_paramaters = yaml.load(
-    open("settings" + sep + "interactors_preprocessor_parameters.yaml"),
-    Loader=yaml.SafeLoader)
-interactors_general_settings = yaml.load(
-    open("settings" + sep + "interactors_general_settings.yaml"),
-    Loader=yaml.SafeLoader)
-
-evaluation_policies_parameters = yaml.load(
-    open("settings" + sep + "evaluation_policies_parameters.yaml"),
-    Loader=yaml.SafeLoader)
-with open("settings"+sep+"datasets_preprocessors_parameters.yaml") as f:
-    loader = yaml.SafeLoader
-    datasets_preprocessors = yaml.load(f,Loader=loader)
-
-    datasets_preprocessors = {setting['name']: setting
-                              for setting in datasets_preprocessors}
-datasets_preprocessors = [datasets_preprocessors[base] for base in args.b]
+datasets_preprocessors = [settings['datasets_preprocessors_parameters'][base] for base in args.b]
 
 dm = DatasetManager()
 
-ir = InteractorRunner(dm, interactors_general_settings,
-                      interactors_preprocessor_paramaters,
-                      evaluation_policies_parameters)
-interactors_classes = [eval('interactors.'+interactor) for interactor in args.m]
+ir = InteractorRunner(dm, settings['interactors_general_settings'],
+                      settings['interactors_preprocessor_paramaters'],
+                      settings['evaluation_policies_parameters'])
+interactors_classes = [eval('lib.interactors.'+interactor) for interactor in args.m]
 for dataset_preprocessor in datasets_preprocessors:
     
     dm.initialize_engines(dataset_preprocessor)
     dm.load()
 
-    ir = InteractorRunner(dm, interactors_general_settings,
-                          interactors_preprocessor_paramaters,
-                          evaluation_policies_parameters)
+    ir = InteractorRunner(dm, settings['interactors_general_settings'],
+                          settings['interactors_preprocessor_paramaters'],
+                          settings['evaluation_policies_parameters'])
 
     data = np.vstack(
         (dm.dataset_preprocessed[0].data, dm.dataset_preprocessed[1].data))
@@ -111,7 +101,9 @@ for dataset_preprocessor in datasets_preprocessors:
         UserCumulativeInteractionMetricsEvaluator(dataset, metrics_classes)
     ]
 
-    evaluation_policy = ir.get_interactors_evaluation_policy()
+    evaluation_policy_name = settings['defaults']['interactors_evaluation_policy']
+    evaluation_policy_parameters = settings['evaluation_policies_parameters'][evaluation_policy_name]
+    evaluation_policy=eval('lib.evaluation_policies.'+evaluation_policy_name)(**evaluation_policy_parameters)
 
     for metric_evaluator in metrics_evaluators:
         # args = [(id(metric_evaluator), id(dm), itr_class)

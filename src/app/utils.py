@@ -1,3 +1,7 @@
+from os.path import dirname, realpath, sep, pardir
+import os
+import sys
+sys.path.append(dirname(realpath(__file__)) + sep + pardir )
 import collections
 import traceback
 import matplotlib.ticker as mtick

@@ -5,7 +5,7 @@ from lib.utils.Parameterizable import Parameterizable
 import numpy as np
 import random
 from tqdm import tqdm
-import interactors
+import lib.interactors
 
 
 import matplotlib as mpl
@@ -154,8 +154,8 @@ class InteractionSample(EvaluationPolicy,Parameterizable):
         pbar.update(_num_interactions)
         _num_interactions = 0
         pbar.close()
-        items_entropy = interactors.Entropy.get_items_entropy(consumption_matrix)
-        items_popularity = interactors.MostPopular.get_items_popularity(consumption_matrix,normalize=False)
+        items_entropy = lib.interactors.Entropy.get_items_entropy(consumption_matrix)
+        items_popularity = lib.interactors.MostPopular.get_items_popularity(consumption_matrix,normalize=False)
         for uid, items in users_items_recommended.items():
 
             colors = mpl.cm.rainbow(np.linspace(0, 1, len(items)))
