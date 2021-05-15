@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-import interactors
+import lib.interactors
 from collections import defaultdict
 import random
 import math

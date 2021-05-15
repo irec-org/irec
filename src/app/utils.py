@@ -1,6 +1,10 @@
 import collections
+import traceback
+import matplotlib.ticker as mtick
 import matplotlib.pyplot as plt
 from os.path import dirname, realpath, sep, pardir
+from lib.utils.PersistentDataManager import PersistentDataManager
+from lib.utils.InteractorCache import InteractorCache
 import copy
 LATEX_TABLE_FOOTER = r"""
 \end{tabular}
@@ -132,7 +136,28 @@ def sync_settings_from_args(settings,args, sep='.'):
 def plot_similar_items(vals,method1,method2):
     fig, ax = plt.subplots()
     ax.plot(np.sort(vals)[::-1],linewidth=5)
+    ax.yaxis.set_major_formatter(mtick.PercentFormatter())
+    ax.xaxis.set_major_formatter(mtick.PercentFormatter())
     # ax.set_title()
     ax.set_xlabel('Users Rank (%)')
     ax.set_ylabel('Similar items (%)')
     return fig
+
+def run_interactor(itr,evaluation_policy,dm,forced_run):
+    pdm = PersistentDataManager(directory='results')
+    if forced_run or not pdm.file_exists(InteractorCache().get_id(
+            dm, evaluation_policy, itr)):
+        try:
+            history_items_recommended = evaluation_policy.evaluate(
+                itr, dm.dataset_preprocessed[0],
+                dm.dataset_preprocessed[1])
+        except:
+            print(traceback.print_exc())
+            raise SystemError
+
+        pdm = PersistentDataManager(directory='results')
+        pdm.save(InteractorCache().get_id(dm, evaluation_policy, itr),
+                 history_items_recommended)
+    else:
+        print("Already executed",
+              InteractorCache().get_id(dm, evaluation_policy, itr))

@@ -10,7 +10,7 @@ import yaml
 # import lib.utils.dataset_parsers as dataset_parsers
 from .DirectoryDependent import DirectoryDependent
 import lib.utils.splitters as splitters
-import lib.utils.utils as util
+# import lib.utils.utils as util
 import pickle
 from .PersistentDataManager import PersistentDataManager
 from .Parameterizable import Parameterizable

@@ -95,10 +95,6 @@ class InteractorRunner():
         evaluation_policy = self.get_interactors_evaluation_policy()
         if forced_run or not pdm.file_exists(InteractorCache().get_id(
                 self.dm, evaluation_policy, itr)):
-            # print("22222")
-            # print(self.dm)
-            # print(self.dm.dataset_preprocessed[0])
-            # print(self.dm.dataset_preprocessed[1])
             try:
                 history_items_recommended = evaluation_policy.evaluate(
                     itr, self.dm.dataset_preprocessed[0],
