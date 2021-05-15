@@ -61,14 +61,24 @@ evaluation_policy=eval('lib.evaluation_policies.'+evaluation_policy_name)(**eval
 datasets_interactors_items_recommended = defaultdict(
     lambda: defaultdict(lambda: defaultdict(list)))
 
-def get_groups_and_methods_metrics_from_sample(items,itr_recs,ground_truth_consumption_matrix):
-    items=set(items)
-    hits= 0
-    for uid, rec_items in itr_recs.items():
-        sample_rec_items = list(set(rec_items).intersection(items))
-        hits+=np.sum(ground_truth_consumption_matrix[uid,sample_rec_items]>=4)
-    hits/=len(itr_recs)
-    return hits
+def get_groups_and_methods_metrics_from_sample(itr_1_recs,itr_2_recs,ground_truth_consumption_matrix,type_):
+    data = dict()
+    data['hits'] = 0
+    data['mean_num_items']= 0
+    for uid, rec_items in itr_1_recs.items():
+        if type_ == 'inter':
+            sample_rec_items = list(set(rec_items).intersection(set(itr_2_recs[uid])))
+        elif type_ == 'x-y':
+            sample_rec_items = list(set(rec_items)-set(itr_2_recs[uid]))
+        elif type_ == 'y-x':
+            sample_rec_items = list(set(itr_2_recs[uid])-set(rec_items))
+        else:
+            sample_rec_items = itr_1_recs[uid]
+        data['mean_num_items']+= len(sample_rec_items)
+        data['hits']+=np.sum(ground_truth_consumption_matrix[uid,sample_rec_items]>=4)
+    data['hits']/=len(itr_1_recs)
+    data['mean_num_items']/=len(itr_1_recs)
+    return data['mean_num_items'],data['hits']
 
 for dataset_preprocessor in datasets_preprocessors:
     dm.initialize_engines(dataset_preprocessor)
@@ -82,8 +92,12 @@ for dataset_preprocessor in datasets_preprocessors:
             uid = history_items_recommended[i][0]
             iid = history_items_recommended[i][1]
             users_items_recommended[uid].append(iid)
+        uir = defaultdict(list)
+        for k,v in users_items_recommended.items():
+            uir[k] = v[:10]
 
-        datasets_interactors_items_recommended[dataset_preprocessor['name']][itr_class.__name__] = users_items_recommended
+        # datasets_interactors_items_recommended[dataset_preprocessor['name']][itr_class.__name__] = users_items_recommended
+        datasets_interactors_items_recommended[dataset_preprocessor['name']][itr_class.__name__] = uir
 
 methods_names= set()
 results = []
@@ -128,17 +142,21 @@ for dataset_preprocessor in datasets_preprocessors:
                 file_name=os.path.join(DirectoryDependent().DIRS['img'],'similarity',f'{dataset_preprocessor["name"]}_{interactors_classes_names_to_names[itr_class_1.__name__]}_{interactors_classes_names_to_names[itr_class_2.__name__]}.png')
                 lib.utils.utils.create_path_to_file(file_name)
                 fig.savefig(file_name)
-                g1 = x.intersection(y)
-                g2 = x - y
-                g3 = y - x
-                all_items = list(range(ground_truth_dataset.num_total_items))
-                hits_g1 = get_groups_and_methods_metrics_from_sample(g1,itr_1_recs,ground_truth_consumption_matrix)
-                hits_g2 = get_groups_and_methods_metrics_from_sample(g2,itr_1_recs,ground_truth_consumption_matrix)
-                hits_g3 = get_groups_and_methods_metrics_from_sample(g3,itr_1_recs,ground_truth_consumption_matrix)
-                hits_itr_1 = get_groups_and_methods_metrics_from_sample(all_items,itr_1_recs,ground_truth_consumption_matrix)
-                hits_itr_2 = get_groups_and_methods_metrics_from_sample(all_items,itr_2_recs,ground_truth_consumption_matrix)
+                # g1 = x.intersection(y)
+                # g2 = x - y
+                # g3 = y - x
+                # g4 = x.intersection(y)
+                # all_items = list(range(ground_truth_dataset.num_total_items))
+                mni_g1, hits_g1 = get_groups_and_methods_metrics_from_sample(itr_1_recs,itr_2_recs, ground_truth_consumption_matrix,type_='inter')
+                mni_g2, hits_g2 = get_groups_and_methods_metrics_from_sample(itr_1_recs,itr_2_recs,ground_truth_consumption_matrix,type_='x-y')
+                mni_g3, hits_g3 = get_groups_and_methods_metrics_from_sample(itr_2_recs,itr_1_recs,ground_truth_consumption_matrix,type_='x-y')
+                # mni_g4, hits_g4 = get_groups_and_methods_metrics_from_sample(g4,itr_2_recs,ground_truth_consumption_matrix)
+                mni_itr_1, hits_itr_1 = get_groups_and_methods_metrics_from_sample(itr_1_recs,None,ground_truth_consumption_matrix,type_=None)
+                mni_itr_2, hits_itr_2 = get_groups_and_methods_metrics_from_sample(itr_2_recs,None,ground_truth_consumption_matrix,type_=None)
                 # results.append([dataset_preprocessor['name']])
                 results.append(['','G1','G2','G3',interactors_classes_names_to_names[itr_class_1.__name__],interactors_classes_names_to_names[itr_class_2.__name__]])
                 results.append([dataset_preprocessor['name'],hits_g1,hits_g2,hits_g3,hits_itr_1,hits_itr_2])
+                # results.append(['Num. Items',len(g1),len(g2),len(g3),len(all_items),len(all_items)])
+                results.append(['Num. Mean Items',mni_g1,mni_g2,mni_g3,mni_itr_1,mni_itr_2])
 
 print(tabulate(results))
