@@ -15,13 +15,13 @@ class PersistentDataManager(DirectoryDependent):
 
     def get_fp(self,path):
         fp = os.path.join(self.DIRS[self.directory],path+self.extension_name)
-        fp = util.repair_path_name(fp)
+        fp = utils.repair_path_name(fp)
         return fp
 
     def save(self,path,data):
             
         fp = self.get_fp(path)
-        util.create_path_to_file(fp)
+        utils.create_path_to_file(fp)
         with open(fp, "wb") as f:
             pickle.dump(data, f)
 

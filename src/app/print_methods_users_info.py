@@ -52,17 +52,17 @@ dm = DatasetManager()
 datasets_preprocessors = [settings['datasets_preprocessors_parameters'][base] for base in args.b]
 
 interactors_classes = [
-    eval('interactors.' + interactor) for interactor in args.m
+    eval('lib.interactors.' + interactor) for interactor in args.m
 ]
 
 evaluation_policy_name = settings['defaults']['interactors_evaluation_policy']
 evaluation_policy_parameters = settings['evaluation_policies_parameters'][evaluation_policy_name]
-evaluation_policy=eval('lib.evaluation_policy'+evaluation_policy_name)(**evaluation_policy_parameters)
+evaluation_policy=eval('lib.evaluation_policies.'+evaluation_policy_name)(**evaluation_policy_parameters)
 
 for dataset_preprocessor in datasets_preprocessors:
     dm.initialize_engines(dataset_preprocessor)
     for itr_class in interactors_classes:
-        itr = ir.create_interactor(itr_class)
+        itr = itr_class(**settings['interactors_preprocessor_paramaters'][dataset_preprocessor['name']][itr_class.__name__]['parameters'])
         pdm = PersistentDataManager(directory='results')
         history_items_recommended = pdm.load(InteractorCache().get_id(
             dm, evaluation_policy, itr))

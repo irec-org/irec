@@ -7,7 +7,7 @@ class Parameterizable:
         self.parameters = []
 
     def get_id(self,num_bars=0):
-        return self.__class__.__name__+':{'+util.dict_to_str(
+        return self.__class__.__name__+':{'+utils.dict_to_str(
             {i: (getattr(self,i) if not isinstance(getattr(self,i),Parameterizable) else getattr(self,i).get_parameters_dict())
              for i in self.parameters}
             ,num_bars)+'}'
@@ -16,4 +16,4 @@ class Parameterizable:
         return {i: (getattr(self,i) if not isinstance(getattr(self,i),Parameterizable) else getattr(self,i).get_parameters_dict()) for i in self.parameters}
 
     def print_parameters(self):
-        util.print_dict(self.get_parameters_dict())
+        utils.print_dict(self.get_parameters_dict())
