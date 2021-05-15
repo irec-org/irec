@@ -58,6 +58,8 @@ interactors_classes = [
 evaluation_policy_name = settings['defaults']['interactors_evaluation_policy']
 evaluation_policy_parameters = settings['evaluation_policies_parameters'][evaluation_policy_name]
 evaluation_policy=eval('lib.evaluation_policies.'+evaluation_policy_name)(**evaluation_policy_parameters)
+datasets_interactors_items_recommended = defaultdict(
+    lambda: defaultdict(lambda: defaultdict(list)))
 
 def get_groups_and_methods_metrics_from_sample(items,itr_recs,ground_truth_consumption_matrix):
     items=set(items)
@@ -87,30 +89,13 @@ methods_names= set()
 results = []
 for dataset_preprocessor in datasets_preprocessors:
     dm.initialize_engines(dataset_preprocessor)
-    if args.users:
-        dm.load()
-        data = np.vstack(
-            (dm.dataset_preprocessed[0].data, dm.dataset_preprocessed[1].data))
-
-        dataset = Dataset(data)
-        dataset.update_from_data()
-        dataset.update_num_total_users_items()
-        ground_truth_dataset= dataset
-        ground_truth_consumption_matrix = scipy.sparse.csr_matrix(
-            (ground_truth_dataset.data[:, 2],
-             (ground_truth_dataset.data[:, 0],
-              ground_truth_dataset.data[:, 1])),
-            (ground_truth_dataset.num_total_users,
-             ground_truth_dataset.num_total_items))
-    # for nits in nums_interactions_to_show:
-        # array = np.array([[1]*len(interactors_classes)]*len(interactors_classes),dtype=float)
-        # dfs[nits] = pd.DataFrame(array, index = [interactors_classes_names_to_names[i.__name__] for i in interactors_classes],
-                          # columns = [interactors_classes_names_to_names[i.__name__] for i in interactors_classes])
     for ii, itr_class_1 in enumerate(interactors_classes):
-        itr_1 = ir.create_interactor(itr_class_1)
+        # itr_1 = ir.create_interactor(itr_class_1)
+        itr_1 = itr_class(**settings['interactors_preprocessor_paramaters'][dataset_preprocessor['name']][itr_class_1.__name__]['parameters'])
         for jj, itr_class_2 in enumerate(interactors_classes):
             if ii > jj:
-                itr_2 = ir.create_interactor(itr_class_1)
+                # itr_2 = ir.create_interactor(itr_class_1)
+                itr_1 = itr_class(**settings['interactors_preprocessor_paramaters'][dataset_preprocessor['name']][itr_class_2.__name__]['parameters'])
                 name = interactors_classes_names_to_names[itr_class_1.__name__]+r' $\times $ '+interactors_classes_names_to_names[itr_class_2.__name__]
                 itr_1_recs = datasets_interactors_items_recommended[dataset_preprocessor['name']][itr_class_1.__name__]
                 itr_2_recs = datasets_interactors_items_recommended[dataset_preprocessor['name']][itr_class_2.__name__]
