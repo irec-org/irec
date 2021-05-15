@@ -3,7 +3,7 @@ import pickle
 import os
 import sys
 import json
-from util import *
+from utils import *
 sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "lib")
 
 import inquirer
@@ -174,7 +174,7 @@ for dataset_preprocessor in datasets_preprocessors:
         itr_1 = ir.create_interactor(itr_class_1)
         for jj, itr_class_2 in enumerate(interactors_classes):
             if ii > jj:
-                itr_2 = ir.create_interactor(itr_class_1)
+                itr_2 = ir.create_interactor(itr_class_2)
                 name = interactors_classes_names_to_names[itr_class_1.__name__]+r' $\times $ '+interactors_classes_names_to_names[itr_class_2.__name__]
                 itr_1_recs = datasets_interactors_items_recommended[dataset_preprocessor['name']][itr_class_1.__name__]
                 itr_2_recs = datasets_interactors_items_recommended[dataset_preprocessor['name']][itr_class_2.__name__]
