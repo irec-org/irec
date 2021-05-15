@@ -1,4 +1,5 @@
 import collections
+import matplotlib.pyplot as plt
 from os.path import dirname, realpath, sep, pardir
 import copy
 LATEX_TABLE_FOOTER = r"""
@@ -126,3 +127,12 @@ def sync_settings_from_args(settings,args, sep='.'):
             tmp = tmp[j]
         tmp[i.split(sep)[-1]] = args_dict[i]
     return settings
+
+
+def plot_similar_items(vals,method1,method2):
+    fig, ax = plt.subplots()
+    ax.plot(np.sort(vals)[::-1],linewidth=5)
+    # ax.set_title()
+    ax.set_xlabel('Users Rank (%)')
+    ax.set_ylabel('Similar items (%)')
+    return fig

@@ -43,6 +43,7 @@ utils.load_settings_to_parser(settings,parser)
 args = parser.parse_args()
 settings = utils.sync_settings_from_args(settings,args)
 
+nums_interactions_to_show=args.i
 interactors_classes_names_to_names = {
     k: v['name'] for k, v in settings['interactors_general_settings'].items()
 }
@@ -56,39 +57,7 @@ interactors_classes = [
 
 evaluation_policy_name = settings['defaults']['interactors_evaluation_policy']
 evaluation_policy_parameters = settings['evaluation_policies_parameters'][evaluation_policy_name]
-# eval('lib.evaluation_policy'+)
-
-# evaluation_policy = ir.get_interactors_evaluation_policy()
-
-nums_interactions_to_show = list(map(int, args.i))
-
-rtex_header = r"""
-\documentclass{standalone}
-%%\usepackage[landscape, paperwidth=15cm, paperheight=30cm, margin=0mm]{geometry}
-\usepackage{multirow}
-\usepackage{color, colortbl}
-\usepackage{xcolor, soul}
-\usepackage{amssymb}
-\definecolor{Gray}{gray}{0.9}
-\definecolor{StrongGray}{gray}{0.7}
-\begin{document}
-\begin{tabular}{%s}
-\hline
-\rowcolor{StrongGray}
-Dataset & %s \\""" % (
-    utils.generate_table_spec(nums_interactions_to_show, len(datasets_preprocessors)),
-    utils.generate_datasets_line(nums_interactions_to_show,
-                           [i['name'] for i in datasets_preprocessors]))
-rtex_footer = r"""
-\end{tabular}
-\end{document}
-"""
-rtex = ""
-
-datasets_metrics_values = defaultdict(
-    lambda: defaultdict(lambda: defaultdict(list)))
-datasets_interactors_items_recommended = defaultdict(
-    lambda: defaultdict(lambda: defaultdict(list)))
+evaluation_policy=eval('lib.evaluation_policy'+evaluation_policy_name)(**evaluation_policy_parameters)
 
 for dataset_preprocessor in datasets_preprocessors:
     dm.initialize_engines(dataset_preprocessor)
@@ -123,11 +92,10 @@ for dataset_preprocessor in datasets_preprocessors:
               ground_truth_dataset.data[:, 1])),
             (ground_truth_dataset.num_total_users,
              ground_truth_dataset.num_total_items))
-    dfs = dict()
-    for nits in nums_interactions_to_show:
-        array = np.array([[1]*len(interactors_classes)]*len(interactors_classes),dtype=float)
-        dfs[nits] = pd.DataFrame(array, index = [interactors_classes_names_to_names[i.__name__] for i in interactors_classes],
-                          columns = [interactors_classes_names_to_names[i.__name__] for i in interactors_classes])
+    # for nits in nums_interactions_to_show:
+        # array = np.array([[1]*len(interactors_classes)]*len(interactors_classes),dtype=float)
+        # dfs[nits] = pd.DataFrame(array, index = [interactors_classes_names_to_names[i.__name__] for i in interactors_classes],
+                          # columns = [interactors_classes_names_to_names[i.__name__] for i in interactors_classes])
     for ii, itr_class_1 in enumerate(interactors_classes):
         itr_1 = ir.create_interactor(itr_class_1)
         for jj, itr_class_2 in enumerate(interactors_classes):
@@ -137,33 +105,22 @@ for dataset_preprocessor in datasets_preprocessors:
                 itr_1_recs = datasets_interactors_items_recommended[dataset_preprocessor['name']][itr_class_1.__name__]
                 itr_2_recs = datasets_interactors_items_recommended[dataset_preprocessor['name']][itr_class_2.__name__]
                 vals = []
-                if args.users == False:
-                    for i in nums_interactions_to_show:
-                        x = set()
-                        for uid,items in itr_1_recs.items():
-                            x |= set(items[:i])
-                        y = set()
-                        for uid,items in itr_2_recs.items():
-                            y |= set(items[:i])
-                        vals.append(len(x.intersection(y))/len(x | y))
-                else:
-                    for i in nums_interactions_to_show:
-                        x = set()
-                        for uid,items in itr_1_recs.items():
-                            if np.sum(ground_truth_consumption_matrix[uid,items[:i]] >= 4)>0:
-                                x.add(uid)
-                        y = set()
-                        for uid,items in itr_2_recs.items():
-                            if np.sum(ground_truth_consumption_matrix[uid,items[:i]] >= 4)>0:
-                                y.add(uid)
-                        vals.append(len(x.intersection(y))/len(x | y))
 
+                for uid1,items1 in itr_1_recs.items():
+                    items2= itr_2_recs[uid1]
+                    x = set(items1).intersection(set(items2))/len(items1)
+                    vals.append(x)
+                fig = utils.plot_similar_items(vals,'','')
+                file_name=os.path.join(DirectoryDependent().DIRS['img'],'similarity',f'{dataset_preprocessor["name"]}_{interactors_classes_names_to_names[itr_class_1.__name__]}_{interactors_classes_names_to_names[itr_class_2.__name__]}','.png')
+                lib.utils.utils.create_path_to_file(file_name)
+                fig.savefig(file_name)
 
-                for iii, nits in enumerate(nums_interactions_to_show):
-                    dfs[nits][interactors_classes_names_to_names[itr_class_1.__name__]][interactors_classes_names_to_names[itr_class_2.__name__]] = vals[iii]
-                    dfs[nits][interactors_classes_names_to_names[itr_class_2.__name__]][interactors_classes_names_to_names[itr_class_1.__name__]] = vals[iii]
+                # vals.append(len(x.intersection(y))/len(x | y))
+                # for iii, nits in enumerate(nums_interactions_to_show):
+                    # dfs[nits][interactors_classes_names_to_names[itr_class_1.__name__]][interactors_classes_names_to_names[itr_class_2.__name__]] = vals[iii]
+                    # dfs[nits][interactors_classes_names_to_names[itr_class_2.__name__]][interactors_classes_names_to_names[itr_class_1.__name__]] = vals[iii]
 
-                datasets_metrics_values[dataset_preprocessor['name']]['Jaccard Similarity'][name].extend(vals)
-                methods_names.add(name)
+                # datasets_metrics_values[dataset_preprocessor['name']]['Jaccard Similarity'][name].extend(vals)
+                # methods_names.add(name)
 
                 # print(vals)
