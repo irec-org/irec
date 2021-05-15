@@ -109,15 +109,16 @@ for dataset_preprocessor in datasets_preprocessors:
                 os.path.join(
                     InteractorCache().get_id(dm, evaluation_policy, itr),
                     metrics_evaluator.get_id(), metric_class_name))
-            datasets_metrics_values[dataset_preprocessor['name']][
-                metric_class_name][itr_class.__name__].extend(
-                    [np.mean(metric_values[i]) for i in range(len(nums_interactions_to_show))])
+            # datasets_metrics_values[dataset_preprocessor['name']][
+                # metric_class_name][itr_class.__name__].extend(
+                    # [np.mean(metric_values[i]) for i in range(len(nums_interactions_to_show))])
             datasets_metrics_users_values[dataset_preprocessor['name']][
                 metric_class_name][itr_class.__name__].extend(
                     np.array([metric_values[i] for i in range(len(nums_interactions_to_show))]))
 
 methods_names= set()
-results = [['']*(len(metrics_classes_names)*len(datasets_preprocessors)+2)]*(2+len(interactors_classes)*4)
+results = [['']*(len(metrics_classes_names)*len(datasets_preprocessors)+2) for _ in range(2+len(interactors_classes)*4)]
+results[0][1]="Characteristics"
 plt.style.use('seaborn-dark')
 fig, axs = plt.subplots(nrows=2,ncols=2,figsize=(7,7))
 axs[1,0].set_ylabel('Mean Rating')
@@ -146,7 +147,7 @@ for hh, dataset_preprocessor in enumerate(datasets_preprocessors):
          ground_truth_dataset.num_total_items))
 
     df = pd.DataFrame(ground_truth_dataset.data)
-    df = df.sort(0)
+    df = df.sort_values(0)
     # print(df.head())
     # print(df.groupby(0).mean().head())
     ds_data = dict()
@@ -176,6 +177,18 @@ for hh, dataset_preprocessor in enumerate(datasets_preprocessors):
     axs[0,0].plot(ipercent,y,label=dataset_preprocessor['name'])
     axs[0,0].xaxis.set_major_formatter(mtick.PercentFormatter())
     axs[0,0].yaxis.set_major_formatter(mtick.PercentFormatter())
+    size_top_pop = 100
+    # print(df)
+    pop_count = df[df[1].isin(df.groupby(1).count().sort_values(2,ascending=False).iloc[:size_top_pop].index)].groupby(0).count()[1]
+    
+    print(pop_count)
+    pop_count = pop_count.to_dict()
+    users_missing= set(list(range(ground_truth_dataset.num_total_users)))-set(list(map(int,pop_count.keys())))
+    for uid in users_missing:
+        pop_count[uid] = 0
+    pop_count = pd.Series(pop_count).to_frame().sort_index()
+    ds_data['Popularity']=np.array(pop_count[0])
+    # raise SystemExit
     
     # np.sort(ground_truth_consumption_matrix.toarray())
     for ii, itr_class in enumerate(interactors_classes):
@@ -183,16 +196,23 @@ for hh, dataset_preprocessor in enumerate(datasets_preprocessors):
         # itr_recs = datasets_interactors_items_recommended[dataset_preprocessor['name']][itr_class.__name__]
         for jj, metric_class_name in enumerate(metrics_classes_names):
             for zz, (ds_fieldname,ds_fieldvalue) in enumerate(ds_data.items()):
+                results[0][hh*len(metrics_classes_names)+2]=dataset_preprocessor['name']
+                results[1][hh*len(metrics_classes_names)+2+jj]=metric_class_name
+                results[2+ii*len(ds_data)][0] = interactors_classes_names_to_names[itr_class.__name__]
+                results[2+ii*len(ds_data)+zz][1] = ds_fieldname
+                # results[2+(ii+1)*(zz)][(jj)*(hh+1)+2]
                 # print(len(datasets_metrics_users_values[dataset_preprocessor['name']][
                     # metric_class_name][itr_class.__name__][-1]))
                 metric_vals= datasets_metrics_users_values[dataset_preprocessor['name']][
                     metric_class_name][itr_class.__name__][-1]
                 
-                pearson = scipy.stats.pearsonr(datasets_metrics_users_values[dataset_preprocessor['name']][
-                    metric_class_name][itr_class.__name__][-1],ds_fieldvalue[list(metric_vals.keys())])[0,0]
-                results[2+(ii+1)*(zz+1)][(jj+1)*(hh+1)+2] = pearson
+                pearson = scipy.stats.pearsonr(np.array(list(metric_vals.values())),ds_fieldvalue[list(metric_vals.keys())])[0]
+                print(pearson,2+(ii+1)*(zz),(jj)*(hh+1)+2)
+                results[2+(ii)*(len(ds_data))+zz][(jj)*(len(datasets_preprocessors))+hh+2] = '%.4f'%pearson
+
         # vals = []
-        
+# print(results)
+# print(results[4]]][5])       
         # results.append(['','G1','G2','G3',interactors_classes_names_to_names[itr_class_1.__name__],interactors_classes_names_to_names[itr_class_2.__name__]])
         # results.append([dataset_preprocessor['name'],hits_g1,hits_g2,hits_g3,hits_itr_1,hits_itr_2])
         # results.append(['Num. Items',len(g1),len(g2),len(g3),len(all_items),len(all_items)])
