@@ -1,6 +1,6 @@
 import numpy as np
 
-import interactors
+import lib.interactors
 
 import scipy.sparse
 from collections import defaultdict
@@ -279,7 +279,7 @@ class CumulativeInteractionMetricsEvaluator(InteractionMetricsEvaluator):
 
     @staticmethod
     def metric_summarize(users_metric_values):
-        return np.mean(users_metric_values)
+        return np.mean(list(users_metric_values.values()))
 
     @staticmethod
     def _metric_evaluation(obj_id, num_interactions, interaction_size,
@@ -320,7 +320,7 @@ class CumulativeInteractionMetricsEvaluator(InteractionMetricsEvaluator):
                 print(f"Computing interaction {i+1} with {self.__class__.__name__}")
                 metric_values.append(
                     self.metric_summarize(
-                        [metric.compute(uid) for uid in self.uids]))
+                        {uid: metric.compute(uid) for uid in self.uids}))
 
         print(
             f"{self.__class__.__name__} spent {time.time()-start_time:.2f} seconds executing {metric_class.__name__} metric"
