@@ -206,9 +206,12 @@ for hh, dataset_preprocessor in enumerate(datasets_preprocessors):
                 metric_vals= datasets_metrics_users_values[dataset_preprocessor['name']][
                     metric_class_name][itr_class.__name__][-1]
                 
-                pearson = scipy.stats.pearsonr(np.array(list(metric_vals.values())),ds_fieldvalue[list(metric_vals.keys())])[0]
-                print(pearson,2+(ii+1)*(zz),(jj)*(hh+1)+2)
-                results[2+(ii)*(len(ds_data))+zz][(jj)*(len(datasets_preprocessors))+hh+2] = '%.4f'%pearson
+                correlation_coef = scipy.stats.spearmanr(np.array(list(metric_vals.values())),ds_fieldvalue[list(metric_vals.keys())])[0]
+                print(correlation_coef,2+(ii+1)*(zz),(jj)*(hh+1)+2)
+                custom_char = ''
+                if correlation_coef > 0.1 or correlation_coef < -0.1:
+                    custom_char = '*'
+                results[2+(ii)*(len(ds_data))+zz][(jj)*(len(datasets_preprocessors))+hh+2] = '%.4f%s'%(correlation_coef,custom_char)
 
         # vals = []
 # print(results)
