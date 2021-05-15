@@ -89,6 +89,20 @@ methods_names= set()
 results = []
 for dataset_preprocessor in datasets_preprocessors:
     dm.initialize_engines(dataset_preprocessor)
+    dm.load()
+    data = np.vstack(
+        (dm.dataset_preprocessed[0].data, dm.dataset_preprocessed[1].data))
+
+    dataset = Dataset(data)
+    dataset.update_from_data()
+    dataset.update_num_total_users_items()
+    ground_truth_dataset= dataset
+    ground_truth_consumption_matrix = scipy.sparse.csr_matrix(
+        (ground_truth_dataset.data[:, 2],
+         (ground_truth_dataset.data[:, 0],
+          ground_truth_dataset.data[:, 1])),
+        (ground_truth_dataset.num_total_users,
+         ground_truth_dataset.num_total_items))
     for ii, itr_class_1 in enumerate(interactors_classes):
         # itr_1 = ir.create_interactor(itr_class_1)
         itr_1 = itr_class(**settings['interactors_preprocessor_paramaters'][dataset_preprocessor['name']][itr_class_1.__name__]['parameters'])
