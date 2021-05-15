@@ -65,8 +65,8 @@ def get_groups_and_methods_metrics_from_sample(items,itr_recs,ground_truth_consu
     items=set(items)
     hits= 0
     for uid, rec_items in itr_recs.items():
-        sample_rec_items = list(set(rec_items)-items)
-        hits+=np.sum(ground_truth_consumption_matrix[uid,sample_rec_items])
+        sample_rec_items = list(set(rec_items).intersection(items))
+        hits+=np.sum(ground_truth_consumption_matrix[uid,sample_rec_items]>=4)
     hits/=len(itr_recs)
     return hits
 
@@ -109,7 +109,7 @@ for dataset_preprocessor in datasets_preprocessors:
         for jj, itr_class_2 in enumerate(interactors_classes):
             if ii > jj:
                 # itr_2 = ir.create_interactor(itr_class_1)
-                itr_1 = itr_class(**settings['interactors_preprocessor_paramaters'][dataset_preprocessor['name']][itr_class_2.__name__]['parameters'])
+                itr_2 = itr_class(**settings['interactors_preprocessor_paramaters'][dataset_preprocessor['name']][itr_class_2.__name__]['parameters'])
                 name = interactors_classes_names_to_names[itr_class_1.__name__]+r' $\times $ '+interactors_classes_names_to_names[itr_class_2.__name__]
                 itr_1_recs = datasets_interactors_items_recommended[dataset_preprocessor['name']][itr_class_1.__name__]
                 itr_2_recs = datasets_interactors_items_recommended[dataset_preprocessor['name']][itr_class_2.__name__]
@@ -118,26 +118,27 @@ for dataset_preprocessor in datasets_preprocessors:
                 y = set()
                 for uid1,items1 in itr_1_recs.items():
                     items2= itr_2_recs[uid1]
-                    v = set(items1).intersection(set(items2))/len(items1)
+                    v = len(set(items1).intersection(set(items2)))/len(items1)
                     x |= set(itr_1_recs[uid1])
                     y |= set(itr_2_recs[uid1])
                     vals.append(v)
                 
                 vals=vals/np.max(vals)
-                fig = utils.plot_similar_items(vals,'','')
-                file_name=os.path.join(DirectoryDependent().DIRS['img'],'similarity',f'{dataset_preprocessor["name"]}_{interactors_classes_names_to_names[itr_class_1.__name__]}_{interactors_classes_names_to_names[itr_class_2.__name__]}','.png')
+                fig = utils.plot_similar_items(vals,'','',dataset_preprocessor['name'])
+                file_name=os.path.join(DirectoryDependent().DIRS['img'],'similarity',f'{dataset_preprocessor["name"]}_{interactors_classes_names_to_names[itr_class_1.__name__]}_{interactors_classes_names_to_names[itr_class_2.__name__]}.png')
                 lib.utils.utils.create_path_to_file(file_name)
                 fig.savefig(file_name)
                 g1 = x.intersection(y)
                 g2 = x - y
                 g3 = y - x
-                all_items = ground_truth_dataset.num_total_items
+                all_items = list(range(ground_truth_dataset.num_total_items))
                 hits_g1 = get_groups_and_methods_metrics_from_sample(g1,itr_1_recs,ground_truth_consumption_matrix)
                 hits_g2 = get_groups_and_methods_metrics_from_sample(g2,itr_1_recs,ground_truth_consumption_matrix)
                 hits_g3 = get_groups_and_methods_metrics_from_sample(g3,itr_1_recs,ground_truth_consumption_matrix)
                 hits_itr_1 = get_groups_and_methods_metrics_from_sample(all_items,itr_1_recs,ground_truth_consumption_matrix)
                 hits_itr_2 = get_groups_and_methods_metrics_from_sample(all_items,itr_2_recs,ground_truth_consumption_matrix)
-                results.append(['G1','G2','G3',interactors_classes_names_to_names[itr_class_1.__name__],interactors_classes_names_to_names[itr_class_2.__name__]])
-                results.append([hits_g1,hits_g2,hits_g3,hits_itr_1,hits_itr_2])
+                # results.append([dataset_preprocessor['name']])
+                results.append(['','G1','G2','G3',interactors_classes_names_to_names[itr_class_1.__name__],interactors_classes_names_to_names[itr_class_2.__name__]])
+                results.append([dataset_preprocessor['name'],hits_g1,hits_g2,hits_g3,hits_itr_1,hits_itr_2])
 
 print(tabulate(results))

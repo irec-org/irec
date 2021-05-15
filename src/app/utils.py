@@ -1,6 +1,7 @@
 import collections
 import traceback
 import matplotlib.ticker as mtick
+import numpy as np
 import matplotlib.pyplot as plt
 from os.path import dirname, realpath, sep, pardir
 from lib.utils.PersistentDataManager import PersistentDataManager
@@ -133,13 +134,14 @@ def sync_settings_from_args(settings,args, sep='.'):
     return settings
 
 
-def plot_similar_items(vals,method1,method2):
+def plot_similar_items(ys,method1,method2,title=None):
     fig, ax = plt.subplots()
-    ax.plot(np.sort(vals)[::-1],linewidth=5)
+    ax.plot(np.sort(ys)[::-1],linewidth=2,color='k')
     ax.yaxis.set_major_formatter(mtick.PercentFormatter())
-    ax.xaxis.set_major_formatter(mtick.PercentFormatter())
+    # ax.xaxis.set_major_formatter(mtick.PercentFormatter())
     # ax.set_title()
-    ax.set_xlabel('Users Rank (%)')
+    ax.set_title(title)
+    ax.set_xlabel('Users Rank')
     ax.set_ylabel('Similar items (%)')
     return fig
 
