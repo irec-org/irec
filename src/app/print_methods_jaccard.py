@@ -198,7 +198,7 @@ for dataset_preprocessor in datasets_preprocessors:
         print(dfs[nits])
         sns_plot=sn.heatmap(dfs[nits], annot=True,cmap="Blues",vmin=0,vmax=1)
         sns_plot.set_title(f"T={nits} {dataset_preprocessor['name']}")
-        file_name=os.path.join(DirectoryDependent().DIRS['img'],f'{dataset_preprocessor["name"]}_{args.type}',f'cm_{evaluation_policy.num_interactions}_{evaluation_policy.interaction_size}',f'cm_jaccard_{nits}.png')
+        file_name=os.path.join(DirectoryDependent().DIRS['img'],f'{dataset_preprocessor["name"]}_{args.type}',f'cm_{evaluation_policy.num_interactions}_{evaluation_policy.interaction_size}',f'cm_{nits}.png')
         lib.utils.utils.create_path_to_file(file_name)
         fig.savefig(file_name)
 
