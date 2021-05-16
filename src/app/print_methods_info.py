@@ -75,7 +75,7 @@ evaluation_policy=eval('lib.evaluation_policies.'+evaluation_policy_name)(**eval
 # for dataset_preprocessor in datasets_preprocessors:
     # dm.initialize_engines(dataset_preprocessor)
     # for itr_class in interactors_classes:
-        # itr = itr_class(**settings['interactors_preprocessor_paramaters'][dataset_preprocessor['name']][itr_class.__name__]['parameters'])
+        # itr = itr_class(**settings['interactors_preprocessor_parameters'][dataset_preprocessor['name']][itr_class.__name__]['parameters'])
         # pdm = PersistentDataManager(directory='results')
         # history_items_recommended = pdm.load(InteractorCache().get_id(
             # dm, evaluation_policy, itr))
@@ -101,7 +101,7 @@ for dataset_preprocessor in datasets_preprocessors:
 
     for metric_class_name in metrics_classes_names:
         for itr_class in interactors_classes:
-            itr = itr_class(**settings['interactors_preprocessor_paramaters'][dataset_preprocessor['name']][itr_class.__name__]['parameters'])
+            itr = itr_class(**settings['interactors_preprocessor_parameters'][dataset_preprocessor['name']][itr_class.__name__]['parameters'])
             pdm = PersistentDataManager(directory='results')
 
             metrics_pdm = PersistentDataManager(directory='metrics')
@@ -192,7 +192,7 @@ for hh, dataset_preprocessor in enumerate(datasets_preprocessors):
     
     # np.sort(ground_truth_consumption_matrix.toarray())
     for ii, itr_class in enumerate(interactors_classes):
-        itr = itr_class(**settings['interactors_preprocessor_paramaters'][dataset_preprocessor['name']][itr_class.__name__]['parameters'])
+        itr = itr_class(**settings['interactors_preprocessor_parameters'][dataset_preprocessor['name']][itr_class.__name__]['parameters'])
         # itr_recs = datasets_interactors_items_recommended[dataset_preprocessor['name']][itr_class.__name__]
         for jj, metric_class_name in enumerate(metrics_classes_names):
             for zz, (ds_fieldname,ds_fieldvalue) in enumerate(ds_data.items()):

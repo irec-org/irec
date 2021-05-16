@@ -83,7 +83,7 @@ def get_groups_and_methods_metrics_from_sample(itr_1_recs,itr_2_recs,ground_trut
 for dataset_preprocessor in datasets_preprocessors:
     dm.initialize_engines(dataset_preprocessor)
     for itr_class in interactors_classes:
-        itr = itr_class(**settings['interactors_preprocessor_paramaters'][dataset_preprocessor['name']][itr_class.__name__]['parameters'])
+        itr = itr_class(**settings['interactors_preprocessor_parameters'][dataset_preprocessor['name']][itr_class.__name__]['parameters'])
         pdm = PersistentDataManager(directory='results')
         history_items_recommended = pdm.load(InteractorCache().get_id(
             dm, evaluation_policy, itr))
@@ -119,11 +119,11 @@ for dataset_preprocessor in datasets_preprocessors:
          ground_truth_dataset.num_total_items))
     for ii, itr_class_1 in enumerate(interactors_classes):
         # itr_1 = ir.create_interactor(itr_class_1)
-        itr_1 = itr_class(**settings['interactors_preprocessor_paramaters'][dataset_preprocessor['name']][itr_class_1.__name__]['parameters'])
+        itr_1 = itr_class(**settings['interactors_preprocessor_parameters'][dataset_preprocessor['name']][itr_class_1.__name__]['parameters'])
         for jj, itr_class_2 in enumerate(interactors_classes):
             if ii > jj:
                 # itr_2 = ir.create_interactor(itr_class_1)
-                itr_2 = itr_class(**settings['interactors_preprocessor_paramaters'][dataset_preprocessor['name']][itr_class_2.__name__]['parameters'])
+                itr_2 = itr_class(**settings['interactors_preprocessor_parameters'][dataset_preprocessor['name']][itr_class_2.__name__]['parameters'])
                 name = interactors_classes_names_to_names[itr_class_1.__name__]+r' $\times $ '+interactors_classes_names_to_names[itr_class_2.__name__]
                 itr_1_recs = datasets_interactors_items_recommended[dataset_preprocessor['name']][itr_class_1.__name__]
                 itr_2_recs = datasets_interactors_items_recommended[dataset_preprocessor['name']][itr_class_2.__name__]

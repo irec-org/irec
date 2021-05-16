@@ -1,4 +1,5 @@
 from os.path import dirname, realpath, sep, pardir
+from collections import defaultdict
 import os
 import sys
 sys.path.append(dirname(realpath(__file__)) + sep + pardir )
@@ -92,13 +93,17 @@ def flatten_dict(d, parent_key='', sep='.'):
         else:
             items.append((new_key, v))
     return dict(items)
-
+def defaultify(d):
+    if not isinstance(d, dict):
+        return d
+    return defaultdict(lambda: dict, {k: defaultify(v) for k, v in d.items()})
 def load_settings():
     d = dict()
     loader = yaml.SafeLoader
-    d['interactors_preprocessor_paramaters'] = yaml.load(
+    d['interactors_preprocessor_parameters'] = yaml.load(
         open(dirname(realpath(__file__)) + sep +"settings" + sep + "interactors_preprocessor_parameters.yaml"),
         Loader=loader)
+    d['interactors_preprocessor_parameters'] =defaultify(d['interactors_preprocessor_parameters'])
 
     d['interactors_general_settings'] = yaml.load(
         open(dirname(realpath(__file__)) + sep +"settings" + sep + "interactors_general_settings.yaml"),
@@ -167,3 +172,8 @@ def run_interactor(itr,evaluation_policy,dm,forced_run):
     else:
         print("Already executed",
               InteractorCache().get_id(dm, evaluation_policy, itr))
+def create_interactor(itr_class,dataset_preprocessor_name,settings):
+    try:
+        return itr_class(**settings['interactors_preprocessor_parameters'][dataset_preprocessor_name][itr_class.__name__]['parameters'])
+    except:
+        return itr_class()

@@ -65,8 +65,8 @@ BUFFER_SIZE_EVALUATOR = 50
 
 nums_interactions_to_show = [5, 10, 20, 50, 100]
 
-# metrics_classes = [metrics.Recall, metrics.Hits, metrics.EPC, metrics.UsersCoverage, metrics.ILD,metrics.GiniCoefficientInv]
-metrics_classes = [metrics.Recall, metrics.Hits]
+metrics_classes = [metrics.Recall, metrics.Hits, metrics.EPC, metrics.UsersCoverage, metrics.ILD,metrics.GiniCoefficientInv]
+# metrics_classes = [metrics.Recall, metrics.Hits]
 # metrics_classes = [metrics.Recall, metrics.Hits, metrics.EPC, metrics.UsersCoverage, metrics.ILD]
 # metrics_classes = [metrics.GiniCoefficientInv]
 #metrics_classes = [metrics.Recall, metrics.Hits, metrics.EPC]
@@ -78,7 +78,7 @@ datasets_preprocessors = [settings['datasets_preprocessors_parameters'][base] fo
 dm = DatasetManager()
 
 ir = InteractorRunner(dm, settings['interactors_general_settings'],
-                      settings['interactors_preprocessor_paramaters'],
+                      settings['interactors_preprocessor_parameters'],
                       settings['evaluation_policies_parameters'])
 interactors_classes = [eval('lib.interactors.'+interactor) for interactor in args.m]
 for dataset_preprocessor in datasets_preprocessors:
@@ -87,7 +87,7 @@ for dataset_preprocessor in datasets_preprocessors:
     dm.load()
 
     ir = InteractorRunner(dm, settings['interactors_general_settings'],
-                          settings['interactors_preprocessor_paramaters'],
+                          settings['interactors_preprocessor_parameters'],
                           settings['evaluation_policies_parameters'])
 
     data = np.vstack(

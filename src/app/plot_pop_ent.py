@@ -32,7 +32,7 @@ nums_interactions_to_print = [5, 10, 20]
 
 dm = DatasetManager()
 datasets_preprocessors = dm.request_datasets_preprocessors()
-interactors_preprocessor_paramaters = yaml.load(
+interactors_preprocessor_parameters = yaml.load(
     open("settings" + sep + "interactors_preprocessor_parameters.yaml"),
     Loader=yaml.SafeLoader)
 interactors_general_settings = yaml.load(
@@ -44,7 +44,7 @@ evaluation_policies_parameters = yaml.load(
     Loader=yaml.SafeLoader)
 
 ir = InteractorRunner(dm, interactors_general_settings,
-                      interactors_preprocessor_paramaters,
+                      interactors_preprocessor_parameters,
                       evaluation_policies_parameters)
 interactors_classes = ir.select_interactors()
 for dataset_preprocessor in datasets_preprocessors:
@@ -53,7 +53,7 @@ for dataset_preprocessor in datasets_preprocessors:
     dm.load()
 
     ir = InteractorRunner(dm, interactors_general_settings,
-                          interactors_preprocessor_paramaters,
+                          interactors_preprocessor_parameters,
                           evaluation_policies_parameters)
 
     data = np.vstack(

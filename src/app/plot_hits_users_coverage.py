@@ -73,7 +73,7 @@ with open("settings"+sep+"datasets_preprocessors_parameters.yaml") as f:
 evaluation_policies_parameters = yaml.load(
     open("settings" + sep + "evaluation_policies_parameters.yaml"),
     Loader=yaml.SafeLoader)
-interactors_preprocessor_paramaters = yaml.load(
+interactors_preprocessor_parameters = yaml.load(
     open("settings" + sep + "interactors_preprocessor_parameters.yaml"),
     Loader=yaml.SafeLoader)
 interactors_general_settings = yaml.load(
@@ -91,12 +91,12 @@ interactors_classes_names_to_names = {
 dm = DatasetManager()
 datasets_preprocessors = [datasets_preprocessors[base] for base in args.b]
 ir = InteractorRunner(dm, interactors_general_settings,
-                      interactors_preprocessor_paramaters,
+                      interactors_preprocessor_parameters,
                       evaluation_policies_parameters)
 interactors_classes = [eval('interactors.'+interactor) for interactor in args.m]
 
 # ir = InteractorRunner(dm, interactors_general_settings,
-                      # interactors_preprocessor_paramaters,
+                      # interactors_preprocessor_parameters,
                       # evaluation_policies_parameters)
 # interactors_classes = ir.select_interactors()
 

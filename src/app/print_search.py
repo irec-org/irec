@@ -43,7 +43,7 @@ interactors_search_parameters = yaml.load(
     open("settings" + sep + "interactors_search_parameters.yaml"),
     Loader=yaml.SafeLoader)
 
-interactors_preprocessor_paramaters = yaml.load(
+interactors_preprocessor_parameters = yaml.load(
     open("settings" + sep + "interactors_preprocessor_parameters.yaml"),
     Loader=yaml.SafeLoader)
 interactors_general_settings = yaml.load(
@@ -65,7 +65,7 @@ interactors_classes_names_to_names = {
 }
 
 ir = InteractorRunner(dm, interactors_general_settings,
-                      interactors_preprocessor_paramaters,
+                      interactors_preprocessor_parameters,
                       evaluation_policies_parameters)
 # interactors_classes = ir.select_interactors()
 interactors_classes = [eval('interactors.'+interactor) for interactor in args.m]
@@ -112,7 +112,7 @@ for k1, v1 in datasets_metrics_values.items():
             keys = [keys[i] for i in idxs]
             values = [values[i] for i in idxs]
             if args.d:
-                interactors_preprocessor_paramaters[k1][k3] = {'parameters':json.loads(keys[0])}
+                interactors_preprocessor_parameters[k1][k3] = {'parameters':json.loads(keys[0])}
             if args.t:
                 print(f"{k3}:")
                 print('\tparameters:')
@@ -127,4 +127,4 @@ for k1, v1 in datasets_metrics_values.items():
 
 if args.d:
     print("Saved parameters!")
-    open("settings" + sep + "interactors_preprocessor_parameters.yaml",'w').write(yaml.dump(interactors_preprocessor_paramaters))
+    open("settings" + sep + "interactors_preprocessor_parameters.yaml",'w').write(yaml.dump(interactors_preprocessor_parameters))

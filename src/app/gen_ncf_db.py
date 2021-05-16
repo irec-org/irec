@@ -24,7 +24,7 @@ parser.add_argument('-b',nargs='*')
 args = parser.parse_args()
 
 def main():
-    interactors_preprocessor_paramaters = yaml.load(
+    interactors_preprocessor_parameters = yaml.load(
         open("settings" + sep + "interactors_preprocessor_parameters.yaml"),
         Loader=yaml.SafeLoader)
     interactors_general_settings = yaml.load(

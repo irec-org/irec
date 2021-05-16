@@ -43,7 +43,7 @@ datasets_metrics_rate_values = defaultdict(
     lambda: defaultdict(lambda: defaultdict(dict))))
 metrics_classes = [metrics.Hits]
 
-interactors_preprocessor_paramaters = yaml.load(
+interactors_preprocessor_parameters = yaml.load(
     open("settings" + sep + "interactors_preprocessor_parameters.yaml"),
     Loader=yaml.SafeLoader)
 interactors_general_settings = yaml.load(
@@ -65,7 +65,7 @@ with open("settings" + sep + "datasets_preprocessors_parameters.yaml") as f:
 dm = DatasetManager()
 datasets_preprocessors = [datasets_preprocessors[base] for base in args.b]
 ir = InteractorRunner(None, interactors_general_settings,
-                      interactors_preprocessor_paramaters,
+                      interactors_preprocessor_parameters,
                       evaluation_policies_parameters)
 interactors_classes = [
     eval('interactors.' + interactor) for interactor in args.m
@@ -84,7 +84,7 @@ for dataset_preprocessor in datasets_preprocessors:
         for interactor_class in interactors_classes:
             metric_evaluator = metrics.TotalMetricsEvaluator(
                 None, metrics_classes)
-            itr = interactor_class(**interactors_preprocessor_paramaters[
+            itr = interactor_class(**interactors_preprocessor_parameters[
                 dataset_preprocessor['name']][interactor_class.__name__]
                                    ['parameters'])
 
@@ -112,7 +112,7 @@ for dataset_preprocessor in datasets_preprocessors:
                         'num_interactions'][interactor_class.__name__][history_rate]=float(fi.read())
             # num_interactions = float(open(fp, 'r').read())
 
-            itr = interactor_class(**interactors_preprocessor_paramaters[
+            itr = interactor_class(**interactors_preprocessor_parameters[
                 dataset_preprocessor['name']][interactor_class.__name__]
                                    ['parameters'])
 

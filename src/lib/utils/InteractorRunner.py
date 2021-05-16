@@ -17,11 +17,11 @@ import time
 class InteractorRunner():
 
     def __init__(self, dm, interactors_general_settings,
-                 interactors_preprocessor_paramaters,
+                 interactors_preprocessor_parameters,
                  evaluation_policies_parameters):
         self.dm = dm
         self.interactors_general_settings = interactors_general_settings
-        self.interactors_preprocessor_paramaters = interactors_preprocessor_paramaters
+        self.interactors_preprocessor_parameters = interactors_preprocessor_parameters
         self.evaluation_policies_parameters = evaluation_policies_parameters
 
     def get_interactor_name(self, interactor_class_name):
@@ -66,18 +66,18 @@ class InteractorRunner():
         return interactors_classes
 
     def create_interactor(self, itr_class):
-        if self.interactors_preprocessor_paramaters[
+        if self.interactors_preprocessor_parameters[
                 self.dm.dataset_preprocessor.name][
-                    itr_class.__name__] != None and 'parameters' in self.interactors_preprocessor_paramaters[
+                    itr_class.__name__] != None and 'parameters' in self.interactors_preprocessor_parameters[
                         self.dm.dataset_preprocessor.name][itr_class.__name__]:
-            parameters = self.interactors_preprocessor_paramaters[
+            parameters = self.interactors_preprocessor_parameters[
                 self.dm.dataset_preprocessor.name][
                     itr_class.__name__]['parameters']
         else:
             parameters = {}
         #     parameters =
 
-        # print(self.interactors_preprocessor_paramaters[self.dm.dataset_preprocessor.name][itr_class.__name__])
+        # print(self.interactors_preprocessor_parameters[self.dm.dataset_preprocessor.name][itr_class.__name__])
         itr = itr_class(**parameters)
         return itr
 

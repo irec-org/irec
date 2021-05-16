@@ -32,7 +32,7 @@ dataset_preprocessor = dm.request_dataset_preprocessor()
 dm.initialize_engines(dataset_preprocessor)
 dm.load()
 
-interactors_preprocessor_paramaters = yaml.load(
+interactors_preprocessor_parameters = yaml.load(
     open("settings" + sep + "interactors_preprocessor_parameters.yaml"),
     Loader=yaml.SafeLoader)
 interactors_general_settings = yaml.load(
@@ -48,7 +48,7 @@ interactors_classes_names_to_names = {
 }
 
 ir = InteractorRunner(dm, interactors_general_settings,
-                      interactors_preprocessor_paramaters,
+                      interactors_preprocessor_parameters,
                       evaluation_policies_parameters)
 interactors_classes = ir.select_interactors()
 

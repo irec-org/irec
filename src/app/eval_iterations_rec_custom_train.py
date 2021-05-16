@@ -38,7 +38,7 @@ import metrics
 
 metrics_classes = [metrics.Hits,metrics.Precision,metrics.Recall]
 
-interactors_preprocessor_paramaters = yaml.load(
+interactors_preprocessor_parameters = yaml.load(
     open("settings" + sep + "interactors_preprocessor_parameters.yaml"),
     Loader=yaml.SafeLoader)
 interactors_general_settings = yaml.load(
@@ -60,7 +60,7 @@ with open("settings" + sep + "datasets_preprocessors_parameters.yaml") as f:
 dm = DatasetManager()
 datasets_preprocessors = [datasets_preprocessors[base] for base in args.b]
 ir = InteractorRunner(None, interactors_general_settings,
-                      interactors_preprocessor_paramaters,
+                      interactors_preprocessor_parameters,
                       evaluation_policies_parameters)
 interactors_classes = [
     eval('interactors.' + interactor) for interactor in args.m
@@ -97,7 +97,7 @@ for dataset_preprocessor in datasets_preprocessors:
         print('%.2f%% of history' % (history_rate * 100))
         for interactor_class in interactors_classes:
             metric_evaluator = metrics.IterationsMetricsEvaluator(dataset, metrics_classes,relevance_evaluator=metrics.ThresholdRelevanceEvaluator(3.99))
-            itr = interactor_class(**interactors_preprocessor_paramaters[
+            itr = interactor_class(**interactors_preprocessor_parameters[
                 dataset_preprocessor['name']][interactor_class.__name__]['parameters'])
 
             start_evaluation_policy = eval('evaluation_policy.' + args.estart)(
@@ -116,7 +116,7 @@ for dataset_preprocessor in datasets_preprocessors:
                 # print(f"File doesnt exists {file_name}")
                 # raise SystemError
 
-            itr = interactor_class(**interactors_preprocessor_paramaters[
+            itr = interactor_class(**interactors_preprocessor_parameters[
                 dataset_preprocessor['name']][interactor_class.__name__]['parameters'])
 
             last_evaluation_policy = eval('evaluation_policy.' + args.elast)(

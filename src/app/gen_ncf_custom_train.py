@@ -40,7 +40,7 @@ from lib.utils.InteractorCache import InteractorCache
 from lib.utils.PersistentDataManager import PersistentDataManager
 
 
-interactors_preprocessor_paramaters = yaml.load(
+interactors_preprocessor_parameters = yaml.load(
     open("settings" + sep + "interactors_preprocessor_parameters.yaml"),
     Loader=yaml.SafeLoader)
 interactors_general_settings = yaml.load(
@@ -63,7 +63,7 @@ with open("settings"+sep+"datasets_preprocessors_parameters.yaml") as f:
 dm = DatasetManager()
 datasets_preprocessors = [datasets_preprocessors[base] for base in args.b]
 ir = InteractorRunner(None, interactors_general_settings,
-                      interactors_preprocessor_paramaters,
+                      interactors_preprocessor_parameters,
                       evaluation_policies_parameters)
 interactors_classes = [eval('interactors.'+interactor) for interactor in args.m]
 # print(interactors_classes)
@@ -131,7 +131,7 @@ def process(history_rate,dataset_preprocessor,dataset,consumption_matrix,dm,inte
                 rating = data[i,2]
                 f.write('{},{},{}\n'.format(uid,iid,rating))
 
-        parameters = interactors_preprocessor_paramaters[dataset_preprocessor['name']][interactor_class.__name__]
+        parameters = interactors_preprocessor_parameters[dataset_preprocessor['name']][interactor_class.__name__]
         if parameters == None:
             parameters = dict()
         else:
@@ -152,7 +152,7 @@ def process(history_rate,dataset_preprocessor,dataset,consumption_matrix,dm,inte
             # pdm.save(file_name_s,
                      # history_items_recommended)
 
-        parameters = interactors_preprocessor_paramaters[dataset_preprocessor['name']][interactor_class.__name__]
+        parameters = interactors_preprocessor_parameters[dataset_preprocessor['name']][interactor_class.__name__]
         if parameters == None:
             parameters = dict()
         else:

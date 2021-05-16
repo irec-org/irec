@@ -27,7 +27,7 @@ print(args.num_tasks)
 
 
 def run_interactors_in_base(dataset_preprocessor, interactors_general_settings,
-                            interactors_preprocessor_paramaters,
+                            interactors_preprocessor_parameters,
                             evaluation_policies_parameters, interactors_classes,
                             interactors_search_parameters):
     dm = DatasetManager()
@@ -36,7 +36,7 @@ def run_interactors_in_base(dataset_preprocessor, interactors_general_settings,
     # print(dm.dataset_preprocessed[0])
     # print(dm.dataset_preprocessed[1])
     ir = InteractorRunner(dm, interactors_general_settings,
-                          interactors_preprocessor_paramaters,
+                          interactors_preprocessor_parameters,
                           evaluation_policies_parameters)
     ir.run_interactors_search(interactors_classes,
                               interactors_search_parameters, num_tasks= args.num_tasks,
@@ -45,7 +45,7 @@ def run_interactors_in_base(dataset_preprocessor, interactors_general_settings,
 
 def main():
 
-    interactors_preprocessor_paramaters = yaml.load(
+    interactors_preprocessor_parameters = yaml.load(
         open("settings" + sep + "interactors_preprocessor_parameters.yaml"),
         Loader=yaml.SafeLoader)
 
@@ -75,7 +75,7 @@ def main():
     # else:
     datasets_preprocessors = [datasets_preprocessors[base] for base in args.b]
     ir = InteractorRunner(None, interactors_general_settings,
-                          interactors_preprocessor_paramaters,
+                          interactors_preprocessor_parameters,
                           evaluation_policies_parameters)
     # if args.m == None:
         # interactors_classes = ir.select_interactors()
@@ -85,7 +85,7 @@ def main():
     for dataset_preprocessor in datasets_preprocessors:
         run_interactors_in_base(dataset_preprocessor,
                             interactors_general_settings,
-                            interactors_preprocessor_paramaters,
+                            interactors_preprocessor_parameters,
                             evaluation_policies_parameters,
                             interactors_classes,
                             interactors_search_parameters)
