@@ -142,7 +142,9 @@ for dataset_preprocessor in datasets_preprocessors:
              ground_truth_dataset.num_total_items))
     dfs = dict()
     for nits in nums_interactions_to_show:
-        array = np.array([[1]*len(interactors_classes)]*len(interactors_classes),dtype=float)
+        # array = np.array([[1]*len(interactors_classes)]*len(interactors_classes),dtype=float)
+        array = np.eye(len(interactors_classes))
+        array[array==0] = 314
         dfs[nits] = pd.DataFrame(array, index = [interactors_classes_names_to_names[i.__name__] for i in interactors_classes],
                           columns = [interactors_classes_names_to_names[i.__name__] for i in interactors_classes])
     for ii, itr_class_1 in enumerate(interactors_classes):
