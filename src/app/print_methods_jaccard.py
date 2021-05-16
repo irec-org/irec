@@ -3,7 +3,7 @@ import pickle
 import os
 import sys
 import json
-from utils import *
+import utils
 sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "lib")
 
 import inquirer
@@ -29,8 +29,7 @@ from lib.utils.DirectoryDependent import DirectoryDependent
 from cycler import cycler
 from collections import defaultdict
 import argparse
-import lib.utils.utils as util
-
+import lib.utils.utils
 parser = argparse.ArgumentParser()
 parser.add_argument('-r', type=str, default=None)
 parser.add_argument('-i', default=[5, 10, 20, 50, 100], nargs='*')
@@ -41,7 +40,7 @@ parser.add_argument('--users', default=False, action='store_true')
 evaluation_policies_parameters = yaml.load(
     open("settings" + sep + "evaluation_policies_parameters.yaml"),
     Loader=yaml.SafeLoader)
-evaluation_policies_parameters_flatten=util.flatten_dict(evaluation_policies_parameters)
+evaluation_policies_parameters_flatten=utils.flatten_dict(evaluation_policies_parameters)
 for k,v in evaluation_policies_parameters_flatten.items():
     parser.add_argument(f'--{k}',default=v)
 args = parser.parse_args()
@@ -215,7 +214,7 @@ for dataset_preprocessor in datasets_preprocessors:
         sns_plot=sn.heatmap(dfs[nits], annot=True,cmap="Blues",vmin=0,vmax=1)
         sns_plot.set_title(f"T={nits} {dataset_preprocessor['name']}")
         file_name=os.path.join(DirectoryDependent().DIRS['img'],f'{dataset_preprocessor["name"]}',f'cm_{evaluation_policy.num_interactions}_{evaluation_policy.interaction_size}',f'cm_jaccard_{nits}.png')
-        util.create_path_to_file(file_name)
+        lib.utils.utils.create_path_to_file(file_name)
         fig.savefig(file_name)
 
 if args.dump:
