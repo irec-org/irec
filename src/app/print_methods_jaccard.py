@@ -10,6 +10,7 @@ import inquirer
 import copy
 import pandas as pd
 import seaborn as sn
+import lib.evaluation_policies
 import scipy
 import interactors
 import mf
@@ -36,59 +37,31 @@ parser.add_argument('-i', default=[5, 10, 20, 50, 100], nargs='*')
 parser.add_argument('-m', nargs='*')
 parser.add_argument('-b', nargs='*')
 parser.add_argument('--dump', default=False, action='store_true')
-parser.add_argument('--users', default=False, action='store_true')
-evaluation_policies_parameters = yaml.load(
-    open("settings" + sep + "evaluation_policies_parameters.yaml"),
-    Loader=yaml.SafeLoader)
-evaluation_policies_parameters_flatten=utils.flatten_dict(evaluation_policies_parameters)
-for k,v in evaluation_policies_parameters_flatten.items():
-    parser.add_argument(f'--{k}',default=v)
+parser.add_argument('--type', default='items_jac')
+settings = utils.load_settings()
+utils.load_settings_to_parser(settings,parser)
 args = parser.parse_args()
-
-args_dict = vars(args)
-for i in set(args_dict.keys()).intersection(set(evaluation_policies_parameters_flatten.keys())):
-    tmp = evaluation_policies_parameters
-    for j in i.split('.')[:-1]:
-        tmp = tmp[j]
-    tmp[i.split('.')[-1]] = args_dict[i]
+settings = utils.sync_settings_from_args(settings,args)
 
 plt.rcParams['axes.prop_cycle'] = cycler(color='krbgmyc')
 plt.rcParams['lines.linewidth'] = 2
 plt.rcParams['font.size'] = 15
 
 # metrics_classes = [metrics.Hits, metrics.Recall]
-metrics_classes_names = ['Jaccard Similarity']
-metrics_names = ['Jaccard Similarity']
+metrics_classes_names = [args.type]
+metrics_names = [args.type]
 # metrics_weights = {'Hits': 0.3,'Recall':0.3,'EPC':0.16666,'UsersCoverage':0.16666,'ILD':0.16666}
 # metrics_weights = {'Hits': 0.25,'Recall':0.25,'EPC':0.125,'UsersCoverage':0.125,'ILD':0.125,'GiniCoefficientInv':0.125}
 # metrics_weights ={i: 1/len(metrics_classes_names) for i in metrics_classes_names}
 
-with open("settings" + sep + "datasets_preprocessors_parameters.yaml") as f:
-    loader = yaml.SafeLoader
-    datasets_preprocessors = yaml.load(f, Loader=loader)
-
-    datasets_preprocessors = {
-        setting['name']: setting for setting in datasets_preprocessors
-    }
-interactors_preprocessor_parameters = yaml.load(
-    open("settings" + sep + "interactors_preprocessor_parameters.yaml"),
-    Loader=yaml.SafeLoader)
-interactors_general_settings = yaml.load(
-    open("settings" + sep + "interactors_general_settings.yaml"),
-    Loader=yaml.SafeLoader)
-
-
 interactors_classes_names_to_names = {
-    k: v['name'] for k, v in interactors_general_settings.items()
+    k: v['name'] for k, v in settings['interactors_general_settings'].items()
 }
 
 dm = DatasetManager()
-datasets_preprocessors = [datasets_preprocessors[base] for base in args.b]
-ir = InteractorRunner(dm, interactors_general_settings,
-                      interactors_preprocessor_parameters,
-                      evaluation_policies_parameters)
+datasets_preprocessors = [settings['datasets_preprocessors_parameters'][base] for base in args.b]
 interactors_classes = [
-    eval('interactors.' + interactor) for interactor in args.m
+    eval('lib.interactors.' + interactor) for interactor in args.m
 ]
 
 # ir = InteractorRunner(dm, interactors_general_settings,
@@ -99,7 +72,9 @@ interactors_classes = [
 # metrics_evaluator = UserCumulativeInteractionMetricsEvaluator(
     # None, metrics_classes)
 
-evaluation_policy = ir.get_interactors_evaluation_policy()
+evaluation_policy_name = settings['defaults']['interactors_evaluation_policy']
+evaluation_policy_parameters = settings['evaluation_policies_parameters'][evaluation_policy_name]
+evaluation_policy=eval('lib.evaluation_policies.'+evaluation_policy_name)(**evaluation_policy_parameters)
 
 nums_interactions_to_show = list(map(int, args.i))
 
@@ -117,8 +92,8 @@ rtex_header = r"""
 \hline
 \rowcolor{StrongGray}
 Dataset & %s \\""" % (
-    generate_table_spec(nums_interactions_to_show, len(datasets_preprocessors)),
-    generate_datasets_line(nums_interactions_to_show,
+    utils.generate_table_spec(nums_interactions_to_show, len(datasets_preprocessors)),
+    utils.generate_datasets_line(nums_interactions_to_show,
                            [i['name'] for i in datasets_preprocessors]))
 rtex_footer = r"""
 \end{tabular}
@@ -128,13 +103,14 @@ rtex = ""
 
 datasets_metrics_values = defaultdict(
     lambda: defaultdict(lambda: defaultdict(list)))
-datasets_interactors_items_recommended = defaultdict(
-    lambda: defaultdict(lambda: defaultdict(list)))
+datasets_interactors_items_recommended=defaultdict(
+    lambda: defaultdict(list))
 
 for dataset_preprocessor in datasets_preprocessors:
     dm.initialize_engines(dataset_preprocessor)
     for itr_class in interactors_classes:
-        itr = ir.create_interactor(itr_class)
+        # itr = ir.create_interactor(itr_class)
+        itr = utils.create_interactor(itr_class,dataset_preprocessor['name'],settings)
         pdm = PersistentDataManager(directory='results')
         history_items_recommended = pdm.load(InteractorCache().get_id(
             dm, evaluation_policy, itr))
@@ -149,7 +125,7 @@ for dataset_preprocessor in datasets_preprocessors:
 methods_names= set()
 for dataset_preprocessor in datasets_preprocessors:
     dm.initialize_engines(dataset_preprocessor)
-    if args.users:
+    if args.type=='users':
         dm.load()
         data = np.vstack(
             (dm.dataset_preprocessed[0].data, dm.dataset_preprocessed[1].data))
@@ -170,15 +146,15 @@ for dataset_preprocessor in datasets_preprocessors:
         dfs[nits] = pd.DataFrame(array, index = [interactors_classes_names_to_names[i.__name__] for i in interactors_classes],
                           columns = [interactors_classes_names_to_names[i.__name__] for i in interactors_classes])
     for ii, itr_class_1 in enumerate(interactors_classes):
-        itr_1 = ir.create_interactor(itr_class_1)
+        itr_1 = utils.create_interactor(itr_class_1,dataset_preprocessor['name'],settings)
         for jj, itr_class_2 in enumerate(interactors_classes):
             if ii > jj:
-                itr_2 = ir.create_interactor(itr_class_2)
+                itr_2 = utils.create_interactor(itr_class_2,dataset_preprocessor['name'],settings)
                 name = interactors_classes_names_to_names[itr_class_1.__name__]+r' $\times $ '+interactors_classes_names_to_names[itr_class_2.__name__]
                 itr_1_recs = datasets_interactors_items_recommended[dataset_preprocessor['name']][itr_class_1.__name__]
                 itr_2_recs = datasets_interactors_items_recommended[dataset_preprocessor['name']][itr_class_2.__name__]
                 vals = []
-                if args.users == False:
+                if args.type == 'Users Jaccard Similarity':
                     for i in nums_interactions_to_show:
                         x = set()
                         for uid,items in itr_1_recs.items():
@@ -187,7 +163,7 @@ for dataset_preprocessor in datasets_preprocessors:
                         for uid,items in itr_2_recs.items():
                             y |= set(items[:i])
                         vals.append(len(x.intersection(y))/len(x | y))
-                else:
+                elif args.type =='Items Jaccard Similarity':
                     for i in nums_interactions_to_show:
                         x = set()
                         for uid,items in itr_1_recs.items():
@@ -198,13 +174,22 @@ for dataset_preprocessor in datasets_preprocessors:
                             if np.sum(ground_truth_consumption_matrix[uid,items[:i]] >= 4)>0:
                                 y.add(uid)
                         vals.append(len(x.intersection(y))/len(x | y))
+                elif args.type == 'Users-Items Similarity':
+                    for i in nums_interactions_to_show:
+                        x = []
+                        for uid,items in itr_1_recs.items():
+                            sample_rec_items = list(set(items[:i]).intersection(set(itr_2_recs[uid][:i])))
+                            x.append(len(sample_rec_items)/len(items[:i]))
+                            # if np.sum(ground_truth_consumption_matrix[uid,items[:i]] >= 4)>0:
+                                # x.add(uid)
+                        vals.append(np.mean(x))
 
 
                 for iii, nits in enumerate(nums_interactions_to_show):
                     dfs[nits][interactors_classes_names_to_names[itr_class_1.__name__]][interactors_classes_names_to_names[itr_class_2.__name__]] = vals[iii]
                     dfs[nits][interactors_classes_names_to_names[itr_class_2.__name__]][interactors_classes_names_to_names[itr_class_1.__name__]] = vals[iii]
 
-                datasets_metrics_values[dataset_preprocessor['name']]['Jaccard Similarity'][name].extend(vals)
+                datasets_metrics_values[dataset_preprocessor['name']][args.type][name].extend(vals)
                 methods_names.add(name)
 
                 # print(vals)
@@ -213,7 +198,7 @@ for dataset_preprocessor in datasets_preprocessors:
         print(dfs[nits])
         sns_plot=sn.heatmap(dfs[nits], annot=True,cmap="Blues",vmin=0,vmax=1)
         sns_plot.set_title(f"T={nits} {dataset_preprocessor['name']}")
-        file_name=os.path.join(DirectoryDependent().DIRS['img'],f'{dataset_preprocessor["name"]}',f'cm_{evaluation_policy.num_interactions}_{evaluation_policy.interaction_size}',f'cm_jaccard_{nits}.png')
+        file_name=os.path.join(DirectoryDependent().DIRS['img'],f'{dataset_preprocessor["name"]}_{args.type}',f'cm_{evaluation_policy.num_interactions}_{evaluation_policy.interaction_size}',f'cm_jaccard_{nits}.png')
         lib.utils.utils.create_path_to_file(file_name)
         fig.savefig(file_name)
 
@@ -223,7 +208,7 @@ if args.dump:
 
 for metric_name, metric_class_name in zip(
         metrics_names, metrics_classes_names):
-    rtex += generate_metric_interactions_header(nums_interactions_to_show,len(datasets_preprocessors),metric_name)
+    rtex += utils.generate_metric_interactions_header(nums_interactions_to_show,len(datasets_preprocessors),metric_name)
     for method_name in methods_names:
         rtex += "{} & ".format(method_name)
         bases_values = []
@@ -244,8 +229,11 @@ tmp = '_'.join([
     dataset_preprocessor['name']
     for dataset_preprocessor in datasets_preprocessors
 ])
-open(os.path.join(DirectoryDependent().DIRS['tex'], f'table_jaccard_{tmp}.tex'),
+
+file_name_suffix = os.path.join(f'table_similarity_{args.type}_{evaluation_policy.num_interactions}_{evaluation_policy.interaction_size}_{tmp}.tex')
+file_name =os.path.join(DirectoryDependent().DIRS['tex'],file_name_suffix)
+open(file_name,
      'w+').write(res)
 os.system(
-    f"pdflatex -output-directory=\"{DirectoryDependent().DIRS['pdf']}\" \"{os.path.join(DirectoryDependent().DIRS['tex'],f'table_jaccard_{tmp}.tex')}\""
+    f"pdflatex -output-directory=\"{DirectoryDependent().DIRS['pdf']}\" \"{file_name}\""
 )
