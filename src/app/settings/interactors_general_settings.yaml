@@ -45,7 +45,7 @@ GLM_UCB:
   name: GLM-UCB
 LinearEGreedy:
   #name: Linear e-Greedy
-  name: ε-Greedy
+  name: e-Greedy
 LinearThompsonSampling:
   name: Linear TS (PMF)
 EGreedy:
@@ -91,7 +91,7 @@ LinearUCBRandPopularity:
 LinearUCBRandom:
   name: Linear UCB (PMF) Random
 LinearUCBLogPopEnt:
-  name: Linear UCB (PMF) log(Pop)*Ent
+  name: Linear UCB*
 LinearEGreedyEntropy:
   name: Linear e-Greedy (PMF) Entropy
 LinearEGreedyPopularity:
@@ -101,7 +101,7 @@ LinearEGreedyRandPopularity:
 LinearEGreedyRandom:
   name: Linear e-Greedy (PMF) Random
 LinearEGreedyLogPopEnt:
-  name: Linear e-Greedy (PMF) log(Pop)*Ent
+  name: e-Greedy*
 OurMethod1Mod:
   name: UCB-Learner Mod
 OurMethod2PCA:
@@ -111,6 +111,7 @@ LinUCBPCA:
 ICTRTS:
   name: ICTRTS
 PTSLogPopEnt:
-  name: PTS+
+  name: PTS*
 GLM_UCBLogPopEnt:
-  name: GLM_UCB+
+  #name: GLM_UCB+
+  name: GLM-UCB*
