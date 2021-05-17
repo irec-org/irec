@@ -35,6 +35,7 @@ parser.add_argument('-r', type=str, default=None)
 parser.add_argument('-i', default=[5,10,20,50,100],nargs='*')
 parser.add_argument('-m',nargs='*')
 parser.add_argument('-b',nargs='*')
+parser.add_argument('--type',default=None)
 parser.add_argument('--dump', default=False, action='store_true')
 settings = utils.load_settings()
 utils.load_settings_to_parser(settings,parser)
@@ -219,53 +220,71 @@ datasets_metrics_best = defaultdict(
 bullet_str = r'\textcolor[rgb]{0.7,0.7,0.0}{$\bullet$}'
 triangle_up_str = r'\textcolor[rgb]{00,0.45,0.10}{$\blacktriangle$}'
 triangle_down_str = r'\textcolor[rgb]{0.7,00,00}{$\blacktriangledown$}'
+
+if args.type == 'pairs':
+    pool_of_methods_to_compare = [(interactors_classes[i].__name__,interactors_classes[i+1].__name__) for i in range(0,len(interactors_classes)-1,2)]
+    print(pool_of_methods_to_compare)
+else:
+    pool_of_methods_to_compare = [[interactors_classes[i].__name__ for i in range(len(interactors_classes)-1)]]
 for dataset_preprocessor in datasets_preprocessors:
     for metric_class_name in metrics_classes_names:
         for i, num in enumerate(nums_interactions_to_show):
-        # for itr_class in interactors_classes:
-            datasets_metrics_best[dataset_preprocessor['name']][metric_class_name][max(datasets_metrics_values[dataset_preprocessor['name']][
-                    metric_class_name].items(),key=lambda x: x[1][i])[0]][i] = True
-            if args.r != None:
-                best_itr = args.r
-            else:
-                best_itr = max(datasets_metrics_values[dataset_preprocessor['name']][
-                    metric_class_name].items(),key=lambda x: x[1][i])[0]
-            best_itr_vals = datasets_metrics_values[dataset_preprocessor['name']][
-                    metric_class_name].pop(best_itr)
-            best_itr_val = best_itr_vals[i]
-            second_best_itr = max(datasets_metrics_values[dataset_preprocessor['name']][
-                metric_class_name].items(),key=lambda x: x[1][i])[0]
-            second_best_itr_vals = datasets_metrics_values[dataset_preprocessor['name']][
-                    metric_class_name][second_best_itr]
-            second_best_itr_val = second_best_itr_vals[i]
-            # come back with value in dict
-            datasets_metrics_values[dataset_preprocessor['name']][
-
-                    metric_class_name][best_itr] = best_itr_vals
-
-            best_itr_users_val = datasets_metrics_users_values[dataset_preprocessor['name']][
-                metric_class_name][best_itr][i]
-            second_best_itr_users_val = datasets_metrics_users_values[dataset_preprocessor['name']][
-                metric_class_name][second_best_itr][i]
-
-            try:
-                statistic, pvalue = scipy.stats.wilcoxon(
-                        best_itr_users_val,
-                        second_best_itr_users_val,
-                        )
-            except:
-                print("Wilcoxon error")
-                datasets_metrics_gain[dataset_preprocessor['name']][metric_class_name][best_itr][i]=bullet_str
-
-            if pvalue > 0.05:
-                datasets_metrics_gain[dataset_preprocessor['name']][metric_class_name][best_itr][i]=bullet_str
-            else:
-                if best_itr_val < second_best_itr_val:
-                    datasets_metrics_gain[dataset_preprocessor['name']][metric_class_name][best_itr][i]=triangle_down_str
-                elif best_itr_val > second_best_itr_val:
-                    datasets_metrics_gain[dataset_preprocessor['name']][metric_class_name][best_itr][i]=triangle_up_str
+            for methods in pool_of_methods_to_compare:
+                datasets_metrics_values_tmp = copy.deepcopy(datasets_metrics_values)
+                methods_set = set(methods)
+                for k1, v1 in datasets_metrics_values.items():
+                    for k2, v2 in v1.items():
+                        for k3, v3 in v2.items():
+                            if k3 not in methods_set:
+                                del datasets_metrics_values_tmp[k1][k2][k3]
+                        # print(datasets_metrics_values_tmp[k1][k2])
+                # datasets_metrics_values_tmp =datasets_metrics_values
+                datasets_metrics_best[dataset_preprocessor['name']][metric_class_name][max(datasets_metrics_values_tmp[dataset_preprocessor['name']][
+                        metric_class_name].items(),key=lambda x: x[1][i])[0]][i] = True
+                if args.r == 'lastmethod':
+                    best_itr = methods[-1]
+                elif args.r != None:
+                    best_itr = args.r
                 else:
+                    best_itr = max(datasets_metrics_values_tmp[dataset_preprocessor['name']][
+                        metric_class_name].items(),key=lambda x: x[1][i])[0]
+                best_itr_vals = datasets_metrics_values_tmp[dataset_preprocessor['name']][
+                        metric_class_name].pop(best_itr)
+                best_itr_val = best_itr_vals[i]
+                second_best_itr = max(datasets_metrics_values_tmp[dataset_preprocessor['name']][
+                    metric_class_name].items(),key=lambda x: x[1][i])[0]
+                second_best_itr_vals = datasets_metrics_values_tmp[dataset_preprocessor['name']][
+                        metric_class_name][second_best_itr]
+                second_best_itr_val = second_best_itr_vals[i]
+                # come back with value in dict
+                datasets_metrics_values_tmp[dataset_preprocessor['name']][
+
+                        metric_class_name][best_itr] = best_itr_vals
+
+                best_itr_users_val = datasets_metrics_users_values[dataset_preprocessor['name']][
+                    metric_class_name][best_itr][i]
+                second_best_itr_users_val = datasets_metrics_users_values[dataset_preprocessor['name']][
+                    metric_class_name][second_best_itr][i]
+
+                try:
+                    statistic, pvalue = scipy.stats.wilcoxon(
+                            best_itr_users_val,
+                            second_best_itr_users_val,
+                            )
+                except:
+                    print("Wilcoxon error")
                     datasets_metrics_gain[dataset_preprocessor['name']][metric_class_name][best_itr][i]=bullet_str
+
+                if pvalue > 0.05:
+                    datasets_metrics_gain[dataset_preprocessor['name']][metric_class_name][best_itr][i]=bullet_str
+                else:
+                    # print(best_itr,best_itr_val,second_best_itr,second_best_itr_val,methods)
+                    if best_itr_val < second_best_itr_val:
+                        datasets_metrics_gain[dataset_preprocessor['name']][metric_class_name][best_itr][i]=triangle_down_str
+                    elif best_itr_val > second_best_itr_val:
+                        datasets_metrics_gain[dataset_preprocessor['name']][metric_class_name][best_itr][i]=triangle_up_str
+                    else:
+                        datasets_metrics_gain[dataset_preprocessor['name']][metric_class_name][best_itr][i]=bullet_str
 
 
 for metric_name, metric_class_name in zip(
