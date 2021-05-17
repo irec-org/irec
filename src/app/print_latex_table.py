@@ -3,7 +3,7 @@ import pickle
 import os
 import sys
 import json
-from util import *
+import utils
 sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "lib")
 
 import inquirer
@@ -17,6 +17,7 @@ import numpy as np
 import scipy.sparse
 from lib.utils.DatasetManager import DatasetManager
 import yaml
+import lib.evaluation_policies
 from metrics import CumulativeInteractionMetricsEvaluator, UserCumulativeInteractionMetricsEvaluator
 from lib.utils.dataset import Dataset
 from lib.utils.PersistentDataManager import PersistentDataManager
@@ -35,7 +36,10 @@ parser.add_argument('-i', default=[5,10,20,50,100],nargs='*')
 parser.add_argument('-m',nargs='*')
 parser.add_argument('-b',nargs='*')
 parser.add_argument('--dump', default=False, action='store_true')
+settings = utils.load_settings()
+utils.load_settings_to_parser(settings,parser)
 args = parser.parse_args()
+settings = utils.sync_settings_from_args(settings,args)
 
 plt.rcParams['axes.prop_cycle'] = cycler(color='krbgmyc')
 plt.rcParams['lines.linewidth'] = 2
@@ -62,36 +66,17 @@ metrics_weights = {'Hits': 0.3,'Recall':0.3,'EPC':0.1,'UsersCoverage':0.1,'ILD':
 # metrics_weights = {'Hits': 0.25,'Recall':0.25,'EPC':0.125,'UsersCoverage':0.125,'ILD':0.125,'GiniCoefficientInv':0.125}
 # metrics_weights ={i: 1/len(metrics_classes_names) for i in metrics_classes_names}
 
-with open("settings"+sep+"datasets_preprocessors_parameters.yaml") as f:
-    loader = yaml.SafeLoader
-    datasets_preprocessors = yaml.load(f,Loader=loader)
-
-    datasets_preprocessors = {setting['name']: setting
-                              for setting in datasets_preprocessors}
-evaluation_policies_parameters = yaml.load(
-    open("settings" + sep + "evaluation_policies_parameters.yaml"),
-    Loader=yaml.SafeLoader)
-interactors_preprocessor_parameters = yaml.load(
-    open("settings" + sep + "interactors_preprocessor_parameters.yaml"),
-    Loader=yaml.SafeLoader)
-interactors_general_settings = yaml.load(
-    open("settings" + sep + "interactors_general_settings.yaml"),
-    Loader=yaml.SafeLoader)
-
-evaluation_policies_parameters = yaml.load(
-    open("settings" + sep + "evaluation_policies_parameters.yaml"),
-    Loader=yaml.SafeLoader)
 
 interactors_classes_names_to_names = {
-    k: v['name'] for k, v in interactors_general_settings.items()
+    k: v['name'] for k, v in settings['interactors_general_settings'].items()
 }
 
 dm = DatasetManager()
-datasets_preprocessors = [datasets_preprocessors[base] for base in args.b]
-ir = InteractorRunner(dm, interactors_general_settings,
-                      interactors_preprocessor_parameters,
-                      evaluation_policies_parameters)
-interactors_classes = [eval('interactors.'+interactor) for interactor in args.m]
+datasets_preprocessors = [settings['datasets_preprocessors_parameters'][base] for base in args.b]
+ir = InteractorRunner(dm, settings['interactors_general_settings'],
+                      settings['interactors_preprocessor_parameters'],
+                      settings['evaluation_policies_parameters'])
+interactors_classes = [eval('lib.interactors.'+interactor) for interactor in args.m]
 
 # ir = InteractorRunner(dm, interactors_general_settings,
                       # interactors_preprocessor_parameters,
@@ -100,7 +85,10 @@ interactors_classes = [eval('interactors.'+interactor) for interactor in args.m]
 
 metrics_evaluator = UserCumulativeInteractionMetricsEvaluator(None, metrics_classes)
 
-evaluation_policy = ir.get_interactors_evaluation_policy()
+# evaluation_policy = ir.get_interactors_evaluation_policy()
+evaluation_policy_name = settings['defaults']['interactors_evaluation_policy']
+evaluation_policy_parameters = settings['evaluation_policies_parameters'][evaluation_policy_name]
+evaluation_policy=eval('lib.evaluation_policies.'+evaluation_policy_name)(**evaluation_policy_parameters)
 
 nums_interactions_to_show = list(map(int,args.i))
 
@@ -160,10 +148,10 @@ for dataset_preprocessor in datasets_preprocessors:
             # print(len(metric_values))
             datasets_metrics_values[dataset_preprocessor['name']][
                 metric_class_name][itr_class.__name__].extend(
-                    [np.mean(metric_values[i]) for i in range(len(nums_interactions_to_show))])
+                    [np.mean(list(metric_values[i].values())) for i in range(len(nums_interactions_to_show))])
             datasets_metrics_users_values[dataset_preprocessor['name']][
                 metric_class_name][itr_class.__name__].extend(
-                    np.array([metric_values[i] for i in range(len(nums_interactions_to_show))]))
+                    np.array([list(metric_values[i].values()) for i in range(len(nums_interactions_to_show))]))
 
             # print(datasets_metrics_values[dataset_preprocessor['name']][
                 # metric_class_name][itr_class.__name__])
@@ -282,7 +270,7 @@ for dataset_preprocessor in datasets_preprocessors:
 
 for metric_name, metric_class_name in zip(
         metrics_names, metrics_classes_names):
-    rtex += generate_metric_interactions_header(nums_interactions_to_show,len(datasets_preprocessors),metric_name)
+    rtex += utils.generate_metric_interactions_header(nums_interactions_to_show,len(datasets_preprocessors),metric_name)
     for itr_class in interactors_classes:
         rtex += "%s & " % (ir.get_interactor_name(itr_class.__name__))
         rtex += ' & '.join([

@@ -260,7 +260,7 @@ class InteractionMetricsEvaluator(MetricsEvaluator):
             self.items_distance = get_items_distance(
                 self.ground_truth_consumption_matrix)
         if EPC in self.metrics_classes:
-            self.items_normalized_popularity = interactors.MostPopular.get_items_popularity(
+            self.items_normalized_popularity = lib.interactors.MostPopular.get_items_popularity(
                 self.ground_truth_consumption_matrix)
 
         metrics_values = defaultdict(list)
