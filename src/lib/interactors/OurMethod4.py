@@ -63,8 +63,8 @@ class OurMethod4(MFInteractor):
 
         items_score = _prediction_rule(self.I,self.initial_b,self.items_weights,self.alpha)
         
-        print(f"WSCB lambda={self.lambda_} items score correlation with popularity:",scipy.stats.pearsonr(items_score,items_popularity),self.train_dataset.num_total_users, self.train_dataset.num_total_items)
-        print(f"WSCB lambda={self.lambda_} items score correlation with entropy:",scipy.stats.pearsonr(items_score,items_entropy),self.train_dataset.num_total_users, self.train_dataset.num_total_items)
+        print(f"WSCB {self.get_id(with_class_name=False)} items score correlation with popularity:",scipy.stats.pearsonr(items_score,items_popularity),self.train_dataset.num_total_users, self.train_dataset.num_total_items)
+        print(f"WSCB {self.get_id(with_class_name=False)} items score correlation with entropy:",scipy.stats.pearsonr(items_score,items_entropy),self.train_dataset.num_total_users, self.train_dataset.num_total_items)
 
     def predict(self,uid,candidate_items,num_req_items):
         b = self.bs[uid]
