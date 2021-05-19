@@ -3437,3 +3437,37 @@ GLM_UCBLogPopEnt:
     stop_criteria: 0.0009
     user_var: 0.01
     var: 0.05
+OurMethod4:
+  - alpha: 0.5
+    lambda_: 0
+    num_lat: 20
+  - alpha: 0.5
+    lambda_: 0.1
+    num_lat: 20
+  - alpha: 0.5
+    lambda_: 0.2
+    num_lat: 20
+  - alpha: 0.5
+    lambda_: 0.3
+    num_lat: 20
+  - alpha: 0.5
+    lambda_: 0.4
+    num_lat: 20
+  - alpha: 0.5
+    lambda_: 0.5
+    num_lat: 20
+  - alpha: 0.5
+    lambda_: 0.6
+    num_lat: 20
+  - alpha: 0.5
+    lambda_: 0.7
+    num_lat: 20
+  - alpha: 0.5
+    lambda_: 0.8
+    num_lat: 20
+  - alpha: 0.5
+    lambda_: 0.9
+    num_lat: 20
+  - alpha: 0.5
+    lambda_: 1
+    num_lat: 20
