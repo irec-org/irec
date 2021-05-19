@@ -8,11 +8,17 @@ class Parameterizable:
         # super().__init__(*args, **kwargs)
         self.parameters = []
 
-    def get_id(self,num_bars=0):
-        return self.__class__.__name__+':{'+utils.dict_to_str(
-            {i: (getattr(self,i) if not isinstance(getattr(self,i),Parameterizable) else getattr(self,i).get_parameters_dict())
-             for i in self.parameters}
-            ,num_bars)+'}'
+    def get_id(self,num_bars=0,with_class_name=True):
+        if with_class_name:
+            return self.__class__.__name__+':{'+utils.dict_to_str(
+                {i: (getattr(self,i) if not isinstance(getattr(self,i),Parameterizable) else getattr(self,i).get_parameters_dict())
+                 for i in self.parameters}
+                ,num_bars)+'}'
+        else:
+            return '{'+utils.dict_to_str(
+                {i: (getattr(self,i) if not isinstance(getattr(self,i),Parameterizable) else getattr(self,i).get_parameters_dict())
+                 for i in self.parameters}
+                ,num_bars)+'}'
 
     def get_parameters_dict(self):
         return {i: (getattr(self,i) if not isinstance(getattr(self,i),Parameterizable) else getattr(self,i).get_parameters_dict()) for i in self.parameters}
