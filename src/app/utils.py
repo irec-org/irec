@@ -177,3 +177,4 @@ def create_interactor(itr_class,dataset_preprocessor_name,settings):
         return itr_class(**settings['interactors_preprocessor_parameters'][dataset_preprocessor_name][itr_class.__name__]['parameters'])
     except:
         return itr_class()
+

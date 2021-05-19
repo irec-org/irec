@@ -15,6 +15,13 @@ from collections import defaultdict
 from .MFInteractor import MFInteractor
 import interactors
 
+def _prediction_rule(A, b, items_weights,alpha):
+    user_latent_factors = np.dot(np.linalg.inv(A),b)
+    items_uncertainty = np.sqrt(np.sum(items_weights.dot(np.linalg.inv(A)) * items_weights,axis=1))
+    items_user_similarity = user_latent_factors @ items_weights.T
+    user_model_items_score = items_user_similarity + alpha*items_uncertainty
+    return user_model_items_score
+
 class OurMethodInit(MFInteractor):
     def __init__(self, alpha, init,*args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -69,13 +76,17 @@ class OurMethodInit(MFInteractor):
         self.bs = defaultdict(lambda: self.initial_b.copy())
         self.As = defaultdict(lambda: self.I.copy())
 
+        items_score = _prediction_rule(self.I,self.initial_b,self.items_weights,self.alpha)
+        items_entropy = interactors.Entropy.get_items_entropy(self.train_consumption_matrix)
+        items_popularity = interactors.MostPopular.get_items_popularity(self.train_consumption_matrix,normalize=False)
+        
+        print(f"WSCB {self.init} items score correlation with popularity:",scipy.stats.pearsonr(items_score,items_popularity),self.train_dataset.num_total_users, self.train_dataset.num_total_items)
+        print(f"WSCB {self.init} items score correlation with entropy:",scipy.stats.pearsonr(items_score,items_entropy),self.train_dataset.num_total_users, self.train_dataset.num_total_items)
+
     def predict(self,uid,candidate_items,num_req_items):
         b = self.bs[uid]
         A = self.As[uid]
-        user_latent_factors = np.dot(np.linalg.inv(A),b)
-        items_uncertainty = np.sqrt(np.sum(self.items_weights[candidate_items].dot(np.linalg.inv(A)) * self.items_weights[candidate_items],axis=1))
-        items_user_similarity = user_latent_factors @ self.items_weights[candidate_items].T
-        user_model_items_score = items_user_similarity + self.alpha*items_uncertainty
+        user_model_items_score=_prediction_rule(A,b,self.items_weights[candidate_items],self.alpha)
         items_score = user_model_items_score
         return items_score, None
 
