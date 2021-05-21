@@ -39,7 +39,8 @@ class GLM_UCB(LinearICF):
     def predict(self,uid,candidate_items,num_req_items):
         A = self.As[uid]
         if len(self.users_rec_items_means[uid]) == 0:
-            self.p_vals[uid] = np.zeros(self.num_latent_factors)
+            # self.p_vals[uid] = np.zeros(self.num_latent_factors)
+            self.p_vals[uid] = self.bs[uid]
         else:
             self.p_vals[uid] = scipy.optimize.root(self.error_user_weight_function,
                                     self.p_vals[uid],
