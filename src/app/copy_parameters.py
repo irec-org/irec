@@ -36,8 +36,7 @@ args = parser.parse_args()
 settings = utils.sync_settings_from_args(settings,args)
 
 for method in args.m:
-    for source in args.s:
-        for target in args.t:
-            settings['interactors_preprocessor_parameters'][target][method] = settings['interactors_preprocessor_parameters'][source][method]
+    for source,target in zip(args.s,args.t):
+        settings['interactors_preprocessor_parameters'][target][method] = settings['interactors_preprocessor_parameters'][source][method]
 
 open("settings" + sep + "interactors_preprocessor_parameters.yaml",'w').write(yaml.dump(utils.default_to_regular(settings['interactors_preprocessor_parameters'])))
