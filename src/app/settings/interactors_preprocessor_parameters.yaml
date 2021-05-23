@@ -409,10 +409,10 @@ Good Books Validation:
       var: 0.05
   GLM_UCBLogPopEnt:
     parameters:
-      c: 4
+      c: 0.1
       item_var: 0.01
       iterations: 20
-      num_lat: 10
+      num_lat: 20
       stop_criteria: 0.0009
       user_var: 0.01
       var: 0.05
@@ -1070,7 +1070,7 @@ MovieLens 10M Validation:
       var: 0.05
   GLM_UCBLogPopEnt:
     parameters:
-      c: 2
+      c: 4
       item_var: 0.01
       iterations: 20
       num_lat: 10
