@@ -1,12 +1,14 @@
 from os.path import dirname, realpath, sep, pardir
 import os
 import sys
-sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "lib")
+sys.path.append(dirname(realpath(__file__)) + sep + pardir)
 
 import json
 import inquirer
-import interactors
-import mf
+import lib.interactors
+import lib.mf
+import utils
+import lib.evaluation_policies
 from lib.utils.InteractorRunner import InteractorRunner
 from sklearn.decomposition import NMF
 import numpy as np
@@ -29,7 +31,10 @@ parser.add_argument('-t', default=False, action='store_true',help='Print only to
 parser.add_argument('-d', default=False, action='store_true',help='Save best')
 parser.add_argument('-m',nargs='*')
 parser.add_argument('-b',nargs='*')
+settings = utils.load_settings()
+utils.load_settings_to_parser(settings,parser)
 args = parser.parse_args()
+settings = utils.sync_settings_from_args(settings,args)
 
 # print(args.b,args.m)
 
@@ -39,41 +44,21 @@ metrics_names = ['Cumulative Hits']
 dm = DatasetManager()
 # datasets_preprocessors = dm.request_datasets_preprocessors()
 
-interactors_search_parameters = yaml.load(
-    open("settings" + sep + "interactors_search_parameters.yaml"),
-    Loader=yaml.SafeLoader)
 
-interactors_preprocessor_parameters = yaml.load(
-    open("settings" + sep + "interactors_preprocessor_parameters.yaml"),
-    Loader=yaml.SafeLoader)
-interactors_general_settings = yaml.load(
-    open("settings" + sep + "interactors_general_settings.yaml"),
-    Loader=yaml.SafeLoader)
+evaluation_policy_name = settings['defaults']['interactors_evaluation_policy']
+evaluation_policy_parameters = settings['evaluation_policies_parameters'][evaluation_policy_name]
+evaluation_policy=eval('lib.evaluation_policies.'+evaluation_policy_name)(**evaluation_policy_parameters)
 
-evaluation_policies_parameters = yaml.load(
-    open("settings" + sep + "evaluation_policies_parameters.yaml"),
-    Loader=yaml.SafeLoader)
 
-with open("settings"+sep+"datasets_preprocessors_parameters.yaml") as f:
-    loader = yaml.SafeLoader
-    datasets_preprocessors = yaml.load(f,Loader=loader)
-
-    datasets_preprocessors = {setting['name']: setting
-                              for setting in datasets_preprocessors}
 interactors_classes_names_to_names = {
-    k: v['name'] for k, v in interactors_general_settings.items()
+    k: v['name'] for k, v in settings['interactors_general_settings'].items()
 }
 
-ir = InteractorRunner(dm, interactors_general_settings,
-                      interactors_preprocessor_parameters,
-                      evaluation_policies_parameters)
 # interactors_classes = ir.select_interactors()
-interactors_classes = [eval('interactors.'+interactor) for interactor in args.m]
-datasets_preprocessors = [datasets_preprocessors[base] for base in args.b]
+interactors_classes = [eval('lib.interactors.'+interactor) for interactor in args.m]
+datasets_preprocessors = [settings['datasets_preprocessors_parameters'][base] for base in args.b]
 
 metrics_evaluator = CumulativeInteractionMetricsEvaluator(None, metrics_classes)
-
-evaluation_policy = ir.get_interactors_evaluation_policy()
 
 datasets_metrics_values = defaultdict(
     lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(float))))
@@ -84,8 +69,7 @@ for dataset_preprocessor in datasets_preprocessors:
 
     for metric_class_name in map(lambda x: x.__name__, metrics_classes):
         for itr_class in interactors_classes:
-            for parameters in interactors_search_parameters[itr_class.__name__]:
-                # print(parameters)
+            for parameters in settings['interactors_search_parameters'][itr_class.__name__]:
                 itr = itr_class(**parameters)
                 pdm = PersistentDataManager(directory='results')
 
@@ -112,7 +96,7 @@ for k1, v1 in datasets_metrics_values.items():
             keys = [keys[i] for i in idxs]
             values = [values[i] for i in idxs]
             if args.d:
-                interactors_preprocessor_parameters[k1][k3] = {'parameters':json.loads(keys[0])}
+                settings['interactors_preprocessor_parameters'][k1][k3] = {'parameters':json.loads(keys[0])}
             if args.t:
                 print(f"{k3}:")
                 print('\tparameters:')
@@ -127,4 +111,4 @@ for k1, v1 in datasets_metrics_values.items():
 
 if args.d:
     print("Saved parameters!")
-    open("settings" + sep + "interactors_preprocessor_parameters.yaml",'w').write(yaml.dump(interactors_preprocessor_parameters))
+    open("settings" + sep + "interactors_preprocessor_parameters.yaml",'w').write(yaml.dump(utils.default_to_regular(settings['interactors_preprocessor_parameters'])))
