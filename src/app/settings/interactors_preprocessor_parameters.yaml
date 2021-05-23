@@ -26,7 +26,7 @@ Good Books:
       var: 0.05
   GLM_UCBLogPopEnt:
     parameters:
-      c: 4
+      c: 8
       item_var: 0.01
       iterations: 20
       num_lat: 10
@@ -687,7 +687,7 @@ MovieLens 10M:
       var: 0.05
   GLM_UCBLogPopEnt:
     parameters:
-      c: 2
+      c: 8
       item_var: 0.01
       iterations: 20
       num_lat: 10
