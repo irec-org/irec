@@ -30,6 +30,7 @@ class GLM_UCB(LinearICF):
         self.users_rec_rewards = defaultdict(list)
         self.users_rec_items_means = defaultdict(list)
         self.p_vals = dict()
+        np.seterr(under="ignore")
 
     def error_user_weight_function(self,p,u_rec_rewards,u_rec_items_means):
         return np.sum(np.array(
@@ -40,8 +41,12 @@ class GLM_UCB(LinearICF):
         A = self.As[uid]
         if len(self.users_rec_items_means[uid]) == 0:
             # self.p_vals[uid] = np.zeros(self.num_latent_factors)
+            # self.p_vals[uid] = self.bs[uid]+1
+            # print(self.bs[uid].dtype)
             self.p_vals[uid] = self.bs[uid]
+            # self.p_vals[uid] = np.array(self.bs[uid],dtype=float)
         else:
+            # self.p_vals[uid] = np.array(self.p_vals[uid],dtype=float)
             self.p_vals[uid] = scipy.optimize.root(self.error_user_weight_function,
                                     self.p_vals[uid],
                                     (self.users_rec_rewards[uid],self.users_rec_items_means[uid])).x

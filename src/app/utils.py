@@ -178,3 +178,7 @@ def create_interactor(itr_class,dataset_preprocessor_name,settings):
     except:
         return itr_class()
 
+def default_to_regular(d):
+    if isinstance(d, defaultdict):
+        d = {k: default_to_regular(v) for k, v in d.items()}
+    return d

@@ -109,6 +109,58 @@ class TRTE(DataProcessor):
         test_dataset.update_from_data()
         return train_dataset, test_dataset
 
+class TRTEPopular(DataProcessor):
+
+    def __init__(self,
+                 items_rate,
+                 *args,
+                 **kwargs):
+        super().__init__(*args, **kwargs)
+        self.items_rate = items_rate
+        self.parameters.extend(['items_rate'])
+
+    def process(self, train_dataset_and_test_dataset):
+        train_dataset = train_dataset_and_test_dataset[0]
+        test_dataset = train_dataset_and_test_dataset[1]
+        data = np.vstack(
+            (test_dataset.data, train_dataset.data))
+        dataset = Dataset(data)
+        dataset.update_from_data()
+        dataset.update_num_total_users_items()
+        num_items_to_sample = int(self.items_rate * dataset.num_total_items)
+        consumption_matrix = scipy.sparse.csr_matrix((dataset.data[:,2],(dataset.data[:,0],dataset.data[:,1])),(dataset.num_total_users,dataset.num_total_items))
+        items_popularity=interactors.MostPopular.get_items_popularity(consumption_matrix)
+        top_popular_items = np.argsort(items_popularity)[::-1][num_items_to_sample]
+        test_dataset.data = test_dataset.data[test_dataset.data[:,1].isin(top_popular_items)]
+        test_dataset.update_from_data()
+        train_dataset.data = train_dataset.data[train_dataset.data[:,1].isin(top_popular_items)]
+        train_dataset.update_from_data()
+
+        # train_dataset.data[train_dataset.data[:,1].isin(top_popular_items)]
+
+        train_dataset, test_dataset = ttc.process(train_dataset)
+        return train_dataset, test_dataset
+class TRTERandom(DataProcessor):
+
+    def __init__(self,
+                 min_ratings,
+                 random_seed,
+                 probability_keep_item,
+                 *args,
+                 **kwargs):
+        super().__init__(*args, **kwargs)
+        self.min_ratings = min_ratings
+        self.random_seed = random_seed
+        self.probability_keep_item = probability_keep_item
+        self.parameters.extend(['min_ratings', 'random_seed','probability_keep_item'])
+
+    def process(self, train_dataset_and_test_dataset):
+        train_dataset = train_dataset_and_test_dataset[0]
+        test_dataset = train_dataset_and_test_dataset[1]
+        # ttc = TrainTestConsumption(self.train_size, self.test_consumes,
+                                   # self.crono, self.random_seed)
+        train_dataset, test_dataset = ttc.process(train_dataset)
+        return train_dataset, test_dataset
 
 class MovieLens100k(DataProcessor):
 
