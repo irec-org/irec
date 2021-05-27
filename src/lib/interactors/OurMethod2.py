@@ -62,8 +62,8 @@ class OurMethod2(MFInteractor):
         self.As = defaultdict(lambda: self.I.copy())
         items_score = _prediction_rule(self.I,self.initial_b,self.items_weights,self.alpha)
         
-        print("WSCB items score correlation with popularity:",scipy.stats.pearsonr(items_score,items_popularity),self.train_dataset.num_total_users, self.train_dataset.num_total_items)
-        print("WSCB items score correlation with entropy:",scipy.stats.pearsonr(items_score,items_entropy),self.train_dataset.num_total_users, self.train_dataset.num_total_items)
+        # print("WSCB items score correlation with popularity:",scipy.stats.pearsonr(items_score,items_popularity),self.train_dataset.num_total_users, self.train_dataset.num_total_items)
+        # print("WSCB items score correlation with entropy:",scipy.stats.pearsonr(items_score,items_entropy),self.train_dataset.num_total_users, self.train_dataset.num_total_items)
         # self.initial_b
 
 

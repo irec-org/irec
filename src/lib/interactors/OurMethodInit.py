@@ -76,12 +76,12 @@ class OurMethodInit(MFInteractor):
         self.bs = defaultdict(lambda: self.initial_b.copy())
         self.As = defaultdict(lambda: self.I.copy())
 
-        items_score = _prediction_rule(self.I,self.initial_b,self.items_weights,self.alpha)
-        items_entropy = interactors.Entropy.get_items_entropy(self.train_consumption_matrix)
-        items_popularity = interactors.MostPopular.get_items_popularity(self.train_consumption_matrix,normalize=False)
+        # items_score = _prediction_rule(self.I,self.initial_b,self.items_weights,self.alpha)
+        # items_entropy = interactors.Entropy.get_items_entropy(self.train_consumption_matrix)
+        # items_popularity = interactors.MostPopular.get_items_popularity(self.train_consumption_matrix,normalize=False)
         
-        print(f"WSCB {self.init} items score correlation with popularity:",scipy.stats.pearsonr(items_score,items_popularity),self.train_dataset.num_total_users, self.train_dataset.num_total_items)
-        print(f"WSCB {self.init} items score correlation with entropy:",scipy.stats.pearsonr(items_score,items_entropy),self.train_dataset.num_total_users, self.train_dataset.num_total_items)
+        # print(f"WSCB {self.init} items score correlation with popularity:",scipy.stats.pearsonr(items_score,items_popularity),self.train_dataset.num_total_users, self.train_dataset.num_total_items)
+        # print(f"WSCB {self.init} items score correlation with entropy:",scipy.stats.pearsonr(items_score,items_entropy),self.train_dataset.num_total_users, self.train_dataset.num_total_items)
 
     def predict(self,uid,candidate_items,num_req_items):
         b = self.bs[uid]
