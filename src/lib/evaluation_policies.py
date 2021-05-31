@@ -302,7 +302,7 @@ class OneInteraction(EvaluationPolicy,Parameterizable):
 
                 if len(no_items_recommended_users) == 0:
                     print(f"Finished recommendations in {i+1} trial")
-                    print('Correlation: {} {}'.format(model.__class__.__name__,
+                    print('Correlation: {} {} {} {}'.format(train_dataset.num_total_users,train_dataset.num_total_items,model.__class__.__name__,
                         ' '.join(['{} {}'.format(corr_name,np.mean(list(corr_values.values()))) for corr_name, corr_values in correlations.items() ])))
                     break
             
