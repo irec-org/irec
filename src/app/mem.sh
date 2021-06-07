@@ -10,6 +10,7 @@ while true; do
 								#TO="daygeek@gmail.com"
 
 								killall python3
+								killall python
 					#			break
 				fi
 				sleep 0.4
