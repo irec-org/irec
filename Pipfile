@@ -1,0 +1,21 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+inquirer = "*"
+matplotlib = "*"
+numba = "*"
+pandas = "*"
+pip-chill = "*"
+sklearn = "*"
+tqdm = "*"
+PyYAML = "*"
+tensorflow = "==2.4.1"
+seaborn = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.8"
