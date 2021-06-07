@@ -47,22 +47,27 @@ plt.rcParams['lines.linewidth'] = 2
 plt.rcParams['font.size'] = 15
 
 # metrics_classes = [metrics.Hits, metrics.Recall]
-metrics_classes = [metrics.Hits,
-        metrics.Recall ,
+metrics_classes = [
+        # metrics.Hits,
+        # metrics.Recall ,
         metrics.EPC,
-        metrics.UsersCoverage, 
-        metrics.ILD,
-        metrics.GiniCoefficientInv,
+        metrics.Entropy,
+        # metrics.UsersCoverage, 
+        # metrics.ILD,
+        # metrics.GiniCoefficientInv,
         ]
 metrics_classes_names = list(map(lambda x: x.__name__, metrics_classes))
-metrics_names = ['Cumulative Precision', 
-        'Cumulative Recall', 
+metrics_names = [
+        # 'Cumulative Precision', 
+        # 'Cumulative Recall', 
         'Cumulative EPC', 
-        'Cumulative Users Coverage',
-        'Cumulative ILD',
-        '1-(Gini-Index)'
+        'Cumulative Entropy', 
+        # 'Cumulative Users Coverage',
+        # 'Cumulative ILD',
+        # '1-(Gini-Index)'
         ]
-metrics_weights = {'Hits': 0.3,'Recall':0.3,'EPC':0.1,'UsersCoverage':0.1,'ILD':0.1,'GiniCoefficientInv':0.1}
+metrics_weights = {'Entropy': 0.5,'EPC':0.5}
+# metrics_weights = {'Hits': 0.3,'Recall':0.3,'EPC':0.1,'UsersCoverage':0.1,'ILD':0.1,'GiniCoefficientInv':0.1}
 # metrics_weights = {'Hits': 0.3,'Recall':0.3,'EPC':0.16666,'UsersCoverage':0.16666,'ILD':0.16666}
 # metrics_weights = {'Hits': 0.25,'Recall':0.25,'EPC':0.125,'UsersCoverage':0.125,'ILD':0.125,'GiniCoefficientInv':0.125}
 # metrics_weights ={i: 1/len(metrics_classes_names) for i in metrics_classes_names}

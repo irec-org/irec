@@ -25,8 +25,8 @@ class EvaluationPolicy:
 class Interaction(EvaluationPolicy,Parameterizable):
     def __init__(self, num_interactions, interaction_size, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.num_interactions = num_interactions
-        self.interaction_size = interaction_size
+        self.num_interactions = int(num_interactions)
+        self.interaction_size = int(interaction_size)
         self.parameters.extend(['num_interactions','interaction_size'])
 
     def evaluate(self,model,train_dataset,test_dataset):
