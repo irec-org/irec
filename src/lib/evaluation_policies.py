@@ -268,9 +268,15 @@ class OneInteraction(EvaluationPolicy,Parameterizable):
             train_consumption_matrix = scipy.sparse.csr_matrix((train_dataset.data[:,2],(train_dataset.data[:,0],train_dataset.data[:,1])),(train_dataset.num_total_users,train_dataset.num_total_items))
 
             items_entropy = lib.interactors.Entropy.get_items_entropy(train_consumption_matrix)
-            items_popularity = lib.interactors.MostPopular.get_items_popularity(train_consumption_matrix,normalize=False)
+            items_popularity = lib.interactors.MostPopular.get_items_popularity(train_consumption_matrix,normalize=True)
             del train_consumption_matrix
-            correlations = defaultdict(dict)
+            # correlations = defaultdict(dict)
+            items_value = defaultdict(dict)
+            membership = defaultdict(dict)
+            top_k_nonp = 100
+            top_k_nonp_items_popularity = np.argsort(items_popularity)[::-1][:top_k_nonp]
+            top_k_nonp_items_entropy = np.argsort(items_entropy)[::-1][:top_k_nonp]
+            
             for i in range(num_trials):
                 uid = random.sample(available_users,k=1)[0]
                 not_recommended = np.ones(num_total_items,dtype=bool)
@@ -291,8 +297,12 @@ class OneInteraction(EvaluationPolicy,Parameterizable):
                     available_users = available_users - {uid}
 
                 if users_num_interactions[uid] == 1:
-                    correlations['Popularity'][uid]= scipy.stats.pearsonr(items_score,items_popularity)[0]
-                    correlations['Entropy'][uid]= scipy.stats.pearsonr(items_score,items_entropy)[0]
+                    # correlations['Popularity'][uid]= scipy.stats.pearsonr(items_score,items_popularity)[0]
+                    # correlations['Entropy'][uid]= scipy.stats.pearsonr(items_score,items_entropy)[0]
+                    items_value['Popularity'][uid] = np.mean(items_popularity[best_items])
+                    items_value['Entropy'][uid] = np.mean(items_entropy[best_items])
+                    membership['Popularity'][uid] = len(set(best_items).intersection(set(top_k_nonp_items_popularity)))
+                    membership['Entropy'][uid] = len(set(best_items).intersection(set(top_k_nonp_items_entropy)))
                     no_items_recommended_users -= {uid}
 
                 _num_interactions += 1
@@ -302,8 +312,14 @@ class OneInteraction(EvaluationPolicy,Parameterizable):
 
                 if len(no_items_recommended_users) == 0:
                     print(f"Finished recommendations in {i+1} trial")
-                    print('Correlation: {} {} {} {}'.format(train_dataset.num_total_users,train_dataset.num_total_items,model.__class__.__name__,
-                        ' '.join(['{} {}'.format(corr_name,np.mean(list(corr_values.values()))) for corr_name, corr_values in correlations.items() ])))
+                    # print('Correlation: {} {} {} {}'.format(train_dataset.num_total_users,train_dataset.num_total_items,model.__class__.__name__,
+                        # ' '.join(['{} {}'.format(corr_name,np.mean(list(corr_values.values()))) for corr_name, corr_values in correlations.items() ])))
+                    print('Items Values: {} {} {} {}'.format(train_dataset.num_total_users,train_dataset.num_total_items,model.__class__.__name__,
+                         ' '.join(['{} {}'.format(corr_name,np.mean(list(corr_values.values()))) for corr_name, corr_values in items_value.items() ])   
+                        ))
+                    print('Membership: {} {} {} {}'.format(train_dataset.num_total_users,train_dataset.num_total_items,model.__class__.__name__,
+                         ' '.join(['{} {}'.format(corr_name,np.mean(list(corr_values.values()))) for corr_name, corr_values in membership.items() ])   
+                        ))
                     break
             
 
