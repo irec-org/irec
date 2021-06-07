@@ -262,6 +262,10 @@ class InteractionMetricsEvaluator(MetricsEvaluator):
         if EPC in self.metrics_classes:
             self.items_normalized_popularity = lib.interactors.MostPopular.get_items_popularity(
                 self.ground_truth_consumption_matrix)
+        if Entropy in self.metrics_classes:
+            self.items_entropy = lib.interactors.Entropy.get_items_entropy(
+                self.ground_truth_consumption_matrix)
+
 
         metrics_values = defaultdict(list)
         results = run_parallel(self._metric_evaluation,
@@ -300,6 +304,11 @@ class CumulativeInteractionMetricsEvaluator(InteractionMetricsEvaluator):
         elif issubclass(metric_class, EPC):
             metric = metric_class(
                 items_normalized_popularity=self.items_normalized_popularity,
+                ground_truth_dataset=self.ground_truth_dataset,
+                relevance_evaluator=self.relevance_evaluator)
+        elif issubclass(metric_class, Entropy):
+            metric = metric_class(
+                items_entropy=self.items_entropy,
                 ground_truth_dataset=self.ground_truth_dataset,
                 relevance_evaluator=self.relevance_evaluator)
         else:
@@ -479,6 +488,20 @@ class EPC(Metric):
         probability_seen = self.items_normalized_popularity[item]
         self.users_prob_not_seen_cumulated[uid] += 1 - probability_seen
 
+class Entropy(Metric):
+
+    def __init__(self, items_entropy, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.users_num_items_recommended = defaultdict(int)
+        self.users_entropy_cumulated = defaultdict(float)
+        self.items_entropy = items_entropy
+
+    def compute(self, uid):
+        return self.users_entropy_cumulated[uid]/self.users_num_items_recommended[uid]
+
+    def update_recommendation(self, uid, item, reward):
+        self.users_num_items_recommended[uid] += 1
+        self.users_entropy_cumulated[uid] += self.items_entropy[item]
 
 class ILD(Metric):
 

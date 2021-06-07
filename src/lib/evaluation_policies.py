@@ -1,4 +1,6 @@
 from collections import defaultdict
+from tabulate import tabulate
+from scipy.sparse import base
 
 from threadpoolctl import threadpool_limits
 import scipy.sparse
@@ -14,6 +16,7 @@ import seaborn as sns
 from lib.utils.DirectoryDependent import DirectoryDependent
 import matplotlib.pyplot as plt
 import scipy.stats
+from lib.utils.PersistentDataManager import PersistentDataManager
 import os
 
 class EvaluationPolicy:
@@ -272,7 +275,10 @@ class OneInteraction(EvaluationPolicy,Parameterizable):
             del train_consumption_matrix
             # correlations = defaultdict(dict)
             items_value = defaultdict(dict)
+            items_value_table = []
             membership = defaultdict(dict)
+            # membership_table = [['Dataset','Method','Pop. Corr.','Ent. Corr.']]
+            membership_table = []
             top_k_nonp = 100
             top_k_nonp_items_popularity = np.argsort(items_popularity)[::-1][:top_k_nonp]
             top_k_nonp_items_entropy = np.argsort(items_entropy)[::-1][:top_k_nonp]
@@ -312,9 +318,21 @@ class OneInteraction(EvaluationPolicy,Parameterizable):
 
                 if len(no_items_recommended_users) == 0:
                     print(f"Finished recommendations in {i+1} trial")
+                    base_name = "None"
+                    if train_dataset.num_total_users == 69878:
+                        base_name = 'MovieLens 10M'
+                    elif train_dataset.num_total_users == 53423:
+                        base_name = 'Good Books'
+                    elif train_dataset.num_total_users == 15400:
+                        base_name = 'Yahoo Music'
+                    # items_value_table.append(base_name,model.__class__.__name__,*[np.mean(list(corr_values.values())) for corr_name, corr_values in items_value.items()])
+                    # membership_table.append(base_name,model.__class__.__name__,*[np.mean(list(corr_values.values())) for corr_name, corr_values in membership.items()])
                     # print('Correlation: {} {} {} {}'.format(train_dataset.num_total_users,train_dataset.num_total_items,model.__class__.__name__,
                         # ' '.join(['{} {}'.format(corr_name,np.mean(list(corr_values.values()))) for corr_name, corr_values in correlations.items() ])))
-                    print('Items Values: {} {} {} {}'.format(train_dataset.num_total_users,train_dataset.num_total_items,model.__class__.__name__,
+                    # print('Items_Values: {} {} {} {}'.format(train_dataset.num_total_users,train_dataset.num_total_items,model.__class__.__name__,
+                         # ' '.join(['{} {}'.format(corr_name,np.mean(list(corr_values.values()))) for corr_name, corr_values in items_value.items() ])   
+                        # ))
+                    print('Items_Values: {} {} {} {}'.format(train_dataset.num_total_users,train_dataset.num_total_items,model.__class__.__name__,
                          ' '.join(['{} {}'.format(corr_name,np.mean(list(corr_values.values()))) for corr_name, corr_values in items_value.items() ])   
                         ))
                     print('Membership: {} {} {} {}'.format(train_dataset.num_total_users,train_dataset.num_total_items,model.__class__.__name__,
@@ -322,7 +340,8 @@ class OneInteraction(EvaluationPolicy,Parameterizable):
                         ))
                     break
             
-
+            # print(tabulate(items_value_table, tablefmt='psql'))
+            # print(tabulate(membership_table, tablefmt='psql'))
             pbar.update(_num_interactions)
             _num_interactions = 0
             pbar.close()
