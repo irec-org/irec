@@ -1,4 +1,5 @@
 from os.path import dirname, realpath, sep, pardir
+import json
 from collections import defaultdict
 import os
 import sys
@@ -15,6 +16,7 @@ import lib.action_selection_policies
 import lib.agents
 import lib.value_functions
 import copy
+import collections.abc
 LATEX_TABLE_FOOTER = r"""
 \end{tabular}
 \end{document}
@@ -45,6 +47,37 @@ T & %s \\
 \hline
 """
 import yaml
+
+def gen_dict_extract(key, var):
+    if hasattr(var,'items'):
+        for k, v in var.items():
+            if k == key:
+                yield v
+            if isinstance(v, dict):
+                for result in gen_dict_extract(key, v):
+                    yield result
+            elif isinstance(v, list):
+                for d in v:
+                    for result in gen_dict_extract(key, d):
+                        yield result
+
+def update_nested_dict(d, u):
+    for k, dv in d.items():
+        if k in u:
+            uv=u[k]
+            if isinstance(dv, collections.abc.Mapping):
+                d[k] = update_nested_dict(uv.get(k,{}),dv)
+            else:
+                d[k] = uv
+    return d
+
+def class2dict(instance):
+    if not hasattr(instance, "__dict__"):
+        return instance
+    new_subdic = dict(vars(instance))
+    for key, value in new_subdic.items():
+        new_subdic[key] = class2dict(value)
+    return new_subdic
 
 def generate_table_spec(nums_interactions_to_show, num_datasets_preprocessors):
     res = '|'
@@ -169,7 +202,7 @@ def run_interactor(itr,evaluation_policy,dm,forced_run):
         except:
             print(traceback.print_exc())
             raise SystemError
-
+        
         pdm = PersistentDataManager(directory='results')
         pdm.save(InteractorCache().get_id(dm, evaluation_policy, itr),
                  history_items_recommended)
@@ -177,8 +210,15 @@ def run_interactor(itr,evaluation_policy,dm,forced_run):
         print("Already executed",
               InteractorCache().get_id(dm, evaluation_policy, itr))
 
-def get_agent_id(agent,dataset_preprocessor_name,settings):
-    pass
+
+def get_agent_id(agent,settings):
+    agent_settings = next(gen_dict_extract(agent.name,settings['agents_preprocessor_parameters']))
+    # agent_settings = copy.copy(settings['agents_preprocessor_parameters'][dataset_preprocessor_name][agent.name])
+    agent_dict = class2dict(agent)
+    new_agent_settings = update_nested_dict(agent_settings,agent_dict)
+    # update_nested_dict(agent_settings[agent.__class__.__name__]['value_function'],agent.value_function.__dict__)
+    return agent.name+'_'+json.dumps(new_agent_settings,separators=(',', ':'))
+
 
 def create_agent(agent_name,dataset_preprocessor_name,settings):
     # try:
