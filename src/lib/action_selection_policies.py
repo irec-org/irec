@@ -6,7 +6,7 @@ class ActionSelectionPolicy:
     def __init__(self):
         pass
 
-    def select_actions(action_estimates, actions_num):
+    def select_actions(self, action_estimates, actions_num):
         raise NotImplementedError
 
     def update(self, observation, action, reward, info):
@@ -18,9 +18,9 @@ class ActionSelectionPolicy:
 
 class Greedy(ActionSelectionPolicy):
 
-    def select_actions(action_estimates, actions_num):
+    def select_actions(self, action_estimates, actions_num):
         return np.argpartition(action_estimates,
-                               -self.actions_num)[-self.actions_num:], None
+                               -actions_num)[-actions_num:], None
 
     def update(self, observation, action, reward, info):
         pass
@@ -31,22 +31,22 @@ class Greedy(ActionSelectionPolicy):
 
 class eGreedy(ActionSelectionPolicy):
 
-    def __init__(self,epsilon, *args, **kwargs):
+    def __init__(self, epsilon, *args, **kwargs):
         dict.__init__(self, *args, **kwargs)
         self.epsilon = epsilon
 
-    def select_actions(action_estimates, actions_num):
-        greedy_actions= np.argpartition(action_estimates,
-                -self.actions_num)[-self.actions_num:][::-1]
-        actions_indexes =[]
+    def select_actions(self, action_estimates, actions_num):
+        greedy_actions = np.argpartition(
+            action_estimates, -actions_num)[-actions_num:][::-1]
+        actions_indexes = []
         for i in range(actions_num):
             if self.epsilon < np.random.rand():
-                j=0
+                j = 0
                 while True:
                     action_index = greedy_actions[j]
                     if action_index not in actions_indexes:
                         break
-                    j+=1
+                    j += 1
                 actions_indexes.append(action_index)
             else:
                 while True:
@@ -55,8 +55,7 @@ class eGreedy(ActionSelectionPolicy):
                         break
                 actions_indexes.append(action_index)
 
-        return np.argpartition(action_estimates,
-                               -self.actions_num)[-self.actions_num:], None
+        return actions_indexes, None
 
     def update(self, observation, action, reward, info):
         pass

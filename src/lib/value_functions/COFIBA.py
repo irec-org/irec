@@ -120,6 +120,7 @@ class COFIBA(MFValueFunction):
         self.users_m = np.array(self.users_m)
         self.users_latent_factors = [np.linalg.inv(m) @ b for b, m in zip(self.users_b,self.users_m)]
         self.t = 1
+        self.recent_predict=True
 
     def action_estimates(self,candidate_actions):
         uid=candidate_actions[0];candidate_items=candidate_actions[1]
@@ -128,6 +129,7 @@ class COFIBA(MFValueFunction):
             users_graph, labels = self.update_user_cluster(uid,item)
             user_connected_component = np.nonzero(labels[uid] == labels)[0]
             items_score[i] = self.score(uid,item,user_connected_component)
+        self.recent_predict = True
         return items_score, None
 
     def update(self,observation,action,reward,info):
@@ -136,3 +138,6 @@ class COFIBA(MFValueFunction):
         item_cluster = self.items_clustering[item]
         self.users_graphs[item_cluster] = users_graph
         self.update_item_cluster(uid,item)
+        if self.recent_predict:
+            self.t+=1
+            self.recent_predict=False

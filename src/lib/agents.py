@@ -1,28 +1,23 @@
-class DotDict(dict):
-
-    def __init__(self, *args, **kwargs):
-        dict.__init__(self, *args, **kwargs)
-        self.__dict__ = self
-
-
 class Agent:
 
-    def __init__(self, value_function, action_selection_policy):
+    def __init__(self, value_function, action_selection_policy, name, *args,
+                 **kwargs):
+        super().__init__(*args, **kwargs)
         self.value_function = value_function
         self.action_selection_policy = action_selection_policy
-        self.state = DotDict()
+        self.name = name
 
-    def act(self):
+    def act(self, candidate_actions, actions_num):
         raise NotImplementedError
 
-    def observe(self, observation, action, reward, done):
+    def observe(self, observation, action, reward, info):
         raise NotImplementedError
 
     def reset(self, observation):
         raise NotImplementedError
 
 
-class SimpleAgent:
+class SimpleAgent(Agent):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -32,10 +27,10 @@ class SimpleAgent:
             candidate_actions)
         actions_indexes, asp_info = self.action_selection_policy.select_actions(
             action_estimates, actions_num)
-        actions = candidate_actions[actions_indexes]
+        actions = (candidate_actions[0],candidate_actions[1][actions_indexes])
         return actions, {'vf_info': vf_info, 'asp_info': asp_info}
 
-    def observe(self, observation, action, reward, done, info):
+    def observe(self, observation, action, reward, info):
         self.value_function.update(observation, action, reward, info['vf_info'])
         self.action_selection_policy.update(observation, action, reward,
                                             info['asp_info'])

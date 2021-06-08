@@ -29,13 +29,14 @@ class UCB(ExperimentalValueFunction):
             item = int(self.train_dataset.data[i,1])
             reward = self.train_dataset.data[i,2]
             self.update(uid,item,reward,None)
-            self.increment_time()
+        self.recent_predict = True
 
     def action_estimates(self,candidate_actions):
         uid=candidate_actions[0];candidate_items=candidate_actions[1]
         with np.errstate(divide='ignore'):
             items_uncertainty = self.c*np.sqrt(2*np.log(self.t)/self.items_count[candidate_items])
             items_score = self.items_mean_values[candidate_items]+items_uncertainty
+        self.recent_predict = True
         return items_score, None
 
     def update(self,observation,action,reward,info):
@@ -43,3 +44,6 @@ class UCB(ExperimentalValueFunction):
         item = int(item)
         self.items_mean_values[item] = (self.items_mean_values[item]*self.items_count[item]+reward)/(self.items_count[item] + 1)
         self.items_count[item] += 1
+        if self.recent_predict:
+            self.t+=1
+            self.recent_predict=False

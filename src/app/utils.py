@@ -11,6 +11,9 @@ import matplotlib.pyplot as plt
 from os.path import dirname, realpath, sep, pardir
 from lib.utils.PersistentDataManager import PersistentDataManager
 from lib.utils.InteractorCache import InteractorCache
+import lib.action_selection_policies
+import lib.agents
+import lib.value_functions
 import copy
 LATEX_TABLE_FOOTER = r"""
 \end{tabular}
@@ -100,10 +103,10 @@ def defaultify(d):
 def load_settings():
     d = dict()
     loader = yaml.SafeLoader
-    d['interactors_preprocessor_parameters'] = yaml.load(
-        open(dirname(realpath(__file__)) + sep +"settings" + sep + "interactors_preprocessor_parameters.yaml"),
+    d['agents_preprocessor_parameters'] = yaml.load(
+        open(dirname(realpath(__file__)) + sep +"settings" + sep + "agents_preprocessor_parameters.yaml"),
         Loader=loader)
-    d['interactors_preprocessor_parameters'] =defaultify(d['interactors_preprocessor_parameters'])
+    d['agents_preprocessor_parameters'] =defaultify(d['agents_preprocessor_parameters'])
 
     d['interactors_general_settings'] = yaml.load(
         open(dirname(realpath(__file__)) + sep +"settings" + sep + "interactors_general_settings.yaml"),
@@ -154,6 +157,7 @@ def plot_similar_items(ys,method1,method2,title=None):
     ax.set_ylabel('Similar items (%)')
     return fig
 
+
 def run_interactor(itr,evaluation_policy,dm,forced_run):
     pdm = PersistentDataManager(directory='results')
     if forced_run or not pdm.file_exists(InteractorCache().get_id(
@@ -172,11 +176,29 @@ def run_interactor(itr,evaluation_policy,dm,forced_run):
     else:
         print("Already executed",
               InteractorCache().get_id(dm, evaluation_policy, itr))
-def create_interactor(itr_class,dataset_preprocessor_name,settings):
-    try:
-        return itr_class(**settings['interactors_preprocessor_parameters'][dataset_preprocessor_name][itr_class.__name__]['parameters'])
-    except:
-        return itr_class()
+
+def get_agent_id(agent,dataset_preprocessor_name,settings):
+    pass
+
+def create_agent(agent_name,dataset_preprocessor_name,settings):
+    # try:
+    agent_settings = settings['agents_preprocessor_parameters'][dataset_preprocessor_name][agent_name]
+    agent_class_name = list(agent_settings.keys())[0]
+    agent_parameters = list(agent_settings.values())[0]
+    agent_class= eval('lib.agents.'+agent_class_name)
+    action_selection_policy_name = list(agent_parameters['action_selection_policy'].keys())[0]
+    action_selection_policy_parameters = list(agent_parameters['action_selection_policy'].values())[0]
+    value_function_name = list(agent_parameters['value_function'].keys())[0]
+    value_function_parameters = list(agent_parameters['value_function'].values())[0]
+
+    action_selection_policy = eval('lib.action_selection_policies.'+action_selection_policy_name)(**action_selection_policy_parameters)
+    value_function = eval('lib.value_functions.'+value_function_name)(**value_function_parameters)
+
+    return agent_class(action_selection_policy=action_selection_policy,value_function=value_function,name=agent_name)
+    # except:
+        # print("Error creating agent")
+        # raise SystemError
+        # return None
 
 def default_to_regular(d):
     if isinstance(d, defaultdict):

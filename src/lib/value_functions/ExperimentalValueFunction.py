@@ -19,6 +19,3 @@ class ExperimentalValueFunction(ValueFunction,Parameterizable):
     def reset(self,observation):
         train_dataset=observation
         ValueFunction.reset(self,train_dataset)
-        self.t = 0
-    def increment_time(self):
-        self.t += 1

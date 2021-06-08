@@ -18,7 +18,7 @@ for k1, v1 in d.items():
             p =v2['parameters']
         new_d[k1][k2] =  {'SimpleAgent':{
                     'value_function': {k2:p},
-                'action_selection_policy': 'Greedy'
+                    'action_selection_policy': {'Greedy':{}}
                 }
         }
 print(yaml.dump(new_d))

@@ -46,9 +46,9 @@ def main():
     dm = DatasetManager()
     datasets_preprocessors = [settings['datasets_preprocessors_parameters'][base] for base in args.b]
 
-    interactors_classes = [
-        eval('lib.value_functions.' + interactor) for interactor in args.m
-    ]
+    # interactors_classes = [
+        # eval('lib.value_functions.' + interactor) for interactor in args.m
+    # ]
         
     with ProcessPoolExecutor() as executor:
         futures = set()
@@ -56,8 +56,8 @@ def main():
             dm = DatasetManager()
             dm.initialize_engines(dataset_preprocessor)
             dm.load()
-            for itr_class in interactors_classes:
-                itr = utils.create_interactor(itr_class,dataset_preprocessor['name'],settings)
+            for agent_name in args.m:
+                itr = utils.create_agent(agent_name,dataset_preprocessor['name'],settings)
                 f=executor.submit(utils.run_interactor,itr,evaluation_policy,dm,args.forced_run)
                 futures.add(f)
                 if len(futures) >= args.num_tasks:

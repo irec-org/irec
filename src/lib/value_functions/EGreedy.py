@@ -27,7 +27,6 @@ class EGreedy(ExperimentalValueFunction):
             item = int(self.train_dataset.data[i,1])
             reward = self.train_dataset.data[i,2]
             self.update(uid,item,reward,None)
-            self.increment_time()
 
     def action_estimates(self,candidate_actions):
         uid=candidate_actions[0];candidate_items=candidate_actions[1]

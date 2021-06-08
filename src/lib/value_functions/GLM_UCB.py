@@ -32,6 +32,8 @@ class GLM_UCB(LinearICF):
         self.users_rec_items_means = defaultdict(list)
         self.p_vals = dict()
         np.seterr(under="ignore")
+        self.recent_predict = True
+        self.t=0
 
     def error_user_weight_function(self,p,u_rec_rewards,u_rec_items_means):
         return np.sum(np.array(
@@ -58,6 +60,7 @@ class GLM_UCB(LinearICF):
             np.sqrt(np.sum(self.items_means[candidate_items].dot(cov) *\
                            self.items_means[candidate_items],axis=1))
         items_score = items_score.flatten()
+        self.recent_predict = True
         return items_score, None
     def update(self,observation,action,reward,info):
         uid=action[0];item=action[1];additional_data=info
@@ -65,6 +68,9 @@ class GLM_UCB(LinearICF):
         self.users_rec_rewards[uid].append(reward)
         self.users_rec_items_means[uid].append(max_item_mean)
         self.As[uid] += max_item_mean[:,None].dot(max_item_mean[None,:])
+        if self.recent_predict:
+            self.t+=1
+            self.recent_predict=False
 
 
 class GLM_UCBInit(GLM_UCB):
