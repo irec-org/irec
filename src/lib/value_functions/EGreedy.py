@@ -7,10 +7,10 @@ import scipy.stats
 from collections import defaultdict
 
 class EGreedy(ExperimentalValueFunction):
-    def __init__(self, epsilon=0.1,*args, **kwargs):
+    def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.epsilon = epsilon
-        self.parameters.extend(['epsilon'])
+        # self.epsilon = epsilon
+        # self.parameters.extend(['epsilon'])
 
     def reset(self,observation):
         train_dataset=observation
@@ -26,14 +26,14 @@ class EGreedy(ExperimentalValueFunction):
             uid = int(self.train_dataset.data[i,0])
             item = int(self.train_dataset.data[i,1])
             reward = self.train_dataset.data[i,2]
-            self.update(uid,item,reward,None)
+            self.update(None, (uid,item),reward,None)
 
     def action_estimates(self,candidate_actions):
         uid=candidate_actions[0];candidate_items=candidate_actions[1]
-        if self.epsilon < np.random.rand():
-            items_score = self.items_mean_values[candidate_items]
-        else:
-            items_score = np.random.rand(len(candidate_items))
+        # if self.epsilon < np.random.rand():
+        items_score = self.items_mean_values[candidate_items]
+        # else:
+            # items_score = np.random.rand(len(candidate_items))
         return items_score, None
                 
     def update(self,observation,action,reward,info):
