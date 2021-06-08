@@ -1,4 +1,4 @@
-import interactors
+import value_functions
 from mf import ICFPMF
 from util import DatasetFormatter
 import numpy as np
@@ -12,15 +12,15 @@ import pandas as pd
 plt.rcParams['lines.linewidth'] = 2
 plt.rcParams['font.size'] = 15
 
-INTERACTION_SIZE = interactors.Interactor().interaction_size
-ITERATIONS = interactors.Interactor().get_iterations()
-INTERACTIONS = interactors.Interactor().interactions
-THRESHOLD = interactors.Interactor().threshold
+INTERACTION_SIZE = value_functions.ValueFunction().interaction_size
+ITERATIONS = value_functions.ValueFunction().get_iterations()
+INTERACTIONS = value_functions.ValueFunction().interactions
+THRESHOLD = value_functions.ValueFunction().threshold
 KS = list(map(int,np.arange(INTERACTION_SIZE,ITERATIONS+1,step=INTERACTION_SIZE)))
 dsf = DatasetFormatter()
 dsf = dsf.load()
 
-itr = interactors.UCBLearner(consumption_matrix=dsf.matrix_users_ratings,
+itr = value_functions.UCBLearner(consumption_matrix=dsf.matrix_users_ratings,
                              prefix_name=dsf.base)
 
 metric_values = defaultdict(lambda:defaultdict(float))
@@ -57,7 +57,7 @@ for ax,metric_name in zip(axs.flatten(),metrics_names):
     ax.yaxis.set_label_coords(-0.1,1.02)
 
 # s = fig.subplotpars
-# fig.legend(answers['interactors'],loc='lower center',
+# fig.legend(answers['value_functions'],loc='lower center',
 #            bbox_to_anchor=[s.left, s.top+0.04, s.right-s.left, 0.05],
 #            ncol=6, mode="expand", borderaxespad=0,
 #            bbox_transform=fig.transFigure, fancybox=False, edgecolor="k")

@@ -4,7 +4,7 @@ import sys
 sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "lib")
 
 import inquirer
-import interactors
+import value_functions
 import mf
 import matplotlib.pyplot as plt
 from collections import defaultdict
@@ -66,8 +66,8 @@ for dataset_preprocessor in datasets_preprocessors:
     consumption_matrix = scipy.sparse.csr_matrix((dataset.data[:,2],(dataset.data[:,0],dataset.data[:,1])),(dataset.num_total_users,dataset.num_total_items))
 
     evaluation_policy = ir.get_interactors_evaluation_policy()
-    items_popularity = interactors.MostPopular.get_items_popularity(consumption_matrix,normalize=False)
-    items_entropy = interactors.Entropy.get_items_entropy(consumption_matrix)
+    items_popularity = value_functions.MostPopular.get_items_popularity(consumption_matrix,normalize=False)
+    items_entropy = value_functions.Entropy.get_items_entropy(consumption_matrix)
     for itr_class in interactors_classes:
         fig, ax = plt.subplots()
         itr = ir.create_interactor(itr_class)

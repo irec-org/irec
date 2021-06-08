@@ -12,7 +12,7 @@ import pandas as pd
 import seaborn as sn
 import lib.evaluation_policies
 import scipy
-import interactors
+import value_functions
 import mf
 from lib.utils.InteractorRunner import InteractorRunner
 from sklearn.decomposition import NMF
@@ -61,7 +61,7 @@ interactors_classes_names_to_names = {
 dm = DatasetManager()
 datasets_preprocessors = [settings['datasets_preprocessors_parameters'][base] for base in args.b]
 interactors_classes = [
-    eval('lib.interactors.' + interactor) for interactor in args.m
+    eval('lib.value_functions.' + interactor) for interactor in args.m
 ]
 
 # ir = InteractorRunner(dm, interactors_general_settings,

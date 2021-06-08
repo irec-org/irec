@@ -8,7 +8,7 @@ import json
 import inquirer
 import copy
 import scipy
-import interactors
+import value_functions
 import mf
 from lib.utils.InteractorRunner import InteractorRunner
 from sklearn.decomposition import NMF
@@ -93,7 +93,7 @@ datasets_preprocessors = [datasets_preprocessors[base] for base in args.b]
 ir = InteractorRunner(dm, interactors_general_settings,
                       interactors_preprocessor_parameters,
                       evaluation_policies_parameters)
-interactors_classes = [eval('interactors.'+interactor) for interactor in args.m]
+interactors_classes = [eval('value_functions.'+interactor) for interactor in args.m]
 
 # ir = InteractorRunner(dm, interactors_general_settings,
                       # interactors_preprocessor_parameters,

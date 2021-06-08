@@ -14,7 +14,7 @@ import pandas as pd
 import seaborn as sn
 import scipy
 import scipy.stats
-import lib.interactors
+import lib.value_functions
 import lib.evaluation_policies
 import mf
 from lib.utils.InteractorRunner import InteractorRunner
@@ -57,7 +57,7 @@ dm = DatasetManager()
 datasets_preprocessors = [settings['datasets_preprocessors_parameters'][base] for base in args.b]
 
 interactors_classes = [
-    eval('lib.interactors.' + interactor) for interactor in args.m
+    eval('lib.value_functions.' + interactor) for interactor in args.m
 ]
 
 metrics_classes_names = args.e

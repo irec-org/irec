@@ -16,7 +16,7 @@ sys.path.append(dirname(realpath(__file__)) + sep + pardir )
 
 import lib.evaluation_policies
 import inquirer
-import lib.interactors
+import lib.value_functions
 import lib.mf
 from lib.utils.InteractorRunner import InteractorRunner
 from sklearn.decomposition import NMF
@@ -81,7 +81,7 @@ dm = DatasetManager()
 ir = InteractorRunner(dm, settings['interactors_general_settings'],
                       settings['interactors_preprocessor_parameters'],
                       settings['evaluation_policies_parameters'])
-interactors_classes = [eval('lib.interactors.'+interactor) for interactor in args.m]
+interactors_classes = [eval('lib.value_functions.'+interactor) for interactor in args.m]
 for dataset_preprocessor in datasets_preprocessors:
     
     dm.initialize_engines(dataset_preprocessor)

@@ -7,7 +7,7 @@ import pandas as pd
 from tqdm import tqdm
 from cycler import cycler
 
-import interactors
+import value_functions
 import mf
 from util import DatasetFormatter, MetricsEvaluator, metrics
 
@@ -15,17 +15,17 @@ plt.rcParams['axes.prop_cycle'] = cycler(color='krbgmyc')
 plt.rcParams['lines.linewidth'] = 2
 plt.rcParams['font.size'] = 15
 q = [
-    inquirer.Checkbox('interactors',
+    inquirer.Checkbox('value_functions',
                       message='Interactors to run',
-                      choices=list(interactors.INTERACTORS.keys())
+                      choices=list(value_functions.INTERACTORS.keys())
                       )
 ]
 answers=inquirer.prompt(q)
 
-INTERACTIONS = interactors.Interactor().interactions
-INTERACTION_SIZE = interactors.Interactor().interaction_size
-ITERATIONS = interactors.Interactor().get_iterations()
-THRESHOLD = interactors.Interactor().threshold
+INTERACTIONS = value_functions.ValueFunction().interactions
+INTERACTION_SIZE = value_functions.ValueFunction().interaction_size
+ITERATIONS = value_functions.ValueFunction().get_iterations()
+THRESHOLD = value_functions.ValueFunction().threshold
 
 dsf = DatasetFormatter()
 dsf = dsf.load()
@@ -39,9 +39,9 @@ pmf_model.load_var(dsf.train_consumption_matrix)
 
 metrics_names = ['precision','recall','hits','ild','epc','epd']
 metric_values = defaultdict(lambda:defaultdict(dict))
-for i in answers['interactors']:
-    itr_class = interactors.INTERACTORS[i]
-    if issubclass(itr_class, interactors.ICF):
+for i in answers['value_functions']:
+    itr_class = value_functions.INTERACTORS[i]
+    if issubclass(itr_class, value_functions.ICF):
         itr = itr_class(var=pmf_model.var,
                                     user_lambda=pmf_model.get_user_lambda(),consumption_matrix=dsf.consumption_matrix,name_prefix=dsf.base)
                                         
@@ -76,7 +76,7 @@ for ax, metric_name in zip(axs[[1,3],:].flatten(),metrics_names):
     ax.yaxis.set_label_coords(-0.1,1.02)
 
 s = fig.subplotpars
-fig.legend(answers['interactors'],loc='lower center',
+fig.legend(answers['value_functions'],loc='lower center',
            bbox_to_anchor=[s.left, s.top+0.04, s.right-s.left, 0.05],
            ncol=6, mode="expand", borderaxespad=0,
            bbox_transform=fig.transFigure, fancybox=False, edgecolor="k")

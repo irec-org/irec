@@ -17,7 +17,7 @@ parser.add_argument('-f2', default=False, action='store_true')
 args = parser.parse_args()
 import inquirer
 from sklearn.model_selection import GroupShuffleSplit
-import interactors
+import value_functions
 import traceback
 import random
 from collections import defaultdict
@@ -65,7 +65,7 @@ datasets_preprocessors = [datasets_preprocessors[base] for base in args.b]
 ir = InteractorRunner(None, interactors_general_settings,
                       interactors_preprocessor_parameters,
                       evaluation_policies_parameters)
-interactors_classes = [eval('interactors.'+interactor) for interactor in args.m]
+interactors_classes = [eval('value_functions.'+interactor) for interactor in args.m]
 # print(interactors_classes)
 # history_rates_to_train = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8]
 # history_rates_to_train = [0.1,0.3,0.5,0.6,0.8]

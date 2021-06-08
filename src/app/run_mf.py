@@ -1,7 +1,7 @@
 import inquirer
 import numpy as np
 
-import interactors
+import value_functions
 import mf
 from mf import ICFPMF
 from util import DatasetFormatter, GridSearch

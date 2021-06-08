@@ -8,7 +8,7 @@ from lib.utils.Parameterizable import Parameterizable
 import numpy as np
 import random
 from tqdm import tqdm
-import lib.interactors
+import lib.value_functions
 
 
 import matplotlib as mpl
@@ -46,7 +46,7 @@ class Interaction(EvaluationPolicy,Parameterizable):
 
             num_test_users = len(test_users)
             print(f"Starting {model.__class__.__name__} Training")
-            model.train(train_dataset)
+            model.reset(train_dataset)
             print(f"Ended {model.__class__.__name__} Training")
             users_num_interactions = defaultdict(int)
             available_users = set(test_users)
@@ -63,13 +63,13 @@ class Interaction(EvaluationPolicy,Parameterizable):
                 not_recommended = np.ones(num_total_items,dtype=bool)
                 not_recommended[users_items_recommended[uid]] = 0
                 items_not_recommended = np.nonzero(not_recommended)[0]
-                items_score, additional_data = model.predict(uid,items_not_recommended,self.interaction_size)
+                items_score, additional_data = model.action_estimates((uid,items_not_recommended))
                 best_items = items_not_recommended[np.argpartition(items_score,-self.interaction_size)[-self.interaction_size:]]
                 users_items_recommended[uid].extend(best_items)
 
                 for item in best_items:
                     history_items_recommended.append((uid,item))
-                    model.update(uid,item,test_consumption_matrix[uid,item],additional_data)
+                    model.update(None,(uid,item),test_consumption_matrix[uid,item],additional_data)
                 model.increment_time()
                 users_num_interactions[uid] += 1
                 if users_num_interactions[uid] == self.num_interactions:
@@ -121,7 +121,7 @@ class InteractionSample(EvaluationPolicy,Parameterizable):
         users_items_recommended = defaultdict(list)
         num_users_selected = len(users_selected)
         print(f"Starting {model.__class__.__name__} Training")
-        model.train(train_dataset)
+        model.reset(train_dataset)
         print(f"Ended {model.__class__.__name__} Training")
         users_num_interactions = defaultdict(int)
         available_users = set(users_selected)
@@ -138,13 +138,13 @@ class InteractionSample(EvaluationPolicy,Parameterizable):
             not_recommended = np.ones(num_total_items,dtype=bool)
             not_recommended[users_items_recommended[uid]] = 0
             items_not_recommended = np.nonzero(not_recommended)[0]
-            items_score, additional_data = model.predict(uid,items_not_recommended,self.interaction_size)
+            items_score, additional_data = model.action_estimates((uid,items_not_recommended))
             best_items = items_not_recommended[np.argpartition(items_score,-self.interaction_size)[-self.interaction_size:]]
             users_items_recommended[uid].extend(best_items)
 
             for item in best_items:
                 history_items_recommended.append((uid,item))
-                model.update(uid,item,test_consumption_matrix[uid,item],additional_data)
+                model.update(None,(uid,item),test_consumption_matrix[uid,item],additional_data)
             model.increment_time()
             users_num_interactions[uid] += 1
             if users_num_interactions[uid] == self.num_interactions:
@@ -158,8 +158,8 @@ class InteractionSample(EvaluationPolicy,Parameterizable):
         pbar.update(_num_interactions)
         _num_interactions = 0
         pbar.close()
-        items_entropy = lib.interactors.Entropy.get_items_entropy(consumption_matrix)
-        items_popularity = lib.interactors.MostPopular.get_items_popularity(consumption_matrix,normalize=False)
+        items_entropy = lib.value_functions.Entropy.get_items_entropy(consumption_matrix)
+        items_popularity = lib.value_functions.MostPopular.get_items_popularity(consumption_matrix,normalize=False)
         for uid, items in users_items_recommended.items():
 
             colors = mpl.cm.rainbow(np.linspace(0, 1, len(items)))
@@ -194,7 +194,7 @@ class LimitedInteraction(EvaluationPolicy,Parameterizable):
             users_items_recommended = defaultdict(list)
             num_test_users = len(test_users)
             print(f"Starting {model.__class__.__name__} Training")
-            model.train(train_dataset)
+            model.reset(train_dataset)
             print(f"Ended {model.__class__.__name__} Training")
             # users_num_interactions = defaultdict(int)
             users_num_items_to_recommend_from_test = dict()
@@ -213,13 +213,13 @@ class LimitedInteraction(EvaluationPolicy,Parameterizable):
                 not_recommended = np.ones(num_total_items,dtype=bool)
                 not_recommended[users_items_recommended[uid]] = 0
                 items_not_recommended = np.nonzero(not_recommended)[0]
-                items_score, additional_data = model.predict(uid,items_not_recommended,self.interaction_size)
+                items_score, additional_data = model.action_estimates((uid,items_not_recommended))
                 best_items = items_not_recommended[np.argpartition(items_score,-self.interaction_size)[-self.interaction_size:]]
                 users_items_recommended[uid].extend(best_items)
 
                 for item in best_items:
                     history_items_recommended.append((uid,item))
-                    model.update(uid,item,test_consumption_matrix[uid,item],additional_data)
+                    model.update(None,(uid,item),test_consumption_matrix[uid,item],additional_data)
                     users_num_items_recommended_from_test[uid]+=test_consumption_matrix[uid,item]>0
 
                 model.increment_time()
@@ -254,7 +254,7 @@ class OneInteraction(EvaluationPolicy,Parameterizable):
 
             num_test_users = len(test_users)
             print(f"Starting {model.__class__.__name__} Training")
-            model.train(train_dataset)
+            model.reset(train_dataset)
             print(f"Ended {model.__class__.__name__} Training")
             users_num_interactions = defaultdict(int)
             available_users = set(test_users)
@@ -270,8 +270,8 @@ class OneInteraction(EvaluationPolicy,Parameterizable):
 
             train_consumption_matrix = scipy.sparse.csr_matrix((train_dataset.data[:,2],(train_dataset.data[:,0],train_dataset.data[:,1])),(train_dataset.num_total_users,train_dataset.num_total_items))
 
-            items_entropy = lib.interactors.Entropy.get_items_entropy(train_consumption_matrix)
-            items_popularity = lib.interactors.MostPopular.get_items_popularity(train_consumption_matrix,normalize=True)
+            items_entropy = lib.value_functions.Entropy.get_items_entropy(train_consumption_matrix)
+            items_popularity = lib.value_functions.MostPopular.get_items_popularity(train_consumption_matrix,normalize=True)
             del train_consumption_matrix
             # correlations = defaultdict(dict)
             items_value = defaultdict(dict)
@@ -288,13 +288,13 @@ class OneInteraction(EvaluationPolicy,Parameterizable):
                 not_recommended = np.ones(num_total_items,dtype=bool)
                 not_recommended[users_items_recommended[uid]] = 0
                 items_not_recommended = np.nonzero(not_recommended)[0]
-                items_score, additional_data = model.predict(uid,items_not_recommended,self.interaction_size)
+                items_score, additional_data = model.action_estimates((uid,items_not_recommended))
                 best_items = items_not_recommended[np.argpartition(items_score,-self.interaction_size)[-self.interaction_size:]]
                 users_items_recommended[uid].extend(best_items)
 
                 for item in best_items:
                     history_items_recommended.append((uid,item))
-                    model.update(uid,item,test_consumption_matrix[uid,item],additional_data)
+                    model.update(None,(uid,item),test_consumption_matrix[uid,item],additional_data)
                 model.increment_time()
 
 

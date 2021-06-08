@@ -1,6 +1,6 @@
 import numpy as np
 
-import lib.interactors
+import lib.value_functions
 
 import scipy.sparse
 from collections import defaultdict
@@ -260,10 +260,10 @@ class InteractionMetricsEvaluator(MetricsEvaluator):
             self.items_distance = get_items_distance(
                 self.ground_truth_consumption_matrix)
         if EPC in self.metrics_classes:
-            self.items_normalized_popularity = lib.interactors.MostPopular.get_items_popularity(
+            self.items_normalized_popularity = lib.value_functions.MostPopular.get_items_popularity(
                 self.ground_truth_consumption_matrix)
         if Entropy in self.metrics_classes:
-            self.items_entropy = lib.interactors.Entropy.get_items_entropy(
+            self.items_entropy = lib.value_functions.Entropy.get_items_entropy(
                 self.ground_truth_consumption_matrix)
 
 

@@ -6,7 +6,7 @@ sys.path.append(dirname(realpath(__file__)) + sep + pardir)
 
 import inquirer
 from concurrent.futures import ProcessPoolExecutor, wait, FIRST_COMPLETED
-import lib.interactors
+import lib.value_functions
 import lib.mf
 import lib.evaluation_policies
 from lib.utils.InteractorRunner import InteractorRunner
@@ -53,7 +53,7 @@ for dataset_preprocessor in datasets_preprocessors:
     dm.initialize_engines(dataset_preprocessor)
     dm.load()
     # interactors_classes = ir.select_interactors()
-    interactors_classes = [eval('lib.interactors.'+interactor) for interactor in args.m]
+    interactors_classes = [eval('lib.value_functions.'+interactor) for interactor in args.m]
 
     data = np.vstack(
         (dm.dataset_preprocessed[0].data, dm.dataset_preprocessed[1].data))

@@ -1,6 +1,6 @@
 import inquirer
 from collections import defaultdict
-import interactors
+import value_functions
 from mf import ICFPMF
 from util import DatasetFormatter
 import numpy as np
@@ -16,7 +16,7 @@ dsf = dsf.load()
 mf = ICFPMF()
 mf.load_var(dsf.matrix_users_ratings[dsf.train_uids])
 
-itr = interactors.LinearUCB.getInstance(var=mf.var,
+itr = value_functions.LinearUCB.getInstance(var=mf.var,
                                             user_lambda=mf.user_lambda,
                                             consumption_matrix=dsf.matrix_users_ratings,
 )

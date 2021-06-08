@@ -1,5 +1,5 @@
 import inquirer
-import interactors
+import value_functions
 import mf
 from util import DatasetFormatter
 from sklearn.decomposition import NMF
@@ -22,13 +22,13 @@ dsf = dsf.load()
 model_class=mf.MF_MODELS[model_name]
 model = model_class(name_prefix=dsf.base)
 correlations= []
-items_popularity = interactors.MostPopular.get_items_popularity(dsf.train_consumption_matrix)
+items_popularity = value_functions.MostPopular.get_items_popularity(dsf.train_consumption_matrix)
 latent_factors_numbers = list(range(1,500,40))
 for k in latent_factors_numbers:
     model.num_lat = k
     model.fit(dsf.train_consumption_matrix)
 
-    items_representativeness = interactors.MostRepresentative.get_items_representativeness(model.items_weights)
+    items_representativeness = value_functions.MostRepresentative.get_items_representativeness(model.items_weights)
     rep_mp_corr = np.corrcoef(items_popularity,items_representativeness)[0,1]
     correlations.append(rep_mp_corr)
 

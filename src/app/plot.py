@@ -4,7 +4,7 @@ import sys
 sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "lib")
 
 import inquirer
-import interactors
+import value_functions
 import mf
 from lib.utils.InteractorRunner import InteractorRunner
 from sklearn.decomposition import NMF

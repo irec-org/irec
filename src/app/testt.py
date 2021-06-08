@@ -1,6 +1,6 @@
 import numpy as np
 from util import DatasetFormatter
-from interactors import MostPopular
+from value_functions import MostPopular
 from tqdm import tqdm
 from util import MetricsEvaluator
 from collections import defaultdict

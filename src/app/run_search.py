@@ -7,7 +7,7 @@ sys.path.append(dirname(realpath(__file__)) + sep + pardir)
 import inquirer
 from concurrent.futures import ProcessPoolExecutor, wait, FIRST_COMPLETED
 import lib.evaluation_policies
-import lib.interactors
+import lib.value_functions
 import mf
 from lib.utils.InteractorRunner import InteractorRunner
 from sklearn.decomposition import NMF
@@ -39,7 +39,7 @@ def main():
     datasets_preprocessors = [settings['datasets_preprocessors_parameters'][base] for base in args.b]
 
     interactors_classes = [
-        eval('lib.interactors.' + interactor) for interactor in args.m
+        eval('lib.value_functions.' + interactor) for interactor in args.m
     ]
         
     with ProcessPoolExecutor() as executor:

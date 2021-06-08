@@ -1,6 +1,6 @@
 import inquirer
 import os
-import interactors
+import value_functions
 from mf import ICFPMF
 from util import DatasetFormatter
 from sklearn.decomposition import NMF
@@ -20,7 +20,7 @@ fig.subplots_adjust(top=0.85, wspace=0.3, hspace=0.5)
 #     dsf = DatasetFormatter(base=base)
 #     dsf = dsf.load()
 
-#     model = interactors.OurMethod1(name_prefix=dsf.base)
+#     model = value_functions.OurMethod1(name_prefix=dsf.base)
 
 #     with open(os.path.join(dsf.DIRS['result'],"weights_"+model.get_id()+".pickle"),'rb') as f:
 #         users_global_model_weights = pickle.load(f)
@@ -54,7 +54,7 @@ for ax, base,base_name in zip(axs,['tr_te_ml_10m','tr_te_good_books','tr_te_yaho
     dsf = DatasetFormatter(base=base)
     dsf = dsf.load()
 
-    model = interactors.OurMethod1(name_prefix=dsf.base)
+    model = value_functions.OurMethod1(name_prefix=dsf.base)
 
     with open(os.path.join(dsf.DIRS['result'],"weights_"+model.get_id()+".pickle"),'rb') as f:
         users_global_model_weights = pickle.load(f)

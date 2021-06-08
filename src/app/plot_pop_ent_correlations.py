@@ -10,7 +10,7 @@ sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "lib")
 import inquirer
 import copy
 import scipy
-import interactors
+import value_functions
 import mf
 from lib.utils.InteractorRunner import InteractorRunner
 from sklearn.decomposition import NMF
@@ -93,18 +93,18 @@ for dataset_preprocessor in datasets_preprocessors:
         (ground_truth_dataset.num_total_users,
          ground_truth_dataset.num_total_items))
     
-    items_entropy = lib.interactors.Entropy.get_items_entropy(ground_truth_consumption_matrix)
-    items_popularity = lib.interactors.MostPopular.get_items_popularity(ground_truth_consumption_matrix,normalize=False)
+    items_entropy = lib.value_functions.Entropy.get_items_entropy(ground_truth_consumption_matrix)
+    items_popularity = lib.value_functions.MostPopular.get_items_popularity(ground_truth_consumption_matrix,normalize=False)
     print(dataset_preprocessor['name'])
     print("\tpopularity correlation with entropy = %s"% str(scipy.stats.pearsonr(items_popularity,items_entropy)))
-    items_logpopent = lib.interactors.LogPopEnt.get_items_logpopent(items_popularity,items_entropy)
+    items_logpopent = lib.value_functions.LogPopEnt.get_items_logpopent(items_popularity,items_entropy)
     pe = scipy.stats.pearsonr(items_logpopent,items_entropy)
     pp = scipy.stats.pearsonr(items_logpopent,items_popularity)
     print("\tent*log(pop) correlation with entropy = %s"% (str(pe)))
     print("\tent*log(pop) correlation with popularity = %s"% (str(pp)))
     for k in np.linspace(0,1,11):
         print('----',k,'----')
-        items_logpopent = lib.interactors.LogPopEnt.get_items_logpopent(items_popularity,items_entropy,k=k)
+        items_logpopent = lib.value_functions.LogPopEnt.get_items_logpopent(items_popularity,items_entropy,k=k)
         pe = scipy.stats.pearsonr(items_logpopent,items_entropy)
         pp = scipy.stats.pearsonr(items_logpopent,items_popularity)
         print("\tent^%.1f*log(pop)^%.1f correlation with entropy = %s"% (k,1-k,str(pe)))

@@ -2,7 +2,7 @@ import click
 import numpy as np
 from util import DatasetFormatter
 from mf import ICFPMF
-from interactors import LinearUCB, ThompsonSampling, LinearEGreedy, GLM_UCB
+from value_functions import LinearUCB, ThompsonSampling, LinearEGreedy, GLM_UCB
 
 # @click.group()
 # def cli2():

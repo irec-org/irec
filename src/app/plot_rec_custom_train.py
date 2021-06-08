@@ -17,7 +17,7 @@ import inquirer
 import matplotlib
 from lib.utils.DirectoryDependent import DirectoryDependent
 from collections import defaultdict
-import interactors
+import value_functions
 import matplotlib.pyplot as plt
 from lib.utils.InteractorRunner import InteractorRunner
 import joblib
@@ -68,7 +68,7 @@ ir = InteractorRunner(None, interactors_general_settings,
                       interactors_preprocessor_parameters,
                       evaluation_policies_parameters)
 interactors_classes = [
-    eval('interactors.' + interactor) for interactor in args.m
+    eval('value_functions.' + interactor) for interactor in args.m
 ]
 # history_rates_to_train = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]
 # history_rates_to_train = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]

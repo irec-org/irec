@@ -5,7 +5,7 @@ sys.path.append(dirname(realpath(__file__)) + sep + pardir)
 
 import json
 import inquirer
-import lib.interactors
+import lib.value_functions
 import lib.mf
 import utils
 import lib.evaluation_policies

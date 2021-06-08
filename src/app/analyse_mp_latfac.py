@@ -1,5 +1,5 @@
 import inquirer
-import interactors
+import value_functions
 from mf import ICFPMF
 from util import DatasetFormatter
 from sklearn.decomposition import NMF
@@ -12,7 +12,7 @@ model = NMF(n_components=10, init='nndsvd', random_state=0)
 P = model.fit_transform(dsf.matrix_users_ratings[dsf.train_uids])
 Q = model.components_.T
 
-items_popularity = interactors.MostPopular.get_items_popularity(dsf.matrix_users_ratings,dsf.test_uids)
+items_popularity = value_functions.MostPopular.get_items_popularity(dsf.matrix_users_ratings,dsf.test_uids)
 
 top_iids_mp = list(reversed(np.argsort(items_popularity)))
 

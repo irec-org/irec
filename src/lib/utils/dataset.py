@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-import lib.interactors
+import lib.value_functions
 from collections import defaultdict
 import random
 import math
@@ -129,7 +129,7 @@ class TRTEPopular(DataProcessor):
         dataset.update_num_total_users_items()
         num_items_to_sample = int(self.items_rate * dataset.num_total_items)
         consumption_matrix = scipy.sparse.csr_matrix((dataset.data[:,2],(dataset.data[:,0],dataset.data[:,1])),(dataset.num_total_users,dataset.num_total_items))
-        items_popularity=interactors.MostPopular.get_items_popularity(consumption_matrix)
+        items_popularity=value_functions.MostPopular.get_items_popularity(consumption_matrix)
         top_popular_items = np.argsort(items_popularity)[::-1][num_items_to_sample]
         test_dataset.data = test_dataset.data[test_dataset.data[:,1].isin(top_popular_items)]
         test_dataset.update_from_data()
@@ -325,10 +325,10 @@ class TRTESample(DataProcessor):
             (dataset.num_total_users, dataset.num_total_items))
         num_items_to_sample = int(self.items_rate * dataset.num_total_items)
         if self.sample_method == 'entropy':
-            items_values = interactors.Entropy.get_items_entropy(
+            items_values = value_functions.Entropy.get_items_entropy(
                 consumption_matrix)
         elif self.sample_method == 'popularity':
-            items_values = interactors.MostPopular.get_items_popularity(
+            items_values = value_functions.MostPopular.get_items_popularity(
                 consumption_matrix)
 
         best_items = np.argpartition(

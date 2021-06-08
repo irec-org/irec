@@ -1,6 +1,6 @@
 import inquirer
 import traceback
-import interactors
+import value_functions
 import numpy as np
 import os
 import mf
@@ -39,9 +39,9 @@ class InteractorRunner():
                 choices.remove(i)
                 choices.insert(0, i)
         else:
-            print("No cache in interactors selection")
+            print("No cache in value_functions selection")
         q = [
-            inquirer.Checkbox('interactors',
+            inquirer.Checkbox('value_functions',
                               message='Interactors to run',
                               choices=choices)
         ]
@@ -51,18 +51,18 @@ class InteractorRunner():
             pdm.save(
                 'interactors_selection_cache',
                 list(
-                    OrderedDict.fromkeys(answers['interactors'] +
+                    OrderedDict.fromkeys(answers['value_functions'] +
                                          interactors_selection_cache)))
         else:
-            pdm.save('interactors_selection_cache', answers['interactors'])
+            pdm.save('interactors_selection_cache', answers['value_functions'])
 
         interactors_class_names = dict(
             zip([v['name'] for v in self.interactors_general_settings.values()],
                 self.interactors_general_settings.keys()))
 
         interactors_classes = list(
-            map(lambda x: eval('interactors.' + interactors_class_names[x]),
-                answers['interactors']))
+            map(lambda x: eval('value_functions.' + interactors_class_names[x]),
+                answers['value_functions']))
         return interactors_classes
 
     def create_interactor(self, itr_class):
@@ -140,7 +140,7 @@ class InteractorRunner():
             futures = set()
             for itr_class in interactors_classes:
                 if interactors_search_parameters[itr_class.__name__] == None:
-                    raise SystemError(f'Interactor doesnt has search parameters ({itr_class.__name__})')
+                    raise SystemError(f'ValueFunction doesnt has search parameters ({itr_class.__name__})')
                 for parameters in interactors_search_parameters[
                         itr_class.__name__]:
                     f = executor.submit(self._run_interactor, id(self),

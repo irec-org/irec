@@ -9,7 +9,7 @@ sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "lib")
 import inquirer
 import copy
 import scipy
-import interactors
+import value_functions
 import mf
 from lib.utils.InteractorRunner import InteractorRunner
 from sklearn.decomposition import NMF
@@ -82,7 +82,7 @@ datasets_preprocessors = [settings['datasets_preprocessors_parameters'][base] fo
 ir = InteractorRunner(dm, settings['interactors_general_settings'],
                       settings['interactors_preprocessor_parameters'],
                       settings['evaluation_policies_parameters'])
-interactors_classes = [eval('lib.interactors.'+interactor) for interactor in args.m]
+interactors_classes = [eval('lib.value_functions.'+interactor) for interactor in args.m]
 
 # ir = InteractorRunner(dm, interactors_general_settings,
                       # interactors_preprocessor_parameters,

@@ -5,7 +5,7 @@ sys.path.append(dirname(realpath(__file__)) + sep + pardir)
 
 import json
 import inquirer
-import lib.interactors
+import lib.value_functions
 import lib.mf
 import utils
 import lib.evaluation_policies
@@ -55,7 +55,7 @@ interactors_classes_names_to_names = {
 }
 
 # interactors_classes = ir.select_interactors()
-interactors_classes = [eval('lib.interactors.'+interactor) for interactor in args.m]
+interactors_classes = [eval('lib.value_functions.'+interactor) for interactor in args.m]
 datasets_preprocessors = [settings['datasets_preprocessors_parameters'][base] for base in args.b]
 
 metrics_evaluator = CumulativeInteractionMetricsEvaluator(None, metrics_classes)
