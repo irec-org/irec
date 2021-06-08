@@ -6,7 +6,7 @@ import os
 import mf
 import evaluation_policies
 from lib.utils.PersistentDataManager import PersistentDataManager
-from .InteractorCache import InteractorCache
+# from .InteractorCache import InteractorCache
 import lib.utils.utils as util
 import ctypes
 from collections import OrderedDict

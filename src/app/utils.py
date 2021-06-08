@@ -11,11 +11,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 from os.path import dirname, realpath, sep, pardir
 from lib.utils.PersistentDataManager import PersistentDataManager
-from lib.utils.InteractorCache import InteractorCache
 import lib.action_selection_policies
 import lib.agents
 import lib.value_functions
 import copy
+import os.path
 import collections.abc
 LATEX_TABLE_FOOTER = r"""
 \end{tabular}
@@ -191,6 +191,10 @@ def plot_similar_items(ys,method1,method2,title=None):
     return fig
 
 
+def get_experiment_run_id(dm,evaluation_policy,itr):
+    settings = load_settings()
+    return os.path.join(dm.get_id(),evaluation_policy.get_id(),get_agent_id(itr,settings))
+
 def run_interactor(itr,evaluation_policy,dm,forced_run):
     pdm = PersistentDataManager(directory='results')
     if forced_run or not pdm.file_exists(InteractorCache().get_id(
@@ -204,11 +208,11 @@ def run_interactor(itr,evaluation_policy,dm,forced_run):
             raise SystemError
         
         pdm = PersistentDataManager(directory='results')
-        pdm.save(InteractorCache().get_id(dm, evaluation_policy, itr),
+        pdm.save(get_experiment_run_id(dm, evaluation_policy, itr),
                  history_items_recommended)
     else:
         print("Already executed",
-              InteractorCache().get_id(dm, evaluation_policy, itr))
+              get_experiment_run_id(dm, evaluation_policy, itr))
 
 
 def get_agent_id(agent,settings):
