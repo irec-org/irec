@@ -24,13 +24,13 @@ class UCB(ExperimentalValueFunction):
         self.items_count = np.zeros(self.num_total_items,dtype=int)
 
         self.t = 1
+        self.recent_predict = True
         for i in range(self.train_dataset.data.shape[0]):
             uid = int(self.train_dataset.data[i,0])
             item = int(self.train_dataset.data[i,1])
             reward = self.train_dataset.data[i,2]
             # self.update(uid,item,reward,None)
             self.update(None, (uid,item),reward,None)
-        self.recent_predict = True
 
     def action_estimates(self,candidate_actions):
         uid=candidate_actions[0];candidate_items=candidate_actions[1]

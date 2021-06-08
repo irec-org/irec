@@ -57,7 +57,7 @@ def main():
             dm.initialize_engines(dataset_preprocessor)
             dm.load()
             for agent_name in args.m:
-                itr = utils.create_agent(agent_name,dataset_preprocessor['name'],settings)
+                itr = utils.create_agent_from_settings(agent_name,dataset_preprocessor['name'],settings)
                 print(utils.get_agent_id(itr,settings))
                 f=executor.submit(utils.run_interactor,itr,evaluation_policy,dm,args.forced_run)
                 futures.add(f)

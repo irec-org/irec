@@ -57,7 +57,7 @@ class Interaction(EvaluationPolicy,Parameterizable):
             _intervals = num_trials//20
             _num_interactions = 0
             pbar = tqdm(total=num_trials)
-            pbar.set_description(f"{model.__class__.__name__}")
+            pbar.set_description(f"{model.name}")
             for i in range(num_trials):
                 uid = random.sample(available_users,k=1)[0]
                 not_recommended = np.ones(num_total_items,dtype=bool)
@@ -122,9 +122,9 @@ class InteractionSample(EvaluationPolicy,Parameterizable):
 
         users_items_recommended = defaultdict(list)
         num_users_selected = len(users_selected)
-        print(f"Starting {model.__class__.__name__} Training")
+        print(f"Starting {model.name} Training")
         model.reset(train_dataset)
-        print(f"Ended {model.__class__.__name__} Training")
+        print(f"Ended {model.name} Training")
         users_num_interactions = defaultdict(int)
         available_users = set(users_selected)
 
@@ -134,7 +134,7 @@ class InteractionSample(EvaluationPolicy,Parameterizable):
         _intervals = num_trials//20
         _num_interactions = 0
         pbar = tqdm(total=num_trials)
-        pbar.set_description(f"{model.__class__.__name__}")
+        pbar.set_description(f"{model.name}")
         for i in range(num_trials):
             uid = random.sample(available_users,k=1)[0]
             not_recommended = np.ones(num_total_items,dtype=bool)
@@ -195,9 +195,9 @@ class LimitedInteraction(EvaluationPolicy,Parameterizable):
 
             users_items_recommended = defaultdict(list)
             num_test_users = len(test_users)
-            print(f"Starting {model.__class__.__name__} Training")
+            print(f"Starting {model.name} Training")
             model.reset(train_dataset)
-            print(f"Ended {model.__class__.__name__} Training")
+            print(f"Ended {model.name} Training")
             # users_num_interactions = defaultdict(int)
             users_num_items_to_recommend_from_test = dict()
             available_users = set()
@@ -255,9 +255,9 @@ class OneInteraction(EvaluationPolicy,Parameterizable):
                     users_items_recommended[uid].append(iid)
 
             num_test_users = len(test_users)
-            print(f"Starting {model.__class__.__name__} Training")
+            print(f"Starting {model.name} Training")
             model.reset(train_dataset)
-            print(f"Ended {model.__class__.__name__} Training")
+            print(f"Ended {model.name} Training")
             users_num_interactions = defaultdict(int)
             available_users = set(test_users)
 
@@ -267,7 +267,7 @@ class OneInteraction(EvaluationPolicy,Parameterizable):
             _intervals = num_trials//20
             _num_interactions = 0
             pbar = tqdm(total=num_trials)
-            pbar.set_description(f"{model.__class__.__name__}")
+            pbar.set_description(f"{model.name}")
             no_items_recommended_users = set(test_users)
 
             train_consumption_matrix = scipy.sparse.csr_matrix((train_dataset.data[:,2],(train_dataset.data[:,0],train_dataset.data[:,1])),(train_dataset.num_total_users,train_dataset.num_total_items))
@@ -327,17 +327,17 @@ class OneInteraction(EvaluationPolicy,Parameterizable):
                         base_name = 'Good Books'
                     elif train_dataset.num_total_users == 15400:
                         base_name = 'Yahoo Music'
-                    # items_value_table.append(base_name,model.__class__.__name__,*[np.mean(list(corr_values.values())) for corr_name, corr_values in items_value.items()])
-                    # membership_table.append(base_name,model.__class__.__name__,*[np.mean(list(corr_values.values())) for corr_name, corr_values in membership.items()])
-                    # print('Correlation: {} {} {} {}'.format(train_dataset.num_total_users,train_dataset.num_total_items,model.__class__.__name__,
+                    # items_value_table.append(base_name,model.name,*[np.mean(list(corr_values.values())) for corr_name, corr_values in items_value.items()])
+                    # membership_table.append(base_name,model.name,*[np.mean(list(corr_values.values())) for corr_name, corr_values in membership.items()])
+                    # print('Correlation: {} {} {} {}'.format(train_dataset.num_total_users,train_dataset.num_total_items,model.name,
                         # ' '.join(['{} {}'.format(corr_name,np.mean(list(corr_values.values()))) for corr_name, corr_values in correlations.items() ])))
-                    # print('Items_Values: {} {} {} {}'.format(train_dataset.num_total_users,train_dataset.num_total_items,model.__class__.__name__,
+                    # print('Items_Values: {} {} {} {}'.format(train_dataset.num_total_users,train_dataset.num_total_items,model.name,
                          # ' '.join(['{} {}'.format(corr_name,np.mean(list(corr_values.values()))) for corr_name, corr_values in items_value.items() ])   
                         # ))
-                    print('Items_Values: {} {} {} {}'.format(train_dataset.num_total_users,train_dataset.num_total_items,model.__class__.__name__,
+                    print('Items_Values: {} {} {} {}'.format(train_dataset.num_total_users,train_dataset.num_total_items,model.name,
                          ' '.join(['{} {}'.format(corr_name,np.mean(list(corr_values.values()))) for corr_name, corr_values in items_value.items() ])   
                         ))
-                    print('Membership: {} {} {} {}'.format(train_dataset.num_total_users,train_dataset.num_total_items,model.__class__.__name__,
+                    print('Membership: {} {} {} {}'.format(train_dataset.num_total_users,train_dataset.num_total_items,model.name,
                          ' '.join(['{} {}'.format(corr_name,np.mean(list(corr_values.values()))) for corr_name, corr_values in membership.items() ])   
                         ))
                     break

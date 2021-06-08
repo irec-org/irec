@@ -48,7 +48,33 @@ T & %s \\
 """
 import yaml
 
+class Singleton:
+
+    def __init__(self, decorated):
+        self._decorated = decorated
+
+    def instance(self):
+        try:
+            return self._instance
+        except AttributeError:
+            self._instance = self._decorated()
+            return self._instance
+
+    def __call__(self):
+        raise TypeError('Singletons must be accessed through `instance()`.')
+
+@Singleton
+class Settings:
+    def __init__(self) -> None:
+        self.settings = None
+        pass
+    def load_settings(self):
+        self.settings = load_settings()
+
+
+
 def gen_dict_extract(key, var):
+
     if hasattr(var,'items'):
         for k, v in var.items():
             if k == key:
@@ -197,8 +223,7 @@ def get_experiment_run_id(dm,evaluation_policy,itr):
 
 def run_interactor(itr,evaluation_policy,dm,forced_run):
     pdm = PersistentDataManager(directory='results')
-    if forced_run or not pdm.file_exists(InteractorCache().get_id(
-            dm, evaluation_policy, itr)):
+    if forced_run or not pdm.file_exists(get_experiment_run_id(dm, evaluation_policy, itr)):
         try:
             history_items_recommended = evaluation_policy.evaluate(
                 itr, dm.dataset_preprocessed[0],
@@ -224,9 +249,7 @@ def get_agent_id(agent,settings):
     return agent.name+'_'+json.dumps(new_agent_settings,separators=(',', ':'))
 
 
-def create_agent(agent_name,dataset_preprocessor_name,settings):
-    # try:
-    agent_settings = settings['agents_preprocessor_parameters'][dataset_preprocessor_name][agent_name]
+def create_agent(agent_name,agent_settings):
     agent_class_name = list(agent_settings.keys())[0]
     agent_parameters = list(agent_settings.values())[0]
     agent_class= eval('lib.agents.'+agent_class_name)
@@ -239,10 +262,12 @@ def create_agent(agent_name,dataset_preprocessor_name,settings):
     value_function = eval('lib.value_functions.'+value_function_name)(**value_function_parameters)
 
     return agent_class(action_selection_policy=action_selection_policy,value_function=value_function,name=agent_name)
-    # except:
-        # print("Error creating agent")
-        # raise SystemError
-        # return None
+
+
+def create_agent_from_settings(agent_name,dataset_preprocessor_name,settings):
+    agent_settings = settings['agents_preprocessor_parameters'][dataset_preprocessor_name][agent_name]
+    agent = create_agent(agent_name,agent_settings)
+    return agent
 
 def default_to_regular(d):
     if isinstance(d, defaultdict):

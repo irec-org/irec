@@ -49,7 +49,7 @@ LinearEGreedy:
 LinearThompsonSampling:
   name: Linear TS (PMF)
 EGreedy:
-  name: ε-Greedy
+  name: e-Greedy
 UCB:
   name: UCB
 MostRepresentative:

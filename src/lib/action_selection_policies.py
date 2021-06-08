@@ -3,7 +3,7 @@ import numpy as np
 
 class ActionSelectionPolicy:
 
-    def __init__(self):
+    def __init__(self,*args,**kwargs):
         pass
 
     def select_actions(self, action_estimates, actions_num):
@@ -16,7 +16,7 @@ class ActionSelectionPolicy:
         raise NotImplementedError
 
 
-class Greedy(ActionSelectionPolicy):
+class ASPGreedy(ActionSelectionPolicy):
 
     def select_actions(self, action_estimates, actions_num):
         return np.argpartition(action_estimates,
@@ -29,15 +29,15 @@ class Greedy(ActionSelectionPolicy):
         pass
 
 
-class eGreedy(ActionSelectionPolicy):
+class ASPEGreedy(ActionSelectionPolicy):
 
     def __init__(self, epsilon, *args, **kwargs):
-        dict.__init__(self, *args, **kwargs)
+        super().__init__(self, *args, **kwargs)
         self.epsilon = epsilon
 
     def select_actions(self, action_estimates, actions_num):
-        greedy_actions = np.argpartition(
-            action_estimates, -actions_num)[-actions_num:][::-1]
+        greedy_actions = np.argpartition(action_estimates,
+                                         -actions_num)[-actions_num:][::-1]
         actions_indexes = []
         for i in range(actions_num):
             if self.epsilon < np.random.rand():
@@ -50,7 +50,7 @@ class eGreedy(ActionSelectionPolicy):
                 actions_indexes.append(action_index)
             else:
                 while True:
-                    action_index = np.random.rand(len(candidate_items))
+                    action_index = np.random.randint(len(action_estimates))
                     if action_index not in actions_indexes:
                         break
                 actions_indexes.append(action_index)

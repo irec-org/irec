@@ -27,19 +27,23 @@ import yaml
 from metrics import InteractionMetricsEvaluator, CumulativeMetricsEvaluator, CumulativeInteractionMetricsEvaluator, UserCumulativeInteractionMetricsEvaluator
 from lib.utils.dataset import Dataset
 from lib.utils.PersistentDataManager import PersistentDataManager
-from lib.utils.InteractorCache import InteractorCache
+# from lib.utils.InteractorCache import InteractorCache
 import metrics
 from lib.utils.utils import run_parallel
 import ctypes
 
 
-def evaluate_itr(metric_evaluator_id, dm_id, itr_class):
+def evaluate_itr(metric_evaluator_id, dm_id, agent_name):
     metric_evaluator = ctypes.cast(metric_evaluator_id, ctypes.py_object).value
     dm = ctypes.cast(dm_id, ctypes.py_object).value
-    print(f"Evaluating {itr_class.__name__} results")
-    itr = ir.create_interactor(itr_class)
+    print(f"Evaluating {agent_name} results")
+    # itr = ir.create_interactor(itr_class)
+    itr = utils.create_agent_from_settings(agent_name,dm.dataset_preprocessor.name,settings)
     pdm = PersistentDataManager(directory='results')
-    users_items_recommended = pdm.load(InteractorCache().get_id(
+    # users_items_recommended = pdm.load(InteractorCache().get_id(
+        # dm, evaluation_policy, itr))
+
+    users_items_recommended = pdm.load(utils.get_experiment_run_id(
         dm, evaluation_policy, itr))
 
     metrics_pdm = PersistentDataManager(directory='metrics')
@@ -56,7 +60,7 @@ def evaluate_itr(metric_evaluator_id, dm_id, itr_class):
 
     for metric_name, metric_values in metrics_values.items():
         metrics_pdm.save(
-            os.path.join(InteractorCache().get_id(dm, evaluation_policy, itr),
+            os.path.join(utils.get_experiment_run_id(dm,evaluation_policy,itr),
                          metric_evaluator.get_id(), metric_name), metric_values)
 
 
@@ -65,9 +69,9 @@ BUFFER_SIZE_EVALUATOR = 50
 
 nums_interactions_to_show = [5, 10, 20, 50, 100]
 
-metrics_classes = [metrics.Entropy,  metrics.EPC]
+# metrics_classes = [metrics.Entropy,  metrics.EPC]
 # metrics_classes = [metrics.Recall, metrics.Hits, metrics.EPC, metrics.UsersCoverage, metrics.ILD,metrics.GiniCoefficientInv]
-# metrics_classes = [metrics.Recall, metrics.Hits]
+metrics_classes = [metrics.Recall, metrics.Hits]
 # metrics_classes = [metrics.Recall, metrics.Hits, metrics.EPC, metrics.UsersCoverage, metrics.ILD]
 # metrics_classes = [metrics.GiniCoefficientInv]
 #metrics_classes = [metrics.Recall, metrics.Hits, metrics.EPC]
@@ -79,7 +83,7 @@ datasets_preprocessors = [settings['datasets_preprocessors_parameters'][base] fo
 dm = DatasetManager()
 
 ir = InteractorRunner(dm, settings['interactors_general_settings'],
-                      settings['interactors_preprocessor_parameters'],
+                      settings['agents_preprocessor_parameters'],
                       settings['evaluation_policies_parameters'])
 interactors_classes = [eval('lib.value_functions.'+interactor) for interactor in args.m]
 for dataset_preprocessor in datasets_preprocessors:
@@ -88,7 +92,7 @@ for dataset_preprocessor in datasets_preprocessors:
     dm.load()
 
     ir = InteractorRunner(dm, settings['interactors_general_settings'],
-                          settings['interactors_preprocessor_parameters'],
+                          settings['agents_preprocessor_parameters'],
                           settings['evaluation_policies_parameters'])
 
     data = np.vstack(
@@ -110,5 +114,5 @@ for dataset_preprocessor in datasets_preprocessors:
         # args = [(id(metric_evaluator), id(dm), itr_class)
                 # for itr_class in interactors_classes]
         # run_parallel(evaluate_itr, args, use_tqdm=False)
-        for itr_class in interactors_classes:
-            evaluate_itr(id(metric_evaluator), id(dm), itr_class)
+        for agent_name in args.m:
+            evaluate_itr(id(metric_evaluator), id(dm), agent_name)

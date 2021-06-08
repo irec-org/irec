@@ -40,5 +40,5 @@ class LinearUCB(LinearICF):
 
     def update(self,observation,action,reward,info):
         uid=action[0];item=action[1];additional_data=info
-        return super().update(uid, item, reward, additional_data)
+        return super().update(observation,action,reward,info)
 
