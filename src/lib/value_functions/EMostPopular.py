@@ -7,10 +7,8 @@ import os
 import random
 
 class EMostPopular(ExperimentalValueFunction):
-    def __init__(self,epsilon=0.2,*args, **kwargs):
+    def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.epsilon = epsilon
-        self.parameters.extend(['epsilon'])
 
     def top_emostpopular(self,items_exploitation,items_exploration):
         top_iids = []
@@ -37,7 +35,7 @@ class EMostPopular(ExperimentalValueFunction):
         self.items_entropy = Entropy.get_items_entropy(self.train_consumption_matrix)
         self.items_popularity = MostPopular.get_items_popularity(self.train_consumption_matrix,normalize=False)
 
-        self.top_iids = self.top_emostpopular(items_popularity,items_entropy)
+        self.top_iids = self.top_emostpopular(self.items_popularity,self.items_entropy)
         self.items_score = np.empty(len(self.top_iids))
         for i, iid in enumerate(reversed(self.top_iids)):
             self.items_score[iid] = i

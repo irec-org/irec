@@ -19,7 +19,6 @@ import yaml
 from metrics import InteractionMetricsEvaluator, CumulativeMetricsEvaluator, CumulativeInteractionMetricsEvaluator
 from lib.utils.dataset import Dataset
 from lib.utils.PersistentDataManager import PersistentDataManager
-from lib.utils.InteractorCache import InteractorCache
 import metrics
 from lib.utils.utils import run_parallel
 import utils
@@ -52,8 +51,6 @@ for dataset_preprocessor in datasets_preprocessors:
     # dataset_preprocessor = dm.request_dataset_preprocessor()
     dm.initialize_engines(dataset_preprocessor)
     dm.load()
-    # interactors_classes = ir.select_interactors()
-    interactors_classes = [eval('lib.value_functions.'+interactor) for interactor in args.m]
 
     data = np.vstack(
         (dm.dataset_preprocessed[0].data, dm.dataset_preprocessed[1].data))
@@ -66,19 +63,18 @@ for dataset_preprocessor in datasets_preprocessors:
         CumulativeInteractionMetricsEvaluator(dataset, metrics_classes),
     ]
 
-    def evaluate_itr(metric_evaluator_id, dm_id, itr_class, parameters):
+    def evaluate_itr(metric_evaluator_id, dm_id, agent, parameters):
         try:
             metric_evaluator = ctypes.cast(metric_evaluator_id,
                                            ctypes.py_object).value
             dm = ctypes.cast(dm_id, ctypes.py_object).value
-            print(f"Evaluating {itr_class.__name__} results")
-            itr = itr_class(**parameters)
+            print(f"Evaluating {agent.name} results")
             pdm = PersistentDataManager(directory='results')
 
             metrics_pdm = PersistentDataManager(directory='metrics')
 
-            users_items_recommended = pdm.load(InteractorCache().get_id(
-                dm, evaluation_policy, itr))
+            users_items_recommended = pdm.load(utils.get_experiment_run_id(
+                dm, evaluation_policy, agent))
 
             if isinstance(metric_evaluator, InteractionMetricsEvaluator):
                 metrics_values = metric_evaluator.evaluate(
@@ -90,12 +86,14 @@ for dataset_preprocessor in datasets_preprocessors:
             for metric_name, metric_values in metrics_values.items():
                 if not args.forced_run and metrics_pdm.file_exists(
                         os.path.join(
-                            InteractorCache().get_id(dm, evaluation_policy, itr),
+                            utils.get_experiment_run_id(
+                dm, evaluation_policy, agent),
                             metric_evaluator.get_id(), metric_name)):
                     raise SystemError
                 metrics_pdm.save(
                     os.path.join(
-                        InteractorCache().get_id(dm, evaluation_policy, itr),
+                        utils.get_experiment_run_id(
+                dm, evaluation_policy, agent),
                         metric_evaluator.get_id(), metric_name), metric_values)
         except Exception as e:
             traceback.print_exc()
@@ -105,10 +103,11 @@ for dataset_preprocessor in datasets_preprocessors:
     with ProcessPoolExecutor() as executor:
         futures = set()
         for metric_evaluator in metrics_evaluators:
-            for itr_class in interactors_classes:
-                for parameters in settings['interactors_search_parameters'][itr_class.__name__]:
+            for agent_name in args.m:
+                for parameters in settings['agents_search_parameters'][agent_name]:
+                    agent = utils.create_agent(agent_name,parameters)
                     f = executor.submit(evaluate_itr, id(metric_evaluator), id(dm),
-                                        itr_class, parameters)
+                                        agent, parameters)
                     futures.add(f)
             if len(futures) >= args.num_tasks:
                 completed, futures = wait(futures, return_when=FIRST_COMPLETED)

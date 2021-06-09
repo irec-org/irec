@@ -185,9 +185,9 @@ def load_settings():
         "interactors_general_settings.yaml"),
                                                   Loader=loader)
 
-    d['interactors_search_parameters'] = yaml.load(open(
+    d['agents_search_parameters'] = yaml.load(open(
         dirname(realpath(__file__)) + sep + "settings" + sep +
-        "interactors_search_parameters.yaml"),
+        "agents_search_parameters.yaml"),
                                                    Loader=loader)
 
     d['evaluation_policies_parameters'] = yaml.load(open(

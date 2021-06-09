@@ -48,12 +48,13 @@ def main():
             dm = DatasetManager()
             dm.initialize_engines(dataset_preprocessor)
             dm.load()
-            for itr_class in interactors_classes:
-                for parameters in settings['interactors_search_parameters'][itr_class.__name__]:
-                    itr = itr_class(**parameters)
+            for agent_name in args.m:
+                for parameters in settings['agents_search_parameters'][agent_name]:
+                    agent = utils.create_agent(agent_name,parameters)
+                    # itr = eval('lib.agents.'+agent_name)(**parameters)
                     # utils.run_interactor(itr,evaluation_policy,dm,args.forced_run)
                     # utils.run_interactor(itr,evaluation_policy,dm,args.forced_run)
-                    f=executor.submit(utils.run_interactor,itr,evaluation_policy,dm,args.forced_run)
+                    f=executor.submit(utils.run_interactor,agent,evaluation_policy,dm,args.forced_run)
                     futures.add(f)
                     if len(futures) >= args.num_tasks:
                         completed, futures = wait(futures, return_when=FIRST_COMPLETED)

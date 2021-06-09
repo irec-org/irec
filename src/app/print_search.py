@@ -68,19 +68,20 @@ for dataset_preprocessor in datasets_preprocessors:
     dm.initialize_engines(dataset_preprocessor)
 
     for metric_class_name in map(lambda x: x.__name__, metrics_classes):
-        for itr_class in interactors_classes:
-            for parameters in settings['interactors_search_parameters'][itr_class.__name__]:
-                itr = itr_class(**parameters)
+        for agent_name in args.m:
+            for parameters in settings['agents_search_parameters'][agent_name]:
+                agent = utils.create_agent(agent_name,parameters)
                 pdm = PersistentDataManager(directory='results')
 
                 metrics_pdm = PersistentDataManager(directory='metrics')
                 try:
                     metric_values = metrics_pdm.load(
                         os.path.join(
-                            InteractorCache().get_id(dm, evaluation_policy, itr),
+                            utils.get_experiment_run_id(
+                dm, evaluation_policy, agent),
                             metrics_evaluator.get_id(), metric_class_name))
                     datasets_metrics_values[dataset_preprocessor['name']][
-                            metric_class_name][itr_class.__name__][json.dumps(parameters)] = metric_values[-1]
+                            metric_class_name][agent.name][json.dumps(parameters)] = metric_values[-1]
                 except:
                     print(f"Could not load metric {dataset_preprocessor['name']} {itr_class.__name__}")
                     pass
