@@ -63,7 +63,7 @@ for dataset_preprocessor in datasets_preprocessors:
         CumulativeInteractionMetricsEvaluator(dataset, metrics_classes),
     ]
 
-    def evaluate_itr(metric_evaluator_id, dm_id, agent, parameters):
+    def evaluate_itr(metric_evaluator_id, dm_id, agent, agent_id):
         try:
             metric_evaluator = ctypes.cast(metric_evaluator_id,
                                            ctypes.py_object).value
@@ -74,7 +74,7 @@ for dataset_preprocessor in datasets_preprocessors:
             metrics_pdm = PersistentDataManager(directory='metrics')
 
             users_items_recommended = pdm.load(utils.get_experiment_run_id(
-                dm, evaluation_policy, agent))
+                dm, evaluation_policy, agent_id))
 
             if isinstance(metric_evaluator, InteractionMetricsEvaluator):
                 metrics_values = metric_evaluator.evaluate(
@@ -87,13 +87,13 @@ for dataset_preprocessor in datasets_preprocessors:
                 if not args.forced_run and metrics_pdm.file_exists(
                         os.path.join(
                             utils.get_experiment_run_id(
-                dm, evaluation_policy, agent),
+                dm, evaluation_policy,agent_id),
                             metric_evaluator.get_id(), metric_name)):
                     raise SystemError
                 metrics_pdm.save(
                     os.path.join(
                         utils.get_experiment_run_id(
-                dm, evaluation_policy, agent),
+                dm, evaluation_policy,agent_id),
                         metric_evaluator.get_id(), metric_name), metric_values)
         except Exception as e:
             traceback.print_exc()
@@ -106,8 +106,9 @@ for dataset_preprocessor in datasets_preprocessors:
             for agent_name in args.m:
                 for parameters in settings['agents_search_parameters'][agent_name]:
                     agent = utils.create_agent(agent_name,parameters)
+                    agent_id = utils.get_agent_id(agent_name,parameters)
                     f = executor.submit(evaluate_itr, id(metric_evaluator), id(dm),
-                                        agent, parameters)
+                                        agent, agent_id)
                     futures.add(f)
             if len(futures) >= args.num_tasks:
                 completed, futures = wait(futures, return_when=FIRST_COMPLETED)

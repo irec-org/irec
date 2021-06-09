@@ -51,10 +51,12 @@ def main():
             for agent_name in args.m:
                 for parameters in settings['agents_search_parameters'][agent_name]:
                     agent = utils.create_agent(agent_name,parameters)
+                    # print(agent.value_function.__dict__)
+                    # print(agent.action_selection_policy.__dict__)
                     # itr = eval('lib.agents.'+agent_name)(**parameters)
                     # utils.run_interactor(itr,evaluation_policy,dm,args.forced_run)
                     # utils.run_interactor(itr,evaluation_policy,dm,args.forced_run)
-                    f=executor.submit(utils.run_interactor,agent,evaluation_policy,dm,args.forced_run)
+                    f=executor.submit(utils.run_interactor,agent,evaluation_policy,dm,args.forced_run,utils.get_agent_id(agent_name,parameters))
                     futures.add(f)
                     if len(futures) >= args.num_tasks:
                         completed, futures = wait(futures, return_when=FIRST_COMPLETED)

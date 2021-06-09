@@ -29,17 +29,16 @@ Good Books:
   EGreedy:
     SimpleAgent:
       action_selection_policy:
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
-        EGreedy:
-          {}
+        EGreedy: {}
   EMostPopular:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        EMostPopular:
-          {}
+        EMostPopular: {}
   Entropy:
     SimpleAgent:
       action_selection_policy:
@@ -95,8 +94,8 @@ Good Books:
   LinEGreedy:
     SimpleAgent:
       action_selection_policy:
-        ASPEGreedy: {epsilon: 0.1}
-        #ASPGreedy: {}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinEGreedy:
           num_lat: 10
@@ -128,8 +127,8 @@ Good Books:
   LinearEGreedy:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedy:
           item_var: 0.01
@@ -141,8 +140,8 @@ Good Books:
   LinearEGreedyEntropy:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedyEntropy:
           item_var: 0.01
@@ -154,8 +153,8 @@ Good Books:
   LinearEGreedyLogPopEnt:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedyLogPopEnt:
           item_var: 0.01
@@ -167,8 +166,8 @@ Good Books:
   LinearEGreedyPopularity:
     SimpleAgent:
       action_selection_policy:
-        ASPEGreedy: {epsilon: 0.1}
-        #ASPGreedy: {}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedyPopularity:
           item_var: 0.01
@@ -180,8 +179,8 @@ Good Books:
   LinearEGreedyRandPopularity:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedyRandPopularity:
           item_var: 0.01
@@ -193,8 +192,8 @@ Good Books:
   LinearEGreedyRandom:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedyRandom:
           item_var: 0.01
@@ -560,18 +559,16 @@ Good Books Sampled:
   EGreedy:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
-        EGreedy:
-          {}
+        EGreedy: {}
   EMostPopular:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        EMostPopular:
-          {}
+        EMostPopular: {}
   Entropy:
     SimpleAgent:
       action_selection_policy:
@@ -601,8 +598,8 @@ Good Books Sampled:
   LinEGreedy:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinEGreedy:
           num_lat: 10
@@ -617,8 +614,8 @@ Good Books Sampled:
   LinearEGreedy:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedy:
           item_var: 0.01
@@ -810,8 +807,8 @@ Good Books Validation:
   LinearEGreedyEntropy:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedyEntropy:
           item_var: 0.01
@@ -823,8 +820,8 @@ Good Books Validation:
   LinearEGreedyLogPopEnt:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedyLogPopEnt:
           item_var: 0.01
@@ -836,8 +833,8 @@ Good Books Validation:
   LinearEGreedyPopularity:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedyPopularity:
           item_var: 0.01
@@ -849,8 +846,8 @@ Good Books Validation:
   LinearEGreedyRandPopularity:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedyRandPopularity:
           item_var: 0.01
@@ -862,8 +859,8 @@ Good Books Validation:
   LinearEGreedyRandom:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedyRandom:
           item_var: 0.01
@@ -1013,18 +1010,16 @@ MovieLens 100k (B):
   EGreedy:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
-        EGreedy:
-          {}
+        EGreedy: {}
   EMostPopular:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        EMostPopular:
-          {}
+        EMostPopular: {}
   Entropy:
     SimpleAgent:
       action_selection_policy:
@@ -1062,8 +1057,8 @@ MovieLens 100k (B):
   LinEGreedy:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinEGreedy:
           num_lat: 10
@@ -1078,8 +1073,8 @@ MovieLens 100k (B):
   LinearEGreedy:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedy:
           item_var: 0.01
@@ -1229,12 +1224,13 @@ MovieLens 100k (B):
         TinUCB:
           alpha: 0.2
   UCB:
-    SimpleAgent:
-      action_selection_policy:
-        ASPGreedy: {}
-      value_function:
-        UCB:
-          c: 0.5
+    parameters:
+      SimpleAgent:
+        action_selection_policy:
+          ASPGreedy: {}
+        value_function:
+          UCB:
+            c: 0.25
   UCBLearner:
     SimpleAgent:
       action_selection_policy:
@@ -1283,18 +1279,16 @@ MovieLens 10M:
   EGreedy:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
-        EGreedy:
-          {}
+        EGreedy: {}
   EMostPopular:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        EMostPopular:
-          {}
+        EMostPopular: {}
   Entropy:
     SimpleAgent:
       action_selection_policy:
@@ -1350,8 +1344,8 @@ MovieLens 10M:
   LinEGreedy:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinEGreedy:
           num_lat: 10
@@ -1383,8 +1377,8 @@ MovieLens 10M:
   LinearEGreedy:
     SimpleAgent:
       action_selection_policy:
-        ASPEGreedy: {epsilon: 0.1}
-        #ASPGreedy: {}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedy:
           item_var: 0.01
@@ -1396,8 +1390,8 @@ MovieLens 10M:
   LinearEGreedyEntropy:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedyEntropy:
           item_var: 0.01
@@ -1409,8 +1403,8 @@ MovieLens 10M:
   LinearEGreedyLogPopEnt:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedyLogPopEnt:
           item_var: 0.01
@@ -1422,8 +1416,8 @@ MovieLens 10M:
   LinearEGreedyPopularity:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedyPopularity:
           item_var: 0.01
@@ -1435,8 +1429,8 @@ MovieLens 10M:
   LinearEGreedyRandPopularity:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedyRandPopularity:
           item_var: 0.01
@@ -1448,8 +1442,8 @@ MovieLens 10M:
   LinearEGreedyRandom:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedyRandom:
           item_var: 0.01
@@ -1815,18 +1809,16 @@ MovieLens 10M Sampled:
   EGreedy:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
-        EGreedy:
-          {}
+        EGreedy: {}
   EMostPopular:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        EMostPopular:
-          {}
+        EMostPopular: {}
   Entropy:
     SimpleAgent:
       action_selection_policy:
@@ -1856,8 +1848,8 @@ MovieLens 10M Sampled:
   LinEGreedy:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinEGreedy:
           num_lat: 10
@@ -1872,8 +1864,8 @@ MovieLens 10M Sampled:
   LinearEGreedy:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedy:
           item_var: 0.01
@@ -2065,8 +2057,8 @@ MovieLens 10M Validation:
   LinearEGreedyEntropy:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedyEntropy:
           item_var: 0.01
@@ -2078,8 +2070,8 @@ MovieLens 10M Validation:
   LinearEGreedyLogPopEnt:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedyLogPopEnt:
           item_var: 0.01
@@ -2091,8 +2083,8 @@ MovieLens 10M Validation:
   LinearEGreedyPopularity:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedyPopularity:
           item_var: 0.01
@@ -2104,8 +2096,8 @@ MovieLens 10M Validation:
   LinearEGreedyRandPopularity:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedyRandPopularity:
           item_var: 0.01
@@ -2117,8 +2109,9 @@ MovieLens 10M Validation:
   LinearEGreedyRandom:
     SimpleAgent:
       action_selection_policy:
+        ASPEGreedy:
+          epsilon: 0.1
         ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
       value_function:
         LinearEGreedyRandom:
           item_var: 0.01
@@ -2268,18 +2261,16 @@ MovieLens 1M:
   EGreedy:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
-        EGreedy:
-          {}
+        EGreedy: {}
   EMostPopular:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        EMostPopular:
-          {}
+        EMostPopular: {}
   Entropy:
     SimpleAgent:
       action_selection_policy:
@@ -2309,8 +2300,8 @@ MovieLens 1M:
   LinEGreedy:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinEGreedy:
           num_lat: 10
@@ -2325,8 +2316,8 @@ MovieLens 1M:
   LinearEGreedy:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedy:
           item_var: 0.01
@@ -2519,18 +2510,16 @@ MovieLens 1M (B):
   EGreedy:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
-        EGreedy:
-          {}
+        EGreedy: {}
   EMostPopular:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        EMostPopular:
-          {}
+        EMostPopular: {}
   Entropy:
     SimpleAgent:
       action_selection_policy:
@@ -2560,8 +2549,8 @@ MovieLens 1M (B):
   LinEGreedy:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinEGreedy:
           num_lat: 10
@@ -2576,8 +2565,8 @@ MovieLens 1M (B):
   LinearEGreedy:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedy:
           item_var: 0.01
@@ -2765,18 +2754,16 @@ Yahoo Music:
   EGreedy:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
-        EGreedy:
-          {}
+        EGreedy: {}
   EMostPopular:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        EMostPopular:
-          {}
+        EMostPopular: {}
   Entropy:
     SimpleAgent:
       action_selection_policy:
@@ -2832,8 +2819,8 @@ Yahoo Music:
   LinEGreedy:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinEGreedy:
           num_lat: 10
@@ -2865,8 +2852,8 @@ Yahoo Music:
   LinearEGreedy:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedy:
           item_var: 0.01
@@ -2878,8 +2865,8 @@ Yahoo Music:
   LinearEGreedyEntropy:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedyEntropy:
           item_var: 0.01
@@ -2891,8 +2878,8 @@ Yahoo Music:
   LinearEGreedyLogPopEnt:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedyLogPopEnt:
           item_var: 0.01
@@ -2904,8 +2891,8 @@ Yahoo Music:
   LinearEGreedyPopularity:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedyPopularity:
           item_var: 0.01
@@ -2917,8 +2904,8 @@ Yahoo Music:
   LinearEGreedyRandPopularity:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedyRandPopularity:
           item_var: 0.01
@@ -2930,8 +2917,8 @@ Yahoo Music:
   LinearEGreedyRandom:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedyRandom:
           item_var: 0.01
@@ -3297,18 +3284,16 @@ Yahoo Music Sampled:
   EGreedy:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
-        EGreedy:
-          {}
+        EGreedy: {}
   EMostPopular:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        EMostPopular:
-          {}
+        EMostPopular: {}
   Entropy:
     SimpleAgent:
       action_selection_policy:
@@ -3338,8 +3323,8 @@ Yahoo Music Sampled:
   LinEGreedy:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinEGreedy:
           num_lat: 10
@@ -3354,8 +3339,8 @@ Yahoo Music Sampled:
   LinearEGreedy:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedy:
           item_var: 0.01
@@ -3547,8 +3532,8 @@ Yahoo Music Validation:
   LinearEGreedyEntropy:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedyEntropy:
           item_var: 0.01
@@ -3560,8 +3545,8 @@ Yahoo Music Validation:
   LinearEGreedyLogPopEnt:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedyLogPopEnt:
           item_var: 0.01
@@ -3573,8 +3558,8 @@ Yahoo Music Validation:
   LinearEGreedyPopularity:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedyPopularity:
           item_var: 0.01
@@ -3586,8 +3571,8 @@ Yahoo Music Validation:
   LinearEGreedyRandPopularity:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedyRandPopularity:
           item_var: 0.01
@@ -3599,8 +3584,8 @@ Yahoo Music Validation:
   LinearEGreedyRandom:
     SimpleAgent:
       action_selection_policy:
-        #ASPGreedy: {}
-        ASPEGreedy: {epsilon: 0.1}
+        ASPEGreedy:
+          epsilon: 0.1
       value_function:
         LinearEGreedyRandom:
           item_var: 0.01
@@ -3719,4 +3704,3 @@ Yahoo Music Validation:
         ASPGreedy: {}
       value_function:
         kNNBandit: {}
-

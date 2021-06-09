@@ -18,7 +18,6 @@ import yaml
 from metrics import CumulativeInteractionMetricsEvaluator
 from lib.utils.dataset import Dataset
 from lib.utils.PersistentDataManager import PersistentDataManager
-from lib.utils.InteractorCache import InteractorCache
 import metrics
 import matplotlib.pyplot as plt
 from lib.utils.DirectoryDependent import DirectoryDependent
@@ -71,6 +70,7 @@ for dataset_preprocessor in datasets_preprocessors:
         for agent_name in args.m:
             for parameters in settings['agents_search_parameters'][agent_name]:
                 agent = utils.create_agent(agent_name,parameters)
+                agent_id = utils.get_agent_id(agent_name,parameters)
                 pdm = PersistentDataManager(directory='results')
 
                 metrics_pdm = PersistentDataManager(directory='metrics')
@@ -78,7 +78,7 @@ for dataset_preprocessor in datasets_preprocessors:
                     metric_values = metrics_pdm.load(
                         os.path.join(
                             utils.get_experiment_run_id(
-                dm, evaluation_policy, agent),
+                dm, evaluation_policy, agent_id),
                             metrics_evaluator.get_id(), metric_class_name))
                     datasets_metrics_values[dataset_preprocessor['name']][
                             metric_class_name][agent.name][json.dumps(parameters)] = metric_values[-1]
@@ -97,19 +97,19 @@ for k1, v1 in datasets_metrics_values.items():
             keys = [keys[i] for i in idxs]
             values = [values[i] for i in idxs]
             if args.d:
-                settings['interactors_preprocessor_parameters'][k1][k3] = {'parameters':json.loads(keys[0])}
+                settings['agents_preprocessor_parameters'][k1][k3] = {'parameters':json.loads(keys[0])}
             if args.t:
                 print(f"{k3}:")
-                print('\tparameters:')
+                # print('\tparameters:')
                 parameters, metric_value = json.loads(keys[0]),values[0]
                 for name, value in parameters.items():
                     print(f'\t\t{name}: {value}')
             else:
                 for k4, v4 in zip(keys,values):
-                    k4 = json.loads(k4)
-                    k4 = ','.join(map(lambda x: str(x[0])+'='+str(x[1]),list(k4.items())))
+                    k4 = yaml.safe_load(k4)
+                    # k4 = ','.join(map(lambda x: str(x[0])+'='+str(x[1]),list(k4.items())))
                     print(f"{k3}({k4}) {v4:.5f}")
 
 if args.d:
     print("Saved parameters!")
-    open("settings" + sep + "interactors_preprocessor_parameters.yaml",'w').write(yaml.dump(utils.default_to_regular(settings['interactors_preprocessor_parameters'])))
+    open("settings" + sep + "agents_preprocessor_parameters.yaml",'w').write(yaml.dump(utils.default_to_regular(settings['agents_preprocessor_parameters'])))

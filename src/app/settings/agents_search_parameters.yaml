@@ -6316,6 +6316,30 @@ UCB:
     value_function:
       UCB:
         c: 0.25
+- SimpleAgent:
+    action_selection_policy:
+      ASPGreedy: {}
+    value_function:
+      UCB:
+        c: 0.2
+- SimpleAgent:
+    action_selection_policy:
+      ASPGreedy: {}
+    value_function:
+      UCB:
+        c: 0.15
+- SimpleAgent:
+    action_selection_policy:
+      ASPGreedy: {}
+    value_function:
+      UCB:
+        c: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPGreedy: {}
+    value_function:
+      UCB:
+        c: 0.01
 UCBLearner:
 - SimpleAgent:
     action_selection_policy:

@@ -188,7 +188,7 @@ def load_settings():
     d['agents_search_parameters'] = yaml.load(open(
         dirname(realpath(__file__)) + sep + "settings" + sep +
         "agents_search_parameters.yaml"),
-                                                   Loader=loader)
+                                              Loader=loader)
 
     d['evaluation_policies_parameters'] = yaml.load(open(
         dirname(realpath(__file__)) + sep + "settings" + sep +
@@ -217,7 +217,7 @@ def load_settings():
 def load_settings_to_parser(settings, parser):
     settings_flatten = flatten_dict(settings)
     for k, v in settings_flatten.items():
-        parser.add_argument(f'--{k}', default=v,type=yaml.safe_load)
+        parser.add_argument(f'--{k}', default=v, type=yaml.safe_load)
         # parser.add_argument(f'--{k}')
 
 
@@ -245,16 +245,15 @@ def plot_similar_items(ys, method1, method2, title=None):
     return fig
 
 
-def get_experiment_run_id(dm, evaluation_policy, itr):
-    settings = load_settings()
-    return os.path.join(dm.get_id(), evaluation_policy.get_id(),
-                        get_agent_id(itr, settings))
+def get_experiment_run_id(dm, evaluation_policy, itr_id):
+    return os.path.join(dm.get_id(), evaluation_policy.get_id(),itr_id)
 
 
-def run_interactor(itr, evaluation_policy, dm, forced_run):
+def run_interactor(itr, evaluation_policy, dm, forced_run, agent_id):
     pdm = PersistentDataManager(directory='results')
+    # print(class2dict(itr))
     if forced_run or not pdm.file_exists(
-            get_experiment_run_id(dm, evaluation_policy, itr)):
+            get_experiment_run_id(dm, evaluation_policy, agent_id)):
         try:
             history_items_recommended = evaluation_policy.evaluate(
                 itr, dm.dataset_preprocessed[0], dm.dataset_preprocessed[1])
@@ -263,23 +262,32 @@ def run_interactor(itr, evaluation_policy, dm, forced_run):
             raise SystemError
 
         pdm = PersistentDataManager(directory='results')
-        pdm.save(get_experiment_run_id(dm, evaluation_policy, itr),
-                 history_items_recommended)
+        pdm.save(
+            get_experiment_run_id(dm, evaluation_policy, agent_id),
+            history_items_recommended)
     else:
-        print("Already executed",
-              get_experiment_run_id(dm, evaluation_policy, itr))
+        print(
+            "Already executed",
+            get_experiment_run_id(dm, evaluation_policy, agent_id))
+
+def get_agent_id(agent_name,agent_parameters):
+    # agent_dict = class2dict(agent)
+    return agent_name + '_' + json.dumps(agent_parameters,
+                                         separators=(',', ':'))
+
+# def get_agent_id(agent, template_parameters):
+    # agent_dict = class2dict(agent)
+    # new_agent_settings = update_nested_dict(template_parameters, agent_dict)
+    # return agent.name + '_' + json.dumps(new_agent_settings,
+                                         # separators=(',', ':'))
 
 
-def get_agent_id(agent, settings):
+def get_agent_id_from_settings(agent, settings):
     agent_settings = next(
         gen_dict_extract(agent.name,
                          settings['agents_preprocessor_parameters']))
     # agent_settings = copy.copy(settings['agents_preprocessor_parameters'][dataset_preprocessor_name][agent.name])
-    agent_dict = class2dict(agent)
-    new_agent_settings = update_nested_dict(agent_settings, agent_dict)
-    # update_nested_dict(agent_settings[agent.__class__.__name__]['value_function'],agent.value_function.__dict__)
-    return agent.name + '_' + json.dumps(new_agent_settings,
-                                         separators=(',', ':'))
+    return get_agent_id(agent, agent_settings)
 
 
 def create_action_selection_policy(action_selection_policy_settings):
