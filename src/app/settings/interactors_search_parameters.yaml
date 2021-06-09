@@ -366,7 +366,6 @@ ThompsonSampling:
     beta_0: 10
   - alpha_0: 1
     beta_0: 100
-Random:
 kNNBandit:
   - alpha_0: 1
     beta_0: 1
@@ -404,7 +403,6 @@ kNNBandit:
   - alpha_0: 1
     beta_0: 100
     k: 1000
-ALMostPopular:
 OurMethod1:
   - alpha: 0.25
     num_lat: 5
@@ -895,7 +893,6 @@ OurMethod4:
     num_lat: 20
 
 
-MostPopular:
 LinearUCB1:
   - alpha: 0.25
     item_var: 0.01
@@ -1144,7 +1141,6 @@ LinUCB:
     num_lat: 20
   - alpha: 1
     num_lat: 20
-PPELPE:
 UCBLearner:
   - stop: 14
     num_lat: 10
@@ -1403,16 +1399,8 @@ UCB:
   - c: 0.75
   - c: 0.5
   - c: 0.25
-MostRepresentative:
-ALEntropy:
-Entropy0:
-HELF:
-PopPlusEnt:
-DistinctPopular:
 EMostPopular:
   - epsilon: 0.2
-Entropy:
-LogPopEnt:
 TinUCB:
   - alpha: 0.2
 OurMethodInit:
