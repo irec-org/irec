@@ -1230,7 +1230,7 @@ MovieLens 100k (B):
           ASPGreedy: {}
         value_function:
           UCB:
-            c: 0.25
+            c: 0.01
   UCBLearner:
     SimpleAgent:
       action_selection_policy:
