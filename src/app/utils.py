@@ -217,7 +217,7 @@ def load_settings():
 def load_settings_to_parser(settings, parser):
     settings_flatten = flatten_dict(settings)
     for k, v in settings_flatten.items():
-        parser.add_argument(f'--{k}', default=v)
+        parser.add_argument(f'--{k}', default=v,type=yaml.safe_load)
         # parser.add_argument(f'--{k}')
 
 

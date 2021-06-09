@@ -41,7 +41,6 @@ settings = utils.sync_settings_from_args(settings,args)
 evaluation_policy_name = settings['defaults']['interactors_evaluation_policy']
 evaluation_policy_parameters = settings['evaluation_policies_parameters'][evaluation_policy_name]
 evaluation_policy=eval('lib.evaluation_policies.'+evaluation_policy_name)(**evaluation_policy_parameters)
-
 def main():
     dm = DatasetManager()
     datasets_preprocessors = [settings['datasets_preprocessors_parameters'][base] for base in args.b]
