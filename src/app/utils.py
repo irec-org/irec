@@ -290,6 +290,11 @@ def create_action_selection_policy(action_selection_policy_settings):
     action_selection_policy = eval('lib.action_selection_policies.' +
                                    action_selection_policy_name)(
                                        **action_selection_policy_parameters)
+
+    if isinstance(action_selection_policy,
+                  lib.action_selection_policies.ASPReranker):
+        action_selection_policy.rule = create_value_function(
+            action_selection_policy.rule)
     return action_selection_policy
 
 
