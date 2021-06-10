@@ -169,6 +169,8 @@ def defaultify(d):
         return d
     return defaultdict(lambda: dict, {k: defaultify(v) for k, v in d.items()})
 
+def _do_nothing(d):
+    return d
 
 def load_settings():
     d = dict()
@@ -177,7 +179,7 @@ def load_settings():
         dirname(realpath(__file__)) + sep + "settings" + sep +
         "agents_preprocessor_parameters.yaml"),
                                                     Loader=loader)
-    d['agents_preprocessor_parameters'] = defaultify(
+    d['agents_preprocessor_parameters'] = _do_nothing(
         d['agents_preprocessor_parameters'])
 
     d['interactors_general_settings'] = yaml.load(open(

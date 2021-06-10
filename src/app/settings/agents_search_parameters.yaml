@@ -10,48 +10,57 @@ COFIBA:
 EGreedy:
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.4}
+      ASPEGreedy:
+        epsilon: 0.4
     value_function:
       EGreedy: {}
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.3}
+      ASPEGreedy:
+        epsilon: 0.3
     value_function:
       EGreedy: {}
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.2}
+      ASPEGreedy:
+        epsilon: 0.2
     value_function:
       EGreedy: {}
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.1}
+      ASPEGreedy:
+        epsilon: 0.1
     value_function:
       EGreedy: {}
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.05}
+      ASPEGreedy:
+        epsilon: 0.05
     value_function:
       EGreedy: {}
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.01}
+      ASPEGreedy:
+        epsilon: 0.01
     value_function:
       EGreedy: {}
 EMostPopular:
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.05}
+      ASPEGreedy:
+        epsilon: 0.05
     value_function:
       EMostPopular: {}
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.2}
+      ASPEGreedy:
+        epsilon: 0.2
     value_function:
       EMostPopular: {}
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.1}
+      ASPEGreedy:
+        epsilon: 0.1
     value_function:
       EMostPopular: {}
 GLM_UCB:
@@ -534,151 +543,176 @@ ICTRTS:
 LinEGreedy:
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.1}
+      ASPEGreedy:
+        epsilon: 0.1
     value_function:
       LinEGreedy:
         num_lat: 10
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.1}
+      ASPEGreedy:
+        epsilon: 0.1
     value_function:
       LinEGreedy:
         num_lat: 20
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.1}
+      ASPEGreedy:
+        epsilon: 0.1
     value_function:
       LinEGreedy:
         num_lat: 30
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.1}
+      ASPEGreedy:
+        epsilon: 0.1
     value_function:
       LinEGreedy:
         num_lat: 40
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.1}
+      ASPEGreedy:
+        epsilon: 0.1
     value_function:
       LinEGreedy:
         num_lat: 50
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.2}
+      ASPEGreedy:
+        epsilon: 0.2
     value_function:
       LinEGreedy:
         num_lat: 10
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.2}
+      ASPEGreedy:
+        epsilon: 0.2
     value_function:
       LinEGreedy:
         num_lat: 20
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.2}
+      ASPEGreedy:
+        epsilon: 0.2
     value_function:
       LinEGreedy:
         num_lat: 30
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.2}
+      ASPEGreedy:
+        epsilon: 0.2
     value_function:
       LinEGreedy:
         num_lat: 40
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.2}
+      ASPEGreedy:
+        epsilon: 0.2
     value_function:
       LinEGreedy:
         num_lat: 50
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.3}
+      ASPEGreedy:
+        epsilon: 0.3
     value_function:
       LinEGreedy:
         num_lat: 10
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.3}
+      ASPEGreedy:
+        epsilon: 0.3
     value_function:
       LinEGreedy:
         num_lat: 20
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.3}
+      ASPEGreedy:
+        epsilon: 0.3
     value_function:
       LinEGreedy:
         num_lat: 30
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.3}
+      ASPEGreedy:
+        epsilon: 0.3
     value_function:
       LinEGreedy:
         num_lat: 40
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.3}
+      ASPEGreedy:
+        epsilon: 0.3
     value_function:
       LinEGreedy:
         num_lat: 50
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.4}
+      ASPEGreedy:
+        epsilon: 0.4
     value_function:
       LinEGreedy:
         num_lat: 10
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.4}
+      ASPEGreedy:
+        epsilon: 0.4
     value_function:
       LinEGreedy:
         num_lat: 20
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.4}
+      ASPEGreedy:
+        epsilon: 0.4
     value_function:
       LinEGreedy:
         num_lat: 30
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.4}
+      ASPEGreedy:
+        epsilon: 0.4
     value_function:
       LinEGreedy:
         num_lat: 40
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.4}
+      ASPEGreedy:
+        epsilon: 0.4
     value_function:
       LinEGreedy:
         num_lat: 50
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.5}
+      ASPEGreedy:
+        epsilon: 0.5
     value_function:
       LinEGreedy:
         num_lat: 10
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.5}
+      ASPEGreedy:
+        epsilon: 0.5
     value_function:
       LinEGreedy:
         num_lat: 20
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.5}
+      ASPEGreedy:
+        epsilon: 0.5
     value_function:
       LinEGreedy:
         num_lat: 30
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.5}
+      ASPEGreedy:
+        epsilon: 0.5
     value_function:
       LinEGreedy:
         num_lat: 40
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.5}
+      ASPEGreedy:
+        epsilon: 0.5
     value_function:
       LinEGreedy:
         num_lat: 50
@@ -1528,7 +1562,8 @@ LinUCBvar:
 LinearEGreedy:
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.1}
+      ASPEGreedy:
+        epsilon: 0.1
     value_function:
       LinearEGreedy:
         item_var: 0.01
@@ -1539,7 +1574,8 @@ LinearEGreedy:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.2}
+      ASPEGreedy:
+        epsilon: 0.2
     value_function:
       LinearEGreedy:
         item_var: 0.01
@@ -1550,7 +1586,8 @@ LinearEGreedy:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.3}
+      ASPEGreedy:
+        epsilon: 0.3
     value_function:
       LinearEGreedy:
         item_var: 0.01
@@ -1561,7 +1598,8 @@ LinearEGreedy:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.4}
+      ASPEGreedy:
+        epsilon: 0.4
     value_function:
       LinearEGreedy:
         item_var: 0.01
@@ -1572,7 +1610,8 @@ LinearEGreedy:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.5}
+      ASPEGreedy:
+        epsilon: 0.5
     value_function:
       LinearEGreedy:
         item_var: 0.01
@@ -1583,7 +1622,8 @@ LinearEGreedy:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.1}
+      ASPEGreedy:
+        epsilon: 0.1
     value_function:
       LinearEGreedy:
         item_var: 0.01
@@ -1594,7 +1634,8 @@ LinearEGreedy:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.2}
+      ASPEGreedy:
+        epsilon: 0.2
     value_function:
       LinearEGreedy:
         item_var: 0.01
@@ -1605,7 +1646,8 @@ LinearEGreedy:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.3}
+      ASPEGreedy:
+        epsilon: 0.3
     value_function:
       LinearEGreedy:
         item_var: 0.01
@@ -1616,7 +1658,8 @@ LinearEGreedy:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.4}
+      ASPEGreedy:
+        epsilon: 0.4
     value_function:
       LinearEGreedy:
         item_var: 0.01
@@ -1627,7 +1670,8 @@ LinearEGreedy:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.5}
+      ASPEGreedy:
+        epsilon: 0.5
     value_function:
       LinearEGreedy:
         item_var: 0.01
@@ -1638,7 +1682,8 @@ LinearEGreedy:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.1}
+      ASPEGreedy:
+        epsilon: 0.1
     value_function:
       LinearEGreedy:
         item_var: 0.01
@@ -1649,7 +1694,8 @@ LinearEGreedy:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.2}
+      ASPEGreedy:
+        epsilon: 0.2
     value_function:
       LinearEGreedy:
         item_var: 0.01
@@ -1660,7 +1706,8 @@ LinearEGreedy:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.3}
+      ASPEGreedy:
+        epsilon: 0.3
     value_function:
       LinearEGreedy:
         item_var: 0.01
@@ -1671,7 +1718,8 @@ LinearEGreedy:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.4}
+      ASPEGreedy:
+        epsilon: 0.4
     value_function:
       LinearEGreedy:
         item_var: 0.01
@@ -1682,7 +1730,8 @@ LinearEGreedy:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.5}
+      ASPEGreedy:
+        epsilon: 0.5
     value_function:
       LinearEGreedy:
         item_var: 0.01
@@ -1694,7 +1743,8 @@ LinearEGreedy:
 LinearEGreedyEntropy:
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.1}
+      ASPEGreedy:
+        epsilon: 0.1
     value_function:
       LinearEGreedyEntropy:
         item_var: 0.01
@@ -1705,7 +1755,8 @@ LinearEGreedyEntropy:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.2}
+      ASPEGreedy:
+        epsilon: 0.2
     value_function:
       LinearEGreedyEntropy:
         item_var: 0.01
@@ -1716,7 +1767,8 @@ LinearEGreedyEntropy:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.3}
+      ASPEGreedy:
+        epsilon: 0.3
     value_function:
       LinearEGreedyEntropy:
         item_var: 0.01
@@ -1727,7 +1779,8 @@ LinearEGreedyEntropy:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.4}
+      ASPEGreedy:
+        epsilon: 0.4
     value_function:
       LinearEGreedyEntropy:
         item_var: 0.01
@@ -1738,7 +1791,8 @@ LinearEGreedyEntropy:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.5}
+      ASPEGreedy:
+        epsilon: 0.5
     value_function:
       LinearEGreedyEntropy:
         item_var: 0.01
@@ -1749,7 +1803,8 @@ LinearEGreedyEntropy:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.1}
+      ASPEGreedy:
+        epsilon: 0.1
     value_function:
       LinearEGreedyEntropy:
         item_var: 0.01
@@ -1760,7 +1815,8 @@ LinearEGreedyEntropy:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.2}
+      ASPEGreedy:
+        epsilon: 0.2
     value_function:
       LinearEGreedyEntropy:
         item_var: 0.01
@@ -1771,7 +1827,8 @@ LinearEGreedyEntropy:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.3}
+      ASPEGreedy:
+        epsilon: 0.3
     value_function:
       LinearEGreedyEntropy:
         item_var: 0.01
@@ -1782,7 +1839,8 @@ LinearEGreedyEntropy:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.4}
+      ASPEGreedy:
+        epsilon: 0.4
     value_function:
       LinearEGreedyEntropy:
         item_var: 0.01
@@ -1793,7 +1851,8 @@ LinearEGreedyEntropy:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.5}
+      ASPEGreedy:
+        epsilon: 0.5
     value_function:
       LinearEGreedyEntropy:
         item_var: 0.01
@@ -1804,7 +1863,8 @@ LinearEGreedyEntropy:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.1}
+      ASPEGreedy:
+        epsilon: 0.1
     value_function:
       LinearEGreedyEntropy:
         item_var: 0.01
@@ -1815,7 +1875,8 @@ LinearEGreedyEntropy:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.2}
+      ASPEGreedy:
+        epsilon: 0.2
     value_function:
       LinearEGreedyEntropy:
         item_var: 0.01
@@ -1826,7 +1887,8 @@ LinearEGreedyEntropy:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.3}
+      ASPEGreedy:
+        epsilon: 0.3
     value_function:
       LinearEGreedyEntropy:
         item_var: 0.01
@@ -1837,7 +1899,8 @@ LinearEGreedyEntropy:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.4}
+      ASPEGreedy:
+        epsilon: 0.4
     value_function:
       LinearEGreedyEntropy:
         item_var: 0.01
@@ -1848,7 +1911,8 @@ LinearEGreedyEntropy:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.5}
+      ASPEGreedy:
+        epsilon: 0.5
     value_function:
       LinearEGreedyEntropy:
         item_var: 0.01
@@ -1860,7 +1924,8 @@ LinearEGreedyEntropy:
 LinearEGreedyLogPopEnt:
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.1}
+      ASPEGreedy:
+        epsilon: 0.1
     value_function:
       LinearEGreedyLogPopEnt:
         item_var: 0.01
@@ -1871,7 +1936,8 @@ LinearEGreedyLogPopEnt:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.2}
+      ASPEGreedy:
+        epsilon: 0.2
     value_function:
       LinearEGreedyLogPopEnt:
         item_var: 0.01
@@ -1882,7 +1948,8 @@ LinearEGreedyLogPopEnt:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.3}
+      ASPEGreedy:
+        epsilon: 0.3
     value_function:
       LinearEGreedyLogPopEnt:
         item_var: 0.01
@@ -1893,7 +1960,8 @@ LinearEGreedyLogPopEnt:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.4}
+      ASPEGreedy:
+        epsilon: 0.4
     value_function:
       LinearEGreedyLogPopEnt:
         item_var: 0.01
@@ -1904,7 +1972,8 @@ LinearEGreedyLogPopEnt:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.5}
+      ASPEGreedy:
+        epsilon: 0.5
     value_function:
       LinearEGreedyLogPopEnt:
         item_var: 0.01
@@ -1915,7 +1984,8 @@ LinearEGreedyLogPopEnt:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.1}
+      ASPEGreedy:
+        epsilon: 0.1
     value_function:
       LinearEGreedyLogPopEnt:
         item_var: 0.01
@@ -1926,7 +1996,8 @@ LinearEGreedyLogPopEnt:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.2}
+      ASPEGreedy:
+        epsilon: 0.2
     value_function:
       LinearEGreedyLogPopEnt:
         item_var: 0.01
@@ -1937,7 +2008,8 @@ LinearEGreedyLogPopEnt:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.3}
+      ASPEGreedy:
+        epsilon: 0.3
     value_function:
       LinearEGreedyLogPopEnt:
         item_var: 0.01
@@ -1948,7 +2020,8 @@ LinearEGreedyLogPopEnt:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.4}
+      ASPEGreedy:
+        epsilon: 0.4
     value_function:
       LinearEGreedyLogPopEnt:
         item_var: 0.01
@@ -1959,7 +2032,8 @@ LinearEGreedyLogPopEnt:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.5}
+      ASPEGreedy:
+        epsilon: 0.5
     value_function:
       LinearEGreedyLogPopEnt:
         item_var: 0.01
@@ -1970,7 +2044,8 @@ LinearEGreedyLogPopEnt:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.1}
+      ASPEGreedy:
+        epsilon: 0.1
     value_function:
       LinearEGreedyLogPopEnt:
         item_var: 0.01
@@ -1981,7 +2056,8 @@ LinearEGreedyLogPopEnt:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.2}
+      ASPEGreedy:
+        epsilon: 0.2
     value_function:
       LinearEGreedyLogPopEnt:
         item_var: 0.01
@@ -1992,7 +2068,8 @@ LinearEGreedyLogPopEnt:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.3}
+      ASPEGreedy:
+        epsilon: 0.3
     value_function:
       LinearEGreedyLogPopEnt:
         item_var: 0.01
@@ -2003,7 +2080,8 @@ LinearEGreedyLogPopEnt:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.4}
+      ASPEGreedy:
+        epsilon: 0.4
     value_function:
       LinearEGreedyLogPopEnt:
         item_var: 0.01
@@ -2014,7 +2092,8 @@ LinearEGreedyLogPopEnt:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.5}
+      ASPEGreedy:
+        epsilon: 0.5
     value_function:
       LinearEGreedyLogPopEnt:
         item_var: 0.01
@@ -2026,7 +2105,8 @@ LinearEGreedyLogPopEnt:
 LinearEGreedyPopularity:
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.1}
+      ASPEGreedy:
+        epsilon: 0.1
     value_function:
       LinearEGreedyPopularity:
         item_var: 0.01
@@ -2037,7 +2117,8 @@ LinearEGreedyPopularity:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.2}
+      ASPEGreedy:
+        epsilon: 0.2
     value_function:
       LinearEGreedyPopularity:
         item_var: 0.01
@@ -2048,7 +2129,8 @@ LinearEGreedyPopularity:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.3}
+      ASPEGreedy:
+        epsilon: 0.3
     value_function:
       LinearEGreedyPopularity:
         item_var: 0.01
@@ -2059,7 +2141,8 @@ LinearEGreedyPopularity:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.4}
+      ASPEGreedy:
+        epsilon: 0.4
     value_function:
       LinearEGreedyPopularity:
         item_var: 0.01
@@ -2070,7 +2153,8 @@ LinearEGreedyPopularity:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.5}
+      ASPEGreedy:
+        epsilon: 0.5
     value_function:
       LinearEGreedyPopularity:
         item_var: 0.01
@@ -2081,7 +2165,8 @@ LinearEGreedyPopularity:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.1}
+      ASPEGreedy:
+        epsilon: 0.1
     value_function:
       LinearEGreedyPopularity:
         item_var: 0.01
@@ -2092,7 +2177,8 @@ LinearEGreedyPopularity:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.2}
+      ASPEGreedy:
+        epsilon: 0.2
     value_function:
       LinearEGreedyPopularity:
         item_var: 0.01
@@ -2103,7 +2189,8 @@ LinearEGreedyPopularity:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.3}
+      ASPEGreedy:
+        epsilon: 0.3
     value_function:
       LinearEGreedyPopularity:
         item_var: 0.01
@@ -2114,7 +2201,8 @@ LinearEGreedyPopularity:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.4}
+      ASPEGreedy:
+        epsilon: 0.4
     value_function:
       LinearEGreedyPopularity:
         item_var: 0.01
@@ -2125,7 +2213,8 @@ LinearEGreedyPopularity:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.5}
+      ASPEGreedy:
+        epsilon: 0.5
     value_function:
       LinearEGreedyPopularity:
         item_var: 0.01
@@ -2136,7 +2225,8 @@ LinearEGreedyPopularity:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.1}
+      ASPEGreedy:
+        epsilon: 0.1
     value_function:
       LinearEGreedyPopularity:
         item_var: 0.01
@@ -2147,7 +2237,8 @@ LinearEGreedyPopularity:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.2}
+      ASPEGreedy:
+        epsilon: 0.2
     value_function:
       LinearEGreedyPopularity:
         item_var: 0.01
@@ -2158,7 +2249,8 @@ LinearEGreedyPopularity:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.3}
+      ASPEGreedy:
+        epsilon: 0.3
     value_function:
       LinearEGreedyPopularity:
         item_var: 0.01
@@ -2169,7 +2261,8 @@ LinearEGreedyPopularity:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.4}
+      ASPEGreedy:
+        epsilon: 0.4
     value_function:
       LinearEGreedyPopularity:
         item_var: 0.01
@@ -2180,7 +2273,8 @@ LinearEGreedyPopularity:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.5}
+      ASPEGreedy:
+        epsilon: 0.5
     value_function:
       LinearEGreedyPopularity:
         item_var: 0.01
@@ -2192,7 +2286,8 @@ LinearEGreedyPopularity:
 LinearEGreedyRandPopularity:
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.1}
+      ASPEGreedy:
+        epsilon: 0.1
     value_function:
       LinearEGreedyRandPopularity:
         item_var: 0.01
@@ -2203,7 +2298,8 @@ LinearEGreedyRandPopularity:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.2}
+      ASPEGreedy:
+        epsilon: 0.2
     value_function:
       LinearEGreedyRandPopularity:
         item_var: 0.01
@@ -2214,7 +2310,8 @@ LinearEGreedyRandPopularity:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.3}
+      ASPEGreedy:
+        epsilon: 0.3
     value_function:
       LinearEGreedyRandPopularity:
         item_var: 0.01
@@ -2225,7 +2322,8 @@ LinearEGreedyRandPopularity:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.4}
+      ASPEGreedy:
+        epsilon: 0.4
     value_function:
       LinearEGreedyRandPopularity:
         item_var: 0.01
@@ -2236,7 +2334,8 @@ LinearEGreedyRandPopularity:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.5}
+      ASPEGreedy:
+        epsilon: 0.5
     value_function:
       LinearEGreedyRandPopularity:
         item_var: 0.01
@@ -2247,7 +2346,8 @@ LinearEGreedyRandPopularity:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.1}
+      ASPEGreedy:
+        epsilon: 0.1
     value_function:
       LinearEGreedyRandPopularity:
         item_var: 0.01
@@ -2258,7 +2358,8 @@ LinearEGreedyRandPopularity:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.2}
+      ASPEGreedy:
+        epsilon: 0.2
     value_function:
       LinearEGreedyRandPopularity:
         item_var: 0.01
@@ -2269,7 +2370,8 @@ LinearEGreedyRandPopularity:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.3}
+      ASPEGreedy:
+        epsilon: 0.3
     value_function:
       LinearEGreedyRandPopularity:
         item_var: 0.01
@@ -2280,7 +2382,8 @@ LinearEGreedyRandPopularity:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.4}
+      ASPEGreedy:
+        epsilon: 0.4
     value_function:
       LinearEGreedyRandPopularity:
         item_var: 0.01
@@ -2291,7 +2394,8 @@ LinearEGreedyRandPopularity:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.5}
+      ASPEGreedy:
+        epsilon: 0.5
     value_function:
       LinearEGreedyRandPopularity:
         item_var: 0.01
@@ -2302,7 +2406,8 @@ LinearEGreedyRandPopularity:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.1}
+      ASPEGreedy:
+        epsilon: 0.1
     value_function:
       LinearEGreedyRandPopularity:
         item_var: 0.01
@@ -2313,7 +2418,8 @@ LinearEGreedyRandPopularity:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.2}
+      ASPEGreedy:
+        epsilon: 0.2
     value_function:
       LinearEGreedyRandPopularity:
         item_var: 0.01
@@ -2324,7 +2430,8 @@ LinearEGreedyRandPopularity:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.3}
+      ASPEGreedy:
+        epsilon: 0.3
     value_function:
       LinearEGreedyRandPopularity:
         item_var: 0.01
@@ -2335,7 +2442,8 @@ LinearEGreedyRandPopularity:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.4}
+      ASPEGreedy:
+        epsilon: 0.4
     value_function:
       LinearEGreedyRandPopularity:
         item_var: 0.01
@@ -2346,7 +2454,8 @@ LinearEGreedyRandPopularity:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.5}
+      ASPEGreedy:
+        epsilon: 0.5
     value_function:
       LinearEGreedyRandPopularity:
         item_var: 0.01
@@ -2358,7 +2467,8 @@ LinearEGreedyRandPopularity:
 LinearEGreedyRandom:
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.1}
+      ASPEGreedy:
+        epsilon: 0.1
     value_function:
       LinearEGreedyRandom:
         item_var: 0.01
@@ -2369,7 +2479,8 @@ LinearEGreedyRandom:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.2}
+      ASPEGreedy:
+        epsilon: 0.2
     value_function:
       LinearEGreedyRandom:
         item_var: 0.01
@@ -2380,7 +2491,8 @@ LinearEGreedyRandom:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.3}
+      ASPEGreedy:
+        epsilon: 0.3
     value_function:
       LinearEGreedyRandom:
         item_var: 0.01
@@ -2391,7 +2503,8 @@ LinearEGreedyRandom:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.4}
+      ASPEGreedy:
+        epsilon: 0.4
     value_function:
       LinearEGreedyRandom:
         item_var: 0.01
@@ -2402,7 +2515,8 @@ LinearEGreedyRandom:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.5}
+      ASPEGreedy:
+        epsilon: 0.5
     value_function:
       LinearEGreedyRandom:
         item_var: 0.01
@@ -2413,7 +2527,8 @@ LinearEGreedyRandom:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.1}
+      ASPEGreedy:
+        epsilon: 0.1
     value_function:
       LinearEGreedyRandom:
         item_var: 0.01
@@ -2424,7 +2539,8 @@ LinearEGreedyRandom:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.2}
+      ASPEGreedy:
+        epsilon: 0.2
     value_function:
       LinearEGreedyRandom:
         item_var: 0.01
@@ -2435,7 +2551,8 @@ LinearEGreedyRandom:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.3}
+      ASPEGreedy:
+        epsilon: 0.3
     value_function:
       LinearEGreedyRandom:
         item_var: 0.01
@@ -2446,7 +2563,8 @@ LinearEGreedyRandom:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.4}
+      ASPEGreedy:
+        epsilon: 0.4
     value_function:
       LinearEGreedyRandom:
         item_var: 0.01
@@ -2457,7 +2575,8 @@ LinearEGreedyRandom:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.5}
+      ASPEGreedy:
+        epsilon: 0.5
     value_function:
       LinearEGreedyRandom:
         item_var: 0.01
@@ -2468,7 +2587,8 @@ LinearEGreedyRandom:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.1}
+      ASPEGreedy:
+        epsilon: 0.1
     value_function:
       LinearEGreedyRandom:
         item_var: 0.01
@@ -2479,7 +2599,8 @@ LinearEGreedyRandom:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.2}
+      ASPEGreedy:
+        epsilon: 0.2
     value_function:
       LinearEGreedyRandom:
         item_var: 0.01
@@ -2490,7 +2611,8 @@ LinearEGreedyRandom:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.3}
+      ASPEGreedy:
+        epsilon: 0.3
     value_function:
       LinearEGreedyRandom:
         item_var: 0.01
@@ -2501,7 +2623,8 @@ LinearEGreedyRandom:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.4}
+      ASPEGreedy:
+        epsilon: 0.4
     value_function:
       LinearEGreedyRandom:
         item_var: 0.01
@@ -2512,7 +2635,8 @@ LinearEGreedyRandom:
         var: 0.05
 - SimpleAgent:
     action_selection_policy:
-      ASPEGreedy: {epsilon: 0.5}
+      ASPEGreedy:
+        epsilon: 0.5
     value_function:
       LinearEGreedyRandom:
         item_var: 0.01
@@ -6262,6 +6386,403 @@ PTSLogPopEnt:
         var: 0.5
         var_u: 1.0
         var_v: 1.0
+RerankedLinUCB:
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          Entropy: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          Entropy: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          Entropy: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          Entropy: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          LogPopEnt: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          LogPopEnt: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          LogPopEnt: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          LogPopEnt: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          Random: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          Random: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          Random: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          Random: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          Entropy: {}
+    value_function:
+      LinUCB:
+        alpha: 0.5
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          Entropy: {}
+    value_function:
+      LinUCB:
+        alpha: 0.5
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          Entropy: {}
+    value_function:
+      LinUCB:
+        alpha: 0.5
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          Entropy: {}
+    value_function:
+      LinUCB:
+        alpha: 0.5
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          LogPopEnt: {}
+    value_function:
+      LinUCB:
+        alpha: 0.5
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          LogPopEnt: {}
+    value_function:
+      LinUCB:
+        alpha: 0.5
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          LogPopEnt: {}
+    value_function:
+      LinUCB:
+        alpha: 0.5
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          LogPopEnt: {}
+    value_function:
+      LinUCB:
+        alpha: 0.5
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          Random: {}
+    value_function:
+      LinUCB:
+        alpha: 0.5
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          Random: {}
+    value_function:
+      LinUCB:
+        alpha: 0.5
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          Random: {}
+    value_function:
+      LinUCB:
+        alpha: 0.5
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          Random: {}
+    value_function:
+      LinUCB:
+        alpha: 0.5
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          Entropy: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 5
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          Entropy: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 5
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          Entropy: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 5
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          Entropy: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 5
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          LogPopEnt: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 5
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          LogPopEnt: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 5
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          LogPopEnt: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 5
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          LogPopEnt: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 5
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          Random: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 5
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          Random: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 5
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          Random: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 5
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          Random: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 5
 ThompsonSampling:
 - SimpleAgent:
     action_selection_policy:
@@ -6445,4 +6966,3 @@ kNNBandit:
         alpha_0: 1
         beta_0: 100
         k: 1000
-
