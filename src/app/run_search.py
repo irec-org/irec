@@ -38,9 +38,6 @@ def main():
     dm = DatasetManager()
     datasets_preprocessors = [settings['datasets_preprocessors_parameters'][base] for base in args.b]
 
-    interactors_classes = [
-        eval('lib.value_functions.' + interactor) for interactor in args.m
-    ]
         
     with ProcessPoolExecutor() as executor:
         futures = set()
