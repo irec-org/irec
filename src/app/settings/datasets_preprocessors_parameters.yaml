@@ -12,6 +12,14 @@ MovieLens 1M (B):
     - MovieLens1M
     - TrainTestConsumption
   #name: MovieLens 1M (B)
+MovieLens 1M (B):
+  dataset_descriptor:
+    dataset_dir: ml-1m/
+  preprocessor:
+    - MovieLens1M
+    - TrainTestConsumption
+    - PopularityFilter
+  #name: MovieLens 1M (B)
 MovieLens 1M:
   dataset_descriptor:
     dataset_dir: Train-Test_ML-1M/

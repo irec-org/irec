@@ -11,3 +11,7 @@ TRTETrainValidation:
 TRTESample:
   items_rate: 0.8
   sample_method: 'popularity'
+PopularityFilter:
+  keep_popular: True
+  num_items_threshold: 68
+

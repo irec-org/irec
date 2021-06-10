@@ -356,3 +356,52 @@ class TRTESample(DataProcessor):
         test_dataset.data = dataset.data[np.isin(dataset.data[:, 0], test_uids)]
         test_dataset.update_from_data()
         return train_dataset, test_dataset
+
+class PopularityFilter(DatasetPreprocessor):
+    def __init__(self, keep_popular, num_items_threshold, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.keep_popular = keep_popular
+        self.num_items_threshold = num_items_threshold
+        self.parameters.extend(['items_rate', 'sample_method'])
+
+    def process(self, train_dataset_and_test_dataset):
+        train_dataset = train_dataset_and_test_dataset[0]
+        test_dataset = train_dataset_and_test_dataset[1]
+        dataset = Dataset(np.vstack([train_dataset.data, test_dataset.data]))
+        dataset.update_from_data()
+        dataset.update_num_total_users_items()
+        consumption_matrix = scipy.sparse.csr_matrix(
+            (dataset.data[:, 2], (dataset.data[:, 0], dataset.data[:, 1])),
+            (dataset.num_total_users, dataset.num_total_items))
+        # num_items_to_sample = int(self.items_rate * dataset.num_total_items)
+        items_values = lib.value_functions.MostPopular.get_items_popularity(
+            consumption_matrix)
+        items_sorted = np.argsort(items_values)[::-1]
+        if keep_popular:
+            items_to_keep = items_sorted[:self.num_items_threshold]
+        else:
+            items_to_keep = items_sorted[self.num_items_threshold:]
+
+        dataset.data = dataset.data[np.isin(dataset.data[:, 1], items_to_keep), :]
+
+        new_iids = dict()
+        for i, iid in enumerate(np.unique(dataset.data[:, 1])):
+            new_iids[iid] = i
+        for i in range(len(dataset.data)):
+            dataset.data[i, 1] = new_iids[dataset.data[i, 1]]
+
+        dataset.update_from_data()
+        dataset.update_num_total_users_items()
+
+        train_uids = train_dataset.uids
+        test_uids = test_dataset.uids
+
+        train_dataset = copy(dataset)
+        train_dataset.data = dataset.data[np.isin(dataset.data[:, 0],
+                                                  train_uids)]
+        train_dataset.update_from_data()
+
+        test_dataset = copy(dataset)
+        test_dataset.data = dataset.data[np.isin(dataset.data[:, 0], test_uids)]
+        test_dataset.update_from_data()
+        return train_dataset, test_dataset
