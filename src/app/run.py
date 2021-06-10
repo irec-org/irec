@@ -56,9 +56,11 @@ def main():
             dm.initialize_engines(dataset_preprocessor)
             dm.load()
             for agent_name in args.m:
-                itr = utils.create_agent_from_settings(agent_name,dataset_preprocessor['name'],settings)
-                print(utils.get_agent_id(itr,settings))
-                f=executor.submit(utils.run_interactor,itr,evaluation_policy,dm,args.forced_run)
+                parameters = settings['agents_preprocessor_parameters'][dataset_preprocessor['name']][agent_name]
+                agent = utils.create_agent(agent_name,parameters)
+                agent_id = utils.get_agent_id(agent_name,parameters)
+                # utils.get_agent_id(itr,settings)
+                f=executor.submit(utils.run_interactor,agent,evaluation_policy,dm,args.forced_run,agent_id)
                 futures.add(f)
                 if len(futures) >= args.num_tasks:
                     completed, futures = wait(futures, return_when=FIRST_COMPLETED)

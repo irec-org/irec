@@ -980,6 +980,14 @@ Good Books Validation:
       value_function:
         kNNBandit: {}
 MovieLens 100k (B):
+  LinUCBEntropy:
+    SimpleAgent:
+      action_selection_policy:
+        ASPReranker: {rule: {Entropy: {}},input_filter_size: 80,rerank_limit: 10}
+      value_function:
+        LinUCB:
+          alpha: 1.0
+          num_lat: 10
   ALEntropy:
     SimpleAgent:
       action_selection_policy:
@@ -1224,13 +1232,12 @@ MovieLens 100k (B):
         TinUCB:
           alpha: 0.2
   UCB:
-    parameters:
-      SimpleAgent:
-        action_selection_policy:
-          ASPGreedy: {}
-        value_function:
-          UCB:
-            c: 0.01
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        UCB:
+          c: 0.01
   UCBLearner:
     SimpleAgent:
       action_selection_policy:

@@ -342,3 +342,5 @@ def default_to_regular(d):
     if isinstance(d, defaultdict):
         d = {k: default_to_regular(v) for k, v in d.items()}
     return d
+def get_agent_pretty_name(agent_name,settings):
+    return settings['interactors_general_settings'][agent_name]['name']

@@ -143,13 +143,16 @@ for dataset_preprocessor in datasets_preprocessors:
     for metric_class_name in metrics_classes_names:
         for agent_name in args.m:
             # itr = ir.create_interactor(itr_class)
-            agent = utils.create_agent_from_settings(agent_name,dataset_preprocessor['name'],settings)
+            parameters = settings['agents_preprocessor_parameters'][dataset_preprocessor['name']][agent_name]
+            agent = utils.create_agent(agent_name,parameters)
+            agent_id = utils.get_agent_id(agent_name,parameters)
+            # agent = utils.create_agent_from_settings(agent_name,dataset_preprocessor['name'],settings)
             pdm = PersistentDataManager(directory='results')
 
             metrics_pdm = PersistentDataManager(directory='metrics')
             metric_values = metrics_pdm.load(
                 os.path.join(
-                    utils.get_experiment_run_id(dm, evaluation_policy, agent),
+                    utils.get_experiment_run_id(dm, evaluation_policy, agent_id),
                     metrics_evaluator.get_id(), metric_class_name))
             # print(len(metric_values))
             datasets_metrics_values[dataset_preprocessor['name']][
@@ -296,7 +299,7 @@ for metric_name, metric_class_name in zip(
         metrics_names, metrics_classes_names):
     rtex += utils.generate_metric_interactions_header(nums_interactions_to_show,len(datasets_preprocessors),metric_name)
     for agent_name in args.m:
-        rtex += "%s & " % (ir.get_interactor_name(agent_name))
+        rtex += "%s & " % (utils.get_agent_pretty_name(agent_name,settings))
         rtex += ' & '.join([
             ' & '.join(
                 map(

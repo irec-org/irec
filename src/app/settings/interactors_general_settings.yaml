@@ -115,3 +115,5 @@ PTSLogPopEnt:
 GLM_UCBLogPopEnt:
   #name: GLM_UCB+
   name: GLM-UCB*
+LinUCBEntropy:
+  name: LinUCB Entropy
