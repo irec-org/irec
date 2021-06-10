@@ -94,6 +94,8 @@ class ASPReranker(ActionSelectionPolicy):
         return (actions[0], actions[1][top_rule_index_actions]), None
 
     def update(self, observation, action, reward, info):
+        if reward >= 4:
+            self.users_num_consumption[action[0]]+=1
         self.rule.update(observation, action, reward, info)
 
     def reset(self, observation):

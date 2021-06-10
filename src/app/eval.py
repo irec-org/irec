@@ -51,6 +51,11 @@ def evaluate_itr(metric_evaluator_id, dm_id, agent_name):
         utils.get_experiment_run_id(dm, evaluation_policy, agent_id))
 
     metrics_pdm = PersistentDataManager(directory='metrics')
+    # if metrics_pdm.file_exists(
+            # os.path.join(
+                # utils.get_experiment_run_id(dm, evaluation_policy, agent_id),
+                # metric_evaluator.get_id())):
+        # print()
     if isinstance(metric_evaluator, CumulativeInteractionMetricsEvaluator):
         metrics_values = metric_evaluator.evaluate(
             evaluation_policy.num_interactions,
