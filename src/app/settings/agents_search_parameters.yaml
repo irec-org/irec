@@ -6386,6 +6386,658 @@ PTSLogPopEnt:
         var: 0.5
         var_u: 1.0
         var_v: 1.0
+RerankedEntropyGLM_UCB:
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          Entropy: {}
+    value_function:
+      GLM_UCB:
+        c: 2
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          Entropy: {}
+    value_function:
+      GLM_UCB:
+        c: 2
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          Entropy: {}
+    value_function:
+      GLM_UCB:
+        c: 2
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          Entropy: {}
+    value_function:
+      GLM_UCB:
+        c: 2
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          Entropy: {}
+    value_function:
+      GLM_UCB:
+        c: 4
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          Entropy: {}
+    value_function:
+      GLM_UCB:
+        c: 4
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          Entropy: {}
+    value_function:
+      GLM_UCB:
+        c: 4
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          Entropy: {}
+    value_function:
+      GLM_UCB:
+        c: 4
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          Entropy: {}
+    value_function:
+      GLM_UCB:
+        c: 8
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          Entropy: {}
+    value_function:
+      GLM_UCB:
+        c: 8
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          Entropy: {}
+    value_function:
+      GLM_UCB:
+        c: 8
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          Entropy: {}
+    value_function:
+      GLM_UCB:
+        c: 8
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+RerankedEntropyLinUCB:
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          Entropy: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          Entropy: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          Entropy: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          Entropy: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          Entropy: {}
+    value_function:
+      LinUCB:
+        alpha: 0.5
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          Entropy: {}
+    value_function:
+      LinUCB:
+        alpha: 0.5
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          Entropy: {}
+    value_function:
+      LinUCB:
+        alpha: 0.5
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          Entropy: {}
+    value_function:
+      LinUCB:
+        alpha: 0.5
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          Entropy: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 5
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          Entropy: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 5
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          Entropy: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 5
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          Entropy: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 5
+RerankedEntropyLinearUCB:
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          Entropy: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 20
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          Entropy: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 20
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          Entropy: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 20
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          Entropy: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 20
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          Entropy: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          Entropy: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          Entropy: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          Entropy: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          Entropy: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 5
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          Entropy: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 5
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          Entropy: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 5
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          Entropy: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 5
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+RerankedEntropyOurMethod2:
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          Entropy: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.75
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          Entropy: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.75
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          Entropy: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.75
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          Entropy: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.75
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          Entropy: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.25
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          Entropy: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.25
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          Entropy: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.25
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          Entropy: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.25
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          Entropy: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.5
+        num_lat: 20
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          Entropy: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.5
+        num_lat: 20
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          Entropy: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.5
+        num_lat: 20
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          Entropy: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.5
+        num_lat: 20
 RerankedLinUCB:
 - SimpleAgent:
     action_selection_policy:
@@ -6783,6 +7435,1962 @@ RerankedLinUCB:
       LinUCB:
         alpha: 1.0
         num_lat: 5
+RerankedLogPopEntGLM_UCB:
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          LogPopEnt: {}
+    value_function:
+      GLM_UCB:
+        c: 2
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          LogPopEnt: {}
+    value_function:
+      GLM_UCB:
+        c: 2
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          LogPopEnt: {}
+    value_function:
+      GLM_UCB:
+        c: 2
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          LogPopEnt: {}
+    value_function:
+      GLM_UCB:
+        c: 2
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          LogPopEnt: {}
+    value_function:
+      GLM_UCB:
+        c: 4
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          LogPopEnt: {}
+    value_function:
+      GLM_UCB:
+        c: 4
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          LogPopEnt: {}
+    value_function:
+      GLM_UCB:
+        c: 4
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          LogPopEnt: {}
+    value_function:
+      GLM_UCB:
+        c: 4
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          LogPopEnt: {}
+    value_function:
+      GLM_UCB:
+        c: 8
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          LogPopEnt: {}
+    value_function:
+      GLM_UCB:
+        c: 8
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          LogPopEnt: {}
+    value_function:
+      GLM_UCB:
+        c: 8
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          LogPopEnt: {}
+    value_function:
+      GLM_UCB:
+        c: 8
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+RerankedLogPopEntLinUCB:
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          LogPopEnt: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          LogPopEnt: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          LogPopEnt: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          LogPopEnt: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          LogPopEnt: {}
+    value_function:
+      LinUCB:
+        alpha: 0.5
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          LogPopEnt: {}
+    value_function:
+      LinUCB:
+        alpha: 0.5
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          LogPopEnt: {}
+    value_function:
+      LinUCB:
+        alpha: 0.5
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          LogPopEnt: {}
+    value_function:
+      LinUCB:
+        alpha: 0.5
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          LogPopEnt: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 5
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          LogPopEnt: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 5
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          LogPopEnt: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 5
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          LogPopEnt: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 5
+RerankedLogPopEntLinearUCB:
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          LogPopEnt: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 20
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          LogPopEnt: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 20
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          LogPopEnt: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 20
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          LogPopEnt: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 20
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          LogPopEnt: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          LogPopEnt: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          LogPopEnt: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          LogPopEnt: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          LogPopEnt: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 5
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          LogPopEnt: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 5
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          LogPopEnt: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 5
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          LogPopEnt: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 5
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+RerankedLogPopEntOurMethod2:
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          LogPopEnt: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.75
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          LogPopEnt: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.75
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          LogPopEnt: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.75
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          LogPopEnt: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.75
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          LogPopEnt: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.25
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          LogPopEnt: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.25
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          LogPopEnt: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.25
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          LogPopEnt: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.25
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          LogPopEnt: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.5
+        num_lat: 20
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          LogPopEnt: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.5
+        num_lat: 20
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          LogPopEnt: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.5
+        num_lat: 20
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          LogPopEnt: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.5
+        num_lat: 20
+RerankedMostPopularGLM_UCB:
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          MostPopular: {}
+    value_function:
+      GLM_UCB:
+        c: 2
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          MostPopular: {}
+    value_function:
+      GLM_UCB:
+        c: 2
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          MostPopular: {}
+    value_function:
+      GLM_UCB:
+        c: 2
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          MostPopular: {}
+    value_function:
+      GLM_UCB:
+        c: 2
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          MostPopular: {}
+    value_function:
+      GLM_UCB:
+        c: 4
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          MostPopular: {}
+    value_function:
+      GLM_UCB:
+        c: 4
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          MostPopular: {}
+    value_function:
+      GLM_UCB:
+        c: 4
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          MostPopular: {}
+    value_function:
+      GLM_UCB:
+        c: 4
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          MostPopular: {}
+    value_function:
+      GLM_UCB:
+        c: 8
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          MostPopular: {}
+    value_function:
+      GLM_UCB:
+        c: 8
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          MostPopular: {}
+    value_function:
+      GLM_UCB:
+        c: 8
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          MostPopular: {}
+    value_function:
+      GLM_UCB:
+        c: 8
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+RerankedMostPopularLinUCB:
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          MostPopular: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          MostPopular: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          MostPopular: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          MostPopular: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          MostPopular: {}
+    value_function:
+      LinUCB:
+        alpha: 0.5
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          MostPopular: {}
+    value_function:
+      LinUCB:
+        alpha: 0.5
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          MostPopular: {}
+    value_function:
+      LinUCB:
+        alpha: 0.5
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          MostPopular: {}
+    value_function:
+      LinUCB:
+        alpha: 0.5
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          MostPopular: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 5
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          MostPopular: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 5
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          MostPopular: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 5
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          MostPopular: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 5
+RerankedMostPopularLinearUCB:
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          MostPopular: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 20
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          MostPopular: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 20
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          MostPopular: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 20
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          MostPopular: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 20
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          MostPopular: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          MostPopular: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          MostPopular: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          MostPopular: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          MostPopular: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 5
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          MostPopular: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 5
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          MostPopular: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 5
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          MostPopular: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 5
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+RerankedMostPopularOurMethod2:
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          MostPopular: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.75
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          MostPopular: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.75
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          MostPopular: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.75
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          MostPopular: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.75
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          MostPopular: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.25
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          MostPopular: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.25
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          MostPopular: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.25
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          MostPopular: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.25
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          MostPopular: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.5
+        num_lat: 20
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          MostPopular: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.5
+        num_lat: 20
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          MostPopular: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.5
+        num_lat: 20
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          MostPopular: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.5
+        num_lat: 20
+RerankedRandomGLM_UCB:
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          Random: {}
+    value_function:
+      GLM_UCB:
+        c: 2
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          Random: {}
+    value_function:
+      GLM_UCB:
+        c: 2
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          Random: {}
+    value_function:
+      GLM_UCB:
+        c: 2
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          Random: {}
+    value_function:
+      GLM_UCB:
+        c: 2
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          Random: {}
+    value_function:
+      GLM_UCB:
+        c: 4
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          Random: {}
+    value_function:
+      GLM_UCB:
+        c: 4
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          Random: {}
+    value_function:
+      GLM_UCB:
+        c: 4
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          Random: {}
+    value_function:
+      GLM_UCB:
+        c: 4
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          Random: {}
+    value_function:
+      GLM_UCB:
+        c: 8
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          Random: {}
+    value_function:
+      GLM_UCB:
+        c: 8
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          Random: {}
+    value_function:
+      GLM_UCB:
+        c: 8
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          Random: {}
+    value_function:
+      GLM_UCB:
+        c: 8
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+RerankedRandomLinUCB:
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          Random: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          Random: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          Random: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          Random: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          Random: {}
+    value_function:
+      LinUCB:
+        alpha: 0.5
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          Random: {}
+    value_function:
+      LinUCB:
+        alpha: 0.5
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          Random: {}
+    value_function:
+      LinUCB:
+        alpha: 0.5
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          Random: {}
+    value_function:
+      LinUCB:
+        alpha: 0.5
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          Random: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 5
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          Random: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 5
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          Random: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 5
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          Random: {}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 5
+RerankedRandomLinearUCB:
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          Random: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 20
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          Random: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 20
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          Random: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 20
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          Random: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 20
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          Random: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          Random: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          Random: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          Random: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 10
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          Random: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 5
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          Random: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 5
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          Random: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 5
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          Random: {}
+    value_function:
+      LinearUCB:
+        alpha: 1.0
+        item_var: 0.01
+        iterations: 20
+        num_lat: 5
+        stop_criteria: 0.0009
+        user_var: 0.01
+        var: 0.05
+RerankedRandomOurMethod2:
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          Random: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.75
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          Random: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.75
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          Random: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.75
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          Random: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.75
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          Random: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.25
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          Random: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.25
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          Random: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.25
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          Random: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.25
+        num_lat: 10
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 2
+        rule:
+          Random: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.5
+        num_lat: 20
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 2
+        rule:
+          Random: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.5
+        num_lat: 20
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 10
+        rerank_limit: 4
+        rule:
+          Random: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.5
+        num_lat: 20
+- SimpleAgent:
+    action_selection_policy:
+      ASPReranker:
+        input_filter_size: 20
+        rerank_limit: 4
+        rule:
+          Random: {}
+    value_function:
+      OurMethod2:
+        alpha: 0.5
+        num_lat: 20
 ThompsonSampling:
 - SimpleAgent:
     action_selection_policy:
