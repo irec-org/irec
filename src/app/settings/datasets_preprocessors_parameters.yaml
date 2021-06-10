@@ -2,8 +2,28 @@ MovieLens 100k (B):
   dataset_descriptor:
     dataset_dir: ml-100k/
   preprocessor:
-    - MovieLens100k
-    - TrainTestConsumption
+    - {MovieLens100k: {}}
+    - {TrainTestConsumption: {
+      train_size: 0.8,
+      test_consumes: 1,
+      crono: False,
+      random_seed: 0,
+      } }
+MovieLens 100k (B) Pop:
+  dataset_descriptor:
+    dataset_dir: ml-100k/
+  preprocessor:
+    - {MovieLens100k: {}}
+    - {TrainTestConsumption: {
+      train_size: 0.8,
+      test_consumes: 1,
+      crono: False,
+      random_seed: 0,
+      } }
+    - {PopularityFilter:{
+      keep_popular: True,
+      num_items_threshold: 100,
+    }}
   #name: MovieLens 100k (B)
 MovieLens 1M (B):
   dataset_descriptor:
@@ -16,9 +36,17 @@ MovieLens 1M (B) Pop:
   dataset_descriptor:
     dataset_dir: ml-1m/
   preprocessor:
-    - MovieLens1M
-    - TrainTestConsumption
-    - PopularityFilter
+    - {MovieLens1M: {}}
+    - {TrainTestConsumption: {
+      train_size: 0.8,
+      test_consumes: 1,
+      crono: False,
+      random_seed: 0,
+      } }
+    - {PopularityFilter:{
+      keep_popular: True,
+      num_items_threshold: 68,
+    }}
   #name: MovieLens 1M (B)
 MovieLens 1M:
   dataset_descriptor:
@@ -29,12 +57,17 @@ MovieLens 10M:
   dataset_descriptor:
     dataset_dir: Train-Test_ML-10M/
   preprocessor:
-    - TRTE
+    - {TRTE:{}}
 Good Books:
   dataset_descriptor:
     dataset_dir: Train-Test_Good-Books/
   preprocessor:
-    - TRTE
+    - {TRTE:{}}
+Yahoo Music:
+  dataset_descriptor:
+    dataset_dir: Train-Test_Yahoo-Music/
+  preprocessor:
+    - {TRTE:{}}
 Ciao DVD:
   dataset_descriptor:
     dataset_dir: Train-Test_Ciao-DVD/
@@ -50,11 +83,6 @@ Netflix:
     dataset_dir: Train-Test_Netflix/
   preprocessor:
     - Netflix
-Yahoo Music:
-  dataset_descriptor:
-    dataset_dir: Train-Test_Yahoo-Music/
-  preprocessor:
-    - TRTE
 Yahoo Music Validation:
   dataset_descriptor:
     dataset_dir: Train-Test_Yahoo-Music/
@@ -97,3 +125,19 @@ MovieLens 1M Validation:
   preprocessor:
     - TRTE
     - TRTETrainValidation
+Yahoo Music Pop:
+  dataset_descriptor:
+    dataset_dir: Train-Test_Yahoo-Music/
+  preprocessor:
+    - {TRTE:{}}
+    - {PopularityFilter:{
+      keep_popular: True,
+      num_items_threshold: 92,
+    }}
+    - {CombineTrainTest: {}}
+    - {TrainTestConsumption: {
+      train_size: 0.8,
+      test_consumes: 1,
+      crono: True,
+      random_seed: 0,
+      } }

@@ -357,12 +357,12 @@ class TRTESample(DataProcessor):
         test_dataset.update_from_data()
         return train_dataset, test_dataset
 
-class PopularityFilter(DatasetPreprocessor):
+class PopularityFilter(DataProcessor):
     def __init__(self, keep_popular, num_items_threshold, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.keep_popular = keep_popular
         self.num_items_threshold = num_items_threshold
-        self.parameters.extend(['items_rate', 'sample_method'])
+        self.parameters.extend(['keep_popular', 'num_items_threshold'])
 
     def process(self, train_dataset_and_test_dataset):
         train_dataset = train_dataset_and_test_dataset[0]
@@ -377,7 +377,7 @@ class PopularityFilter(DatasetPreprocessor):
         items_values = lib.value_functions.MostPopular.get_items_popularity(
             consumption_matrix)
         items_sorted = np.argsort(items_values)[::-1]
-        if keep_popular:
+        if self.keep_popular:
             items_to_keep = items_sorted[:self.num_items_threshold]
         else:
             items_to_keep = items_sorted[self.num_items_threshold:]
@@ -405,3 +405,15 @@ class PopularityFilter(DatasetPreprocessor):
         test_dataset.data = dataset.data[np.isin(dataset.data[:, 0], test_uids)]
         test_dataset.update_from_data()
         return train_dataset, test_dataset
+
+class CombineTrainTest(DataProcessor):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def process(self, train_dataset_and_test_dataset):
+        train_dataset = train_dataset_and_test_dataset[0]
+        test_dataset = train_dataset_and_test_dataset[1]
+        dataset = Dataset(np.vstack([train_dataset.data, test_dataset.data]))
+        dataset.update_from_data()
+        dataset.update_num_total_users_items()
+        return dataset

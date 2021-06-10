@@ -59,13 +59,15 @@ class DatasetManager(Parameterizable):
     def initialize_engines(self,dataset_preprocessor):
         pipeline = dataset.Pipeline()
         with open("settings"+sep+"processors_parameters.yaml") as processors_parameters_f:
-            loader = yaml.SafeLoader
-            processors_parameters = yaml.load(processors_parameters_f,Loader=loader)
+            # loader = yaml.SafeLoader
+            # processors_parameters = yaml.load(processors_parameters_f,Loader=loader)
             for data_processor in dataset_preprocessor['preprocessor']:
-                if data_processor in processors_parameters:
-                    pipeline.steps.append(eval('dataset.'+data_processor)(**processors_parameters[data_processor]))
-                else:
-                    pipeline.steps.append(eval('dataset.'+data_processor)())
+                data_processor_name = list(data_processor.keys())[0]
+                parameters = list(data_processor.values())[0]
+                # if data_processor in processors_parameters:
+                pipeline.steps.append(eval('dataset.'+data_processor_name)(**parameters))
+                # else:
+                # pipeline.steps.append(eval('dataset.'+data_processor)())
         dataset_descriptor=dataset.DatasetDescriptor(
             os.path.join(
                 DirectoryDependent().DIRS['datasets'],
