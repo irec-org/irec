@@ -12,7 +12,7 @@ MovieLens 1M (B):
     - MovieLens1M
     - TrainTestConsumption
   #name: MovieLens 1M (B)
-MovieLens 1M (B):
+MovieLens 1M (B) Pop:
   dataset_descriptor:
     dataset_dir: ml-1m/
   preprocessor:
