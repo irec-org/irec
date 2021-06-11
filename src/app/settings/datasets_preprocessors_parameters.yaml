@@ -161,3 +161,35 @@ Yahoo Music Pop:
       crono: True,
       random_seed: 0,
       } }
+MovieLens 10M Pop:
+  dataset_descriptor:
+    dataset_dir: Train-Test_ML-10M/
+  preprocessor:
+    - {TRTE:{}}
+    - {PopularityFilter:{
+      keep_popular: True,
+      num_items_threshold: 918,
+    }}
+    - {CombineTrainTest: {}}
+    - {TrainTestConsumption: {
+      train_size: 0.8,
+      test_consumes: 1,
+      crono: True,
+      random_seed: 0,
+      } }
+MovieLens 10M Non-Pop:
+  dataset_descriptor:
+    dataset_dir: Train-Test_ML-10M/
+  preprocessor:
+    - {TRTE:{}}
+    - {PopularityFilter:{
+      keep_popular: False,
+      num_items_threshold: 918,
+    }}
+    - {CombineTrainTest: {}}
+    - {TrainTestConsumption: {
+      train_size: 0.8,
+      test_consumes: 1,
+      crono: True,
+      random_seed: 0,
+      } }
