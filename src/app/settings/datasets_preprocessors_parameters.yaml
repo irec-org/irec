@@ -174,7 +174,7 @@ MovieLens 10M Pop:
     - {TrainTestConsumption: {
       train_size: 0.8,
       test_consumes: 1,
-      crono: True,
+      crono: False,
       random_seed: 0,
       } }
 MovieLens 10M Non-Pop:
@@ -190,6 +190,51 @@ MovieLens 10M Non-Pop:
     - {TrainTestConsumption: {
       train_size: 0.8,
       test_consumes: 1,
-      crono: True,
+      crono: False,
       random_seed: 0,
       } }
+
+MovieLens 10M Pop Validation:
+  dataset_descriptor:
+    dataset_dir: Train-Test_ML-10M/
+  preprocessor:
+    - {TRTE:{}}
+    - {PopularityFilter:{
+      keep_popular: True,
+      num_items_threshold: 918,
+    }}
+    - {CombineTrainTest: {}}
+    - {TrainTestConsumption: {
+      train_size: 0.8,
+      test_consumes: 1,
+      crono: False,
+      random_seed: 0,
+      } }
+    - {TRTETrainValidation:{
+  train_size: 0.8,
+  test_consumes: 1,
+  crono: False,
+  random_seed: 0
+  }}
+MovieLens 10M Non-Pop Validation:
+  dataset_descriptor:
+    dataset_dir: Train-Test_ML-10M/
+  preprocessor:
+    - {TRTE:{}}
+    - {PopularityFilter:{
+      keep_popular: False,
+      num_items_threshold: 918,
+    }}
+    - {CombineTrainTest: {}}
+    - {TrainTestConsumption: {
+      train_size: 0.8,
+      test_consumes: 1,
+      crono: False,
+      random_seed: 0,
+      } }
+    - {TRTETrainValidation:{
+  train_size: 0.8,
+  test_consumes: 1,
+  crono: False,
+  random_seed: 0
+  }}
