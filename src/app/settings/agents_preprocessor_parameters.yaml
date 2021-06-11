@@ -973,6 +973,37 @@ Good Books Validation:
           var: 0.5
           var_u: 1.0
           var_v: 1.0
+  RerankedEntropyLinUCB:
+    parameters:
+      SimpleAgent:
+        action_selection_policy:
+          ASPReranker:
+            input_filter_size: 10
+            rerank_limit: 4
+            rule:
+              Entropy: {}
+        value_function:
+          LinUCB:
+            alpha: 1.0
+            num_lat: 10
+  RerankedEntropyLinearUCB:
+    parameters:
+      SimpleAgent:
+        action_selection_policy:
+          ASPReranker:
+            input_filter_size: 10
+            rerank_limit: 2
+            rule:
+              Entropy: {}
+        value_function:
+          LinearUCB:
+            alpha: 1.0
+            item_var: 0.01
+            iterations: 20
+            num_lat: 20
+            stop_criteria: 0.0009
+            user_var: 0.01
+            var: 0.05
   kNNBandit:
     SimpleAgent:
       action_selection_policy:
@@ -980,14 +1011,6 @@ Good Books Validation:
       value_function:
         kNNBandit: {}
 MovieLens 100k (B):
-  #LinUCBEntropy:
-    #SimpleAgent:
-      #action_selection_policy:
-        #ASPReranker: {rule: {Entropy: {}},input_filter_size: 10,rerank_limit: 2}
-      #value_function:
-        #LinUCB:
-          #alpha: 1.0
-          #num_lat: 10
   ALEntropy:
     SimpleAgent:
       action_selection_policy:
@@ -2231,6 +2254,37 @@ MovieLens 10M Validation:
           var: 0.5
           var_u: 1.0
           var_v: 1.0
+  RerankedEntropyLinUCB:
+    parameters:
+      SimpleAgent:
+        action_selection_policy:
+          ASPReranker:
+            input_filter_size: 20
+            rerank_limit: 2
+            rule:
+              Entropy: {}
+        value_function:
+          LinUCB:
+            alpha: 1.0
+            num_lat: 10
+  RerankedEntropyLinearUCB:
+    parameters:
+      SimpleAgent:
+        action_selection_policy:
+          ASPReranker:
+            input_filter_size: 10
+            rerank_limit: 2
+            rule:
+              Entropy: {}
+        value_function:
+          LinearUCB:
+            alpha: 1.0
+            item_var: 0.01
+            iterations: 20
+            num_lat: 20
+            stop_criteria: 0.0009
+            user_var: 0.01
+            var: 0.05
   kNNBandit:
     SimpleAgent:
       action_selection_policy:
@@ -3705,6 +3759,37 @@ Yahoo Music Validation:
           var: 0.5
           var_u: 1.0
           var_v: 1.0
+  RerankedEntropyLinUCB:
+    parameters:
+      SimpleAgent:
+        action_selection_policy:
+          ASPReranker:
+            input_filter_size: 20
+            rerank_limit: 2
+            rule:
+              Entropy: {}
+        value_function:
+          LinUCB:
+            alpha: 1.0
+            num_lat: 10
+  RerankedEntropyLinearUCB:
+    parameters:
+      SimpleAgent:
+        action_selection_policy:
+          ASPReranker:
+            input_filter_size: 20
+            rerank_limit: 2
+            rule:
+              Entropy: {}
+        value_function:
+          LinearUCB:
+            alpha: 1.0
+            item_var: 0.01
+            iterations: 20
+            num_lat: 10
+            stop_criteria: 0.0009
+            user_var: 0.01
+            var: 0.05
   kNNBandit:
     SimpleAgent:
       action_selection_policy:

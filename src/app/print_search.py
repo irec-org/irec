@@ -54,7 +54,7 @@ interactors_classes_names_to_names = {
 }
 
 # interactors_classes = ir.select_interactors()
-interactors_classes = [eval('lib.value_functions.'+interactor) for interactor in args.m]
+# interactors_classes = [eval('lib.value_functions.'+interactor) for interactor in args.m]
 datasets_preprocessors = [settings['datasets_preprocessors_parameters'][base] for base in args.b]
 
 metrics_evaluator = CumulativeInteractionMetricsEvaluator(None, metrics_classes)

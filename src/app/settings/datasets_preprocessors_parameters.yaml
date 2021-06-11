@@ -52,7 +52,7 @@ MovieLens 1M:
   dataset_descriptor:
     dataset_dir: Train-Test_ML-1M/
   preprocessor:
-    - TRTE
+    - {TRTE:{}}
 MovieLens 10M:
   dataset_descriptor:
     dataset_dir: Train-Test_ML-10M/
@@ -72,12 +72,12 @@ Ciao DVD:
   dataset_descriptor:
     dataset_dir: Train-Test_Ciao-DVD/
   preprocessor:
-    - TRTE
+    - {TRTE:{}}
 Amazon Kindle Store:
   dataset_descriptor:
     dataset_dir: Train-Test_Amazon-Kindle-Store/
   preprocessor:
-    - TRTE
+    - {TRTE:{}}
 Netflix:
   dataset_descriptor:
     dataset_dir: Train-Test_Netflix/
@@ -87,44 +87,64 @@ Yahoo Music Validation:
   dataset_descriptor:
     dataset_dir: Train-Test_Yahoo-Music/
   preprocessor:
-    - TRTE
-    - TRTETrainValidation
+    - {TRTE:{}}
+    - {TRTETrainValidation:{
+  train_size: 0.8,
+  test_consumes: 1,
+  crono: False,
+  random_seed: 0
+  }}
 MovieLens 10M Validation:
   dataset_descriptor:
     dataset_dir: Train-Test_ML-10M/
   preprocessor:
-    - TRTE
-    - TRTETrainValidation
+    - {TRTE:{}}
+    - {TRTETrainValidation:{
+  train_size: 0.8,
+  test_consumes: 1,
+  crono: False,
+  random_seed: 0
+  }}
 Good Books Validation:
   dataset_descriptor:
     dataset_dir: Train-Test_Good-Books/
   preprocessor:
-    - TRTE
-    - TRTETrainValidation
+    - {TRTE:{}}
+    - {TRTETrainValidation:{
+  train_size: 0.8,
+  test_consumes: 1,
+  crono: False,
+  random_seed: 0
+  }}
 Yahoo Music Sampled:
   dataset_descriptor:
     dataset_dir: Train-Test_Yahoo-Music/
   preprocessor:
-    - TRTE
+    - {TRTE:{}}
     - TRTESample
 MovieLens 10M Sampled:
   dataset_descriptor:
     dataset_dir: Train-Test_ML-10M/
   preprocessor:
-    - TRTE
+    - {TRTE:{}}
     - TRTESample
 Good Books Sampled:
   dataset_descriptor:
     dataset_dir: Train-Test_Good-Books/
   preprocessor:
-    - TRTE
+    - {TRTE:{}}
     - TRTESample
 MovieLens 1M Validation:
   dataset_descriptor:
     dataset_dir: Train-Test_ML-1M/
   preprocessor:
-    - TRTE
-    - TRTETrainValidation
+    - {TRTE:{}}
+    - {TRTETrainValidation:{
+  train_size: 0.8,
+  test_consumes: 1,
+  crono: False,
+  random_seed: 0
+  }}
 Yahoo Music Pop:
   dataset_descriptor:
     dataset_dir: Train-Test_Yahoo-Music/
