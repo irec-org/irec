@@ -389,6 +389,11 @@ class PopularityFilter(DataProcessor):
             new_iids[iid] = i
         for i in range(len(dataset.data)):
             dataset.data[i, 1] = new_iids[dataset.data[i, 1]]
+        new_uids = dict()
+        for i, uid in enumerate(np.unique(dataset.data[:, 0])):
+            new_uids[uid] = i
+        for i in range(len(dataset.data)):
+            dataset.data[i, 0] = new_uids[dataset.data[i, 0]]
 
         dataset.update_from_data()
         dataset.update_num_total_users_items()
