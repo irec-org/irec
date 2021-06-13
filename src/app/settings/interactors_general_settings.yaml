@@ -125,3 +125,11 @@ RerankedEntropyLinearEGreedy:
   name: RerankedEntropy LinearEGreedy
 RerankedEntropyLinearUCB:
   name: RerankedEntropy LinearUCB
+RerankedLogPopEntGLM_UCB:
+  name: RerankedLogPopEnt GLM-UCB
+RerankedLogPopEntLinUCB:
+  name: RerankedLogPopEnt LinUCB
+RerankedLogPopEntLinearEGreedy:
+  name: RerankedLogPopEnt LinearEGreedy
+RerankedLogPopEntLinearUCB:
+  name: RerankedLogPopEnt LinearUCB
