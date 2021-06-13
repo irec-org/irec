@@ -117,3 +117,11 @@ GLM_UCBLogPopEnt:
   name: GLM-UCB*
 LinUCBEntropy:
   name: LinUCB Entropy
+RerankedEntropyGLM_UCB:
+  name: RerankedEntropy GLM-UCB
+RerankedEntropyLinUCB:
+  name: RerankedEntropy LinUCB
+RerankedEntropyLinearEGreedy:
+  name: RerankedEntropy LinearEGreedy
+RerankedEntropyLinearUCB:
+  name: RerankedEntropy LinearUCB
