@@ -238,3 +238,91 @@ MovieLens 10M Non-Pop Validation:
   crono: False,
   random_seed: 0
   }}
+Yahoo Music Non-Pop:
+  dataset_descriptor:
+    dataset_dir: Train-Test_Yahoo-Music/
+  preprocessor:
+    - {TRTE:{}}
+    - {PopularityFilter:{
+      keep_popular: False,
+      num_items_threshold: 92,
+    }}
+    - {CombineTrainTest: {}}
+    - {TrainTestConsumption: {
+      train_size: 0.8,
+      test_consumes: 1,
+      crono: False,
+      random_seed: 0,
+      } }
+    - {TRTETrainValidation:{
+  train_size: 0.8,
+  test_consumes: 1,
+  crono: False,
+  random_seed: 0
+  }}
+Yahoo Music Pop:
+  dataset_descriptor:
+    dataset_dir: Train-Test_Yahoo-Music/
+  preprocessor:
+    - {TRTE:{}}
+    - {PopularityFilter:{
+      keep_popular: True,
+      num_items_threshold: 92,
+    }}
+    - {CombineTrainTest: {}}
+    - {TrainTestConsumption: {
+      train_size: 0.8,
+      test_consumes: 1,
+      crono: False,
+      random_seed: 0,
+      } }
+    - {TRTETrainValidation:{
+  train_size: 0.8,
+  test_consumes: 1,
+  crono: False,
+  random_seed: 0
+  }}
+Good Books Non-Pop:
+  dataset_descriptor:
+    dataset_dir: Train-Test_Good-Books/
+  preprocessor:
+    - {TRTE:{}}
+    - {PopularityFilter:{
+      keep_popular: False,
+      num_items_threshold: 640,
+    }}
+    - {CombineTrainTest: {}}
+    - {TrainTestConsumption: {
+      train_size: 0.8,
+      test_consumes: 1,
+      crono: False,
+      random_seed: 0,
+      } }
+    - {TRTETrainValidation:{
+  train_size: 0.8,
+  test_consumes: 1,
+  crono: False,
+  random_seed: 0
+  }}
+Good Books Pop:
+  dataset_descriptor:
+    dataset_dir: Train-Test_Good-Books/
+  preprocessor:
+    - {TRTE:{}}
+    - {PopularityFilter:{
+      keep_popular: True,
+      num_items_threshold: 640,
+    }}
+    - {CombineTrainTest: {}}
+    - {TrainTestConsumption: {
+      train_size: 0.8,
+      test_consumes: 1,
+      crono: False,
+      random_seed: 0,
+      } }
+    - {TRTETrainValidation:{
+  train_size: 0.8,
+  test_consumes: 1,
+  crono: False,
+  random_seed: 0
+  }}
