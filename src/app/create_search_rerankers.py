@@ -57,7 +57,8 @@ for agent_name in args.m:
                 # action_selection_policy)
                 search_parameters.append(_agent_parameters)
                 # print(utils.default_to_regular(_agent_parameters))
-        settings['agents_search_parameters'][new_agent_name] = search_parameters
+        settings['agents_search_parameters'][
+            new_agent_name] = search_parameters
 
 open('settings/agents_search_parameters.yaml',
      'w').write(yaml.dump(settings['agents_search_parameters']))

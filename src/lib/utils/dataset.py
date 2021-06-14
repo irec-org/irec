@@ -13,9 +13,10 @@ import os
 from copy import copy
 from .Parameterizable import Parameterizable
 
-class DatasetPreprocessor(Parameterizable):
 
-    def __init__(self, name, dataset_descriptor, preprocessor, *args, **kwargs):
+class DatasetPreprocessor(Parameterizable):
+    def __init__(self, name, dataset_descriptor, preprocessor, *args,
+                 **kwargs):
         super().__init__(*args, **kwargs)
         self.name = name
         self.dataset_descriptor = dataset_descriptor
@@ -27,7 +28,6 @@ class DatasetPreprocessor(Parameterizable):
 
 
 class Pipeline(Parameterizable):
-
     def __init__(self, steps=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if steps is None:
@@ -44,7 +44,6 @@ class Pipeline(Parameterizable):
 
 
 class DatasetDescriptor(Parameterizable):
-
     def __init__(self, dataset_dir, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.dataset_dir = dataset_dir
@@ -52,7 +51,6 @@ class DatasetDescriptor(Parameterizable):
 
 
 class Dataset:
-
     def __init__(self,
                  data,
                  num_total_users=None,
@@ -90,7 +88,6 @@ class DataProcessor(Parameterizable):
 
 
 class TRTE(DataProcessor):
-
     def process(self, dataset_descriptor):
         dataset_dir = dataset_descriptor.dataset_dir
         train_data = np.loadtxt(os.path.join(dataset_dir, 'train.data'),
@@ -109,12 +106,9 @@ class TRTE(DataProcessor):
         test_dataset.update_from_data()
         return train_dataset, test_dataset
 
-class TRTEPopular(DataProcessor):
 
-    def __init__(self,
-                 items_rate,
-                 *args,
-                 **kwargs):
+class TRTEPopular(DataProcessor):
+    def __init__(self, items_rate, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.items_rate = items_rate
         self.parameters.extend(['items_rate'])
@@ -122,48 +116,51 @@ class TRTEPopular(DataProcessor):
     def process(self, train_dataset_and_test_dataset):
         train_dataset = train_dataset_and_test_dataset[0]
         test_dataset = train_dataset_and_test_dataset[1]
-        data = np.vstack(
-            (test_dataset.data, train_dataset.data))
+        data = np.vstack((test_dataset.data, train_dataset.data))
         dataset = Dataset(data)
         dataset.update_from_data()
         dataset.update_num_total_users_items()
         num_items_to_sample = int(self.items_rate * dataset.num_total_items)
-        consumption_matrix = scipy.sparse.csr_matrix((dataset.data[:,2],(dataset.data[:,0],dataset.data[:,1])),(dataset.num_total_users,dataset.num_total_items))
-        items_popularity=value_functions.MostPopular.get_items_popularity(consumption_matrix)
-        top_popular_items = np.argsort(items_popularity)[::-1][num_items_to_sample]
-        test_dataset.data = test_dataset.data[test_dataset.data[:,1].isin(top_popular_items)]
+        consumption_matrix = scipy.sparse.csr_matrix(
+            (dataset.data[:, 2], (dataset.data[:, 0], dataset.data[:, 1])),
+            (dataset.num_total_users, dataset.num_total_items))
+        items_popularity = value_functions.MostPopular.get_items_popularity(
+            consumption_matrix)
+        top_popular_items = np.argsort(
+            items_popularity)[::-1][num_items_to_sample]
+        test_dataset.data = test_dataset.data[test_dataset.data[:, 1].isin(
+            top_popular_items)]
         test_dataset.update_from_data()
-        train_dataset.data = train_dataset.data[train_dataset.data[:,1].isin(top_popular_items)]
+        train_dataset.data = train_dataset.data[train_dataset.data[:, 1].isin(
+            top_popular_items)]
         train_dataset.update_from_data()
 
         # train_dataset.data[train_dataset.data[:,1].isin(top_popular_items)]
 
         train_dataset, test_dataset = ttc.process(train_dataset)
         return train_dataset, test_dataset
-class TRTERandom(DataProcessor):
 
-    def __init__(self,
-                 min_ratings,
-                 random_seed,
-                 probability_keep_item,
-                 *args,
+
+class TRTERandom(DataProcessor):
+    def __init__(self, min_ratings, random_seed, probability_keep_item, *args,
                  **kwargs):
         super().__init__(*args, **kwargs)
         self.min_ratings = min_ratings
         self.random_seed = random_seed
         self.probability_keep_item = probability_keep_item
-        self.parameters.extend(['min_ratings', 'random_seed','probability_keep_item'])
+        self.parameters.extend(
+            ['min_ratings', 'random_seed', 'probability_keep_item'])
 
     def process(self, train_dataset_and_test_dataset):
         train_dataset = train_dataset_and_test_dataset[0]
         test_dataset = train_dataset_and_test_dataset[1]
         # ttc = TrainTestConsumption(self.train_size, self.test_consumes,
-                                   # self.crono, self.random_seed)
+        # self.crono, self.random_seed)
         train_dataset, test_dataset = ttc.process(train_dataset)
         return train_dataset, test_dataset
 
-class MovieLens100k(DataProcessor):
 
+class MovieLens100k(DataProcessor):
     def process(self, dataset_descriptor):
         dataset_dir = dataset_descriptor.dataset_dir
         data = np.loadtxt(os.path.join(dataset_dir, 'u.data'), delimiter='\t')
@@ -176,7 +173,6 @@ class MovieLens100k(DataProcessor):
 
 
 class MovieLens1M(DataProcessor):
-
     def process(self, dataset_descriptor):
         dataset_dir = dataset_descriptor.dataset_dir
         data = np.loadtxt(os.path.join(dataset_dir, 'ratings.dat'),
@@ -220,7 +216,6 @@ def _netflix_read_ratings(self, fileName):
 
 
 class Netflix:
-
     def process(self, dataset_descriptor):
         # base_dir = self.BASES_DIRS[self.base]
         u_train, i_train, r_train, t_train, numr_train = _netflix_read_ratings(
@@ -233,7 +228,6 @@ class Netflix:
 
 
 class TrainTestConsumption(DataProcessor):
-
     def __init__(self, train_size, test_consumes, crono, random_seed, *args,
                  **kwargs):
         super().__init__(*args, **kwargs)
@@ -281,13 +275,7 @@ class TrainTestConsumption(DataProcessor):
 
 
 class TRTETrainValidation(DataProcessor):
-
-    def __init__(self,
-                 train_size,
-                 test_consumes,
-                 crono,
-                 random_seed,
-                 *args,
+    def __init__(self, train_size, test_consumes, crono, random_seed, *args,
                  **kwargs):
         super().__init__(*args, **kwargs)
         self.train_size = train_size
@@ -307,7 +295,6 @@ class TRTETrainValidation(DataProcessor):
 
 
 class TRTESample(DataProcessor):
-
     def __init__(self, items_rate, sample_method, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.items_rate = items_rate
@@ -353,9 +340,11 @@ class TRTESample(DataProcessor):
         train_dataset.update_from_data()
 
         test_dataset = copy(dataset)
-        test_dataset.data = dataset.data[np.isin(dataset.data[:, 0], test_uids)]
+        test_dataset.data = dataset.data[np.isin(dataset.data[:, 0],
+                                                 test_uids)]
         test_dataset.update_from_data()
         return train_dataset, test_dataset
+
 
 class PopularityFilter(DataProcessor):
     def __init__(self, keep_popular, num_items_threshold, *args, **kwargs):
@@ -382,7 +371,8 @@ class PopularityFilter(DataProcessor):
         else:
             items_to_keep = items_sorted[self.num_items_threshold:]
 
-        dataset.data = dataset.data[np.isin(dataset.data[:, 1], items_to_keep), :]
+        dataset.data = dataset.data[np.isin(dataset.data[:,
+                                                         1], items_to_keep), :]
 
         new_iids = dict()
         for i, iid in enumerate(np.unique(dataset.data[:, 1])):
@@ -403,13 +393,14 @@ class PopularityFilter(DataProcessor):
 
         # train_dataset = copy(dataset)
         # train_dataset.data = dataset.data[np.isin(dataset.data[:, 0],
-                                                  # train_uids)]
+        # train_uids)]
         # train_dataset.update_from_data()
 
         # test_dataset = copy(dataset)
         # test_dataset.data = dataset.data[np.isin(dataset.data[:, 0], test_uids)]
         # test_dataset.update_from_data()
         return dataset
+
 
 class CombineTrainTest(DataProcessor):
     def __init__(self, *args, **kwargs):

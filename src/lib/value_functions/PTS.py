@@ -15,32 +15,44 @@ from lib.utils.PersistentDataManager import PersistentDataManager
 import joblib
 import value_functions
 
+
 @njit
 def _softmax(x):
     return np.exp(x - np.max(x)) / np.sum(np.exp(x - np.max(x)))
 
+
 class PTS(MFValueFunction):
-    def __init__(self,num_particles,var,var_u,var_v, *args, **kwargs):
+    def __init__(self, num_particles, var, var_u, var_v, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.num_particles = num_particles
         self.var = var
         self.var_u = var_u
         self.var_v = var_v
-        self.parameters.extend(['num_particles','var','var_u','var_v'])
+        self.parameters.extend(['num_particles', 'var', 'var_u', 'var_v'])
 
-    def reset(self,observation):
-        train_dataset=observation
+    def reset(self, observation):
+        train_dataset = observation
         super().reset(train_dataset)
         self.train_dataset = train_dataset
-        self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[:,2],(self.train_dataset.data[:,0],self.train_dataset.data[:,1])),(self.train_dataset.num_total_users,self.train_dataset.num_total_items))
+        self.train_consumption_matrix = scipy.sparse.csr_matrix(
+            (self.train_dataset.data[:, 2],
+             (self.train_dataset.data[:, 0], self.train_dataset.data[:, 1])),
+            (self.train_dataset.num_total_users,
+             self.train_dataset.num_total_items))
 
         self.num_total_items = self.train_dataset.num_total_items
         self.num_total_users = self.train_dataset.num_total_users
 
-        self.particles_us = np.random.normal(size=(self.num_particles,self.num_total_users,self.num_lat))
-        self.particles_vs = np.random.normal(size=(self.num_particles,self.num_total_items,self.num_lat))
-        self.particles_var_us = np.ones(shape=(self.num_particles))*self.var_u
-        self.particles_var_vs = np.ones(shape=(self.num_particles))*self.var_v
+        self.particles_us = np.random.normal(size=(self.num_particles,
+                                                   self.num_total_users,
+                                                   self.num_lat))
+        self.particles_vs = np.random.normal(size=(self.num_particles,
+                                                   self.num_total_items,
+                                                   self.num_lat))
+        self.particles_var_us = np.ones(
+            shape=(self.num_particles)) * self.var_u
+        self.particles_var_vs = np.ones(
+            shape=(self.num_particles)) * self.var_v
 
         self.particles_ids = np.arange(self.num_particles)
         self.items_consumed_users = defaultdict(list)
@@ -48,28 +60,31 @@ class PTS(MFValueFunction):
         self.users_consumed_items = defaultdict(list)
         self.users_consumed_items_rewards = defaultdict(list)
         for i in tqdm(range(len(self.train_dataset.data))):
-            uid = int(self.train_dataset.data[i,0])
-            item = int(self.train_dataset.data[i,1])
-            reward = self.train_dataset.data[i,2]
+            uid = int(self.train_dataset.data[i, 0])
+            item = int(self.train_dataset.data[i, 1])
+            reward = self.train_dataset.data[i, 2]
             # self.update(uid,item,reward,None)
             self.users_consumed_items[uid].append(item)
             self.users_consumed_items_rewards[uid].append(reward)
             self.items_consumed_users[item].append(uid)
             self.items_consumed_users_rewards[item].append(reward)
 
-        mf_model = mf.PMF(num_lat=self.num_lat,var=self.var,user_var=self.var_u,item_var=self.var_v)
-        mf_model_id = joblib.hash((mf_model.get_id(),self.train_consumption_matrix))
+        mf_model = mf.PMF(num_lat=self.num_lat,
+                          var=self.var,
+                          user_var=self.var_u,
+                          item_var=self.var_v)
+        mf_model_id = joblib.hash(
+            (mf_model.get_id(), self.train_consumption_matrix))
         pdm = PersistentDataManager('state_save')
         if pdm.file_exists(mf_model_id):
             mf_model = pdm.load(mf_model_id)
         else:
             mf_model.fit(self.train_consumption_matrix)
-            pdm.save(mf_model_id,mf_model)
+            pdm.save(mf_model_id, mf_model)
 
         for i in range(self.num_particles):
-            self.particles_us[i]=mf_model.users_weights
-            self.particles_vs[i]=mf_model.items_weights
-
+            self.particles_us[i] = mf_model.users_weights
+            self.particles_vs[i] = mf_model.items_weights
 
         # for uid in self.users_consumed_items.keys():
         #     item = self.users_consumed_items[uid].pop()
@@ -80,50 +95,68 @@ class PTS(MFValueFunction):
         #     uid = self.items_consumed_users[item].pop()
         #     reward = self.items_consumed_users_rewards[item].pop()
         #     self.update(uid,item,reward,None)
-        
-    def action_estimates(self,candidate_actions):
-        uid=candidate_actions[0];candidate_items=candidate_actions[1]
+
+    def action_estimates(self, candidate_actions):
+        uid = candidate_actions[0]
+        candidate_items = candidate_actions[1]
         particle_idx = np.random.choice(self.particles_ids)
-        items_score = self.particles_us[particle_idx][uid] @ self.particles_vs[particle_idx][candidate_items].T
+        items_score = self.particles_us[particle_idx][uid] @ self.particles_vs[
+            particle_idx][candidate_items].T
         return items_score, None
 
-    def update(self,observation,action,reward,info):
-        uid=action[0];item=action[1];additional_data=info
+    def update(self, observation, action, reward, info):
+        uid = action[0]
+        item = action[1]
+        additional_data = info
         with threadpool_limits(limits=1, user_api='blas'):
             updated_history = False
 
-            lambdas_u_i = np.empty(shape=(self.num_particles,self.num_lat,self.num_lat))
-            zetas_u_i  = np.empty(shape=(self.num_particles,self.num_lat))
-            mus_u_i = np.empty(shape=(self.num_particles,self.num_lat))
+            lambdas_u_i = np.empty(shape=(self.num_particles, self.num_lat,
+                                          self.num_lat))
+            zetas_u_i = np.empty(shape=(self.num_particles, self.num_lat))
+            mus_u_i = np.empty(shape=(self.num_particles, self.num_lat))
             for i in range(self.num_particles):
                 v_j = self.particles_vs[i][self.users_consumed_items[uid]]
-                lambda_u_i = 1/self.var*(v_j.T @ v_j)+1/self.particles_var_us[i] * np.eye(self.num_lat)
-                zeta_u_i = np.sum(np.multiply(v_j,np.array(self.users_consumed_items_rewards[uid]).reshape(-1, 1)),axis=0)
-                lambdas_u_i[i]= lambda_u_i
+                lambda_u_i = 1 / self.var * (
+                    v_j.T @ v_j) + 1 / self.particles_var_us[i] * np.eye(
+                        self.num_lat)
+                zeta_u_i = np.sum(np.multiply(
+                    v_j,
+                    np.array(self.users_consumed_items_rewards[uid]).reshape(
+                        -1, 1)),
+                                  axis=0)
+                lambdas_u_i[i] = lambda_u_i
                 zetas_u_i[i] = zeta_u_i
-                mus_u_i[i] = 1/self.var*(np.linalg.inv(lambda_u_i) @ zeta_u_i)
+                mus_u_i[i] = 1 / self.var * (
+                    np.linalg.inv(lambda_u_i) @ zeta_u_i)
 
             weights = np.empty(self.num_particles)
             for i in range(self.num_particles):
                 lambda_u_i, mu_u_i = lambdas_u_i[i], mus_u_i[i]
-                v_j = self.particles_vs[i][item,:]
-                cov = 1/self.var + np.dot(np.dot(v_j.T, lambda_u_i), v_j)
-                w = scipy.stats.norm(np.dot(v_j.T, mu_u_i),cov).pdf(reward)
-                weights[i]=w
+                v_j = self.particles_vs[i][item, :]
+                cov = 1 / self.var + np.dot(np.dot(v_j.T, lambda_u_i), v_j)
+                w = scipy.stats.norm(np.dot(v_j.T, mu_u_i), cov).pdf(reward)
+                weights[i] = w
 
             normalized_weights = _softmax(weights)
-            ds = np.random.choice(range(self.num_particles), p=normalized_weights,size=self.num_particles)
-            new_particles_us = np.empty(shape=(self.num_particles,self.num_total_users,self.num_lat))
-            new_particles_vs = np.empty(shape=(self.num_particles,self.num_total_items,self.num_lat))
+            ds = np.random.choice(range(self.num_particles),
+                                  p=normalized_weights,
+                                  size=self.num_particles)
+            new_particles_us = np.empty(shape=(self.num_particles,
+                                               self.num_total_users,
+                                               self.num_lat))
+            new_particles_vs = np.empty(shape=(self.num_particles,
+                                               self.num_total_items,
+                                               self.num_lat))
             new_particles_var_us = np.empty(shape=(self.num_particles))
             new_particles_var_vs = np.empty(shape=(self.num_particles))
 
             for i in range(self.num_particles):
                 d = ds[i]
-                new_particles_us[i]=self.particles_us[d]
-                new_particles_vs[i]=self.particles_vs[d]
-                new_particles_var_us[i]=self.particles_var_us[d]
-                new_particles_var_vs[i]=self.particles_var_vs[d]
+                new_particles_us[i] = self.particles_us[d]
+                new_particles_vs[i] = self.particles_vs[d]
+                new_particles_var_us[i] = self.particles_var_us[d]
+                new_particles_var_vs[i] = self.particles_var_vs[d]
 
             if not updated_history:
                 self.users_consumed_items[uid].append(item)
@@ -135,19 +168,27 @@ class PTS(MFValueFunction):
             for i in range(self.num_particles):
                 lambda_u_i, zeta_u_i = lambdas_u_i[i], zetas_u_i[i]
                 v_j = new_particles_vs[i][item, :]
-                lambda_u_i += 1/self.var * (v_j @ v_j.T)
+                lambda_u_i += 1 / self.var * (v_j @ v_j.T)
                 zeta_u_i += reward * v_j
 
                 inv_lambda_u_i = np.linalg.inv(lambda_u_i)
-                sampled_user_vector = np.random.multivariate_normal(1/self.var*(inv_lambda_u_i @ zeta_u_i), inv_lambda_u_i)
+                sampled_user_vector = np.random.multivariate_normal(
+                    1 / self.var * (inv_lambda_u_i @ zeta_u_i), inv_lambda_u_i)
                 new_particles_us[i][uid] = sampled_user_vector
 
-                u_i = new_particles_us[i][self.items_consumed_users[item],:]
-                lambda_v_i = 1/self.var * (u_i.T @ u_i) + 1/new_particles_var_vs[i]*np.eye(self.num_lat)
+                u_i = new_particles_us[i][self.items_consumed_users[item], :]
+                lambda_v_i = 1 / self.var * (
+                    u_i.T @ u_i) + 1 / new_particles_var_vs[i] * np.eye(
+                        self.num_lat)
 
-                zeta = np.sum(np.multiply(u_i,np.array(self.items_consumed_users_rewards[item]).reshape(-1, 1)),axis=0)
+                zeta = np.sum(np.multiply(
+                    u_i,
+                    np.array(self.items_consumed_users_rewards[item]).reshape(
+                        -1, 1)),
+                              axis=0)
                 inv_lambda_v_i = np.linalg.inv(lambda_v_i)
-                item_sample_vector = np.random.multivariate_normal(1/self.var*(inv_lambda_v_i @ zeta),inv_lambda_v_i)
+                item_sample_vector = np.random.multivariate_normal(
+                    1 / self.var * (inv_lambda_v_i @ zeta), inv_lambda_v_i)
                 new_particles_vs[i][item] = item_sample_vector
 
             if not updated_history:
@@ -157,38 +198,46 @@ class PTS(MFValueFunction):
                 self.items_consumed_users_rewards[item].append(reward)
                 updated_history = True
 
-            self.particles_us=new_particles_us
-            self.particles_vs=new_particles_vs
-            self.particles_var_us=new_particles_var_us
-            self.particles_var_vs=new_particles_var_vs
+            self.particles_us = new_particles_us
+            self.particles_vs = new_particles_vs
+            self.particles_var_us = new_particles_var_us
+            self.particles_var_vs = new_particles_var_vs
 
 
 class PTSInit(PTS):
-    def __init__(self, init,*args, **kwargs):
+    def __init__(self, init, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.init = init
         self.parameters.extend(['init'])
-    def reset(self,observation):
-        train_dataset=observation
+
+    def reset(self, observation):
+        train_dataset = observation
         super().reset(train_dataset)
 
         if self.init == 'entropy':
-            items_entropy = value_functions.Entropy.get_items_entropy(self.train_consumption_matrix)
+            items_entropy = value_functions.Entropy.get_items_entropy(
+                self.train_consumption_matrix)
             self.items_bias = items_entropy
         elif self.init == 'logpopent':
-            items_entropy = value_functions.Entropy.get_items_entropy(self.train_consumption_matrix)
-            items_popularity = value_functions.MostPopular.get_items_popularity(self.train_consumption_matrix,normalize=False)
-            self.items_bias = value_functions.LogPopEnt.get_items_logpopent(items_popularity,items_entropy)
+            items_entropy = value_functions.Entropy.get_items_entropy(
+                self.train_consumption_matrix)
+            items_popularity = value_functions.MostPopular.get_items_popularity(
+                self.train_consumption_matrix, normalize=False)
+            self.items_bias = value_functions.LogPopEnt.get_items_logpopent(
+                items_popularity, items_entropy)
 
         self.items_bias = self.items_bias - np.min(self.items_bias)
-        self.items_bias = self.items_bias/np.max(self.items_bias)
-        assert(self.items_bias.min() >= 0 and np.isclose(self.items_bias.max(), 1))
-        res=scipy.optimize.minimize(lambda x,items_means,items_bias: np.sum((items_bias - x @ items_means.T)**2),
-                                    np.ones(self.num_lat),
-                                    args=(self.particles_vs[0],self.items_bias),
-                                    method='BFGS',
-                                    )
-        self.initial_user_factors = res.x 
+        self.items_bias = self.items_bias / np.max(self.items_bias)
+        assert (self.items_bias.min() >= 0
+                and np.isclose(self.items_bias.max(), 1))
+        res = scipy.optimize.minimize(
+            lambda x, items_means, items_bias: np.sum(
+                (items_bias - x @ items_means.T)**2),
+            np.ones(self.num_lat),
+            args=(self.particles_vs[0], self.items_bias),
+            method='BFGS',
+        )
+        self.initial_user_factors = res.x
         # print(np.corrcoef(self.items_bias,self.initial_user_factors @ self.items_means.T)[0,1])
         # self.bs = defaultdict(lambda: self.initial_b.copy())
         not_train_users = set(list(range(self.train_dataset.num_total_users))) - \
@@ -196,7 +245,9 @@ class PTSInit(PTS):
         for i in range(self.num_particles):
             for uid in not_train_users:
                 self.particles_us[i][uid] = self.initial_user_factors
-            # self.particles_vs[i] 
+
+
+            # self.particles_vs[i]
 class PTSLogPopEnt(PTSInit):
-    def __init__(self,*args, **kwargs):
-        super().__init__(init='logpopent',*args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(init='logpopent', *args, **kwargs)

@@ -24,7 +24,7 @@ from lib.utils.utils import run_parallel
 import ctypes
 import matplotlib
 
-font = {'size'   : 22}
+font = {'size': 22}
 
 matplotlib.rc('font', **font)
 
@@ -48,7 +48,7 @@ ir = InteractorRunner(dm, interactors_general_settings,
                       evaluation_policies_parameters)
 interactors_classes = ir.select_interactors()
 for dataset_preprocessor in datasets_preprocessors:
-    
+
     dm.initialize_engines(dataset_preprocessor)
     dm.load()
 
@@ -63,17 +63,21 @@ for dataset_preprocessor in datasets_preprocessors:
     dataset.update_from_data()
     dataset.update_num_total_users_items()
 
-    consumption_matrix = scipy.sparse.csr_matrix((dataset.data[:,2],(dataset.data[:,0],dataset.data[:,1])),(dataset.num_total_users,dataset.num_total_items))
+    consumption_matrix = scipy.sparse.csr_matrix(
+        (dataset.data[:, 2], (dataset.data[:, 0], dataset.data[:, 1])),
+        (dataset.num_total_users, dataset.num_total_items))
 
     evaluation_policy = ir.get_interactors_evaluation_policy()
-    items_popularity = value_functions.MostPopular.get_items_popularity(consumption_matrix,normalize=False)
-    items_entropy = value_functions.Entropy.get_items_entropy(consumption_matrix)
+    items_popularity = value_functions.MostPopular.get_items_popularity(
+        consumption_matrix, normalize=False)
+    items_entropy = value_functions.Entropy.get_items_entropy(
+        consumption_matrix)
     for itr_class in interactors_classes:
         fig, ax = plt.subplots()
         itr = ir.create_interactor(itr_class)
         pdm = PersistentDataManager(directory='results')
-        results = pdm.load(InteractorCache().get_id(
-            dm, evaluation_policy, itr))
+        results = pdm.load(InteractorCache().get_id(dm, evaluation_policy,
+                                                    itr))
 
         users_items_recommended = defaultdict(list)
         for uid, item in results:
@@ -87,23 +91,32 @@ for dataset_preprocessor in datasets_preprocessors:
             top_item = max(counter, key=counter.get)
             position_most_recommended_item[pos] = top_item
         previous_pos = 0
-        ax.scatter(items_entropy,
-                items_popularity,
-                color='gray')
+        ax.scatter(items_entropy, items_popularity, color='gray')
         for pos in np.sort(nums_interactions_to_print):
-            ax.scatter([items_entropy[position_most_recommended_item[i]] for i in range(previous_pos,pos)],
-                    [items_popularity[position_most_recommended_item[i]] for i in range(previous_pos,pos)],
-                    label=f'Top-{pos}',s=100)
+            ax.scatter([
+                items_entropy[position_most_recommended_item[i]]
+                for i in range(previous_pos, pos)
+            ], [
+                items_popularity[position_most_recommended_item[i]]
+                for i in range(previous_pos, pos)
+            ],
+                       label=f'Top-{pos}',
+                       s=100)
             previous_pos = pos
         ax.set_title(interactors_general_settings[itr_class.__name__]['name'])
         ax.set_xlabel("Entropy")
         ax.set_ylabel("Popularity")
-        ax.set_xlim(xmin=np.min(items_entropy),xmax=np.max(items_entropy))
-        ax.set_ylim(ymin=np.min(items_popularity),ymax=np.max(items_popularity))
+        ax.set_xlim(xmin=np.min(items_entropy), xmax=np.max(items_entropy))
+        ax.set_ylim(ymin=np.min(items_popularity),
+                    ymax=np.max(items_popularity))
         ax.legend()
 
-        fig.savefig(os.path.join(DirectoryDependent().DIRS["img"],f'pop_ent_{dm.dataset_preprocessor.name}_{itr_class.__name__}.png'),bbox_inches = 'tight')
+        fig.savefig(os.path.join(
+            DirectoryDependent().DIRS["img"],
+            f'pop_ent_{dm.dataset_preprocessor.name}_{itr_class.__name__}.png'
+        ),
+                    bbox_inches='tight')
 
     # for metric_evaluator in metrics_evaluators:
-        # args = [(id(metric_evaluator), id(dm), itr_class)
-        # run_parallel(evaluate_itr, args, use_tqdm=False)
+    # args = [(id(metric_evaluator), id(dm), itr_class)
+    # run_parallel(evaluate_itr, args, use_tqdm=False)

@@ -14,7 +14,6 @@ np.seterr(all='raise')
 
 
 class RelevanceEvaluator(Parameterizable):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -23,7 +22,6 @@ class RelevanceEvaluator(Parameterizable):
 
 
 class ThresholdRelevanceEvaluator:
-
     def __init__(self, threshold, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.threshold = threshold
@@ -33,7 +31,6 @@ class ThresholdRelevanceEvaluator:
 
 
 class MetricsEvaluator(Parameterizable):
-
     def __init__(self,
                  metrics_classes=[],
                  relevance_evaluator=ThresholdRelevanceEvaluator(3.999),
@@ -45,7 +42,6 @@ class MetricsEvaluator(Parameterizable):
 
 
 class TotalMetricsEvaluator(MetricsEvaluator):
-
     def __init__(self, ground_truth_dataset, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.ground_truth_dataset = ground_truth_dataset
@@ -102,10 +98,10 @@ class TotalMetricsEvaluator(MetricsEvaluator):
         self.results = results
         metrics_values = defaultdict(list)
 
-        results = run_parallel(
-            self._metric_evaluation,
-            [(id(self), metric_class) for metric_class in self.metrics_classes],
-            use_tqdm=False)
+        results = run_parallel(self._metric_evaluation,
+                               [(id(self), metric_class)
+                                for metric_class in self.metrics_classes],
+                               use_tqdm=False)
         for result, metric_class in zip(results, self.metrics_classes):
             metrics_values[metric_class.__name__].extend(result)
 
@@ -113,7 +109,6 @@ class TotalMetricsEvaluator(MetricsEvaluator):
 
 
 class CumulativeMetricsEvaluator(MetricsEvaluator):
-
     def __init__(self, buffer_size, ground_truth_dataset, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.ground_truth_dataset = ground_truth_dataset
@@ -171,10 +166,10 @@ class CumulativeMetricsEvaluator(MetricsEvaluator):
         self.uids = uids
         self.results = results
         metrics_values = defaultdict(list)
-        results = run_parallel(
-            self._metric_evaluation,
-            [(id(self), metric_class) for metric_class in self.metrics_classes],
-            use_tqdm=False)
+        results = run_parallel(self._metric_evaluation,
+                               [(id(self), metric_class)
+                                for metric_class in self.metrics_classes],
+                               use_tqdm=False)
         for result, metric_class in zip(results, self.metrics_classes):
             metrics_values[metric_class.__name__].extend(result)
 
@@ -182,7 +177,6 @@ class CumulativeMetricsEvaluator(MetricsEvaluator):
 
 
 class InteractionMetricsEvaluator(MetricsEvaluator):
-
     def __init__(self, ground_truth_dataset, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.ground_truth_dataset = ground_truth_dataset
@@ -266,7 +260,6 @@ class InteractionMetricsEvaluator(MetricsEvaluator):
             self.items_entropy = lib.value_functions.Entropy.get_items_entropy(
                 self.ground_truth_consumption_matrix)
 
-
         metrics_values = defaultdict(list)
         results = run_parallel(self._metric_evaluation,
                                [(id(self), num_interactions, interaction_size,
@@ -280,7 +273,6 @@ class InteractionMetricsEvaluator(MetricsEvaluator):
 
 
 class CumulativeInteractionMetricsEvaluator(InteractionMetricsEvaluator):
-
     @staticmethod
     def metric_summarize(users_metric_values):
         return np.mean(list(users_metric_values.values()))
@@ -325,11 +317,14 @@ class CumulativeInteractionMetricsEvaluator(InteractionMetricsEvaluator):
                         uid, item, self.ground_truth_consumption_matrix[uid,
                                                                         item])
 
-            if (i+1) in interactions_to_evaluate:
-                print(f"Computing interaction {i+1} with {self.__class__.__name__}")
+            if (i + 1) in interactions_to_evaluate:
+                print(
+                    f"Computing interaction {i+1} with {self.__class__.__name__}"
+                )
                 metric_values.append(
                     self.metric_summarize(
-                        {uid: metric.compute(uid) for uid in self.uids}))
+                        {uid: metric.compute(uid)
+                         for uid in self.uids}))
 
         print(
             f"{self.__class__.__name__} spent {time.time()-start_time:.2f} seconds executing {metric_class.__name__} metric"
@@ -339,14 +334,12 @@ class CumulativeInteractionMetricsEvaluator(InteractionMetricsEvaluator):
 
 class UserCumulativeInteractionMetricsEvaluator(
         CumulativeInteractionMetricsEvaluator):
-
     @staticmethod
     def metric_summarize(users_metric_values):
         return users_metric_values
 
 
 class IterationsMetricsEvaluator(InteractionMetricsEvaluator):
-
     @staticmethod
     def metric_summarize(users_metric_values):
         return np.mean(users_metric_values)
@@ -377,17 +370,19 @@ class IterationsMetricsEvaluator(InteractionMetricsEvaluator):
                 ground_truth_dataset=self.ground_truth_dataset,
                 relevance_evaluator=self.relevance_evaluator)
         if 0 not in iterations_to_evaluate:
-            iterations_to_evaluate=[0]+iterations_to_evaluate
-        for i in range(len(iterations_to_evaluate)-1):
+            iterations_to_evaluate = [0] + iterations_to_evaluate
+        for i in range(len(iterations_to_evaluate) - 1):
             for uid in self.uids:
-                interaction_results = self.users_items_recommended[
-                    uid][iterations_to_evaluate[i]:iterations_to_evaluate[i+1]]
+                interaction_results = self.users_items_recommended[uid][
+                    iterations_to_evaluate[i]:iterations_to_evaluate[i + 1]]
                 for item in interaction_results:
                     metric.update_recommendation(
                         uid, item, self.ground_truth_consumption_matrix[uid,
                                                                         item])
             # if (i+1) in interactions_to_evaluate:
-            print(f"Computing iteration {iterations_to_evaluate[i+1]} with {self.__class__.__name__}")
+            print(
+                f"Computing iteration {iterations_to_evaluate[i+1]} with {self.__class__.__name__}"
+            )
             metric_values.append(
                 self.metric_summarize(
                     [metric.compute(uid) for uid in self.uids]))
@@ -397,8 +392,8 @@ class IterationsMetricsEvaluator(InteractionMetricsEvaluator):
         )
         return metric_values
 
-class Metric(Parameterizable):
 
+class Metric(Parameterizable):
     def __init__(self, ground_truth_dataset, relevance_evaluator, *args,
                  **kwargs):
         super().__init__(*args, **kwargs)
@@ -417,7 +412,6 @@ class Metric(Parameterizable):
 
 
 class Recall(Metric):
-
     def __init__(self, users_false_negative, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.users_true_positive = defaultdict(int)
@@ -435,7 +429,6 @@ class Recall(Metric):
 
 
 class Precision(Metric):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.users_true_positive = defaultdict(int)
@@ -456,7 +449,6 @@ class Precision(Metric):
 
 
 class Hits(Metric):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.users_true_positive = defaultdict(int)
@@ -470,7 +462,6 @@ class Hits(Metric):
 
 
 class EPC(Metric):
-
     def __init__(self, items_normalized_popularity, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.users_num_items_recommended = defaultdict(int)
@@ -488,8 +479,8 @@ class EPC(Metric):
         probability_seen = self.items_normalized_popularity[item]
         self.users_prob_not_seen_cumulated[uid] += 1 - probability_seen
 
-class Entropy(Metric):
 
+class Entropy(Metric):
     def __init__(self, items_entropy, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.users_num_items_recommended = defaultdict(int)
@@ -497,32 +488,35 @@ class Entropy(Metric):
         self.items_entropy = items_entropy
 
     def compute(self, uid):
-        return self.users_entropy_cumulated[uid]/self.users_num_items_recommended[uid]
+        return self.users_entropy_cumulated[
+            uid] / self.users_num_items_recommended[uid]
 
     def update_recommendation(self, uid, item, reward):
         self.users_num_items_recommended[uid] += 1
         self.users_entropy_cumulated[uid] += self.items_entropy[item]
 
-class TopItemsMembership(Metric):
 
+class TopItemsMembership(Metric):
     def __init__(self, items_feature_values, top_size, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.users_num_items_recommended = defaultdict(int)
         self.users_membership_count_cumulated = defaultdict(float)
         self.items_feature_values = items_feature_values
         self.top_size = top_size
-        self.top_items = set(np.argsort(items_feature_values)[::-1][:self.top_size])
+        self.top_items = set(
+            np.argsort(items_feature_values)[::-1][:self.top_size])
 
     def compute(self, uid):
-        return self.users_membership_count_cumulated[uid]/self.users_num_items_recommended[uid]
+        return self.users_membership_count_cumulated[
+            uid] / self.users_num_items_recommended[uid]
 
     def update_recommendation(self, uid, item, reward):
         self.users_num_items_recommended[uid] += 1
         if item in self.top_items:
             self.users_membership_count_cumulated[uid] += 1
 
-class ILD(Metric):
 
+class ILD(Metric):
     def __init__(self, items_distance, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.items_distance = items_distance
@@ -545,7 +539,6 @@ class ILD(Metric):
 
 
 class EPD:
-
     def __init__(self, items_distance, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.items_distance = items_distance
@@ -583,7 +576,6 @@ class EPD:
 
 
 class AP(Metric):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.users_true_positive = defaultdict(int)
@@ -601,17 +593,17 @@ class AP(Metric):
         else:
             self.users_false_positive[uid] += 1
 
-        self.users_cumulated_precision[uid] += self.users_true_positive[uid] / (
-            self.users_true_positive[uid] + self.users_false_positive[uid])
+        self.users_cumulated_precision[
+            uid] += self.users_true_positive[uid] / (
+                self.users_true_positive[uid] + self.users_false_positive[uid])
         self.users_num_recommendations[uid] += 1
 
 
 class GiniCoefficientInv(Metric):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.items_frequency = defaultdict(int)
-        for item in np.unique(self.ground_truth_dataset.data[:,1]):
+        for item in np.unique(self.ground_truth_dataset.data[:, 1]):
             self.items_frequency[item]
         self.is_computation_updated = False
         self.computation_cache = None
@@ -623,7 +615,7 @@ class GiniCoefficientInv(Metric):
             diff_sum = 0
             for i, xi in enumerate(x[:-1], 1):
                 diff_sum += np.sum(np.abs(xi - x[i:]))
-            self.computation_cache=diff_sum / (len(x)**2 * np.mean(x))
+            self.computation_cache = diff_sum / (len(x)**2 * np.mean(x))
         return 1 - self.computation_cache
 
     def update_recommendation(self, uid, item, reward):
@@ -633,7 +625,6 @@ class GiniCoefficientInv(Metric):
 
 
 class UsersCoverage(Metric):
-
     def __init__(self, users_covered=defaultdict(bool), *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.users_covered = users_covered
@@ -643,10 +634,12 @@ class UsersCoverage(Metric):
         return np.sum(l) / len(l)
 
     def update_recommendation(self, uid, item, reward):
-        if self.users_covered[uid] == False and self.relevance_evaluator.is_relevant(reward):
+        if self.users_covered[
+                uid] == False and self.relevance_evaluator.is_relevant(reward):
             self.users_covered[uid] = True
             # else:
-                # self.users_covered[uid] = False
+            # self.users_covered[uid] = False
+
 
 def mapk(actual, predicted, k):
     score = 0.0
@@ -729,7 +722,7 @@ def get_items_distance(matrix):
         # items_similarity = cov_matrix/np.sqrt(np.outer(cov_diag,cov_diag))
     else:
         items_similarity = np.corrcoef(matrix.T)
-    items_similarity = (items_similarity+1)/2
+    items_similarity = (items_similarity + 1) / 2
     # items_similarity[items_similarity < 0] = 0
     return 1 - items_similarity
 

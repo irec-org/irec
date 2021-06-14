@@ -15,7 +15,6 @@ import time
 
 
 class InteractorRunner():
-
     def __init__(self, dm, interactors_general_settings,
                  interactors_preprocessor_parameters,
                  evaluation_policies_parameters):
@@ -57,18 +56,21 @@ class InteractorRunner():
             pdm.save('interactors_selection_cache', answers['value_functions'])
 
         interactors_class_names = dict(
-            zip([v['name'] for v in self.interactors_general_settings.values()],
-                self.interactors_general_settings.keys()))
+            zip([
+                v['name'] for v in self.interactors_general_settings.values()
+            ], self.interactors_general_settings.keys()))
 
         interactors_classes = list(
-            map(lambda x: eval('value_functions.' + interactors_class_names[x]),
-                answers['value_functions']))
+            map(
+                lambda x: eval('value_functions.' + interactors_class_names[x]
+                               ), answers['value_functions']))
         return interactors_classes
 
     def create_interactor(self, itr_class):
         if self.interactors_preprocessor_parameters[
                 self.dm.dataset_preprocessor.name][
-                    itr_class.__name__] != None and 'parameters' in self.interactors_preprocessor_parameters[
+                    itr_class.
+                    __name__] != None and 'parameters' in self.interactors_preprocessor_parameters[
                         self.dm.dataset_preprocessor.name][itr_class.__name__]:
             parameters = self.interactors_preprocessor_parameters[
                 self.dm.dataset_preprocessor.name][
@@ -85,8 +87,9 @@ class InteractorRunner():
         evaluation_policy_name = open(
             "settings/interactors_evaluation_policy.txt").read().replace(
                 '\n', '')
-        evaluation_policy = eval('evaluation_policy.' + evaluation_policy_name)(
-            **self.evaluation_policies_parameters[evaluation_policy_name])
+        evaluation_policy = eval(
+            'evaluation_policy.' + evaluation_policy_name)(
+                **self.evaluation_policies_parameters[evaluation_policy_name])
         return evaluation_policies
 
     def run_interactor(self, itr, forced_run):
@@ -116,7 +119,10 @@ class InteractorRunner():
         self = ctypes.cast(obj_id, ctypes.py_object).value
         self.run_interactor(itr, forced_run)
 
-    def run_interactors(self, interactors_classes, forced_run=False,parallel=False):
+    def run_interactors(self,
+                        interactors_classes,
+                        forced_run=False,
+                        parallel=False):
 
         args = [(id(self), self.create_interactor(itr_class), forced_run)
                 for itr_class in interactors_classes]
@@ -140,7 +146,9 @@ class InteractorRunner():
             futures = set()
             for itr_class in interactors_classes:
                 if interactors_search_parameters[itr_class.__name__] == None:
-                    raise SystemError(f'ValueFunction doesnt has search parameters ({itr_class.__name__})')
+                    raise SystemError(
+                        f'ValueFunction doesnt has search parameters ({itr_class.__name__})'
+                    )
                 for parameters in interactors_search_parameters[
                         itr_class.__name__]:
                     f = executor.submit(self._run_interactor, id(self),

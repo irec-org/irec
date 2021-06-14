@@ -5,25 +5,33 @@ from . import Entropy, MostPopular
 import matplotlib.pyplot as plt
 import os
 import scipy.stats
+
+
 class MostRepresentative(ExperimentalValueFunction):
-    def __init__(self,*args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
     @staticmethod
     def get_items_representativeness(items_latent_factors):
         # return np.linalg.norm(items_latent_factors,axis=1,ord=np.inf)
-        return np.sum(items_latent_factors**2,axis=1)
+        return np.sum(items_latent_factors**2, axis=1)
 
-    def reset(self,observation):
-        train_dataset=observation
+    def reset(self, observation):
+        train_dataset = observation
         super().reset(train_dataset)
         self.train_dataset = train_dataset
-        self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[:,2],(self.train_dataset.data[:,0],self.train_dataset.data[:,1])),(self.train_dataset.num_total_users,self.train_dataset.num_total_items))
+        self.train_consumption_matrix = scipy.sparse.csr_matrix(
+            (self.train_dataset.data[:, 2],
+             (self.train_dataset.data[:, 0], self.train_dataset.data[:, 1])),
+            (self.train_dataset.num_total_users,
+             self.train_dataset.num_total_items))
         # uids = self.test_users
-        self.items_representativeness = self.get_items_representativeness(items_latent_factors)
+        self.items_representativeness = self.get_items_representativeness(
+            items_latent_factors)
 
-    def action_estimates(self,candidate_actions):
-        uid=candidate_actions[0];candidate_items=candidate_actions[1]
+    def action_estimates(self, candidate_actions):
+        uid = candidate_actions[0]
+        candidate_items = candidate_actions[1]
         items_score = self.items_representativeness[candidate_items]
         return items_score, None
 

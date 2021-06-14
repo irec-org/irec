@@ -50,7 +50,6 @@ import yaml
 
 
 class Singleton:
-
     def __init__(self, decorated):
         self._decorated = decorated
 
@@ -67,7 +66,6 @@ class Singleton:
 
 @Singleton
 class Settings:
-
     def __init__(self) -> None:
         self.settings = None
         pass
@@ -113,8 +111,8 @@ def class2dict(instance):
 
 def generate_table_spec(nums_interactions_to_show, num_datasets_preprocessors):
     res = '|'
-    for i in range(1 +
-                   len(nums_interactions_to_show) * num_datasets_preprocessors):
+    for i in range(1 + len(nums_interactions_to_show) *
+                   num_datasets_preprocessors):
         res += 'c'
         if i % (len(nums_interactions_to_show)) == 0:
             res += '|'
@@ -169,8 +167,10 @@ def defaultify(d):
         return d
     return defaultdict(lambda: dict, {k: defaultify(v) for k, v in d.items()})
 
+
 def _do_nothing(d):
     return d
+
 
 def load_settings():
     d = dict()
@@ -207,7 +207,8 @@ def load_settings():
                 **{
                     'name': k
                 }
-            } for k, setting in d['datasets_preprocessors_parameters'].items()
+            }
+            for k, setting in d['datasets_preprocessors_parameters'].items()
         }
     with open(
             dirname(realpath(__file__)) + sep + "settings" + sep +
@@ -248,7 +249,7 @@ def plot_similar_items(ys, method1, method2, title=None):
 
 
 def get_experiment_run_id(dm, evaluation_policy, itr_id):
-    return os.path.join(dm.get_id(), evaluation_policy.get_id(),itr_id)
+    return os.path.join(dm.get_id(), evaluation_policy.get_id(), itr_id)
 
 
 def run_interactor(itr, evaluation_policy, dm, forced_run, agent_id):
@@ -264,24 +265,24 @@ def run_interactor(itr, evaluation_policy, dm, forced_run, agent_id):
             raise SystemError
 
         pdm = PersistentDataManager(directory='results')
-        pdm.save(
-            get_experiment_run_id(dm, evaluation_policy, agent_id),
-            history_items_recommended)
+        pdm.save(get_experiment_run_id(dm, evaluation_policy, agent_id),
+                 history_items_recommended)
     else:
-        print(
-            "Already executed",
-            get_experiment_run_id(dm, evaluation_policy, agent_id))
+        print("Already executed",
+              get_experiment_run_id(dm, evaluation_policy, agent_id))
 
-def get_agent_id(agent_name,agent_parameters):
+
+def get_agent_id(agent_name, agent_parameters):
     # agent_dict = class2dict(agent)
     return agent_name + '_' + json.dumps(agent_parameters,
                                          separators=(',', ':'))
 
+
 # def get_agent_id(agent, template_parameters):
-    # agent_dict = class2dict(agent)
-    # new_agent_settings = update_nested_dict(template_parameters, agent_dict)
-    # return agent.name + '_' + json.dumps(new_agent_settings,
-                                         # separators=(',', ':'))
+# agent_dict = class2dict(agent)
+# new_agent_settings = update_nested_dict(template_parameters, agent_dict)
+# return agent.name + '_' + json.dumps(new_agent_settings,
+# separators=(',', ':'))
 
 
 def get_agent_id_from_settings(agent, settings):
@@ -333,7 +334,8 @@ def create_agent(agent_name, agent_settings):
                        name=agent_name)
 
 
-def create_agent_from_settings(agent_name, dataset_preprocessor_name, settings):
+def create_agent_from_settings(agent_name, dataset_preprocessor_name,
+                               settings):
     agent_settings = settings['agents_preprocessor_parameters'][
         dataset_preprocessor_name][agent_name]
     agent = create_agent(agent_name, agent_settings)
@@ -344,5 +346,7 @@ def default_to_regular(d):
     if isinstance(d, defaultdict):
         d = {k: default_to_regular(v) for k, v in d.items()}
     return d
-def get_agent_pretty_name(agent_name,settings):
+
+
+def get_agent_pretty_name(agent_name, settings):
     return settings['interactors_general_settings'][agent_name]['name']

@@ -12,7 +12,6 @@ from .LinearICF import LinearICF
 
 
 class LinearUCB(LinearICF):
-
     def __init__(self, alpha, zeta=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if alpha != None:
@@ -22,12 +21,13 @@ class LinearUCB(LinearICF):
 
         self.parameters.extend(['alpha'])
 
-    def reset(self,observation):
-        train_dataset=observation
+    def reset(self, observation):
+        train_dataset = observation
         super().reset(train_dataset)
 
-    def action_estimates(self,candidate_actions):
-        uid=candidate_actions[0];candidate_items=candidate_actions[1]
+    def action_estimates(self, candidate_actions):
+        uid = candidate_actions[0]
+        candidate_items = candidate_actions[1]
         b = self.bs[uid]
         A = self.As[uid]
         mean = np.dot(np.linalg.inv(A), b)
@@ -38,7 +38,8 @@ class LinearUCB(LinearICF):
 
         return items_score, None
 
-    def update(self,observation,action,reward,info):
-        uid=action[0];item=action[1];additional_data=info
-        return super().update(observation,action,reward,info)
-
+    def update(self, observation, action, reward, info):
+        uid = action[0]
+        item = action[1]
+        additional_data = info
+        return super().update(observation, action, reward, info)

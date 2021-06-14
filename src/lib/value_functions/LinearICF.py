@@ -11,12 +11,11 @@ from lib.utils.PersistentDataManager import PersistentDataManager
 
 
 class LinearICF(ICF):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def reset(self,observation):
-        train_dataset=observation
+    def reset(self, observation):
+        train_dataset = observation
         super().reset(train_dataset)
         self.train_dataset = train_dataset
         self.train_consumption_matrix = scipy.sparse.csr_matrix(
@@ -48,19 +47,22 @@ class LinearICF(ICF):
         self.bs = defaultdict(lambda: np.zeros(self.num_latent_factors))
         self.As = defaultdict(lambda: self.get_user_lambda() * self.I)
 
-    def action_estimates(self,candidate_actions):
-        uid=candidate_actions[0];candidate_items=candidate_actions[1]
+    def action_estimates(self, candidate_actions):
+        uid = candidate_actions[0]
+        candidate_items = candidate_actions[1]
         b = self.bs[uid]
         A = self.As[uid]
         mean = np.dot(np.linalg.inv(A), b)
         cov = np.linalg.inv(A) * self.var
 
-        items_score  = mean @ self.items_means[candidate_items].T
+        items_score = mean @ self.items_means[candidate_items].T
 
         return items_score, None
 
-    def update(self,observation,action,reward,info):
-        uid=action[0];item=action[1];additional_data=info
+    def update(self, observation, action, reward, info):
+        uid = action[0]
+        item = action[1]
+        additional_data = info
         max_item_mean = self.items_means[item]
         b = self.bs[uid]
         A = self.As[uid]

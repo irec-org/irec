@@ -12,10 +12,12 @@ import pickle
 import json
 from .ValueFunction import ValueFunction
 
-class ExperimentalValueFunction(ValueFunction,Parameterizable):
-    def __init__(self,*args, **kwargs):
-        ValueFunction.__init__(self,*args, **kwargs)
+
+class ExperimentalValueFunction(ValueFunction, Parameterizable):
+    def __init__(self, *args, **kwargs):
+        ValueFunction.__init__(self, *args, **kwargs)
         Parameterizable.__init__(self)
-    def reset(self,observation):
-        train_dataset=observation
-        ValueFunction.reset(self,train_dataset)
+
+    def reset(self, observation):
+        train_dataset = observation
+        ValueFunction.reset(self, train_dataset)

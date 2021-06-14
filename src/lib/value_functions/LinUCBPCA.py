@@ -12,7 +12,6 @@ import sklearn.decomposition
 
 
 class LinUCBPCA(MFValueFunction):
-
     def __init__(self, alpha, zeta=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if alpha != None:
@@ -21,8 +20,8 @@ class LinUCBPCA(MFValueFunction):
             self.alpha = 1 + np.sqrt(np.log(2 / zeta) / 2)
         self.parameters.extend(['alpha'])
 
-    def reset(self,observation):
-        train_dataset=observation
+    def reset(self, observation):
+        train_dataset = observation
         super().reset(train_dataset)
         self.train_dataset = train_dataset
         self.train_consumption_matrix = scipy.sparse.csr_matrix(
@@ -32,7 +31,8 @@ class LinUCBPCA(MFValueFunction):
              self.train_dataset.num_total_items))
         self.num_total_items = self.train_dataset.num_total_items
 
-        transformer = sklearn.decomposition.TruncatedSVD(n_components=self.num_lat)
+        transformer = sklearn.decomposition.TruncatedSVD(
+            n_components=self.num_lat)
         transformer.fit(self.train_consumption_matrix.T)
         items_weights = transformer.transform(self.train_consumption_matrix.T)
         self.items_weights = items_weights
@@ -47,8 +47,9 @@ class LinUCBPCA(MFValueFunction):
         self.bs = defaultdict(lambda: np.ones(self.num_latent_factors))
         self.As = defaultdict(lambda: self.I.copy())
 
-    def action_estimates(self,candidate_actions):
-        uid=candidate_actions[0];candidate_items=candidate_actions[1]
+    def action_estimates(self, candidate_actions):
+        uid = candidate_actions[0]
+        candidate_items = candidate_actions[1]
         b = self.bs[uid]
         A = self.As[uid]
         mean = np.dot(np.linalg.inv(A), b)
@@ -62,11 +63,13 @@ class LinUCBPCA(MFValueFunction):
         # print(uid,best_item,items_user_similarity[best_item],items_uncertainty[best_item])
         return items_score, None
 
-    def update(self,observation,action,reward,info):
-        uid=action[0];item=action[1];additional_data=info
+    def update(self, observation, action, reward, info):
+        uid = action[0]
+        item = action[1]
+        additional_data = info
         max_item_latent_factors = self.items_weights[item]
         b = self.bs[uid]
         A = self.As[uid]
-        A += max_item_latent_factors[:,
-                                     None].dot(max_item_latent_factors[None, :])
+        A += max_item_latent_factors[:, None].dot(
+            max_item_latent_factors[None, :])
         b += reward * max_item_latent_factors

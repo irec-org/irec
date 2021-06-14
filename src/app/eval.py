@@ -4,7 +4,7 @@ import utils
 parser = argparse.ArgumentParser()
 parser.add_argument('-m', nargs='*')
 parser.add_argument('-b', nargs='*')
-parser.add_argument('-i', default=[5,10,20,50,100],nargs='*')
+parser.add_argument('-i', default=[5, 10, 20, 50, 100], nargs='*')
 settings = utils.load_settings()
 utils.load_settings_to_parser(settings, parser)
 args = parser.parse_args()
@@ -53,10 +53,10 @@ def evaluate_itr(metric_evaluator_id, dm_id, agent_name):
 
     metrics_pdm = PersistentDataManager(directory='metrics')
     # if metrics_pdm.file_exists(
-            # os.path.join(
-                # utils.get_experiment_run_id(dm, evaluation_policy, agent_id),
-                # metric_evaluator.get_id())):
-        # print()
+    # os.path.join(
+    # utils.get_experiment_run_id(dm, evaluation_policy, agent_id),
+    # metric_evaluator.get_id())):
+    # print()
     if isinstance(metric_evaluator, CumulativeInteractionMetricsEvaluator):
         metrics_values = metric_evaluator.evaluate(
             evaluation_policy.num_interactions,
@@ -80,7 +80,7 @@ def evaluate_itr(metric_evaluator_id, dm_id, agent_name):
 # parser = argparse.ArgumentParser(description='Grid search')
 BUFFER_SIZE_EVALUATOR = 50
 
-nums_interactions_to_show = list(map(int,args.i))
+nums_interactions_to_show = list(map(int, args.i))
 
 # metrics_classes = [metrics.Entropy,  metrics.EPC]
 # metrics_classes = [metrics.Recall, metrics.Hits, metrics.EPC, metrics.UsersCoverage, metrics.ILD,metrics.GiniCoefficientInv]

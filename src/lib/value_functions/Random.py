@@ -2,16 +2,19 @@ import numpy as np
 from tqdm import tqdm
 from .ExperimentalValueFunction import ExperimentalValueFunction
 import random
+
+
 class Random(ExperimentalValueFunction):
-    def __init__(self,*args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def reset(self,observation):
-        train_dataset=observation
+    def reset(self, observation):
+        train_dataset = observation
         super().reset(train_dataset)
 
-    def action_estimates(self,candidate_actions):
-        uid=candidate_actions[0];candidate_items=candidate_actions[1]
+    def action_estimates(self, candidate_actions):
+        uid = candidate_actions[0]
+        candidate_items = candidate_actions[1]
         return np.random.rand(len(candidate_items)), None
         # uids = self.test_users
         # num_total_users = len(uids)
@@ -21,4 +24,3 @@ class Random(ExperimentalValueFunction):
         #     random.shuffle(iids)
         #     self.results[uid].extend(iids[:self.interactions*self.interaction_size])
         # self.save_results()
-        

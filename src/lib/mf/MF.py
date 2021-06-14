@@ -10,7 +10,8 @@ from numba import jit, prange
 from lib.utils.Parameterizable import Parameterizable
 import metrics
 
-@jit(nopython=True,parallel=True)
+
+@jit(nopython=True, parallel=True)
 def _predict_sparse(users_weights, items_weights, users_items):
     n = len(users_items[0])
     results = np.zeros(n)
@@ -20,26 +21,28 @@ def _predict_sparse(users_weights, items_weights, users_items):
         results[i] = users_weights[uid] @ items_weights[iid]
     return results
 
+
 class MF(Parameterizable):
     def __init__(self, num_lat=10, *args, **kwargs):
-        super().__init__(*args,**kwargs)
+        super().__init__(*args, **kwargs)
         self.num_lat = num_lat
         self.parameters.extend(['num_lat'])
 
-    def normalize_matrix(self,matrix):
-        return matrix/np.max(matrix)
+    def normalize_matrix(self, matrix):
+        return matrix / np.max(matrix)
 
     def fit(self):
         self.print_parameters()
 
-    def predict_sparse(self,users_items):
-        return _predict_sparse(self.users_weights,self.items_weights,users_items)
+    def predict_sparse(self, users_items):
+        return _predict_sparse(self.users_weights, self.items_weights,
+                               users_items)
 
-    def predict(self,X):
-        if isinstance(X,scipy.sparse.spmatrix):
-            observed_ui = (X.tocoo().row,X.tocoo().col)
+    def predict(self, X):
+        if isinstance(X, scipy.sparse.spmatrix):
+            observed_ui = (X.tocoo().row, X.tocoo().col)
             X = observed_ui
         return self.predict_sparse(X)
 
-    def score(self,X):
-        return metrics.rmse(X.data,self.predict(X))
+    def score(self, X):
+        return metrics.rmse(X.data, self.predict(X))

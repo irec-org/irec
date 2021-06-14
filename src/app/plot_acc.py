@@ -44,7 +44,8 @@ evaluation_policies_parameters = yaml.load(
     Loader=yaml.SafeLoader)
 
 interactors_classes_names_to_names = {
-    k: v['name'] for k, v in interactors_general_settings.items()
+    k: v['name']
+    for k, v in interactors_general_settings.items()
 }
 
 ir = InteractorRunner(dm, interactors_general_settings,
@@ -66,7 +67,9 @@ metrics_evaluators = [
 
 evaluation_policy = ir.get_interactors_evaluation_policy()
 
-fig, axs = plt.subplots(nrows=len(metrics_evaluators), ncols=len(metrics_classes), figsize=(18, 17))
+fig, axs = plt.subplots(nrows=len(metrics_evaluators),
+                        ncols=len(metrics_classes),
+                        figsize=(18, 17))
 fig.suptitle(
     f"Top-{evaluation_policy.interaction_size} recommendation, {dm.dataset_preprocessor.name}"
 )
@@ -104,7 +107,7 @@ for metric_evaluator in metrics_evaluators:
         elif isinstance(metric_evaluator, CumulativeMetricsEvaluator):
             ax.set_xlabel("Time", size=18)
         ax.set_ylabel(metric_name, size=18)
-        ax.yaxis.set_label_coords(-0.1,1.02)
+        ax.yaxis.set_label_coords(-0.1, 1.02)
         j += 1
     i += 1
 

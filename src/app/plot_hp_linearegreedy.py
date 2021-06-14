@@ -16,17 +16,18 @@ dsf = dsf.load()
 mf = ICFPMF()
 mf.load_var(dsf.matrix_users_ratings[dsf.train_uids])
 
-itr = value_functions.LinearEGreedy(var=mf.var,
-                                            user_lambda=mf.user_lambda,
-                                            consumption_matrix=dsf.matrix_users_ratings,
+itr = value_functions.LinearEGreedy(
+    var=mf.var,
+    user_lambda=mf.user_lambda,
+    consumption_matrix=dsf.matrix_users_ratings,
 )
 METRIC_NAME = 'precision'
 metric_values = defaultdict(dict)
-for i in np.linspace(0,0.1,6):
+for i in np.linspace(0, 0.1, 6):
     itr.epsilon = i
 
     itr.result = itr.load_result()
-    for k in tqdm(range(1,itr.get_iterations()+1)):
+    for k in tqdm(range(1, itr.get_iterations() + 1)):
         me = MetricsEvaluator(itr.get_id(), k)
         me = me.load()
 

@@ -4,7 +4,6 @@ import lib.value_functions.Entropy
 
 
 class ActionSelectionPolicy:
-
     def __init__(self, *args, **kwargs):
         pass
 
@@ -19,7 +18,6 @@ class ActionSelectionPolicy:
 
 
 class ASPGreedy(ActionSelectionPolicy):
-
     def select_actions(self, actions, action_estimates, actions_num):
         return (actions[0],
                 actions[1][np.argpartition(action_estimates,
@@ -33,7 +31,6 @@ class ASPGreedy(ActionSelectionPolicy):
 
 
 class ASPEGreedy(ActionSelectionPolicy):
-
     def __init__(self, epsilon, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
         self.epsilon = epsilon
@@ -68,7 +65,6 @@ class ASPEGreedy(ActionSelectionPolicy):
 
 
 class ASPReranker(ActionSelectionPolicy):
-
     def __init__(self, rule, input_filter_size, rerank_limit, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
         self.rule = rule
@@ -77,9 +73,8 @@ class ASPReranker(ActionSelectionPolicy):
 
     def select_actions(self, actions, action_estimates, actions_num):
         if self.users_num_consumption[actions[0]] > self.rerank_limit:
-            return (actions[0],
-                    actions[1][np.argpartition(action_estimates,
-                                               -actions_num)[-actions_num:]]), None
+            return (actions[0], actions[1][np.argpartition(
+                action_estimates, -actions_num)[-actions_num:]]), None
 
         top_estimates_index_actions = np.argpartition(
             action_estimates,
@@ -95,7 +90,7 @@ class ASPReranker(ActionSelectionPolicy):
 
     def update(self, observation, action, reward, info):
         if reward >= 4:
-            self.users_num_consumption[action[0]]+=1
+            self.users_num_consumption[action[0]] += 1
         self.rule.update(observation, action, reward, info)
 
     def reset(self, observation):

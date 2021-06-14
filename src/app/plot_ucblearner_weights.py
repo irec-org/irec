@@ -9,8 +9,7 @@ import matplotlib.pyplot as plt
 import pickle
 plt.rcParams['font.size'] = 14
 
-
-fig, axs = plt.subplots(1,3)
+fig, axs = plt.subplots(1, 3)
 fig.set_size_inches(15, 3)
 fig.subplots_adjust(top=0.85, wspace=0.3, hspace=0.5)
 # i = 0
@@ -48,7 +47,9 @@ fig.subplots_adjust(top=0.85, wspace=0.3, hspace=0.5)
 #     i+= 1
 
 i = 0
-for ax, base,base_name in zip(axs,['tr_te_ml_10m','tr_te_good_books','tr_te_yahoo_music'],['ML-10M','Good-Books','Yahoo-Music']):
+for ax, base, base_name in zip(
+        axs, ['tr_te_ml_10m', 'tr_te_good_books', 'tr_te_yahoo_music'],
+    ['ML-10M', 'Good-Books', 'Yahoo-Music']):
 
     ax.set_title(base_name)
     dsf = DatasetFormatter(base=base)
@@ -56,24 +57,34 @@ for ax, base,base_name in zip(axs,['tr_te_ml_10m','tr_te_good_books','tr_te_yaho
 
     model = value_functions.OurMethod1(name_prefix=dsf.base)
 
-    with open(os.path.join(dsf.DIRS['result'],"weights_"+model.get_id()+".pickle"),'rb') as f:
+    with open(
+            os.path.join(dsf.DIRS['result'],
+                         "weights_" + model.get_id() + ".pickle"), 'rb') as f:
         users_global_model_weights = pickle.load(f)
 
-
-    xs = np.linspace(0,users_global_model_weights.shape[1]-1,11,dtype=int)
+    xs = np.linspace(0, users_global_model_weights.shape[1] - 1, 11, dtype=int)
     # xs = [1, 5, 10, 15, 20, 40, 60, 80, 100]
     ax.errorbar(xs,
-                 y=np.mean(users_global_model_weights[:,xs],axis=0),
-                 yerr=np.std(users_global_model_weights[:,xs],axis=0),capsize=6,
-                    color='k',marker='o',markersize=6,markerfacecolor='red',linewidth=None)
+                y=np.mean(users_global_model_weights[:, xs], axis=0),
+                yerr=np.std(users_global_model_weights[:, xs], axis=0),
+                capsize=6,
+                color='k',
+                marker='o',
+                markersize=6,
+                markerfacecolor='red',
+                linewidth=None)
     ax.set_xlabel("Interactions")
     # if i == 0:
-    ax.set_ylabel("Parameter $\Phi$",fontsize=14)
+    ax.set_ylabel("Parameter $\Phi$", fontsize=14)
     # ax.set_xticklabels(xs)
-    i+= 1
-    ax.set_yticks([0,0.25,0.5,0.75,1])
-    ax.set_xticks(np.linspace(0,100,11,dtype=int))
-    ax.set_xlim(-0.95,100.5)
+    i += 1
+    ax.set_yticks([0, 0.25, 0.5, 0.75, 1])
+    ax.set_xticks(np.linspace(0, 100, 11, dtype=int))
+    ax.set_xlim(-0.95, 100.5)
     # ax.set_ylim(0,1.03)
-fig.savefig(os.path.join(dsf.DIRS['img'],"weights_"+model.get_id()+".png"),bbox_inches='tight')
-fig.savefig(os.path.join(dsf.DIRS['img'],"weights_"+model.get_id()+".eps"),bbox_inches='tight')
+fig.savefig(os.path.join(dsf.DIRS['img'],
+                         "weights_" + model.get_id() + ".png"),
+            bbox_inches='tight')
+fig.savefig(os.path.join(dsf.DIRS['img'],
+                         "weights_" + model.get_id() + ".eps"),
+            bbox_inches='tight')

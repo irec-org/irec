@@ -36,7 +36,7 @@ from lib.utils.InteractorCache import InteractorCache
 from lib.utils.PersistentDataManager import PersistentDataManager
 import metrics
 
-metrics_classes = [metrics.Hits,metrics.Precision,metrics.Recall]
+metrics_classes = [metrics.Hits, metrics.Precision, metrics.Recall]
 
 interactors_preprocessor_parameters = yaml.load(
     open("settings" + sep + "interactors_preprocessor_parameters.yaml"),
@@ -54,7 +54,8 @@ with open("settings" + sep + "datasets_preprocessors_parameters.yaml") as f:
     datasets_preprocessors = yaml.load(f, Loader=loader)
 
     datasets_preprocessors = {
-        setting['name']: setting for setting in datasets_preprocessors
+        setting['name']: setting
+        for setting in datasets_preprocessors
     }
 
 dm = DatasetManager()
@@ -73,14 +74,11 @@ history_rates_to_train = [0.1]
 # history_rates_to_train = [0.1,0.3,0.5,0.6,0.8]
 # history_rates_to_train = [0.8]
 # def process(history_rate, dataset_preprocessor, dataset, consumption_matrix,
-            # dm):
-
-
-
+# dm):
 
 # with concurrent.futures.ProcessPoolExecutor(
-        # max_workers=args.num_tasks) as executor:
-    # futures = set()
+# max_workers=args.num_tasks) as executor:
+# futures = set()
 for dataset_preprocessor in datasets_preprocessors:
     dm.initialize_engines(dataset_preprocessor)
     dm.load()
@@ -96,33 +94,38 @@ for dataset_preprocessor in datasets_preprocessors:
     for history_rate in history_rates_to_train:
         print('%.2f%% of history' % (history_rate * 100))
         for interactor_class in interactors_classes:
-            metric_evaluator = metrics.IterationsMetricsEvaluator(dataset, metrics_classes,relevance_evaluator=metrics.ThresholdRelevanceEvaluator(3.99))
+            metric_evaluator = metrics.IterationsMetricsEvaluator(
+                dataset,
+                metrics_classes,
+                relevance_evaluator=metrics.ThresholdRelevanceEvaluator(3.99))
             itr = interactor_class(**interactors_preprocessor_parameters[
-                dataset_preprocessor['name']][interactor_class.__name__]['parameters'])
+                dataset_preprocessor['name']][interactor_class.__name__]
+                                   ['parameters'])
 
             start_evaluation_policy = eval('evaluation_policy.' + args.estart)(
                 **evaluation_policies_parameters[args.estart])
             start_evaluation_policy.recommend_test_data_rate_limit = history_rate
             # no need history rate s but i will put it because of consistency
-            file_name = 's_' + str(history_rate) + '_' + InteractorCache().get_id(
-                dm, start_evaluation_policy, itr)
+            file_name = 's_' + str(history_rate) + '_' + InteractorCache(
+            ).get_id(dm, start_evaluation_policy, itr)
 
-            pdm = PersistentDataManager(directory='results',)
+            pdm = PersistentDataManager(directory='results', )
             # if pdm.file_exists(file_name):
-                # print("File already exists")
-                # history_items_recommended = pdm.load(file_name)
-                # history_items_recommended = np.array(history_items_recommended)
+            # print("File already exists")
+            # history_items_recommended = pdm.load(file_name)
+            # history_items_recommended = np.array(history_items_recommended)
             # else:
-                # print(f"File doesnt exists {file_name}")
-                # raise SystemError
+            # print(f"File doesnt exists {file_name}")
+            # raise SystemError
 
             itr = interactor_class(**interactors_preprocessor_parameters[
-                dataset_preprocessor['name']][interactor_class.__name__]['parameters'])
+                dataset_preprocessor['name']][interactor_class.__name__]
+                                   ['parameters'])
 
             last_evaluation_policy = eval('evaluation_policy.' + args.elast)(
                 **evaluation_policies_parameters[args.elast])
-            file_name = 'e_' + str(history_rate) + '_' + InteractorCache().get_id(
-                dm, last_evaluation_policy, itr)
+            file_name = 'e_' + str(history_rate) + '_' + InteractorCache(
+            ).get_id(dm, last_evaluation_policy, itr)
 
             if pdm.file_exists(file_name):
                 print("File already exists")
@@ -131,13 +134,15 @@ for dataset_preprocessor in datasets_preprocessors:
                 # metrics_values = metric_evaluator.evaluate(history_items_recommended)
                 metrics_values = metric_evaluator.evaluate(
                     last_evaluation_policy.num_interactions,
-                    last_evaluation_policy.interaction_size, history_items_recommended,interactions_to_evaluate=[5, 10, 20,50,100])
+                    last_evaluation_policy.interaction_size,
+                    history_items_recommended,
+                    interactions_to_evaluate=[5, 10, 20, 50, 100])
                 print(metrics_values)
                 # metrics_pdm = PersistentDataManager(directory='metrics')
                 # for metric_name, metric_values in metrics_values.items():
-                    # metrics_pdm.save(
-                        # os.path.join(InteractorCache().get_id(dm, last_evaluation_policy, itr),
-                                     # metric_evaluator.get_id(), metric_name+'_'+str(history_rate)), metric_values)
+                # metrics_pdm.save(
+                # os.path.join(InteractorCache().get_id(dm, last_evaluation_policy, itr),
+                # metric_evaluator.get_id(), metric_name+'_'+str(history_rate)), metric_values)
                 pass
             else:
                 print(f"File doenst exists {file_name}")
