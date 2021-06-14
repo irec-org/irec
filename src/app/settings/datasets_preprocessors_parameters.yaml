@@ -170,7 +170,6 @@ MovieLens 10M Pop:
       keep_popular: True,
       num_items_threshold: 918,
     }}
-    - {CombineTrainTest: {}}
     - {TrainTestConsumption: {
       train_size: 0.8,
       test_consumes: 1,
@@ -186,7 +185,6 @@ MovieLens 10M Non-Pop:
       keep_popular: False,
       num_items_threshold: 918,
     }}
-    - {CombineTrainTest: {}}
     - {TrainTestConsumption: {
       train_size: 0.8,
       test_consumes: 1,
@@ -203,19 +201,12 @@ MovieLens 10M Pop Validation:
       keep_popular: True,
       num_items_threshold: 918,
     }}
-    - {CombineTrainTest: {}}
     - {TrainTestConsumption: {
       train_size: 0.8,
       test_consumes: 1,
       crono: False,
       random_seed: 0,
       } }
-    - {TRTETrainValidation:{
-  train_size: 0.8,
-  test_consumes: 1,
-  crono: False,
-  random_seed: 0
-  }}
 MovieLens 10M Non-Pop Validation:
   dataset_descriptor:
     dataset_dir: Train-Test_ML-10M/
@@ -225,19 +216,12 @@ MovieLens 10M Non-Pop Validation:
       keep_popular: False,
       num_items_threshold: 918,
     }}
-    - {CombineTrainTest: {}}
     - {TrainTestConsumption: {
       train_size: 0.8,
       test_consumes: 1,
       crono: False,
       random_seed: 0,
       } }
-    - {TRTETrainValidation:{
-  train_size: 0.8,
-  test_consumes: 1,
-  crono: False,
-  random_seed: 0
-  }}
 Yahoo Music Non-Pop:
   dataset_descriptor:
     dataset_dir: Train-Test_Yahoo-Music/
@@ -247,19 +231,12 @@ Yahoo Music Non-Pop:
       keep_popular: False,
       num_items_threshold: 92,
     }}
-    - {CombineTrainTest: {}}
     - {TrainTestConsumption: {
       train_size: 0.8,
       test_consumes: 1,
       crono: False,
       random_seed: 0,
       } }
-    - {TRTETrainValidation:{
-  train_size: 0.8,
-  test_consumes: 1,
-  crono: False,
-  random_seed: 0
-  }}
 Yahoo Music Pop:
   dataset_descriptor:
     dataset_dir: Train-Test_Yahoo-Music/
@@ -269,19 +246,12 @@ Yahoo Music Pop:
       keep_popular: True,
       num_items_threshold: 92,
     }}
-    - {CombineTrainTest: {}}
     - {TrainTestConsumption: {
       train_size: 0.8,
       test_consumes: 1,
       crono: False,
       random_seed: 0,
       } }
-    - {TRTETrainValidation:{
-  train_size: 0.8,
-  test_consumes: 1,
-  crono: False,
-  random_seed: 0
-  }}
 Good Books Non-Pop:
   dataset_descriptor:
     dataset_dir: Train-Test_Good-Books/
@@ -291,19 +261,12 @@ Good Books Non-Pop:
       keep_popular: False,
       num_items_threshold: 640,
     }}
-    - {CombineTrainTest: {}}
     - {TrainTestConsumption: {
       train_size: 0.8,
       test_consumes: 1,
       crono: False,
       random_seed: 0,
       } }
-    - {TRTETrainValidation:{
-  train_size: 0.8,
-  test_consumes: 1,
-  crono: False,
-  random_seed: 0
-  }}
 Good Books Pop:
   dataset_descriptor:
     dataset_dir: Train-Test_Good-Books/
@@ -313,16 +276,9 @@ Good Books Pop:
       keep_popular: True,
       num_items_threshold: 640,
     }}
-    - {CombineTrainTest: {}}
     - {TrainTestConsumption: {
       train_size: 0.8,
       test_consumes: 1,
       crono: False,
       random_seed: 0,
       } }
-    - {TRTETrainValidation:{
-  train_size: 0.8,
-  test_consumes: 1,
-  crono: False,
-  random_seed: 0
-  }}

@@ -398,18 +398,18 @@ class PopularityFilter(DataProcessor):
         dataset.update_from_data()
         dataset.update_num_total_users_items()
 
-        train_uids = train_dataset.uids
-        test_uids = test_dataset.uids
+        # train_uids = train_dataset.uids
+        # test_uids = test_dataset.uids
 
-        train_dataset = copy(dataset)
-        train_dataset.data = dataset.data[np.isin(dataset.data[:, 0],
-                                                  train_uids)]
-        train_dataset.update_from_data()
+        # train_dataset = copy(dataset)
+        # train_dataset.data = dataset.data[np.isin(dataset.data[:, 0],
+                                                  # train_uids)]
+        # train_dataset.update_from_data()
 
-        test_dataset = copy(dataset)
-        test_dataset.data = dataset.data[np.isin(dataset.data[:, 0], test_uids)]
-        test_dataset.update_from_data()
-        return train_dataset, test_dataset
+        # test_dataset = copy(dataset)
+        # test_dataset.data = dataset.data[np.isin(dataset.data[:, 0], test_uids)]
+        # test_dataset.update_from_data()
+        return dataset
 
 class CombineTrainTest(DataProcessor):
     def __init__(self, *args, **kwargs):
