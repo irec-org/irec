@@ -45,3 +45,4 @@ from .OurMethod1Mod import *
 from .OurMethod2PCA import *
 from .LinUCBPCA import *
 from .ICTR import *
+from .GenericThompsonSampling import *

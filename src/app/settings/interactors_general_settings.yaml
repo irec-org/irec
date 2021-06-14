@@ -133,3 +133,5 @@ RerankedLogPopEntLinearEGreedy:
   name: RerankedLogPopEnt LinearEGreedy
 RerankedLogPopEntLinearUCB:
   name: RerankedLogPopEnt LinearUCB
+NaiveEnsemble:
+  name: Naive Ensemble

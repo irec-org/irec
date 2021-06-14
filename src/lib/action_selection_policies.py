@@ -4,6 +4,7 @@ import lib.value_functions.Entropy
 
 
 class ActionSelectionPolicy:
+
     def __init__(self, *args, **kwargs):
         pass
 
@@ -18,6 +19,7 @@ class ActionSelectionPolicy:
 
 
 class ASPGreedy(ActionSelectionPolicy):
+
     def select_actions(self, actions, action_estimates, actions_num):
         return (actions[0],
                 actions[1][np.argpartition(action_estimates,
@@ -31,6 +33,7 @@ class ASPGreedy(ActionSelectionPolicy):
 
 
 class ASPEGreedy(ActionSelectionPolicy):
+
     def __init__(self, epsilon, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
         self.epsilon = epsilon
@@ -65,6 +68,7 @@ class ASPEGreedy(ActionSelectionPolicy):
 
 
 class ASPReranker(ActionSelectionPolicy):
+
     def __init__(self, rule, input_filter_size, rerank_limit, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
         self.rule = rule
@@ -96,3 +100,17 @@ class ASPReranker(ActionSelectionPolicy):
     def reset(self, observation):
         self.users_num_consumption = defaultdict(int)
         self.rule.reset(observation)
+
+
+class ASPGenericGreedy(ActionSelectionPolicy):
+
+    def select_actions(self, actions, action_estimates, actions_num):
+        # print(actions,action_estimates)
+        return actions[np.argpartition(action_estimates,
+                                       -actions_num)[-actions_num:]], None
+
+    def update(self, observation, action, reward, info):
+        pass
+
+    def reset(self, observation):
+        pass

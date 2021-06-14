@@ -1112,6 +1112,27 @@ Good Books Validation:
       value_function:
         kNNBandit: {}
 MovieLens 100k (B):
+  NaiveEnsemble:
+    SimpleEnsembleAgent:
+      action_selection_policy:
+        ASPGenericGreedy: {}
+      value_function:
+        GenericThompsonSampling:
+          alpha_0: 1
+          beta_0: 1
+      agents:
+        - SimpleAgent:
+            action_selection_policy:
+              ASPGreedy: {}
+            value_function:
+              LinUCB:
+                alpha: 1.0
+                num_lat: 10
+        - SimpleAgent:
+            action_selection_policy:
+              ASPGreedy: {}
+            value_function:
+              MostPopular: {}
   ALEntropy:
     SimpleAgent:
       action_selection_policy:

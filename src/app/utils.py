@@ -50,6 +50,7 @@ import yaml
 
 
 class Singleton:
+
     def __init__(self, decorated):
         self._decorated = decorated
 
@@ -66,6 +67,7 @@ class Singleton:
 
 @Singleton
 class Settings:
+
     def __init__(self) -> None:
         self.settings = None
         pass
@@ -111,8 +113,8 @@ def class2dict(instance):
 
 def generate_table_spec(nums_interactions_to_show, num_datasets_preprocessors):
     res = '|'
-    for i in range(1 + len(nums_interactions_to_show) *
-                   num_datasets_preprocessors):
+    for i in range(1 +
+                   len(nums_interactions_to_show) * num_datasets_preprocessors):
         res += 'c'
         if i % (len(nums_interactions_to_show)) == 0:
             res += '|'
@@ -207,8 +209,7 @@ def load_settings():
                 **{
                     'name': k
                 }
-            }
-            for k, setting in d['datasets_preprocessors_parameters'].items()
+            } for k, setting in d['datasets_preprocessors_parameters'].items()
         }
     with open(
             dirname(realpath(__file__)) + sep + "settings" + sep +
@@ -318,6 +319,7 @@ def create_value_function(value_function_settings):
 
 
 def create_agent(agent_name, agent_settings):
+    agent_class_parameters = {}
     agent_class_name = list(agent_settings.keys())[0]
     agent_parameters = list(agent_settings.values())[0]
     agent_class = eval('lib.agents.' + agent_class_name)
@@ -328,14 +330,25 @@ def create_agent(agent_name, agent_settings):
     # value_function_name = list(agent_parameters['value_function'].keys())[0]
     # value_function_parameters = list(agent_parameters['value_function'].values())[0]
     value_function = create_value_function(agent_parameters['value_function'])
+    agents = []
+    if agent_name == 'NaiveEnsemble':
+        for _agent in agent_parameters['agents']:
+            # print(_agent)
+            new_agent = create_agent(
+                list(_agent.keys())[0],
+                _agent)
+            agents.append(new_agent)
+        agent_class_parameters['agents'] = agents
+    agent_class_parameters.update({
+        'action_selection_policy': action_selection_policy,
+        'value_function': value_function,
+        'name': agent_name
+    })
+    # print(agent_class_parameters)
+    return agent_class(**agent_class_parameters)
 
-    return agent_class(action_selection_policy=action_selection_policy,
-                       value_function=value_function,
-                       name=agent_name)
 
-
-def create_agent_from_settings(agent_name, dataset_preprocessor_name,
-                               settings):
+def create_agent_from_settings(agent_name, dataset_preprocessor_name, settings):
     agent_settings = settings['agents_preprocessor_parameters'][
         dataset_preprocessor_name][agent_name]
     agent = create_agent(agent_name, agent_settings)
