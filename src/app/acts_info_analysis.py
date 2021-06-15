@@ -39,7 +39,7 @@ ir = InteractorRunner(dm, settings['interactors_general_settings'],
                       settings['evaluation_policies_parameters'])
 # for dataset_preprocessor in datasets_preprocessors:
 for base in args.b:
-    dataset_preprocessor= settings['datasets_preprocessors_parameters'][base] 
+    dataset_preprocessor = settings['datasets_preprocessors_parameters'][base]
     dm.initialize_engines(dataset_preprocessor)
     dm.load()
 
@@ -51,11 +51,8 @@ for base in args.b:
     dataset.update_num_total_users_items()
 
     consumption_matrix = scipy.sparse.csr_matrix(
-        (dataset.data[:, 2],
-         (dataset.data[:, 0],
-          dataset.data[:, 1])),
-        (dataset.num_total_users,
-         dataset.num_total_items))
+        (dataset.data[:, 2], (dataset.data[:, 0], dataset.data[:, 1])),
+        (dataset.num_total_users, dataset.num_total_items))
     evaluation_policy_name = settings['defaults'][
         'interactors_evaluation_policy']
     evaluation_policy_parameters = settings['evaluation_policies_parameters'][
@@ -65,8 +62,8 @@ for base in args.b:
                                  **evaluation_policy_parameters)
 
     for agent_name in args.m:
-        parameters = settings['agents_preprocessor_parameters'][
-                base][agent_name]
+        parameters = settings['agents_preprocessor_parameters'][base][
+            agent_name]
         agent = utils.create_agent(agent_name, parameters)
         agent_id = utils.get_agent_id(agent_name, parameters)
         pdm = PersistentDataManager(directory='results')
@@ -81,13 +78,12 @@ for base in args.b:
             for i in range(len(acts_info)):
                 uid = users_items_recommended[i][0]
                 iid = users_items_recommended[i][1]
-                data.append({**acts_info[i],**{'uid': uid,'iid': iid,
-                    'reward': consumption_matrix[uid,iid] }})
+                data.append({
+                    **acts_info[i],
+                    **{
+                        'uid': uid,
+                        'iid': iid,
+                        'reward': consumption_matrix[uid, iid]
+                    }
+                })
             print(pd.DataFrame(data))
-        # for i in acts_info:
-            # users_items_recommended
-        # for metric_evaluator in metrics_evaluators:
-            # args = [(id(metric_evaluator), id(dm), itr_class)
-            # for itr_class in interactors_classes]
-            # run_parallel(evaluate_itr, args, use_tqdm=False)
-            # for agent_name in args.m:
