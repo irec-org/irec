@@ -24,10 +24,11 @@ class EvaluationPolicy:
 
 
 class Interaction(EvaluationPolicy, Parameterizable):
-    def __init__(self, num_interactions, interaction_size, *args, **kwargs):
+    def __init__(self, num_interactions, interaction_size, save_info, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.num_interactions = int(num_interactions)
         self.interaction_size = int(interaction_size)
+        self.save_info = save_info
         self.parameters.extend(['num_interactions', 'interaction_size'])
 
     def evaluate(self, model, train_dataset, test_dataset):
@@ -64,6 +65,7 @@ class Interaction(EvaluationPolicy, Parameterizable):
             _num_interactions = 0
             pbar = tqdm(total=num_trials)
             pbar.set_description(f"{model.name}")
+            acts_info = []
             for i in range(num_trials):
                 uid = random.sample(available_users, k=1)[0]
                 not_recommended = np.ones(num_total_items, dtype=bool)
@@ -73,6 +75,10 @@ class Interaction(EvaluationPolicy, Parameterizable):
                 # best_items = items_not_recommended[np.argpartition(items_score,-self.interaction_size)[-self.interaction_size:]]
                 actions, info = model.act((uid, items_not_recommended),
                                           self.interaction_size)
+                if self.save_info:
+                    info['trial'] = i
+                    info['user_interaction'] = users_num_interactions[uid]
+                acts_info.append(info)
                 best_items = actions[1]
                 users_items_recommended[uid].extend(best_items)
 
@@ -89,11 +95,10 @@ class Interaction(EvaluationPolicy, Parameterizable):
                 if i % _intervals == 0 and i != 0:
                     pbar.update(_num_interactions)
                     _num_interactions = 0
-
             pbar.update(_num_interactions)
             _num_interactions = 0
             pbar.close()
-            return history_items_recommended
+            return history_items_recommended, acts_info
 
 
 class InteractionSample(EvaluationPolicy, Parameterizable):

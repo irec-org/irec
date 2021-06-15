@@ -1,6 +1,7 @@
 Interaction:
   num_interactions: 100
   interaction_size: 1
+  save_info: True
 OneInteraction:
   num_interactions: 100
   interaction_size: 1

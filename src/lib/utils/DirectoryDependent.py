@@ -17,6 +17,7 @@ class DirectoryDependent:
     DIRS['datasets'] = os.path.join(DIRS['data'], 'datasets')
     DIRS['tex'] = os.path.join(DIRS['data'], 'tex')
     DIRS['pdf'] = os.path.join(DIRS['data'], 'pdf')
+    DIRS['acts_info'] = os.path.join(DIRS['data'], 'acts_info')
     EXISTS = False
 
     def __init__(self):

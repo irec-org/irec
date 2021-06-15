@@ -259,7 +259,7 @@ def run_interactor(itr, evaluation_policy, dm, forced_run, agent_id):
     if forced_run or not pdm.file_exists(
             get_experiment_run_id(dm, evaluation_policy, agent_id)):
         try:
-            history_items_recommended = evaluation_policy.evaluate(
+            history_items_recommended, acts_info = evaluation_policy.evaluate(
                 itr, dm.dataset_preprocessed[0], dm.dataset_preprocessed[1])
         except:
             print(traceback.print_exc())
@@ -268,6 +268,9 @@ def run_interactor(itr, evaluation_policy, dm, forced_run, agent_id):
         pdm = PersistentDataManager(directory='results')
         pdm.save(get_experiment_run_id(dm, evaluation_policy, agent_id),
                  history_items_recommended)
+        pdm = PersistentDataManager(directory='acts_info')
+        pdm.save(get_experiment_run_id(dm, evaluation_policy, agent_id),
+                 acts_info)
     else:
         print("Already executed",
               get_experiment_run_id(dm, evaluation_policy, agent_id))

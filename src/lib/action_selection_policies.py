@@ -104,10 +104,19 @@ class ASPReranker(ActionSelectionPolicy):
 
 class ASPGenericGreedy(ActionSelectionPolicy):
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # self.save_played_actions = save_played_actions
+        pass
+
     def select_actions(self, actions, action_estimates, actions_num):
         # print(actions,action_estimates)
-        return actions[np.argpartition(action_estimates,
-                                       -actions_num)[-actions_num:]], None
+        # info = {''}
+        actions = actions[np.argpartition(action_estimates,
+                                           -actions_num)[-actions_num:]]
+        # if self.save_played_actions:
+        # info = {'played_actions': factions}
+        return actions, None
 
     def update(self, observation, action, reward, info):
         pass
