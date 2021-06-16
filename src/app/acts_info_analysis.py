@@ -86,4 +86,11 @@ for base in args.b:
                         'reward': consumption_matrix[uid, iid]
                     }
                 })
-            print(pd.DataFrame(data))
+
+            df_results = pd.DataFrame(data)
+            results = df_results.groupby(['user_interaction', 'meta_action_name'])['trial'].agg(['count'])
+            print(results)
+            results.to_csv('outputs/output.csv')
+
+
+
