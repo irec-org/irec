@@ -135,3 +135,11 @@ RerankedLogPopEntLinearUCB:
   name: RerankedLogPopEnt LinearUCB
 NaiveEnsemble:
   name: Naive Ensemble
+TSEnsemble_Pop:
+  name: TSEnsemble-Pop
+TSEnsemble_PopEnt:
+  name: TSEnsemble-PopEnt
+TSEnsemble_Entropy:
+  name: TSEnsemble-Entropy
+TSEnsemble_Random:
+  name: TSEnsemble-Random
