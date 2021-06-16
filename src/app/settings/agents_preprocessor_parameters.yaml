@@ -4135,7 +4135,7 @@ Yahoo Music:
       value_function:
         GenericThompsonSampling:
           alpha_0: 1
-          beta_0: 1
+          beta_0: 100
       agents:
         - LinUCB:
             SimpleAgent:
@@ -4151,6 +4151,12 @@ Yahoo Music:
                 ASPGreedy: {}
               value_function:
                 MostPopular: {}
+        - Random:
+            SimpleAgent:
+              action_selection_policy:
+                ASPGreedy: {}
+              value_function:
+                Random: {}
   ALEntropy:
     SimpleAgent:
       action_selection_policy:

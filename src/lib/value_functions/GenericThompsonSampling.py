@@ -1,4 +1,5 @@
 import numpy as np
+import copy
 from numpy.lib.npyio import save
 from tqdm import tqdm, trange
 from . import ValueFunction, ExperimentalValueFunction
@@ -24,12 +25,12 @@ class GenericThompsonSampling(ExperimentalValueFunction):
         # (self.train_dataset.data[:, 2],
         # (self.train_dataset.data[:, 0], self.train_dataset.data[:, 1])),
         # (self.train_dataset.num_total_users,
-        # self.train_dataset.num_total_items))
         # self.num_total_items = self.train_dataset.num_total_items
 
         self.alphas = defaultdict(lambda : self.alpha_0)
         self.betas = defaultdict(lambda:self.beta_0)
 
+        # self.train_dataset.num_total_items))
         # for i in range(self.train_dataset.data.shape[0]):
             # uid = int(self.train_dataset.data[i, 0])
             # item = int(self.train_dataset.data[i, 1])
@@ -41,7 +42,9 @@ class GenericThompsonSampling(ExperimentalValueFunction):
     def action_estimates(self, candidate_actions):
         items_score = np.random.beta([self.alphas[ca] for ca in candidate_actions],
                                      [self.betas[ca] for ca in candidate_actions])
+        # info = {'a': copy.copy(self.alphas), 'b': copy.copy(self.betas)}
         return items_score, None
+        # return items_score, info
 
     def update(self, observation, action, reward, info):
         # additional_data = info

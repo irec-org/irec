@@ -64,16 +64,17 @@ class SimpleEnsembleAgent(Agent):
         self.save_meta_actions = save_meta_actions
 
     def act(self, candidate_actions, actions_num):
+        info = {}
         meta_action_estimates, meta_vf_info = self.value_function.action_estimates(
             self.ensemble_candidate_actions)
         # print(m,meta_action_estimates)
+        # info = {'meta_action_estimates': meta_action_estimates}
         meta_actions, meta_asp_info = self.action_selection_policy.select_actions(
             self.ensemble_candidate_actions, meta_action_estimates,
             self.default_actions_num)
         meta_action = meta_actions[0]
         # print(meta_actions)
         # actions = (candidate_actions[0],candidate_actions[1][actions_indexes])
-        info = {}
         selected_agent = self.agents[meta_action]
         selected_agent_actions, selected_agent_info = selected_agent.act(
             candidate_actions, actions_num)
@@ -85,6 +86,7 @@ class SimpleEnsembleAgent(Agent):
             info['selected_agent_info'] = selected_agent_info
         if self.save_meta_actions:
             info['meta_action_name'] = self.agents[meta_action].name
+            info['mai'] = meta_action
         if info == dict():
             info = None
         return selected_agent_actions, info
@@ -92,8 +94,8 @@ class SimpleEnsembleAgent(Agent):
     def observe(self, observation, action, reward, info):
         vf_info = info.get('vf_info',None)
         asp_info = info.get('asp_info',None)
-        self.value_function.update(observation, action, reward, vf_info)
-        self.action_selection_policy.update(observation, action, reward,
+        self.value_function.update(observation, info['mai'], reward, vf_info)
+        self.action_selection_policy.update(observation, info['mai'], reward,
                                             asp_info)
         for agent in self.agents:
             agent.observe(observation, action, reward, info)

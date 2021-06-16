@@ -89,8 +89,10 @@ for base in args.b:
 
             df_results = pd.DataFrame(data)
             results = df_results.groupby(['user_interaction', 'meta_action_name'])['trial'].agg(['count'])
+            print(df_results.head())
             print(results)
             results.to_csv('outputs/output.csv')
+            print(df_results.groupby('meta_action_name')['reward'].mean())
 
 
 
