@@ -1,4 +1,96 @@
 Good Books:
+  TSEnsemble-Pop:
+    SimpleEnsembleAgent:
+      action_selection_policy:
+        ASPGenericGreedy: {}
+      value_function:
+        GenericThompsonSampling:
+          alpha_0: 1
+          beta_0: 1
+      agents:
+        - LinUCB:
+            SimpleAgent:
+              action_selection_policy:
+                ASPGreedy: {}
+              value_function:
+                LinUCB:
+                  alpha: 1.0
+                  num_lat: 10
+        - MostPopular:
+            SimpleAgent:
+              action_selection_policy:
+                ASPGreedy: {}
+              value_function:
+                MostPopular: {}
+  TSEnsemble-PopEnt:
+    SimpleEnsembleAgent:
+      action_selection_policy:
+        ASPGenericGreedy: {}
+      value_function:
+        GenericThompsonSampling:
+          alpha_0: 1
+          beta_0: 1
+      agents:
+        - LinUCB:
+            SimpleAgent:
+              action_selection_policy:
+                ASPGreedy: {}
+              value_function:
+                LinUCB:
+                  alpha: 1.0
+                  num_lat: 10
+        - LogPopEnt:
+            SimpleAgent:
+              action_selection_policy:
+                ASPGreedy: {}
+              value_function:
+                LogPopEnt: {}
+  TSEnsemble-Entropy:
+    SimpleEnsembleAgent:
+      action_selection_policy:
+        ASPGenericGreedy: {}
+      value_function:
+        GenericThompsonSampling:
+          alpha_0: 1
+          beta_0: 1
+      agents:
+        - LinUCB:
+            SimpleAgent:
+              action_selection_policy:
+                ASPGreedy: {}
+              value_function:
+                LinUCB:
+                  alpha: 1.0
+                  num_lat: 10
+        - Entropy:
+            SimpleAgent:
+              action_selection_policy:
+                ASPGreedy: {}
+              value_function:
+                Entropy: {}
+  TSEnsemble-Random:
+    SimpleEnsembleAgent:
+      action_selection_policy:
+        ASPGenericGreedy: {}
+      value_function:
+        GenericThompsonSampling:
+          alpha_0: 1
+          beta_0: 1
+      agents:
+        - LinUCB:
+            SimpleAgent:
+              action_selection_policy:
+                ASPGreedy: {}
+              value_function:
+                LinUCB:
+                  alpha: 1.0
+                  num_lat: 10
+        - Random:
+            SimpleAgent:
+              action_selection_policy:
+                ASPGreedy: {}
+              value_function:
+                Random: {}
   ALEntropy:
     SimpleAgent:
       action_selection_policy:
@@ -1403,6 +1495,98 @@ MovieLens 100k (B):
           beta_0: 100
           k: 1
 MovieLens 10M:
+ TSEnsemble-Pop:
+    SimpleEnsembleAgent:
+      action_selection_policy:
+        ASPGenericGreedy: {}
+      value_function:
+        GenericThompsonSampling:
+          alpha_0: 1
+          beta_0: 1
+      agents:
+        - LinUCB:
+            SimpleAgent:
+              action_selection_policy:
+                ASPGreedy: {}
+              value_function:
+                LinUCB:
+                  alpha: 1.0
+                  num_lat: 10
+        - MostPopular:
+            SimpleAgent:
+              action_selection_policy:
+                ASPGreedy: {}
+              value_function:
+                MostPopular: {}
+  TSEnsemble-PopEnt:
+    SimpleEnsembleAgent:
+      action_selection_policy:
+        ASPGenericGreedy: {}
+      value_function:
+        GenericThompsonSampling:
+          alpha_0: 1
+          beta_0: 1
+      agents:
+        - LinUCB:
+            SimpleAgent:
+              action_selection_policy:
+                ASPGreedy: {}
+              value_function:
+                LinUCB:
+                  alpha: 1.0
+                  num_lat: 10
+        - LogPopEnt:
+            SimpleAgent:
+              action_selection_policy:
+                ASPGreedy: {}
+              value_function:
+                LogPopEnt: {}
+  TSEnsemble-Entropy:
+    SimpleEnsembleAgent:
+      action_selection_policy:
+        ASPGenericGreedy: {}
+      value_function:
+        GenericThompsonSampling:
+          alpha_0: 1
+          beta_0: 1
+      agents:
+        - LinUCB:
+            SimpleAgent:
+              action_selection_policy:
+                ASPGreedy: {}
+              value_function:
+                LinUCB:
+                  alpha: 1.0
+                  num_lat: 10
+        - Entropy:
+            SimpleAgent:
+              action_selection_policy:
+                ASPGreedy: {}
+              value_function:
+                Entropy: {}
+  TSEnsemble-Random:
+    SimpleEnsembleAgent:
+      action_selection_policy:
+        ASPGenericGreedy: {}
+      value_function:
+        GenericThompsonSampling:
+          alpha_0: 1
+          beta_0: 1
+      agents:
+        - LinUCB:
+            SimpleAgent:
+              action_selection_policy:
+                ASPGreedy: {}
+              value_function:
+                LinUCB:
+                  alpha: 1.0
+                  num_lat: 10
+        - Random:
+            SimpleAgent:
+              action_selection_policy:
+                ASPGreedy: {}
+              value_function:
+                Random: {}
   ALEntropy:
     SimpleAgent:
       action_selection_policy:
@@ -3635,6 +3819,98 @@ MovieLens 10M Validation:
       value_function:
         kNNBandit: {}
 MovieLens 1M:
+ TSEnsemble-Pop:
+    SimpleEnsembleAgent:
+      action_selection_policy:
+        ASPGenericGreedy: {}
+      value_function:
+        GenericThompsonSampling:
+          alpha_0: 1
+          beta_0: 1
+      agents:
+        - LinUCB:
+            SimpleAgent:
+              action_selection_policy:
+                ASPGreedy: {}
+              value_function:
+                LinUCB:
+                  alpha: 1.0
+                  num_lat: 10
+        - MostPopular:
+            SimpleAgent:
+              action_selection_policy:
+                ASPGreedy: {}
+              value_function:
+                MostPopular: {}
+  TSEnsemble-PopEnt:
+    SimpleEnsembleAgent:
+      action_selection_policy:
+        ASPGenericGreedy: {}
+      value_function:
+        GenericThompsonSampling:
+          alpha_0: 1
+          beta_0: 1
+      agents:
+        - LinUCB:
+            SimpleAgent:
+              action_selection_policy:
+                ASPGreedy: {}
+              value_function:
+                LinUCB:
+                  alpha: 1.0
+                  num_lat: 10
+        - LogPopEnt:
+            SimpleAgent:
+              action_selection_policy:
+                ASPGreedy: {}
+              value_function:
+                LogPopEnt: {}
+  TSEnsemble-Entropy:
+    SimpleEnsembleAgent:
+      action_selection_policy:
+        ASPGenericGreedy: {}
+      value_function:
+        GenericThompsonSampling:
+          alpha_0: 1
+          beta_0: 1
+      agents:
+        - LinUCB:
+            SimpleAgent:
+              action_selection_policy:
+                ASPGreedy: {}
+              value_function:
+                LinUCB:
+                  alpha: 1.0
+                  num_lat: 10
+        - Entropy:
+            SimpleAgent:
+              action_selection_policy:
+                ASPGreedy: {}
+              value_function:
+                Entropy: {}
+  TSEnsemble-Random:
+    SimpleEnsembleAgent:
+      action_selection_policy:
+        ASPGenericGreedy: {}
+      value_function:
+        GenericThompsonSampling:
+          alpha_0: 1
+          beta_0: 1
+      agents:
+        - LinUCB:
+            SimpleAgent:
+              action_selection_policy:
+                ASPGreedy: {}
+              value_function:
+                LinUCB:
+                  alpha: 1.0
+                  num_lat: 10
+        - Random:
+            SimpleAgent:
+              action_selection_policy:
+                ASPGreedy: {}
+              value_function:
+                Random: {}
   ALEntropy:
     SimpleAgent:
       action_selection_policy:
@@ -4128,7 +4404,7 @@ MovieLens 1M (B):
           beta_0: 1
           k: 1
 Yahoo Music:
-  NaiveEnsemble:
+ TSEnsemble-Pop:
     SimpleEnsembleAgent:
       action_selection_policy:
         ASPGenericGreedy: {}
@@ -4151,6 +4427,69 @@ Yahoo Music:
                 ASPGreedy: {}
               value_function:
                 MostPopular: {}
+  TSEnsemble-PopEnt:
+    SimpleEnsembleAgent:
+      action_selection_policy:
+        ASPGenericGreedy: {}
+      value_function:
+        GenericThompsonSampling:
+          alpha_0: 1
+          beta_0: 100
+      agents:
+        - LinUCB:
+            SimpleAgent:
+              action_selection_policy:
+                ASPGreedy: {}
+              value_function:
+                LinUCB:
+                  alpha: 1.0
+                  num_lat: 10
+        - LogPopEnt:
+            SimpleAgent:
+              action_selection_policy:
+                ASPGreedy: {}
+              value_function:
+                LogPopEnt: {}
+  TSEnsemble-Entropy:
+    SimpleEnsembleAgent:
+      action_selection_policy:
+        ASPGenericGreedy: {}
+      value_function:
+        GenericThompsonSampling:
+          alpha_0: 1
+          beta_0: 100
+      agents:
+        - LinUCB:
+            SimpleAgent:
+              action_selection_policy:
+                ASPGreedy: {}
+              value_function:
+                LinUCB:
+                  alpha: 1.0
+                  num_lat: 10
+        - Entropy:
+            SimpleAgent:
+              action_selection_policy:
+                ASPGreedy: {}
+              value_function:
+                Entropy: {}
+  TSEnsemble-Random:
+    SimpleEnsembleAgent:
+      action_selection_policy:
+        ASPGenericGreedy: {}
+      value_function:
+        GenericThompsonSampling:
+          alpha_0: 1
+          beta_0: 100
+      agents:
+        - LinUCB:
+            SimpleAgent:
+              action_selection_policy:
+                ASPGreedy: {}
+              value_function:
+                LinUCB:
+                  alpha: 1.0
+                  num_lat: 10
         - Random:
             SimpleAgent:
               action_selection_policy:
