@@ -66,6 +66,7 @@ for base in args.b:
             agent_name]
         agent = utils.create_agent(agent_name, parameters)
         agent_id = utils.get_agent_id(agent_name, parameters)
+        agent_methods= ','.join(list(list(parameters.values())[0]['agents'].keys()))
         pdm = PersistentDataManager(directory='results')
         users_items_recommended = pdm.load(
             utils.get_experiment_run_id(dm, evaluation_policy, agent_id))
@@ -91,8 +92,6 @@ for base in args.b:
             results = df_results.groupby(['user_interaction', 'meta_action_name'])['trial'].agg(['count'])
             print(df_results.head())
             print(results)
-            results.to_csv('outputs/output.csv')
+
+            results.to_csv(f'outputs/{base}_{agent_name}_{agent_methods}.csv')
             print(df_results.groupby('meta_action_name')['reward'].mean())
-
-
-
