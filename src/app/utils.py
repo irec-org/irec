@@ -339,7 +339,7 @@ def create_agent(agent_name, agent_settings):
             # print(_agent)
             new_agent = create_agent(
                 list(_agent.keys())[0],
-                _agent)
+                list(_agent.values())[0])
             agents.append(new_agent)
         agent_class_parameters['agents'] = agents
     agent_class_parameters.update({
