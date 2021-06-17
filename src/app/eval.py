@@ -5,6 +5,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument('-m', nargs='*')
 parser.add_argument('-b', nargs='*')
 parser.add_argument('-i', default=[5, 10, 20, 50, 100], nargs='*')
+# parser.add_argument('--num_tasks', type=int, default=os.cpu_count())
+parser.add_argument('--num_tasks', type=int, default=3)
 settings = utils.load_settings()
 utils.load_settings_to_parser(settings, parser)
 args = parser.parse_args()
@@ -20,6 +22,7 @@ import inquirer
 import lib.value_functions
 import lib.mf
 from lib.utils.InteractorRunner import InteractorRunner
+from concurrent.futures import ProcessPoolExecutor, wait, FIRST_COMPLETED
 from sklearn.decomposition import NMF
 import numpy as np
 import scipy.sparse
@@ -100,37 +103,45 @@ dm = DatasetManager()
 ir = InteractorRunner(dm, settings['interactors_general_settings'],
                       settings['agents_preprocessor_parameters'],
                       settings['evaluation_policies_parameters'])
-for dataset_preprocessor in datasets_preprocessors:
+with ProcessPoolExecutor() as executor:
+    futures = set()
+    for dataset_preprocessor in datasets_preprocessors:
 
-    dm.initialize_engines(dataset_preprocessor)
-    dm.load()
+        dm.initialize_engines(dataset_preprocessor)
+        dm.load()
 
-    ir = InteractorRunner(dm, settings['interactors_general_settings'],
-                          settings['agents_preprocessor_parameters'],
-                          settings['evaluation_policies_parameters'])
+        ir = InteractorRunner(dm, settings['interactors_general_settings'],
+                              settings['agents_preprocessor_parameters'],
+                              settings['evaluation_policies_parameters'])
 
-    data = np.vstack(
-        (dm.dataset_preprocessed[0].data, dm.dataset_preprocessed[1].data))
+        data = np.vstack(
+            (dm.dataset_preprocessed[0].data, dm.dataset_preprocessed[1].data))
 
-    dataset = Dataset(data)
-    dataset.update_from_data()
-    dataset.update_num_total_users_items()
+        dataset = Dataset(data)
+        dataset.update_from_data()
+        dataset.update_num_total_users_items()
 
-    metrics_evaluators = [
-        UserCumulativeInteractionMetricsEvaluator(dataset, metrics_classes)
-    ]
+        metrics_evaluators = [
+            UserCumulativeInteractionMetricsEvaluator(dataset, metrics_classes)
+        ]
 
-    evaluation_policy_name = settings['defaults'][
-        'interactors_evaluation_policy']
-    evaluation_policy_parameters = settings['evaluation_policies_parameters'][
-        evaluation_policy_name]
-    evaluation_policy = eval('lib.evaluation_policies.' +
-                             evaluation_policy_name)(
-                                 **evaluation_policy_parameters)
+        evaluation_policy_name = settings['defaults'][
+            'interactors_evaluation_policy']
+        evaluation_policy_parameters = settings['evaluation_policies_parameters'][
+            evaluation_policy_name]
+        evaluation_policy = eval('lib.evaluation_policies.' +
+                                 evaluation_policy_name)(
+                                     **evaluation_policy_parameters)
 
-    for metric_evaluator in metrics_evaluators:
-        # args = [(id(metric_evaluator), id(dm), itr_class)
-        # for itr_class in interactors_classes]
-        # run_parallel(evaluate_itr, args, use_tqdm=False)
-        for agent_name in args.m:
-            evaluate_itr(id(metric_evaluator), id(dm), agent_name)
+        for metric_evaluator in metrics_evaluators:
+            # args = [(id(metric_evaluator), id(dm), itr_class)
+            # for itr_class in interactors_classes]
+            # run_parallel(evaluate_itr, args, use_tqdm=False)
+            for agent_name in args.m:
+                f = executor.submit(evaluate_itr,id(metric_evaluator), id(dm), agent_name)
+                futures.add(f)
+    if len(futures) >= args.num_tasks:
+        completed, futures = wait(futures,
+                return_when=FIRST_COMPLETED)
+        for f in futures:
+            f.result()
