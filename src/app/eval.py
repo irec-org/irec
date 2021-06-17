@@ -37,29 +37,20 @@ from lib.utils.utils import run_parallel
 import ctypes
 
 
-def evaluate_itr(metric_evaluator_id, dm_id, agent_name):
-    metric_evaluator = ctypes.cast(metric_evaluator_id, ctypes.py_object).value
+def evaluate_itr(dataset ,dm_id, agent_name):
     dm = ctypes.cast(dm_id, ctypes.py_object).value
     print(f"Evaluating {agent_name} results")
-    # itr = ir.create_interactor(itr_class)
-    # itr = utils.create_agent_from_settings(agent_name,dm.dataset_preprocessor.name,settings)
+    metric_evaluator = UserCumulativeInteractionMetricsEvaluator(dataset, metrics_classes)
     parameters = settings['agents_preprocessor_parameters'][
         dm.dataset_preprocessor.name][agent_name]
     agent = utils.create_agent(agent_name, parameters)
     agent_id = utils.get_agent_id(agent_name, parameters)
     pdm = PersistentDataManager(directory='results')
-    # users_items_recommended = pdm.load(InteractorCache().get_id(
-    # dm, evaluation_policy, itr))
 
     users_items_recommended = pdm.load(
         utils.get_experiment_run_id(dm, evaluation_policy, agent_id))
 
     metrics_pdm = PersistentDataManager(directory='metrics')
-    # if metrics_pdm.file_exists(
-    # os.path.join(
-    # utils.get_experiment_run_id(dm, evaluation_policy, agent_id),
-    # metric_evaluator.get_id())):
-    # print()
     if isinstance(metric_evaluator, CumulativeInteractionMetricsEvaluator):
         metrics_values = metric_evaluator.evaluate(
             evaluation_policy.num_interactions,
@@ -121,10 +112,6 @@ with ProcessPoolExecutor() as executor:
         dataset.update_from_data()
         dataset.update_num_total_users_items()
 
-        metrics_evaluators = [
-            UserCumulativeInteractionMetricsEvaluator(dataset, metrics_classes)
-        ]
-
         evaluation_policy_name = settings['defaults'][
             'interactors_evaluation_policy']
         evaluation_policy_parameters = settings['evaluation_policies_parameters'][
@@ -133,15 +120,16 @@ with ProcessPoolExecutor() as executor:
                                  evaluation_policy_name)(
                                      **evaluation_policy_parameters)
 
-        for metric_evaluator in metrics_evaluators:
-            # args = [(id(metric_evaluator), id(dm), itr_class)
-            # for itr_class in interactors_classes]
-            # run_parallel(evaluate_itr, args, use_tqdm=False)
-            for agent_name in args.m:
-                f = executor.submit(evaluate_itr,id(metric_evaluator), id(dm), agent_name)
-                futures.add(f)
-    if len(futures) >= args.num_tasks:
-        completed, futures = wait(futures,
-                return_when=FIRST_COMPLETED)
-        for f in futures:
-            f.result()
+        # args = [(id(metric_evaluator), id(dm), itr_class)
+        # for itr_class in interactors_classes]
+        # run_parallel(evaluate_itr, args, use_tqdm=False)
+        for agent_name in args.m:
+            f = executor.submit(evaluate_itr,dataset, id(dm), agent_name)
+            futures.add(f)
+            if len(futures) >= args.num_tasks:
+                completed, futures = wait(futures,
+                        return_when=FIRST_COMPLETED)
+                for f in futures:
+                    f.result()
+    for f in futures:
+        f.result()
