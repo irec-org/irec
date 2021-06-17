@@ -1,4 +1,6 @@
 import numpy as np
+
+import numbers
 import copy
 from numpy.lib.npyio import save
 from tqdm import tqdm, trange
@@ -8,6 +10,11 @@ import random
 import scipy.stats
 from collections import defaultdict
 
+def _create_attribute_with_check(value):
+    if isinstance(value,numbers.Number):
+        return defaultdict(lambda: value)
+    elif isinstance(value,dict):
+        return defaultdict(lambda:1,value)
 
 class GenericThompsonSampling(ExperimentalValueFunction):
 
@@ -27,8 +34,8 @@ class GenericThompsonSampling(ExperimentalValueFunction):
         # (self.train_dataset.num_total_users,
         # self.num_total_items = self.train_dataset.num_total_items
 
-        self.alphas = defaultdict(lambda : self.alpha_0)
-        self.betas = defaultdict(lambda:self.beta_0)
+        self.alphas = _create_attribute_with_check(self.alpha_0)
+        self.betas = _create_attribute_with_check(self.beta_0)
 
         # self.train_dataset.num_total_items))
         # for i in range(self.train_dataset.data.shape[0]):

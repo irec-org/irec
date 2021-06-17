@@ -6,7 +6,7 @@ Good Books:
       value_function:
         GenericThompsonSampling:
           alpha_0: 1
-          beta_0: 1
+          beta_0: 10
       agents:
         - LinUCB:
             SimpleAgent:
@@ -29,7 +29,7 @@ Good Books:
       value_function:
         GenericThompsonSampling:
           alpha_0: 1
-          beta_0: 1
+          beta_0: 10
       agents:
         - LinUCB:
             SimpleAgent:
@@ -52,7 +52,7 @@ Good Books:
       value_function:
         GenericThompsonSampling:
           alpha_0: 1
-          beta_0: 1
+          beta_0: 10
       agents:
         - LinUCB:
             SimpleAgent:
@@ -75,7 +75,7 @@ Good Books:
       value_function:
         GenericThompsonSampling:
           alpha_0: 1
-          beta_0: 1
+          beta_0: 10
       agents:
         - LinUCB:
             SimpleAgent:
