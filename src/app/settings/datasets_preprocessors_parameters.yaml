@@ -282,3 +282,9 @@ Good Books Pop:
       crono: False,
       random_seed: 0,
       } }
+Yahoo Music Pop-Removed-Ent:
+  dataset_descriptor:
+    dataset_dir: Train-Test_Yahoo-Music/
+  preprocessor:
+    - {TRTE:{}}
+    - {PopRemoveEnt:{num_items_threshold:92}}

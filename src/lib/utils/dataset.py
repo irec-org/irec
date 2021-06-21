@@ -413,3 +413,32 @@ class CombineTrainTest(DataProcessor):
         dataset.update_from_data()
         dataset.update_num_total_users_items()
         return dataset
+class PopRemoveEnt(DataProcessor):
+    def __init__(self, num_items_threshold, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # self.keep_popular = keep_popular
+        self.num_items_threshold = num_items_threshold
+        self.parameters.extend(['num_items_threshold'])
+
+    def process(self, train_dataset_and_test_dataset):
+        train_dataset = train_dataset_and_test_dataset[0]
+        test_dataset = train_dataset_and_test_dataset[1]
+        dataset = Dataset(np.vstack([train_dataset.data, test_dataset.data]))
+        dataset.update_from_data()
+        dataset.update_num_total_users_items()
+        consumption_matrix = scipy.sparse.csr_matrix(
+            (dataset.data[:, 2], (dataset.data[:, 0], dataset.data[:, 1])),
+            (dataset.num_total_users, dataset.num_total_items))
+        # num_items_to_sample = int(self.items_rate * dataset.num_total_items)
+        items_values = lib.value_functions.MostPopular.get_items_popularity(
+            consumption_matrix)
+        items_sorted = np.argsort(items_values)[::-1]
+        # if self.keep_popular:
+        items_to_keep = items_sorted[:self.num_items_threshold]
+        # else:
+            # items_to_keep = items_sorted[self.num_items_threshold:]
+        train_dataset.data[train_dataset.data[:,1].isin(items_to_keep),2] = 5
+        test_dataset.data[test_dataset.data[:,1].isin(items_to_keep),2] = 5
+        # dataset.update_from_data()
+        # dataset.update_num_total_users_items()
+        return dataset
