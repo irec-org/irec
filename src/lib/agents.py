@@ -54,12 +54,18 @@ class SimpleAgent(Agent):
 
 class SimpleEnsembleAgent(Agent):
 
-    def __init__(self, agents, save_meta_actions=True, *args, **kwargs):
+    def __init__(self, agents, use_name_meta_actions=True,save_meta_actions=True, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # self.ensemble_method_vf = ensemble_method_vf
         self.agents = agents
-        self.ensemble_candidate_actions = np.array(list(range(len(
-            self.agents))))
+        self.use_name_meta_actions = use_name_meta_actions
+        if self.use_name_meta_actions:
+            self.ensemble_candidate_actions = np.array([i.name for i in self.agents])
+            self.actions_name_object_map = {act_name: self.agents[i] for i, act_name in enumerate(self.ensemble_candidate_actions)}
+        else:
+            self.ensemble_candidate_actions = np.array(list(range(len(
+                self.agents))))
+        # self.ensemble_candidate_actions = []
         self.default_actions_num = 1
         self.save_meta_actions = save_meta_actions
 
@@ -75,7 +81,10 @@ class SimpleEnsembleAgent(Agent):
         meta_action = meta_actions[0]
         # print(meta_actions)
         # actions = (candidate_actions[0],candidate_actions[1][actions_indexes])
-        selected_agent = self.agents[meta_action]
+        if self.use_name_meta_actions:
+            selected_agent = self.actions_name_object_map[meta_action]
+        else:
+            selected_agent = self.agents[meta_action]
         selected_agent_actions, selected_agent_info = selected_agent.act(
             candidate_actions, actions_num)
         if meta_vf_info != None:
@@ -85,8 +94,12 @@ class SimpleEnsembleAgent(Agent):
         if selected_agent_info != None:
             info['selected_agent_info'] = selected_agent_info
         if self.save_meta_actions:
-            info['meta_action_name'] = self.agents[meta_action].name
-            info['mai'] = meta_action
+            if self.use_name_meta_actions:
+                info['meta_action_name'] = meta_action
+                info['mai'] = meta_action
+            else:
+                info['meta_action_name'] = self.agents[meta_action].name
+                info['mai'] = meta_action
         if info == dict():
             info = None
         return selected_agent_actions, info

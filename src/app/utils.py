@@ -334,7 +334,7 @@ def create_agent(agent_name, agent_settings):
     # value_function_parameters = list(agent_parameters['value_function'].values())[0]
     value_function = create_value_function(agent_parameters['value_function'])
     agents = []
-    if agent_name == 'NaiveEnsemble':
+    if agent_name in ['NaiveEnsemble', 'TSEnsemble_Pop','TSEnsemble_PopEnt','TSEnsemble_Entropy','TSEnsemble_Random']:
         for _agent in agent_parameters['agents']:
             # print(_agent)
             new_agent = create_agent(

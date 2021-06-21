@@ -29,7 +29,7 @@ parser = argparse.ArgumentParser()
 
 parser.add_argument('--num_tasks', type=int, default=os.cpu_count())
 parser.add_argument('--forced_run', default=False, action='store_true')
-parser.add_argument('--parallel', default=False, action='store_true')
+# parser.add_argument('--parallel', default=False, action='store_true')
 
 parser.add_argument('-m', nargs='*')
 parser.add_argument('-b', nargs='*')

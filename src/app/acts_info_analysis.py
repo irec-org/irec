@@ -12,6 +12,7 @@ settings = utils.sync_settings_from_args(settings, args)
 from os.path import dirname, realpath, sep, pardir
 import os
 import sys
+import lib.utils.DirectoryDependent
 sys.path.append(dirname(realpath(__file__)) + sep + pardir)
 
 import lib.evaluation_policies
@@ -32,6 +33,7 @@ from lib.utils.utils import run_parallel
 import ctypes
 import pandas as pd
 
+dd = lib.utils.DirectoryDependent.DirectoryDependent()
 dm = DatasetManager()
 
 ir = InteractorRunner(dm, settings['interactors_general_settings'],
@@ -66,6 +68,7 @@ for base in args.b:
             agent_name]
         agent = utils.create_agent(agent_name, parameters)
         agent_id = utils.get_agent_id(agent_name, parameters)
+        agent_methods= ','.join(map(lambda x: list(x.keys())[0], list(list(parameters.values())[0]['agents'])))
         pdm = PersistentDataManager(directory='results')
         users_items_recommended = pdm.load(
             utils.get_experiment_run_id(dm, evaluation_policy, agent_id))
@@ -73,26 +76,23 @@ for base in args.b:
         pdm = PersistentDataManager(directory='acts_info')
         acts_info = pdm.load(
             utils.get_experiment_run_id(dm, evaluation_policy, agent_id))
-        if agent_name == 'NaiveEnsemble':
-            data = []
-            for i in range(len(acts_info)):
-                uid = users_items_recommended[i][0]
-                iid = users_items_recommended[i][1]
-                data.append({
-                    **acts_info[i],
-                    **{
-                        'uid': uid,
-                        'iid': iid,
-                        'reward': consumption_matrix[uid, iid]
-                    }
-                })
+        # if agent_name == 'NaiveEnsemble':
+        data = []
+        for i in range(len(acts_info)):
+            uid = users_items_recommended[i][0]
+            iid = users_items_recommended[i][1]
+            data.append({
+                **acts_info[i],
+                **{
+                    'uid': uid,
+                    'iid': iid,
+                    'reward': consumption_matrix[uid, iid]
+                }
+            })
+        df_results = pd.DataFrame(data)
+        results = df_results.groupby(['user_interaction', 'meta_action_name'])['trial'].agg(['count'])
+        print(df_results.head())
+        print(results)
 
-            df_results = pd.DataFrame(data)
-            results = df_results.groupby(['user_interaction', 'meta_action_name'])['trial'].agg(['count'])
-            print(df_results.head())
-            print(results)
-            results.to_csv('outputs/output.csv')
-            print(df_results.groupby('meta_action_name')['reward'].mean())
-
-
-
+        results.to_csv(f'{dd.DIRS["export"]}/{base}_{agent_name}_{agent_methods}.csv')
+        print(df_results.groupby('meta_action_name')['reward'].mean())
