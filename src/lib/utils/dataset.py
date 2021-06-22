@@ -437,8 +437,8 @@ class PopRemoveEnt(DataProcessor):
         items_to_keep = items_sorted[:self.num_items_threshold]
         # else:
             # items_to_keep = items_sorted[self.num_items_threshold:]
-        train_dataset.data[train_dataset.data[:,1].isin(items_to_keep),2] = 5
-        test_dataset.data[test_dataset.data[:,1].isin(items_to_keep),2] = 5
+        train_dataset.data[np.isin(train_dataset.data[:,1],items_to_keep),2] = 5
+        test_dataset.data[np.isin(test_dataset.data[:,1],items_to_keep),2] = 5
         # dataset.update_from_data()
         # dataset.update_num_total_users_items()
-        return dataset
+        return train_dataset, test_dataset

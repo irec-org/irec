@@ -22,7 +22,7 @@ import lib.evaluation_policies
 from metrics import CumulativeInteractionMetricsEvaluator, UserCumulativeInteractionMetricsEvaluator
 from lib.utils.dataset import Dataset
 from lib.utils.PersistentDataManager import PersistentDataManager
-from lib.utils.InteractorCache import InteractorCache
+# from lib.utils.InteractorCache import InteractorCache
 import metrics
 import matplotlib.pyplot as plt
 from lib.utils.DirectoryDependent import DirectoryDependent
@@ -121,3 +121,11 @@ for dataset_preprocessor in datasets_preprocessors:
               (k, 1 - k, str(pe)))
         print("\tent^%.1f*log(pop)^%.1f correlation with popularity = %s" %
               (k, 1 - k, str(pp)))
+    fig, ax = plt.subplots()
+    ax.scatter(items_entropy,items_popularity,marker='d',color='blue')
+    ax.set_xlabel("Entropy")
+    ax.set_ylabel("Popularity")
+    ax.set_xlim(xmin=np.min(items_entropy)-0.2, xmax=np.max(items_entropy)+0.2)
+    ax.set_ylim(ymin=np.min(items_popularity),
+                ymax=np.max(items_popularity))
+    fig.savefig(os.path.join(DirectoryDependent().DIRS['img'], f'pop_ent_{dataset_preprocessor["name"]}.png'),bbox_inches='tight')
