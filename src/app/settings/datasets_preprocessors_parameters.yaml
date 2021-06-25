@@ -287,13 +287,13 @@ Yahoo Music Pop-Removed-Ent:
     dataset_dir: Train-Test_Yahoo-Music/
   preprocessor:
     - {TRTE:{}}
-    - {PopRemoveEnt:{num_items_threshold: 92}}
+    - {PopRemoveEnt:{num_items_threshold: 92, new_rating: 1}}
 Yahoo Music Pop-Removed-Ent Validation:
   dataset_descriptor:
     dataset_dir: Train-Test_Yahoo-Music/
   preprocessor:
     - {TRTE:{}}
-    - {PopRemoveEnt:{num_items_threshold: 92}}
+    - {PopRemoveEnt:{num_items_threshold: 92, new_rating: 1}}
     - {TRTETrainValidation:{
   train_size: 0.8,
   test_consumes: 1,

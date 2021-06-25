@@ -414,11 +414,12 @@ class CombineTrainTest(DataProcessor):
         dataset.update_num_total_users_items()
         return dataset
 class PopRemoveEnt(DataProcessor):
-    def __init__(self, num_items_threshold, *args, **kwargs):
+    def __init__(self, num_items_threshold, new_rating, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # self.keep_popular = keep_popular
         self.num_items_threshold = num_items_threshold
-        self.parameters.extend(['num_items_threshold'])
+        self.new_rating = new_rating
+        self.parameters.extend(['num_items_threshold','new_rating'])
 
     def process(self, train_dataset_and_test_dataset):
         train_dataset = train_dataset_and_test_dataset[0]
@@ -437,8 +438,8 @@ class PopRemoveEnt(DataProcessor):
         items_to_keep = items_sorted[:self.num_items_threshold]
         # else:
             # items_to_keep = items_sorted[self.num_items_threshold:]
-        train_dataset.data[np.isin(train_dataset.data[:,1],items_to_keep),2] = 5
-        test_dataset.data[np.isin(test_dataset.data[:,1],items_to_keep),2] = 5
+        train_dataset.data[np.isin(train_dataset.data[:,1],items_to_keep),2] = self.new_rating
+        test_dataset.data[np.isin(test_dataset.data[:,1],items_to_keep),2] = self.new_rating
         # dataset.update_from_data()
         # dataset.update_num_total_users_items()
         return train_dataset, test_dataset
