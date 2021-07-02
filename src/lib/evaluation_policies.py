@@ -266,11 +266,14 @@ class LimitedInteraction(EvaluationPolicy, Parameterizable):
                 not_recommended = np.ones(num_total_items, dtype=bool)
                 not_recommended[users_items_recommended[uid]] = 0
                 items_not_recommended = np.nonzero(not_recommended)[0]
-                items_score, info = model.action_estimates(
-                    (uid, items_not_recommended))
-                best_items = items_not_recommended[np.argpartition(
-                    items_score,
-                    -self.interaction_size)[-self.interaction_size:]]
+                # items_score, info = model.action_estimates(
+                    # (uid, items_not_recommended))
+                # best_items = items_not_recommended[np.argpartition(
+                    # items_score,
+                    # -self.interaction_size)[-self.interaction_size:]]
+                actions, info = model.act((uid, items_not_recommended),
+                                          self.interaction_size)
+                best_items = actions[1]
                 users_items_recommended[uid].extend(best_items)
 
                 for item in best_items:
@@ -280,13 +283,12 @@ class LimitedInteraction(EvaluationPolicy, Parameterizable):
                     users_num_items_recommended_from_test[
                         uid] += test_consumption_matrix[uid, item] > 0
 
-                model.increment_time()
                 # users_num_interactions[uid] += 1
                 if users_num_items_recommended_from_test[
                         uid] >= users_num_items_to_recommend_from_test[uid]:
                     available_users = available_users - {uid}
 
-            return history_items_recommended
+            return history_items_recommended, None
 
 
 class OneInteraction(EvaluationPolicy, Parameterizable):
