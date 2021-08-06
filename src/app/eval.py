@@ -4,7 +4,7 @@ import utils
 parser = argparse.ArgumentParser()
 parser.add_argument('-m', nargs='*')
 parser.add_argument('-b', nargs='*')
-parser.add_argument('-i', default=[5, 10, 20, 50, 100], nargs='*')
+parser.add_argument('-i', default=[5, 10, 20, 50, 100,150,200], nargs='*')
 # parser.add_argument('--num_tasks', type=int, default=os.cpu_count())
 parser.add_argument('--num_tasks', type=int, default=3)
 settings = utils.load_settings()
