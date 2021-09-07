@@ -15,3 +15,5 @@ data/
 *.aux
 *.log
 *.csv
+
+.vim/coc-settings.json
