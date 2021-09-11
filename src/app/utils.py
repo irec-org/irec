@@ -17,6 +17,7 @@ import lib.value_functions
 import copy
 import os.path
 import collections.abc
+import pandas as pd
 LATEX_TABLE_FOOTER = r"""
 \end{tabular}
 \end{document}
@@ -366,3 +367,26 @@ def default_to_regular(d):
 
 def get_agent_pretty_name(agent_name, settings):
     return settings['interactors_general_settings'][agent_name]['name']
+
+
+
+def nested_dict_to_df(values_dict) -> pd.DataFrame:
+
+    def flatten_dict(nested_dict):
+        res = {}
+        if isinstance(nested_dict, dict):
+            for k in nested_dict:
+                flattened_dict = flatten_dict(nested_dict[k])
+                for key, val in flattened_dict.items():
+                    key = list(key)
+                    key.insert(0, k)
+                    res[tuple(key)] = val
+        else:
+            res[()] = nested_dict
+        return res
+    flat_dict = flatten_dict(values_dict)
+    df = pd.DataFrame.from_dict(flat_dict, orient="index")
+    df.index = pd.MultiIndex.from_tuples(df.index)
+    df = df.unstack(level=-1)
+    df.columns = df.columns.map("{0[1]}".format)
+    return df

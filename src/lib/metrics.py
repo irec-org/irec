@@ -460,6 +460,17 @@ class Hits(Metric):
         if self.relevance_evaluator.is_relevant(reward):
             self.users_true_positive[uid] += 1
 
+class NumInteractions(Metric):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.users_num_interactions = defaultdict(int)
+
+    def compute(self, uid):
+        return self.users_num_interactions[uid]
+
+    def update_recommendation(self, uid, item, reward):
+        self.users_num_interactions[uid] += 1
+
 
 class EPC(Metric):
     def __init__(self, items_normalized_popularity, *args, **kwargs):

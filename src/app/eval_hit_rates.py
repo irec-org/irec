@@ -5,6 +5,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('-m', nargs='*')
 parser.add_argument('-b', nargs='*')
 parser.add_argument('-r', nargs='*',type=float,default=[0.1,0.2,0.3,0.4,0.5])
+# parser.add_argument('-r', nargs='*',type=float,default=[0.1,0.2])
 parser.add_argument('--num_tasks', type=int, default=3)
 settings = utils.load_settings()
 utils.load_settings_to_parser(settings, parser)
@@ -36,7 +37,7 @@ import lib.metrics
 import ctypes
 
 
-def evaluate_itr(dataset ,dm_id, agent_name):
+def evaluate_itr(dataset ,dm_id, agent_name,evaluation_policy):
     dm = ctypes.cast(dm_id, ctypes.py_object).value
     print(f"Evaluating {agent_name} results")
     metric_evaluator = CumulativeMetricsEvaluator(ground_truth_dataset=dataset, metrics_classes=metrics_classes,buffer_size=BUFFER_SIZE_EVALUATOR)
@@ -63,7 +64,8 @@ def evaluate_itr(dataset ,dm_id, agent_name):
 # BUFFER_SIZE_EVALUATOR = 1000
 BUFFER_SIZE_EVALUATOR = 100000
 
-metrics_classes = [lib.metrics.Recall, lib.metrics.Hits]
+metrics_classes = [lib.metrics.Recall, lib.metrics.Hits, lib.metrics.NumInteractions]
+# metrics_classes = [lib.metrics.NumInteractions]
 
 datasets_preprocessors = [
     settings['datasets_preprocessors_parameters'][base] for base in args.b
@@ -101,14 +103,12 @@ with ProcessPoolExecutor() as executor:
             evaluation_policy.recommend_test_data_rate_limit = hit_rate
 
             for agent_name in args.m:
-                f = executor.submit(evaluate_itr,dataset, id(dm), agent_name)
+                f = executor.submit(evaluate_itr,dataset, id(dm), agent_name,evaluation_policy)
                 futures.add(f)
                 if len(futures) >= args.num_tasks:
                     completed, futures = wait(futures,
                             return_when=FIRST_COMPLETED)
                     for f in futures:
                         f.result()
-            for f in futures:
-                f.result()
     for f in futures:
         f.result()

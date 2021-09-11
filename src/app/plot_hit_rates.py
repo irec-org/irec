@@ -5,7 +5,8 @@ from collections import defaultdict
 parser = argparse.ArgumentParser()
 parser.add_argument('-m', nargs='*')
 parser.add_argument('-b', nargs='*')
-parser.add_argument('-r', nargs='*',type=float,default=[0.1,0.2,0.3,0.4,0.5])
+# parser.add_argument('-r', nargs='*',type=float,default=[0.1,0.2,0.3,0.4,0.5])
+parser.add_argument('-r', nargs='*',type=float,default=[0.1,0.2])
 settings = utils.load_settings()
 utils.load_settings_to_parser(settings, parser)
 args = parser.parse_args()
@@ -17,22 +18,17 @@ import sys
 sys.path.append(dirname(realpath(__file__)) + sep + pardir)
 
 import lib.evaluation_policies
-import inquirer
 import lib.value_functions
 import lib.mf
 from lib.utils.InteractorRunner import InteractorRunner
-from concurrent.futures import ProcessPoolExecutor, wait, FIRST_COMPLETED
-from sklearn.decomposition import NMF
 import numpy as np
-import scipy.sparse
 from lib.utils.DatasetManager import DatasetManager
-import yaml
-from lib.metrics import InteractionMetricsEvaluator, CumulativeMetricsEvaluator, CumulativeInteractionMetricsEvaluator, UserCumulativeInteractionMetricsEvaluator
+from lib.metrics import CumulativeMetricsEvaluator
 from lib.utils.dataset import Dataset
 from lib.utils.PersistentDataManager import PersistentDataManager
 # from lib.utils.InteractorCache import InteractorCache
-from lib.utils.utils import run_parallel
 import lib.metrics
+import pandas as pd
 import ctypes
 
 
@@ -62,7 +58,7 @@ def evaluate_itr(dataset,dm_id, agent_name):
 # BUFFER_SIZE_EVALUATOR = 1000
 BUFFER_SIZE_EVALUATOR = 100000
 
-metrics_classes = [lib.metrics.Recall, lib.metrics.Hits]
+metrics_classes = [lib.metrics.Recall, lib.metrics.Hits,lib.metrics.NumInteractions]
 metrics_classes_names = list(map(lambda x: x.__name__, metrics_classes))
 
 datasets_preprocessors = [
@@ -74,11 +70,14 @@ dm = DatasetManager()
 ir = InteractorRunner(dm, settings['interactors_general_settings'],
                       settings['agents_preprocessor_parameters'],
                       settings['evaluation_policies_parameters'])
-datasets_metrics_values = defaultdict(
-    lambda: defaultdict(lambda: defaultdict(list)))
+# datasets_metrics_values = defaultdict(
+#     lambda: defaultdict(lambda: defaultdict(list)))
 
-datasets_metrics_users_values = defaultdict(
-    lambda: defaultdict(lambda: defaultdict(list)))
+# datasets_metrics_users_values = defaultdict(
+#     lambda: defaultdict(lambda: defaultdict(list)))
+
+infinite_defaultdict = lambda: defaultdict(infinite_defaultdict)
+dataset_metrics_values = infinite_defaultdict()
 
 for dataset_preprocessor in datasets_preprocessors:
     dm.initialize_engines(dataset_preprocessor)
@@ -119,8 +118,19 @@ for dataset_preprocessor in datasets_preprocessors:
                                                     agent_id),
                         metrics_evaluator.get_id(), metric_class_name))
                 # print(len(metric_values))
-                print(metric_values)
-                raise SystemExit
+                dataset_metrics_values[dm.dataset_preprocessor.name][metric_class_name][agent_name][hit_rate] = metric_values[-1]
+                # raise SystemExit
+
+# print(pd.DataFrame.from_dict(dataset_metrics_values))
+df:pd.DataFrame=utils.nested_dict_to_df(dataset_metrics_values)
+print(df)
+# for dataset_name, df_metric in df.groupby(level=0):
+#     df_metric = df_metric.loc[dataset_name]
+#     # print(dataset_name)
+#     print(df_metric)
+#     for metric_name, df_method in df_metric.groupby(level=0):
+#         df_method = df_method.loc[metric_name]
+#         print(df_method)
                 # datasets_metrics_values[dataset_preprocessor['name']][
                     # metric_class_name][agent_name].extend([
                         # np.mean(list(metric_values[i].values()))
