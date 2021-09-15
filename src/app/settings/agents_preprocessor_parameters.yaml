@@ -1,38 +1,38 @@
 LastFM 5K Validation:
-  GLM_UCB: &id009
+  GLM_UCB:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
         GLM_UCB: {c: 8, item_var: 0.01, iterations: 20, num_lat: 5, stop_criteria: 0.0009,
           user_var: 0.01, var: 0.05}
-  ICTRTS: &id010
+  ICTRTS:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
         ICTRTS: {num_lat: 2, num_particles: 5}
-  LinearEGreedy: &id011
+  LinearEGreedy:
     SimpleAgent:
       action_selection_policy:
         ASPEGreedy: {epsilon: 0.4}
       value_function:
         LinearEGreedy: {item_var: 0.01, iterations: 20, num_lat: 10, stop_criteria: 0.0009,
           user_var: 0.01, var: 0.05}
-  LinearUCB: &id012
+  LinearUCB:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
         LinearUCB: {alpha: 0.75, item_var: 0.01, iterations: 20, num_lat: 5, stop_criteria: 0.0009,
           user_var: 0.01, var: 0.05}
-  MostPopular: &id013
+  MostPopular:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
         MostPopular: {}
-  NICF: &id014
+  NICF:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
@@ -40,48 +40,108 @@ LastFM 5K Validation:
         NICF: {batch: 128, clip_param: 0.2, dropout_rate: 0.1, gamma: 0.0, inner_epoch: 50,
           latent_factor: 20, learning_rate: 0.01, num_blocks: 2, num_heads: 1, restore_model: false,
           rnn_layer: 1, time_step: 3, training_epoch: 30000}
-  OurMethod2: &id015
+  OurMethod2:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
         OurMethod2: {alpha: 0.5, num_lat: 20}
-  PTS: &id016
+  PTS:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
         PTS: {num_lat: 20, num_particles: 2, var: 0.5, var_u: 1.0, var_v: 1.0}
-  Random: &id017
+  Random:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
     value_function:
       Random: {}
-  ThompsonSampling: &id018
+  ThompsonSampling:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
         ThompsonSampling: {alpha_0: 1, beta_0: 100}
-  UCB: &id019
+  UCB:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
         UCB: {c: 0.01}
 LastFM 5K:
-  GLM_UCB: *id009
-  ICTRTS: *id010
-  LinearEGreedy: *id011
-  LinearUCB: *id012
-  MostPopular: *id013
-  NICF: *id014
-  OurMethod2: *id015
-  PTS: *id016
-  Random: *id017
-  ThompsonSampling: *id018
-  UCB: *id019
+  GLM_UCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        GLM_UCB: {c: 8, item_var: 0.01, iterations: 20, num_lat: 5, stop_criteria: 0.0009,
+          user_var: 0.01, var: 0.05}
+  ICTRTS:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        ICTRTS: {num_lat: 2, num_particles: 5}
+  LinearEGreedy:
+    SimpleAgent:
+      action_selection_policy:
+        ASPEGreedy: {epsilon: 0.4}
+      value_function:
+        LinearEGreedy: {item_var: 0.01, iterations: 20, num_lat: 10, stop_criteria: 0.0009,
+          user_var: 0.01, var: 0.05}
+  LinearUCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        LinearUCB: {alpha: 0.75, item_var: 0.01, iterations: 20, num_lat: 5, stop_criteria: 0.0009,
+          user_var: 0.01, var: 0.05}
+  MostPopular:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        MostPopular: {}
+  NICF:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        NICF: {batch: 128, clip_param: 0.2, dropout_rate: 0.1, gamma: 0.0, inner_epoch: 50,
+          latent_factor: 20, learning_rate: 0.01, num_blocks: 2, num_heads: 1, restore_model: false,
+          rnn_layer: 1, time_step: 3, training_epoch: 30000}
+  OurMethod2:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        OurMethod2: {alpha: 0.5, num_lat: 20}
+  PTS:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        PTS: {num_lat: 20, num_particles: 2, var: 0.5, var_u: 1.0, var_v: 1.0}
+  Random:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+    value_function:
+      Random: {}
+  ThompsonSampling:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        ThompsonSampling: {alpha_0: 1, beta_0: 100}
+  UCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        UCB: {c: 0.01}
 
 Good Books:
   ALEntropy:
