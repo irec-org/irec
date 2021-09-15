@@ -15,6 +15,23 @@ Netflix 1K Validation:
   random_seed: 0
   }}
 
+LastFM 5K:
+  dataset_descriptor:
+    dataset_dir: Train-Test_LastFM-5K/
+  preprocessor:
+    - {TRTE:{}}
+LastFM 5K Validation:
+  dataset_descriptor:
+    dataset_dir: Train-Test_LastFM-5K/
+  preprocessor:
+    - {TRTE:{}}
+    - {TRTETrainValidation:{
+  train_size: 0.8,
+  test_consumes: 1,
+  crono: False,
+  random_seed: 0
+  }}
+
 MovieLens 100k (B):
   dataset_descriptor:
     dataset_dir: ml-100k/
