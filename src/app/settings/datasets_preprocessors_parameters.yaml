@@ -1,3 +1,20 @@
+Netflix 1K:
+  dataset_descriptor:
+    dataset_dir: Train-Test_Netflix-1K/
+  preprocessor:
+    - {TRTE:{}}
+Netflix 1K Validation:
+  dataset_descriptor:
+    dataset_dir: Train-Test_Netflix-1K/
+  preprocessor:
+    - {TRTE:{}}
+    - {TRTETrainValidation:{
+  train_size: 0.8,
+  test_consumes: 1,
+  crono: False,
+  random_seed: 0
+  }}
+
 MovieLens 100k (B):
   dataset_descriptor:
     dataset_dir: ml-100k/
