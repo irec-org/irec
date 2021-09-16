@@ -93,7 +93,7 @@ ir = InteractorRunner(dm, settings['interactors_general_settings'],
 # interactors_classes = ir.select_interactors()
 
 metrics_evaluator = UserCumulativeInteractionMetricsEvaluator(
-    None, metrics_classes)
+    None)
 
 # evaluation_policy = ir.get_interactors_evaluation_policy()
 evaluation_policy_name = settings['defaults']['interactors_evaluation_policy']

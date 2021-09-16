@@ -10,6 +10,7 @@ from lib.utils.utils import run_parallel
 import ctypes
 # import lib.utils.dataset as dataset
 from lib.utils import dataset
+from lib.value_functions.Entropy import Entropy
 np.seterr(all='raise')
 
 
@@ -32,12 +33,10 @@ class ThresholdRelevanceEvaluator:
 
 class MetricsEvaluator(Parameterizable):
     def __init__(self,
-                 metrics_classes=[],
                  relevance_evaluator=ThresholdRelevanceEvaluator(3.999),
                  *args,
                  **kwargs):
         super().__init__(*args, **kwargs)
-        self.metrics_classes = metrics_classes
         self.relevance_evaluator = relevance_evaluator
 
 
@@ -53,9 +52,7 @@ class TotalMetricsEvaluator(MetricsEvaluator):
                 (self.ground_truth_dataset.num_total_users,
                  self.ground_truth_dataset.num_total_items))
 
-    @staticmethod
-    def _metric_evaluation(obj_id, metric_class):
-        self = ctypes.cast(obj_id, ctypes.py_object).value
+    def _metric_evaluation(self, metric_class):
         start_time = time.time()
         metric_values = []
         if issubclass(metric_class, Recall):
@@ -83,7 +80,7 @@ class TotalMetricsEvaluator(MetricsEvaluator):
         )
         return metric_values
 
-    def evaluate(self, results):
+    def evaluate(self, metric_class, results):
         self.users_false_negative = defaultdict(int)
         for row in self.ground_truth_dataset.data:
             uid = int(row[0])
@@ -96,16 +93,10 @@ class TotalMetricsEvaluator(MetricsEvaluator):
         uids = list(set(uids))
         self.uids = uids
         self.results = results
-        metrics_values = defaultdict(list)
 
-        results = run_parallel(self._metric_evaluation,
-                               [(id(self), metric_class)
-                                for metric_class in self.metrics_classes],
-                               use_tqdm=False)
-        for result, metric_class in zip(results, self.metrics_classes):
-            metrics_values[metric_class.__name__].extend(result)
+        metric_values = self._metric_evaluation(metric_class)
 
-        return metrics_values
+        return metric_values
 
 
 class CumulativeMetricsEvaluator(MetricsEvaluator):
@@ -121,9 +112,7 @@ class CumulativeMetricsEvaluator(MetricsEvaluator):
         self.buffer_size = buffer_size
         self.parameters.extend(['buffer_size'])
 
-    @staticmethod
-    def _metric_evaluation(obj_id, metric_class):
-        self = ctypes.cast(obj_id, ctypes.py_object).value
+    def _metric_evaluation(self, metric_class):
         if issubclass(metric_class, Recall):
             metric = metric_class(
                 users_false_negative=self.users_false_negative,
@@ -152,7 +141,7 @@ class CumulativeMetricsEvaluator(MetricsEvaluator):
         )
         return metric_values
 
-    def evaluate(self, results):
+    def evaluate(self, metric_class, results):
         self.users_false_negative = defaultdict(int)
         for row in self.ground_truth_dataset.data:
             uid = int(row[0])
@@ -165,15 +154,8 @@ class CumulativeMetricsEvaluator(MetricsEvaluator):
         uids = list(set(uids))
         self.uids = uids
         self.results = results
-        metrics_values = defaultdict(list)
-        results = run_parallel(self._metric_evaluation,
-                               [(id(self), metric_class)
-                                for metric_class in self.metrics_classes],
-                               use_tqdm=False)
-        for result, metric_class in zip(results, self.metrics_classes):
-            metrics_values[metric_class.__name__].extend(result)
-
-        return metrics_values
+        metric_values = self._metric_evaluation(metric_class)
+        return metric_values
 
 
 class InteractionMetricsEvaluator(MetricsEvaluator):
@@ -188,10 +170,8 @@ class InteractionMetricsEvaluator(MetricsEvaluator):
                 (self.ground_truth_dataset.num_total_users,
                  self.ground_truth_dataset.num_total_items))
 
-    @staticmethod
-    def _metric_evaluation(obj_id, num_interactions, interaction_size,
-                           metric_class, interactions_to_evaluate):
-        self = ctypes.cast(obj_id, ctypes.py_object).value
+    def _metric_evaluation(self, metric_class, num_interactions,
+                           interaction_size, interactions_to_evaluate):
         start_time = time.time()
         metric_values = []
         for i in range(num_interactions):
@@ -233,6 +213,7 @@ class InteractionMetricsEvaluator(MetricsEvaluator):
         return metric_values
 
     def evaluate(self,
+                 metric_class,
                  num_interactions,
                  interaction_size,
                  results,
@@ -250,26 +231,21 @@ class InteractionMetricsEvaluator(MetricsEvaluator):
         for uid, item in results:
             self.users_items_recommended[uid].append(item)
         self.uids = list(self.users_items_recommended.keys())
-        if ILD in self.metrics_classes:
+        if isinstance(metric_class, ILD):
             self.items_distance = get_items_distance(
                 self.ground_truth_consumption_matrix)
-        if EPC in self.metrics_classes:
+        if isinstance(metric_class, EPC):
             self.items_normalized_popularity = lib.value_functions.MostPopular.get_items_popularity(
                 self.ground_truth_consumption_matrix)
-        if Entropy in self.metrics_classes:
+        if isinstance(metric_class, Entropy):
             self.items_entropy = lib.value_functions.Entropy.get_items_entropy(
                 self.ground_truth_consumption_matrix)
 
-        metrics_values = defaultdict(list)
-        results = run_parallel(self._metric_evaluation,
-                               [(id(self), num_interactions, interaction_size,
-                                 metric_class, interactions_to_evaluate)
-                                for metric_class in self.metrics_classes],
-                               use_tqdm=False)
-        for result, metric_class in zip(results, self.metrics_classes):
-            metrics_values[metric_class.__name__].extend(result)
+        metric_values = self._metric_evaluation(metric_class, num_interactions,
+                                                interaction_size,
+                                                interactions_to_evaluate)
 
-        return metrics_values
+        return metric_values
 
 
 class CumulativeInteractionMetricsEvaluator(InteractionMetricsEvaluator):
@@ -277,10 +253,8 @@ class CumulativeInteractionMetricsEvaluator(InteractionMetricsEvaluator):
     def metric_summarize(users_metric_values):
         return np.mean(list(users_metric_values.values()))
 
-    @staticmethod
-    def _metric_evaluation(obj_id, num_interactions, interaction_size,
-                           metric_class, interactions_to_evaluate):
-        self = ctypes.cast(obj_id, ctypes.py_object).value
+    def _metric_evaluation(self, metric_class, num_interactions,
+                           interaction_size, interactions_to_evaluate):
         start_time = time.time()
         metric_values = []
         if issubclass(metric_class, Recall):
@@ -344,10 +318,8 @@ class IterationsMetricsEvaluator(InteractionMetricsEvaluator):
     def metric_summarize(users_metric_values):
         return np.mean(users_metric_values)
 
-    @staticmethod
-    def _metric_evaluation(obj_id, num_interactions, interaction_size,
-                           metric_class, iterations_to_evaluate):
-        self = ctypes.cast(obj_id, ctypes.py_object).value
+    def _metric_evaluation(self, metric_class, num_interactions,
+                           interaction_size, iterations_to_evaluate):
         start_time = time.time()
         metric_values = []
         if issubclass(metric_class, Recall):
@@ -459,6 +431,7 @@ class Hits(Metric):
     def update_recommendation(self, uid, item, reward):
         if self.relevance_evaluator.is_relevant(reward):
             self.users_true_positive[uid] += 1
+
 
 class NumInteractions(Metric):
     def __init__(self, *args, **kwargs):

@@ -38,10 +38,9 @@ from lib.utils.utils import run_parallel
 import ctypes
 
 
-def evaluate_itr(dataset ,dm_id, agent_name):
+def evaluate_itr(dataset ,dm_id, agent_name, metric_evaluator,metric_class):
     dm = ctypes.cast(dm_id, ctypes.py_object).value
     print(f"Evaluating {agent_name} results")
-    metric_evaluator = UserCumulativeInteractionMetricsEvaluator(dataset, metrics_classes)
     parameters = settings['agents_preprocessor_parameters'][
         dm.dataset_preprocessor.name][agent_name]
     agent = utils.create_agent(agent_name, parameters)
@@ -53,23 +52,22 @@ def evaluate_itr(dataset ,dm_id, agent_name):
 
     metrics_pdm = PersistentDataManager(directory='metrics')
     if isinstance(metric_evaluator, CumulativeInteractionMetricsEvaluator):
-        metrics_values = metric_evaluator.evaluate(
+        metric_values = metric_evaluator.evaluate(metric_class,
             evaluation_policy.num_interactions,
             evaluation_policy.interaction_size,
             users_items_recommended,
             interactions_to_evaluate=nums_interactions_to_show)
     elif isinstance(metric_evaluator, InteractionMetricsEvaluator):
-        metrics_values = metric_evaluator.evaluate(
+        metric_values = metric_evaluator.evaluate(metric_class,
             evaluation_policy.num_interactions,
             evaluation_policy.interaction_size, users_items_recommended)
     elif isinstance(metric_evaluator, CumulativeMetricsEvaluator):
-        metrics_values = metric_evaluator.evaluate(users_items_recommended)
-
-    for metric_name, metric_values in metrics_values.items():
-        metrics_pdm.save(
-            os.path.join(
-                utils.get_experiment_run_id(dm, evaluation_policy, agent_id),
-                metric_evaluator.get_id(), metric_name), metric_values)
+        metric_values = metric_evaluator.evaluate(users_items_recommended)
+    metric_name = metric_class.__name__
+    metrics_pdm.save(
+        os.path.join(
+            utils.get_experiment_run_id(dm, evaluation_policy, agent_id),
+            metric_evaluator.get_id(), metric_name), metric_values)
 
 
 # parser = argparse.ArgumentParser(description='Grid search')
@@ -124,14 +122,17 @@ with ProcessPoolExecutor() as executor:
         # args = [(id(metric_evaluator), id(dm), itr_class)
         # for itr_class in interactors_classes]
         # run_parallel(evaluate_itr, args, use_tqdm=False)
-        for agent_name in args.m:
-            f = executor.submit(evaluate_itr,dataset, id(dm), agent_name)
-            futures.add(f)
-            if len(futures) >= args.num_tasks:
-                completed, futures = wait(futures,
-                        return_when=FIRST_COMPLETED)
-                for f in futures:
-                    f.result()
+
+        for metric_class in metrics_classes:
+            metric_evaluator = UserCumulativeInteractionMetricsEvaluator(dataset)
+            for agent_name in args.m:
+                f = executor.submit(evaluate_itr,dataset, id(dm), agent_name,metric_evaluator,metric_class)
+                futures.add(f)
+                if len(futures) >= args.num_tasks:
+                    completed, futures = wait(futures,
+                            return_when=FIRST_COMPLETED)
+                    for f in futures:
+                        f.result()
         for f in futures:
             f.result()
     for f in futures:
