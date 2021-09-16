@@ -1,336 +1,291 @@
-Netflix 1K:
+'Amazon Kindle Store':
   dataset_descriptor:
-    dataset_dir: Train-Test_Netflix-1K/
+    dataset_dir: Train-Test_Amazon-Kindle-Store/
   preprocessor:
-    - {TRTE:{}}
-Netflix 1K Validation:
+    - TRTE: {}
+'Ciao DVD':
   dataset_descriptor:
-    dataset_dir: Train-Test_Netflix-1K/
+    dataset_dir: Train-Test_Ciao-DVD/
   preprocessor:
-    - {TRTE:{}}
-    - {TRTETrainValidation:{
-  train_size: 0.8,
-  test_consumes: 1,
-  crono: False,
-  random_seed: 0
-  }}
-
-LastFM 5K:
+    - TRTE: {}
+'Good Books':
+  dataset_descriptor:
+    dataset_dir: Train-Test_Good-Books/
+  preprocessor:
+    - TRTE: {}
+'Good Books Non-Pop':
+  dataset_descriptor:
+    dataset_dir: Train-Test_Good-Books/
+  preprocessor:
+    - TRTE: {}
+    - PopularityFilter:
+        keep_popular: false
+        num_items_threshold: 640
+    - TrainTestConsumption:
+        crono: false
+        random_seed: 0
+        test_consumes: 1
+        train_size: 0.8
+'Good Books Pop':
+  dataset_descriptor:
+    dataset_dir: Train-Test_Good-Books/
+  preprocessor:
+    - TRTE: {}
+    - PopularityFilter:
+        keep_popular: true
+        num_items_threshold: 640
+    - TrainTestConsumption:
+        crono: false
+        random_seed: 0
+        test_consumes: 1
+        train_size: 0.8
+'Good Books Sampled':
+  dataset_descriptor:
+    dataset_dir: Train-Test_Good-Books/
+  preprocessor:
+    - TRTE: {}
+    - TRTESample
+'Good Books Validation':
+  dataset_descriptor:
+    dataset_dir: Train-Test_Good-Books/
+  preprocessor:
+    - TRTE: {}
+    - TRTETrainValidation:
+        crono: false
+        random_seed: 0
+        test_consumes: 1
+        train_size: 0.8
+'LastFM 5K':
   dataset_descriptor:
     dataset_dir: Train-Test_LastFM-5K/
   preprocessor:
-    - {TRTE:{}}
-LastFM 5K Validation:
+    - TRTE: {}
+'LastFM 5K Validation':
   dataset_descriptor:
     dataset_dir: Train-Test_LastFM-5K/
   preprocessor:
-    - {TRTE:{}}
-    - {TRTETrainValidation:{
-  train_size: 0.8,
-  test_consumes: 1,
-  crono: False,
-  random_seed: 0
-  }}
-
-MovieLens 100k (B):
+    - TRTE: {}
+    - TRTETrainValidation:
+        crono: false
+        random_seed: 0
+        test_consumes: 1
+        train_size: 0.8
+'MovieLens 100k (B)':
   dataset_descriptor:
     dataset_dir: ml-100k/
   preprocessor:
-    - {MovieLens100k: {}}
-    - {TrainTestConsumption: {
-      train_size: 0.8,
-      test_consumes: 1,
-      crono: False,
-      random_seed: 0,
-      } }
-MovieLens 100k (B) Pop:
+    - MovieLens100k: {}
+    - TrainTestConsumption:
+        crono: false
+        random_seed: 0
+        test_consumes: 1
+        train_size: 0.8
+'MovieLens 100k (B) Pop':
   dataset_descriptor:
     dataset_dir: ml-100k/
   preprocessor:
-    - {MovieLens100k: {}}
-    - {TrainTestConsumption: {
-      train_size: 0.8,
-      test_consumes: 1,
-      crono: False,
-      random_seed: 0,
-      } }
-    - {PopularityFilter:{
-      keep_popular: True,
-      num_items_threshold: 100,
-    }}
-  #name: MovieLens 100k (B)
-MovieLens 1M (B):
+    - MovieLens100k: {}
+    - TrainTestConsumption:
+        crono: false
+        random_seed: 0
+        test_consumes: 1
+        train_size: 0.8
+    - PopularityFilter:
+        keep_popular: true
+        num_items_threshold: 100
+'MovieLens 10M':
+  dataset_descriptor:
+    dataset_dir: Train-Test_ML-10M/
+  preprocessor:
+    - TRTE: {}
+'MovieLens 10M Non-Pop':
+  dataset_descriptor:
+    dataset_dir: Train-Test_ML-10M/
+  preprocessor:
+    - TRTE: {}
+    - PopularityFilter:
+        keep_popular: false
+        num_items_threshold: 918
+    - TrainTestConsumption:
+        crono: false
+        random_seed: 0
+        test_consumes: 1
+        train_size: 0.8
+'MovieLens 10M Non-Pop Validation':
+  dataset_descriptor:
+    dataset_dir: Train-Test_ML-10M/
+  preprocessor:
+    - TRTE: {}
+    - PopularityFilter:
+        keep_popular: false
+        num_items_threshold: 918
+    - TrainTestConsumption:
+        crono: false
+        random_seed: 0
+        test_consumes: 1
+        train_size: 0.8
+'MovieLens 10M Pop':
+  dataset_descriptor:
+    dataset_dir: Train-Test_ML-10M/
+  preprocessor:
+    - TRTE: {}
+    - PopularityFilter:
+        keep_popular: true
+        num_items_threshold: 918
+    - TrainTestConsumption:
+        crono: false
+        random_seed: 0
+        test_consumes: 1
+        train_size: 0.8
+'MovieLens 10M Pop Validation':
+  dataset_descriptor:
+    dataset_dir: Train-Test_ML-10M/
+  preprocessor:
+    - TRTE: {}
+    - PopularityFilter:
+        keep_popular: true
+        num_items_threshold: 918
+    - TrainTestConsumption:
+        crono: false
+        random_seed: 0
+        test_consumes: 1
+        train_size: 0.8
+'MovieLens 10M Sampled':
+  dataset_descriptor:
+    dataset_dir: Train-Test_ML-10M/
+  preprocessor:
+    - TRTE: {}
+    - TRTESample
+'MovieLens 10M Validation':
+  dataset_descriptor:
+    dataset_dir: Train-Test_ML-10M/
+  preprocessor:
+    - TRTE: {}
+    - TRTETrainValidation:
+        crono: false
+        random_seed: 0
+        test_consumes: 1
+        train_size: 0.8
+'MovieLens 1M':
+  dataset_descriptor:
+    dataset_dir: Train-Test_ML-1M/
+  preprocessor:
+    - TRTE: {}
+'MovieLens 1M (B)':
   dataset_descriptor:
     dataset_dir: ml-1m/
   preprocessor:
     - MovieLens1M
     - TrainTestConsumption
-  #name: MovieLens 1M (B)
-MovieLens 1M (B) Pop:
+'MovieLens 1M (B) Pop':
   dataset_descriptor:
     dataset_dir: ml-1m/
   preprocessor:
-    - {MovieLens1M: {}}
-    - {TrainTestConsumption: {
-      train_size: 0.8,
-      test_consumes: 1,
-      crono: False,
-      random_seed: 0,
-      } }
-    - {PopularityFilter:{
-      keep_popular: True,
-      num_items_threshold: 68,
-    }}
-  #name: MovieLens 1M (B)
-MovieLens 1M:
+    - MovieLens1M: {}
+    - TrainTestConsumption:
+        crono: false
+        random_seed: 0
+        test_consumes: 1
+        train_size: 0.8
+    - PopularityFilter:
+        keep_popular: true
+        num_items_threshold: 68
+'MovieLens 1M Validation':
   dataset_descriptor:
     dataset_dir: Train-Test_ML-1M/
   preprocessor:
-    - {TRTE:{}}
-MovieLens 10M:
-  dataset_descriptor:
-    dataset_dir: Train-Test_ML-10M/
-  preprocessor:
-    - {TRTE:{}}
-Good Books:
-  dataset_descriptor:
-    dataset_dir: Train-Test_Good-Books/
-  preprocessor:
-    - {TRTE:{}}
-Yahoo Music:
-  dataset_descriptor:
-    dataset_dir: Train-Test_Yahoo-Music/
-  preprocessor:
-    - {TRTE:{}}
-Ciao DVD:
-  dataset_descriptor:
-    dataset_dir: Train-Test_Ciao-DVD/
-  preprocessor:
-    - {TRTE:{}}
-Amazon Kindle Store:
-  dataset_descriptor:
-    dataset_dir: Train-Test_Amazon-Kindle-Store/
-  preprocessor:
-    - {TRTE:{}}
+    - TRTE: {}
+    - TRTETrainValidation:
+        crono: false
+        random_seed: 0
+        test_consumes: 1
+        train_size: 0.8
 Netflix:
   dataset_descriptor:
     dataset_dir: Train-Test_Netflix/
   preprocessor:
     - Netflix
-Yahoo Music Validation:
+'Netflix 1K':
+  dataset_descriptor:
+    dataset_dir: Train-Test_Netflix-1K/
+  preprocessor:
+    - TRTE: {}
+'Netflix 1K Validation':
+  dataset_descriptor:
+    dataset_dir: Train-Test_Netflix-1K/
+  preprocessor:
+    - TRTE: {}
+    - TRTETrainValidation:
+        crono: false
+        random_seed: 0
+        test_consumes: 1
+        train_size: 0.8
+'Yahoo Music':
   dataset_descriptor:
     dataset_dir: Train-Test_Yahoo-Music/
   preprocessor:
-    - {TRTE:{}}
-    - {TRTETrainValidation:{
-  train_size: 0.8,
-  test_consumes: 1,
-  crono: False,
-  random_seed: 0
-  }}
-MovieLens 10M Validation:
-  dataset_descriptor:
-    dataset_dir: Train-Test_ML-10M/
-  preprocessor:
-    - {TRTE:{}}
-    - {TRTETrainValidation:{
-  train_size: 0.8,
-  test_consumes: 1,
-  crono: False,
-  random_seed: 0
-  }}
-Good Books Validation:
-  dataset_descriptor:
-    dataset_dir: Train-Test_Good-Books/
-  preprocessor:
-    - {TRTE:{}}
-    - {TRTETrainValidation:{
-  train_size: 0.8,
-  test_consumes: 1,
-  crono: False,
-  random_seed: 0
-  }}
-Yahoo Music Sampled:
+    - TRTE: {}
+'Yahoo Music Non-Pop':
   dataset_descriptor:
     dataset_dir: Train-Test_Yahoo-Music/
   preprocessor:
-    - {TRTE:{}}
+    - TRTE: {}
+    - PopularityFilter:
+        keep_popular: false
+        num_items_threshold: 92
+    - TrainTestConsumption:
+        crono: false
+        random_seed: 0
+        test_consumes: 1
+        train_size: 0.8
+'Yahoo Music Pop':
+  dataset_descriptor:
+    dataset_dir: Train-Test_Yahoo-Music/
+  preprocessor:
+    - TRTE: {}
+    - PopularityFilter:
+        keep_popular: true
+        num_items_threshold: 92
+    - CombineTrainTest: {}
+    - TrainTestConsumption:
+        crono: true
+        random_seed: 0
+        test_consumes: 1
+        train_size: 0.8
+'Yahoo Music Pop-Removed-Ent':
+  dataset_descriptor:
+    dataset_dir: Train-Test_Yahoo-Music/
+  preprocessor:
+    - TRTE: {}
+    - PopRemoveEnt:
+        new_rating: 1
+        num_items_threshold: 92
+'Yahoo Music Pop-Removed-Ent Validation':
+  dataset_descriptor:
+    dataset_dir: Train-Test_Yahoo-Music/
+  preprocessor:
+    - TRTE: {}
+    - PopRemoveEnt:
+        new_rating: 1
+        num_items_threshold: 92
+    - TRTETrainValidation:
+        crono: false
+        random_seed: 0
+        test_consumes: 1
+        train_size: 0.8
+'Yahoo Music Sampled':
+  dataset_descriptor:
+    dataset_dir: Train-Test_Yahoo-Music/
+  preprocessor:
+    - TRTE: {}
     - TRTESample
-MovieLens 10M Sampled:
-  dataset_descriptor:
-    dataset_dir: Train-Test_ML-10M/
-  preprocessor:
-    - {TRTE:{}}
-    - TRTESample
-Good Books Sampled:
-  dataset_descriptor:
-    dataset_dir: Train-Test_Good-Books/
-  preprocessor:
-    - {TRTE:{}}
-    - TRTESample
-MovieLens 1M Validation:
-  dataset_descriptor:
-    dataset_dir: Train-Test_ML-1M/
-  preprocessor:
-    - {TRTE:{}}
-    - {TRTETrainValidation:{
-  train_size: 0.8,
-  test_consumes: 1,
-  crono: False,
-  random_seed: 0
-  }}
-Yahoo Music Pop:
+'Yahoo Music Validation':
   dataset_descriptor:
     dataset_dir: Train-Test_Yahoo-Music/
   preprocessor:
-    - {TRTE:{}}
-    - {PopularityFilter:{
-      keep_popular: True,
-      num_items_threshold: 92,
-    }}
-    - {CombineTrainTest: {}}
-    - {TrainTestConsumption: {
-      train_size: 0.8,
-      test_consumes: 1,
-      crono: True,
-      random_seed: 0,
-      } }
-MovieLens 10M Pop:
-  dataset_descriptor:
-    dataset_dir: Train-Test_ML-10M/
-  preprocessor:
-    - {TRTE:{}}
-    - {PopularityFilter:{
-      keep_popular: True,
-      num_items_threshold: 918,
-    }}
-    - {TrainTestConsumption: {
-      train_size: 0.8,
-      test_consumes: 1,
-      crono: False,
-      random_seed: 0,
-      } }
-MovieLens 10M Non-Pop:
-  dataset_descriptor:
-    dataset_dir: Train-Test_ML-10M/
-  preprocessor:
-    - {TRTE:{}}
-    - {PopularityFilter:{
-      keep_popular: False,
-      num_items_threshold: 918,
-    }}
-    - {TrainTestConsumption: {
-      train_size: 0.8,
-      test_consumes: 1,
-      crono: False,
-      random_seed: 0,
-      } }
-
-MovieLens 10M Pop Validation:
-  dataset_descriptor:
-    dataset_dir: Train-Test_ML-10M/
-  preprocessor:
-    - {TRTE:{}}
-    - {PopularityFilter:{
-      keep_popular: True,
-      num_items_threshold: 918,
-    }}
-    - {TrainTestConsumption: {
-      train_size: 0.8,
-      test_consumes: 1,
-      crono: False,
-      random_seed: 0,
-      } }
-MovieLens 10M Non-Pop Validation:
-  dataset_descriptor:
-    dataset_dir: Train-Test_ML-10M/
-  preprocessor:
-    - {TRTE:{}}
-    - {PopularityFilter:{
-      keep_popular: False,
-      num_items_threshold: 918,
-    }}
-    - {TrainTestConsumption: {
-      train_size: 0.8,
-      test_consumes: 1,
-      crono: False,
-      random_seed: 0,
-      } }
-Yahoo Music Non-Pop:
-  dataset_descriptor:
-    dataset_dir: Train-Test_Yahoo-Music/
-  preprocessor:
-    - {TRTE:{}}
-    - {PopularityFilter:{
-      keep_popular: False,
-      num_items_threshold: 92,
-    }}
-    - {TrainTestConsumption: {
-      train_size: 0.8,
-      test_consumes: 1,
-      crono: False,
-      random_seed: 0,
-      } }
-Yahoo Music Pop:
-  dataset_descriptor:
-    dataset_dir: Train-Test_Yahoo-Music/
-  preprocessor:
-    - {TRTE:{}}
-    - {PopularityFilter:{
-      keep_popular: True,
-      num_items_threshold: 92,
-    }}
-    - {TrainTestConsumption: {
-      train_size: 0.8,
-      test_consumes: 1,
-      crono: False,
-      random_seed: 0,
-      } }
-Good Books Non-Pop:
-  dataset_descriptor:
-    dataset_dir: Train-Test_Good-Books/
-  preprocessor:
-    - {TRTE:{}}
-    - {PopularityFilter:{
-      keep_popular: False,
-      num_items_threshold: 640,
-    }}
-    - {TrainTestConsumption: {
-      train_size: 0.8,
-      test_consumes: 1,
-      crono: False,
-      random_seed: 0,
-      } }
-Good Books Pop:
-  dataset_descriptor:
-    dataset_dir: Train-Test_Good-Books/
-  preprocessor:
-    - {TRTE:{}}
-    - {PopularityFilter:{
-      keep_popular: True,
-      num_items_threshold: 640,
-    }}
-    - {TrainTestConsumption: {
-      train_size: 0.8,
-      test_consumes: 1,
-      crono: False,
-      random_seed: 0,
-      } }
-Yahoo Music Pop-Removed-Ent:
-  dataset_descriptor:
-    dataset_dir: Train-Test_Yahoo-Music/
-  preprocessor:
-    - {TRTE:{}}
-    - {PopRemoveEnt:{num_items_threshold: 92, new_rating: 1}}
-Yahoo Music Pop-Removed-Ent Validation:
-  dataset_descriptor:
-    dataset_dir: Train-Test_Yahoo-Music/
-  preprocessor:
-    - {TRTE:{}}
-    - {PopRemoveEnt:{num_items_threshold: 92, new_rating: 1}}
-    - {TRTETrainValidation:{
-  train_size: 0.8,
-  test_consumes: 1,
-  crono: False,
-  random_seed: 0
-  }}
+    - TRTE: {}
+    - TRTETrainValidation:
+        crono: false
+        random_seed: 0
+        test_consumes: 1
+        train_size: 0.8
