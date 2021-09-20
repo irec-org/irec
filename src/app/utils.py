@@ -1,6 +1,7 @@
 from os.path import dirname, realpath, sep, pardir
 import os
 import sys
+
 sys.path.append(dirname(dirname(realpath(__file__))))
 import re
 import pickle
@@ -29,6 +30,7 @@ import copy
 import os.path
 import collections.abc
 import pandas as pd
+
 LATEX_TABLE_FOOTER = r"""
 \end{tabular}
 \end{document}
@@ -73,7 +75,7 @@ class Singleton:
             return self._instance
 
     def __call__(self):
-        raise TypeError('Singletons must be accessed through `instance()`.')
+        raise TypeError("Singletons must be accessed through `instance()`.")
 
 
 @Singleton
@@ -88,7 +90,7 @@ class Settings:
 
 def gen_dict_extract(key, var):
 
-    if hasattr(var, 'items'):
+    if hasattr(var, "items"):
         for k, v in var.items():
             if k == key:
                 yield v
@@ -122,48 +124,53 @@ def class2dict(instance):
 
 
 def generate_table_spec(nums_interactions_to_show, num_datasets_preprocessors):
-    res = '|'
-    for i in range(1 + len(nums_interactions_to_show) *
-                   num_datasets_preprocessors):
-        res += 'c'
+    res = "|"
+    for i in range(1 + len(nums_interactions_to_show) * num_datasets_preprocessors):
+        res += "c"
         if i % (len(nums_interactions_to_show)) == 0:
-            res += '|'
+            res += "|"
     return res
 
 
 def generate_datasets_line(nums_interactions_to_show, preprocessors_names):
-    return ' & '.join([
-        r"\multicolumn{%d}{c|}{%s}" % (len(nums_interactions_to_show), i)
-        for i in preprocessors_names
-    ])
+    return " & ".join(
+        [
+            r"\multicolumn{%d}{c|}{%s}" % (len(nums_interactions_to_show), i)
+            for i in preprocessors_names
+        ]
+    )
 
 
-def generate_metrics_header_line(nums_interactions_to_show, num_preprocessors,
-                                 metric_name):
-    return ' & '.join(
+def generate_metrics_header_line(
+    nums_interactions_to_show, num_preprocessors, metric_name
+):
+    return " & ".join(
         map(
-            lambda x: r"\multicolumn{%d}{c|}{%s}" %
-            (len(nums_interactions_to_show), x),
-            [metric_name] * num_preprocessors))
+            lambda x: r"\multicolumn{%d}{c|}{%s}" % (len(nums_interactions_to_show), x),
+            [metric_name] * num_preprocessors,
+        )
+    )
 
 
-def generate_interactions_header_line(nums_interactions_to_show,
-                                      num_preprocessors):
-    return ' & '.join([' & '.join(map(str, nums_interactions_to_show))] *
-                      num_preprocessors)
+def generate_interactions_header_line(nums_interactions_to_show, num_preprocessors):
+    return " & ".join(
+        [" & ".join(map(str, nums_interactions_to_show))] * num_preprocessors
+    )
 
 
-def generate_metric_interactions_header(nums_interactions_to_show,
-                                        num_preprocessors, metric_name):
+def generate_metric_interactions_header(
+    nums_interactions_to_show, num_preprocessors, metric_name
+):
     btex = LATEX_TABLE_METRICS_INTERACTIONS_HEADER % (
-        generate_metrics_header_line(nums_interactions_to_show,
-                                     num_preprocessors, metric_name),
-        generate_interactions_header_line(nums_interactions_to_show,
-                                          num_preprocessors))
+        generate_metrics_header_line(
+            nums_interactions_to_show, num_preprocessors, metric_name
+        ),
+        generate_interactions_header_line(nums_interactions_to_show, num_preprocessors),
+    )
     return btex
 
 
-def flatten_dict(d, parent_key='', sep='.'):
+def flatten_dict(d, parent_key="", sep="."):
     items = []
     for k, v in d.items():
         new_key = parent_key + sep + k if parent_key else k
@@ -187,32 +194,63 @@ def _do_nothing(d):
 def load_settings():
     d = dict()
     loader = yaml.SafeLoader
-    d['agents_preprocessor_parameters'] = yaml.load(open(
-        dirname(realpath(__file__)) + sep + "settings" + sep +
-        "agents_preprocessor_parameters.yaml"),
-                                                    Loader=loader)
-    d['agents_preprocessor_parameters'] = _do_nothing(
-        d['agents_preprocessor_parameters'])
+    d["agents_preprocessor_parameters"] = yaml.load(
+        open(
+            dirname(realpath(__file__))
+            + sep
+            + "settings"
+            + sep
+            + "agents_preprocessor_parameters.yaml"
+        ),
+        Loader=loader,
+    )
+    d["agents_preprocessor_parameters"] = _do_nothing(
+        d["agents_preprocessor_parameters"]
+    )
 
-    d['interactors_general_settings'] = yaml.load(open(
-        dirname(realpath(__file__)) + sep + "settings" + sep +
-        "interactors_general_settings.yaml"),
-                                                  Loader=loader)
+    d["interactors_general_settings"] = yaml.load(
+        open(
+            dirname(realpath(__file__))
+            + sep
+            + "settings"
+            + sep
+            + "interactors_general_settings.yaml"
+        ),
+        Loader=loader,
+    )
 
-    d['agents_search_parameters'] = yaml.load(open(
-        dirname(realpath(__file__)) + sep + "settings" + sep +
-        "agents_search_parameters.yaml"),
-                                              Loader=loader)
+    d["agents_search_parameters"] = yaml.load(
+        open(
+            dirname(realpath(__file__))
+            + sep
+            + "settings"
+            + sep
+            + "agents_search_parameters.yaml"
+        ),
+        Loader=loader,
+    )
 
-    d['evaluation_policies_parameters'] = yaml.load(open(
-        dirname(realpath(__file__)) + sep + "settings" + sep +
-        "evaluation_policies_parameters.yaml"),
-                                                    Loader=loader)
+    d["evaluation_policies_parameters"] = yaml.load(
+        open(
+            dirname(realpath(__file__))
+            + sep
+            + "settings"
+            + sep
+            + "evaluation_policies_parameters.yaml"
+        ),
+        Loader=loader,
+    )
 
-    d['dataset_loaders'] = yaml.load(open(
-        dirname(realpath(__file__)) + sep + "settings" + sep +
-        "dataset_loaders.yaml"),
-                                     Loader=loader)
+    d["dataset_loaders"] = yaml.load(
+        open(
+            dirname(realpath(__file__))
+            + sep
+            + "settings"
+            + sep
+            + "dataset_loaders.yaml"
+        ),
+        Loader=loader,
+    )
 
     # with open(
     # dirname(realpath(__file__)) + sep + "settings" + sep +
@@ -227,20 +265,20 @@ def load_settings():
     # } for k, setting in d['datasets_preprocessors_parameters'].items()
     # }
     with open(
-            dirname(realpath(__file__)) + sep + "settings" + sep +
-            "defaults.yaml") as f:
-        d['defaults'] = yaml.load(f, Loader=loader)
+        dirname(realpath(__file__)) + sep + "settings" + sep + "defaults.yaml"
+    ) as f:
+        d["defaults"] = yaml.load(f, Loader=loader)
     return d
 
 
 def load_settings_to_parser(settings, parser):
     settings_flatten = flatten_dict(settings)
     for k, v in settings_flatten.items():
-        parser.add_argument(f'--{k}', default=v, type=yaml.safe_load)
+        parser.add_argument(f"--{k}", default=v, type=yaml.safe_load)
         # parser.add_argument(f'--{k}')
 
 
-def sync_settings_from_args(settings, args, sep='.'):
+def sync_settings_from_args(settings, args, sep="."):
     settings = copy.deepcopy(settings)
     args_dict = vars(args)
     settings_flatten = flatten_dict(settings)
@@ -254,13 +292,13 @@ def sync_settings_from_args(settings, args, sep='.'):
 
 def plot_similar_items(ys, method1, method2, title=None):
     fig, ax = plt.subplots()
-    ax.plot(np.sort(ys)[::-1], linewidth=2, color='k')
+    ax.plot(np.sort(ys)[::-1], linewidth=2, color="k")
     ax.yaxis.set_major_formatter(mtick.PercentFormatter())
     # ax.xaxis.set_major_formatter(mtick.PercentFormatter())
     # ax.set_title()
     ax.set_title(title)
-    ax.set_xlabel('Users Rank')
-    ax.set_ylabel('Similar items (%)')
+    ax.set_xlabel("Users Rank")
+    ax.set_ylabel("Similar items (%)")
     return fig
 
 
@@ -268,25 +306,46 @@ def get_experiment_run_id(dm, evaluation_policy, itr_id):
     return os.path.join(dm.get_id(), evaluation_policy.get_id(), itr_id)
 
 
-def run_interactor(agent, agent_name, agent_parameters, dataset_name,
-                   dataset_parameters, traintest_dataset: TrainTestDataset,
-                   evaluation_policy: lib.evaluation_policies.EvaluationPolicy,
-                   evaluation_policy_name, evaluation_policy_parameters,
-                   forced_run: bool):
+def run_interactor(
+    agent,
+    agent_name,
+    agent_parameters,
+    dataset_name,
+    dataset_parameters,
+    traintest_dataset: TrainTestDataset,
+    evaluation_policy: lib.evaluation_policies.EvaluationPolicy,
+    evaluation_policy_name,
+    evaluation_policy_parameters,
+):
     # client = mlflow.tracking.MlflowClient()
     # experiment = client.create_experiment('dataset')
-    mlflow.set_experiment('agent')
+    mlflow.set_experiment("agent")
     with mlflow.start_run() as run:
-        log_custom_parameters(parameters_normalize(constants.AGENT_PARAMETERS_PREFIX, agent_name, agent_parameters))
-        log_custom_parameters(parameters_normalize(constants.DATASET_PARAMETERS_PREFIX, dataset_name, dataset_parameters))
-        log_custom_parameters(parameters_normalize(constants.EVALUATION_POLICY_PARAMETERS_PREFIX, evaluation_policy_name, evaluation_policy_parameters))
+        log_custom_parameters(
+            parameters_normalize(
+                constants.AGENT_PARAMETERS_PREFIX, agent_name, agent_parameters
+            )
+        )
+        log_custom_parameters(
+            parameters_normalize(
+                constants.DATASET_PARAMETERS_PREFIX, dataset_name, dataset_parameters
+            )
+        )
+        log_custom_parameters(
+            parameters_normalize(
+                constants.EVALUATION_POLICY_PARAMETERS_PREFIX,
+                evaluation_policy_name,
+                evaluation_policy_parameters,
+            )
+        )
 
         interactions, acts_info = evaluation_policy.evaluate(
-            agent, traintest_dataset.train, traintest_dataset.test)
+            agent, traintest_dataset.train, traintest_dataset.test
+        )
 
-        fname = './tmp/interactions.pickle'
+        fname = "./tmp/interactions.pickle"
         log_custom_artifact(fname, interactions)
-        fname = './tmp/acts_info.pickle'
+        fname = "./tmp/acts_info.pickle"
         log_custom_artifact(fname, acts_info)
         # create_path_to_file(fname)
         # with open(fname,mode='wb') as f:
@@ -296,8 +355,7 @@ def run_interactor(agent, agent_name, agent_parameters, dataset_name,
 
 def get_agent_id(agent_name, agent_parameters):
     # agent_dict = class2dict(agent)
-    return agent_name + '_' + json.dumps(agent_parameters,
-                                         separators=(',', ':'))
+    return agent_name + "_" + json.dumps(agent_parameters, separators=(",", ":"))
 
 
 # def get_agent_id(agent, template_parameters):
@@ -309,33 +367,34 @@ def get_agent_id(agent_name, agent_parameters):
 
 def get_agent_id_from_settings(agent, settings):
     agent_settings = next(
-        gen_dict_extract(agent.name,
-                         settings['agents_preprocessor_parameters']))
+        gen_dict_extract(agent.name, settings["agents_preprocessor_parameters"])
+    )
     # agent_settings = copy.copy(settings['agents_preprocessor_parameters'][dataset_preprocessor_name][agent.name])
     return get_agent_id(agent, agent_settings)
 
 
 def create_action_selection_policy(action_selection_policy_settings):
-    action_selection_policy_name = list(
-        action_selection_policy_settings.keys())[0]
+    action_selection_policy_name = list(action_selection_policy_settings.keys())[0]
     action_selection_policy_parameters = list(
-        action_selection_policy_settings.values())[0]
-    action_selection_policy = eval('lib.action_selection_policies.' +
-                                   action_selection_policy_name)(
-                                       **action_selection_policy_parameters)
+        action_selection_policy_settings.values()
+    )[0]
+    action_selection_policy = eval(
+        "lib.action_selection_policies." + action_selection_policy_name
+    )(**action_selection_policy_parameters)
 
-    if isinstance(action_selection_policy,
-                  lib.action_selection_policies.ASPReranker):
+    if isinstance(action_selection_policy, lib.action_selection_policies.ASPReranker):
         action_selection_policy.rule = create_value_function(
-            action_selection_policy.rule)
+            action_selection_policy.rule
+        )
     return action_selection_policy
 
 
 def create_value_function(value_function_settings):
     value_function_name = list(value_function_settings.keys())[0]
     value_function_parameters = list(value_function_settings.values())[0]
-    value_function = eval('lib.value_functions.' +
-                          value_function_name)(**value_function_parameters)
+    value_function = eval("lib.value_functions." + value_function_name)(
+        **value_function_parameters
+    )
     return value_function
 
 
@@ -343,39 +402,43 @@ def create_agent(agent_name, agent_settings):
     agent_class_parameters = {}
     agent_class_name = list(agent_settings.keys())[0]
     agent_parameters = list(agent_settings.values())[0]
-    agent_class = eval('lib.agents.' + agent_class_name)
+    agent_class = eval("lib.agents." + agent_class_name)
     action_selection_policy = create_action_selection_policy(
-        agent_parameters['action_selection_policy'])
+        agent_parameters["action_selection_policy"]
+    )
     # action_selection_policy = eval('lib.action_selection_policies.'+action_selection_policy_name)(**action_selection_policy_parameters)
 
     # value_function_name = list(agent_parameters['value_function'].keys())[0]
     # value_function_parameters = list(agent_parameters['value_function'].values())[0]
-    value_function = create_value_function(agent_parameters['value_function'])
+    value_function = create_value_function(agent_parameters["value_function"])
     agents = []
     if agent_name in [
-            'NaiveEnsemble', 'TSEnsemble_Pop', 'TSEnsemble_PopEnt',
-            'TSEnsemble_Entropy', 'TSEnsemble_Random'
+        "NaiveEnsemble",
+        "TSEnsemble_Pop",
+        "TSEnsemble_PopEnt",
+        "TSEnsemble_Entropy",
+        "TSEnsemble_Random",
     ]:
-        for _agent in agent_parameters['agents']:
+        for _agent in agent_parameters["agents"]:
             # print(_agent)
-            new_agent = create_agent(
-                list(_agent.keys())[0],
-                list(_agent.values())[0])
+            new_agent = create_agent(list(_agent.keys())[0], list(_agent.values())[0])
             agents.append(new_agent)
-        agent_class_parameters['agents'] = agents
-    agent_class_parameters.update({
-        'action_selection_policy': action_selection_policy,
-        'value_function': value_function,
-        'name': agent_name
-    })
+        agent_class_parameters["agents"] = agents
+    agent_class_parameters.update(
+        {
+            "action_selection_policy": action_selection_policy,
+            "value_function": value_function,
+            "name": agent_name,
+        }
+    )
     # print(agent_class_parameters)
     return agent_class(**agent_class_parameters)
 
 
-def create_agent_from_settings(agent_name, dataset_preprocessor_name,
-                               settings):
-    agent_settings = settings['agents_preprocessor_parameters'][
-        dataset_preprocessor_name][agent_name]
+def create_agent_from_settings(agent_name, dataset_preprocessor_name, settings):
+    agent_settings = settings["agents_preprocessor_parameters"][
+        dataset_preprocessor_name
+    ][agent_name]
     agent = create_agent(agent_name, agent_settings)
     return agent
 
@@ -387,7 +450,7 @@ def default_to_regular(d):
 
 
 def get_agent_pretty_name(agent_name, settings):
-    return settings['interactors_general_settings'][agent_name]['name']
+    return settings["interactors_general_settings"][agent_name]["name"]
 
 
 def nested_dict_to_df(values_dict):
@@ -413,8 +476,7 @@ def nested_dict_to_df(values_dict):
 
 
 def create_path_to_file(file_name):
-    Path('/'.join(file_name.split('/')[:-1])).mkdir(parents=True,
-                                                    exist_ok=True)
+    Path("/".join(file_name.split("/")[:-1])).mkdir(parents=True, exist_ok=True)
 
 
 def _get_params(run):
@@ -427,8 +489,9 @@ def already_ran(parameters, experiment_id):
     parameters, and experiment id already ran. The run must have completed
     successfully and have at least the parameters provided.
     """
-    all_run_infos = mlflow.list_run_infos(experiment_id,
-                                          order_by=['attribute.end_time DESC'])
+    all_run_infos = mlflow.list_run_infos(
+        experiment_id, order_by=["attribute.end_time DESC"]
+    )
     for run_info in all_run_infos:
         # print(run_info)
 
@@ -445,21 +508,27 @@ def already_ran(parameters, experiment_id):
         if match_failed:
             continue
 
-        if run_info.status != 'FINISHED':
-            print(("Run matched, but is not FINISHED, so skipping "
-                   "(run_id=%s, status=%s)") %
-                  (run_info.run_uuid, run_info.status))
+        if run_info.status != "FINISHED":
+            print(
+                (
+                    "Run matched, but is not FINISHED, so skipping "
+                    "(run_id=%s, status=%s)"
+                )
+                % (run_info.run_uuid, run_info.status)
+            )
             continue
         return mlflow.get_run(run_info.run_uuid)
     return None
+
 
 def dict_parameters_normalize(category, settings: dict):
     settings = flatten_dict({category: settings})
     return settings
 
+
 def parameters_normalize(category, name, settings: dict):
-    t1 = dict_parameters_normalize(category,settings)|{category:name}
-    return {str(k): str(v) for k,v in t1.items()}
+    t1 = dict_parameters_normalize(category, settings) | {category: name}
+    return {str(k): str(v) for k, v in t1.items()}
 
 
 def log_custom_parameters(settings: dict) -> None:
@@ -476,7 +545,7 @@ def log_custom_parameters(settings: dict) -> None:
 
 
 # def log_category_parameters(x, name, settings: dict):
-    # log_custom_parameters(name)
+# log_custom_parameters(name)
 
 
 # def log_evaluation_policy_parameters(name, settings: dict):
@@ -485,8 +554,9 @@ def log_custom_parameters(settings: dict) -> None:
 
 
 def log_custom_artifact(fname, obj):
-    fnametmp = f'./tmp/{fname}'
+    fnametmp = f"./tmp/{fname}"
     create_path_to_file(fnametmp)
-    with open(fnametmp, mode='wb') as f:
+    with open(fnametmp, mode="wb") as f:
         pickle.dump(obj, f)
+        f.flush()
         mlflow.log_artifact(f.name)
