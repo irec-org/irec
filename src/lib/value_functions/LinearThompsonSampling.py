@@ -64,7 +64,7 @@ class LinearThompsonSampling(ICF):
                               num_lat=self.num_lat)
         mf_model_id = joblib.hash(
             (mf_model.get_id(), self.train_consumption_matrix))
-        pdm = PersistentDataManager('state_save')
+
         if pdm.file_exists(mf_model_id):
             mf_model = pdm.load(mf_model_id)
         else:

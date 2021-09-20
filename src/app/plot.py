@@ -14,7 +14,7 @@ from lib.utils.DatasetManager import DatasetManager
 import yaml
 from metrics import InteractionMetricsEvaluator, CumulativeMetricsEvaluator
 from lib.utils.dataset import Dataset
-from lib.utils.PersistentDataManager import PersistentDataManager
+            pdm = PersistentDataManager(directory='results')
 from lib.utils.InteractorCache import InteractorCache
 import metrics
 import matplotlib.pyplot as plt
@@ -73,9 +73,9 @@ for metric_evaluator in metrics_evaluators:
         fig, ax = plt.subplots()
         for itr_class in interactors_classes:
             itr = ir.create_interactor(itr_class)
-            pdm = PersistentDataManager(directory='results')
-
             metrics_pdm = PersistentDataManager(directory='metrics')
+
+from lib.utils.PersistentDataManager import PersistentDataManager
             metric_values = metrics_pdm.load(
                 os.path.join(
                     InteractorCache().get_id(dm, evaluation_policy, itr),

@@ -88,10 +88,6 @@ class SVDPlusPlus(MF):
         self.stop_criteria = stop_criteria
         self.init_mean = init_mean
         self.init_std = init_std
-        self.parameters.extend([
-            'iterations', 'learn_rate', 'delta', 'delta_bias',
-            'bias_learn_rate', 'stop_criteria', 'init_mean', 'init_std'
-        ])
 
     def fit(self, training_matrix):
         super().fit()

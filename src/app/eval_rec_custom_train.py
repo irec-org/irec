@@ -33,7 +33,6 @@ import evaluation_policies
 import yaml
 import lib.utils.dataset
 from lib.utils.InteractorCache import InteractorCache
-from lib.utils.PersistentDataManager import PersistentDataManager
 import metrics
 
 metrics_classes = [metrics.Hits]
@@ -107,7 +106,6 @@ for dataset_preprocessor in datasets_preprocessors:
             file_name = 's_' + str(history_rate) + '_' + InteractorCache(
             ).get_id(dm, start_evaluation_policy, itr)
 
-            pdm = PersistentDataManager(directory='results', )
             if pdm.file_exists(file_name):
                 print("File already exists")
                 history_items_recommended = pdm.load(file_name)
@@ -119,9 +117,6 @@ for dataset_preprocessor in datasets_preprocessors:
                 file_name = 's_num_interactions_' + str(
                     history_rate) + '_' + InteractorCache().get_id(
                         dm, start_evaluation_policy, itr)
-                pdm_out = PersistentDataManager(directory='metrics',
-                                                extension_name='.txt')
-                fp = pdm_out.get_fp(file_name)
                 # print(fp)
                 # raise SystemError
                 util.create_path_to_file(fp)
@@ -148,7 +143,6 @@ for dataset_preprocessor in datasets_preprocessors:
                 history_items_recommended = pdm.load(file_name)
                 metrics_values = metric_evaluator.evaluate(
                     history_items_recommended)
-                metrics_pdm = PersistentDataManager(directory='metrics')
                 for metric_name, metric_values in metrics_values.items():
                     metrics_pdm.save(
                         os.path.join(

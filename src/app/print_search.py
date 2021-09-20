@@ -17,7 +17,7 @@ from lib.utils.DatasetManager import DatasetManager
 import yaml
 from metrics import CumulativeInteractionMetricsEvaluator
 from lib.utils.dataset import Dataset
-from lib.utils.PersistentDataManager import PersistentDataManager
+                pdm = PersistentDataManager(directory='results')
 import metrics
 import matplotlib.pyplot as plt
 from lib.utils.DirectoryDependent import DirectoryDependent
@@ -78,9 +78,9 @@ for dataset_preprocessor in datasets_preprocessors:
             for parameters in settings['agents_search_parameters'][agent_name]:
                 agent = utils.create_agent(agent_name, parameters)
                 agent_id = utils.get_agent_id(agent_name, parameters)
-                pdm = PersistentDataManager(directory='results')
-
                 metrics_pdm = PersistentDataManager(directory='metrics')
+
+from lib.utils.PersistentDataManager import PersistentDataManager
                 try:
                     metric_values = metrics_pdm.load(
                         os.path.join(

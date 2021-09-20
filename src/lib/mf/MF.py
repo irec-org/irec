@@ -5,9 +5,7 @@ sys.path.append(dirname(realpath(__file__)) + sep + pardir)
 import numpy as np
 import scipy.sparse
 from numba import jit, prange
-# from lib.utils.Parameterizable import Parameterizable
 # from .. import lib.utils
-from lib.utils.Parameterizable import Parameterizable
 import metrics
 
 
@@ -22,11 +20,11 @@ def _predict_sparse(users_weights, items_weights, users_items):
     return results
 
 
-class MF(Parameterizable):
+class MF:
     def __init__(self, num_lat=10, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.num_lat = num_lat
-        self.parameters.extend(['num_lat'])
+
 
     def normalize_matrix(self, matrix):
         return matrix / np.max(matrix)

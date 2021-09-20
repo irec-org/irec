@@ -7,7 +7,6 @@ from threadpoolctl import threadpool_limits
 import ctypes
 import scipy
 import joblib
-from lib.utils.PersistentDataManager import PersistentDataManager
 from .LinearICF import LinearICF
 
 
@@ -15,7 +14,7 @@ class LinearEGreedy(LinearICF):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # self.epsilon = epsilon
-        # self.parameters.extend(['epsilon'])
+        #
 
     def reset(self, observation):
         train_dataset = observation

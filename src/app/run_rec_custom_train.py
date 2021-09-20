@@ -34,7 +34,7 @@ import evaluation_policies
 import yaml
 import lib.utils.dataset
 from lib.utils.InteractorCache import InteractorCache
-from lib.utils.PersistentDataManager import PersistentDataManager
+        pdm = PersistentDataManager(directory='results')
 
 interactors_preprocessor_parameters = yaml.load(
     open("settings" + sep + "interactors_preprocessor_parameters.yaml"),
@@ -92,7 +92,7 @@ def process(history_rate, dataset_preprocessor, dataset, consumption_matrix,
         file_name_s = 's_' + str(history_rate) + '_' + InteractorCache(
         ).get_id(dm, start_evaluation_policy, itr)
 
-        pdm = PersistentDataManager(directory='results')
+    pdm = PersistentDataManager(directory='results')
         print(pdm.get_fp(file_name_s))
         if not pdm.file_exists(file_name_s) or args.f1:
             history_items_recommended = start_evaluation_policy.evaluate(

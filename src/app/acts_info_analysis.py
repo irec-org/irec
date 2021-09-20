@@ -28,7 +28,6 @@ from lib.utils.DatasetManager import DatasetManager
 import yaml
 from metrics import InteractionMetricsEvaluator, CumulativeMetricsEvaluator, CumulativeInteractionMetricsEvaluator, UserCumulativeInteractionMetricsEvaluator
 from lib.utils.dataset import Dataset
-from lib.utils.PersistentDataManager import PersistentDataManager
 import metrics
 from lib.utils.utils import run_parallel
 import ctypes
@@ -72,11 +71,9 @@ for base in args.b:
         agent = utils.create_agent(agent_name, parameters)
         agent_id = utils.get_agent_id(agent_name, parameters)
         # agent_methods= ','.join(map(lambda x: list(x.keys())[0], list(list(parameters.values())[0]['agents'])))
-        pdm = PersistentDataManager(directory='results')
         users_items_recommended = pdm.load(
             utils.get_experiment_run_id(dm, evaluation_policy, agent_id))
 
-        pdm = PersistentDataManager(directory='acts_info')
         acts_info = pdm.load(
             utils.get_experiment_run_id(dm, evaluation_policy, agent_id))
         # if agent_name == 'NaiveEnsemble':

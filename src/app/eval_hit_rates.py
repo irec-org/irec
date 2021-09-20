@@ -30,7 +30,6 @@ from lib.utils.DatasetManager import DatasetManager
 import yaml
 from lib.metrics import InteractionMetricsEvaluator, CumulativeMetricsEvaluator, CumulativeInteractionMetricsEvaluator, UserCumulativeInteractionMetricsEvaluator
 from lib.utils.dataset import Dataset
-from lib.utils.PersistentDataManager import PersistentDataManager
 # from lib.utils.InteractorCache import InteractorCache
 from lib.utils.utils import run_parallel
 import lib.metrics
@@ -45,12 +44,10 @@ def evaluate_itr(dataset ,dm_id, agent_name,evaluation_policy):
         dm.dataset_preprocessor.name][agent_name]
     agent = utils.create_agent(agent_name, parameters)
     agent_id = utils.get_agent_id(agent_name, parameters)
-    pdm = PersistentDataManager(directory='results')
 
     users_items_recommended = pdm.load(
         utils.get_experiment_run_id(dm, evaluation_policy, agent_id))
 
-    metrics_pdm = PersistentDataManager(directory='metrics')
     metrics_values = metric_evaluator.evaluate(users_items_recommended)
 
     for metric_name, metric_values in metrics_values.items():

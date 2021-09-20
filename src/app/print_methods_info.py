@@ -25,7 +25,7 @@ from lib.utils.DatasetManager import DatasetManager
 import yaml
 from metrics import CumulativeInteractionMetricsEvaluator, UserCumulativeInteractionMetricsEvaluator, UsersCoverage
 from lib.utils.dataset import Dataset
-from lib.utils.PersistentDataManager import PersistentDataManager
+# pdm = PersistentDataManager(directory='results')
 from lib.utils.InteractorCache import InteractorCache
 import metrics
 import matplotlib.pyplot as plt
@@ -80,7 +80,7 @@ evaluation_policy = eval('lib.evaluation_policies.' + evaluation_policy_name)(
 # dm.initialize_engines(dataset_preprocessor)
 # for itr_class in interactors_classes:
 # itr = itr_class(**settings['interactors_preprocessor_parameters'][dataset_preprocessor['name']][itr_class.__name__]['parameters'])
-# pdm = PersistentDataManager(directory='results')
+            pdm = PersistentDataManager(directory='results')
 # history_items_recommended = pdm.load(InteractorCache().get_id(
 # dm, evaluation_policy, itr))
 # users_items_recommended = defaultdict(list)
@@ -108,9 +108,9 @@ for dataset_preprocessor in datasets_preprocessors:
             itr = itr_class(**settings['interactors_preprocessor_parameters'][
                 dataset_preprocessor['name']][itr_class.__name__]
                             ['parameters'])
-            pdm = PersistentDataManager(directory='results')
-
             metrics_pdm = PersistentDataManager(directory='metrics')
+
+from lib.utils.PersistentDataManager import PersistentDataManager
             metric_values = metrics_pdm.load(
                 os.path.join(
                     InteractorCache().get_id(dm, evaluation_policy, itr),

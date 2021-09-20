@@ -1,31 +1,34 @@
 from os.path import dirname, realpath, sep, pardir
-import os
+import tempfile
 import sys
 sys.path.append(dirname(realpath(__file__)) + sep + pardir)
 
-import inquirer
-import lib.utils.dataset as dataset
-import yaml
-from lib.utils.DirectoryDependent import DirectoryDependent
-import lib.utils.splitters as splitters
-import lib.utils.utils as util
-import pickle
-import utils
+from app import constants
+from app import utils
 import argparse
-from lib.utils.DatasetManager import DatasetManager
+from lib.utils.DatasetLoaderFactory import DatasetLoaderFactory
+from mlflow import log_param, log_artifact
+import mlflow
+import pickle
 
+dataset_loader_factory= DatasetLoaderFactory()
 parser = argparse.ArgumentParser()
-parser.add_argument('-b', nargs='*')
+parser.add_argument('-b')
 args = parser.parse_args()
-
 settings = utils.load_settings()
-dm = DatasetManager()
-# datasets_preprocessors = dm.request_datasets_preprocessors()
-datasets_preprocessors = [
-    settings['datasets_preprocessors_parameters'][base] for base in args.b
-]
 
-for dataset_preprocessor in datasets_preprocessors:
-    dm.initialize_engines(dataset_preprocessor)
-    dm.run_preprocessor()
-    dm.save()
+dataset_loader_settings =settings['dataset_loaders'][args.b]
+
+mlflow.set_experiment("dataset")
+
+with mlflow.start_run() as run:
+    utils.log_custom_parameters(utils.parameters_normalize(constants.DATASET_PARAMETERS_PREFIX,args.b,dataset_loader_settings))
+    # client.log_param()
+    # for k,v in dataset_loader_settings.items():
+        # log_param(k,v)
+
+    dataset_loader = dataset_loader_factory.create(args.b,dataset_loader_settings)
+    dataset = dataset_loader.load()
+
+    fname = './tmp/dataset.pickle'
+    utils.log_custom_artifact(fname,dataset)

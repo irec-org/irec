@@ -11,7 +11,6 @@ from .MFValueFunction import MFValueFunction
 from tqdm import tqdm
 from numba import njit, jit
 import mf
-from lib.utils.PersistentDataManager import PersistentDataManager
 import joblib
 import value_functions
 
@@ -28,7 +27,7 @@ class PTS(MFValueFunction):
         self.var = var
         self.var_u = var_u
         self.var_v = var_v
-        self.parameters.extend(['num_particles', 'var', 'var_u', 'var_v'])
+
 
     def reset(self, observation):
         train_dataset = observation
@@ -208,7 +207,7 @@ class PTSInit(PTS):
     def __init__(self, init, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.init = init
-        self.parameters.extend(['init'])
+
 
     def reset(self, observation):
         train_dataset = observation

@@ -27,7 +27,7 @@ class ICFPMF(MF):
         self.item_lambda = self.var / self.item_var
         self.objective_values = []
         self.best = None
-        self.parameters.extend(['var', 'user_var', 'item_var'])
+
 
     def load_var(self, training_matrix):
         decimals = 4

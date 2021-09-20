@@ -33,10 +33,6 @@ class PMF(MF):
         self.learning_rate = learning_rate
         self.momentum = momentum
         self.stop_criteria = stop_criteria
-        self.parameters.extend([
-            'iterations', 'var', 'user_var', 'item_var', 'learning_rate',
-            'momentum', 'stop_criteria'
-        ])
 
     def get_user_lambda(self):
         return self.var / self.user_var

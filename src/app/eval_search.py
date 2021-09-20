@@ -18,7 +18,6 @@ from lib.utils.DatasetManager import DatasetManager
 import yaml
 from metrics import InteractionMetricsEvaluator, CumulativeMetricsEvaluator, CumulativeInteractionMetricsEvaluator
 from lib.utils.dataset import Dataset
-from lib.utils.PersistentDataManager import PersistentDataManager
 import metrics
 from lib.utils.utils import run_parallel
 import utils
@@ -73,9 +72,9 @@ for dataset_preprocessor in datasets_preprocessors:
                                            ctypes.py_object).value
             dm = ctypes.cast(dm_id, ctypes.py_object).value
             print(f"Evaluating {agent.name} results")
-            pdm = PersistentDataManager(directory='results')
-
             metrics_pdm = PersistentDataManager(directory='metrics')
+
+from lib.utils.PersistentDataManager import PersistentDataManager
 
             users_items_recommended = pdm.load(
                 utils.get_experiment_run_id(dm, evaluation_policy, agent_id))

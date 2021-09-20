@@ -2,10 +2,9 @@ from copy import copy
 import numpy as np
 import pandas as pd
 import random
-from .Parameterizable import Parameterizable
 
 
-class Splitter(Parameterizable):
+class Splitter:
     pass
 
 
@@ -20,8 +19,6 @@ class TrainTestConsumption(Splitter):
         self.train_size = 0.8
         self.test_consumes = test_consumes
         self.crono = crono
-
-        self.parameters.extend(['train_size', 'test_consumes', 'crono'])
 
     def process(self, dataset):
         data = dataset.data
@@ -69,7 +66,6 @@ class TRTETrainValidation(Splitter):
         self.train_size = 0.8
         self.test_consumes = test_consumes
         self.crono = crono
-        self.parameters.extend(['train_size', 'test_consumes', 'crono'])
 
     def process(self, train_dataset, test_dataset):
         ttc = TrainTestConsumption(self.train_size, self.test_consumes,

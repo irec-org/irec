@@ -11,7 +11,7 @@ class UCB(ExperimentalValueFunction):
     def __init__(self, c, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.c = c
-        self.parameters.extend(['c'])
+
 
     def reset(self, observation):
         train_dataset = observation

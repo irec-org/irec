@@ -18,7 +18,7 @@ class LinUCBvar(MFValueFunction):
         elif zeta != None:
             self.alpha = 1 + np.sqrt(np.log(2 / zeta) / 2)
         self.lambda_u = lambda_u
-        self.parameters.extend(['alpha', 'lambda_u'])
+
 
     def reset(self, observation):
         train_dataset = observation

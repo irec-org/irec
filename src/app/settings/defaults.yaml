@@ -1,1 +1,4 @@
+data_dir: data/
 interactors_evaluation_policy: LimitedInteraction
+pdf_dir: pdf/
+tex_dir: tex/

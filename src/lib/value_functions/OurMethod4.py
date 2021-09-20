@@ -31,7 +31,7 @@ class OurMethod4(MFValueFunction):
         super().__init__(*args, **kwargs)
         self.alpha = alpha
         self.lambda_ = lambda_
-        self.parameters.extend(['alpha', 'lambda_'])
+
 
     def reset(self, observation):
         train_dataset = observation

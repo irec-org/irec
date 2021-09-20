@@ -16,7 +16,7 @@ class kNNBandit(ExperimentalValueFunction):
         self.alpha_0 = alpha_0
         self.beta_0 = beta_0
         self.k = k
-        self.parameters.extend(['alpha_0', 'beta_0', 'k'])
+
 
     def reset(self, observation):
         train_dataset = observation
