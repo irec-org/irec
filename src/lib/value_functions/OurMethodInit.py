@@ -30,7 +30,7 @@ class OurMethodInit(MFValueFunction):
         super().__init__(*args, **kwargs)
         self.alpha = alpha
         self.init = init
-        self.parameters.extend(['alpha', 'init'])
+
 
     def reset(self, observation):
         train_dataset = observation

@@ -13,7 +13,6 @@ from .MFValueFunction import MFValueFunction
 from tqdm import tqdm
 from numba import njit, jit
 import mf
-from lib.utils.PersistentDataManager import PersistentDataManager
 import joblib
 from .MostPopular import *
 
@@ -135,7 +134,7 @@ class ICTRTS(MFValueFunction):
     def __init__(self, num_particles, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.num_particles = num_particles
-        self.parameters.extend(['num_particles'])
+
 
     def reset(self, observation):
         train_dataset = observation

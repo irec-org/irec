@@ -15,7 +15,7 @@ class TinUCB(MFValueFunction):
             self.alpha = alpha
         elif zeta != None:
             self.alpha = 1 + np.sqrt(np.log(2 / zeta) / 2)
-        self.parameters.extend(['alpha'])
+
 
     def reset(self, observation):
         train_dataset = observation

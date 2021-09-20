@@ -4,7 +4,6 @@ import lib.value_functions
 
 import scipy.sparse
 from collections import defaultdict
-from lib.utils.Parameterizable import Parameterizable
 import time
 from lib.utils.utils import run_parallel
 import ctypes
@@ -14,7 +13,7 @@ from lib.value_functions.Entropy import Entropy
 np.seterr(all='raise')
 
 
-class RelevanceEvaluator(Parameterizable):
+class RelevanceEvaluator:
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -31,7 +30,7 @@ class ThresholdRelevanceEvaluator:
         return reward > self.threshold
 
 
-class MetricsEvaluator(Parameterizable):
+class MetricsEvaluator:
     def __init__(self,
                  relevance_evaluator=ThresholdRelevanceEvaluator(3.999),
                  *args,
@@ -110,7 +109,7 @@ class CumulativeMetricsEvaluator(MetricsEvaluator):
             (self.ground_truth_dataset.num_total_users,
              self.ground_truth_dataset.num_total_items))
         self.buffer_size = buffer_size
-        self.parameters.extend(['buffer_size'])
+
 
     def _metric_evaluation(self, metric_class):
         if issubclass(metric_class, Recall):
@@ -365,13 +364,13 @@ class IterationsMetricsEvaluator(InteractionMetricsEvaluator):
         return metric_values
 
 
-class Metric(Parameterizable):
+class Metric:
     def __init__(self, ground_truth_dataset, relevance_evaluator, *args,
                  **kwargs):
         super().__init__(*args, **kwargs)
         self.ground_truth_dataset = ground_truth_dataset
         self.relevance_evaluator = relevance_evaluator
-        self.parameters.extend(['relevance_evaluator'])
+
 
     def compute(self, uid):
         return None

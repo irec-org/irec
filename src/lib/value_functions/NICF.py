@@ -10,7 +10,6 @@ import random
 from .MFValueFunction import MFValueFunction
 from numba import njit, jit
 import mf
-from lib.utils.PersistentDataManager import PersistentDataManager
 import joblib
 import tensorflow as tf
 import copy
@@ -607,11 +606,6 @@ class NICF(ExperimentalValueFunction):
         self.num_heads = num_heads
         self.dropout_rate = dropout_rate
 
-        self.parameters.extend([
-            'time_step', 'latent_factor', 'learning_rate', 'training_epoch',
-            'rnn_layer', 'inner_epoch', 'batch', 'gamma', 'clip_param',
-            'restore_model', 'num_blocks', 'num_heads', 'dropout_rate'
-        ])
 
     def reset_with_users(self, uid):
         self.state = [(uid, 1), []]
@@ -693,7 +687,7 @@ class NICF(ExperimentalValueFunction):
         self.tau = 0
 
         args = Namespace(**{i: getattr(self, i)
-                            for i in self.parameters},
+                            for i in dir(self)},
                          item_num=self.train_dataset.num_total_items + 1,
                          utype_num=self.train_dataset.num_total_users + 1)
         self.args = args

@@ -6,7 +6,6 @@ import os
 import multiprocessing
 import numpy as np
 from pathlib import Path
-from . import Parameterizable
 
 
 class TupleNonRedundantList():
@@ -45,8 +44,6 @@ def value_to_str(value):
         return f"{{{dict_to_str(value)}}}"
     elif isinstance(value, list):
         return f"{join_strings(list(map(lambda x: value_to_str(x), value)))}"
-    elif isinstance(value, Parameterizable.Parameterizable):
-        return value.get_id()
     else:
         return f"{str(value).replace('/','|')}"
 
@@ -97,14 +94,6 @@ def run_parallel(func, args, use_tqdm=True):
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
-
-def create_train_test_with_results(consumption_matrix, results, rate):
-    pass
-
-
-def create_path_to_file(file_name):
-    Path('/'.join(file_name.split('/')[:-1])).mkdir(parents=True,
-                                                    exist_ok=True)
 
 
 def repair_path_name(path):

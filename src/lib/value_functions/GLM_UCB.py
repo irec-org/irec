@@ -10,7 +10,6 @@ from collections import defaultdict
 import joblib
 import scipy
 import mf
-from lib.utils.PersistentDataManager import PersistentDataManager
 import value_functions
 
 
@@ -18,7 +17,7 @@ class GLM_UCB(LinearICF):
     def __init__(self, c=1.0, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.c = c
-        self.parameters.extend(['c'])
+
 
     def sigmoid(self, x):
         return 1 / (1 + np.exp(-x))
@@ -84,7 +83,7 @@ class GLM_UCBInit(GLM_UCB):
     def __init__(self, init, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.init = init
-        self.parameters.extend(['init'])
+
 
     def reset(self, observation):
         train_dataset = observation

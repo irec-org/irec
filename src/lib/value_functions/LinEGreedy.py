@@ -12,7 +12,7 @@ class LinEGreedy(MFValueFunction):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # self.epsilon = epsilon
-        # self.parameters.extend(['epsilon'])
+        #
 
     def reset(self, observation):
         train_dataset = observation

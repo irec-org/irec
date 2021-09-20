@@ -1,19 +1,30 @@
 from os.path import dirname, realpath, sep, pardir
-import json
-from collections import defaultdict
 import os
 import sys
-sys.path.append(dirname(realpath(__file__)) + sep + pardir)
+sys.path.append(dirname(dirname(realpath(__file__))))
+import re
+import pickle
+import mlflow.tracking
+import mlflow.entities
+import mlflow
+from mlflow.tracking.fluent import _get_experiment_id
+from mlflow.tracking import MlflowClient
+import json
+from collections import defaultdict
+from pathlib import Path
+
+from lib.utils.dataset import TrainTestDataset
 import collections
 import traceback
+from app import constants
 import matplotlib.ticker as mtick
 import numpy as np
 import matplotlib.pyplot as plt
 from os.path import dirname, realpath, sep, pardir
-from lib.utils.PersistentDataManager import PersistentDataManager
 import lib.action_selection_policies
 import lib.agents
 import lib.value_functions
+import lib.evaluation_policies
 import copy
 import os.path
 import collections.abc
@@ -51,7 +62,6 @@ import yaml
 
 
 class Singleton:
-
     def __init__(self, decorated):
         self._decorated = decorated
 
@@ -68,7 +78,6 @@ class Singleton:
 
 @Singleton
 class Settings:
-
     def __init__(self) -> None:
         self.settings = None
         pass
@@ -114,8 +123,8 @@ def class2dict(instance):
 
 def generate_table_spec(nums_interactions_to_show, num_datasets_preprocessors):
     res = '|'
-    for i in range(1 +
-                   len(nums_interactions_to_show) * num_datasets_preprocessors):
+    for i in range(1 + len(nums_interactions_to_show) *
+                   num_datasets_preprocessors):
         res += 'c'
         if i % (len(nums_interactions_to_show)) == 0:
             res += '|'
@@ -200,18 +209,23 @@ def load_settings():
         "evaluation_policies_parameters.yaml"),
                                                     Loader=loader)
 
-    with open(
-            dirname(realpath(__file__)) + sep + "settings" + sep +
-            "datasets_preprocessors_parameters.yaml") as f:
-        d['datasets_preprocessors_parameters'] = yaml.load(f, Loader=loader)
-        d['datasets_preprocessors_parameters'] = {
-            k: {
-                **setting,
-                **{
-                    'name': k
-                }
-            } for k, setting in d['datasets_preprocessors_parameters'].items()
-        }
+    d['dataset_loaders'] = yaml.load(open(
+        dirname(realpath(__file__)) + sep + "settings" + sep +
+        "dataset_loaders.yaml"),
+                                     Loader=loader)
+
+    # with open(
+    # dirname(realpath(__file__)) + sep + "settings" + sep +
+    # "datasets_preprocessors_parameters.yaml") as f:
+    # d['datasets_preprocessors_parameters'] = yaml.load(f, Loader=loader)
+    # d['datasets_preprocessors_parameters'] = {
+    # k: {
+    # **setting,
+    # **{
+    # 'name': k
+    # }
+    # } for k, setting in d['datasets_preprocessors_parameters'].items()
+    # }
     with open(
             dirname(realpath(__file__)) + sep + "settings" + sep +
             "defaults.yaml") as f:
@@ -254,27 +268,30 @@ def get_experiment_run_id(dm, evaluation_policy, itr_id):
     return os.path.join(dm.get_id(), evaluation_policy.get_id(), itr_id)
 
 
-def run_interactor(itr, evaluation_policy, dm, forced_run, agent_id):
-    pdm = PersistentDataManager(directory='results')
-    # print(class2dict(itr))
-    if forced_run or not pdm.file_exists(
-            get_experiment_run_id(dm, evaluation_policy, agent_id)):
-        try:
-            history_items_recommended, acts_info = evaluation_policy.evaluate(
-                itr, dm.dataset_preprocessed[0], dm.dataset_preprocessed[1])
-        except:
-            print(traceback.print_exc())
-            raise SystemError
+def run_interactor(agent, agent_name, agent_parameters, dataset_name,
+                   dataset_parameters, traintest_dataset: TrainTestDataset,
+                   evaluation_policy: lib.evaluation_policies.EvaluationPolicy,
+                   evaluation_policy_name, evaluation_policy_parameters,
+                   forced_run: bool):
+    # client = mlflow.tracking.MlflowClient()
+    # experiment = client.create_experiment('dataset')
+    mlflow.set_experiment('agent')
+    with mlflow.start_run() as run:
+        log_custom_parameters(parameters_normalize(constants.AGENT_PARAMETERS_PREFIX, agent_name, agent_parameters))
+        log_custom_parameters(parameters_normalize(constants.DATASET_PARAMETERS_PREFIX, dataset_name, dataset_parameters))
+        log_custom_parameters(parameters_normalize(constants.EVALUATION_POLICY_PARAMETERS_PREFIX, evaluation_policy_name, evaluation_policy_parameters))
 
-        pdm = PersistentDataManager(directory='results')
-        pdm.save(get_experiment_run_id(dm, evaluation_policy, agent_id),
-                 history_items_recommended)
-        pdm = PersistentDataManager(directory='acts_info')
-        pdm.save(get_experiment_run_id(dm, evaluation_policy, agent_id),
-                 acts_info)
-    else:
-        print("Already executed",
-              get_experiment_run_id(dm, evaluation_policy, agent_id))
+        interactions, acts_info = evaluation_policy.evaluate(
+            agent, traintest_dataset.train, traintest_dataset.test)
+
+        fname = './tmp/interactions.pickle'
+        log_custom_artifact(fname, interactions)
+        fname = './tmp/acts_info.pickle'
+        log_custom_artifact(fname, acts_info)
+        # create_path_to_file(fname)
+        # with open(fname,mode='wb') as f:
+        # pickle.dump(history_items_recommended,f)
+        # mlflow.log_artifact(f.name)
 
 
 def get_agent_id(agent_name, agent_parameters):
@@ -335,7 +352,10 @@ def create_agent(agent_name, agent_settings):
     # value_function_parameters = list(agent_parameters['value_function'].values())[0]
     value_function = create_value_function(agent_parameters['value_function'])
     agents = []
-    if agent_name in ['NaiveEnsemble', 'TSEnsemble_Pop','TSEnsemble_PopEnt','TSEnsemble_Entropy','TSEnsemble_Random']:
+    if agent_name in [
+            'NaiveEnsemble', 'TSEnsemble_Pop', 'TSEnsemble_PopEnt',
+            'TSEnsemble_Entropy', 'TSEnsemble_Random'
+    ]:
         for _agent in agent_parameters['agents']:
             # print(_agent)
             new_agent = create_agent(
@@ -352,7 +372,8 @@ def create_agent(agent_name, agent_settings):
     return agent_class(**agent_class_parameters)
 
 
-def create_agent_from_settings(agent_name, dataset_preprocessor_name, settings):
+def create_agent_from_settings(agent_name, dataset_preprocessor_name,
+                               settings):
     agent_settings = settings['agents_preprocessor_parameters'][
         dataset_preprocessor_name][agent_name]
     agent = create_agent(agent_name, agent_settings)
@@ -369,9 +390,7 @@ def get_agent_pretty_name(agent_name, settings):
     return settings['interactors_general_settings'][agent_name]['name']
 
 
-
-def nested_dict_to_df(values_dict) -> pd.DataFrame:
-
+def nested_dict_to_df(values_dict):
     def flatten_dict(nested_dict):
         res = {}
         if isinstance(nested_dict, dict):
@@ -384,9 +403,90 @@ def nested_dict_to_df(values_dict) -> pd.DataFrame:
         else:
             res[()] = nested_dict
         return res
+
     flat_dict = flatten_dict(values_dict)
     df = pd.DataFrame.from_dict(flat_dict, orient="index")
     df.index = pd.MultiIndex.from_tuples(df.index)
     df = df.unstack(level=-1)
     df.columns = df.columns.map("{0[1]}".format)
     return df
+
+
+def create_path_to_file(file_name):
+    Path('/'.join(file_name.split('/')[:-1])).mkdir(parents=True,
+                                                    exist_ok=True)
+
+
+def _get_params(run):
+    """Converts [mlflow.entities.Param] to a dictionary of {k: v}."""
+    return run.data.params
+
+
+def already_ran(parameters, experiment_id):
+    """Best-effort detection of if a run with the given entrypoint name,
+    parameters, and experiment id already ran. The run must have completed
+    successfully and have at least the parameters provided.
+    """
+    all_run_infos = mlflow.list_run_infos(experiment_id,
+                                          order_by=['attribute.end_time DESC'])
+    for run_info in all_run_infos:
+        # print(run_info)
+
+        full_run = mlflow.get_run(run_info.run_uuid)
+        run_params = _get_params(full_run)
+        match_failed = False
+        # print(parameters)
+        # print(run_params)
+        for param_key, param_value in parameters.items():
+            run_value = run_params.get(param_key)
+            if run_value != param_value:
+                match_failed = True
+                break
+        if match_failed:
+            continue
+
+        if run_info.status != 'FINISHED':
+            print(("Run matched, but is not FINISHED, so skipping "
+                   "(run_id=%s, status=%s)") %
+                  (run_info.run_uuid, run_info.status))
+            continue
+        return mlflow.get_run(run_info.run_uuid)
+    return None
+
+def dict_parameters_normalize(category, settings: dict):
+    settings = flatten_dict({category: settings})
+    return settings
+
+def parameters_normalize(category, name, settings: dict):
+    t1 = dict_parameters_normalize(category,settings)|{category:name}
+    return {str(k): str(v) for k,v in t1.items()}
+
+
+def log_custom_parameters(settings: dict) -> None:
+    # settings = {name: settings}
+    # settings = flatten_dict(settings)
+    # settings = {re.sub(' ','_',k):v for k,v in settings.items()}
+    # mlflow.log_param(field, name)
+    for k, v in settings.items():
+        mlflow.log_param(k, v)
+
+
+# def log_dataset_parameters(dataset_name, dataset_loader_settings: dict):
+# log_custom_parameters('dataset', dataset_name, {'dataset':dataset_loader_settings})
+
+
+# def log_category_parameters(x, name, settings: dict):
+    # log_custom_parameters(name)
+
+
+# def log_evaluation_policy_parameters(name, settings: dict):
+# cn = 'evaluation_policy'
+# log_custom_parameters(cn, name, {cn:settings})
+
+
+def log_custom_artifact(fname, obj):
+    fnametmp = f'./tmp/{fname}'
+    create_path_to_file(fnametmp)
+    with open(fnametmp, mode='wb') as f:
+        pickle.dump(obj, f)
+        mlflow.log_artifact(f.name)

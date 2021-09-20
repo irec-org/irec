@@ -4,7 +4,6 @@ from scipy.sparse import base
 
 from threadpoolctl import threadpool_limits
 import scipy.sparse
-from lib.utils.Parameterizable import Parameterizable
 import numpy as np
 import random
 from tqdm import tqdm
@@ -12,24 +11,23 @@ import lib.value_functions
 
 import matplotlib as mpl
 import seaborn as sns
-from lib.utils.DirectoryDependent import DirectoryDependent
 import matplotlib.pyplot as plt
 import scipy.stats
-from lib.utils.PersistentDataManager import PersistentDataManager
 import os
 
 
 class EvaluationPolicy:
-    pass
+    def evaluate(self, model, train_dataset, test_dataset):
+        pass
 
 
-class Interaction(EvaluationPolicy, Parameterizable):
+class Interaction(EvaluationPolicy):
     def __init__(self, num_interactions, interaction_size, save_info, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.num_interactions = int(num_interactions)
         self.interaction_size = int(interaction_size)
         self.save_info = save_info
-        self.parameters.extend(['num_interactions', 'interaction_size'])
+
 
     def evaluate(self, model, train_dataset, test_dataset):
         with threadpool_limits(limits=1, user_api='blas'):
@@ -101,15 +99,13 @@ class Interaction(EvaluationPolicy, Parameterizable):
             return history_items_recommended, acts_info
 
 
-class InteractionSample(EvaluationPolicy, Parameterizable):
+class InteractionSample(EvaluationPolicy):
     def __init__(self, num_interactions, interaction_size, rseed, *args,
                  **kwargs):
         super().__init__(*args, **kwargs)
         self.num_interactions = num_interactions
         self.interaction_size = interaction_size
         self.rseed = rseed
-        self.parameters.extend(
-            ['num_interactions', 'interaction_size', 'rseed'])
 
     def evaluate(self, model, train_dataset, test_dataset):
         np.random.seed(self.rseed)
@@ -222,14 +218,12 @@ class InteractionSample(EvaluationPolicy, Parameterizable):
         return history_items_recommended
 
 
-class LimitedInteraction(EvaluationPolicy, Parameterizable):
+class LimitedInteraction(EvaluationPolicy):
     def __init__(self, interaction_size, recommend_test_data_rate_limit, *args,
                  **kwargs):
         super().__init__(*args, **kwargs)
         self.interaction_size = interaction_size
         self.recommend_test_data_rate_limit = recommend_test_data_rate_limit
-        self.parameters.extend(
-            ['interaction_size', 'recommend_test_data_rate_limit'])
 
     def evaluate(self, model, train_dataset, test_dataset):
         with threadpool_limits(limits=1, user_api='blas'):
@@ -291,12 +285,12 @@ class LimitedInteraction(EvaluationPolicy, Parameterizable):
             return history_items_recommended, None
 
 
-class OneInteraction(EvaluationPolicy, Parameterizable):
+class OneInteraction(EvaluationPolicy):
     def __init__(self, num_interactions, interaction_size, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.num_interactions = num_interactions
         self.interaction_size = interaction_size
-        self.parameters.extend(['num_interactions', 'interaction_size'])
+
 
     def evaluate(self, model, train_dataset, test_dataset):
         with threadpool_limits(limits=1, user_api='blas'):

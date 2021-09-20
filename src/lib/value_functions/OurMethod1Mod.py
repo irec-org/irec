@@ -24,7 +24,7 @@ class OurMethod1Mod(MFValueFunction):
         self.alpha = alpha
         self.weight_method = weight_method
         self.stop = stop
-        self.parameters.extend(['alpha', 'weight_method', 'stop'])
+
 
     def reset(self, observation):
         train_dataset = observation

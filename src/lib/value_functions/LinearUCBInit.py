@@ -7,7 +7,6 @@ from collections import defaultdict
 import joblib
 import scipy
 import mf
-from lib.utils.PersistentDataManager import PersistentDataManager
 from .LinearUCB import LinearUCB
 import value_functions
 
@@ -16,7 +15,7 @@ class LinearUCBInit(LinearUCB):
     def __init__(self, init, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.init = init
-        self.parameters.extend(['init'])
+
 
     def reset(self, observation):
         train_dataset = observation

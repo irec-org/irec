@@ -17,7 +17,7 @@ class COFIBA(MFValueFunction):
         super().__init__(*args, **kwargs)
         self.alpha = alpha
         self.alpha_2 = alpha_2
-        self.parameters.extend(['alpha', 'alpha_2'])
+
 
     def cb(self, alpha, item_latent_factors, m, t):
         return alpha * np.sqrt(item_latent_factors.T @ np.linalg.inv(m)

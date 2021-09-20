@@ -1,1 +1,2 @@
 interactors_evaluation_policy: LimitedInteraction
+data_dir: data/

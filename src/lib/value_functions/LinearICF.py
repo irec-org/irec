@@ -7,7 +7,6 @@ from collections import defaultdict
 import joblib
 import scipy
 import mf
-from lib.utils.PersistentDataManager import PersistentDataManager
 
 
 class LinearICF(ICF):

@@ -25,7 +25,7 @@ import numpy as np
 from lib.utils.DatasetManager import DatasetManager
 from lib.metrics import CumulativeMetricsEvaluator
 from lib.utils.dataset import Dataset
-from lib.utils.PersistentDataManager import PersistentDataManager
+    pdm = PersistentDataManager(directory='results')
 # from lib.utils.InteractorCache import InteractorCache
 import lib.metrics
 import pandas as pd
@@ -39,12 +39,12 @@ def evaluate_itr(dataset,dm_id, agent_name):
         dm.dataset_preprocessor.name][agent_name]
     agent = utils.create_agent(agent_name, parameters)
     agent_id = utils.get_agent_id(agent_name, parameters)
-    pdm = PersistentDataManager(directory='results')
+    metrics_pdm = PersistentDataManager(directory='metrics')
 
     users_items_recommended = pdm.load(
         utils.get_experiment_run_id(dm, evaluation_policy, agent_id))
 
-    metrics_pdm = PersistentDataManager(directory='metrics')
+                pdm = PersistentDataManager(directory='results')
     metrics_values = metric_evaluator.evaluate(users_items_recommended)
 
     for metric_name, metric_values in metrics_values.items():
@@ -109,9 +109,9 @@ for dataset_preprocessor in datasets_preprocessors:
                     dataset_preprocessor['name']][agent_name]
                 agent = utils.create_agent(agent_name, parameters)
                 agent_id = utils.get_agent_id(agent_name, parameters)
-                pdm = PersistentDataManager(directory='results')
-
                 metrics_pdm = PersistentDataManager(directory='metrics')
+
+from lib.utils.PersistentDataManager import PersistentDataManager
                 metric_values = metrics_pdm.load(
                     os.path.join(
                         utils.get_experiment_run_id(dm, evaluation_policy,

@@ -2505,7 +2505,7 @@
       value_function:
         UCB:
           c: 0.01
-'MovieLens 100k (B)':
+'MovieLens 100k O':
   ALEntropy:
     SimpleAgent:
       action_selection_policy:

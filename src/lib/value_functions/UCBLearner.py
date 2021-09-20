@@ -16,7 +16,7 @@ class UCBLearner(MFValueFunction):
     def __init__(self, stop=14, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.stop = stop
-        self.parameters.extend(['stop'])
+
 
     def reset(self, observation):
         train_dataset = observation
