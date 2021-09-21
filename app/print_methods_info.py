@@ -5,35 +5,35 @@ import matplotlib.ticker as mtick
 import sys
 import json
 sys.path.append(dirname(realpath(__file__)) + sep + pardir)
-from lib.metrics import InteractionMetricsEvaluator, CumulativeMetricsEvaluator, CumulativeInteractionMetricsEvaluator, UserCumulativeInteractionMetricsEvaluator
+from irec.metrics import InteractionMetricsEvaluator, CumulativeMetricsEvaluator, CumulativeInteractionMetricsEvaluator, UserCumulativeInteractionMetricsEvaluator
 import inquirer
 from tabulate import tabulate
-import lib.metrics
+import irec.metrics
 import copy
 import pandas as pd
 import seaborn as sn
 import scipy
 import scipy.stats
-import lib.value_functions
-import lib.evaluation_policies
+import irec.value_functions
+import irec.evaluation_policies
 import mf
-from lib.utils.InteractorRunner import InteractorRunner
+from irec.utils.InteractorRunner import InteractorRunner
 from sklearn.decomposition import NMF
 import numpy as np
 import scipy.sparse
-from lib.utils.DatasetManager import DatasetManager
+from irec.utils.DatasetManager import DatasetManager
 import yaml
 from metrics import CumulativeInteractionMetricsEvaluator, UserCumulativeInteractionMetricsEvaluator, UsersCoverage
-from lib.utils.dataset import Dataset
+from irec.utils.dataset import Dataset
 # pdm = PersistentDataManager(directory='results')
-from lib.utils.InteractorCache import InteractorCache
+from irec.utils.InteractorCache import InteractorCache
 import metrics
 import matplotlib.pyplot as plt
-from lib.utils.DirectoryDependent import DirectoryDependent
+from irec.utils.DirectoryDependent import DirectoryDependent
 from cycler import cycler
 from collections import defaultdict
 import argparse
-import lib.utils.utils
+import irec.utils.utils
 import utils
 
 parser = argparse.ArgumentParser()
@@ -60,18 +60,18 @@ datasets_preprocessors = [
 ]
 
 interactors_classes = [
-    eval('lib.value_functions.' + interactor) for interactor in args.m
+    eval('irec.value_functions.' + interactor) for interactor in args.m
 ]
 
 metrics_classes_names = args.e
-metrics_classes = [eval('lib.metrics.' + metric) for metric in args.e]
+metrics_classes = [eval('irec.metrics.' + metric) for metric in args.e]
 metrics_evaluator = UserCumulativeInteractionMetricsEvaluator(
     None, metrics_classes)
 
 evaluation_policy_name = settings['defaults']['interactors_evaluation_policy']
 evaluation_policy_parameters = settings['evaluation_policies_parameters'][
     evaluation_policy_name]
-evaluation_policy = eval('lib.evaluation_policies.' + evaluation_policy_name)(
+evaluation_policy = eval('irec.evaluation_policies.' + evaluation_policy_name)(
     **evaluation_policy_parameters)
 # datasets_interactors_items_recommended = defaultdict(
 # lambda: defaultdict(lambda: defaultdict(list)))
@@ -110,7 +110,7 @@ for dataset_preprocessor in datasets_preprocessors:
                             ['parameters'])
             metrics_pdm = PersistentDataManager(directory='metrics')
 
-from lib.utils.PersistentDataManager import PersistentDataManager
+from irec.utils.PersistentDataManager import PersistentDataManager
             metric_values = metrics_pdm.load(
                 os.path.join(
                     InteractorCache().get_id(dm, evaluation_policy, itr),
@@ -251,7 +251,7 @@ for hh, dataset_preprocessor in enumerate(datasets_preprocessors):
 # results.append(['Num. Mean Items',mni_g1,mni_g2,mni_g3,mni_itr_1,mni_itr_2])
 
 # file_name=os.path.join(DirectoryDependent().DIRS['img'],f'dataset_analyses.png')
-# lib.utils.utils.create_path_to_file(file_name)
+# irec.utils.utils.create_path_to_file(file_name)
 # handles, labels = axs[0,0].get_legend_handles_labels()
 # print(handles,labels)
 # fig.legend(handles, labels, loc='upper center',ncol = 3,

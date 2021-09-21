@@ -17,17 +17,17 @@ import os
 import sys
 sys.path.append(dirname(realpath(__file__)) + sep + pardir)
 
-import lib.evaluation_policies
-import lib.value_functions
-import lib.mf
-from lib.utils.InteractorRunner import InteractorRunner
+import irec.evaluation_policies
+import irec.value_functions
+import irec.mf
+from irec.utils.InteractorRunner import InteractorRunner
 import numpy as np
-from lib.utils.DatasetManager import DatasetManager
-from lib.metrics import CumulativeMetricsEvaluator
-from lib.utils.dataset import Dataset
+from irec.utils.DatasetManager import DatasetManager
+from irec.metrics import CumulativeMetricsEvaluator
+from irec.utils.dataset import Dataset
     pdm = PersistentDataManager(directory='results')
-# from lib.utils.InteractorCache import InteractorCache
-import lib.metrics
+# from irec.utils.InteractorCache import InteractorCache
+import irec.metrics
 import pandas as pd
 import ctypes
 
@@ -58,7 +58,7 @@ def evaluate_itr(dataset,dm_id, agent_name):
 # BUFFER_SIZE_EVALUATOR = 1000
 BUFFER_SIZE_EVALUATOR = 100000
 
-metrics_classes = [lib.metrics.Recall, lib.metrics.Hits,lib.metrics.NumInteractions]
+metrics_classes = [irec.metrics.Recall, irec.metrics.Hits,irec.metrics.NumInteractions]
 metrics_classes_names = list(map(lambda x: x.__name__, metrics_classes))
 
 datasets_preprocessors = [
@@ -101,7 +101,7 @@ for dataset_preprocessor in datasets_preprocessors:
                 evaluation_policy_name = "LimitedInteraction"
                 evaluation_policy_parameters = settings['evaluation_policies_parameters'][
                     evaluation_policy_name]
-                evaluation_policy = eval('lib.evaluation_policies.' +
+                evaluation_policy = eval('irec.evaluation_policies.' +
                                          evaluation_policy_name)(
                                              **evaluation_policy_parameters)
                 evaluation_policy.recommend_test_data_rate_limit = hit_rate
@@ -111,7 +111,7 @@ for dataset_preprocessor in datasets_preprocessors:
                 agent_id = utils.get_agent_id(agent_name, parameters)
                 metrics_pdm = PersistentDataManager(directory='metrics')
 
-from lib.utils.PersistentDataManager import PersistentDataManager
+from irec.utils.PersistentDataManager import PersistentDataManager
                 metric_values = metrics_pdm.load(
                     os.path.join(
                         utils.get_experiment_run_id(dm, evaluation_policy,

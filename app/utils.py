@@ -14,7 +14,7 @@ import json
 from collections import defaultdict
 from pathlib import Path
 
-from lib.utils.dataset import TrainTestDataset
+from irec.utils.dataset import TrainTestDataset
 import collections
 import traceback
 from app import constants
@@ -22,10 +22,10 @@ import matplotlib.ticker as mtick
 import numpy as np
 import matplotlib.pyplot as plt
 from os.path import dirname, realpath, sep, pardir
-import lib.action_selection_policies
-import lib.agents
-import lib.value_functions
-import lib.evaluation_policies
+import irec.action_selection_policies
+import irec.agents
+import irec.value_functions
+import irec.evaluation_policies
 import copy
 import os.path
 import collections.abc
@@ -313,7 +313,7 @@ def run_interactor(
     dataset_name,
     dataset_parameters,
     traintest_dataset: TrainTestDataset,
-    evaluation_policy: lib.evaluation_policies.EvaluationPolicy,
+    evaluation_policy: irec.evaluation_policies.EvaluationPolicy,
     evaluation_policy_name,
     evaluation_policy_parameters,
 ):
@@ -379,10 +379,10 @@ def create_action_selection_policy(action_selection_policy_settings):
         action_selection_policy_settings.values()
     )[0]
     action_selection_policy = eval(
-        "lib.action_selection_policies." + action_selection_policy_name
+        "irec.action_selection_policies." + action_selection_policy_name
     )(**action_selection_policy_parameters)
 
-    if isinstance(action_selection_policy, lib.action_selection_policies.ASPReranker):
+    if isinstance(action_selection_policy, irec.action_selection_policies.ASPReranker):
         action_selection_policy.rule = create_value_function(
             action_selection_policy.rule
         )
@@ -392,7 +392,7 @@ def create_action_selection_policy(action_selection_policy_settings):
 def create_value_function(value_function_settings):
     value_function_name = list(value_function_settings.keys())[0]
     value_function_parameters = list(value_function_settings.values())[0]
-    value_function = eval("lib.value_functions." + value_function_name)(
+    value_function = eval("irec.value_functions." + value_function_name)(
         **value_function_parameters
     )
     return value_function
@@ -402,11 +402,11 @@ def create_agent(agent_name, agent_settings):
     agent_class_parameters = {}
     agent_class_name = list(agent_settings.keys())[0]
     agent_parameters = list(agent_settings.values())[0]
-    agent_class = eval("lib.agents." + agent_class_name)
+    agent_class = eval("irec.agents." + agent_class_name)
     action_selection_policy = create_action_selection_policy(
         agent_parameters["action_selection_policy"]
     )
-    # action_selection_policy = eval('lib.action_selection_policies.'+action_selection_policy_name)(**action_selection_policy_parameters)
+    # action_selection_policy = eval('irec.action_selection_policies.'+action_selection_policy_name)(**action_selection_policy_parameters)
 
     # value_function_name = list(agent_parameters['value_function'].keys())[0]
     # value_function_parameters = list(agent_parameters['value_function'].values())[0]

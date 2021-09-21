@@ -12,8 +12,8 @@ import mlflow.tracking
 import yaml
 from concurrent.futures import ProcessPoolExecutor, wait, FIRST_COMPLETED
 from app import utils
-import lib.value_functions
-import lib.evaluation_policies
+import irec.value_functions
+import irec.evaluation_policies
 import argparse
 
 parser = argparse.ArgumentParser()
@@ -36,7 +36,7 @@ evaluation_policy_name = settings["defaults"]["interactors_evaluation_policy"]
 evaluation_policy_parameters = settings["evaluation_policies_parameters"][
     evaluation_policy_name
 ]
-evaluation_policy = eval("lib.evaluation_policies." + evaluation_policy_name)(
+evaluation_policy = eval("irec.evaluation_policies." + evaluation_policy_name)(
     **evaluation_policy_parameters
 )
 

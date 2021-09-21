@@ -1,5 +1,5 @@
 'MovieLens 100k O':
-  dataset_path: /home/heitor/Documents/Projects/rl-rss/data/datasets/ml-100k/
+  dataset_path: /home/heitor/Documents/Projects/rl-rss/app/data/datasets/ml-100k/
   crono: false
   random_seed: 0
   test_consumes: 1

@@ -7,7 +7,7 @@ import scipy.sparse
 import numpy as np
 import random
 from tqdm import tqdm
-import lib.value_functions
+import irec.value_functions
 
 import matplotlib as mpl
 import seaborn as sns
@@ -117,7 +117,7 @@ class InteractionSample(EvaluationPolicy):
             shape=(test_dataset.num_total_users, test_dataset.num_total_items))
 
         data = np.vstack((train_dataset.data, test_dataset.data))
-        from lib.utils.dataset import Dataset
+        from irec.utils.dataset import Dataset
 
         dataset = Dataset(data)
         dataset.update_from_data()
@@ -180,9 +180,9 @@ class InteractionSample(EvaluationPolicy):
         pbar.update(_num_interactions)
         _num_interactions = 0
         pbar.close()
-        items_entropy = lib.value_functions.Entropy.get_items_entropy(
+        items_entropy = irec.value_functions.Entropy.get_items_entropy(
             consumption_matrix)
-        items_popularity = lib.value_functions.MostPopular.get_items_popularity(
+        items_popularity = irec.value_functions.MostPopular.get_items_popularity(
             consumption_matrix, normalize=False)
         for uid, items in users_items_recommended.items():
 
@@ -333,9 +333,9 @@ class OneInteraction(EvaluationPolicy):
                  (train_dataset.data[:, 0], train_dataset.data[:, 1])),
                 (train_dataset.num_total_users, train_dataset.num_total_items))
 
-            items_entropy = lib.value_functions.Entropy.get_items_entropy(
+            items_entropy = irec.value_functions.Entropy.get_items_entropy(
                 train_consumption_matrix)
-            items_popularity = lib.value_functions.MostPopular.get_items_popularity(
+            items_popularity = irec.value_functions.MostPopular.get_items_popularity(
                 train_consumption_matrix, normalize=True)
             del train_consumption_matrix
             # correlations = defaultdict(dict)

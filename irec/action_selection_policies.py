@@ -1,6 +1,6 @@
 import numpy as np
 from collections import defaultdict
-import lib.value_functions.Entropy
+import irec.value_functions.Entropy
 
 
 class ActionSelectionPolicy:

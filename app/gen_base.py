@@ -6,7 +6,7 @@ sys.path.append(dirname(realpath(__file__)) + sep + pardir)
 from app import constants
 from app import utils
 import argparse
-from lib.utils.DatasetLoaderFactory import DatasetLoaderFactory
+from irec.utils.DatasetLoaderFactory import DatasetLoaderFactory
 from mlflow import log_param, log_artifact
 import mlflow
 import pickle

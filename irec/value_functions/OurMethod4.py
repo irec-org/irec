@@ -14,7 +14,7 @@ import mf
 from collections import defaultdict
 from .MFValueFunction import MFValueFunction
 import value_functions
-import lib.utils.utils
+import irec.utils.utils
 
 
 def _prediction_rule(A, b, items_weights, alpha):

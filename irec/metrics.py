@@ -1,15 +1,15 @@
 import numpy as np
 
-import lib.value_functions
+import irec.value_functions
 
 import scipy.sparse
 from collections import defaultdict
 import time
-from lib.utils.utils import run_parallel
+from irec.utils.utils import run_parallel
 import ctypes
-# import lib.utils.dataset as dataset
-from lib.utils import dataset
-from lib.value_functions.Entropy import Entropy
+# import irec.utils.dataset as dataset
+from irec.utils import dataset
+from irec.value_functions.Entropy import Entropy
 np.seterr(all='raise')
 
 
@@ -234,10 +234,10 @@ class InteractionMetricsEvaluator(MetricsEvaluator):
             self.items_distance = get_items_distance(
                 self.ground_truth_consumption_matrix)
         if isinstance(metric_class, EPC):
-            self.items_normalized_popularity = lib.value_functions.MostPopular.get_items_popularity(
+            self.items_normalized_popularity = irec.value_functions.MostPopular.get_items_popularity(
                 self.ground_truth_consumption_matrix)
         if isinstance(metric_class, Entropy):
-            self.items_entropy = lib.value_functions.Entropy.get_items_entropy(
+            self.items_entropy = irec.value_functions.Entropy.get_items_entropy(
                 self.ground_truth_consumption_matrix)
 
         metric_values = self._metric_evaluation(metric_class, num_interactions,

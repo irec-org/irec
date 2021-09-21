@@ -6,20 +6,20 @@ sys.path.append(dirname(realpath(__file__)) + sep + pardir)
 
 import inquirer
 from concurrent.futures import ProcessPoolExecutor, wait, FIRST_COMPLETED
-import lib.value_functions
-import lib.mf
-import lib.evaluation_policies
-from lib.utils.InteractorRunner import InteractorRunner
+import irec.value_functions
+import irec.mf
+import irec.evaluation_policies
+from irec.utils.InteractorRunner import InteractorRunner
 from sklearn.decomposition import NMF
 import numpy as np
 import traceback
 import scipy.sparse
-from lib.utils.DatasetManager import DatasetManager
+from irec.utils.DatasetManager import DatasetManager
 import yaml
 from metrics import InteractionMetricsEvaluator, CumulativeMetricsEvaluator, CumulativeInteractionMetricsEvaluator
-from lib.utils.dataset import Dataset
+from irec.utils.dataset import Dataset
 import metrics
-from lib.utils.utils import run_parallel
+from irec.utils.utils import run_parallel
 import utils
 import ctypes
 from copy import copy
@@ -42,7 +42,7 @@ metrics_classes = [metrics.Hits]
 evaluation_policy_name = settings['defaults']['interactors_evaluation_policy']
 evaluation_policy_parameters = settings['evaluation_policies_parameters'][
     evaluation_policy_name]
-evaluation_policy = eval('lib.evaluation_policies.' + evaluation_policy_name)(
+evaluation_policy = eval('irec.evaluation_policies.' + evaluation_policy_name)(
     **evaluation_policy_parameters)
 
 datasets_preprocessors = [
@@ -74,7 +74,7 @@ for dataset_preprocessor in datasets_preprocessors:
             print(f"Evaluating {agent.name} results")
             metrics_pdm = PersistentDataManager(directory='metrics')
 
-from lib.utils.PersistentDataManager import PersistentDataManager
+from irec.utils.PersistentDataManager import PersistentDataManager
 
             users_items_recommended = pdm.load(
                 utils.get_experiment_run_id(dm, evaluation_policy, agent_id))

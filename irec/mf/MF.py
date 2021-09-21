@@ -5,7 +5,7 @@ sys.path.append(dirname(realpath(__file__)) + sep + pardir)
 import numpy as np
 import scipy.sparse
 from numba import jit, prange
-# from .. import lib.utils
+# from .. import irec.utils
 import metrics
 
 

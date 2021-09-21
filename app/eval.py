@@ -6,15 +6,15 @@ sys.path.append(dirname(realpath(__file__)) + sep + pardir)
 
 from concurrent.futures import FIRST_COMPLETED, ProcessPoolExecutor, wait
 from app import utils
-import lib.metrics
+import irec.metrics
 import inquirer
 
-# from lib.utils.InteractorCache import InteractorCache
+# from irec.utils.InteractorCache import InteractorCache
 import metrics
 import numpy as np
 import scipy.sparse
 import yaml
-from lib.metrics import (
+from irec.metrics import (
     CumulativeInteractionMetricsEvaluator,
     CumulativeMetricsEvaluator,
     InteractionMetricsEvaluator,
@@ -22,11 +22,11 @@ from lib.metrics import (
 )
 from sklearn.decomposition import NMF
 
-import lib.evaluation_policies
-import lib.mf
-import lib.value_functions
+import irec.evaluation_policies
+import irec.mf
+import irec.value_functions
 from app import constants
-from lib.utils.dataset import Dataset
+from irec.utils.dataset import Dataset
 import argparse
 import pickle
 
@@ -56,7 +56,7 @@ evaluation_policy_name = settings["defaults"]["interactors_evaluation_policy"]
 evaluation_policy_parameters = settings["evaluation_policies_parameters"][
     evaluation_policy_name
 ]
-evaluation_policy = eval("lib.evaluation_policies." + evaluation_policy_name)(
+evaluation_policy = eval("irec.evaluation_policies." + evaluation_policy_name)(
     **evaluation_policy_parameters
 )
 
@@ -157,7 +157,7 @@ dataset.update_num_total_users_items()
 metric_evaluator = UserCumulativeInteractionMetricsEvaluator(dataset)
 # metric_evaluator = InteractionMetricsEvaluator(ground_truth_dataset=dataset)
 
-metric_class = eval("lib.metrics." + args.e)
+metric_class = eval("irec.metrics." + args.e)
 
 evaluate_itr(
     agent_name=agent_name,

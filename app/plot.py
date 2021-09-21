@@ -1,24 +1,24 @@
 from os.path import dirname, realpath, sep, pardir
 import os
 import sys
-sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "lib")
+sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "irec")
 
 import inquirer
 import value_functions
 import mf
-from lib.utils.InteractorRunner import InteractorRunner
+from irec.utils.InteractorRunner import InteractorRunner
 from sklearn.decomposition import NMF
 import numpy as np
 import scipy.sparse
-from lib.utils.DatasetManager import DatasetManager
+from irec.utils.DatasetManager import DatasetManager
 import yaml
 from metrics import InteractionMetricsEvaluator, CumulativeMetricsEvaluator
-from lib.utils.dataset import Dataset
+from irec.utils.dataset import Dataset
             pdm = PersistentDataManager(directory='results')
-from lib.utils.InteractorCache import InteractorCache
+from irec.utils.InteractorCache import InteractorCache
 import metrics
 import matplotlib.pyplot as plt
-from lib.utils.DirectoryDependent import DirectoryDependent
+from irec.utils.DirectoryDependent import DirectoryDependent
 from cycler import cycler
 plt.rcParams['axes.prop_cycle'] = cycler(color='krbgmyc')
 plt.rcParams['lines.linewidth'] = 2
@@ -75,7 +75,7 @@ for metric_evaluator in metrics_evaluators:
             itr = ir.create_interactor(itr_class)
             metrics_pdm = PersistentDataManager(directory='metrics')
 
-from lib.utils.PersistentDataManager import PersistentDataManager
+from irec.utils.PersistentDataManager import PersistentDataManager
             metric_values = metrics_pdm.load(
                 os.path.join(
                     InteractorCache().get_id(dm, evaluation_policy, itr),

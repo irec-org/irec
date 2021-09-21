@@ -1,5 +1,5 @@
 from numpy.lib.npyio import save
-from lib import value_functions
+from irec import value_functions
 import numpy as np
 
 

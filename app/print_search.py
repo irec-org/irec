@@ -5,22 +5,22 @@ sys.path.append(dirname(realpath(__file__)) + sep + pardir)
 
 import json
 import inquirer
-import lib.value_functions
-import lib.mf
+import irec.value_functions
+import irec.mf
 import utils
-import lib.evaluation_policies
-from lib.utils.InteractorRunner import InteractorRunner
+import irec.evaluation_policies
+from irec.utils.InteractorRunner import InteractorRunner
 from sklearn.decomposition import NMF
 import numpy as np
 import scipy.sparse
-from lib.utils.DatasetManager import DatasetManager
+from irec.utils.DatasetManager import DatasetManager
 import yaml
 from metrics import CumulativeInteractionMetricsEvaluator
-from lib.utils.dataset import Dataset
+from irec.utils.dataset import Dataset
                 pdm = PersistentDataManager(directory='results')
 import metrics
 import matplotlib.pyplot as plt
-from lib.utils.DirectoryDependent import DirectoryDependent
+from irec.utils.DirectoryDependent import DirectoryDependent
 from cycler import cycler
 from collections import defaultdict
 import argparse
@@ -49,7 +49,7 @@ dm = DatasetManager()
 evaluation_policy_name = settings['defaults']['interactors_evaluation_policy']
 evaluation_policy_parameters = settings['evaluation_policies_parameters'][
     evaluation_policy_name]
-evaluation_policy = eval('lib.evaluation_policies.' + evaluation_policy_name)(
+evaluation_policy = eval('irec.evaluation_policies.' + evaluation_policy_name)(
     **evaluation_policy_parameters)
 
 interactors_classes_names_to_names = {
@@ -58,7 +58,7 @@ interactors_classes_names_to_names = {
 }
 
 # interactors_classes = ir.select_interactors()
-# interactors_classes = [eval('lib.value_functions.'+interactor) for interactor in args.m]
+# interactors_classes = [eval('irec.value_functions.'+interactor) for interactor in args.m]
 datasets_preprocessors = [
     settings['datasets_preprocessors_parameters'][base] for base in args.b
 ]
@@ -80,7 +80,7 @@ for dataset_preprocessor in datasets_preprocessors:
                 agent_id = utils.get_agent_id(agent_name, parameters)
                 metrics_pdm = PersistentDataManager(directory='metrics')
 
-from lib.utils.PersistentDataManager import PersistentDataManager
+from irec.utils.PersistentDataManager import PersistentDataManager
                 try:
                     metric_values = metrics_pdm.load(
                         os.path.join(

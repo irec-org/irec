@@ -6,14 +6,14 @@ sys.path.append(dirname(realpath(__file__)) + sep + pardir)
 
 import inquirer
 from concurrent.futures import ProcessPoolExecutor, wait, FIRST_COMPLETED
-import lib.evaluation_policies
-import lib.value_functions
+import irec.evaluation_policies
+import irec.value_functions
 import mf
-from lib.utils.InteractorRunner import InteractorRunner
+from irec.utils.InteractorRunner import InteractorRunner
 from sklearn.decomposition import NMF
 import numpy as np
 import scipy.sparse
-from lib.utils.DatasetManager import DatasetManager
+from irec.utils.DatasetManager import DatasetManager
 import yaml
 from concurrent.futures import ProcessPoolExecutor
 import argparse
@@ -33,7 +33,7 @@ print(args.num_tasks)
 evaluation_policy_name = settings['defaults']['interactors_evaluation_policy']
 evaluation_policy_parameters = settings['evaluation_policies_parameters'][
     evaluation_policy_name]
-evaluation_policy = eval('lib.evaluation_policies.' + evaluation_policy_name)(
+evaluation_policy = eval('irec.evaluation_policies.' + evaluation_policy_name)(
     **evaluation_policy_parameters)
 
 
@@ -55,7 +55,7 @@ def main():
                     agent = utils.create_agent(agent_name, parameters)
                     # print(agent.value_function.__dict__)
                     # print(agent.action_selection_policy.__dict__)
-                    # itr = eval('lib.agents.'+agent_name)(**parameters)
+                    # itr = eval('irec.agents.'+agent_name)(**parameters)
                     # utils.run_interactor(itr,evaluation_policy,dm,args.forced_run)
                     # utils.run_interactor(itr,evaluation_policy,dm,args.forced_run)
                     f = executor.submit(

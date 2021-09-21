@@ -6,7 +6,7 @@ import random
 from threadpoolctl import threadpool_limits
 import ctypes
 
-from lib.utils.utils import run_parallel
+from irec.utils.utils import run_parallel
 from . import MF
 
 

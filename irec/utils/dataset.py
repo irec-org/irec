@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-import lib.value_functions
+import irec.value_functions
 from collections import defaultdict
 import random
 import math
@@ -359,7 +359,7 @@ class PopularityFilter(DataProcessor):
             (dataset.data[:, 2], (dataset.data[:, 0], dataset.data[:, 1])),
             (dataset.num_total_users, dataset.num_total_items))
         # num_items_to_sample = int(self.items_rate * dataset.num_total_items)
-        items_values = lib.value_functions.MostPopular.get_items_popularity(
+        items_values = irec.value_functions.MostPopular.get_items_popularity(
             consumption_matrix)
         items_sorted = np.argsort(items_values)[::-1]
         if self.keep_popular:
@@ -427,7 +427,7 @@ class PopRemoveEnt(DataProcessor):
             (dataset.data[:, 2], (dataset.data[:, 0], dataset.data[:, 1])),
             (dataset.num_total_users, dataset.num_total_items))
         # num_items_to_sample = int(self.items_rate * dataset.num_total_items)
-        items_values = lib.value_functions.MostPopular.get_items_popularity(
+        items_values = irec.value_functions.MostPopular.get_items_popularity(
             consumption_matrix)
         items_sorted = np.argsort(items_values)[::-1]
         # if self.keep_popular:

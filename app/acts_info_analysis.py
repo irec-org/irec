@@ -12,28 +12,28 @@ settings = utils.sync_settings_from_args(settings, args)
 from os.path import dirname, realpath, sep, pardir
 import os
 import sys
-import lib.utils.DirectoryDependent
+import irec.utils.DirectoryDependent
 sys.path.append(dirname(realpath(__file__)) + sep + pardir)
 
-import lib.evaluation_policies
+import irec.evaluation_policies
 import inquirer
-import lib.value_functions
-import lib.mf
-from lib.utils.InteractorRunner import InteractorRunner
-import lib.agents
+import irec.value_functions
+import irec.mf
+from irec.utils.InteractorRunner import InteractorRunner
+import irec.agents
 from sklearn.decomposition import NMF
 import numpy as np
 import scipy.sparse
-from lib.utils.DatasetManager import DatasetManager
+from irec.utils.DatasetManager import DatasetManager
 import yaml
 from metrics import InteractionMetricsEvaluator, CumulativeMetricsEvaluator, CumulativeInteractionMetricsEvaluator, UserCumulativeInteractionMetricsEvaluator
-from lib.utils.dataset import Dataset
+from irec.utils.dataset import Dataset
 import metrics
-from lib.utils.utils import run_parallel
+from irec.utils.utils import run_parallel
 import ctypes
 import pandas as pd
 
-dd = lib.utils.DirectoryDependent.DirectoryDependent()
+dd = irec.utils.DirectoryDependent.DirectoryDependent()
 dm = DatasetManager()
 
 ir = InteractorRunner(dm, settings['interactors_general_settings'],
@@ -60,7 +60,7 @@ for base in args.b:
         'interactors_evaluation_policy']
     evaluation_policy_parameters = settings['evaluation_policies_parameters'][
         evaluation_policy_name]
-    evaluation_policy = eval('lib.evaluation_policies.' +
+    evaluation_policy = eval('irec.evaluation_policies.' +
                              evaluation_policy_name)(
                                  **evaluation_policy_parameters)
     # all_data= []
@@ -81,7 +81,7 @@ for base in args.b:
         for i in range(len(acts_info)):
             uid = users_items_recommended[i][0]
             iid = users_items_recommended[i][1]
-            if isinstance(agent,lib.agents.SimpleEnsembleAgent):
+            if isinstance(agent,irec.agents.SimpleEnsembleAgent):
                 data.append({
                     **acts_info[i],
                     **{
@@ -111,7 +111,7 @@ for base in args.b:
                 # })
         # all_data.extend(data)
         # print(df_results.head())
-        if isinstance(agent,lib.agents.SimpleEnsembleAgent):
+        if isinstance(agent,irec.agents.SimpleEnsembleAgent):
             df_results = pd.DataFrame(data)
             results = df_results.groupby(['user_interaction', 'meta_action_name'])['trial'].agg(['count'])
             print(results)

@@ -8,7 +8,7 @@ import sys
 import json
 import utils
 
-sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "lib")
+sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "irec")
 from app import constants
 
 import inquirer
@@ -19,12 +19,12 @@ import mf
 import numpy as np
 import scipy.sparse
 import yaml
-import lib.evaluation_policies
+import irec.evaluation_policies
 from metrics import (
     CumulativeInteractionMetricsEvaluator,
     UserCumulativeInteractionMetricsEvaluator,
 )
-from lib.utils.dataset import Dataset
+from irec.utils.dataset import Dataset
 import metrics
 import matplotlib.pyplot as plt
 from cycler import cycler
@@ -70,7 +70,7 @@ evaluation_policy_name = settings["defaults"]["interactors_evaluation_policy"]
 evaluation_policy_parameters = settings["evaluation_policies_parameters"][
     evaluation_policy_name
 ]
-evaluation_policy = eval("lib.evaluation_policies." + evaluation_policy_name)(
+evaluation_policy = eval("irec.evaluation_policies." + evaluation_policy_name)(
     **evaluation_policy_parameters
 )
 # metrics_names = [

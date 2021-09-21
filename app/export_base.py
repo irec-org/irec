@@ -5,15 +5,15 @@ import sys
 sys.path.append(dirname(realpath(__file__)) + sep + pardir)
 
 import inquirer
-import lib.utils.dataset as dataset
+import irec.utils.dataset as dataset
 import yaml
-from lib.utils.DirectoryDependent import DirectoryDependent
-import lib.utils.splitters as splitters
-import lib.utils.utils as util
+from irec.utils.DirectoryDependent import DirectoryDependent
+import irec.utils.splitters as splitters
+import irec.utils.utils as util
 import pickle
 import utils
 import argparse
-from lib.utils.DatasetManager import DatasetManager
+from irec.utils.DatasetManager import DatasetManager
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-b', nargs='*')

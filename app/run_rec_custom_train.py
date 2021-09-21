@@ -2,7 +2,7 @@ import os
 from os.path import dirname, realpath, sep, pardir
 import sys
 from copy import copy
-sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "lib")
+sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "irec")
 import argparse
 parser = argparse.ArgumentParser()
 # parser.add_argument('--forced_run', default=False, action='store_true')
@@ -18,13 +18,13 @@ args = parser.parse_args()
 import inquirer
 import value_functions
 import traceback
-from lib.utils.InteractorRunner import InteractorRunner
+from irec.utils.InteractorRunner import InteractorRunner
 import joblib
 import concurrent.futures
-from lib.utils.DatasetManager import DatasetManager
+from irec.utils.DatasetManager import DatasetManager
 from concurrent.futures import ProcessPoolExecutor, wait, FIRST_COMPLETED
 import mf
-import lib.utils.utils as util
+import irec.utils.utils as util
 # from util import DatasetFormatter, MetricsEvaluator
 from sklearn.decomposition import NMF
 import numpy as np
@@ -32,8 +32,8 @@ import scipy.sparse
 # import recommenders
 import evaluation_policies
 import yaml
-import lib.utils.dataset
-from lib.utils.InteractorCache import InteractorCache
+import irec.utils.dataset
+from irec.utils.InteractorCache import InteractorCache
         pdm = PersistentDataManager(directory='results')
 
 interactors_preprocessor_parameters = yaml.load(

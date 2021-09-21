@@ -8,7 +8,7 @@ import ctypes
 import metrics
 from tqdm import tqdm
 
-from lib.utils.utils import run_parallel
+from irec.utils.utils import run_parallel
 from mf import MF
 
 

@@ -17,22 +17,22 @@ import os
 import sys
 sys.path.append(dirname(realpath(__file__)) + sep + pardir)
 
-import lib.evaluation_policies
+import irec.evaluation_policies
 import inquirer
-import lib.value_functions
-import lib.mf
-from lib.utils.InteractorRunner import InteractorRunner
+import irec.value_functions
+import irec.mf
+from irec.utils.InteractorRunner import InteractorRunner
 from concurrent.futures import ProcessPoolExecutor, wait, FIRST_COMPLETED
 from sklearn.decomposition import NMF
 import numpy as np
 import scipy.sparse
-from lib.utils.DatasetManager import DatasetManager
+from irec.utils.DatasetManager import DatasetManager
 import yaml
-from lib.metrics import InteractionMetricsEvaluator, CumulativeMetricsEvaluator, CumulativeInteractionMetricsEvaluator, UserCumulativeInteractionMetricsEvaluator
-from lib.utils.dataset import Dataset
-# from lib.utils.InteractorCache import InteractorCache
-from lib.utils.utils import run_parallel
-import lib.metrics
+from irec.metrics import InteractionMetricsEvaluator, CumulativeMetricsEvaluator, CumulativeInteractionMetricsEvaluator, UserCumulativeInteractionMetricsEvaluator
+from irec.utils.dataset import Dataset
+# from irec.utils.InteractorCache import InteractorCache
+from irec.utils.utils import run_parallel
+import irec.metrics
 import ctypes
 
 
@@ -61,8 +61,8 @@ def evaluate_itr(dataset ,dm_id, agent_name,evaluation_policy):
 # BUFFER_SIZE_EVALUATOR = 1000
 BUFFER_SIZE_EVALUATOR = 100000
 
-metrics_classes = [lib.metrics.Recall, lib.metrics.Hits, lib.metrics.NumInteractions]
-# metrics_classes = [lib.metrics.NumInteractions]
+metrics_classes = [irec.metrics.Recall, irec.metrics.Hits, irec.metrics.NumInteractions]
+# metrics_classes = [irec.metrics.NumInteractions]
 
 datasets_preprocessors = [
     settings['datasets_preprocessors_parameters'][base] for base in args.b
@@ -94,7 +94,7 @@ with ProcessPoolExecutor() as executor:
             evaluation_policy_name = "LimitedInteraction"
             evaluation_policy_parameters = settings['evaluation_policies_parameters'][
                 evaluation_policy_name]
-            evaluation_policy = eval('lib.evaluation_policies.' +
+            evaluation_policy = eval('irec.evaluation_policies.' +
                                      evaluation_policy_name)(
                                          **evaluation_policy_parameters)
             evaluation_policy.recommend_test_data_rate_limit = hit_rate
