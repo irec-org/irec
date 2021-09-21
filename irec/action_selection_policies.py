@@ -1,14 +1,14 @@
+from irec.CandidateActions import CandidateActions
 import numpy as np
 from collections import defaultdict
 import irec.value_functions.Entropy
 
 
 class ActionSelectionPolicy:
-
     def __init__(self, *args, **kwargs):
         pass
 
-    def select_actions(self, actions, action_estimates, actions_num):
+    def select_actions(self, actions: CandidateActions, action_estimates, actions_num):
         raise NotImplementedError
 
     def update(self, observation, action, reward, info):
@@ -19,11 +19,11 @@ class ActionSelectionPolicy:
 
 
 class ASPGreedy(ActionSelectionPolicy):
-
     def select_actions(self, actions, action_estimates, actions_num):
-        return (actions[0],
-                actions[1][np.argpartition(action_estimates,
-                                           -actions_num)[-actions_num:]]), None
+        return (
+            actions[0],
+            actions[1][np.argpartition(action_estimates, -actions_num)[-actions_num:]],
+        ), None
 
     def update(self, observation, action, reward, info):
         pass
@@ -33,14 +33,14 @@ class ASPGreedy(ActionSelectionPolicy):
 
 
 class ASPEGreedy(ActionSelectionPolicy):
-
     def __init__(self, epsilon, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
         self.epsilon = epsilon
 
     def select_actions(self, actions, action_estimates, actions_num):
-        greedy_actions = np.argpartition(action_estimates,
-                                         -actions_num)[-actions_num:][::-1]
+        greedy_actions = np.argpartition(action_estimates, -actions_num)[-actions_num:][
+            ::-1
+        ]
         actions_indexes = []
         for i in range(actions_num):
             if self.epsilon < np.random.rand():
@@ -68,7 +68,6 @@ class ASPEGreedy(ActionSelectionPolicy):
 
 
 class ASPReranker(ActionSelectionPolicy):
-
     def __init__(self, rule, input_filter_size, rerank_limit, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
         self.rule = rule
@@ -77,19 +76,24 @@ class ASPReranker(ActionSelectionPolicy):
 
     def select_actions(self, actions, action_estimates, actions_num):
         if self.users_num_consumption[actions[0]] > self.rerank_limit:
-            return (actions[0], actions[1][np.argpartition(
-                action_estimates, -actions_num)[-actions_num:]]), None
+            return (
+                actions[0],
+                actions[1][
+                    np.argpartition(action_estimates, -actions_num)[-actions_num:]
+                ],
+            ), None
 
         top_estimates_index_actions = np.argpartition(
-            action_estimates,
-            -self.input_filter_size)[-self.input_filter_size:][::-1]
+            action_estimates, -self.input_filter_size
+        )[-self.input_filter_size :][::-1]
 
         actions = (actions[0], actions[1][top_estimates_index_actions])
         action_estimates = action_estimates[top_estimates_index_actions]
 
         rule_action_estimates = self.rule.action_estimates(actions)[0]
-        top_rule_index_actions = np.argpartition(
-            rule_action_estimates, -actions_num)[-actions_num:][::-1]
+        top_rule_index_actions = np.argpartition(rule_action_estimates, -actions_num)[
+            -actions_num:
+        ][::-1]
         return (actions[0], actions[1][top_rule_index_actions]), None
 
     def update(self, observation, action, reward, info):
@@ -103,7 +107,6 @@ class ASPReranker(ActionSelectionPolicy):
 
 
 class ASPGenericGreedy(ActionSelectionPolicy):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # self.save_played_actions = save_played_actions
@@ -112,8 +115,9 @@ class ASPGenericGreedy(ActionSelectionPolicy):
     def select_actions(self, actions, action_estimates, actions_num):
         # print(actions,action_estimates)
         # info = {''}
-        actions = actions[np.argpartition(action_estimates,
-                                           -actions_num)[-actions_num:]]
+        actions = actions[
+            np.argpartition(action_estimates, -actions_num)[-actions_num:]
+        ]
         # if self.save_played_actions:
         # info = {'played_actions': factions}
         return actions, None

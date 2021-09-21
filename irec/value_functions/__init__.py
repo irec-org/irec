@@ -1,6 +1,7 @@
 import random
 import numpy as np
 
+from .ValueFunction import *
 from .ExperimentalValueFunction import *
 from .ICF import *
 from .LinearUCB import *
