@@ -1,3 +1,7 @@
+"""
+Code mainly from: https://github.com/zoulixin93/NICF
+Author: zoulixin93
+"""
 from threadpoolctl import threadpool_limits
 import numpy as np
 from tqdm import tqdm
