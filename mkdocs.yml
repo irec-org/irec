@@ -1,0 +1,22 @@
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
+      #handlers:
+        #python:
+          #rendering:
+            #show_source: true
+            ##setup_commands:
+              ##- import sys
+              ##- sys.path.append('../')
+            #selection:
+              #new_path_syntax: true
+      #custom_templates: templates
+      watch:
+        - irec
+site_name: IRec
+theme:
+  highlightjs: true
+  hljs_languages:
+    - python
+  name: readthedocs
