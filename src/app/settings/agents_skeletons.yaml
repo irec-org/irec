@@ -1,0 +1,82 @@
+ICTRTS:
+  variable_values:
+    num_lat: range(1,10,1)
+    num_particles: range(1,10,1)
+
+  skeleton:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        ICTRTS:
+          num_lat:
+          num_particles:
+
+NICF:
+  variable_values:
+    batch: 128
+    clip_param: 0.2
+    dropout_rate: 0.1
+    gamma: 0.0
+    inner_epoch: 50
+    latent_factor: 10
+    learning_rate: 1
+    num_blocks: 2
+    num_heads: 1
+    restore_model: false
+    rnn_layer: 1
+    time_step: 3
+    training_epoch: [30000,40000]
+
+  skeleton:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        NICF:
+          batch:
+          clip_param:
+          dropout_rate:
+          gamma:
+          inner_epoch:
+          latent_factor:
+          learning_rate:
+          num_blocks:
+          num_heads:
+          restore_model:
+          rnn_layer:
+          time_step:
+          training_epoch:
+
+PTS:
+  variable_values:
+    num_lat: [10,20,30,40,50]
+    num_particles: 2
+    var: 0.3
+    var_u: 0.6
+    var_v: 0.6
+
+  skeleton:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        PTS:
+          num_lat: 
+          num_particles:
+          var:
+          var_u:
+          var_v:
+
+
+EGreedy:
+  variable_values:
+    epsilon: range(0.1, 1, 0.1)
+
+  skeleton:  
+    SimpleAgent:
+      action_selection_policy:
+        ASPEGreedy:
+          epsilon:
+      value_function:
+        EGreedy: {}
