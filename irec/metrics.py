@@ -12,6 +12,7 @@ import ctypes
 # import irec.utils.dataset as dataset
 from irec.utils import dataset
 from irec.value_functions.Entropy import Entropy
+from typing import Any
 
 np.seterr(all="raise")
 
@@ -21,7 +22,7 @@ class Metric:
 
     def __init__(
         self,
-        ground_truth_dataset,
+        ground_truth_dataset: Any,
         relevance_evaluator: RelevanceEvaluator,
         *args,
         **kwargs
@@ -29,41 +30,53 @@ class Metric:
         """__init__.
 
         Args:
-            ground_truth_dataset:
+            ground_truth_dataset (Any): ground_truth_dataset
             relevance_evaluator (RelevanceEvaluator): relevance_evaluator
             args:
             kwargs:
         """
+
         super().__init__(*args, **kwargs)
         self.ground_truth_dataset = ground_truth_dataset
         self.relevance_evaluator = relevance_evaluator
 
-    def compute(self, uid: int):
+    def compute(self, uid: int) -> Any:
         """compute.
 
         Args:
             uid (int): uid
+
+        Returns:
+            Any:
         """
+
         return None
 
-    def update_recommendation(self, uid: int, item: int, reward: float):
+    def update_recommendation(self, uid: int, item: int, reward: float) -> None:
         """update_recommendation.
 
         Args:
             uid (int): uid
             item (int): item
             reward (float): reward
+
+        Returns:
+            None:
         """
         raise NotImplemented
 
-    def update_consumption_history(self, uid: int, item: int, reward: float):
+    def update_consumption_history(self, uid: int, item: int, reward: float) -> None:
         """update_consumption_history.
 
         Args:
             uid (int): uid
             item (int): item
             reward (float): reward
+
+        Returns:
+            None:
         """
+
         raise NotImplemented
 
 
