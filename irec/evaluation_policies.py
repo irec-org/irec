@@ -9,6 +9,8 @@ import random
 from tqdm import tqdm
 import irec.value_functions
 from irec.CandidateActions import OneUserCandidateActions
+from irec.dataset import Dataset
+from irec.agents import Agent
 
 import matplotlib as mpl
 import seaborn as sns
@@ -18,7 +20,21 @@ import os
 
 
 class EvaluationPolicy:
-    def evaluate(self, model, train_dataset, test_dataset):
+    """EvaluationPolicy."""
+
+    def evaluate(
+        self, model: Agent, train_dataset: Dataset, test_dataset: Dataset
+    ) -> Tuple[list, dict]:
+        """evaluate.
+
+        Args:
+            model (Agent): model
+            train_dataset (Dataset): train_dataset
+            test_dataset (Dataset): test_dataset
+
+        Returns:
+            Tuple[list, dict]:
+        """
         pass
 
 
