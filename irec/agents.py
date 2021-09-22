@@ -4,10 +4,12 @@ from irec import action_selection_policies
 from irec.CandidateActions import CandidateActions
 from irec.CandidateAction import CandidateAction, UICandidateAction
 import numpy as np
-from typing import List
+from typing import List, Any
 
 
 class Agent:
+    """Agent."""
+
     def __init__(
         self,
         value_function: value_functions.ValueFunction,
@@ -16,6 +18,7 @@ class Agent:
         *args,
         **kwargs
     ):
+
         """__init__.
 
         Args:
@@ -39,23 +42,27 @@ class Agent:
         """
         raise NotImplementedError
 
-    def observe(self, observation, action: CandidateAction, reward: float, info: dict):
+    def observe(
+        self, observation: Any, action: CandidateAction, reward: float, info: dict
+    ):
         """observe.
 
         Args:
-            observation:
-            action:
+            observation (Any): observation
+            action (CandidateAction): action
             reward (float): reward
             info (dict): info
         """
+
         raise NotImplementedError
 
-    def reset(self, observation):
+    def reset(self, observation: Any):
         """reset.
 
         Args:
-            observation:
+            observation (Any): observation
         """
+
         raise NotImplementedError
 
 
@@ -72,6 +79,12 @@ class SimpleAgent(Agent):
         super().__init__(*args, **kwargs)
 
     def act(self, candidate_actions: CandidateActions, actions_num: int):
+        """act.
+
+        Args:
+            candidate_actions (CandidateActions): candidate_actions
+            actions_num (int): actions_num
+        """
         action_estimates, vf_info = self.value_function.action_estimates(
             candidate_actions
         )
@@ -82,15 +95,28 @@ class SimpleAgent(Agent):
         return actions, {"vf_info": vf_info, "asp_info": asp_info}
 
     def observe(
-        self, observation, action: UICandidateAction, reward: float, info: dict
+        self, observation: Any, action: UICandidateAction, reward: float, info: dict
     ):
+        """observe.
+
+        Args:
+            observation (Any): observation
+            action (UICandidateAction): action
+            reward (float): reward
+            info (dict): info
+        """
         vf_info = info.get("vf_info", None)
         asp_info = info.get("asp_info", None)
         self.value_function.update(observation, action, reward, vf_info)
         self.action_selection_policy.update(observation, action, reward, asp_info)
         return None
 
-    def reset(self, observation):
+    def reset(self, observation: Any):
+        """reset.
+
+        Args:
+            observation (Any): observation
+        """
         if observation != None:
             self.value_function.reset(observation)
             self.action_selection_policy.reset(observation)
@@ -100,14 +126,26 @@ class SimpleAgent(Agent):
 
 
 class SimpleEnsembleAgent(Agent):
+    """SimpleEnsembleAgent."""
+
     def __init__(
         self,
         agents: List[Agent],
-        use_name_meta_actions=True,
-        save_meta_actions=True,
+        use_name_meta_actions: bool = True,
+        save_meta_actions: bool = True,
         *args,
         **kwargs
     ):
+        """__init__.
+
+        Args:
+            agents (List[Agent]): agents
+            use_name_meta_actions (bool): use_name_meta_actions
+            save_meta_actions (bool): save_meta_actions
+            args:
+            kwargs:
+        """
+
         super().__init__(*args, **kwargs)
         # self.ensemble_method_vf = ensemble_method_vf
         self.agents = agents
@@ -125,6 +163,12 @@ class SimpleEnsembleAgent(Agent):
         self.save_meta_actions = save_meta_actions
 
     def act(self, candidate_actions: CandidateActions, actions_num: int):
+        """act.
+
+        Args:
+            candidate_actions (CandidateActions): candidate_actions
+            actions_num (int): actions_num
+        """
         info = {}
         meta_action_estimates, meta_vf_info = self.value_function.action_estimates(
             self.ensemble_candidate_actions
@@ -163,7 +207,17 @@ class SimpleEnsembleAgent(Agent):
             info = None
         return selected_agent_actions, info
 
-    def observe(self, observation, action: UICandidateAction, reward: float, info: dict):
+    def observe(
+        self, observation: Any, action: UICandidateAction, reward: float, info: dict
+    ):
+        """observe.
+
+        Args:
+            observation (Any): observation
+            action (UICandidateAction): action
+            reward (float): reward
+            info (dict): info
+        """
         vf_info = info.get("vf_info", None)
         asp_info = info.get("asp_info", None)
         self.value_function.update(observation, info["mai"], reward, vf_info)
@@ -172,7 +226,12 @@ class SimpleEnsembleAgent(Agent):
             agent.observe(observation, action, reward, info)
         return None
 
-    def reset(self, observation):
+    def reset(self, observation: Any):
+        """reset.
+
+        Args:
+            observation (Any): observation
+        """
         if observation != None:
             self.value_function.reset(observation)
             self.action_selection_policy.reset(observation)
