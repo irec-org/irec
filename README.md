@@ -10,4 +10,4 @@ Systems.
 
 A basic Reinforcement Learning model:
 
-![Model](figures/mab-model.png){width="300px"}
+![Model](figures/mab-model.png)
