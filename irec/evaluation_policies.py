@@ -9,7 +9,7 @@ import random
 from tqdm import tqdm
 import irec.value_functions
 from irec.CandidateActions import OneUserCandidateActions
-from irec.dataset import Dataset
+from irec.utils.dataset import Dataset
 from irec.agents import Agent
 
 import matplotlib as mpl
@@ -24,7 +24,7 @@ class EvaluationPolicy:
 
     def evaluate(
         self, model: Agent, train_dataset: Dataset, test_dataset: Dataset
-    ) -> Tuple[list, dict]:
+    ) -> [list, dict]:
         """evaluate.
 
         Args:
