@@ -4,3 +4,17 @@
   random_seed: 0
   test_consumes: 1
   train_size: 0.8
+
+'LastFM 5k':
+  dataset_path: /home/thiagodks/Documentos/irec/data/datasets/LastFM 5k/
+  crono: false
+  random_seed: 0
+  test_consumes: 1
+  train_size: 0.8
+
+'LastFM 5k Validation':
+  dataset_path: /home/thiagodks/Documentos/irec/data/datasets/LastFM 5k/
+  crono: false
+  random_seed: 0
+  test_consumes: 1
+  train_size: 0.8

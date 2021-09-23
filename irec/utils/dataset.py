@@ -22,8 +22,6 @@ class DatasetPreprocessor:
         self.preprocessor = preprocessor
 
 
-
-
 class Pipeline:
     def __init__(self, steps=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -171,6 +169,13 @@ class MovieLens100k(DataProcessor):
         dataset.update_num_total_users_items()
         return dataset
 
+class LastFM5k(DataProcessor):
+    def process(self, dataset_dir):
+        data = np.loadtxt(os.path.join(dataset_dir, 'ratings.csv'), delimiter=',')
+        dataset = Dataset(data)
+        dataset.update_from_data()
+        dataset.update_num_total_users_items()
+        return dataset
 
 class MovieLens1M(DataProcessor):
     def process(self, dataset_descriptor):
