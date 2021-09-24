@@ -14,7 +14,7 @@ import metrics
 import numpy as np
 import scipy.sparse
 import yaml
-from irec.metrics import (
+from irec.metric_evaluators import (
     CumulativeInteractionMetricsEvaluator,
     CumulativeMetricsEvaluator,
     InteractionMetricsEvaluator,
@@ -34,31 +34,36 @@ import mlflow
 from mlflow.tracking import MlflowClient
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-m")
-parser.add_argument("-b")
-parser.add_argument("-e")
-parser.add_argument("-i", default=[5, 10, 20, 50, 100], nargs="*")
+# parser.add_argument("-i", default=[5, 10, 20, 50, 100], nargs="*")
+parser.add_argument("--evaluation_policy")
+parser.add_argument("--dataset_loader")
+parser.add_argument("--agent")
+parser.add_argument("--metric")
+parser.add_argument("--metric_evaluator")
 settings = utils.load_settings()
 utils.load_settings_to_parser(settings, parser)
 args = parser.parse_args()
 
 settings = utils.sync_settings_from_args(settings, args)
 
-agent_name = args.m
-dataset_name = args.b
+agent_name = args.agent
+dataset_name = args.dataset_loader
+evaluation_policy_name = args.evaluation_policy
+metric_name = args.metric
+metric_evaluator_name = args.metric_evaluator
 
-# print(args.m, args.b, args.e)
-agent_parameters = settings["agents_preprocessor_parameters"][dataset_name][agent_name]
+agent_parameters = settings["agents"][agent_name]
 
 dataset_parameters = settings["dataset_loaders"][dataset_name]
 
-evaluation_policy_name = settings["defaults"]["interactors_evaluation_policy"]
-evaluation_policy_parameters = settings["evaluation_policies_parameters"][
-    evaluation_policy_name
-]
+evaluation_policy_name = settings["defaults"]["evaluation_policy"]
+evaluation_policy_parameters = settings["evaluation_policies"][evaluation_policy_name]
 evaluation_policy = eval("irec.evaluation_policies." + evaluation_policy_name)(
     **evaluation_policy_parameters
 )
+
+metric_evaluator_name = settings["defaults"]["metric_evaluator"]
+metric_evaluator_parameters = settings["metric_evaluators"][metric_evaluator_name]
 
 
 def evaluate_itr(
@@ -103,20 +108,15 @@ def evaluate_itr(
     if isinstance(metric_evaluator, CumulativeInteractionMetricsEvaluator):
         metric_values = metric_evaluator.evaluate(
             metric_class,
-            evaluation_policy.num_interactions,
-            evaluation_policy.interaction_size,
             users_items_recommended,
-            interactions_to_evaluate=nums_interactions_to_show,
         )
     elif isinstance(metric_evaluator, InteractionMetricsEvaluator):
         metric_values = metric_evaluator.evaluate(
             metric_class,
-            evaluation_policy.num_interactions,
-            evaluation_policy.interaction_size,
             users_items_recommended,
         )
     elif isinstance(metric_evaluator, CumulativeMetricsEvaluator):
-        metric_values = metric_evaluator.evaluate(users_items_recommended)
+        metric_values = metric_evaluator.evaluate(metric_class, users_items_recommended)
     # metric_name = metric_class.__name__
     # metric_values
     mlflow.set_experiment("evaluation")
@@ -132,10 +132,6 @@ def evaluate_itr(
         # print(metric_values)
         utils.log_custom_artifact("evaluation.pickle", metric_values)
 
-
-BUFFER_SIZE_EVALUATOR = 50
-
-nums_interactions_to_show = list(map(int, args.i))
 
 metrics_classes = [metrics.Recall, metrics.Hits]
 
@@ -154,10 +150,13 @@ dataset = Dataset(data)
 dataset.update_from_data()
 dataset.update_num_total_users_items()
 
-metric_evaluator = UserCumulativeInteractionMetricsEvaluator(dataset)
 # metric_evaluator = InteractionMetricsEvaluator(ground_truth_dataset=dataset)
 
-metric_class = eval("irec.metrics." + args.e)
+metric_class = eval("irec.metrics." + metric_name)
+
+metric_evaluator = eval("irec.metric_evaluators." + metric_evaluator_name)(
+    dataset, **metric_evaluator_parameters
+)
 
 evaluate_itr(
     agent_name=agent_name,

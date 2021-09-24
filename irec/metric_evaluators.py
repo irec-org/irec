@@ -12,6 +12,7 @@ import ctypes
 from irec.utils import dataset
 from irec.value_functions.Entropy import Entropy
 from irec.RelevanceEvaluator import ThresholdRelevanceEvaluator
+from irec.metrics import ILD, Recall, Precision, EPC, EPD
 
 np.seterr(all="raise")
 
@@ -19,18 +20,18 @@ np.seterr(all="raise")
 class MetricsEvaluator:
     """MetricsEvaluator."""
 
-    def __init__(
-        self, relevance_evaluator=ThresholdRelevanceEvaluator(3.999), *args, **kwargs
-    ):
+    def __init__(self, relevance_evaluator_threshold: float, *args, **kwargs):
         """__init__.
 
         Args:
-            relevance_evaluator:
+            relevance_evaluator_threshold (float): relevance_evaluator_threshold
             args:
             kwargs:
         """
         super().__init__(*args, **kwargs)
-        self.relevance_evaluator = relevance_evaluator
+        self.relevance_evaluator = ThresholdRelevanceEvaluator(
+            relevance_evaluator_threshold
+        )
 
 
 class TotalMetricsEvaluator(MetricsEvaluator):
@@ -169,9 +170,24 @@ class CumulativeMetricsEvaluator(MetricsEvaluator):
 
 
 class InteractionMetricsEvaluator(MetricsEvaluator):
-    def __init__(self, ground_truth_dataset, *args, **kwargs):
+    def __init__(
+        self,
+        ground_truth_dataset,
+        num_interactions,
+        interaction_size,
+        interactions_to_evaluate=None,
+        *args,
+        **kwargs,
+    ):
         super().__init__(*args, **kwargs)
         self.ground_truth_dataset = ground_truth_dataset
+        self.num_interactions = num_interactions
+        self.interaction_size = interaction_size
+        self.interactions_to_evaluate = interactions_to_evaluate
+        if self.interactions_to_evaluate == None:
+            self.interactions_to_evaluate = list(range(self.num_interactions))
+        self.iterations_to_evaluate = self.interactions_to_evaluate
+
         if isinstance(ground_truth_dataset, dataset.Dataset):
             self.ground_truth_consumption_matrix = scipy.sparse.csr_matrix(
                 (
@@ -187,12 +203,10 @@ class InteractionMetricsEvaluator(MetricsEvaluator):
                 ),
             )
 
-    def _metric_evaluation(
-        self, metric_class, num_interactions, interaction_size, interactions_to_evaluate
-    ):
+    def _metric_evaluation(self, metric_class):
         start_time = time.time()
         metric_values = []
-        for i in range(num_interactions):
+        for i in range(self.num_interactions):
             if issubclass(metric_class, Recall):
                 metric = metric_class(
                     users_false_negative=self.users_false_negative,
@@ -218,7 +232,8 @@ class InteractionMetricsEvaluator(MetricsEvaluator):
                 )
             for uid in self.uids:
                 interaction_results = self.users_items_recommended[uid][
-                    i * interaction_size : i * interaction_size + interaction_size
+                    i * self.interaction_size : i * self.interaction_size
+                    + self.interaction_size
                 ]
                 for item in interaction_results:
                     metric.update_recommendation(
@@ -235,13 +250,8 @@ class InteractionMetricsEvaluator(MetricsEvaluator):
     def evaluate(
         self,
         metric_class,
-        num_interactions,
-        interaction_size,
         results,
-        interactions_to_evaluate=None,
     ):
-        if interactions_to_evaluate == None:
-            interactions_to_evaluate = list(range(num_interactions))
         self.users_false_negative = defaultdict(int)
         for row in self.ground_truth_dataset.data:
             uid = int(row[0])
@@ -268,9 +278,7 @@ class InteractionMetricsEvaluator(MetricsEvaluator):
                 self.ground_truth_consumption_matrix
             )
 
-        metric_values = self._metric_evaluation(
-            metric_class, num_interactions, interaction_size, interactions_to_evaluate
-        )
+        metric_values = self._metric_evaluation(metric_class)
 
         return metric_values
 
@@ -280,9 +288,7 @@ class CumulativeInteractionMetricsEvaluator(InteractionMetricsEvaluator):
     def metric_summarize(users_metric_values):
         return np.mean(list(users_metric_values.values()))
 
-    def _metric_evaluation(
-        self, metric_class, num_interactions, interaction_size, interactions_to_evaluate
-    ):
+    def _metric_evaluation(self, metric_class):
         start_time = time.time()
         metric_values = []
         if issubclass(metric_class, Recall):
@@ -314,17 +320,18 @@ class CumulativeInteractionMetricsEvaluator(InteractionMetricsEvaluator):
                 ground_truth_dataset=self.ground_truth_dataset,
                 relevance_evaluator=self.relevance_evaluator,
             )
-        for i in range(num_interactions):
+        for i in range(self.num_interactions):
             for uid in self.uids:
                 interaction_results = self.users_items_recommended[uid][
-                    i * interaction_size : i * interaction_size + interaction_size
+                    i * self.interaction_size : i * self.interaction_size
+                    + self.interaction_size
                 ]
                 for item in interaction_results:
                     metric.update_recommendation(
                         uid, item, self.ground_truth_consumption_matrix[uid, item]
                     )
 
-            if (i + 1) in interactions_to_evaluate:
+            if (i + 1) in self.interactions_to_evaluate:
                 print(f"Computing interaction {i+1} with {self.__class__.__name__}")
                 metric_values.append(
                     self.metric_summarize(
@@ -349,9 +356,7 @@ class IterationsMetricsEvaluator(InteractionMetricsEvaluator):
     def metric_summarize(users_metric_values):
         return np.mean(users_metric_values)
 
-    def _metric_evaluation(
-        self, metric_class, num_interactions, interaction_size, iterations_to_evaluate
-    ):
+    def _metric_evaluation(self, metric_class):
         start_time = time.time()
         metric_values = []
         if issubclass(metric_class, Recall):
@@ -377,12 +382,12 @@ class IterationsMetricsEvaluator(InteractionMetricsEvaluator):
                 ground_truth_dataset=self.ground_truth_dataset,
                 relevance_evaluator=self.relevance_evaluator,
             )
-        if 0 not in iterations_to_evaluate:
-            iterations_to_evaluate = [0] + iterations_to_evaluate
-        for i in range(len(iterations_to_evaluate) - 1):
+        if 0 not in self.iterations_to_evaluate:
+            self.iterations_to_evaluate = [0] + self.iterations_to_evaluate
+        for i in range(len(self.iterations_to_evaluate) - 1):
             for uid in self.uids:
                 interaction_results = self.users_items_recommended[uid][
-                    iterations_to_evaluate[i] : iterations_to_evaluate[i + 1]
+                    self.iterations_to_evaluate[i] : self.iterations_to_evaluate[i + 1]
                 ]
                 for item in interaction_results:
                     metric.update_recommendation(
@@ -390,7 +395,7 @@ class IterationsMetricsEvaluator(InteractionMetricsEvaluator):
                     )
             # if (i+1) in interactions_to_evaluate:
             print(
-                f"Computing iteration {iterations_to_evaluate[i+1]} with {self.__class__.__name__}"
+                f"Computing iteration {self.iterations_to_evaluate[i+1]} with {self.__class__.__name__}"
             )
             metric_values.append(
                 self.metric_summarize([metric.compute(uid) for uid in self.uids])

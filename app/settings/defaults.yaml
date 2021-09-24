@@ -2,5 +2,7 @@ agent: UCB
 data_dir: data/
 dataset_loader: 'MovieLens 100k O'
 evaluation_policy: Interaction
+metric: Recall
+metric_evaluator: UserCumulativeInteractionMetricsEvaluator
 pdf_dir: pdf/
 tex_dir: tex/

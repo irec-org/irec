@@ -262,6 +262,17 @@ def load_settings():
         Loader=loader,
     )
 
+    d["metric_evaluators"] = yaml.load(
+        open(
+            dirname(realpath(__file__))
+            + sep
+            + "settings"
+            + sep
+            + "metric_evaluators.yaml"
+        ),
+        Loader=loader,
+    )
+
     # with open(
     # dirname(realpath(__file__)) + sep + "settings" + sep +
     # "datasets_preprocessors_parameters.yaml") as f:
