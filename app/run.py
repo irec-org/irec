@@ -52,7 +52,7 @@ evaluation_policy = eval("irec.evaluation_policies." + evaluation_policy_name)(
     **evaluation_policy_parameters
 )
 
-mlflow.set_experiment("dataset")
+mlflow.set_experiment(settings["defaults"]["dataset_experiment"])
 
 print(
     utils.parameters_normalize(
@@ -63,7 +63,9 @@ run = utils.already_ran(
     utils.parameters_normalize(
         constants.DATASET_PARAMETERS_PREFIX, dataset_name, dataset_loader_settings
     ),
-    mlflow.get_experiment_by_name("dataset").experiment_id,
+    mlflow.get_experiment_by_name(
+        settings["defaults"]["dataset_experiment"]
+    ).experiment_id,
 )
 
 client = MlflowClient()
@@ -84,4 +86,5 @@ utils.run_interactor(
     evaluation_policy=evaluation_policy,
     evaluation_policy_name=evaluation_policy_name,
     evaluation_policy_parameters=evaluation_policy_parameters,
+    agent_experiment=settings["defaults"]["agent_experiment"],
 )

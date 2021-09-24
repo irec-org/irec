@@ -339,10 +339,12 @@ def run_interactor(
     evaluation_policy: irec.evaluation_policies.EvaluationPolicy,
     evaluation_policy_name,
     evaluation_policy_parameters,
+    agent_experiment,
 ):
+
+    mlflow.set_experiment(agent_experiment)
     # client = mlflow.tracking.MlflowClient()
     # experiment = client.create_experiment('dataset')
-    mlflow.set_experiment("agent")
     with mlflow.start_run() as run:
         log_custom_parameters(
             parameters_normalize(

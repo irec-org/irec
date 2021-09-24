@@ -78,8 +78,10 @@ def evaluate_itr(
     metric_evaluator_name,
     metric_class,
     metric_class_name,
+    agent_experiment,
+    evaluation_experiment,
 ):
-    mlflow.set_experiment("agent")
+    mlflow.set_experiment(agent_experiment)
     parameters_agent_run = (
         utils.parameters_normalize(
             constants.DATASET_PARAMETERS_PREFIX, dataset_name, dataset_parameters
@@ -119,7 +121,7 @@ def evaluate_itr(
         metric_values = metric_evaluator.evaluate(metric_class, users_items_recommended)
     # metric_name = metric_class.__name__
     # metric_values
-    mlflow.set_experiment("evaluation")
+    mlflow.set_experiment(evaluation_experiment)
     parameters_evaluation_run = copy.copy(parameters_agent_run)
     parameters_evaluation_run |= utils.parameters_normalize(
         constants.METRIC_EVALUATOR_PARAMETERS_PREFIX, metric_evaluator_name, {}
@@ -135,9 +137,12 @@ def evaluate_itr(
 
 metrics_classes = [metrics.Recall, metrics.Hits]
 
-mlflow.set_experiment("dataset")
+mlflow.set_experiment(settings["defaults"]["dataset_experiment"])
 run = utils.already_ran(
-    {"dataset": dataset_name}, mlflow.get_experiment_by_name("dataset").experiment_id
+    {"dataset": dataset_name},
+    mlflow.get_experiment_by_name(
+        settings["defaults"]["dataset_experiment"]
+    ).experiment_id,
 )
 
 client = MlflowClient()
@@ -170,4 +175,6 @@ evaluate_itr(
     metric_evaluator_name=metric_evaluator.__class__.__name__,
     metric_class=metric_class,
     metric_class_name=metric_class.__name__,
+    agent_experiment=settings["defaults"]["agent_experiment"],
+    evaluation_experiment=settings["defaults"]["evaluation_experiment"],
 )
