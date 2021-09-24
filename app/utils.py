@@ -194,19 +194,19 @@ def _do_nothing(d):
 def load_settings():
     d = dict()
     loader = yaml.SafeLoader
-    d["agents_preprocessor_parameters"] = yaml.load(
-        open(
-            dirname(realpath(__file__))
-            + sep
-            + "settings"
-            + sep
-            + "agents_preprocessor_parameters.yaml"
-        ),
-        Loader=loader,
-    )
-    d["agents_preprocessor_parameters"] = _do_nothing(
-        d["agents_preprocessor_parameters"]
-    )
+    # d["agents_preprocessor_parameters"] = yaml.load(
+    # open(
+    # dirname(realpath(__file__))
+    # + sep
+    # + "settings"
+    # + sep
+    # + "agents_preprocessor_parameters.yaml"
+    # ),
+    # Loader=loader,
+    # )
+    # d["agents_preprocessor_parameters"] = _do_nothing(
+    # d["agents_preprocessor_parameters"]
+    # )
 
     d["interactors_general_settings"] = yaml.load(
         open(
@@ -219,24 +219,24 @@ def load_settings():
         Loader=loader,
     )
 
-    d["agents_search_parameters"] = yaml.load(
-        open(
-            dirname(realpath(__file__))
-            + sep
-            + "settings"
-            + sep
-            + "agents_search_parameters.yaml"
-        ),
-        Loader=loader,
-    )
+    # d["agents_search_parameters"] = yaml.load(
+    # open(
+    # dirname(realpath(__file__))
+    # + sep
+    # + "settings"
+    # + sep
+    # + "agents_search_parameters.yaml"
+    # ),
+    # Loader=loader,
+    # )
 
-    d["evaluation_policies_parameters"] = yaml.load(
+    d["evaluation_policies"] = yaml.load(
         open(
             dirname(realpath(__file__))
             + sep
             + "settings"
             + sep
-            + "evaluation_policies_parameters.yaml"
+            + "evaluation_policies.yaml"
         ),
         Loader=loader,
     )
@@ -249,6 +249,16 @@ def load_settings():
             + sep
             + "dataset_loaders.yaml"
         ),
+        Loader=loader,
+    )
+
+    d["agents"] = yaml.load(
+        open(dirname(realpath(__file__)) + sep + "settings" + sep + "agents.yaml"),
+        Loader=loader,
+    )
+
+    d["defaults"] = yaml.load(
+        open(dirname(realpath(__file__)) + sep + "settings" + sep + "defaults.yaml"),
         Loader=loader,
     )
 
@@ -274,7 +284,9 @@ def load_settings():
 def load_settings_to_parser(settings, parser):
     settings_flatten = flatten_dict(settings)
     for k, v in settings_flatten.items():
-        parser.add_argument(f"--{k}", default=v, type=yaml.safe_load)
+        # agent_group = parser.add_argument_group(agent_name)
+        # parser.add_argument(f"--{k}", default=v, type=yaml.safe_load)
+        parser.add_argument(f"--{k}", default=v, type=type(v))
         # parser.add_argument(f'--{k}')
 
 
