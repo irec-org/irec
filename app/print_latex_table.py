@@ -20,7 +20,7 @@ import numpy as np
 import scipy.sparse
 import yaml
 import irec.evaluation_policies
-from metrics import (
+from irec.metric_evaluators import (
     CumulativeInteractionMetricsEvaluator,
     UserCumulativeInteractionMetricsEvaluator,
 )
@@ -32,11 +32,12 @@ from collections import defaultdict
 import argparse
 
 parser = argparse.ArgumentParser()
+parser.add_argument("--evaluation_policy")
+parser.add_argument("--dataset_loaders", nargs="*")
+parser.add_argument("--agents", nargs="*")
+parser.add_argument("--metrics", nargs="*")
+parser.add_argument("--metric_evaluator")
 parser.add_argument("-r", type=str, default=None)
-parser.add_argument("-i", default=[5, 10, 20, 50, 100], nargs="*")
-parser.add_argument("-m", nargs="*")
-parser.add_argument("-e", nargs="*")
-parser.add_argument("-b", nargs="*")
 parser.add_argument("--type", default=None)
 parser.add_argument("--dump", default=False, action="store_true")
 settings = utils.load_settings()
@@ -49,7 +50,7 @@ plt.rcParams["lines.linewidth"] = 2
 plt.rcParams["font.size"] = 15
 
 # metrics_classes = [metrics.Hits, metrics.Recall]
-metrics_classes = [eval("metrics." + i) for i in args.e]
+metrics_classes = [eval("metrics." + i) for i in args.metrics]
 # metrics_classes = [
 # metrics.Hits,
 # metrics.Recall,
@@ -61,15 +62,17 @@ metrics_classes = [eval("metrics." + i) for i in args.e]
 # ]
 metrics_classes_names = list(map(lambda x: x.__name__, metrics_classes))
 metrics_names = metrics_classes_names
-datasets_names = args.b
+datasets_names = args.dataset_loaders
 
-metric_evaluator = UserCumulativeInteractionMetricsEvaluator(None)
-metric_evaluator_name = metric_evaluator.__class__.__name__
+metric_evaluator_name = settings["defaults"]["metric_evaluator"]
+metric_evaluator_parameters = settings["metric_evaluators"][metric_evaluator_name]
 
-evaluation_policy_name = settings["defaults"]["interactors_evaluation_policy"]
-evaluation_policy_parameters = settings["evaluation_policies_parameters"][
-    evaluation_policy_name
-]
+metric_evaluator = eval("irec.metric_evaluators." + metric_evaluator_name)(
+    None, **metric_evaluator_parameters
+)
+
+evaluation_policy_name = settings["defaults"]["evaluation_policy"]
+evaluation_policy_parameters = settings["evaluation_policies"][evaluation_policy_name]
 evaluation_policy = eval("irec.evaluation_policies." + evaluation_policy_name)(
     **evaluation_policy_parameters
 )
@@ -93,7 +96,7 @@ interactors_classes_names_to_names = {
 }
 
 
-nums_interactions_to_show = list(map(int, args.i))
+nums_interactions_to_show = list(map(int, metric_evaluator.interactions_to_evaluate))
 
 
 def generate_table_spec():
@@ -142,10 +145,8 @@ datasets_metrics_users_values = defaultdict(
 for dataset_name in datasets_names:
 
     for metric_class_name in metrics_classes_names:
-        for agent_name in args.m:
-            agent_parameters = settings["agents_preprocessor_parameters"][dataset_name][
-                agent_name
-            ]
+        for agent_name in args.agents:
+            agent_parameters = settings["agents"][dataset_name][agent_name]
             agent = utils.create_agent(agent_name, agent_parameters)
             agent_id = utils.get_agent_id(agent_name, agent_parameters)
             mlflow.set_experiment("evaluation")
@@ -212,7 +213,7 @@ method_utility_scores = defaultdict(lambda: defaultdict(lambda: dict))
 for num_interaction in range(len(nums_interactions_to_show)):
     for dataset_name in datasets_names:
         for metric_class_name in metrics_classes_names:
-            for agent_name in args.m:
+            for agent_name in args.agents:
                 metric_max_value = np.max(
                     list(
                         map(
@@ -244,7 +245,7 @@ for num_interaction in range(len(nums_interactions_to_show)):
 
 for num_interaction in range(len(nums_interactions_to_show)):
     for dataset_name in datasets_names:
-        for agent_name in args.m:
+        for agent_name in args.agents:
             us = [
                 utility_scores[dataset_name][metric_class_name][agent_name][
                     num_interaction
@@ -286,10 +287,10 @@ triangle_down_str = r"\textcolor[rgb]{0.7,00,00}{$\blacktriangledown$}"
 
 if args.type == "pairs":
     pool_of_methods_to_compare = [
-        (args.m[i], args.m[i + 1]) for i in range(0, len(args.m) - 1, 2)
+        (args.agents[i], args.agents[i + 1]) for i in range(0, len(args.agents) - 1, 2)
     ]
 else:
-    pool_of_methods_to_compare = [[args.m[i] for i in range(len(args.m))]]
+    pool_of_methods_to_compare = [[args.agents[i] for i in range(len(args.agents))]]
 print(pool_of_methods_to_compare)
 for dataset_name in datasets_names:
     for metric_class_name in metrics_classes_names:
@@ -383,7 +384,7 @@ for metric_name, metric_class_name in zip(metrics_names, metrics_classes_names):
     rtex += utils.generate_metric_interactions_header(
         nums_interactions_to_show, len(datasets_names), metric_name
     )
-    for agent_name in args.m:
+    for agent_name in args.agents:
         rtex += "%s & " % (utils.get_agent_pretty_name(agent_name, settings))
         rtex += " & ".join(
             [

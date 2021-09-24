@@ -21,7 +21,7 @@ import time
 
 
 settings = utils.load_settings()
-parser = argparse.ArgumentParser()
+parser = argparse.ArgumentParser(add_help=False)
 
 parser.add_argument(
     "--evaluation_policy", default=settings["defaults"]["evaluation_policy"]
@@ -45,10 +45,10 @@ args = parser.parse_args()
 settings = utils.sync_settings_from_args(settings, args)
 
 agent_name = args.agent
-dataset_name = args.dataset_loader
+dataset_loader_name = args.dataset_loader
 evaluation_policy_name = args.evaluation_policy
 
-dataset_loader_settings = settings["dataset_loaders"][dataset_name]
+dataset_loader_parameters = settings["dataset_loaders"][dataset_loader_name]
 
 evaluation_policy_parameters = settings["evaluation_policies"][evaluation_policy_name]
 evaluation_policy = eval("irec.evaluation_policies." + evaluation_policy_name)(
@@ -59,12 +59,16 @@ mlflow.set_experiment(settings["defaults"]["dataset_experiment"])
 
 print(
     utils.parameters_normalize(
-        constants.DATASET_PARAMETERS_PREFIX, dataset_name, dataset_loader_settings
+        constants.DATASET_PARAMETERS_PREFIX,
+        dataset_loader_name,
+        dataset_loader_parameters,
     )
 )
 run = utils.already_ran(
     utils.parameters_normalize(
-        constants.DATASET_PARAMETERS_PREFIX, dataset_name, dataset_loader_settings
+        constants.DATASET_PARAMETERS_PREFIX,
+        dataset_loader_name,
+        dataset_loader_parameters,
     ),
     mlflow.get_experiment_by_name(
         settings["defaults"]["dataset_experiment"]
@@ -83,8 +87,8 @@ utils.run_interactor(
     agent=agent,
     agent_name=agent_name,
     agent_parameters=agent_parameters,
-    dataset_name=dataset_name,
-    dataset_parameters=dataset_loader_settings,
+    dataset_name=dataset_loader_name,
+    dataset_parameters=dataset_loader_parameters,
     traintest_dataset=traintest_dataset,
     evaluation_policy=evaluation_policy,
     evaluation_policy_name=evaluation_policy_name,
