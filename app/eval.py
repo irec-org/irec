@@ -33,14 +33,18 @@ import pickle
 import mlflow
 from mlflow.tracking import MlflowClient
 
+settings = utils.load_settings()
 parser = argparse.ArgumentParser()
 # parser.add_argument("-i", default=[5, 10, 20, 50, 100], nargs="*")
-parser.add_argument("--evaluation_policy")
-parser.add_argument("--dataset_loader")
-parser.add_argument("--agent")
-parser.add_argument("--metric")
-parser.add_argument("--metric_evaluator")
-settings = utils.load_settings()
+parser.add_argument(
+    "--evaluation_policy", default=settings["defaults"]["evaluation_policy"]
+)
+parser.add_argument("--dataset_loader", default=settings["defaults"]["dataset_loader"])
+parser.add_argument("--agent", default=settings["defaults"]["agent"])
+parser.add_argument("--metric", default=settings["defaults"]["metric"])
+parser.add_argument(
+    "--metric_evaluator", default=settings["defaults"]["metric_evaluator"]
+)
 utils.load_settings_to_parser(settings, parser)
 args = parser.parse_args()
 

@@ -12,11 +12,11 @@ from mlflow import log_param, log_artifact
 import mlflow
 import pickle
 
+settings = utils.load_settings()
 dataset_loader_factory = DatasetLoaderFactory()
 parser = argparse.ArgumentParser()
-parser.add_argument("--dataset_loader")
+parser.add_argument("--dataset_loader", default=settings["defaults"]["dataset_loader"])
 args = parser.parse_args()
-settings = utils.load_settings()
 dataset_name = args.dataset_loader
 
 dataset_loader_settings = settings["dataset_loaders"][dataset_name]

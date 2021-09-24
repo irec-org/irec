@@ -39,7 +39,14 @@ class EvaluationPolicy:
 
 
 class Interaction(EvaluationPolicy):
-    def __init__(self, num_interactions, interaction_size, save_info, *args, **kwargs):
+    def __init__(
+        self,
+        num_interactions: int,
+        interaction_size: int,
+        save_info: bool,
+        *args,
+        **kwargs,
+    ):
         super().__init__(*args, **kwargs)
         self.num_interactions = int(num_interactions)
         self.interaction_size = int(interaction_size)

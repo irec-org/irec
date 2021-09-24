@@ -22,9 +22,12 @@ import time
 
 settings = utils.load_settings()
 parser = argparse.ArgumentParser()
-parser.add_argument("--evaluation_policy")
-parser.add_argument("--dataset_loader")
-parser.add_argument("--agent")
+
+parser.add_argument(
+    "--evaluation_policy", default=settings["defaults"]["evaluation_policy"]
+)
+parser.add_argument("--dataset_loader", default=settings["defaults"]["dataset_loader"])
+parser.add_argument("--agent", default=settings["defaults"]["agent"])
 
 # for setting_name in ["defaults", "evaluation_policy", "agents", "dataset"]:
 # for section_name, section_parameters in settings[setting_name].items():
