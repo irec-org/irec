@@ -1,20 +1,26 @@
-'MovieLens 100k O':
-  dataset_path: /home/heitor/Documents/Projects/rl-rss/app/data/datasets/ml-100k/
-  crono: false
-  random_seed: 0
-  test_consumes: 1
-  train_size: 0.8
-
 'LastFM 5k':
-  dataset_path: /home/thiagodks/Documentos/irec/data/datasets/LastFM 5k/
   crono: false
+  dataset_path: './data/datasets/LastFM 5k/'
   random_seed: 0
   test_consumes: 1
   train_size: 0.8
-
-'LastFM 5k Validation':
-  dataset_path: /home/thiagodks/Documentos/irec/data/datasets/LastFM 5k/
+'LastFM 5k TRTE':
+  dataset_path: './data/datasets/LastFM 5k/Train-Test_LastFM-5K/'
+'LastFM 5k TRTE Validation':
   crono: false
+  dataset_path: './data/datasets/LastFM 5k/Train-Test_LastFM-5K/'
+  random_seed: 0
+  test_consumes: 1
+  train_size: 0.8
+'LastFM 5k Validation':
+  crono: false
+  dataset_path: './data/datasets/LastFM 5k/'
+  random_seed: 0
+  test_consumes: 1
+  train_size: 0.8
+'MovieLens 100k O':
+  crono: false
+  dataset_path: ./data/datasets/ml-100k/
   random_seed: 0
   test_consumes: 1
   train_size: 0.8

@@ -88,8 +88,8 @@ class DataProcessor:
 
 
 class TRTE(DataProcessor):
-    def process(self, dataset_descriptor):
-        dataset_dir = dataset_descriptor.dataset_dir
+    def process(self, dataset_dir):
+        # dataset_dir = dataset_descriptor.dataset_dir
         train_data = np.loadtxt(os.path.join(dataset_dir, "train.data"), delimiter="::")
         test_data = np.loadtxt(os.path.join(dataset_dir, "test.data"), delimiter="::")
 
@@ -102,7 +102,7 @@ class TRTE(DataProcessor):
         test_dataset = copy(dataset)
         test_dataset.data = test_data
         test_dataset.update_from_data()
-        return train_dataset, test_dataset
+        return TrainTestDataset(train=train_dataset, test=test_dataset)
 
 
 class TRTEPopular(DataProcessor):
