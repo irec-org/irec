@@ -142,8 +142,8 @@ columns = ["hits_s0","hits_s1","hits_s2","hits_s3","hits_s4","hits_s5","hits_tot
 for dataset in datasets: latex_table = latex_table.replace("mydf", dataset, 1)
 
 for method in methods:
+    latex_table = latex_table.replace("method", method.replace("_", "-"), 1)
     for dataset in datasets:
-        latex_table = latex_table.replace("method", method.replace("_", "-"), 1)
         values = df_analysis.loc[(df_analysis["method"] == method) & (df_analysis["dataset"] == dataset)]
         for i, col in enumerate(columns): latex_table = latex_table.replace(f"v{i+1}", values[col].values[0],1)
 
