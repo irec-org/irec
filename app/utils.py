@@ -417,9 +417,13 @@ def create_action_selection_policy(action_selection_policy_settings):
 def create_value_function(value_function_settings):
     value_function_name = list(value_function_settings.keys())[0]
     value_function_parameters = list(value_function_settings.values())[0]
-    value_function = eval("irec.value_functions." + value_function_name)(
-        **value_function_parameters
-    )
+    import irec.value_functions.UCB
+
+    irec.value_functions.UCB.UCB
+    exec("import irec.value_functions.{}".format(value_function_name))
+    value_function = eval(
+        "irec.value_functions.{}.{}".format(value_function_name, value_function_name)
+    )(**value_function_parameters)
     return value_function
 
 

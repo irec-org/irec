@@ -1,6 +1,7 @@
 import numpy as np
 from tqdm import tqdm
-from . import ValueFunction, ExperimentalValueFunction
+from .ValueFunction import ValueFunction
+from .ExperimentalValueFunction import ExperimentalValueFunction
 import os
 import random
 import scipy.stats
@@ -12,20 +13,20 @@ class UCB(ExperimentalValueFunction):
         super().__init__(*args, **kwargs)
         self.c = c
 
-
     def reset(self, observation):
         train_dataset = observation
         super().reset(train_dataset)
         self.train_dataset = train_dataset
         self.train_consumption_matrix = scipy.sparse.csr_matrix(
-            (self.train_dataset.data[:, 2],
-             (self.train_dataset.data[:, 0], self.train_dataset.data[:, 1])),
-            (self.train_dataset.num_total_users,
-             self.train_dataset.num_total_items))
+            (
+                self.train_dataset.data[:, 2],
+                (self.train_dataset.data[:, 0], self.train_dataset.data[:, 1]),
+            ),
+            (self.train_dataset.num_total_users, self.train_dataset.num_total_items),
+        )
         self.num_total_items = self.train_dataset.num_total_items
 
-        self.items_mean_values = np.zeros(self.num_total_items,
-                                          dtype=np.float128)
+        self.items_mean_values = np.zeros(self.num_total_items, dtype=np.float128)
         self.items_count = np.zeros(self.num_total_items, dtype=int)
 
         self.t = 1
@@ -40,11 +41,11 @@ class UCB(ExperimentalValueFunction):
     def action_estimates(self, candidate_actions):
         uid = candidate_actions[0]
         candidate_items = candidate_actions[1]
-        with np.errstate(divide='ignore'):
+        with np.errstate(divide="ignore"):
             items_uncertainty = self.c * np.sqrt(
-                2 * np.log(self.t) / self.items_count[candidate_items])
-            items_score = self.items_mean_values[
-                candidate_items] + items_uncertainty
+                2 * np.log(self.t) / self.items_count[candidate_items]
+            )
+            items_score = self.items_mean_values[candidate_items] + items_uncertainty
         self.recent_predict = True
         return items_score, None
 
@@ -54,8 +55,8 @@ class UCB(ExperimentalValueFunction):
         additional_data = info
         item = int(item)
         self.items_mean_values[item] = (
-            self.items_mean_values[item] * self.items_count[item] +
-            reward) / (self.items_count[item] + 1)
+            self.items_mean_values[item] * self.items_count[item] + reward
+        ) / (self.items_count[item] + 1)
         self.items_count[item] += 1
         if self.recent_predict:
             self.t += 1
