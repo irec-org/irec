@@ -29,6 +29,7 @@ from irec.metric_evaluators import (
     CumulativeInteractionMetricEvaluator,
     InteractionMetricEvaluator,
     CumulativeMetricEvaluator,
+    UserCumulativeInteractionMetricEvaluator,
 )
 import copy
 import os.path
@@ -690,28 +691,35 @@ def evaluate_itr(dataset, settings):
     )
     # print(parameters_agent_run)
     run = already_ran(
-        parameters_agent_run, mlflow.get_experiment_by_name("agent").experiment_id
+        parameters_agent_run,
+        mlflow.get_experiment_by_name(
+            settings["defaults"]["agent_experiment"]
+        ).experiment_id,
     )
 
     # run = already_ran({'dataset': dataset_name}|,
     # mlflow.get_experiment_by_name('dataset').experiment_id)
     client = MlflowClient()
     artifact_path = client.download_artifacts(run.info.run_id, "interactions.pickle")
+    print(artifact_path)
     interactions = pickle.load(open(artifact_path, "rb"))
     users_items_recommended = interactions
+    metric_values = metric_evaluator.evaluate(
+        metric_class,
+        users_items_recommended,
+    )
 
-    if isinstance(metric_evaluator, CumulativeInteractionMetricEvaluator):
-        metric_values = metric_evaluator.evaluate(
-            metric_class,
-            users_items_recommended,
-        )
+    if isinstance(metric_evaluator, UserCumulativeInteractionMetricEvaluator):
+        with mlflow.start_run(run_id=run.info.run_id) as run:
+            mlflow.log_metric(
+                metric_class.__name__, np.mean(list(metric_values[-1].values()))
+            )
+        pass
     elif isinstance(metric_evaluator, InteractionMetricEvaluator):
-        metric_values = metric_evaluator.evaluate(
-            metric_class,
-            users_items_recommended,
-        )
+        pass
     elif isinstance(metric_evaluator, CumulativeMetricEvaluator):
-        metric_values = metric_evaluator.evaluate(metric_class, users_items_recommended)
+        pass
+
     mlflow.set_experiment(settings["defaults"]["evaluation_experiment"])
     parameters_evaluation_run = copy.copy(parameters_agent_run)
     parameters_evaluation_run |= parameters_normalize(
