@@ -69,7 +69,7 @@ class Agent:
         """observe.
 
         After each action, the agent receives a reward, and determines what kind of information the agent 
-        can observe to update its value function and its selection policy
+        can observe to update its value function and its selection policy.
 
         Args:
             observation (Any): observation
@@ -83,7 +83,7 @@ class Agent:
     def reset(self, observation: Any):
         """reset.
 
-        Reset agent parameters
+        Reset agent parameters.
 
         Args:
             observation (Any): observation
