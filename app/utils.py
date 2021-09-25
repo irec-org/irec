@@ -666,7 +666,7 @@ def evaluate_itr(dataset, settings):
     ]
 
     metric_class = eval("irec.metrics." + settings["defaults"]["metric"])
-
+    print(settings["defaults"]["metric_evaluator"], metric_evaluator_parameters)
     metric_evaluator = eval(
         "irec.metric_evaluators." + settings["defaults"]["metric_evaluator"]
     )(dataset, **metric_evaluator_parameters)
@@ -734,3 +734,51 @@ def evaluate_itr(dataset, settings):
         log_custom_parameters(parameters_evaluation_run)
         # print(metric_values)
         log_custom_artifact("evaluation.pickle", metric_values)
+
+
+def load_evaluation_experiment(settings):
+    mlflow.set_experiment(settings["defaults"]["evaluation_experiment"])
+    dataset_parameters = settings["dataset_loaders"][
+        settings["defaults"]["dataset_loader"]
+    ]
+    # metrics_evaluator_name = settings["defaults"]["metric_evaluator"]
+    parameters_agent_run = (
+        parameters_normalize(
+            constants.DATASET_PARAMETERS_PREFIX,
+            settings["defaults"]["dataset_loader"],
+            dataset_parameters,
+        )
+        | parameters_normalize(
+            constants.EVALUATION_POLICY_PARAMETERS_PREFIX,
+            settings["defaults"]["evaluation_policy"],
+            settings["evaluation_policies"][settings["defaults"]["evaluation_policy"]],
+        )
+        | parameters_normalize(
+            constants.AGENT_PARAMETERS_PREFIX,
+            settings["defaults"]["agent"],
+            settings["agents"][settings["defaults"]["agent"]],
+        )
+    )
+
+    parameters_evaluation_run = copy.copy(parameters_agent_run)
+    parameters_evaluation_run |= parameters_normalize(
+        constants.METRIC_EVALUATOR_PARAMETERS_PREFIX,
+        settings["defaults"]["metric_evaluator"],
+        {},
+    )
+    parameters_evaluation_run |= parameters_normalize(
+        constants.METRIC_PARAMETERS_PREFIX, settings["defaults"]["metric"], {}
+    )
+    run = already_ran(
+        parameters_evaluation_run,
+        mlflow.get_experiment_by_name(
+            settings["defaults"]["evaluation_experiment"]
+        ).experiment_id,
+    )
+    # print(run)
+
+    client = MlflowClient()
+    artifact_path = client.download_artifacts(run.info.run_id, "evaluation.pickle")
+    # print(artifact_path)
+    metric_values = pickle.load(open(artifact_path, "rb"))
+    return metric_values

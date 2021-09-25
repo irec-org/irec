@@ -104,22 +104,23 @@ class TotalMetricEvaluator(MetricEvaluator):
 
 
 class CumulativeMetricEvaluator(MetricEvaluator):
-    def __init__(self, buffer_size, ground_truth_dataset, *args, **kwargs):
+    def __init__(self, ground_truth_dataset, buffer_size, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.ground_truth_dataset = ground_truth_dataset
-        self.ground_truth_consumption_matrix = scipy.sparse.csr_matrix(
-            (
-                self.ground_truth_dataset.data[:, 2],
+        if ground_truth_dataset != None:
+            self.ground_truth_dataset = ground_truth_dataset
+            self.ground_truth_consumption_matrix = scipy.sparse.csr_matrix(
                 (
-                    self.ground_truth_dataset.data[:, 0],
-                    self.ground_truth_dataset.data[:, 1],
+                    self.ground_truth_dataset.data[:, 2],
+                    (
+                        self.ground_truth_dataset.data[:, 0],
+                        self.ground_truth_dataset.data[:, 1],
+                    ),
                 ),
-            ),
-            (
-                self.ground_truth_dataset.num_total_users,
-                self.ground_truth_dataset.num_total_items,
-            ),
-        )
+                (
+                    self.ground_truth_dataset.num_total_users,
+                    self.ground_truth_dataset.num_total_items,
+                ),
+            )
         self.buffer_size = buffer_size
 
     def _metric_evaluation(self, metric_class):

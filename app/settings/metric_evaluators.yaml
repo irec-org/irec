@@ -8,6 +8,9 @@ CumulativeInteractionMetricEvaluator:
     - 100
   num_interactions: 100
   relevance_evaluator_threshold: 3.999
+CumulativeMetricEvaluator:
+  buffer_size: 1000
+  relevance_evaluator_threshold: 3.999
 InteractionMetricEvaluator:
   interaction_size: 5
   interactions_to_evaluate:
