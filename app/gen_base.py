@@ -1,3 +1,4 @@
+#!/bin/python3
 from os.path import dirname, realpath, sep, pardir
 import tempfile
 import sys

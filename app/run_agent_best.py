@@ -8,6 +8,7 @@ import sys
 sys.path.append(dirname(dirname(realpath(__file__))))
 # print(os.path.join(dirname(realpath(__file__)), "..", "app"))
 # from utils import flatten_dict
+from app.constants import WORKINGDIR
 from app import utils
 
 # from app import utils
@@ -32,8 +33,7 @@ args = parser.parse_args()
 dataset_agents = yaml.load(
     open("./settings/dataset_agents.yaml"), Loader=yaml.SafeLoader
 )
-PYTHONCMD = "python3"
-WORKINGDIR = "."
+# PYTHONCMD = "python3"
 # dataset_agents
 agent_name = args.agent
 dataset_loader_name = args.dataset_loader
@@ -53,8 +53,7 @@ agent_str_parameters = " ".join(
 
 
 subprocess.run(
-    "{} ./run_agent.py --dataset_loader '{}' --agent '{}' --evaluation_policy '{}' {}".format(
-        PYTHONCMD,
+    "./run_agent.py --dataset_loader '{}' --agent '{}' --evaluation_policy '{}' {}".format(
         dataset_loader_name,
         agent_name,
         evaluation_policy_name,

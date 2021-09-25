@@ -14,8 +14,7 @@ from copy import copy
 
 
 class DatasetPreprocessor:
-    def __init__(self, name, dataset_descriptor, preprocessor, *args,
-                 **kwargs):
+    def __init__(self, name, dataset_descriptor, preprocessor, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.name = name
         self.dataset_descriptor = dataset_descriptor
@@ -30,7 +29,6 @@ class Pipeline:
         else:
             self.steps = steps
 
-
     def process(self, data):
         buf = data
         for element in self.steps:
@@ -44,16 +42,17 @@ class DatasetDescriptor:
         self.dataset_dir = dataset_dir
 
 
-
 class Dataset:
-    def __init__(self,
-                 data,
-                 num_total_users=None,
-                 num_total_items=None,
-                 num_users=None,
-                 num_items=None,
-                 rate_domain=None,
-                 uids=None):
+    def __init__(
+        self,
+        data,
+        num_total_users=None,
+        num_total_items=None,
+        num_users=None,
+        num_items=None,
+        rate_domain=None,
+        uids=None,
+    ):
         self.data = data
         self.num_users = num_users
         self.num_items = num_items
@@ -77,11 +76,11 @@ class Dataset:
 
         # self.consumption_matrix = scipy.sparse.csr_matrix((self.data[:,2],(self..data[:,0],self.train_dataset.data[:,1])),(self.train_dataset.users_num,self.train_dataset.items_num))
 
+
 class TrainTestDataset:
-    def __init__(self,train,test):
+    def __init__(self, train, test):
         self.train = train
         self.test = test
-
 
 
 class DataProcessor:
@@ -91,10 +90,8 @@ class DataProcessor:
 class TRTE(DataProcessor):
     def process(self, dataset_descriptor):
         dataset_dir = dataset_descriptor.dataset_dir
-        train_data = np.loadtxt(os.path.join(dataset_dir, 'train.data'),
-                                delimiter='::')
-        test_data = np.loadtxt(os.path.join(dataset_dir, 'test.data'),
-                               delimiter='::')
+        train_data = np.loadtxt(os.path.join(dataset_dir, "train.data"), delimiter="::")
+        test_data = np.loadtxt(os.path.join(dataset_dir, "test.data"), delimiter="::")
 
         dataset = Dataset(np.vstack([train_data, test_data]))
         dataset.update_from_data()
@@ -113,7 +110,6 @@ class TRTEPopular(DataProcessor):
         super().__init__(*args, **kwargs)
         self.items_rate = items_rate
 
-
     def process(self, train_dataset_and_test_dataset):
         train_dataset = train_dataset_and_test_dataset[0]
         test_dataset = train_dataset_and_test_dataset[1]
@@ -124,16 +120,19 @@ class TRTEPopular(DataProcessor):
         num_items_to_sample = int(self.items_rate * dataset.num_total_items)
         consumption_matrix = scipy.sparse.csr_matrix(
             (dataset.data[:, 2], (dataset.data[:, 0], dataset.data[:, 1])),
-            (dataset.num_total_users, dataset.num_total_items))
+            (dataset.num_total_users, dataset.num_total_items),
+        )
         items_popularity = value_functions.MostPopular.get_items_popularity(
-            consumption_matrix)
-        top_popular_items = np.argsort(
-            items_popularity)[::-1][num_items_to_sample]
-        test_dataset.data = test_dataset.data[test_dataset.data[:, 1].isin(
-            top_popular_items)]
+            consumption_matrix
+        )
+        top_popular_items = np.argsort(items_popularity)[::-1][num_items_to_sample]
+        test_dataset.data = test_dataset.data[
+            test_dataset.data[:, 1].isin(top_popular_items)
+        ]
         test_dataset.update_from_data()
-        train_dataset.data = train_dataset.data[train_dataset.data[:, 1].isin(
-            top_popular_items)]
+        train_dataset.data = train_dataset.data[
+            train_dataset.data[:, 1].isin(top_popular_items)
+        ]
         train_dataset.update_from_data()
 
         # train_dataset.data[train_dataset.data[:,1].isin(top_popular_items)]
@@ -143,8 +142,9 @@ class TRTEPopular(DataProcessor):
 
 
 class TRTERandom(DataProcessor):
-    def __init__(self, min_ratings, random_seed, probability_keep_item, *args,
-                 **kwargs):
+    def __init__(
+        self, min_ratings, random_seed, probability_keep_item, *args, **kwargs
+    ):
         super().__init__(*args, **kwargs)
         self.min_ratings = min_ratings
         self.random_seed = random_seed
@@ -161,7 +161,7 @@ class TRTERandom(DataProcessor):
 
 class MovieLens100k(DataProcessor):
     def process(self, dataset_dir):
-        data = np.loadtxt(os.path.join(dataset_dir, 'u.data'), delimiter='\t')
+        data = np.loadtxt(os.path.join(dataset_dir, "u.data"), delimiter="\t")
         data[:, 0] = data[:, 0] - 1
         data[:, 1] = data[:, 1] - 1
         dataset = Dataset(data)
@@ -169,19 +169,20 @@ class MovieLens100k(DataProcessor):
         dataset.update_num_total_users_items()
         return dataset
 
+
 class LastFM5k(DataProcessor):
     def process(self, dataset_dir):
-        data = np.loadtxt(os.path.join(dataset_dir, 'ratings.csv'), delimiter=',')
+        data = np.loadtxt(os.path.join(dataset_dir, "ratings.csv"), delimiter=",")
         dataset = Dataset(data)
         dataset.update_from_data()
         dataset.update_num_total_users_items()
         return dataset
 
+
 class MovieLens1M(DataProcessor):
     def process(self, dataset_descriptor):
         dataset_dir = dataset_descriptor.dataset_dir
-        data = np.loadtxt(os.path.join(dataset_dir, 'ratings.dat'),
-                          delimiter='::')
+        data = np.loadtxt(os.path.join(dataset_dir, "ratings.dat"), delimiter="::")
         iids = dict()
         for i, iid in enumerate(np.unique(data[:, 1])):
             iids[iid] = i
@@ -206,9 +207,13 @@ def _netflix_read_ratings(self, fileName):
     file.readline()
     cont = 0
     for row in file:
-        values = row.split('::')
-        uid, iid, rating, ts = int(float(values[0])), int(float(
-            values[1])), values[2], int(float(values[3].replace('\n', '')))
+        values = row.split("::")
+        uid, iid, rating, ts = (
+            int(float(values[0])),
+            int(float(values[1])),
+            values[2],
+            int(float(values[3].replace("\n", ""))),
+        )
         usersId[cont] = uid
         itemsId[cont] = iid
         ratings[cont] = rating
@@ -224,43 +229,48 @@ class Netflix:
     def process(self, dataset_descriptor):
         # base_dir = self.BASES_DIRS[self.base]
         u_train, i_train, r_train, t_train, numr_train = _netflix_read_ratings(
-            dataset_descriptor.dataset_dir + 'train.data')
+            dataset_descriptor.dataset_dir + "train.data"
+        )
         u_test, i_test, r_test, t_test, numr_test = _netflix_read_ratings(
-            dataset_descriptor.dataset_dir + 'test.data')
+            dataset_descriptor.dataset_dir + "test.data"
+        )
         test_data = np.array((u_test, i_test, r_test, t_test))
         train_data = np.array((u_train, i_train, r_train, t_train))
         return train_data, test_data
 
 
 class TrainTestConsumption(DataProcessor):
-    def __init__(self, train_size, test_consumes, crono, random_seed, *args,
-                 **kwargs):
+    def __init__(self, train_size, test_consumes, crono: bool, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.train_size = train_size
         self.test_consumes = test_consumes
         self.crono = crono
-        self.random_seed = random_seed
 
     def process(self, dataset):
-        np.random.seed(self.random_seed)
         data = dataset.data
         num_users = len(np.unique(data[:, 0]))
         num_train_users = round(num_users * (self.train_size))
         num_test_users = int(num_users - num_train_users)
         data_df = pd.DataFrame(data)
         users_items_consumed = data_df.groupby(0).count().iloc[:, 0]
-        test_candidate_users = list(users_items_consumed[
-            users_items_consumed >= self.test_consumes].to_dict().keys())
+        test_candidate_users = list(
+            users_items_consumed[users_items_consumed >= self.test_consumes]
+            .to_dict()
+            .keys()
+        )
         if self.crono:
             users_start_time = data_df.groupby(0).min()[3].to_numpy()
             test_uids = np.array(
-                list(test_candidate_users[list(
-                    reversed(np.argsort(
-                        users_start_time[test_candidate_users])))])
-                [:num_test_users])
+                list(
+                    test_candidate_users[
+                        list(
+                            reversed(np.argsort(users_start_time[test_candidate_users]))
+                        )
+                    ]
+                )[:num_test_users]
+            )
         else:
-            test_uids = np.array(
-                random.sample(test_candidate_users, k=num_test_users))
+            test_uids = np.array(random.sample(test_candidate_users, k=num_test_users))
             # print(test_uids)
         train_uids = np.array(list(set(range(num_users)) - set(test_uids)))
 
@@ -274,12 +284,11 @@ class TrainTestConsumption(DataProcessor):
         dataset.update_from_data()
         print("Test shape:", test_dataset.data.shape)
         print("Train shape:", train_dataset.data.shape)
-        return TrainTestDataset(train=train_dataset,test=test_dataset)
+        return TrainTestDataset(train=train_dataset, test=test_dataset)
 
 
 class TRTETrainValidation(DataProcessor):
-    def __init__(self, train_size, test_consumes, crono, random_seed, *args,
-                 **kwargs):
+    def __init__(self, train_size, test_consumes, crono, random_seed, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.train_size = train_size
         self.test_consumes = test_consumes
@@ -289,8 +298,9 @@ class TRTETrainValidation(DataProcessor):
     def process(self, train_dataset_and_test_dataset):
         train_dataset = train_dataset_and_test_dataset[0]
         test_dataset = train_dataset_and_test_dataset[1]
-        ttc = TrainTestConsumption(self.train_size, self.test_consumes,
-                                   self.crono, self.random_seed)
+        ttc = TrainTestConsumption(
+            self.train_size, self.test_consumes, self.crono, self.random_seed
+        )
         train_dataset, test_dataset = ttc.process(train_dataset)
         return train_dataset, test_dataset
 
@@ -301,7 +311,6 @@ class TRTESample(DataProcessor):
         self.items_rate = items_rate
         self.sample_method = sample_method
 
-
     def process(self, train_dataset_and_test_dataset):
         train_dataset = train_dataset_and_test_dataset[0]
         test_dataset = train_dataset_and_test_dataset[1]
@@ -310,17 +319,19 @@ class TRTESample(DataProcessor):
         dataset.update_num_total_users_items()
         consumption_matrix = scipy.sparse.csr_matrix(
             (dataset.data[:, 2], (dataset.data[:, 0], dataset.data[:, 1])),
-            (dataset.num_total_users, dataset.num_total_items))
+            (dataset.num_total_users, dataset.num_total_items),
+        )
         num_items_to_sample = int(self.items_rate * dataset.num_total_items)
-        if self.sample_method == 'entropy':
-            items_values = value_functions.Entropy.get_items_entropy(
-                consumption_matrix)
-        elif self.sample_method == 'popularity':
+        if self.sample_method == "entropy":
+            items_values = value_functions.Entropy.get_items_entropy(consumption_matrix)
+        elif self.sample_method == "popularity":
             items_values = value_functions.MostPopular.get_items_popularity(
-                consumption_matrix)
+                consumption_matrix
+            )
 
-        best_items = np.argpartition(
-            items_values, -num_items_to_sample)[-num_items_to_sample:]
+        best_items = np.argpartition(items_values, -num_items_to_sample)[
+            -num_items_to_sample:
+        ]
         dataset.data = dataset.data[np.isin(dataset.data[:, 1], best_items), :]
 
         new_iids = dict()
@@ -336,13 +347,11 @@ class TRTESample(DataProcessor):
         test_uids = test_dataset.uids
 
         train_dataset = copy(dataset)
-        train_dataset.data = dataset.data[np.isin(dataset.data[:, 0],
-                                                  train_uids)]
+        train_dataset.data = dataset.data[np.isin(dataset.data[:, 0], train_uids)]
         train_dataset.update_from_data()
 
         test_dataset = copy(dataset)
-        test_dataset.data = dataset.data[np.isin(dataset.data[:, 0],
-                                                 test_uids)]
+        test_dataset.data = dataset.data[np.isin(dataset.data[:, 0], test_uids)]
         test_dataset.update_from_data()
         return train_dataset, test_dataset
 
@@ -353,7 +362,6 @@ class PopularityFilter(DataProcessor):
         self.keep_popular = keep_popular
         self.num_items_threshold = num_items_threshold
 
-
     def process(self, train_dataset_and_test_dataset):
         train_dataset = train_dataset_and_test_dataset[0]
         test_dataset = train_dataset_and_test_dataset[1]
@@ -362,18 +370,19 @@ class PopularityFilter(DataProcessor):
         dataset.update_num_total_users_items()
         consumption_matrix = scipy.sparse.csr_matrix(
             (dataset.data[:, 2], (dataset.data[:, 0], dataset.data[:, 1])),
-            (dataset.num_total_users, dataset.num_total_items))
+            (dataset.num_total_users, dataset.num_total_items),
+        )
         # num_items_to_sample = int(self.items_rate * dataset.num_total_items)
         items_values = irec.value_functions.MostPopular.get_items_popularity(
-            consumption_matrix)
+            consumption_matrix
+        )
         items_sorted = np.argsort(items_values)[::-1]
         if self.keep_popular:
-            items_to_keep = items_sorted[:self.num_items_threshold]
+            items_to_keep = items_sorted[: self.num_items_threshold]
         else:
-            items_to_keep = items_sorted[self.num_items_threshold:]
+            items_to_keep = items_sorted[self.num_items_threshold :]
 
-        dataset.data = dataset.data[np.isin(dataset.data[:,
-                                                         1], items_to_keep), :]
+        dataset.data = dataset.data[np.isin(dataset.data[:, 1], items_to_keep), :]
 
         new_iids = dict()
         for i, iid in enumerate(np.unique(dataset.data[:, 1])):
@@ -414,13 +423,14 @@ class CombineTrainTest(DataProcessor):
         dataset.update_from_data()
         dataset.update_num_total_users_items()
         return dataset
+
+
 class PopRemoveEnt(DataProcessor):
     def __init__(self, num_items_threshold, new_rating, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # self.keep_popular = keep_popular
         self.num_items_threshold = num_items_threshold
         self.new_rating = new_rating
-
 
     def process(self, train_dataset_and_test_dataset):
         train_dataset = train_dataset_and_test_dataset[0]
@@ -430,17 +440,23 @@ class PopRemoveEnt(DataProcessor):
         dataset.update_num_total_users_items()
         consumption_matrix = scipy.sparse.csr_matrix(
             (dataset.data[:, 2], (dataset.data[:, 0], dataset.data[:, 1])),
-            (dataset.num_total_users, dataset.num_total_items))
+            (dataset.num_total_users, dataset.num_total_items),
+        )
         # num_items_to_sample = int(self.items_rate * dataset.num_total_items)
         items_values = irec.value_functions.MostPopular.get_items_popularity(
-            consumption_matrix)
+            consumption_matrix
+        )
         items_sorted = np.argsort(items_values)[::-1]
         # if self.keep_popular:
-        items_to_keep = items_sorted[:self.num_items_threshold]
+        items_to_keep = items_sorted[: self.num_items_threshold]
         # else:
-            # items_to_keep = items_sorted[self.num_items_threshold:]
-        train_dataset.data[np.isin(train_dataset.data[:,1],items_to_keep),2] = self.new_rating
-        test_dataset.data[np.isin(test_dataset.data[:,1],items_to_keep),2] = self.new_rating
+        # items_to_keep = items_sorted[self.num_items_threshold:]
+        train_dataset.data[
+            np.isin(train_dataset.data[:, 1], items_to_keep), 2
+        ] = self.new_rating
+        test_dataset.data[
+            np.isin(test_dataset.data[:, 1], items_to_keep), 2
+        ] = self.new_rating
         # dataset.update_from_data()
         # dataset.update_num_total_users_items()
         return train_dataset, test_dataset

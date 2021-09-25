@@ -64,7 +64,6 @@ with ProcessPoolExecutor(max_workers=args.tasks) as executor:
                 agent_str_parameters,
             ),
             cwd=WORKINGDIR,
-            shell=True,
         )
         futures.add(f)
         if len(futures) >= args.tasks:
