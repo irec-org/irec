@@ -38,4 +38,5 @@ settings["defaults"]["evaluation_policy"] = args.evaluation_policy
 settings["defaults"]["agent"] = args.agent
 settings["defaults"]["dataset_loader"] = args.dataset_loader
 
-utils.run_agent(settings)
+data = utils.load_dataset_experiment(settings)
+utils.run_agent(data, settings)

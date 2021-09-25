@@ -359,6 +359,8 @@ for dataset_name in datasets_names:
                 ][second_best_itr][i]
 
                 try:
+                    print(best_itr_users_val)
+                    print(second_best_itr_users_val)
                     statistic, pvalue = scipy.stats.wilcoxon(
                         best_itr_users_val,
                         second_best_itr_users_val,

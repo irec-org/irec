@@ -614,7 +614,7 @@ def load_dataset_experiment(settings):
     return traintest_dataset
 
 
-def run_agent(settings):
+def run_agent(traintest_dataset, settings):
 
     dataset_loader_parameters = settings["dataset_loaders"][
         settings["defaults"]["dataset_loader"]
@@ -628,8 +628,6 @@ def run_agent(settings):
     )(**evaluation_policy_parameters)
 
     mlflow.set_experiment(settings["defaults"]["dataset_experiment"])
-
-    traintest_dataset = load_dataset_experiment(settings)
 
     agent_parameters = settings["agents"][settings["defaults"]["agent"]]
     agent = create_agent(settings["defaults"]["agent"], agent_parameters)
