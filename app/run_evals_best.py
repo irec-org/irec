@@ -41,31 +41,28 @@ dataset_agents = yaml.load(
 
 with ProcessPoolExecutor(max_workers=args.tasks) as executor:
     futures = set()
-    for agent_name in args.agents:
-        for dataset_loader_name in args.dataset_loaders:
+    for dataset_loader_name in args.dataset_loaders:
+        settings["defaults"]["dataset_loader"] = dataset_loader_name
+
+        traintest_dataset = utils.load_dataset_experiment(settings)
+
+        data = np.vstack((traintest_dataset.train.data, traintest_dataset.test.data))
+
+        dataset = Dataset(data)
+        dataset.update_from_data()
+        dataset.update_num_total_users_items()
+        for agent_name in args.agents:
             for metric_name in args.metrics:
-                current_settings = copy.deepcopy(settings)
-                current_settings["defaults"][
-                    "evaluation_policy"
-                ] = args.evaluation_policy
-                current_settings["defaults"]["metric"] = metric_name
-                current_settings["defaults"]["metric_evaluator"] = args.metric_evaluator
-                current_settings["defaults"]["agent"] = agent_name
-                current_settings["defaults"]["dataset_loader"] = dataset_loader_name
-                current_settings["agents"][agent_name] = dataset_agents[
-                    dataset_loader_name
-                ][agent_name]
-
-                traintest_dataset = utils.load_dataset_experiment(settings)
-
-                data = np.vstack(
-                    (traintest_dataset.train.data, traintest_dataset.test.data)
+                settings["defaults"]["evaluation_policy"] = args.evaluation_policy
+                settings["defaults"]["metric"] = metric_name
+                settings["defaults"]["metric_evaluator"] = args.metric_evaluator
+                settings["defaults"]["agent"] = agent_name
+                settings["agents"][agent_name] = dataset_agents[dataset_loader_name][
+                    agent_name
+                ]
+                f = executor.submit(
+                    utils.evaluate_itr, dataset, copy.deepcopy(settings)
                 )
-
-                dataset = Dataset(data)
-                dataset.update_from_data()
-                dataset.update_num_total_users_items()
-                f = executor.submit(utils.evaluate_itr, dataset, current_settings)
                 futures.add(f)
                 if len(futures) >= args.tasks:
                     completed, futures = wait(futures, return_when=FIRST_COMPLETED)

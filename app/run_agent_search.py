@@ -26,14 +26,14 @@ parser.add_argument(
     "--dataset_loaders", nargs="*", default=[settings["defaults"]["dataset_loader"]]
 )
 parser.add_argument("--agents", nargs="*", default=[settings["defaults"]["agent"]])
-parser.add_argument("--tasks", type=int)
+parser.add_argument("--tasks", type=int, default=os.cpu_count())
 args = parser.parse_args()
 
 agents_search = yaml.load(open("./settings/agents_search.yaml"), Loader=yaml.SafeLoader)
 
 settings["defaults"]["evaluation_policy"] = args.evaluation_policy
 # settings["defaults"]["agent"] = args.agent
-settings["defaults"]["dataset_loader"] = args.dataset_loader
+# settings["defaults"]["dataset_loader"] = args.dataset_loader
 
 # evaluation_policy_parameters = settings["evaluation_policies"][evaluation_policy_name]
 # agent_parameters = settings["agents"][agent_name]
@@ -42,7 +42,7 @@ settings["defaults"]["dataset_loader"] = args.dataset_loader
 # subsettings = {k: v for k, v in settings.items() if k not in ["agents"]}
 with ProcessPoolExecutor(max_workers=args.tasks) as executor:
     futures = set()
-    for dataset_loader_name in args.dataset_loader:
+    for dataset_loader_name in args.dataset_loaders:
         settings["defaults"]["dataset_loader"] = dataset_loader_name
         data = utils.load_dataset_experiment(settings)
         for agent_name in args.agents:
