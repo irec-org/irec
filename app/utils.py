@@ -562,7 +562,7 @@ def dict_parameters_normalize(category, settings: dict):
 
 
 def parameters_normalize(category, name, settings: dict):
-    t1 = dict_parameters_normalize(category, settings) | {category: name}
+    t1 = {**dict_parameters_normalize(category, settings),**{category: name}}
     return {str(k): str(v) for k, v in t1.items()}
 
 
@@ -672,23 +672,23 @@ def evaluate_itr(dataset, settings):
     )(dataset, **metric_evaluator_parameters)
 
     mlflow.set_experiment(settings["defaults"]["agent_experiment"])
-    parameters_agent_run = (
-        parameters_normalize(
+    parameters_agent_run = {
+        **parameters_normalize(
             constants.DATASET_PARAMETERS_PREFIX,
             settings["defaults"]["dataset_loader"],
             dataset_parameters,
         )
-        | parameters_normalize(
+        , **parameters_normalize(
             constants.EVALUATION_POLICY_PARAMETERS_PREFIX,
             settings["defaults"]["evaluation_policy"],
             evaluation_policy_parameters,
         )
-        | parameters_normalize(
+        ,**parameters_normalize(
             constants.AGENT_PARAMETERS_PREFIX,
             settings["defaults"]["agent"],
             agent_parameters,
         )
-    )
+    }
     # print(parameters_agent_run)
     run = already_ran(
         parameters_agent_run,
@@ -722,14 +722,15 @@ def evaluate_itr(dataset, settings):
 
     mlflow.set_experiment(settings["defaults"]["evaluation_experiment"])
     parameters_evaluation_run = copy.copy(parameters_agent_run)
-    parameters_evaluation_run |= parameters_normalize(
+    parameters_evaluation_run = {**parameters_evaluation_run,**parameters_normalize(
         constants.METRIC_EVALUATOR_PARAMETERS_PREFIX,
         settings["defaults"]["metric_evaluator"],
         {},
     )
-    parameters_evaluation_run |= parameters_normalize(
+    ,**parameters_normalize(
         constants.METRIC_PARAMETERS_PREFIX, settings["defaults"]["metric"], {}
     )
+    }
     with mlflow.start_run() as run:
         log_custom_parameters(parameters_evaluation_run)
         # print(metric_values)

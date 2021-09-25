@@ -1,4 +1,4 @@
-#!/bin/python3
+#!/usr/bin/python3
 from os.path import dirname, realpath, sep, pardir
 import mlflow
 from mlflow.tracking import MlflowClient
