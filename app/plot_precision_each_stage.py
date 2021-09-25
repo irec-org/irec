@@ -89,9 +89,13 @@ for dataset in datasets:
 
 columns = ["hits_s0","hits_s1","hits_s2","hits_s3","hits_s4","hits_s5","hits_total"]
 
-for col in columns:
-    maxv = df_result[col].max()
-    df_result[col] = df_result[col].apply(lambda x: fff(float(x)) if x != maxv else "\\textbf{\cellcolor{green!25}"+fff(float(x)) +"}")
+df_analysis = pd.DataFrame()
+for d in datasets:
+	df = df_result.loc[df_result["dataset"] == d]
+	for col in columns:
+	    maxv = df[col].max()
+	    df[col] = df[col].apply(lambda x: fff(float(x)) if x != maxv else "\\textbf{\cellcolor{green!25}"+fff(float(x)) +"}")
+	df_analysis = df_analysis.append(df)
 
 latex_table = r"""
 \begin{table*}[!htb]
@@ -140,7 +144,7 @@ for dataset in datasets: latex_table = latex_table.replace("mydf", dataset, 1)
 for method in methods:
     for dataset in datasets:
         latex_table = latex_table.replace("method", method.replace("_", "-"), 1)
-        values = df_result.loc[(df_result["method"] == method) & (df_result["dataset"] == dataset)]
+        values = df_analysis.loc[(df_analysis["method"] == method) & (df_analysis["dataset"] == dataset)]
         for i, col in enumerate(columns): latex_table = latex_table.replace(f"v{i+1}", values[col].values[0],1)
 
 
