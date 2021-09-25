@@ -2,13 +2,13 @@ from os.path import dirname, realpath, sep, pardir
 import os
 import sys
 
+
 sys.path.append(dirname(dirname(realpath(__file__))))
 import re
 import pickle
 import mlflow.tracking
 import mlflow.entities
 import mlflow
-from mlflow.tracking.fluent import _get_experiment_id
 from mlflow.tracking import MlflowClient
 import json
 from collections import defaultdict
@@ -16,7 +16,6 @@ from pathlib import Path
 
 from irec.utils.dataset import TrainTestDataset
 import collections
-import traceback
 from app import constants
 import matplotlib.ticker as mtick
 import numpy as np
@@ -26,6 +25,11 @@ import irec.action_selection_policies
 import irec.agents
 import irec.value_functions
 import irec.evaluation_policies
+from irec.metric_evaluators import (
+    CumulativeInteractionMetricEvaluator,
+    InteractionMetricEvaluator,
+    CumulativeMetricEvaluator,
+)
 import copy
 import os.path
 import collections.abc
@@ -547,6 +551,7 @@ def already_ran(parameters, experiment_id):
             )
             continue
         return mlflow.get_run(run_info.run_uuid)
+    raise IndexError("Could not find the run with the given parameters.")
     return None
 
 
@@ -589,3 +594,137 @@ def log_custom_artifact(fname, obj):
         pickle.dump(obj, f)
         f.flush()
         mlflow.log_artifact(f.name)
+
+
+def load_dataset_experiment(settings):
+    run = already_ran(
+        parameters_normalize(
+            constants.DATASET_PARAMETERS_PREFIX,
+            settings["defaults"]["dataset_loader"],
+            settings["dataset_loaders"][settings["defaults"]["dataset_loader"]],
+        ),
+        mlflow.get_experiment_by_name(
+            settings["defaults"]["dataset_experiment"]
+        ).experiment_id,
+    )
+
+    client = MlflowClient()
+    artifact_path = client.download_artifacts(run.info.run_id, "dataset.pickle")
+    traintest_dataset = pickle.load(open(artifact_path, "rb"))
+    return traintest_dataset
+
+
+def run_agent(settings):
+
+    dataset_loader_parameters = settings["dataset_loaders"][
+        settings["defaults"]["dataset_loader"]
+    ]
+
+    evaluation_policy_parameters = settings["evaluation_policies"][
+        settings["defaults"]["evaluation_policy"]
+    ]
+    evaluation_policy = eval(
+        "irec.evaluation_policies." + settings["defaults"]["evaluation_policy"]
+    )(**evaluation_policy_parameters)
+
+    mlflow.set_experiment(settings["defaults"]["dataset_experiment"])
+
+    traintest_dataset = load_dataset_experiment(settings)
+
+    agent_parameters = settings["agents"][settings["defaults"]["agent"]]
+    agent = create_agent(settings["defaults"]["agent"], agent_parameters)
+    # agent_id = utils.get_agent_id(agent_name, parameters)
+    run_interactor(
+        agent=agent,
+        agent_name=settings["defaults"]["agent"],
+        agent_parameters=agent_parameters,
+        dataset_name=settings["defaults"]["dataset_loader"],
+        dataset_parameters=dataset_loader_parameters,
+        traintest_dataset=traintest_dataset,
+        evaluation_policy=evaluation_policy,
+        evaluation_policy_name=settings["defaults"]["evaluation_policy"],
+        evaluation_policy_parameters=evaluation_policy_parameters,
+        agent_experiment=settings["defaults"]["agent_experiment"],
+    )
+
+
+def evaluate_itr(dataset, settings):
+    agent_parameters = settings["agents"][settings["defaults"]["agent"]]
+
+    dataset_parameters = settings["dataset_loaders"][
+        settings["defaults"]["dataset_loader"]
+    ]
+
+    evaluation_policy_parameters = settings["evaluation_policies"][
+        settings["defaults"]["evaluation_policy"]
+    ]
+    # evaluation_policy = eval(
+    # "irec.evaluation_policies." + settings["defaults"]["evaluation_policy"]
+    # )(**evaluation_policy_parameters)
+
+    metric_evaluator_parameters = settings["metric_evaluators"][
+        settings["defaults"]["metric_evaluator"]
+    ]
+
+    metric_class = eval("irec.metrics." + settings["defaults"]["metric"])
+
+    metric_evaluator = eval(
+        "irec.metric_evaluators." + settings["defaults"]["metric_evaluator"]
+    )(dataset, **metric_evaluator_parameters)
+
+    mlflow.set_experiment(settings["defaults"]["agent_experiment"])
+    parameters_agent_run = (
+        parameters_normalize(
+            constants.DATASET_PARAMETERS_PREFIX,
+            settings["defaults"]["dataset_loader"],
+            dataset_parameters,
+        )
+        | parameters_normalize(
+            constants.EVALUATION_POLICY_PARAMETERS_PREFIX,
+            settings["defaults"]["evaluation_policy"],
+            evaluation_policy_parameters,
+        )
+        | parameters_normalize(
+            constants.AGENT_PARAMETERS_PREFIX,
+            settings["defaults"]["agent"],
+            agent_parameters,
+        )
+    )
+    # print(parameters_agent_run)
+    run = already_ran(
+        parameters_agent_run, mlflow.get_experiment_by_name("agent").experiment_id
+    )
+
+    # run = already_ran({'dataset': dataset_name}|,
+    # mlflow.get_experiment_by_name('dataset').experiment_id)
+    client = MlflowClient()
+    artifact_path = client.download_artifacts(run.info.run_id, "interactions.pickle")
+    interactions = pickle.load(open(artifact_path, "rb"))
+    users_items_recommended = interactions
+
+    if isinstance(metric_evaluator, CumulativeInteractionMetricEvaluator):
+        metric_values = metric_evaluator.evaluate(
+            metric_class,
+            users_items_recommended,
+        )
+    elif isinstance(metric_evaluator, InteractionMetricEvaluator):
+        metric_values = metric_evaluator.evaluate(
+            metric_class,
+            users_items_recommended,
+        )
+    elif isinstance(metric_evaluator, CumulativeMetricEvaluator):
+        metric_values = metric_evaluator.evaluate(metric_class, users_items_recommended)
+    mlflow.set_experiment(settings["defaults"]["evaluation_experiment"])
+    parameters_evaluation_run = copy.copy(parameters_agent_run)
+    parameters_evaluation_run |= parameters_normalize(
+        constants.METRIC_EVALUATOR_PARAMETERS_PREFIX,
+        settings["defaults"]["metric_evaluator"],
+        {},
+    )
+    parameters_evaluation_run |= parameters_normalize(
+        constants.METRIC_PARAMETERS_PREFIX, settings["defaults"]["metric"], {}
+    )
+    with mlflow.start_run() as run:
+        log_custom_parameters(parameters_evaluation_run)
+        # print(metric_values)
+        log_custom_artifact("evaluation.pickle", metric_values)

@@ -5,7 +5,7 @@ dataset_experiment: dataset
 dataset_loader: 'MovieLens 100k O'
 evaluation_experiment: evaluation
 evaluation_policy: Interaction
-metric: Recall
-metric_evaluator: UserCumulativeInteractionMetricsEvaluator
+metric: Hits
+metric_evaluator: UserCumulativeInteractionMetricEvaluator
 pdf_dir: pdf/
 tex_dir: tex/

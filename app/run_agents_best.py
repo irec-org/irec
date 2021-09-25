@@ -10,8 +10,10 @@ from concurrent.futures import ProcessPoolExecutor, wait, FIRST_COMPLETED
 from app import utils
 
 # from app import utils
+import yaml
 import subprocess
 import argparse
+import copy
 
 settings = utils.load_settings()
 parser = argparse.ArgumentParser()
@@ -27,23 +29,25 @@ parser.add_argument("--agents", nargs="*", default=[settings["defaults"]["agent"
 parser.add_argument("--tasks", type=int, default=os.cpu_count())
 
 args = parser.parse_args()
-evaluation_policy_name = args.evaluation_policy
+
+settings["defaults"]["evaluation_policy"] = args.evaluation_policy
+
+
+dataset_agents = yaml.load(
+    open("./settings/dataset_agents.yaml"), Loader=yaml.SafeLoader
+)
 
 with ProcessPoolExecutor(max_workers=args.tasks) as executor:
     futures = set()
     for agent_name in args.agents:
         for dataset_loader_name in args.dataset_loaders:
-
-            f = executor.submit(
-                subprocess.run,
-                "./run_agent_best.py --dataset_loader '{}' --agent '{}' --evaluation_policy '{}'".format(
-                    dataset_loader_name,
-                    agent_name,
-                    evaluation_policy_name,
-                ),
-                cwd=WORKINGDIR,
-                shell=True,
-            )
+            current_settings = copy.deepcopy(settings)
+            current_settings["defaults"]["agent"] = agent_name
+            current_settings["defaults"]["dataset_loader"] = dataset_loader_name
+            current_settings["agents"][agent_name] = dataset_agents[
+                dataset_loader_name
+            ][agent_name]
+            f = executor.submit(utils.run_agent, current_settings)
             futures.add(f)
             if len(futures) >= args.tasks:
                 completed, futures = wait(futures, return_when=FIRST_COMPLETED)

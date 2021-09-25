@@ -11,7 +11,6 @@ import utils
 sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "irec")
 from app import constants
 
-import inquirer
 import scipy
 import copy
 import value_functions
@@ -21,8 +20,8 @@ import scipy.sparse
 import yaml
 import irec.evaluation_policies
 from irec.metric_evaluators import (
-    CumulativeInteractionMetricsEvaluator,
-    UserCumulativeInteractionMetricsEvaluator,
+    CumulativeInteractionMetricEvaluator,
+    UserCumulativeInteractionMetricEvaluator,
 )
 from irec.utils.dataset import Dataset
 import metrics
@@ -49,8 +48,13 @@ plt.rcParams["axes.prop_cycle"] = cycler(color="krbgmyc")
 plt.rcParams["lines.linewidth"] = 2
 plt.rcParams["font.size"] = 15
 
+dataset_agents = yaml.load(
+    open("./settings/dataset_agents.yaml"), Loader=yaml.SafeLoader
+)
+
 # metrics_classes = [metrics.Hits, metrics.Recall]
 metrics_classes = [eval("metrics." + i) for i in args.metrics]
+
 # metrics_classes = [
 # metrics.Hits,
 # metrics.Recall,
@@ -146,10 +150,10 @@ for dataset_name in datasets_names:
 
     for metric_class_name in metrics_classes_names:
         for agent_name in args.agents:
-            agent_parameters = settings["agents"][dataset_name][agent_name]
+            agent_parameters = dataset_agents[dataset_name][agent_name]
             agent = utils.create_agent(agent_name, agent_parameters)
             agent_id = utils.get_agent_id(agent_name, agent_parameters)
-            mlflow.set_experiment("evaluation")
+            mlflow.set_experiment(settings["defaults"]["evaluation_experiment"])
             dataset_parameters = settings["dataset_loaders"][dataset_name]
             metrics_evaluator_name = metric_evaluator.__class__.__name__
             parameters_agent_run = (
@@ -177,7 +181,9 @@ for dataset_name in datasets_names:
             )
             run = utils.already_ran(
                 parameters_evaluation_run,
-                mlflow.get_experiment_by_name("evaluation").experiment_id,
+                mlflow.get_experiment_by_name(
+                    settings["defaults"]["evaluation_experiment"]
+                ).experiment_id,
             )
             # print(run)
 
@@ -190,6 +196,8 @@ for dataset_name in datasets_names:
             # print(metric_values)
             users_items_recommended = metric_values
             # agent = utils.create_agent_from_settings(agent_name,dataset_name,settings)
+            # print(metric_values)
+            # print(len(metric_values))
 
             datasets_metrics_values[dataset_name][metric_class_name][agent_name].extend(
                 [
@@ -360,6 +368,7 @@ for dataset_name in datasets_names:
                     datasets_metrics_gain[dataset_name][metric_class_name][best_itr][
                         i
                     ] = bullet_str
+                    continue
 
                 if pvalue > 0.05:
                     datasets_metrics_gain[dataset_name][metric_class_name][best_itr][

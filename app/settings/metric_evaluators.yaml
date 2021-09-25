@@ -1,4 +1,30 @@
-UserCumulativeInteractionMetricsEvaluator:
+CumulativeInteractionMetricEvaluator:
   interaction_size: 5
+  interactions_to_evaluate:
+    - 5
+    - 10
+    - 20
+    - 50
+    - 100
+  num_interactions: 100
+  relevance_evaluator_threshold: 3.999
+InteractionMetricEvaluator:
+  interaction_size: 5
+  interactions_to_evaluate:
+    - 5
+    - 10
+    - 20
+    - 50
+    - 100
+  num_interactions: 100
+  relevance_evaluator_threshold: 3.999
+UserCumulativeInteractionMetricEvaluator:
+  interaction_size: 5
+  interactions_to_evaluate:
+    - 5
+    - 10
+    - 20
+    - 50
+    - 100
   num_interactions: 100
   relevance_evaluator_threshold: 3.999

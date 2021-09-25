@@ -17,7 +17,7 @@ from irec.metrics import ILD, Recall, Precision, EPC, EPD
 np.seterr(all="raise")
 
 
-class MetricsEvaluator:
+class MetricEvaluator:
     """MetricsEvaluator."""
 
     def __init__(self, relevance_evaluator_threshold: float, *args, **kwargs):
@@ -34,7 +34,7 @@ class MetricsEvaluator:
         )
 
 
-class TotalMetricsEvaluator(MetricsEvaluator):
+class TotalMetricEvaluator(MetricEvaluator):
     def __init__(self, ground_truth_dataset, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.ground_truth_dataset = ground_truth_dataset
@@ -103,7 +103,7 @@ class TotalMetricsEvaluator(MetricsEvaluator):
         return metric_values
 
 
-class CumulativeMetricsEvaluator(MetricsEvaluator):
+class CumulativeMetricEvaluator(MetricEvaluator):
     def __init__(self, buffer_size, ground_truth_dataset, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.ground_truth_dataset = ground_truth_dataset
@@ -169,7 +169,7 @@ class CumulativeMetricsEvaluator(MetricsEvaluator):
         return metric_values
 
 
-class InteractionMetricsEvaluator(MetricsEvaluator):
+class InteractionMetricEvaluator(MetricEvaluator):
     def __init__(
         self,
         ground_truth_dataset,
@@ -283,7 +283,7 @@ class InteractionMetricsEvaluator(MetricsEvaluator):
         return metric_values
 
 
-class CumulativeInteractionMetricsEvaluator(InteractionMetricsEvaluator):
+class CumulativeInteractionMetricEvaluator(InteractionMetricEvaluator):
     @staticmethod
     def metric_summarize(users_metric_values):
         return np.mean(list(users_metric_values.values()))
@@ -345,13 +345,13 @@ class CumulativeInteractionMetricsEvaluator(InteractionMetricsEvaluator):
         return metric_values
 
 
-class UserCumulativeInteractionMetricsEvaluator(CumulativeInteractionMetricsEvaluator):
+class UserCumulativeInteractionMetricEvaluator(CumulativeInteractionMetricEvaluator):
     @staticmethod
     def metric_summarize(users_metric_values):
         return users_metric_values
 
 
-class IterationsMetricsEvaluator(InteractionMetricsEvaluator):
+class IterationsMetricEvaluator(InteractionMetricEvaluator):
     @staticmethod
     def metric_summarize(users_metric_values):
         return np.mean(users_metric_values)
