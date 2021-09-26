@@ -1,10 +1,12 @@
 from os.path import dirname, realpath, sep, pardir
 import sys, os
+
 sys.path.append(dirname(realpath(__file__)) + sep + pardir)
 
 import numpy as np
 import scipy.sparse
 from numba import jit, prange
+
 # from .. import irec.utils
 import metrics
 
@@ -25,16 +27,14 @@ class MF:
         super().__init__(*args, **kwargs)
         self.num_lat = num_lat
 
-
     def normalize_matrix(self, matrix):
         return matrix / np.max(matrix)
 
     def fit(self):
-        self.print_parameters()
+        pass
 
     def predict_sparse(self, users_items):
-        return _predict_sparse(self.users_weights, self.items_weights,
-                               users_items)
+        return _predict_sparse(self.users_weights, self.items_weights, users_items)
 
     def predict(self, X):
         if isinstance(X, scipy.sparse.spmatrix):
