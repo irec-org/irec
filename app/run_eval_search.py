@@ -17,6 +17,9 @@ from irec.utils.dataset import Dataset
 import yaml
 import argparse
 import copy
+import mlflow
+from mlflow.tracking import MlflowClient
+import pickle
 from concurrent.futures import ProcessPoolExecutor, wait, FIRST_COMPLETED
 
 settings = utils.load_settings()
@@ -34,7 +37,9 @@ parser.add_argument("--metrics", nargs="*", default=[settings["defaults"]["metri
 parser.add_argument(
     "--metric_evaluator", default=settings["defaults"]["metric_evaluator"]
 )
+utils.load_settings_to_parser(settings, parser)
 args = parser.parse_args()
+settings = utils.sync_settings_from_args(settings, args)
 
 agents_search = yaml.load(open("./settings/agents_search.yaml"), Loader=yaml.SafeLoader)
 
@@ -61,13 +66,29 @@ with ProcessPoolExecutor(max_workers=args.tasks) as executor:
         dataset.update_num_total_users_items()
         for agent_name in args.agents:
             settings["defaults"]["agent"] = agent_name
-            for metric_name in args.metrics:
-                for agent_og_parameters in agents_search[agent_name]:
-                    settings["agents"][agent_name] = agent_og_parameters
+            for agent_og_parameters in agents_search[agent_name]:
+                settings["agents"][agent_name] = agent_og_parameters
+                mlflow.set_experiment(settings["defaults"]["agent_experiment"])
+                # print(parameters_agent_run)
+                run = utils.get_agent_run(settings)
+
+                client = MlflowClient()
+                artifact_path = client.download_artifacts(
+                    run.info.run_id, "interactions.pickle"
+                )
+                # print("SEP----")
+                # print(artifact_path)
+                with open(artifact_path, "rb") as f:
+                    interactions = pickle.load(f)
+                for metric_name in args.metrics:
                     settings["defaults"]["metric"] = metric_name
+
                     # agent_og_parameters = dataset_agents[dataset_loader_name][agent_name]
                     f = executor.submit(
-                        utils.evaluate_itr, dataset, copy.deepcopy(settings)
+                        utils.evaluate_itr,
+                        dataset,
+                        interactions,
+                        copy.deepcopy(settings),
                     )
                     futures.add(f)
                     if len(futures) >= args.tasks:

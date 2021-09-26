@@ -27,7 +27,10 @@ parser.add_argument(
 )
 parser.add_argument("--agents", nargs="*", default=[settings["defaults"]["agent"]])
 parser.add_argument("--tasks", type=int, default=os.cpu_count())
+
+utils.load_settings_to_parser(settings, parser)
 args = parser.parse_args()
+settings = utils.sync_settings_from_args(settings, args)
 
 agents_search = yaml.load(open("./settings/agents_search.yaml"), Loader=yaml.SafeLoader)
 
