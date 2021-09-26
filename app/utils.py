@@ -758,3 +758,16 @@ def get_agent_run(settings):
         ).experiment_id,
     )
     return run
+
+
+def unflatten_dict(d, sep="."):
+    result_dict = dict()
+    for key, value in d.items():
+        parts = key.split(sep)
+        d = result_dict
+        for part in parts[:-1]:
+            if part not in d:
+                d[part] = dict()
+            d = d[part]
+        d[parts[-1]] = value
+    return result_dict

@@ -68,18 +68,8 @@ with ProcessPoolExecutor(max_workers=args.tasks) as executor:
             settings["defaults"]["agent"] = agent_name
             for agent_og_parameters in agents_search[agent_name]:
                 settings["agents"][agent_name] = agent_og_parameters
-                mlflow.set_experiment(settings["defaults"]["agent_experiment"])
-                # print(parameters_agent_run)
-                run = utils.get_agent_run(settings)
-
-                client = MlflowClient()
-                artifact_path = client.download_artifacts(
-                    run.info.run_id, "interactions.pickle"
-                )
                 # print("SEP----")
                 # print(artifact_path)
-                with open(artifact_path, "rb") as f:
-                    interactions = pickle.load(f)
                 for metric_name in args.metrics:
                     settings["defaults"]["metric"] = metric_name
 
@@ -87,7 +77,6 @@ with ProcessPoolExecutor(max_workers=args.tasks) as executor:
                     f = executor.submit(
                         utils.evaluate_itr,
                         dataset,
-                        interactions,
                         copy.deepcopy(settings),
                     )
                     futures.add(f)
