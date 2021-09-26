@@ -22,7 +22,7 @@ def generate_grid_parameters(template):
     d = flatten_dict(template)
     d = {k: (v if isinstance(v, (list, np.ndarray)) else [v]) for k, v in d.items()}
     t1 = list(sklearn.model_selection.ParameterGrid(d))
-    return list(map(unflatten_dict, t1))
+    return list(map(lambda x: unflatten_dict(copy.deepcopy(x)), t1))
 
 
 settings = utils.load_settings()
