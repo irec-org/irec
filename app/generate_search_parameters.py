@@ -27,49 +27,82 @@ def generate_grid_parameters(template):
 
 settings = utils.load_settings()
 parser = argparse.ArgumentParser(add_help=False)
-parser.add_argument("--agent", default=settings["defaults"]["agent"])
+parser.add_argument("--agents", nargs="*", default=settings["defaults"]["agent"])
 args = parser.parse_args()
 agents_search = yaml.load(open("./settings/agents_search.yaml"), Loader=yaml.SafeLoader)
-base_agent_parameters = settings["agents"][args.agent]
-template = copy.deepcopy(base_agent_parameters)
-if args.agent == "PTS":
-    # alpha = list(np.arange(0.25, 1, 0.25)) + [1, 2, 4, 8, 16, 32]
-    # num_particles = [2, 5, 10, 20, 30]
-    # num_lat = [5, 10, 20, 50, 100]
-    template["SimpleAgent"]["value_function"]["PTS"]["num_lat"] = [5, 10, 20, 50, 100]
-    template["SimpleAgent"]["value_function"]["PTS"]["num_particles"] = [
-        2,
-        5,
-        10,
-        20,
-        30,
-    ]
-    template["SimpleAgent"]["value_function"]["PTS"]["var_v"] = np.around(
-        np.linspace(0.3, 2, 6), 3
-    ).tolist()
-    template["SimpleAgent"]["value_function"]["PTS"]["var_u"] = np.around(
-        np.linspace(0.3, 2, 6), 3
-    ).tolist()
-    template["SimpleAgent"]["value_function"]["PTS"]["var"] = np.around(
-        np.linspace(0.3, 2, 6), 3
-    ).tolist()
-else:
-    raise IndexError("Unrecognized agent")
 
-print(yaml.dump(template))
-new_parameters = []
-new_parameters.extend(generate_grid_parameters(template))
-# for a in alpha:
-# for nl in num_lat:
-# base_agent_parameters["SimpleAgent"]["value_function"]["PTS"]["alpha"] = a
-# new_parameters += [copy.deepcopy(base_agent_parameters)]
-# print(agents_search)
-agents_search[args.agent] = new_parameters
-print(len(agents_search))
+for agent_name in args.agents:
+    base_agent_parameters = settings["agents"][agent_name]
+    template = copy.deepcopy(base_agent_parameters)
+    if agent_name == "PTS":
+        template["SimpleAgent"]["value_function"]["PTS"]["num_lat"] = [
+            5,
+            10,
+            20,
+            50,
+            100,
+        ]
+        template["SimpleAgent"]["value_function"]["PTS"]["num_particles"] = [
+            2,
+            5,
+            10,
+            20,
+            30,
+        ]
+        template["SimpleAgent"]["value_function"]["PTS"]["var_v"] = np.around(
+            np.linspace(0.3, 2, 6), 3
+        ).tolist()
+        template["SimpleAgent"]["value_function"]["PTS"]["var_u"] = np.around(
+            np.linspace(0.3, 2, 6), 3
+        ).tolist()
+        template["SimpleAgent"]["value_function"]["PTS"]["var"] = np.around(
+            np.linspace(0.3, 2, 6), 3
+        ).tolist()
+
+    elif agent_name == "ICTRTS":
+        template["SimpleAgent"]["value_function"]["ICTRTS"]["num_lat"] = [
+            5,
+            10,
+            20,
+            50,
+            100,
+        ]
+        template["SimpleAgent"]["value_function"]["ICTRTS"]["num_particles"] = [
+            2,
+            5,
+            10,
+            20,
+            30,
+        ]
+    elif agent_name == "NICF":
+        template["SimpleAgent"]["value_function"]["NICF"]["latent_factor"] = [
+            5,
+            10,
+            20,
+            50,
+            100,
+        ]
+        template["SimpleAgent"]["value_function"]["NICF"]["batch"] = [
+            64,
+            128,
+            256,
+        ]
+        template["SimpleAgent"]["value_function"]["NICF"]["num_blocks"] = [1, 2, 3]
+
+        template["SimpleAgent"]["value_function"]["NICF"]["num_heads"] = [1, 2, 3]
+        template["SimpleAgent"]["value_function"]["NICF"]["rnn_layer"] = [1, 2]
+        template["SimpleAgent"]["value_function"]["NICF"]["dropout_rate"] = [
+            0.1,
+            0.2,
+            0.3,
+        ]
+    else:
+
+        raise IndexError("Unrecognized agent")
+
+    # new_parameters = []
+    # new_parameters.extend(generate_grid_parameters(template))
+    new_parameters = generate_grid_parameters(template)
+    agents_search[agent_name] = new_parameters
+
 yaml.dump(agents_search, open("./settings/agents_search.yaml", "w"))
-# print(yaml.dump(new_parameters, default_flow_style=False))
-
-# settings['agents']['LinUCB']['SimpleAgent']
-
-
-# agents_parameters = ParameterGrid
