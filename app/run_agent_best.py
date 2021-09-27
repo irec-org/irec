@@ -11,7 +11,6 @@ from app import utils
 
 # from app import utils
 import yaml
-import subprocess
 import argparse
 import copy
 
@@ -39,15 +38,18 @@ dataset_agents = yaml.load(
 
 with ProcessPoolExecutor(max_workers=args.tasks) as executor:
     futures = set()
-    for agent_name in args.agents:
-        for dataset_loader_name in args.dataset_loaders:
-            current_settings = copy.deepcopy(settings)
+    for dataset_loader_name in args.dataset_loaders:
+        current_settings = settings
+        current_settings["defaults"]["dataset_loader"] = dataset_loader_name
+        traintest_dataset = utils.load_dataset_experiment(settings)
+        for agent_name in args.agents:
             current_settings["defaults"]["agent"] = agent_name
-            current_settings["defaults"]["dataset_loader"] = dataset_loader_name
             current_settings["agents"][agent_name] = dataset_agents[
                 dataset_loader_name
             ][agent_name]
-            f = executor.submit(utils.run_agent, current_settings)
+            f = executor.submit(
+                utils.run_agent, traintest_dataset, copy.deepcopy(current_settings)
+            )
             futures.add(f)
             if len(futures) >= args.tasks:
                 completed, futures = wait(futures, return_when=FIRST_COMPLETED)

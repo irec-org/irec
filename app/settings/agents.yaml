@@ -10,6 +10,16 @@ ALMostPopular:
       ASPGreedy: {}
     value_function:
       ALMostPopular: {}
+CB:
+  SimpleAgent:
+    action_selection_policy:
+      ASPGreedy: {}
+    value_function:
+      CB:
+        B: 5
+        C: 0.5
+        D: 3
+        num_clusters: 16
 COFIBA:
   SimpleAgent:
     action_selection_policy:
