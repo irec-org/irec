@@ -23,7 +23,16 @@ def _predict_sparse(users_weights, items_weights, users_items):
 
 
 class MF:
+    """MF."""
+
     def __init__(self, num_lat=10, *args, **kwargs):
+        """__init__.
+
+        Args:
+            num_lat:
+            args:
+            kwargs:
+        """
         super().__init__(*args, **kwargs)
         self.num_lat = num_lat
 
@@ -31,16 +40,27 @@ class MF:
         return matrix / np.max(matrix)
 
     def fit(self):
+        """fit."""
         pass
 
     def predict_sparse(self, users_items):
         return _predict_sparse(self.users_weights, self.items_weights, users_items)
 
     def predict(self, X):
+        """predict.
+
+        Args:
+            X:
+        """
         if isinstance(X, scipy.sparse.spmatrix):
             observed_ui = (X.tocoo().row, X.tocoo().col)
             X = observed_ui
         return self.predict_sparse(X)
 
     def score(self, X):
+        """score.
+
+        Args:
+            X:
+        """
         return metrics.rmse(X.data, self.predict(X))
