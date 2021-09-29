@@ -341,9 +341,20 @@ def run_interactor(
     traintest_dataset: TrainTestDataset,
     evaluation_policy: irec.evaluation_policies.EvaluationPolicy,
     settings,
+    forced_run,
 ):
 
     mlflow.set_experiment(settings["defaults"]["agent_experiment"])
+
+    run = get_agent_run(settings)
+    if forced_run == False and run != None:
+        print(
+            "Already executed {} in {}".format(
+                get_agent_run_parameters(settings),
+                settings["defaults"]["agent_experiment"],
+            )
+        )
+        return
     with mlflow.start_run() as run:
         log_custom_parameters(get_agent_run_parameters(settings))
 
@@ -531,7 +542,7 @@ def already_ran(parameters, experiment_id):
             )
             continue
         return mlflow.get_run(run_info.run_uuid)
-    raise IndexError("Could not find the run with the given parameters.")
+    # raise IndexError("Could not find the run with the given parameters.")
     return None
 
 
@@ -594,7 +605,7 @@ def load_dataset_experiment(settings):
     return traintest_dataset
 
 
-def run_agent(traintest_dataset, settings):
+def run_agent(traintest_dataset, settings, forced_run):
 
     dataset_loader_parameters = settings["dataset_loaders"][
         settings["defaults"]["dataset_loader"]
@@ -617,6 +628,7 @@ def run_agent(traintest_dataset, settings):
         traintest_dataset=traintest_dataset,
         evaluation_policy=evaluation_policy,
         settings=settings,
+        forced_run=forced_run,
     )
 
 
@@ -646,7 +658,7 @@ def evaluate_itr(dataset, interactions, settings):
 
     mlflow.set_experiment(settings["defaults"]["agent_experiment"])
     # print(parameters_agent_run)
-    run = utils.get_agent_run(settings)
+    run = get_agent_run(settings)
 
     client = MlflowClient()
     artifact_path = client.download_artifacts(run.info.run_id, "interactions.pickle")

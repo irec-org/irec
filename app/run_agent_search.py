@@ -27,6 +27,7 @@ parser.add_argument(
 )
 parser.add_argument("--agents", nargs="*", default=[settings["defaults"]["agent"]])
 parser.add_argument("--tasks", type=int, default=os.cpu_count())
+parser.add_argument("--forced_run", action='store_true', default=False)
 
 utils.load_settings_to_parser(settings, parser)
 args = parser.parse_args()
@@ -43,6 +44,7 @@ settings["defaults"]["evaluation_policy"] = args.evaluation_policy
 # dataset_loader_parameters = settings["dataset_loaders"][dataset_loader_name]
 
 # subsettings = {k: v for k, v in settings.items() if k not in ["agents"]}
+print(args.forced_run)
 with ProcessPoolExecutor(max_workers=args.tasks) as executor:
     futures = set()
     for dataset_loader_name in args.dataset_loaders:
@@ -53,7 +55,7 @@ with ProcessPoolExecutor(max_workers=args.tasks) as executor:
             for agent_og_parameters in agents_search[agent_name]:
                 settings["agents"][agent_name] = agent_og_parameters
                 # agent_og_parameters = dataset_agents[dataset_loader_name][agent_name]
-                f = executor.submit(utils.run_agent, data, copy.deepcopy(settings))
+                f = executor.submit(utils.run_agent, data, copy.deepcopy(settings),args.forced_run)
                 futures.add(f)
                 if len(futures) >= args.tasks:
                     completed, futures = wait(futures, return_when=FIRST_COMPLETED)
