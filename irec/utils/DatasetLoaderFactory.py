@@ -30,6 +30,10 @@ class DatasetLoaderFactory:
             dl = DatasetLoader.TRTEDatasetLoader(**dataset_parameters)
         elif dataset_name == "LastFM 5k TRTE Validation":
             dl = DatasetLoader.TRTEValidationDatasetLoader(**dataset_parameters)
+        elif dataset_name == "Kindle 4k TRTE":
+            dl = DatasetLoader.TRTEDatasetLoader(**dataset_parameters)
+        elif dataset_name == "Kindle 4k TRTE Validation":
+            dl = DatasetLoader.TRTEValidationDatasetLoader(**dataset_parameters)
         else:
             raise IndexError
         return dl
