@@ -24,3 +24,11 @@
   random_seed: 0
   test_consumes: 1
   train_size: 0.8
+'Kindle 4k TRTE':
+  dataset_path: ./data/datasets/Train-Test_Kindle-Store-4K/
+'Kindle 4k TRTE Validation':
+  dataset_path: ./data/datasets/Train-Test_Kindle-Store-4K/
+  train_size: 0.8
+  test_consumes: 1
+  crono: False
+  random_seed: 0
