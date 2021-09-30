@@ -632,7 +632,7 @@ def run_agent(traintest_dataset, settings, forced_run):
     )
 
 
-def evaluate_itr(dataset, interactions, settings):
+def evaluate_itr(dataset, settings):
     agent_parameters = settings["agents"][settings["defaults"]["agent"]]
 
     dataset_parameters = settings["dataset_loaders"][
@@ -689,7 +689,7 @@ def evaluate_itr(dataset, interactions, settings):
         pass
 
     mlflow.set_experiment(settings["defaults"]["evaluation_experiment"])
-    parameters_evaluation_run = get_parameters_evaluation_run()
+    parameters_evaluation_run = get_evaluation_run_parameters(settings)
     with mlflow.start_run() as run:
         log_custom_parameters(parameters_evaluation_run)
         # print(metric_values)
@@ -731,8 +731,8 @@ def get_agent_run_parameters(settings):
     return parameters_agent_run
 
 
-def get_evaluation_parameters_run(settings):
-    parameters_agent_run = get_parameters_agent_run(settings)
+def get_evaluation_run_parameters(settings):
+    parameters_agent_run = get_agent_run_parameters(settings)
     # parameters_evaluation_run = copy.copy(parameters_agent_run)
     parameters_evaluation_run = {
         **parameters_agent_run,

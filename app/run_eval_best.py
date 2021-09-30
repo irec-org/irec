@@ -52,14 +52,15 @@ with ProcessPoolExecutor(max_workers=args.tasks) as executor:
         dataset.update_from_data()
         dataset.update_num_total_users_items()
         for agent_name in args.agents:
+            settings["defaults"]["evaluation_policy"] = args.evaluation_policy
+            settings["defaults"]["agent"] = agent_name
+            settings["agents"][agent_name] = dataset_agents[dataset_loader_name][
+                agent_name
+            ]
+
             for metric_name in args.metrics:
-                settings["defaults"]["evaluation_policy"] = args.evaluation_policy
                 settings["defaults"]["metric"] = metric_name
                 settings["defaults"]["metric_evaluator"] = args.metric_evaluator
-                settings["defaults"]["agent"] = agent_name
-                settings["agents"][agent_name] = dataset_agents[dataset_loader_name][
-                    agent_name
-                ]
                 f = executor.submit(
                     utils.evaluate_itr, dataset, copy.deepcopy(settings)
                 )

@@ -11,6 +11,7 @@ import utils
 sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "irec")
 from app import constants
 
+from app import utils
 import scipy
 import copy
 import value_functions
@@ -428,6 +429,7 @@ tex_path = os.path.join(
     settings["defaults"]["tex_dir"],
     f"table_{tmp}.tex",
 )
+utils.create_path_to_file(tex_path)
 open(
     tex_path,
     "w+",
@@ -435,6 +437,7 @@ open(
 pdf_path = os.path.join(
     settings["defaults"]["data_dir"], settings["defaults"]["pdf_dir"]
 )
+utils.create_path_to_file(pdf_path)
 # print(f"latexmk -pdf -interaction=nonstopmode -output-directory={pdf_path} {tex_path}")
 os.system(
     f'latexmk -pdflatex=pdflatex -pdf -interaction=nonstopmode -output-directory="{pdf_path}" "{tex_path}"'

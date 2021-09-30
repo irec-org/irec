@@ -19,7 +19,8 @@ CB:
         B: 5
         C: 0.5
         D: 3
-        num_clusters: 16
+        num_clusters: 4
+        cache_dir: '.cache/'
 COFIBA:
   SimpleAgent:
     action_selection_policy:

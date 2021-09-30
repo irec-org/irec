@@ -39,4 +39,4 @@ settings["defaults"]["agent"] = args.agent
 settings["defaults"]["dataset_loader"] = args.dataset_loader
 
 data = utils.load_dataset_experiment(settings)
-utils.run_agent(data, settings)
+utils.run_agent(data, settings,True)

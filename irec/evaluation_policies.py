@@ -96,7 +96,8 @@ class Interaction(EvaluationPolicy):
             history_items_recommended = []
 
             num_trials = num_test_users * self.num_interactions
-            _intervals = num_trials // 20
+            # _intervals = num_trials // 20
+            _intervals = num_trials // num_trials
             _num_interactions = 0
             pbar = tqdm(total=num_trials)
             pbar.set_description(f"{model.name}")

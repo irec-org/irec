@@ -2,16 +2,15 @@
 Cluster-Based algorithm of "Cluster-Based Bandits: Fast Cold-Start for Recommender System New Users"
 """
 import numpy as np
-from tensorflow.python.eager.context import num_gpus
-from tqdm import tqdm
-from .ValueFunction import ValueFunction
 from .ExperimentalValueFunction import ExperimentalValueFunction
-import os
-import random
 import scipy.stats
 from collections import defaultdict
 from sklearn.cluster import KMeans
 import itertools
+
+# from joblib import Memory
+from cachetools import cached
+from cachetools.keys import hashkey
 
 
 def _vars(a, axis=None):
@@ -34,25 +33,46 @@ def _argmin(d):
 
 class CB(ExperimentalValueFunction):
     def __init__(
-        self, num_clusters: int, B: float, C: float, D: float, *args, **kwargs
+        self,
+        num_clusters: int,
+        B: float,
+        C: float,
+        D: float,
+        # cache_dir: str,
+        *args,
+        **kwargs
     ):
         super().__init__(*args, **kwargs)
         self.B = B
         self.C = C
         self.D = D
         self.num_clusters = num_clusters
+        # self.cache_dir = cache_dir
 
+        # self.Gamma = cached(self.Gamma,)
+
+    # def find_object(db_handle, query):
+    # print("processing {0}".format(query))
+    # return query
+    # memory = Memory(self.cache_dir, verbose=0)
+    # self.Gamma =  memory.cache(self.Gamma, ignore=['self'])
+    # # self.Rn =  memory.cache(self.Rn, ignore=['self'])
+    # self.Sigma =  memory.cache(self.Sigma, ignore=['self'])
+    # self.alpha =  memory.cache(self.alpha, ignore=['self'])
+    @cached(cache={}, key=lambda self, g, h, v: hashkey(g, h, v))
     def Gamma(self, g, h, v):
 
         return (self.groups_mean[g][v] - self.groups_mean[h][v]) ** 2 / self.groups_std[
             g
         ][v]
 
+    @cached(cache={}, key=lambda self, i, g, h: hashkey(i, g, h))
     def alpha(self, i, g, h):
         return self.Gamma(g, h, i) / np.sum(
             [self.Gamma(g, h, v) for v in range(self.num_total_items)]
         )
 
+    @cached(cache={}, key=lambda self, g, h: hashkey(g, h))
     def Sigma(self, g, h):
         c = 0
         for v in range(self.num_total_items):
@@ -64,19 +84,41 @@ class CB(ExperimentalValueFunction):
         return [self.Gamma(g, h, v) for v in user_candidate_items]
 
     def Rn(self, uid, g, h):
-        l = [
-            self.alpha(vi, g, h)
-            * (
-                (self.consumption_matrix[uid, vi] - self.groups_mean[h, vi])
-                / (self.groups_mean[g, vi] - self.groups_mean[h, vi])
+        # items = [
+            # vi
+            # for vi in range(self.num_total_items)
+            # if self.groups_mean[g, vi] != self.groups_mean[h, vi]
+        # ]
+        items = np.arange(self.num_total_items)
+        items=items[self.groups_mean[g, items]!= self.groups_mean[h, items]]
+        # self.[]
+        alphas = np.array([self.alpha(vi, g, h) for vi in items])
+        with np.errstate(invalid="ignore"):
+            l = alphas * (
+                (
+                    self.consumption_matrix[uid, items].toarray().flatten()
+                    - self.groups_mean[h, items].flatten()
+                )
+                / (
+                    self.groups_mean[g, items].flatten()
+                    - self.groups_mean[h, items].flatten()
+                )
             )
-            for vi in range(self.num_total_items) if self.groups_mean[g, vi] != self.groups_mean[h, vi]
-        ]
+        # print(np.sum(l))
+        # l = [
+        # self.alpha(vi, g, h)
+        # * (
+        # (self.consumption_matrix[uid, vi] - self.groups_mean[h, vi])
+        # / (self.groups_mean[g, vi] - self.groups_mean[h, vi])
+        # )
+        # for vi in range(self.num_total_items)
+        # if self.groups_mean[g, vi] != self.groups_mean[h, vi]
+        # ]
         return np.sum(l)
 
     def I(self, uid, g):
         l = []
-        for h in range(self.num_total_items):
+        for h in range(self.num_clusters):
             if g != h:
                 l.append(self.Rn(uid, g, h))
         return np.min(l)
@@ -95,6 +137,7 @@ class CB(ExperimentalValueFunction):
         )
         kmeans = KMeans(self.num_clusters).fit(self.train_consumption_matrix)
         self.num_total_items = self.train_dataset.num_total_items
+        self.num_total_users = self.train_dataset.num_total_users
 
         self.groups_users = defaultdict(list)
         for uid, group in enumerate(kmeans.labels_):
@@ -106,14 +149,30 @@ class CB(ExperimentalValueFunction):
         for group, uids in self.groups_users.items():
             ratings = self.train_consumption_matrix[uids]
             self.groups_mean[group] = ratings.mean(axis=0)
-            self.groups_std[group] = _stds(ratings, axis=0)
-            print(group,self.groups_std[group])
-        self.groups_std[self.groups_std<0.01] = 0.01
+            try:
+                self.groups_std[group] = _stds(ratings, axis=0)
+            except:
+                self.groups_std[group] = np.zeros(self.num_total_items)
+            # print(group, self.groups_std[group])
+        self.groups_std[self.groups_std < 0.01] = 0.01
 
         self.consumption_matrix = self.train_consumption_matrix.todok()
         self.exploration_phase = defaultdict(lambda: True)
         self.new_user = defaultdict(lambda: True)
         self.users_group = {}
+
+        # self.Gamma_cache = dict()
+        # for g in range(self.num_clusters):
+        # for h in range(self.num_clusters):
+        # for v in range(self.num_total_items):
+        # self.Gamma_cache[(g,h,v)] = self.Gamma(g,h,v)
+
+        # self.Rn_cache = dict()
+        # for g in range(self.num_clusters):
+        # for h in range(self.num_clusters):
+        # for u in range(self.num_total_users):
+        # self.Rn_cache[(u,g,h)] = self.Rn(u,g,h)
+
         # print(self.groups)
 
         # for uid in range(self.train_dataset.data.shape[0]):
@@ -130,9 +189,11 @@ class CB(ExperimentalValueFunction):
             g = np.random.randint(self.num_clusters)
             return self.explore(g, candidate_items), None
         else:
+            # print("Not new user")
             if self.exploration_phase[uid]:
                 # [g for g in self.groups if self.Rn(uid,g,)]
                 candidates_groups = []
+                # print("Not new user c1")
                 for g in self.groups:
                     ngroups = set(self.groups) - {g}
                     hs_vals = []
@@ -143,6 +204,7 @@ class CB(ExperimentalValueFunction):
                     fval = np.abs(min_h - 1)
                     if fval <= self.C:
                         candidates_groups.append(g)
+                # print("Not new user c2")
                 if len(candidates_groups) != 0:
                     g_hat = np.argmax([self.I(uid, g) for g in self.groups])
                     result_explore = self.explore(g_hat, candidate_items)

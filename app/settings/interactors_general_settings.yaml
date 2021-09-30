@@ -143,3 +143,5 @@ TSEnsemble_Entropy:
   name: TSEnsemble-Entropy
 TSEnsemble_Random:
   name: TSEnsemble-Random
+CB:
+  name: Cluster-Bandit
