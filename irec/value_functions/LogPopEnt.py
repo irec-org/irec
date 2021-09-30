@@ -6,7 +6,7 @@ import scipy.stats
 import os
 
 
-class LogPopEnt(ExperimentalValueFunction):
+class LogPopEnt(ExperimentalValueFunction.ExperimentalValueFunction):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

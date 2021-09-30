@@ -54,7 +54,7 @@ with ProcessPoolExecutor(max_workers=args.tasks) as executor:
             settings["defaults"]["agent"] = agent_name
             for agent_og_parameters in agents_search[agent_name]:
                 settings["agents"][agent_name] = agent_og_parameters
-                # agent_og_parameters = dataset_agents[dataset_loader_name][agent_name]
+                # f = utils.run_agent(data, copy.deepcopy(settings),args.forced_run)
                 f = executor.submit(utils.run_agent, data, copy.deepcopy(settings),args.forced_run)
                 futures.add(f)
                 if len(futures) >= args.tasks:

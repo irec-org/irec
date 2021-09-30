@@ -14,6 +14,9 @@ import mf
 from collections import defaultdict
 from .MFValueFunction import MFValueFunction
 import value_functions
+from value_functions.MostPopular import MostPopular
+from value_functions.Entropy import Entropy
+from value_functions.LogPopEnt import LogPopEnt
 
 
 def _prediction_rule(A, b, items_weights, alpha):

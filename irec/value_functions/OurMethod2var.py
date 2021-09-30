@@ -14,6 +14,9 @@ import mf
 from collections import defaultdict
 from .MFValueFunction import MFValueFunction
 import value_functions
+import value_functions.Entropy
+import value_functions.MostPopular
+import value_functions.LogPopEnt
 
 
 def _prediction_rule(A, b, items_weights, alpha):
@@ -48,12 +51,12 @@ class OurMethod2var(MFValueFunction):
         self.items_weights = mf_model.items_weights
         self.num_latent_factors = len(self.items_weights[0])
 
-        items_entropy = value_functions.Entropy.get_items_entropy(
+        items_entropy = value_functions.Entropy.Entropy.get_items_entropy(
             self.train_consumption_matrix)
-        items_popularity = value_functions.MostPopular.get_items_popularity(
+        items_popularity = value_functions.MostPopular.MostPopular.get_items_popularity(
             self.train_consumption_matrix, normalize=False)
         # self.items_bias = value_functions.PPELPE.get_items_ppelpe(items_popularity,items_entropy)
-        self.items_bias = value_functions.LogPopEnt.get_items_logpopent(
+        self.items_bias = value_functions.LogPopEnt.LogPopEnt.get_items_logpopent(
             items_popularity, items_entropy)
         print(self.items_bias.min(), self.items_bias.max())
         assert (self.items_bias.min() >= 0
