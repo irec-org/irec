@@ -119,6 +119,7 @@ class TRTEValidationDatasetLoader:
 
     def load(self):
         np.random.seed(self.random_seed)
+        random.seed(self.random_seed)
         trte_processor = dataset.TRTE()
         data = trte_processor.process(self.dataset_path)
 

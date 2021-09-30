@@ -57,13 +57,14 @@ with ProcessPoolExecutor(max_workers=args.tasks) as executor:
     futures = set()
     for dataset_loader_name in args.dataset_loaders:
         settings["defaults"]["dataset_loader"] = dataset_loader_name
-        traintest_dataset = utils.load_dataset_experiment(settings)
+        traintest = utils.load_dataset_experiment(settings)
 
-        data = np.vstack((traintest_dataset.train.data, traintest_dataset.test.data))
+        data = np.vstack((traintest.train.data, traintest.test.data))
 
-        dataset = Dataset(data)
+        dataset = copy.copy(traintest.train)
+        dataset.data = data
         dataset.update_from_data()
-        dataset.update_num_total_users_items()
+        # dataset.update_num_total_users_items()
         for agent_name in args.agents:
             settings["defaults"]["agent"] = agent_name
             for agent_og_parameters in agents_search[agent_name]:
@@ -74,6 +75,10 @@ with ProcessPoolExecutor(max_workers=args.tasks) as executor:
                     settings["defaults"]["metric"] = metric_name
 
                     # agent_og_parameters = dataset_agents[dataset_loader_name][agent_name]
+                    # try:
+                    # utils.evaluate_itr(dataset, copy.deepcopy(settings))
+                    # except AttributeError as e:
+                    # print(e)
                     f = executor.submit(
                         utils.evaluate_itr,
                         dataset,

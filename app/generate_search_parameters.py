@@ -40,23 +40,21 @@ for agent_name in args.agents:
             10,
             20,
             50,
-            100,
         ]
         template["SimpleAgent"]["value_function"]["PTS"]["num_particles"] = [
             2,
             5,
             10,
             20,
-            30,
         ]
         template["SimpleAgent"]["value_function"]["PTS"]["var_v"] = np.around(
-            np.linspace(0.3, 2, 6), 3
+            np.linspace(0.3, 1.5, 3), 3
         ).tolist()
         template["SimpleAgent"]["value_function"]["PTS"]["var_u"] = np.around(
-            np.linspace(0.3, 2, 6), 3
+            np.linspace(0.3, 1.5, 3), 3
         ).tolist()
         template["SimpleAgent"]["value_function"]["PTS"]["var"] = np.around(
-            np.linspace(0.3, 2, 6), 3
+            np.linspace(0.3, 1.5, 3), 3
         ).tolist()
 
     elif agent_name == "ICTRTS":

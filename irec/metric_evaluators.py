@@ -198,6 +198,11 @@ class InteractionMetricEvaluator(MetricEvaluator):
                         self.ground_truth_dataset.data[:, 1],
                     ),
                 ),
+                # (
+                # np.max(self.ground_truth_dataset.uids),
+                # np.max(self.ground_truth_dataset.iids),
+                # self.ground_truth_dataset.num_total_items,
+                # ),
                 (
                     self.ground_truth_dataset.num_total_users,
                     self.ground_truth_dataset.num_total_items,

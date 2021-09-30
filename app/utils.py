@@ -660,6 +660,9 @@ def evaluate_itr(dataset, settings):
     # print(parameters_agent_run)
     run = get_agent_run(settings)
 
+    if run == None:
+        print("Could not find agent run")
+        return
     client = MlflowClient()
     artifact_path = client.download_artifacts(run.info.run_id, "interactions.pickle")
     with open(artifact_path, "rb") as f:
@@ -676,22 +679,29 @@ def evaluate_itr(dataset, settings):
         metric_class,
         interactions,
     )
-
-    if isinstance(metric_evaluator, UserCumulativeInteractionMetricEvaluator):
-        with mlflow.start_run(run_id=run.info.run_id) as run:
+    with mlflow.start_run(run_id=run.info.run_id) as run:
+        if isinstance(metric_evaluator, UserCumulativeInteractionMetricEvaluator):
             mlflow.log_metric(
                 metric_class.__name__, np.mean(list(metric_values[-1].values()))
             )
-        pass
-    elif isinstance(metric_evaluator, InteractionMetricEvaluator):
-        pass
-    elif isinstance(metric_evaluator, CumulativeMetricEvaluator):
-        pass
+        elif isinstance(metric_evaluator, InteractionMetricEvaluator):
+            pass
+        elif isinstance(metric_evaluator, CumulativeMetricEvaluator):
+            pass
 
     mlflow.set_experiment(settings["defaults"]["evaluation_experiment"])
     parameters_evaluation_run = get_evaluation_run_parameters(settings)
+
     with mlflow.start_run() as run:
         log_custom_parameters(parameters_evaluation_run)
+        if isinstance(metric_evaluator, UserCumulativeInteractionMetricEvaluator):
+            mlflow.log_metric(
+                metric_class.__name__, np.mean(list(metric_values[-1].values()))
+            )
+        elif isinstance(metric_evaluator, InteractionMetricEvaluator):
+            pass
+        elif isinstance(metric_evaluator, CumulativeMetricEvaluator):
+            pass
         # print(metric_values)
         log_custom_artifact("evaluation.pickle", metric_values)
 
