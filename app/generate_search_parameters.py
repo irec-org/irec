@@ -94,6 +94,25 @@ for agent_name in args.agents:
             0.2,
             0.3,
         ]
+    elif agent_name == "CB":
+        template["SimpleAgent"]["value_function"]["CB"]["num_clusters"] = [
+            4,
+            8,
+        ]
+        template["SimpleAgent"]["value_function"]["CB"]["B"] = [
+            2,
+            5,
+        ]
+        template["SimpleAgent"]["value_function"]["CB"]["C"] = [
+            0.2,
+            0.5,
+            0.8,
+        ]
+        template["SimpleAgent"]["value_function"]["CB"]["D"] = [
+            1,
+            3,
+            5,
+        ]
     else:
 
         raise IndexError("Unrecognized agent")
