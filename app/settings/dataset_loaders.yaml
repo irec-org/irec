@@ -5,10 +5,10 @@
   test_consumes: 1
   train_size: 0.8
 'LastFM 5k TRTE':
-  dataset_path: './data/datasets/LastFM 5k/Train-Test_LastFM-5K/'
+  dataset_path: './data/datasets/Train-Test_LastFM-5K/'
 'LastFM 5k TRTE Validation':
   crono: false
-  dataset_path: './data/datasets/LastFM 5k/Train-Test_LastFM-5K/'
+  dataset_path: './data/datasets/Train-Test_LastFM-5K/'
   random_seed: 0
   test_consumes: 1
   train_size: 0.8
@@ -36,14 +36,6 @@
   dataset_path: ./data/datasets/Train-Test_Yahoo-Music/
 'Yahoo Music TRTE Validation':
   dataset_path: ./data/datasets/Train-Test_Yahoo-Music/
-  train_size: 0.8
-  test_consumes: 1
-  crono: False
-  random_seed: 0
-'MovieLens 10M TRTE':
-  dataset_path: ./data/datasets/Train-Test_ML-10M/
-'MovieLens 10M TRTE Validation':
-  dataset_path: ./data/datasets/Train-Test_ML-10M/
   train_size: 0.8
   test_consumes: 1
   crono: False
