@@ -412,7 +412,7 @@ def create_value_function(value_function_settings):
     value_function_name = list(value_function_settings.keys())[0]
     value_function_parameters = list(value_function_settings.values())[0]
 
-    if value_function_name in ['OurMethodRandom','OurMethodRandPopularity','OurMethodEntropy']:
+    if value_function_name in ['OurMethodRandom','OurMethodRandPopularity','OurMethodEntropy','OurMethodPopularity']:
         exec("import irec.value_functions.OurMethodInit")
         value_function = eval(
             "irec.value_functions.OurMethodInit.{}".format(value_function_name)
