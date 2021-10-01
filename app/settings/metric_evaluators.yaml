@@ -1,5 +1,5 @@
 CumulativeInteractionMetricEvaluator:
-  interaction_size: 5
+  interaction_size: 1
   interactions_to_evaluate:
     - 5
     - 10
@@ -12,7 +12,7 @@ CumulativeMetricEvaluator:
   buffer_size: 1000
   relevance_evaluator_threshold: 3.999
 InteractionMetricEvaluator:
-  interaction_size: 5
+  interaction_size: 1
   interactions_to_evaluate:
     - 5
     - 10
