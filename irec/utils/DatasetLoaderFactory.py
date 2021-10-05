@@ -6,10 +6,36 @@ class DatasetLoaderFactory:
         dl = None
         if dataset_name == "MovieLens 100k O":
             dl = DatasetLoader.ML100kDatasetLoader(**dataset_parameters)
-        elif dataset_name == "LastFM 5k":
-            dl = DatasetLoader.LastFM5kDatasetLoader(**dataset_parameters)
-        elif dataset_name == "LastFM 5k Validation":
-            dl = DatasetLoader.LastFM5kValidationDatasetLoader(**dataset_parameters)
+        elif dataset_name in [
+            "MovieLens 1M",
+            "MovieLens 10M",
+            "MovieLens 20M",
+            "LastFM 5k",
+            "Kindle Store",
+            "Kindle Store 4k",
+            "Netflix",
+            "Netflix 10k",
+            "Good Books",
+            "Yahoo Music",
+            "Good Reads 10k",
+        ]:
+            dl = DatasetLoader.DefaultDatasetLoader(dataset_name,**dataset_parameters)
+        elif dataset_name in [
+            "MovieLens 1M Validation",
+            "MovieLens 10M Validation",
+            "MovieLens 20M Validation",
+            "LastFM 5k Validation",
+            "Kindle Store Validation",
+            "Kindle Store 4k Validation",
+            "Netflix Validation",
+            "Netflix 10k Validation",
+            "Good Books Validation",
+            "Yahoo Music Validation",
+            "Good Reads 10k Validation",
+
+        ]:
+            dl = DatasetLoader.DefaultValidationDatasetLoader(dataset_name,**dataset_parameters)
+        
         elif dataset_name in [
             "Kindle 4k TRTE",
             "Good Books TRTE",
