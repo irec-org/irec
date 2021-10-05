@@ -19,9 +19,13 @@ class DatasetLoaderFactory:
             "Yahoo Music",
             "Good Reads 10k",
         ]:
-            dl = DatasetLoader.DefaultDatasetLoader(dataset.DefaultDataset(),**dataset_parameters)
+            dl = DatasetLoader.DefaultDatasetLoader(
+                dataset.DefaultDataset(), **dataset_parameters
+            )
         elif dataset_name == "Netflix":
-            dl = DatasetLoader.DefaultDatasetLoader(dataset.Netflix(),**dataset_parameters)
+            dl = DatasetLoader.DefaultDatasetLoader(
+                dataset.Netflix(), **dataset_parameters
+            )
         elif dataset_name in [
             "MovieLens 1M Validation",
             "MovieLens 10M Validation",
@@ -31,13 +35,17 @@ class DatasetLoaderFactory:
             "Kindle Store 4k Validation",
             "Good Books Validation",
             "Yahoo Music Validation",
+            "Netflix 10k Validation",
             "Good Reads 10k Validation",
-
         ]:
-            dl = DatasetLoader.DefaultValidationDatasetLoader(dataset.DefaultDataset(),**dataset_parameters)
+            dl = DatasetLoader.DefaultValidationDatasetLoader(
+                dataset.DefaultDataset(), **dataset_parameters
+            )
 
-        elif dataset_name in ["Netflix Validation","Netflix 10k Validation"]:
-            dl = DatasetLoader.DefaultDatasetLoader(dataset.Netflix(),**dataset_parameters)
+        elif dataset_name in ["Netflix Validation"]:
+            dl = DatasetLoader.DefaultDatasetLoader(
+                dataset.Netflix(), **dataset_parameters
+            )
         elif dataset_name in [
             "Kindle 4k TRTE",
             "Good Books TRTE",
