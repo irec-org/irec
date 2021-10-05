@@ -1,10 +1,11 @@
+#!/usr/bin/python3
 from googleDriveFileDownloader import googleDriveFileDownloader
 from termcolor import colored
 import zipfile
 import shutil 
 import os 
 
-destination = "../data/datasets/"
+destination = "./data/datasets/"
 file_name = "datasets.zip"
 
 file = googleDriveFileDownloader()
