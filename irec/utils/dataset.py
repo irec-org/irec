@@ -177,9 +177,9 @@ class MovieLens100k(DataProcessor):
         return dataset
 
 
-class LastFM5k(DataProcessor):
+class DefaultDataset(DataProcessor):
     def process(self, dataset_dir):
-        data = np.loadtxt(os.path.join(dataset_dir, "ratings.csv"), delimiter=",")
+        data = np.loadtxt(os.path.join(dataset_dir, "ratings.csv"), delimiter=",", skiprows=1)
         dataset = Dataset(data)
         dataset.update_from_data()
         dataset.update_num_total_users_items()
@@ -187,8 +187,20 @@ class LastFM5k(DataProcessor):
 
 
 class MovieLens1M(DataProcessor):
-    def process(self, dataset_descriptor):
-        dataset_dir = dataset_descriptor.dataset_dir
+    def process(self, dataset_dir):
+        data = np.loadtxt(os.path.join(dataset_dir, "ratings.dat"), delimiter="::")
+        iids = dict()
+        for i, iid in enumerate(np.unique(data[:, 1])):
+            iids[iid] = i
+        data[:, 1] = np.vectorize(lambda x: iids[x])(data[:, 1])
+        data[:, 0] = data[:, 0] - 1
+        dataset = Dataset(data)
+        dataset.update_from_data()
+        dataset.update_num_total_users_items()
+        return dataset
+
+class MovieLens10M(DataProcessor):
+    def process(self, dataset_dir):
         data = np.loadtxt(os.path.join(dataset_dir, "ratings.dat"), delimiter="::")
         iids = dict()
         for i, iid in enumerate(np.unique(data[:, 1])):
@@ -201,49 +213,59 @@ class MovieLens1M(DataProcessor):
         return dataset
 
 
-def _netflix_read_ratings(self, fileName):
-    file = open(fileName, "r")
-    file.readline()
-    numratings = np.sum([1 for line in open(fileName)])
-    usersId = np.zeros(numratings, dtype=np.int32)
-    itemsId = np.zeros(numratings, dtype=np.int32)
-    ratings = np.zeros(numratings, dtype=np.float16)
-    timestamp = np.zeros(numratings, dtype=np.int32)
-
-    file = open(fileName, "r")
-    file.readline()
-    cont = 0
-    for row in file:
-        values = row.split("::")
-        uid, iid, rating, ts = (
-            int(float(values[0])),
-            int(float(values[1])),
-            values[2],
-            int(float(values[3].replace("\n", ""))),
-        )
-        usersId[cont] = uid
-        itemsId[cont] = iid
-        ratings[cont] = rating
-        timestamp[cont] = ts
-        cont += 1
-
-    print(numratings, usersId[-1], itemsId[-1], ratings[-1])
-    file.close()
-    return usersId, itemsId, ratings, timestamp, numratings
 
 
 class Netflix:
-    def process(self, dataset_descriptor):
+    
+    def _netflix_read_ratings(self, fileName):
+        file = open(fileName, "r")
+        file.readline()
+        numratings = np.sum([1 for line in open(fileName)])
+        usersId = np.zeros(numratings, dtype=np.int32)
+        itemsId = np.zeros(numratings, dtype=np.int32)
+        timestamp = np.zeros(numratings, dtype=np.uint64) 
+        ratings = np.zeros(numratings, dtype=np.uint8)
+        
+        file = open(fileName, "r")
+        file.readline()
+        cont = 0
+        for row in file:
+            values = row.split(",")
+            uid, iid, rating, ts = (
+                int(float(values[0])),
+                int(float(values[1])),
+                values[2],
+                int(float(values[3].replace("\n", ""))),
+            )
+            usersId[cont] = uid
+            itemsId[cont] = iid
+            ratings[cont] = rating
+            timestamp[cont] = ts
+            cont += 1
+
+        file.close()
+        return usersId, itemsId, ratings, timestamp, numratings
+
+    def process(self, dataset_dir):
         # base_dir = self.BASES_DIRS[self.base]
-        u_train, i_train, r_train, t_train, numr_train = _netflix_read_ratings(
-            dataset_descriptor.dataset_dir + "train.data"
+        # u_train, i_train, r_train, t_train, numr_train = _netflix_read_ratings(
+        #     dataset_dir + "train.data"
+        # )
+        # u_test, i_test, r_test, t_test, numr_test = _netflix_read_ratings(
+        #     dataset_dir + "test.data"
+        # )
+        # test_data = np.array((u_test, i_test, r_test, t_test))
+        # train_data = np.array((u_train, i_train, r_train, t_train)) 
+
+        usersId, itemsId, ratings, timestamp, numratings = self._netflix_read_ratings(
+            dataset_dir + "ratings.csv"
         )
-        u_test, i_test, r_test, t_test, numr_test = _netflix_read_ratings(
-            dataset_descriptor.dataset_dir + "test.data"
-        )
-        test_data = np.array((u_test, i_test, r_test, t_test))
-        train_data = np.array((u_train, i_train, r_train, t_train))
-        return train_data, test_data
+        dataset = np.array([usersId,itemsId,ratings,timestamp]).T
+        # return train_data, test_data
+        dataset = Dataset(dataset)
+        dataset.update_from_data()
+        dataset.update_num_total_users_items()
+        return dataset
 
 
 class TrainTestConsumption(DataProcessor):
