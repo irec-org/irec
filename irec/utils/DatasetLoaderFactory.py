@@ -1,4 +1,5 @@
 from . import DatasetLoader
+import irec.utils.dataset as dataset
 
 
 class DatasetLoaderFactory:
@@ -13,13 +14,14 @@ class DatasetLoaderFactory:
             "LastFM 5k",
             "Kindle Store",
             "Kindle Store 4k",
-            "Netflix",
             "Netflix 10k",
             "Good Books",
             "Yahoo Music",
             "Good Reads 10k",
         ]:
-            dl = DatasetLoader.DefaultDatasetLoader(dataset_name,**dataset_parameters)
+            dl = DatasetLoader.DefaultDatasetLoader(dataset.DefaultDataset(),**dataset_parameters)
+        elif dataset_name == "Netflix":
+            dl = DatasetLoader.DefaultDatasetLoader(dataset.Netflix(),**dataset_parameters)
         elif dataset_name in [
             "MovieLens 1M Validation",
             "MovieLens 10M Validation",
@@ -27,15 +29,15 @@ class DatasetLoaderFactory:
             "LastFM 5k Validation",
             "Kindle Store Validation",
             "Kindle Store 4k Validation",
-            "Netflix Validation",
-            "Netflix 10k Validation",
             "Good Books Validation",
             "Yahoo Music Validation",
             "Good Reads 10k Validation",
 
         ]:
-            dl = DatasetLoader.DefaultValidationDatasetLoader(dataset_name,**dataset_parameters)
-        
+            dl = DatasetLoader.DefaultValidationDatasetLoader(dataset.DefaultDataset(),**dataset_parameters)
+
+        elif dataset_name in ["Netflix Validation","Netflix 10k Validation"]:
+            dl = DatasetLoader.DefaultDatasetLoader(dataset.Netflix(),**dataset_parameters)
         elif dataset_name in [
             "Kindle 4k TRTE",
             "Good Books TRTE",

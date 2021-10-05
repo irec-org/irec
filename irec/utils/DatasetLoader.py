@@ -8,37 +8,20 @@ class DatasetLoader:
 
 class DefaultDatasetLoader:
     def __init__(
-        self, dataset_name, dataset_path, crono, random_seed, test_consumes, train_size
+        self, dataset_processor, dataset_path, crono, random_seed, test_consumes, train_size
     ) -> None:
-        self.dataset_name = dataset_name
+        self.dataset_processor = dataset_processor
         self.dataset_path = dataset_path
         self.crono = crono
         self.random_seed = random_seed
         self.test_consumes = test_consumes
         self.train_size = train_size
+        self.dataset_processor = dataset_processor
 
     def load(self):
         np.random.seed(self.random_seed)
-        if self.dataset_name in [
-            "MovieLens 1M",
-            "MovieLens 10M",
-            "MovieLens 20M",
-            "LastFM 5k",
-            "Kindle Store",
-            "Kindle Store 4k",
-            "Netflix 10k",
-            "Good Books",
-            "Yahoo Music",
-            "Good Reads 10k",
-        ]:     
-            dataset_processor = dataset.DefaultDataset()
 
-        elif self.dataset_name == "Netflix":
-            dataset_processor = dataset.Netflix()
-        else:
-            raise IndexError(self.dataset_name)
-
-        data = dataset_processor.process(self.dataset_path)
+        data = self.dataset_processor.process(self.dataset_path)
 
         traintest_processor = dataset.TrainTestConsumption(
             crono=self.crono,
@@ -50,9 +33,9 @@ class DefaultDatasetLoader:
 
 class DefaultValidationDatasetLoader:
     def __init__(
-        self, dataset_name, dataset_path, crono, random_seed, test_consumes, train_size
+        self, dataset_processor, dataset_path, crono, random_seed, test_consumes, train_size
     ) -> None:
-        self.dataset_name = dataset_name
+        self.dataset_processor = dataset_processor
         self.dataset_path = dataset_path
         self.crono = crono
         self.random_seed = random_seed
@@ -61,26 +44,8 @@ class DefaultValidationDatasetLoader:
 
     def load(self):
         np.random.seed(self.random_seed)
-        if self.dataset_name in [
-            "MovieLens 1M Validation",
-            "MovieLens 10M Validation",
-            "MovieLens 20M Validation",
-            "LastFM 5k Validation",
-            "Kindle Store Validation",
-            "Kindle Store 4k Validation",
-            "Netflix 10k Validation",
-            "Good Books Validation",
-            "Yahoo Music Validation",
-            "Good Reads 10k Validation",
-        ]:
-            dataset_processor = dataset.DefaultDataset()
 
-        elif self.dataset_name == "Netflix Validation":
-            dataset_processor = dataset.Netflix()
-        else:
-            raise IndexError(self.dataset_name)
-
-        data = dataset_processor.process(self.dataset_path)
+        data = self.dataset_processor.process(self.dataset_path)
         traintest_processor = dataset.TrainTestConsumption(
             crono=self.crono,
             test_consumes=self.test_consumes,
