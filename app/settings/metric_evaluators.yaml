@@ -9,7 +9,7 @@ CumulativeInteractionMetricEvaluator:
   num_interactions: 100
   relevance_evaluator_threshold: 3.999
 CumulativeMetricEvaluator:
-  buffer_size: 1000
+  buffer_size: 1000000
   relevance_evaluator_threshold: 3.999
 InteractionMetricEvaluator:
   interaction_size: 1

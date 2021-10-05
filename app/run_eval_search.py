@@ -35,7 +35,7 @@ parser.add_argument("--agents", nargs="*", default=[settings["defaults"]["agent"
 parser.add_argument("--tasks", type=int, default=os.cpu_count())
 parser.add_argument("--metrics", nargs="*", default=[settings["defaults"]["metric"]])
 parser.add_argument(
-    "--metric_evaluator", default=settings["defaults"]["metric_evaluator"]
+    "--metric_evaluator", default="CumulativeMetricEvaluator"
 )
 utils.load_settings_to_parser(settings, parser)
 args = parser.parse_args()
@@ -83,6 +83,7 @@ with ProcessPoolExecutor(max_workers=args.tasks) as executor:
                         utils.evaluate_itr,
                         dataset,
                         copy.deepcopy(settings),
+                        False
                     )
                     futures.add(f)
                     if len(futures) >= args.tasks:

@@ -6,6 +6,7 @@ import sys
 
 sys.path.append(dirname(realpath(__file__)) + sep + pardir)
 
+from app import errors
 import json
 import inquirer
 import irec.value_functions
@@ -33,14 +34,15 @@ parser.add_argument("--agents", nargs="*", default=[settings["defaults"]["agent"
 parser.add_argument(
     "--dataset_loaders", nargs="*", default=[settings["defaults"]["dataset_loader"]]
 )
-parser.add_argument(
-    "--metric_evaluator", default=settings["defaults"]["metric_evaluator"]
-)
+parser.add_argument("--metric_evaluator", default="CumulativeMetricEvaluator")
 parser.add_argument("--metrics", nargs="*", default=[settings["defaults"]["metric"]])
 utils.load_settings_to_parser(settings, parser)
 args = parser.parse_args()
 settings = utils.sync_settings_from_args(settings, args)
 agents_search = yaml.load(open("./settings/agents_search.yaml"), Loader=yaml.SafeLoader)
+dataset_agents = yaml.load(
+    open("./settings/dataset_agents.yaml"), Loader=yaml.SafeLoader
+)
 
 settings["defaults"]["metric_evaluator"] = args.metric_evaluator
 # print(args.b,args.m)
@@ -84,12 +86,23 @@ for dataset_loader_name in args.dataset_loaders:
     for metric_name in args.metrics:
         for agent_name in args.agents:
             for agent_parameters in agents_search[agent_name]:
+                print(agent_name)
                 settings["defaults"]["metric"] = metric_name
                 settings["defaults"]["agent"] = agent_name
                 settings["agents"][agent_name] = agent_parameters
                 agent = utils.create_agent(agent_name, agent_parameters)
                 agent_id = utils.get_agent_id(agent_name, agent_parameters)
-                metric_values = utils.load_evaluation_experiment(settings)
+                try:
+                    metric_values = utils.load_evaluation_experiment(settings)
+                    if metric_values == None:
+                        continue
+
+                except errors.EvaluationRunNotFoundError as e:
+                    print(e)
+                    continue
+                except EOFError as e:
+                    print(e)
+                    continue
 
                 datasets_metrics_values[settings["defaults"]["dataset_loader"]][
                     settings["defaults"]["metric"]
@@ -106,7 +119,9 @@ for k1, v1 in datasets_metrics_values.items():
             keys = [keys[i] for i in idxs]
             values = [values[i] for i in idxs]
             if args.d:
-                settings["agents_preprocessor_parameters"][k1][k3] = json.loads(keys[0])
+                if k1 not in dataset_agents:
+                    dataset_agents[k1] = {}
+                dataset_agents[k1][k3] = json.loads(keys[0])
             if args.t:
                 print(f"{k3}:")
                 # print('\tparameters:')
@@ -121,6 +136,4 @@ for k1, v1 in datasets_metrics_values.items():
 
 if args.d:
     print("Saved parameters!")
-    open("settings" + sep + "agents_preprocessor_parameters.yaml", "w").write(
-        yaml.dump(utils.default_to_regular(settings["agents_preprocessor_parameters"]))
-    )
+    open("settings" + sep + "dataset_agents.yaml", "w").write(yaml.dump(dataset_agents))

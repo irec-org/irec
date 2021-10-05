@@ -2,9 +2,9 @@ from os.path import dirname, realpath, sep, pardir
 import os
 import sys
 
-
 sys.path.append(dirname(dirname(realpath(__file__))))
 import re
+from app import errors
 import pickle
 import mlflow.tracking
 import mlflow.entities
@@ -187,11 +187,16 @@ def flatten_dict(d, parent_key="", sep="."):
             items.append((new_key, v))
     return dict(items)
 
+def rec_defaultdict(d=None):
+    if d == None:
+        return defaultdict(rec_defaultdict)
+    else:
+        return defaultdict(rec_defaultdict,d)
 
 def defaultify(d):
     if not isinstance(d, dict):
         return d
-    return defaultdict(lambda: dict, {k: defaultify(v) for k, v in d.items()})
+    return defaultdict(lambda: dict(), {k: defaultify(v) for k, v in d.items()})
 
 
 def _do_nothing(d):
@@ -471,7 +476,7 @@ def create_agent_from_settings(agent_name, dataset_preprocessor_name, settings):
 
 
 def default_to_regular(d):
-    if isinstance(d, defaultdict):
+    if isinstance(d, (defaultdict,dict)):
         d = {k: default_to_regular(v) for k, v in d.items()}
     return d
 
@@ -636,7 +641,16 @@ def run_agent(traintest_dataset, settings, forced_run):
     )
 
 
-def evaluate_itr(dataset, settings):
+def evaluate_itr(dataset, settings,forced_run):
+    run = get_evaluation_run(settings)
+    if forced_run == False and run != None:
+        print(
+            "Already executed {} in {}".format(
+                get_evaluation_run_parameters(settings),
+                settings["defaults"]["agent_experiment"],
+            )
+        )
+        return
     agent_parameters = settings["agents"][settings["defaults"]["agent"]]
 
     dataset_parameters = settings["dataset_loaders"][
@@ -716,7 +730,10 @@ def load_evaluation_experiment(settings):
         settings["defaults"]["dataset_loader"]
     ]
     # metrics_evaluator_name = settings["defaults"]["metric_evaluator"]
-    run = get_agent_run(settings)
+    run = get_evaluation_run(settings)
+
+    if run == None:
+        raise errors.EvaluationRunNotFoundError("Could not find evaluation run")
     client = MlflowClient()
     artifact_path = client.download_artifacts(run.info.run_id, "evaluation.pickle")
     # print(artifact_path)
@@ -783,6 +800,16 @@ def get_agent_run(settings):
         agent_run_parameters,
         mlflow.get_experiment_by_name(
             settings["defaults"]["agent_experiment"]
+        ).experiment_id,
+    )
+    return run
+
+def get_evaluation_run(settings):
+    evaluation_run_parameters = get_evaluation_run_parameters(settings)
+    run = already_ran(
+        evaluation_run_parameters,
+        mlflow.get_experiment_by_name(
+            settings["defaults"]["evaluation_experiment"]
         ).experiment_id,
     )
     return run
