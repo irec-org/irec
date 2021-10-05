@@ -14,7 +14,7 @@ file = googleDriveFileDownloader()
 # dirr = "TrainTest"
 
 # datasets
-# file.downloadFile("https://drive.google.com/uc?id=1zy2k0jz3t4oA59w9cwMbNS7vFx_8ky3I&export=download", destination+file_name)
+file.downloadFile("https://drive.google.com/uc?id=1zy2k0jz3t4oA59w9cwMbNS7vFx_8ky3I&export=download", destination+file_name)
 dirr = "New Datasets/"
 
 with zipfile.ZipFile(destination+file_name,"r") as zip_ref:
