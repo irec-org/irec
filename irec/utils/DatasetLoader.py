@@ -72,8 +72,6 @@ class DefaultValidationDatasetLoader:
             "Good Books Validation",
             "Yahoo Music Validation",
             "Good Reads 10k Validation",
-            # "Yahoo Music Validation",
-            # "GoodBooks Validation",
         ]:
             dataset_processor = dataset.DefaultDataset()
 
@@ -115,56 +113,6 @@ class ML100kDatasetLoader:
         )
         res = traintest_processor.process(data)
         return res
-
-
-# class LastFM5kDatasetLoader:
-#     def __init__(
-#         self, dataset_path, crono, random_seed, test_consumes, train_size
-#     ) -> None:
-#         self.dataset_path = dataset_path
-#         self.crono = crono
-#         self.random_seed = random_seed
-#         self.test_consumes = test_consumes
-#         self.train_size = train_size
-
-#     def load(self):
-#         np.random.seed(self.random_seed)
-#         lastfm5k_processor = dataset.LastFM5k()
-#         data = lastfm5k_processor.process(self.dataset_path)
-
-#         traintest_processor = dataset.TrainTestConsumption(
-#             crono=self.crono,
-#             test_consumes=self.test_consumes,
-#             train_size=self.train_size,
-#         )
-#         res = traintest_processor.process(data)
-#         return res
-
-
-# class LastFM5kValidationDatasetLoader:
-#     def __init__(
-#         self, dataset_path, crono, random_seed, test_consumes, train_size
-#     ) -> None:
-#         self.dataset_path = dataset_path
-#         self.crono = crono
-#         self.random_seed = random_seed
-#         self.test_consumes = test_consumes
-#         self.train_size = train_size
-
-#     def load(self):
-#         np.random.seed(self.random_seed)
-#         lastfm5k_processor = dataset.LastFM5k()
-#         data = lastfm5k_processor.process(self.dataset_path)
-
-#         traintest_processor = dataset.TrainTestConsumption(
-#             crono=self.crono,
-#             test_consumes=self.test_consumes,
-#             train_size=self.train_size,
-#         )
-#         res = traintest_processor.process(traintest_processor.process(data).train)
-
-#         return res
-
 
 class TRTEDatasetLoader:
     def __init__(
