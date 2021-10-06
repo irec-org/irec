@@ -48,7 +48,10 @@ with ProcessPoolExecutor(max_workers=args.tasks) as executor:
                 dataset_loader_name
             ][agent_name]
             f = executor.submit(
-                utils.run_agent, traintest_dataset, copy.deepcopy(current_settings),True
+                utils.run_agent,
+                traintest_dataset,
+                copy.deepcopy(current_settings),
+                False,
             )
             futures.add(f)
             if len(futures) >= args.tasks:

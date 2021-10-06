@@ -587,8 +587,9 @@ def log_custom_parameters(settings: dict) -> None:
 # log_custom_parameters(cn, name, {cn:settings})
 
 
+import secrets
 def log_custom_artifact(fname, obj):
-    fnametmp = f"./tmp/{fname}"
+    fnametmp = f"./tmp/{secrets.token_urlsafe(16)}/{fname}"
     create_path_to_file(fnametmp)
     with open(fnametmp, mode="wb") as f:
         pickle.dump(obj, f)
