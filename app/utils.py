@@ -417,7 +417,7 @@ def create_value_function(value_function_settings):
     value_function_name = list(value_function_settings.keys())[0]
     value_function_parameters = list(value_function_settings.values())[0]
 
-    if value_function_name in ['OurMethodRandom','OurMethodRandPopularity','OurMethodEntropy','OurMethodPopularity']:
+    if value_function_name in ['OurMethodRandom','OurMethodRandPopularity','OurMethodEntropy','OurMethodPopularity','OurMethodOne','OurMethodZero']:
         exec("import irec.value_functions.OurMethodInit")
         value_function = eval(
             "irec.value_functions.OurMethodInit.{}".format(value_function_name)
@@ -521,7 +521,7 @@ def already_ran(parameters, experiment_id):
     parameters, and experiment id already ran. The run must have completed
     successfully and have at least the parameters provided.
     """
-    # print(experiment_id)
+    # print('Exp',experiment_id)
     all_run_infos = mlflow.list_run_infos(
         experiment_id, order_by=["attribute.end_time DESC"]
     )

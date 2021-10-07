@@ -769,3 +769,11 @@ kNNBandit:
       ASPGreedy: {}
     value_function:
       kNNBandit: {}
+ICBandit:
+  SimpleAgent:
+    action_selection_policy:
+      ASPICGreedy: {stop:5,num_clusters:16}
+    value_function:
+      LinUCB:
+        alpha: 1.0
+        num_lat: 10

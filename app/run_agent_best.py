@@ -27,7 +27,10 @@ parser.add_argument("--agents", nargs="*", default=[settings["defaults"]["agent"
 
 parser.add_argument("--tasks", type=int, default=os.cpu_count())
 
+parser.add_argument("--forced_run", action='store_true', default=False)
+utils.load_settings_to_parser(settings, parser)
 args = parser.parse_args()
+settings = utils.sync_settings_from_args(settings, args)
 
 settings["defaults"]["evaluation_policy"] = args.evaluation_policy
 
@@ -51,7 +54,7 @@ with ProcessPoolExecutor(max_workers=args.tasks) as executor:
                 utils.run_agent,
                 traintest_dataset,
                 copy.deepcopy(current_settings),
-                False,
+                args.forced_run,
             )
             futures.add(f)
             if len(futures) >= args.tasks:

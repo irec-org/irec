@@ -8,9 +8,12 @@ import numpy as np
 import random
 from tqdm import tqdm
 import irec.value_functions
+import irec.value_functions.MostPopular
+import irec.value_functions.OurMethodInit
 from irec.CandidateActions import OneUserCandidateActions
 from irec.utils.dataset import Dataset
 from irec.agents import Agent
+from irec.utils.utils import print_dict
 
 import matplotlib as mpl
 import seaborn as sns
@@ -102,6 +105,19 @@ class Interaction(EvaluationPolicy):
             pbar = tqdm(total=num_trials)
             pbar.set_description(f"{model.name}")
             acts_info = []
+
+            train_consumption_matrix = scipy.sparse.csr_matrix(
+                (
+                    train_dataset.data[:, 2],
+                    (train_dataset.data[:, 0], train_dataset.data[:, 1]),
+                ),
+                (train_dataset.num_total_users, train_dataset.num_total_items),
+            )
+
+            items_popularity = irec.value_functions.MostPopular.MostPopular.get_items_popularity(
+                train_consumption_matrix, normalize=True
+            )
+
             for i in range(num_trials):
                 uid = random.sample(available_users, k=1)[0]
                 not_recommended = np.ones(num_total_items, dtype=bool)
@@ -117,7 +133,16 @@ class Interaction(EvaluationPolicy):
                 if self.save_info:
                     info["trial"] = i
                     info["user_interaction"] = users_num_interactions[uid]
-                acts_info.append(info)
+                    info['rec_items']=actions[1]
+                    if False and isinstance(model.value_function,irec.value_functions.OurMethodInit.OurMethodInit):
+                        if uid == 4653:
+                            info['popularity_correlation']=scipy.stats.pearsonr(items_popularity[items_not_recommended],info['vf_info']['items_score'])[0]
+                            info['popularity_percentile']= scipy.stats.percentileofscore(items_popularity,items_popularity[actions[1][0]])
+                            print('------ interaction',info["user_interaction"])
+                            print_dict(info)
+                            print('------')
+                        del info['vf_info']['items_score']
+                        acts_info.append(info)
                 best_items = actions[1]
                 users_items_recommended[uid].extend(best_items)
 
