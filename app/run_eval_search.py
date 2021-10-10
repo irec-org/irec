@@ -35,7 +35,7 @@ parser.add_argument("--agents", nargs="*", default=[settings["defaults"]["agent"
 parser.add_argument("--tasks", type=int, default=os.cpu_count())
 parser.add_argument("--metrics", nargs="*", default=[settings["defaults"]["metric"]])
 parser.add_argument(
-    "--metric_evaluator", default="CumulativeMetricEvaluator"
+    "--metric_evaluator", default="UserCumulativeInteractionMetricEvaluator"
 )
 utils.load_settings_to_parser(settings, parser)
 args = parser.parse_args()

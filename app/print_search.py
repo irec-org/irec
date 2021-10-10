@@ -34,7 +34,7 @@ parser.add_argument("--agents", nargs="*", default=[settings["defaults"]["agent"
 parser.add_argument(
     "--dataset_loaders", nargs="*", default=[settings["defaults"]["dataset_loader"]]
 )
-parser.add_argument("--metric_evaluator", default="CumulativeMetricEvaluator")
+parser.add_argument("--metric_evaluator", default="UserCumulativeInteractionMetricEvaluator")
 parser.add_argument("--metrics", nargs="*", default=[settings["defaults"]["metric"]])
 utils.load_settings_to_parser(settings, parser)
 args = parser.parse_args()
