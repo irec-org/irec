@@ -20,6 +20,7 @@ CB:
         C: 0.5
         D: 3
         num_clusters: 4
+        num_lat: 10
 COFIBA:
   SimpleAgent:
     action_selection_policy:
