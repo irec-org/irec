@@ -2927,6 +2927,7 @@ MovieLens 100k O:
           B: 5
           C: 0.5
           D: 3
+          num_lat: 10
           num_clusters: 4
   COFIBA:
     SimpleAgent:
