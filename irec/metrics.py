@@ -98,7 +98,7 @@ class Recall(Metric):
     """Recall.
     
     Recall represents the probability that a relevant item will be selected. 
-    (right predictions/wrong predictions)
+    (true positive/false negative)
     """
 
     def __init__(self, users_false_negative, *args, **kwargs):
@@ -140,7 +140,7 @@ class Precision(Metric):
     """Precision.
 
     Precision is defined as the percentage of predictions we get right.
-    (right predictions)/(total predictions).
+    (true positive)/(total predictions).
     """
 
     def __init__(self, *args, **kwargs):
