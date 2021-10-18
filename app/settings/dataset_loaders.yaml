@@ -96,13 +96,13 @@
 
 'LastFM 5k':
   crono: false
-  dataset_path: '../data/datasets/LastFM 5k/'
+  dataset_path: './data/datasets/LastFM 5k/'
   random_seed: 0
   test_consumes: 1
   train_size: 0.8
 'LastFM 5k Validation':
   crono: false
-  dataset_path: '../data/datasets/LastFM 5k/'
+  dataset_path: './data/datasets/LastFM 5k/'
   random_seed: 0
   test_consumes: 1
   train_size: 0.8
