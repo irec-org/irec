@@ -27,9 +27,10 @@ This module implements several assessment policies that will define how
 to assess the agent after the recommendation process.
 """
 
+
 class EvaluationPolicy:
     """EvaluationPolicy.
-        
+
     Defines a form of evaluation for the recommendation process.
     """
 
@@ -37,7 +38,7 @@ class EvaluationPolicy:
         self, model: Agent, train_dataset: Dataset, test_dataset: Dataset
     ) -> [list, dict]:
         """evaluate.
-        
+
         Performs the form of evaluation according to the chosen policy.
 
         Args:
@@ -114,8 +115,10 @@ class Interaction(EvaluationPolicy):
                 (train_dataset.num_total_users, train_dataset.num_total_items),
             )
 
-            items_popularity = irec.value_functions.MostPopular.MostPopular.get_items_popularity(
-                train_consumption_matrix, normalize=True
+            items_popularity = (
+                irec.value_functions.MostPopular.MostPopular.get_items_popularity(
+                    train_consumption_matrix, normalize=True
+                )
             )
 
             for i in range(num_trials):
@@ -123,8 +126,6 @@ class Interaction(EvaluationPolicy):
                 not_recommended = np.ones(num_total_items, dtype=bool)
                 not_recommended[users_items_recommended[uid]] = 0
                 items_not_recommended = np.nonzero(not_recommended)[0]
-                # items_score, info = model.action_estimates((uid,items_not_recommended))
-                # best_items = items_not_recommended[np.argpartition(items_score,-self.interaction_size)[-self.interaction_size:]]
 
                 actions, info = model.act(
                     OneUserCandidateActions(uid, items_not_recommended),
@@ -133,16 +134,16 @@ class Interaction(EvaluationPolicy):
                 if self.save_info:
                     info["trial"] = i
                     info["user_interaction"] = users_num_interactions[uid]
-                    info['rec_items']=actions[1]
-                    if False and isinstance(model.value_function,irec.value_functions.OurMethodInit.OurMethodInit):
-                        if uid == 4653:
-                            info['popularity_correlation']=scipy.stats.pearsonr(items_popularity[items_not_recommended],info['vf_info']['items_score'])[0]
-                            info['popularity_percentile']= scipy.stats.percentileofscore(items_popularity,items_popularity[actions[1][0]])
-                            print('------ interaction',info["user_interaction"])
-                            print_dict(info)
-                            print('------')
-                        del info['vf_info']['items_score']
-                        acts_info.append(info)
+                    # info['rec_items']=actions[1]
+                    # if False and isinstance(model.value_function,irec.value_functions.OurMethodInit.OurMethodInit):
+                    #     if uid == 4653:
+                    #         info['popularity_correlation']=scipy.stats.pearsonr(items_popularity[items_not_recommended],info['vf_info']['items_score'])[0]
+                    #         info['popularity_percentile']= scipy.stats.percentileofscore(items_popularity,items_popularity[actions[1][0]])
+                    #         print('------ interaction',info["user_interaction"])
+                    #         print_dict(info)
+                    #         print('------')
+                    #     del info['vf_info']['items_score']
+                    #     acts_info.append(info)
                 best_items = actions[1]
                 users_items_recommended[uid].extend(best_items)
 
