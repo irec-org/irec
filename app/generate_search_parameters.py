@@ -36,26 +36,24 @@ for agent_name in args.agents:
     template = copy.deepcopy(base_agent_parameters)
     if agent_name == "PTS":
         template["SimpleAgent"]["value_function"]["PTS"]["num_lat"] = [
-            5,
             10,
-            20,
-            50,
         ]
         template["SimpleAgent"]["value_function"]["PTS"]["num_particles"] = [
-            2,
             5,
-            10,
-            20,
         ]
         template["SimpleAgent"]["value_function"]["PTS"]["var_v"] = np.around(
-            np.linspace(0.3, 1.5, 3), 3
+            np.linspace(0.3, 5.0, 8), 3
         ).tolist()
         template["SimpleAgent"]["value_function"]["PTS"]["var_u"] = np.around(
-            np.linspace(0.3, 1.5, 3), 3
+            np.linspace(0.01, 0.5, 4), 3
         ).tolist()
         template["SimpleAgent"]["value_function"]["PTS"]["var"] = np.around(
-            np.linspace(0.3, 1.5, 3), 3
+            # np.linspace(0.3, 5.0, 4), 3
+            np.linspace(0.01, 0.5, 4),
+            3,
         ).tolist()
+
+        # template["SimpleAgent"]["value_function"]["PTS"]["var"] = [0.3]
 
     elif agent_name == "ICTRTS":
         template["SimpleAgent"]["value_function"]["ICTRTS"]["num_lat"] = [
@@ -99,20 +97,25 @@ for agent_name in args.agents:
             4,
             8,
         ]
-        template["SimpleAgent"]["value_function"]["CB"]["B"] = [
-            2,
+        template["SimpleAgent"]["value_function"]["CB"]["num_lat"] = [
             5,
+            10,
+            20,
         ]
-        template["SimpleAgent"]["value_function"]["CB"]["C"] = [
-            0.2,
-            0.5,
-            0.8,
-        ]
-        template["SimpleAgent"]["value_function"]["CB"]["D"] = [
-            1,
-            3,
-            5,
-        ]
+        # template["SimpleAgent"]["value_function"]["CB"]["B"] = [
+        #     2,
+        #     5,
+        # ]
+        # template["SimpleAgent"]["value_function"]["CB"]["C"] = [
+        #     0.2,
+        #     0.5,
+        #     0.8,
+        # ]
+        # template["SimpleAgent"]["value_function"]["CB"]["D"] = [
+        #     1,
+        #     3,
+        #     5,
+        # ]
     else:
 
         raise IndexError("Unrecognized agent")

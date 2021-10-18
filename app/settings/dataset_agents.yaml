@@ -2750,6 +2750,33 @@ LastFM 5K Validation:
         UCB:
           c: 0.01
 LastFM 5k TRTE:
+  ICBandit:
+    SimpleAgent:
+      action_selection_policy:
+        ASPICGreedy:
+          stop: 5
+          num_clusters: 16
+          num_lat: 10
+      value_function:
+        LinUCB:
+          alpha: 1.0
+          num_lat: 10
+  OurMethodOne:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        OurMethodOne:
+          alpha: 0.5
+          num_lat: 10
+  OurMethodZero:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        OurMethodZero:
+          alpha: 0.5
+          num_lat: 10
   LinUCB:
     SimpleAgent:
       action_selection_policy:
@@ -2764,6 +2791,7 @@ LastFM 5k TRTE:
         ASPGreedy: {}
       value_function:
         MostPopular: {}
+
   OurMethod2:
     SimpleAgent:
       action_selection_policy:
@@ -2899,6 +2927,7 @@ MovieLens 100k O:
           B: 5
           C: 0.5
           D: 3
+          num_lat: 10
           num_clusters: 4
   COFIBA:
     SimpleAgent:

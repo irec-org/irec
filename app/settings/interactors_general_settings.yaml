@@ -145,3 +145,9 @@ TSEnsemble_Random:
   name: TSEnsemble-Random
 CB:
   name: Cluster-Bandit
+OurMethodZero:
+  name: WSCB (p=0)
+OurMethodOne:
+  name: WSCB (p=1)
+ICBandit:
+  name: ICBandit
