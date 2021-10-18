@@ -179,7 +179,9 @@ class MovieLens100k(DataProcessor):
 
 class DefaultDataset(DataProcessor):
     def process(self, dataset_dir):
-        data = np.loadtxt(os.path.join(dataset_dir, "ratings.csv"), delimiter=",", skiprows=1)
+        data = np.loadtxt(
+            os.path.join(dataset_dir, "ratings.csv"), delimiter=",", skiprows=1
+        )
         dataset = Dataset(data)
         dataset.update_from_data()
         dataset.update_num_total_users_items()
@@ -199,6 +201,7 @@ class MovieLens1M(DataProcessor):
         dataset.update_num_total_users_items()
         return dataset
 
+
 class MovieLens10M(DataProcessor):
     def process(self, dataset_dir):
         data = np.loadtxt(os.path.join(dataset_dir, "ratings.dat"), delimiter="::")
@@ -213,19 +216,16 @@ class MovieLens10M(DataProcessor):
         return dataset
 
 
-
-
 class Netflix:
-    
     def _netflix_read_ratings(self, fileName):
         file = open(fileName, "r")
         file.readline()
         numratings = np.sum([1 for line in open(fileName)])
         usersId = np.zeros(numratings, dtype=np.int32)
         itemsId = np.zeros(numratings, dtype=np.int32)
-        timestamp = np.zeros(numratings, dtype=np.uint64) 
+        timestamp = np.zeros(numratings, dtype=np.uint64)
         ratings = np.zeros(numratings, dtype=np.uint8)
-        
+
         file = open(fileName, "r")
         file.readline()
         cont = 0
@@ -255,12 +255,12 @@ class Netflix:
         #     dataset_dir + "test.data"
         # )
         # test_data = np.array((u_test, i_test, r_test, t_test))
-        # train_data = np.array((u_train, i_train, r_train, t_train)) 
+        # train_data = np.array((u_train, i_train, r_train, t_train))
 
         usersId, itemsId, ratings, timestamp, numratings = self._netflix_read_ratings(
             dataset_dir + "ratings.csv"
         )
-        dataset = np.array([usersId,itemsId,ratings,timestamp]).T
+        dataset = np.array([usersId, itemsId, ratings, timestamp]).T
         # return train_data, test_data
         dataset = Dataset(dataset)
         dataset.update_from_data()
@@ -287,6 +287,8 @@ class TrainTestConsumption(DataProcessor):
             .to_dict()
             .keys()
         )
+        # test_candidate_users = list(map(int, test_candidate_users))
+        test_candidate_users = np.array(test_candidate_users, dtype=int)
         if self.crono:
             users_start_time = data_df.groupby(0).min()[3].to_numpy()
             test_uids = np.array(
