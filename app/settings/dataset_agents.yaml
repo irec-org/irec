@@ -2395,21 +2395,88 @@ Good Books Validation:
         ASPGreedy: {}
       value_function:
         kNNBandit: {}
-Kindle 4k TRTE:
+
+Kindle 4k:
+  GLM_UCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        GLM_UCB:
+          c: 4
+          item_var: 0.01
+          iterations: 20
+          num_lat: 20
+          stop_criteria: 0.0009
+          user_var: 0.01
+          var: 0.05
+  ICTRTS:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        ICTRTS:
+          num_lat: 5
+          num_particles: 10
   LinUCB:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
         LinUCB:
+          alpha: 0.5
+          num_lat: 10
+  LinearEGreedy:
+    SimpleAgent:
+      action_selection_policy:
+        ASPEGreedy:
+          epsilon: 0.4
+      value_function:
+        LinearEGreedy:
+          item_var: 0.01
+          iterations: 20
+          num_lat: 5
+          stop_criteria: 0.0009
+          user_var: 0.01
+          var: 0.05
+  LinearUCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        LinearUCB:
           alpha: 0.75
+          item_var: 0.01
+          iterations: 20
           num_lat: 20
+          stop_criteria: 0.0009
+          user_var: 0.01
+          var: 0.05
   MostPopular:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
         MostPopular: {}
+  NICF:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        NICF:
+          batch: 128
+          clip_param: 0.2
+          dropout_rate: 0.1
+          gamma: 0.0
+          inner_epoch: 50
+          latent_factor: 30
+          learning_rate: 0.001
+          num_blocks: 2
+          num_heads: 1
+          restore_model: false
+          rnn_layer: 1
+          time_step: 3
+          training_epoch: 30000
   OurMethod2:
     SimpleAgent:
       action_selection_policy:
@@ -2418,53 +2485,40 @@ Kindle 4k TRTE:
         OurMethod2:
           alpha: 0.25
           num_lat: 20
-  OurMethod2var:
+  PTS:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2var:
-          alpha: 0.25
-          lambda_u: 0.01
-          num_lat: 20
-  OurMethodEntropy:
-    SimpleAgent:
-      action_selection_policy:
-        ASPGreedy: {}
-      value_function:
-        OurMethodEntropy:
-          alpha: 0.5
-          num_lat: 20
-  OurMethodPopularity:
-    SimpleAgent:
-      action_selection_policy:
-        ASPGreedy: {}
-      value_function:
-        OurMethodPopularity:
-          alpha: 0.25
-          num_lat: 20
-  OurMethodRandPopularity:
-    SimpleAgent:
-      action_selection_policy:
-        ASPGreedy: {}
-      value_function:
-        OurMethodRandPopularity:
-          alpha: 0.25
-          num_lat: 20
-  OurMethodRandom:
-    SimpleAgent:
-      action_selection_policy:
-        ASPGreedy: {}
-      value_function:
-        OurMethodRandom:
-          alpha: 0.25
-          num_lat: 20
+        PTS:
+          num_lat: 10
+          num_particles: 5
+          var: 0.5
+          var_u: 1.0
+          var_v: 1.0
   Random:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
         Random: {}
+  ThompsonSampling:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        ThompsonSampling:
+          alpha_0: 1
+          beta_0: 100
+  UCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        UCB:
+          c: 0.05
+
+
 Kindle 4k TRTE Validation:
   LinUCB:
     SimpleAgent:
@@ -2523,7 +2577,8 @@ Kindle 4k TRTE Validation:
         OurMethodRandom:
           alpha: 0.25
           num_lat: 20
-LastFM 5K:
+
+LastFM 5k:
   GLM_UCB:
     SimpleAgent:
       action_selection_policy:
@@ -2549,12 +2604,12 @@ LastFM 5K:
     SimpleAgent:
       action_selection_policy:
         ASPEGreedy:
-          epsilon: 0.4
+          epsilon: 0.5
       value_function:
         LinearEGreedy:
           item_var: 0.01
           iterations: 20
-          num_lat: 10
+          num_lat: 20
           stop_criteria: 0.0009
           user_var: 0.01
           var: 0.05
@@ -2564,10 +2619,10 @@ LastFM 5K:
         ASPGreedy: {}
       value_function:
         LinearUCB:
-          alpha: 0.75
+          alpha: 1
           item_var: 0.01
           iterations: 20
-          num_lat: 5
+          num_lat: 20
           stop_criteria: 0.0009
           user_var: 0.01
           var: 0.05
@@ -2589,7 +2644,7 @@ LastFM 5K:
           gamma: 0.0
           inner_epoch: 50
           latent_factor: 20
-          learning_rate: 0.01
+          learning_rate: 0.1
           num_blocks: 2
           num_heads: 1
           restore_model: false
@@ -2602,7 +2657,7 @@ LastFM 5K:
         ASPGreedy: {}
       value_function:
         OurMethod2:
-          alpha: 0.5
+          alpha: 0.25
           num_lat: 20
   PTS:
     SimpleAgent:
@@ -2619,8 +2674,8 @@ LastFM 5K:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
-    value_function:
-      Random: {}
+      value_function:
+        Random: {}
   ThompsonSampling:
     SimpleAgent:
       action_selection_policy:
@@ -2636,6 +2691,8 @@ LastFM 5K:
       value_function:
         UCB:
           c: 0.01
+
+
 LastFM 5K Validation:
   GLM_UCB:
     SimpleAgent:
@@ -6248,6 +6305,130 @@ MovieLens 1M (B):
           alpha_0: 1
           beta_0: 1
           k: 1
+
+Netflix 10K:
+  GLM_UCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        GLM_UCB:
+          c: 4
+          item_var: 0.01
+          iterations: 20
+          num_lat: 10
+          stop_criteria: 0.0009
+          user_var: 0.01
+          var: 0.05
+  ICTRTS:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        ICTRTS:
+          num_lat: 2
+          num_particles: 5
+  LinUCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        LinUCB:
+          alpha: 0.5
+          num_lat: 10
+  LinearEGreedy:
+    SimpleAgent:
+      action_selection_policy:
+        ASPEGreedy:
+          epsilon: 0.1
+      value_function:
+        LinearEGreedy:
+          item_var: 0.01
+          iterations: 20
+          num_lat: 20
+          stop_criteria: 0.0009
+          user_var: 0.01
+          var: 0.05
+  LinearUCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        LinearUCB:
+          alpha: 1
+          item_var: 0.01
+          iterations: 20
+          num_lat: 20
+          stop_criteria: 0.0009
+          user_var: 0.01
+          var: 0.05
+  MostPopular:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        MostPopular: {}
+  NICF:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        NICF:
+          batch: 128
+          clip_param: 0.2
+          dropout_rate: 0.1
+          gamma: 0.0
+          inner_epoch: 50
+          latent_factor: 10
+          learning_rate: 0.1
+          num_blocks: 2
+          num_heads: 1
+          restore_model: false
+          rnn_layer: 1
+          time_step: 3
+          training_epoch: 30000
+  OurMethod2:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        OurMethod2:
+          alpha: 1
+          num_lat: 10
+  PTS:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        PTS:
+          num_lat: 10
+          num_particles: 5
+          var: 0.7
+          var_u: 0.8
+          var_v: 0.9
+  Random:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        Random: {}
+  ThompsonSampling:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        ThompsonSampling:
+          alpha_0: 1
+          beta_0: 100
+  UCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        UCB:
+          c: 0.01
+
+
 Netflix 10k TRTE:
   LinUCB:
     SimpleAgent:
