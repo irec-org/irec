@@ -449,7 +449,8 @@ class AP(Metric):
 class GiniCoefficientInv(Metric):
     """GiniCoefficientInv.
     
-    desc    
+    Diversity is represented as the Gini coefficient – a measure of distributional inequality. 
+    It is measured as the inverse of cumulative frequency that each item is recommended.    
     """
 
     def __init__(self, *args, **kwargs):
