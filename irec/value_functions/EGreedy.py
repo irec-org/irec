@@ -10,7 +10,7 @@ from collections import defaultdict
 class EGreedy(ExperimentalValueFunction):
     """EGreedy.
     
-    desc   
+    In general, ε-Greedy models the problem based on an ε diversification parameter to perform random actions.   
     """
     def __init__(self, *args, **kwargs):
         """__init__.
