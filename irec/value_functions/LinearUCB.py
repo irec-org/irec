@@ -11,20 +11,43 @@ from .LinearICF import LinearICF
 
 
 class LinearUCB(LinearICF):
+    """LinearUCB.
+    
+    An adaptation of the original LinUCB (Lihong Li et al. 2010) to measure
+    the latent dimensions by a PMF formulation.   
+    """
     def __init__(self, alpha, zeta=None, *args, **kwargs):
+        """__init__.
+
+        Args:
+            args:
+            kwargs:
+            alpha:
+        """
         super().__init__(*args, **kwargs)
         if alpha != None:
             self.alpha = alpha
         elif zeta != None:
             self.alpha = 1 + np.sqrt(np.log(2 / zeta) / 2)
 
-
-
     def reset(self, observation):
+        """reset.
+
+        Args:
+            observation: 
+        """
         train_dataset = observation
         super().reset(train_dataset)
 
     def action_estimates(self, candidate_actions):
+        """action_estimates.
+
+        Args:
+            candidate_actions: (user id, candidate_items)
+
+        Returns:
+            numpy.ndarray:
+        """
         uid = candidate_actions[0]
         candidate_items = candidate_actions[1]
         b = self.bs[uid]
@@ -38,6 +61,14 @@ class LinearUCB(LinearICF):
         return items_score, None
 
     def update(self, observation, action, reward, info):
+        """update.
+
+        Args:
+            observation:
+            action: (user id, item)
+            reward (float): reward
+            info: 
+        """
         uid = action[0]
         item = action[1]
         additional_data = info

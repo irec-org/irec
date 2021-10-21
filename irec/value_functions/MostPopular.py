@@ -10,11 +10,31 @@ import random
 
 
 class MostPopular(ExperimentalValueFunction):
+    """Most Popular.
+    
+    It recommends items with the higher number of ratings 
+    received (most-popular) at each iteration.   
+    """
     def __init__(self, *args, **kwargs):
+        """__init__.
+
+        Args:
+            args:
+            kwargs:
+        """
         super().__init__(*args, **kwargs)
 
     @staticmethod
     def get_items_popularity(consumption_matrix, normalize=True):
+        """get_items_popularity.
+        
+        Args:
+            consumption_matrix: consumption_matrix
+            normalize (bool): normalize
+
+        Returns:
+            numpy.ndarray:
+        """
         lowest_value = np.min(consumption_matrix)
         if not isinstance(consumption_matrix, scipy.sparse.spmatrix):
             items_popularity = np.count_nonzero(
@@ -29,6 +49,11 @@ class MostPopular(ExperimentalValueFunction):
         return items_popularity
 
     def reset(self, observation):
+        """reset.
+
+        Args:
+            observation: 
+        """
         train_dataset = observation
         super().reset(train_dataset)
         self.train_dataset = train_dataset
@@ -43,12 +68,29 @@ class MostPopular(ExperimentalValueFunction):
             self.train_consumption_matrix, normalize=False)
 
     def action_estimates(self, candidate_actions):
+        """action_estimates.
+
+        Args:
+            candidate_actions: (user id, candidate_items)
+        
+        Returns:
+            numpy.ndarray:
+        """
         uid = candidate_actions[0]
         candidate_items = candidate_actions[1]
         items_score = self.items_popularity[candidate_items]
+
         return items_score, None
 
     def update(self, observation, action, reward, info):
+        """update.
+
+        Args:
+            observation:
+            action: (user id, item)
+            reward (float): reward
+            info: 
+        """
         uid = action[0]
         item = action[1]
         additional_data = info

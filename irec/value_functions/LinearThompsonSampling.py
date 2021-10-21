@@ -1,7 +1,6 @@
 from .ICF import ICF
 import numpy as np
 from tqdm import tqdm
-#import util
 from threadpoolctl import threadpool_limits
 import ctypes
 from numba import jit
@@ -42,10 +41,24 @@ def _sample_items_weights(user_candidate_items, items_means, items_covs):
 
 
 class LinearThompsonSampling(ICF):
+    """Linear Thompson Sampling.
+    An adaptation of the original Thompson Sampling to measure the latent dimensions by a PMF formulation.
+    """
     def __init__(self, *args, **kwargs):
+        """__init__.
+
+        Args:
+            args:
+            kwargs:
+        """
         super().__init__(*args, **kwargs)
 
     def reset(self, observation):
+        """reset.
+
+        Args:
+            observation: 
+        """ 
         train_dataset = observation
         super().reset(train_dataset)
         self.train_dataset = train_dataset
@@ -75,34 +88,20 @@ class LinearThompsonSampling(ICF):
         self.items_covs = mf_model.items_covs
         self.num_latent_factors = len(self.items_latent_factors[0])
 
-        # num_lat = len(self.items_means[0])
         self.I = np.eye(self.num_latent_factors)
 
-        # user_candidate_items = np.array(list(range(len(self.items_means))))
-        # get number of latent factors
         bs = defaultdict(lambda: np.zeros(self.num_latent_factors))
         As = defaultdict(lambda: self.get_user_lambda() * I)
-        # A = self.get_user_lambda()*I
-        # result = []
-        # num_correct_items = 0
-
-        # get number of latent factors
-
-        # self_id = id(self)
-        # with threadpool_limits(limits=1, user_api='blas'):
-        #     args = [(self_id,int(uid),) for uid in uids]
-        #     results = util.run_parallel(self.interact_user,args)
-        # for i, user_result in enumerate(results):
-        #     self.results[uids[i]] = user_result
-        # self.save_results()
-
-    # @staticmethod
-    # def interact_user(obj_id, uid):
-    #     self = ctypes.cast(obj_id, ctypes.py_object).value
-    #     if not issubclass(self.__class__,ICF): # DANGER CODE
-    #         raise RuntimeError
 
     def action_estimates(self, candidate_actions):
+        """action_estimates.
+
+        Args:
+            candidate_actions: (user id, candidate_items)
+        
+        Returns:
+            numpy.ndarray:
+        """
         uid = candidate_actions[0]
         candidate_items = candidate_actions[1]
         b = bs[uid]
@@ -116,22 +115,20 @@ class LinearThompsonSampling(ICF):
 
         items_score = p @ qs.T
         return items_score, {'qs': qs, 'candidate_items': candidate_items}
-        # best_items = user_candidate_items[np.argsort(items_score)[::-1]][:self.interaction_size]
-
-        # result.extend(best_items)
 
     def update(self, observation, action, reward, info):
+        """update.
+
+        Args:
+            observation:
+            action: (user id, item)
+            reward (float): reward
+            info: 
+        """
         uid = action[0]
         item = action[1]
         additional_data = info
         max_q = additional_data['qs'][np.argmax(
             item == additional_data['candidate_items']), :]
         A += max_q[:, None].dot(max_q[None, :])
-        # if self.get_reward(uid,item) >= self.train_dataset.mean_rating:
         b += reward * max_q
-        # num_correct_items += 1
-        # if self.exit_when_consumed_all and num_correct_items == self.users_num_correct_items[uid]:
-        #     print(f"Exiting user {uid} with {len(result)} items in total and {num_correct_items} correct ones")
-        #     return np.array(result)
-
-        # user_candidate_items = user_candidate_items[~np.isin(user_candidate_items,best_items)]

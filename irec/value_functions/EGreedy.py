@@ -8,12 +8,25 @@ from collections import defaultdict
 
 
 class EGreedy(ExperimentalValueFunction):
+    """EGreedy.
+    
+    desc   
+    """
     def __init__(self, *args, **kwargs):
+        """__init__.
+
+        Args:
+            args:
+            kwargs:
+        """
         super().__init__(*args, **kwargs)
-        # self.epsilon = epsilon
-        #
 
     def reset(self, observation):
+        """reset.
+
+        Args:
+            observation: 
+        """
         train_dataset = observation
         super().reset(train_dataset)
         self.train_dataset = train_dataset
@@ -34,6 +47,14 @@ class EGreedy(ExperimentalValueFunction):
             self.update(None, (uid, item), reward, None)
 
     def action_estimates(self, candidate_actions):
+        """action_estimates.
+
+        Args:
+            candidate_actions: (user id, candidate_items)
+
+        Returns:
+            numpy.ndarray:
+        """
         uid = candidate_actions[0]
         candidate_items = candidate_actions[1]
         # if self.epsilon < np.random.rand():
@@ -43,6 +64,14 @@ class EGreedy(ExperimentalValueFunction):
         return items_score, None
 
     def update(self, observation, action, reward, info):
+        """update.
+
+        Args:
+            observation:
+            action: (user id, item)
+            reward (float): reward
+            info: 
+        """
         uid = action[0]
         item = action[1]
         additional_data = info

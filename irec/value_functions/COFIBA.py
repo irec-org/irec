@@ -13,18 +13,51 @@ from .MFValueFunction import MFValueFunction
 
 
 class COFIBA(MFValueFunction):
+    """COFIBA.
+    
+    This method relies on upper-confidence-based tradeoffs between exploration and exploitation,
+    combined with adaptive clustering procedures at both the user and the item sides.
+    """
     def __init__(self, alpha=1, alpha_2=1, *args, **kwargs):
+        """__init__.
+
+        Args:
+            args:
+            kwargs:
+            alpha:
+            alpha_2:
+        """
         super().__init__(*args, **kwargs)
         self.alpha = alpha
         self.alpha_2 = alpha_2
 
 
     def cb(self, alpha, item_latent_factors, m, t):
+        """cb.
+
+        Args:
+            alpha: 
+            item_latent_factors:
+            m: 
+            t: 
+
+        Returns:
+            float
+        """
         return alpha * np.sqrt(item_latent_factors.T @ np.linalg.inv(m)
                                @ item_latent_factors * np.log10(t + 1))
         pass
 
     def update_user_cluster(self, uid, item):
+        """update_user_cluster.
+
+        Args:
+            uid (int): user id
+            item (int): item id
+
+        Returns:
+            :
+        """
         item_cluster = self.items_clustering[item]
         users_graph = self.users_graphs[item_cluster].copy()
         neighbors = np.nonzero(users_graph[uid])[1]
@@ -39,6 +72,13 @@ class COFIBA(MFValueFunction):
         return users_graph, labels
 
     def update_item_cluster(self, uid, item):
+        """update_item_cluster.
+
+        Args:
+            uid (int): user id
+            item (int): item id
+
+        """
         item_cluster = self.items_clustering[item]
         actual_cluster_items = set(
             np.nonzero(self.items_clustering == item_cluster)[0])
@@ -72,6 +112,14 @@ class COFIBA(MFValueFunction):
 
     @staticmethod
     def new_graph(n):
+        """new_graph.
+
+        Args:
+            n (int):
+
+        Returns:
+            sparse matrix:
+        """
         graph = scipy.sparse.random(n,
                                     n,
                                     density=2 * np.log(n) / n,
@@ -85,12 +133,28 @@ class COFIBA(MFValueFunction):
 
     @staticmethod
     def symmetrize_matrix(m):
+        """symmetrize_matrix.
+
+        Args:
+            m (int):
+
+        """
         for i in range(m.shape[0]):
             for j in range(m.shape[0]):
                 if j < i:
                     m[j, i] = m[i, j]
 
     def score(self, uid, item, user_connected_component):
+        """score.
+
+        Args:
+            uid (int): user id
+            item (int): item id
+            user_connected_component:
+
+        Returns:
+            :
+        """
         neighbors = user_connected_component
         num_neighbors = len(neighbors)
         cluster_m = self.I + np.add.reduce(self.users_m[np.append(
@@ -102,6 +166,11 @@ class COFIBA(MFValueFunction):
                             cluster_m, self.t)
 
     def reset(self, observation):
+        """reset.
+
+        Args:
+            observation: 
+        """
         train_dataset = observation
         super().reset(train_dataset)
         self.train_dataset = train_dataset
@@ -145,6 +214,14 @@ class COFIBA(MFValueFunction):
         self.recent_predict = True
 
     def action_estimates(self, candidate_actions):
+        """action_estimates.
+
+        Args:
+            candidate_actions: (user id, candidate_items)
+
+        Returns:
+            numpy.ndarray:
+        """
         uid = candidate_actions[0]
         candidate_items = candidate_actions[1]
         items_score = np.zeros(candidate_items.shape)
@@ -156,6 +233,14 @@ class COFIBA(MFValueFunction):
         return items_score, None
 
     def update(self, observation, action, reward, info):
+        """update.
+
+        Args:
+            observation:
+            action: (user id, item)
+            reward (float): reward
+            info: 
+        """
         uid = action[0]
         item = action[1]
         additional_data = info

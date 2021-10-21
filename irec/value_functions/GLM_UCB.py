@@ -14,7 +14,19 @@ import value_functions
 
 
 class GLM_UCB(LinearICF):
+    """Generalized Linear Model Bandit-Upper Confidence Bound.
+    
+    It follows a similar process as Linear UCB based on the PMF formulation, but it also
+    adds a sigmoid form in the exploitation step and makes a time-dependent exploration.   
+    """
     def __init__(self, c=1.0, *args, **kwargs):
+        """__init__.
+
+        Args:
+            args:
+            kwargs:
+            c (float):
+        """
         super().__init__(*args, **kwargs)
         self.c = c
 
@@ -26,6 +38,11 @@ class GLM_UCB(LinearICF):
         return x
 
     def reset(self, observation):
+        """reset.
+
+        Args:
+            observation: 
+        """ 
         train_dataset = observation
         super().reset(train_dataset)
         self.users_rec_rewards = defaultdict(list)
@@ -42,6 +59,14 @@ class GLM_UCB(LinearICF):
                       for t in range(0, len(u_rec_items_means))]), 0)
 
     def action_estimates(self, candidate_actions):
+        """action_estimates.
+
+        Args:
+            candidate_actions: (user id, candidate_items)
+        
+        Returns:
+            numpy.ndarray:
+        """
         uid = candidate_actions[0]
         candidate_items = candidate_actions[1]
         A = self.As[uid]
@@ -67,6 +92,14 @@ class GLM_UCB(LinearICF):
         return items_score, None
 
     def update(self, observation, action, reward, info):
+        """update.
+
+        Args:
+            observation:
+            action: (user id, item)
+            reward (float): reward
+            info: 
+        """
         uid = action[0]
         item = action[1]
         additional_data = info
