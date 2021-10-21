@@ -95,35 +95,85 @@ class Metric:
 
 
 class Recall(Metric):
+    """Recall.
+    
+    Recall represents the probability that a relevant item will be selected. 
+    (true positive/false negative)
+    """
+
     def __init__(self, users_false_negative, *args, **kwargs):
+        """__init__.
+
+        Args:
+            args:
+            kwargs:
+            users_false_negative:
+        """
+
         super().__init__(*args, **kwargs)
         self.users_true_positive = defaultdict(int)
         self.users_false_negative = users_false_negative
 
     def compute(self, uid: int):
+        """compute.
+
+        Args:
+            uid (int): user id
+        """
         if self.users_true_positive[uid] == 0 and self.users_false_negative[uid] == 0:
             return 0
         return self.users_true_positive[uid] / self.users_false_negative[uid]
 
     def update_recommendation(self, uid: int, item: int, reward: float):
+        """update_recommendation.
+
+        Args:
+            uid (int): user id
+            item (int): item id
+            reward (float): reward
+        """
         if self.relevance_evaluator.is_relevant(reward):
             self.users_true_positive[uid] += 1
 
 
 class Precision(Metric):
+    """Precision.
+
+    Precision is defined as the percentage of predictions we get right.
+    (true positive)/(total predictions).
+    """
+
     def __init__(self, *args, **kwargs):
+        """__init__.
+
+        Args:
+            args:
+            kwargs:
+        """
         super().__init__(*args, **kwargs)
         self.users_true_positive = defaultdict(int)
         self.users_false_positive = defaultdict(int)
 
-    def compute(self, uid):
+    def compute(self, uid: int):
+        """compute.
+
+        Args:
+            uid (int): user id
+        """
         if self.users_true_positive[uid] == 0 and self.users_false_positive[uid] == 0:
             return 0
         return self.users_true_positive[uid] / (
             self.users_true_positive[uid] + self.users_false_positive[uid]
         )
 
-    def update_recommendation(self, uid, item, reward):
+    def update_recommendation(self, uid: int, item: int, reward: float):
+        """update_recommendation.
+
+        Args:
+            uid (int): user id
+            item (int): item id
+            reward (float): reward
+        """
         if self.relevance_evaluator.is_relevant(reward):
             self.users_true_positive[uid] += 1
         else:
@@ -131,14 +181,38 @@ class Precision(Metric):
 
 
 class Hits(Metric):
+    """Hits.
+    
+    Number of recommendations made successfully.
+    (right predictions)
+    """
+
     def __init__(self, *args, **kwargs):
+        """__init__.
+
+        Args:
+            args:
+            kwargs:
+        """
         super().__init__(*args, **kwargs)
         self.users_true_positive = defaultdict(int)
 
-    def compute(self, uid):
+    def compute(self, uid: int):
+        """compute.
+
+        Args:
+            uid (int): user id
+        """
         return self.users_true_positive[uid]
 
-    def update_recommendation(self, uid, item, reward):
+    def update_recommendation(self, uid: int, item: int, reward: float):
+        """update_recommendation.
+
+        Args:
+            uid (int): user id
+            item (int): item id
+            reward (float): reward
+        """
         if self.relevance_evaluator.is_relevant(reward):
             self.users_true_positive[uid] += 1
 
@@ -156,19 +230,44 @@ class NumInteractions(Metric):
 
 
 class EPC(Metric):
+    """Expected Popularity Complement.
+    
+    EPC is a metric that measures the ability of a system to recommend 
+    relevant items that reside in the long-tail.
+    """
+   
     def __init__(self, items_normalized_popularity, *args, **kwargs):
+        """__init__.
+
+        Args:
+            args:
+            kwargs:
+            items_normalized_popularity
+        """
         super().__init__(*args, **kwargs)
         self.users_num_items_recommended = defaultdict(int)
         self.users_prob_not_seen_cumulated = defaultdict(float)
         self.items_normalized_popularity = items_normalized_popularity
 
-    def compute(self, uid):
+    def compute(self, uid: int):
+        """compute.
+
+        Args:
+            uid (int): user id
+        """
         C_2 = 1.0 / self.users_num_items_recommended[uid]
         sum_2 = self.users_prob_not_seen_cumulated[uid]
         EPC = C_2 * sum_2
         return EPC
 
-    def update_recommendation(self, uid, item, reward):
+    def update_recommendation(self, uid: int, item: int, reward: float):
+        """update_recommendation.
+
+        Args:
+            uid (int): user id
+            item (int): item id
+            reward (float): reward
+        """        
         self.users_num_items_recommended[uid] += 1
         probability_seen = self.items_normalized_popularity[item]
         self.users_prob_not_seen_cumulated[uid] += 1 - probability_seen
@@ -211,13 +310,30 @@ class TopItemsMembership(Metric):
 
 
 class ILD(Metric):
+    """Intra-List Diversity.
+
+    This is used to measure the diversity of an individual user’s recommendations and quantifies user-novelty.   
+    """
+
     def __init__(self, items_distance, *args, **kwargs):
+        """__init__.
+
+        Args:
+            args:
+            kwargs:
+            items_distance:
+        """
         super().__init__(*args, **kwargs)
         self.items_distance = items_distance
         self.users_items_recommended = defaultdict(list)
         self.users_local_ild = defaultdict(float)
 
-    def compute(self, uid):
+    def compute(self, uid: int):
+        """compute.
+
+        Args:
+            uid (int): user id
+        """
         user_num_items_recommended = len(self.users_items_recommended[uid])
         if user_num_items_recommended == 0 or user_num_items_recommended == 1:
             return 1.0
@@ -226,7 +342,14 @@ class ILD(Metric):
                 user_num_items_recommended * (user_num_items_recommended - 1) / 2
             )
 
-    def update_recommendation(self, uid, item, reward):
+    def update_recommendation(self, uid: int, item: int, reward: float):
+        """update_recommendation.
+
+        Args:
+            uid (int): user id
+            item (int): item id
+            reward (float): reward
+        """
         self.users_local_ild[uid] += np.sum(
             self.items_distance[self.users_items_recommended[uid], item]
         )
@@ -234,7 +357,20 @@ class ILD(Metric):
 
 
 class EPD:
+    """Expected Profile Distance.
+
+    EPD, on the other hand, is a distance-based novelty measure, which looks
+    at distances between the items inthe user’s profile and the recommended items.   
+    """
     def __init__(self, items_distance, *args, **kwargs):
+        """__init__.
+
+        Args:
+            args:
+            kwargs:
+            items_distance:
+        """
+
         super().__init__(*args, **kwargs)
         self.items_distance = items_distance
         self.users_consumed_items = defaultdict(list)
@@ -246,14 +382,12 @@ class EPD:
             self.users_relevant_items > self.ground_truth_dataset.min_rating
         ] = True
 
-        # rel = np.zeros(self.items_distance.shape[0], dtype=bool)
-        # rel[actual] = 1
-        # self.ground_truth_dataset.data
+    def compute(self, uid: int):
+        """compute.
 
-        # self.users_liked_items = relevance_evaluator.is_relevant()
-
-    def compute(self, uid):
-
+        Args:
+            uid (int): user id
+        """
         rel = np.array(self.users_relevant_items[uid].A).flatten()
         consumed_items = self.users_consumed_items[item]
         predicted = self.users_items_recommended[uid]
@@ -265,13 +399,27 @@ class EPD:
         C = 1 / (len(predicted) * np.sum(rel[consumed_items]))
         return C * np.sum(res)
 
-    def update_recommendation(self, uid, item, reward):
+    def update_recommendation(self, uid: int, item: int, reward: float):
+        """update_recommendation.
+
+        Args:
+            uid (int): user id
+            item (int): item id
+            reward (float): reward
+        """
         self.users_local_ild[uid] += np.sum(
             self.items_distance[self.users_items_recommended[uid], item]
         )
         self.users_items_recommended[uid].append(item)
 
-    def update_consumption_history(self, uid, item, reward):
+    def update_consumption_history(self, uid: int, item: int, reward: float):
+        """update_consumption_history.
+
+        Args:
+            uid (int): user id
+            item (int): item id
+            reward (float): reward
+        """
         self.users_consumed_items[uid].append(item)
 
 
@@ -299,7 +447,19 @@ class AP(Metric):
 
 
 class GiniCoefficientInv(Metric):
+    """GiniCoefficientInv.
+    
+    desc    
+    """
+
     def __init__(self, *args, **kwargs):
+        """__init__.
+
+        Args:
+            args:
+            kwargs:
+            users_covered:
+        """
         super().__init__(*args, **kwargs)
         self.items_frequency = defaultdict(int)
         for item in np.unique(self.ground_truth_dataset.data[:, 1]):
@@ -307,7 +467,12 @@ class GiniCoefficientInv(Metric):
         self.is_computation_updated = False
         self.computation_cache = None
 
-    def compute(self, uid):
+    def compute(self, uid: int):
+        """compute.
+
+        Args:
+            uid (int): user id
+        """
         if self.is_computation_updated == False:
             self.is_computation_updated = True
             x = np.array(list(self.items_frequency.values()))
@@ -317,22 +482,53 @@ class GiniCoefficientInv(Metric):
             self.computation_cache = diff_sum / (len(x) ** 2 * np.mean(x))
         return 1 - self.computation_cache
 
-    def update_recommendation(self, uid, item, reward):
+    def update_recommendation(self, uid: int, item: int, reward: float):
+        """update_recommendation.
+
+        Args:
+            uid (int): user id
+            item (int): item id
+            reward (float): reward
+        """
         self.items_frequency[item] += 1
         if self.is_computation_updated:
             self.is_computation_updated = False
 
 
 class UsersCoverage(Metric):
+    """Users Coverage.
+    
+    It represents the percentage of distinctusers that are interested 
+    in at least k items recommended (k ≥ 1).
+    """
     def __init__(self, users_covered=defaultdict(bool), *args, **kwargs):
+        """__init__.
+
+        Args:
+            args:
+            kwargs:
+            users_covered:
+        """
         super().__init__(*args, **kwargs)
         self.users_covered = users_covered
 
-    def compute(self, uid):
+    def compute(self, uid: int):
+        """compute.
+
+        Args:
+            uid (int): user id
+        """
         l = np.array(list(self.users_covered.values()))
         return np.sum(l) / len(l)
 
-    def update_recommendation(self, uid, item, reward):
+    def update_recommendation(self, uid: int, item: int, reward: float):
+        """update_consumption_history.
+
+        Args:
+            uid (int): user id
+            item (int): item id
+            reward (float): reward
+        """
         if self.users_covered[uid] == False and self.relevance_evaluator.is_relevant(
             reward
         ):
