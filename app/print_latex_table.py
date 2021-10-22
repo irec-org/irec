@@ -147,66 +147,44 @@ datasets_metrics_users_values = defaultdict(
     lambda: defaultdict(lambda: defaultdict(list))
 )
 
-for dataset_name in datasets_names:
+for dataset_loader_name in datasets_names:
 
     for metric_class_name in metrics_classes_names:
         for agent_name in args.agents:
-            agent_parameters = dataset_agents[dataset_name][agent_name]
+            settings["defaults"]["dataset_loader"] = dataset_loader_name
+            settings["defaults"]["agent"] = agent_name
+            agent_parameters = dataset_agents[dataset_loader_name][agent_name]
+            settings["agents"][agent_name] = agent_parameters
+            settings["defaults"]["metric"] = metric_class_name
             agent = utils.create_agent(agent_name, agent_parameters)
             agent_id = utils.get_agent_id(agent_name, agent_parameters)
-            mlflow.set_experiment(settings["defaults"]["evaluation_experiment"])
-            dataset_parameters = settings["dataset_loaders"][dataset_name]
+            dataset_parameters = settings["dataset_loaders"][dataset_loader_name]
             metrics_evaluator_name = metric_evaluator.__class__.__name__
-            parameters_agent_run = (
-                utils.parameters_normalize(
-                    constants.DATASET_PARAMETERS_PREFIX,
-                    dataset_name,
-                    dataset_parameters,
-                )
-                | utils.parameters_normalize(
-                    constants.EVALUATION_POLICY_PARAMETERS_PREFIX,
-                    evaluation_policy_name,
-                    evaluation_policy_parameters,
-                )
-                | utils.parameters_normalize(
-                    constants.AGENT_PARAMETERS_PREFIX, agent_name, agent_parameters
-                )
-            )
+            parameters_agent_run = utils.get_agent_run_parameters(settings)
+            parameters_evaluation_run = utils.get_evaluation_run_parameters(settings)
 
-            parameters_evaluation_run = copy.copy(parameters_agent_run)
-            parameters_evaluation_run |= utils.parameters_normalize(
-                constants.METRIC_EVALUATOR_PARAMETERS_PREFIX, metric_evaluator_name, {}
-            )
-            parameters_evaluation_run |= utils.parameters_normalize(
-                constants.METRIC_PARAMETERS_PREFIX, metric_class_name, {}
-            )
+            mlflow.set_experiment(settings["defaults"]["evaluation_experiment"])
             run = utils.already_ran(
                 parameters_evaluation_run,
                 mlflow.get_experiment_by_name(
                     settings["defaults"]["evaluation_experiment"]
                 ).experiment_id,
             )
-            # print(run)
 
             client = MlflowClient()
             artifact_path = client.download_artifacts(
                 run.info.run_id, "evaluation.pickle"
             )
-            # print(artifact_path)
             metric_values = pickle.load(open(artifact_path, "rb"))
-            # print(metric_values)
             users_items_recommended = metric_values
-            # agent = utils.create_agent_from_settings(agent_name,dataset_name,settings)
-            # print(metric_values)
-            # print(len(metric_values))
 
-            datasets_metrics_values[dataset_name][metric_class_name][agent_name].extend(
+            datasets_metrics_values[dataset_loader_name][metric_class_name][agent_name].extend(
                 [
                     np.mean(list(metric_values[i].values()))
                     for i in range(len(nums_interactions_to_show))
                 ]
             )
-            datasets_metrics_users_values[dataset_name][metric_class_name][
+            datasets_metrics_users_values[dataset_loader_name][metric_class_name][
                 agent_name
             ].extend(
                 np.array(
@@ -220,14 +198,14 @@ for dataset_name in datasets_names:
 utility_scores = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: dict())))
 method_utility_scores = defaultdict(lambda: defaultdict(lambda: dict))
 for num_interaction in range(len(nums_interactions_to_show)):
-    for dataset_name in datasets_names:
+    for dataset_loader_name in datasets_names:
         for metric_class_name in metrics_classes_names:
             for agent_name in args.agents:
                 metric_max_value = np.max(
                     list(
                         map(
                             lambda x: x[num_interaction],
-                            datasets_metrics_values[dataset_name][
+                            datasets_metrics_values[dataset_loader_name][
                                 metric_class_name
                             ].values(),
                         )
@@ -237,34 +215,34 @@ for num_interaction in range(len(nums_interactions_to_show)):
                     list(
                         map(
                             lambda x: x[num_interaction],
-                            datasets_metrics_values[dataset_name][
+                            datasets_metrics_values[dataset_loader_name][
                                 metric_class_name
                             ].values(),
                         )
                     )
                 )
-                metric_value = datasets_metrics_values[dataset_name][metric_class_name][
+                metric_value = datasets_metrics_values[dataset_loader_name][metric_class_name][
                     agent_name
                 ][num_interaction]
-                utility_scores[dataset_name][metric_class_name][agent_name][
+                utility_scores[dataset_loader_name][metric_class_name][agent_name][
                     num_interaction
                 ] = (metric_value - metric_min_value) / (
                     metric_max_value - metric_min_value
                 )
 
 for num_interaction in range(len(nums_interactions_to_show)):
-    for dataset_name in datasets_names:
+    for dataset_loader_name in datasets_names:
         for agent_name in args.agents:
             us = [
-                utility_scores[dataset_name][metric_class_name][agent_name][
+                utility_scores[dataset_loader_name][metric_class_name][agent_name][
                     num_interaction
                 ]
                 * metrics_weights[metric_class_name]
                 for metric_class_name in metrics_classes_names
             ]
             maut = np.sum(us)
-            datasets_metrics_values[dataset_name]["MAUT"][agent_name].append(maut)
-            datasets_metrics_users_values[dataset_name]["MAUT"][agent_name].append(
+            datasets_metrics_values[dataset_loader_name]["MAUT"][agent_name].append(maut)
+            datasets_metrics_users_values[dataset_loader_name]["MAUT"][agent_name].append(
                 np.array([maut] * 100)
             )
 
@@ -301,7 +279,7 @@ if args.type == "pairs":
 else:
     pool_of_methods_to_compare = [[args.agents[i] for i in range(len(args.agents))]]
 print(pool_of_methods_to_compare)
-for dataset_name in datasets_names:
+for dataset_loader_name in datasets_names:
     for metric_class_name in metrics_classes_names:
         for i, num in enumerate(nums_interactions_to_show):
             for methods in pool_of_methods_to_compare:
@@ -314,9 +292,9 @@ for dataset_name in datasets_names:
                                 del datasets_metrics_values_tmp[k1][k2][k3]
                         # print(datasets_metrics_values_tmp[k1][k2])
                 # datasets_metrics_values_tmp =datasets_metrics_values
-                datasets_metrics_best[dataset_name][metric_class_name][
+                datasets_metrics_best[dataset_loader_name][metric_class_name][
                     max(
-                        datasets_metrics_values_tmp[dataset_name][
+                        datasets_metrics_values_tmp[dataset_loader_name][
                             metric_class_name
                         ].items(),
                         key=lambda x: x[1][i],
@@ -328,34 +306,34 @@ for dataset_name in datasets_names:
                     best_itr = args.r
                 else:
                     best_itr = max(
-                        datasets_metrics_values_tmp[dataset_name][
+                        datasets_metrics_values_tmp[dataset_loader_name][
                             metric_class_name
                         ].items(),
                         key=lambda x: x[1][i],
                     )[0]
-                best_itr_vals = datasets_metrics_values_tmp[dataset_name][
+                best_itr_vals = datasets_metrics_values_tmp[dataset_loader_name][
                     metric_class_name
                 ].pop(best_itr)
                 best_itr_val = best_itr_vals[i]
                 second_best_itr = max(
-                    datasets_metrics_values_tmp[dataset_name][
+                    datasets_metrics_values_tmp[dataset_loader_name][
                         metric_class_name
                     ].items(),
                     key=lambda x: x[1][i],
                 )[0]
-                second_best_itr_vals = datasets_metrics_values_tmp[dataset_name][
+                second_best_itr_vals = datasets_metrics_values_tmp[dataset_loader_name][
                     metric_class_name
                 ][second_best_itr]
                 second_best_itr_val = second_best_itr_vals[i]
                 # come back with value in dict
-                datasets_metrics_values_tmp[dataset_name][metric_class_name][
+                datasets_metrics_values_tmp[dataset_loader_name][metric_class_name][
                     best_itr
                 ] = best_itr_vals
 
-                best_itr_users_val = datasets_metrics_users_values[dataset_name][
+                best_itr_users_val = datasets_metrics_users_values[dataset_loader_name][
                     metric_class_name
                 ][best_itr][i]
-                second_best_itr_users_val = datasets_metrics_users_values[dataset_name][
+                second_best_itr_users_val = datasets_metrics_users_values[dataset_loader_name][
                     metric_class_name
                 ][second_best_itr][i]
 
@@ -368,27 +346,27 @@ for dataset_name in datasets_names:
                     )
                 except:
                     print("Wilcoxon error")
-                    datasets_metrics_gain[dataset_name][metric_class_name][best_itr][
+                    datasets_metrics_gain[dataset_loader_name][metric_class_name][best_itr][
                         i
                     ] = bullet_str
                     continue
 
                 if pvalue > 0.05:
-                    datasets_metrics_gain[dataset_name][metric_class_name][best_itr][
+                    datasets_metrics_gain[dataset_loader_name][metric_class_name][best_itr][
                         i
                     ] = bullet_str
                 else:
                     # print(best_itr,best_itr_val,second_best_itr,second_best_itr_val,methods)
                     if best_itr_val < second_best_itr_val:
-                        datasets_metrics_gain[dataset_name][metric_class_name][
+                        datasets_metrics_gain[dataset_loader_name][metric_class_name][
                             best_itr
                         ][i] = triangle_down_str
                     elif best_itr_val > second_best_itr_val:
-                        datasets_metrics_gain[dataset_name][metric_class_name][
+                        datasets_metrics_gain[dataset_loader_name][metric_class_name][
                             best_itr
                         ][i] = triangle_up_str
                     else:
-                        datasets_metrics_gain[dataset_name][metric_class_name][
+                        datasets_metrics_gain[dataset_loader_name][metric_class_name][
                             best_itr
                         ][i] = bullet_str
 

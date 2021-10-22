@@ -8,7 +8,7 @@
   train_size: 0.8
 'MovieLens 100k O':
   crono: false
-  dataset_path: ../data/datasets/ml-100k/
+  dataset_path: ./data/datasets/ml-100k/
   random_seed: 0
   test_consumes: 1
   train_size: 0.8
@@ -56,39 +56,39 @@
 #Default Loaders
 
 'MovieLens 1M':
-  dataset_path: ../data/datasets/MovieLens 1M/
+  dataset_path: ./data/datasets/MovieLens 1M/
   train_size: 0.8
   test_consumes: 1
   crono: False
   random_seed: 0
 'MovieLens 1M Validation':
-  dataset_path: ../data/datasets/MovieLens 1M/
+  dataset_path: ./data/datasets/MovieLens 1M/
   train_size: 0.8
   test_consumes: 1
   crono: False
   random_seed: 0
 
 'MovieLens 10M':
-  dataset_path: ../data/datasets/MovieLens 10M/
+  dataset_path: ./data/datasets/MovieLens 10M/
   train_size: 0.8
   test_consumes: 1
   crono: False
   random_seed: 0
 'MovieLens 10M Validation':
-  dataset_path: ../data/datasets/MovieLens 10M/
+  dataset_path: ./data/datasets/MovieLens 10M/
   train_size: 0.8
   test_consumes: 1
   crono: False
   random_seed: 0
 
 'MovieLens 20M':
-  dataset_path: ../data/datasets/MovieLens 20M/
+  dataset_path: ./data/datasets/MovieLens 20M/
   train_size: 0.8
   test_consumes: 1
   crono: False
   random_seed: 0
 'MovieLens 20M Validation':
-  dataset_path: ../data/datasets/MovieLens 20M/
+  dataset_path: ./data/datasets/MovieLens 20M/
   train_size: 0.8
   test_consumes: 1
   crono: False
@@ -109,91 +109,91 @@
 
 'Kindle Store':
   crono: false
-  dataset_path: ../data/datasets/Kindle Store/
+  dataset_path: ./data/datasets/Kindle Store/
   random_seed: 0
   test_consumes: 1
   train_size: 0.8
 'Kindle Store Validation':
   crono: false
-  dataset_path: ../data/datasets/Kindle Store/
+  dataset_path: ./data/datasets/Kindle Store/
   random_seed: 0
   test_consumes: 1
   train_size: 0.8
 
 'Kindle Store 4k':
   crono: false
-  dataset_path: ../data/datasets/Kindle Store 4k/
+  dataset_path: ./data/datasets/Kindle Store 4k/
   random_seed: 0
   test_consumes: 1
   train_size: 0.8
 'Kindle Store 4k Validation':
   crono: false
-  dataset_path: ../data/datasets/Kindle Store 4k/
+  dataset_path: ./data/datasets/Kindle Store 4k/
   random_seed: 0
   test_consumes: 1
   train_size: 0.8
 
 'Netflix':
   crono: false
-  dataset_path: ../data/datasets/Netflix/
+  dataset_path: ./data/datasets/Netflix/
   random_seed: 0
   test_consumes: 1
   train_size: 0.8
 'Netflix Validation':
   crono: false
-  dataset_path: ../data/datasets/Netflix/
+  dataset_path: ./data/datasets/Netflix/
   random_seed: 0
   test_consumes: 1
   train_size: 0.8
 
 'Netflix 10k':
   crono: false
-  dataset_path: ../data/datasets/Netflix 10k/
+  dataset_path: ./data/datasets/Netflix 10k/
   random_seed: 0
   test_consumes: 1
   train_size: 0.8
 'Netflix 10k Validation':
   crono: false
-  dataset_path: ../data/datasets/Netflix 10k/
+  dataset_path: ./data/datasets/Netflix 10k/
   random_seed: 0
   test_consumes: 1
   train_size: 0.8
 
 'Good Books':
   crono: false
-  dataset_path: ../data/datasets/Good Books/
+  dataset_path: ./data/datasets/Good Books/
   random_seed: 0
   test_consumes: 1
   train_size: 0.8
 'Good Books Validation':
   crono: false
-  dataset_path: ../data/datasets/Good Books/
+  dataset_path: ./data/datasets/Good Books/
   random_seed: 0
   test_consumes: 1
   train_size: 0.8
 
 'Yahoo Music':
   crono: false
-  dataset_path: ../data/datasets/Yahoo Music/
+  dataset_path: ./data/datasets/Yahoo Music/
   random_seed: 0
   test_consumes: 1
   train_size: 0.8
 'Yahoo Music Validation':
   crono: false
-  dataset_path: ../data/datasets/Yahoo Music/
+  dataset_path: ./data/datasets/Yahoo Music/
   random_seed: 0
   test_consumes: 1
   train_size: 0.8
 
 'Good Reads 10k':
   crono: false
-  dataset_path: ../data/datasets/Good Reads 10k/
+  dataset_path: ./data/datasets/Good Reads 10k/
   random_seed: 0
   test_consumes: 1
   train_size: 0.8
 'Good Reads 10k Validation':
   crono: false
-  dataset_path: ../data/datasets/Good Reads 10k/
+  dataset_path: ./data/datasets/Good Reads 10k/
   random_seed: 0
   test_consumes: 1
   train_size: 0.8

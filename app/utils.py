@@ -2,9 +2,9 @@ from os.path import dirname, realpath, sep, pardir
 import os
 import sys
 
-
 sys.path.append(dirname(dirname(realpath(__file__))))
 import re
+from app import errors
 import pickle
 import mlflow.tracking
 import mlflow.entities
@@ -187,11 +187,16 @@ def flatten_dict(d, parent_key="", sep="."):
             items.append((new_key, v))
     return dict(items)
 
+def rec_defaultdict(d=None):
+    if d == None:
+        return defaultdict(rec_defaultdict)
+    else:
+        return defaultdict(rec_defaultdict,d)
 
 def defaultify(d):
     if not isinstance(d, dict):
         return d
-    return defaultdict(lambda: dict, {k: defaultify(v) for k, v in d.items()})
+    return defaultdict(lambda: dict(), {k: defaultify(v) for k, v in d.items()})
 
 
 def _do_nothing(d):
@@ -412,7 +417,7 @@ def create_value_function(value_function_settings):
     value_function_name = list(value_function_settings.keys())[0]
     value_function_parameters = list(value_function_settings.values())[0]
 
-    if value_function_name in ['OurMethodRandom','OurMethodRandPopularity','OurMethodEntropy','OurMethodPopularity']:
+    if value_function_name in ['OurMethodRandom','OurMethodRandPopularity','OurMethodEntropy','OurMethodPopularity','OurMethodOne','OurMethodZero']:
         exec("import irec.value_functions.OurMethodInit")
         value_function = eval(
             "irec.value_functions.OurMethodInit.{}".format(value_function_name)
@@ -471,7 +476,7 @@ def create_agent_from_settings(agent_name, dataset_preprocessor_name, settings):
 
 
 def default_to_regular(d):
-    if isinstance(d, defaultdict):
+    if isinstance(d, (defaultdict,dict)):
         d = {k: default_to_regular(v) for k, v in d.items()}
     return d
 
@@ -516,7 +521,7 @@ def already_ran(parameters, experiment_id):
     parameters, and experiment id already ran. The run must have completed
     successfully and have at least the parameters provided.
     """
-    # print(experiment_id)
+    # print('Exp',experiment_id)
     all_run_infos = mlflow.list_run_infos(
         experiment_id, order_by=["attribute.end_time DESC"]
     )
@@ -582,8 +587,9 @@ def log_custom_parameters(settings: dict) -> None:
 # log_custom_parameters(cn, name, {cn:settings})
 
 
+import secrets
 def log_custom_artifact(fname, obj):
-    fnametmp = f"./tmp/{fname}"
+    fnametmp = f"./tmp/{secrets.token_urlsafe(16)}/{fname}"
     create_path_to_file(fnametmp)
     with open(fnametmp, mode="wb") as f:
         pickle.dump(obj, f)
@@ -636,7 +642,16 @@ def run_agent(traintest_dataset, settings, forced_run):
     )
 
 
-def evaluate_itr(dataset, settings):
+def evaluate_itr(dataset, settings,forced_run):
+    run = get_evaluation_run(settings)
+    if forced_run == False and run != None:
+        print(
+            "Already executed {} in {}".format(
+                get_evaluation_run_parameters(settings),
+                settings["defaults"]["agent_experiment"],
+            )
+        )
+        return
     agent_parameters = settings["agents"][settings["defaults"]["agent"]]
 
     dataset_parameters = settings["dataset_loaders"][
@@ -716,7 +731,10 @@ def load_evaluation_experiment(settings):
         settings["defaults"]["dataset_loader"]
     ]
     # metrics_evaluator_name = settings["defaults"]["metric_evaluator"]
-    run = get_agent_run(settings)
+    run = get_evaluation_run(settings)
+
+    if run == None:
+        raise errors.EvaluationRunNotFoundError("Could not find evaluation run")
     client = MlflowClient()
     artifact_path = client.download_artifacts(run.info.run_id, "evaluation.pickle")
     # print(artifact_path)
@@ -783,6 +801,16 @@ def get_agent_run(settings):
         agent_run_parameters,
         mlflow.get_experiment_by_name(
             settings["defaults"]["agent_experiment"]
+        ).experiment_id,
+    )
+    return run
+
+def get_evaluation_run(settings):
+    evaluation_run_parameters = get_evaluation_run_parameters(settings)
+    run = already_ran(
+        evaluation_run_parameters,
+        mlflow.get_experiment_by_name(
+            settings["defaults"]["evaluation_experiment"]
         ).experiment_id,
     )
     return run

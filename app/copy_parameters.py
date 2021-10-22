@@ -11,12 +11,16 @@ parser.add_argument('-tb', nargs='*')
 args = parser.parse_args()
 
 settings = utils.load_settings()
+dataset_agents = utils.defaultify(yaml.load(
+    open("./settings/dataset_agents.yaml"), Loader=yaml.SafeLoader
+))
 print(args)
+print(dataset_agents)
 for agent_name in args.m:
     for source_base, target_base in zip(args.sb, args.tb):
-        settings['agents_preprocessor_parameters'][target_base][
-            agent_name] = settings['agents_preprocessor_parameters'][
+        dataset_agents[target_base][
+            agent_name] = dataset_agents[
                 source_base][agent_name]
 
-open('settings/agents_preprocessor_parameters.yaml',
-     'w').write(yaml.dump(settings['agents_preprocessor_parameters']))
+open('settings/dataset_agents.yaml',
+     'w').write(yaml.dump(utils.default_to_regular(dataset_agents)))

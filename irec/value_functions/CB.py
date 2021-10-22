@@ -7,6 +7,7 @@ import scipy.stats
 from collections import defaultdict
 from sklearn.cluster import KMeans
 import itertools
+import mf
 
 # from joblib import Memory
 from cachetools import cached
@@ -38,6 +39,7 @@ class CB(ExperimentalValueFunction):
         B: float,
         C: float,
         D: float,
+        num_lat: int,
         # cache_dir: str,
         *args,
         **kwargs
@@ -46,7 +48,9 @@ class CB(ExperimentalValueFunction):
         self.B = B
         self.C = C
         self.D = D
+        self.num_lat = num_lat
         self.num_clusters = num_clusters
+
         # self.cache_dir = cache_dir
 
         # self.Gamma = cached(self.Gamma,)
@@ -85,12 +89,12 @@ class CB(ExperimentalValueFunction):
 
     def Rn(self, uid, g, h):
         # items = [
-            # vi
-            # for vi in range(self.num_total_items)
-            # if self.groups_mean[g, vi] != self.groups_mean[h, vi]
+        # vi
+        # for vi in range(self.num_total_items)
+        # if self.groups_mean[g, vi] != self.groups_mean[h, vi]
         # ]
         items = np.arange(self.num_total_items)
-        items=items[self.groups_mean[g, items]!= self.groups_mean[h, items]]
+        items = items[self.groups_mean[g, items] != self.groups_mean[h, items]]
         # self.[]
         alphas = np.array([self.alpha(vi, g, h) for vi in items])
         with np.errstate(invalid="ignore"):
@@ -135,7 +139,12 @@ class CB(ExperimentalValueFunction):
             ),
             (self.train_dataset.num_total_users, self.train_dataset.num_total_items),
         )
-        kmeans = KMeans(self.num_clusters).fit(self.train_consumption_matrix)
+
+        # self.train_consumption_matrix
+
+        mf_model = mf.SVD(num_lat=self.num_lat)
+        mf_model.fit(self.train_consumption_matrix)
+        kmeans = KMeans(self.num_clusters).fit(mf_model.users_weights)
         self.num_total_items = self.train_dataset.num_total_items
         self.num_total_users = self.train_dataset.num_total_users
 
@@ -149,12 +158,15 @@ class CB(ExperimentalValueFunction):
         for group, uids in self.groups_users.items():
             ratings = self.train_consumption_matrix[uids]
             self.groups_mean[group] = ratings.mean(axis=0)
+            num = np.array((ratings > 0).sum(axis=0)).flatten()
+            # print(num.shape)
             try:
                 self.groups_std[group] = _stds(ratings, axis=0)
             except:
                 self.groups_std[group] = np.zeros(self.num_total_items)
+            self.groups_std[group] += 0.5 * np.sqrt(np.log(1 / 0.2) / (num + 0.01))
             # print(group, self.groups_std[group])
-        self.groups_std[self.groups_std < 0.01] = 0.01
+        # self.groups_std[self.groups_std] +=
 
         self.consumption_matrix = self.train_consumption_matrix.todok()
         self.exploration_phase = defaultdict(lambda: True)
@@ -208,12 +220,9 @@ class CB(ExperimentalValueFunction):
                 if len(candidates_groups) != 0:
                     g_hat = np.argmax([self.I(uid, g) for g in self.groups])
                     result_explore = self.explore(g_hat, candidate_items)
-                    cond1 = np.sum(
-                        [
-                            self.groups_mean[g_hat, vi] ** 2
-                            / self.groups_std[g_hat, vi]
-                            for vi in range(self.num_total_items)
-                        ]
+                    cond1 = (
+                        np.min([self.Sigma(g_hat, h) for h in range(self.num_clusters)])
+                        >= self.B
                     )
                     if cond1 or (
                         len(candidates_groups) == 1

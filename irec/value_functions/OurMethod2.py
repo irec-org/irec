@@ -24,8 +24,9 @@ def _prediction_rule(A, b, items_weights, alpha):
     items_uncertainty = np.sqrt(
         np.sum(items_weights.dot(np.linalg.inv(A)) * items_weights, axis=1))
     items_user_similarity = user_latent_factors @ items_weights.T
-    user_model_items_score = items_user_similarity + alpha * items_uncertainty
-    return user_model_items_score
+    weighted_items_uncertainty = alpha * items_uncertainty
+    user_model_items_score = items_user_similarity + weighted_items_uncertainty
+    return user_model_items_score, items_user_similarity,weighted_items_uncertainty
 
 
 class OurMethod2(MFValueFunction):
@@ -88,7 +89,7 @@ class OurMethod2(MFValueFunction):
         candidate_items = candidate_actions[1]
         b = self.bs[uid]
         A = self.As[uid]
-        user_model_items_score = _prediction_rule(
+        user_model_items_score,l1,l2 = _prediction_rule(
             A, b, self.items_weights[candidate_items], self.alpha)
         items_score = user_model_items_score
         return items_score, None

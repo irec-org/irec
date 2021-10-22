@@ -32,6 +32,7 @@ parser.add_argument("--metrics", nargs="*", default=[settings["defaults"]["metri
 parser.add_argument(
     "--metric_evaluator", default=settings["defaults"]["metric_evaluator"]
 )
+parser.add_argument("--forced_run", action='store_true', default=False)
 args = parser.parse_args()
 
 
@@ -62,7 +63,7 @@ with ProcessPoolExecutor(max_workers=args.tasks) as executor:
                 settings["defaults"]["metric"] = metric_name
                 settings["defaults"]["metric_evaluator"] = args.metric_evaluator
                 f = executor.submit(
-                    utils.evaluate_itr, dataset, copy.deepcopy(settings)
+                    utils.evaluate_itr, dataset, copy.deepcopy(settings), args.forced_run
                 )
                 futures.add(f)
                 if len(futures) >= args.tasks:
