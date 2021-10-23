@@ -34,7 +34,9 @@ parser.add_argument("--agents", nargs="*", default=[settings["defaults"]["agent"
 parser.add_argument(
     "--dataset_loaders", nargs="*", default=[settings["defaults"]["dataset_loader"]]
 )
-parser.add_argument("--metric_evaluator", default="UserCumulativeInteractionMetricEvaluator")
+parser.add_argument(
+    "--metric_evaluator", default="UserCumulativeInteractionMetricEvaluator"
+)
 parser.add_argument("--metrics", nargs="*", default=[settings["defaults"]["metric"]])
 utils.load_settings_to_parser(settings, parser)
 args = parser.parse_args()
@@ -107,6 +109,7 @@ for dataset_loader_name in args.dataset_loaders:
                 datasets_metrics_values[settings["defaults"]["dataset_loader"]][
                     settings["defaults"]["metric"]
                 ][agent.name][json.dumps(agent_parameters)] = metric_values[-1]
+                print(metric_values[-1])
 # ','.join(map(lambda x: str(x[0])+'='+str(x[1]),list(parameters.items())))
 
 # print(datasets_metrics_values)
