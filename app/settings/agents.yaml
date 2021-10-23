@@ -339,19 +339,19 @@ NICF:
       ASPGreedy: {}
     value_function:
       NICF:
-        batch: 128
+        batch: 256
         clip_param: 0.2
-        dropout_rate: 0.1
+        dropout_rate: 0.01
         gamma: 0.0
         inner_epoch: 50
-        latent_factor: 20
+        latent_factor: 10
         learning_rate: 0.1
-        num_blocks: 2
-        num_heads: 1
+        num_blocks: 1
+        num_heads: 2
         restore_model: false
         rnn_layer: 1
         time_step: 3
-        training_epoch: 30000
+        training_epoch: 10
 OurMethod1:
   SimpleAgent:
     action_selection_policy:

@@ -187,11 +187,13 @@ def flatten_dict(d, parent_key="", sep="."):
             items.append((new_key, v))
     return dict(items)
 
+
 def rec_defaultdict(d=None):
     if d == None:
         return defaultdict(rec_defaultdict)
     else:
-        return defaultdict(rec_defaultdict,d)
+        return defaultdict(rec_defaultdict, d)
+
 
 def defaultify(d):
     if not isinstance(d, dict):
@@ -417,7 +419,14 @@ def create_value_function(value_function_settings):
     value_function_name = list(value_function_settings.keys())[0]
     value_function_parameters = list(value_function_settings.values())[0]
 
-    if value_function_name in ['OurMethodRandom','OurMethodRandPopularity','OurMethodEntropy','OurMethodPopularity','OurMethodOne','OurMethodZero']:
+    if value_function_name in [
+        "OurMethodRandom",
+        "OurMethodRandPopularity",
+        "OurMethodEntropy",
+        "OurMethodPopularity",
+        "OurMethodOne",
+        "OurMethodZero",
+    ]:
         exec("import irec.value_functions.OurMethodInit")
         value_function = eval(
             "irec.value_functions.OurMethodInit.{}".format(value_function_name)
@@ -425,7 +434,9 @@ def create_value_function(value_function_settings):
     else:
         exec("import irec.value_functions.{}".format(value_function_name))
         value_function = eval(
-            "irec.value_functions.{}.{}".format(value_function_name, value_function_name)
+            "irec.value_functions.{}.{}".format(
+                value_function_name, value_function_name
+            )
         )(**value_function_parameters)
     return value_function
 
@@ -476,7 +487,7 @@ def create_agent_from_settings(agent_name, dataset_preprocessor_name, settings):
 
 
 def default_to_regular(d):
-    if isinstance(d, (defaultdict,dict)):
+    if isinstance(d, (defaultdict, dict)):
         d = {k: default_to_regular(v) for k, v in d.items()}
     return d
 
@@ -588,6 +599,8 @@ def log_custom_parameters(settings: dict) -> None:
 
 
 import secrets
+
+
 def log_custom_artifact(fname, obj):
     fnametmp = f"./tmp/{secrets.token_urlsafe(16)}/{fname}"
     create_path_to_file(fnametmp)
@@ -642,7 +655,7 @@ def run_agent(traintest_dataset, settings, forced_run):
     )
 
 
-def evaluate_itr(dataset, settings,forced_run):
+def evaluate_itr(dataset, settings, forced_run):
     run = get_evaluation_run(settings)
     if forced_run == False and run != None:
         print(
@@ -804,6 +817,7 @@ def get_agent_run(settings):
         ).experiment_id,
     )
     return run
+
 
 def get_evaluation_run(settings):
     evaluation_run_parameters = get_evaluation_run_parameters(settings)

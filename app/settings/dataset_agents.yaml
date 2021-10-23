@@ -340,19 +340,19 @@ Good Books:
         ASPGreedy: {}
       value_function:
         NICF:
-          batch: 128
+          batch: 256
           clip_param: 0.2
-          dropout_rate: 0.1
+          dropout_rate: 0.01
           gamma: 0.0
           inner_epoch: 50
-          latent_factor: 30
+          latent_factor: 10
           learning_rate: 0.1
-          num_blocks: 2
-          num_heads: 1
+          num_blocks: 1
+          num_heads: 2
           restore_model: false
           rnn_layer: 1
           time_step: 3
-          training_epoch: 30000
+          training_epoch: 2000
   OurMethod1:
     SimpleAgent:
       action_selection_policy:
@@ -2429,6 +2429,13 @@ Kindle 4k:
           D: 3
           num_clusters: 4
           num_lat: 10
+  EGreedy:
+    SimpleAgent:
+      action_selection_policy:
+        ASPEGreedy:
+          epsilon: 0.001
+      value_function:
+        EGreedy: {}
   GLM_UCB:
     SimpleAgent:
       action_selection_policy:
@@ -2496,19 +2503,19 @@ Kindle 4k:
         ASPGreedy: {}
       value_function:
         NICF:
-          batch: 128
+          batch: 256
           clip_param: 0.2
-          dropout_rate: 0.1
+          dropout_rate: 0.01
           gamma: 0.0
           inner_epoch: 50
-          latent_factor: 30
-          learning_rate: 0.001
-          num_blocks: 2
-          num_heads: 1
+          latent_factor: 10
+          learning_rate: 0.1
+          num_blocks: 1
+          num_heads: 2
           restore_model: false
           rnn_layer: 1
           time_step: 3
-          training_epoch: 30000
+          training_epoch: 2000
   OurMethod2:
     SimpleAgent:
       action_selection_policy:
@@ -2755,6 +2762,13 @@ LastFM 5k:
           D: 3
           num_clusters: 4
           num_lat: 20
+  EGreedy:
+    SimpleAgent:
+      action_selection_policy:
+        ASPEGreedy:
+          epsilon: 0.01
+      value_function:
+        EGreedy: {}
   GLM_UCB:
     SimpleAgent:
       action_selection_policy:
@@ -2814,19 +2828,19 @@ LastFM 5k:
         ASPGreedy: {}
       value_function:
         NICF:
-          batch: 128
+          batch: 256
           clip_param: 0.2
-          dropout_rate: 0.1
+          dropout_rate: 0.01
           gamma: 0.0
           inner_epoch: 50
-          latent_factor: 20
+          latent_factor: 10
           learning_rate: 0.1
-          num_blocks: 2
-          num_heads: 1
+          num_blocks: 1
+          num_heads: 2
           restore_model: false
           rnn_layer: 1
           time_step: 3
-          training_epoch: 30000
+          training_epoch: 2000
   OurMethod2:
     SimpleAgent:
       action_selection_policy:
@@ -3688,19 +3702,19 @@ MovieLens 10M:
         ASPGreedy: {}
       value_function:
         NICF:
-          batch: 128
+          batch: 256
           clip_param: 0.2
-          dropout_rate: 0.1
+          dropout_rate: 0.01
           gamma: 0.0
           inner_epoch: 50
-          latent_factor: 20
+          latent_factor: 10
           learning_rate: 0.1
-          num_blocks: 2
-          num_heads: 1
+          num_blocks: 1
+          num_heads: 2
           restore_model: false
           rnn_layer: 1
           time_step: 3
-          training_epoch: 30000
+          training_epoch: 2000
   OurMethod1:
     SimpleAgent:
       action_selection_policy:
@@ -6409,7 +6423,7 @@ MovieLens 1M (B):
           alpha_0: 1
           beta_0: 1
           k: 1
-Netflix 10K:
+Netflix 10k:
   GLM_UCB:
     SimpleAgent:
       action_selection_policy:
@@ -6471,25 +6485,6 @@ Netflix 10K:
         ASPGreedy: {}
       value_function:
         MostPopular: {}
-  NICF:
-    SimpleAgent:
-      action_selection_policy:
-        ASPGreedy: {}
-      value_function:
-        NICF:
-          batch: 128
-          clip_param: 0.2
-          dropout_rate: 0.1
-          gamma: 0.0
-          inner_epoch: 50
-          latent_factor: 10
-          learning_rate: 0.1
-          num_blocks: 2
-          num_heads: 1
-          restore_model: false
-          rnn_layer: 1
-          time_step: 3
-          training_epoch: 30000
   OurMethod2:
     SimpleAgent:
       action_selection_policy:
@@ -6530,7 +6525,6 @@ Netflix 10K:
       value_function:
         UCB:
           c: 0.01
-Netflix 10k:
   CB:
     SimpleAgent:
       action_selection_policy:
@@ -6542,6 +6536,32 @@ Netflix 10k:
           D: 3
           num_clusters: 8
           num_lat: 10
+  EGreedy:
+    SimpleAgent:
+      action_selection_policy:
+        ASPEGreedy:
+          epsilon: 0.001
+      value_function:
+        EGreedy: {}
+  NICF:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        NICF:
+          batch: 256
+          clip_param: 0.2
+          dropout_rate: 0.01
+          gamma: 0.0
+          inner_epoch: 50
+          latent_factor: 10
+          learning_rate: 0.1
+          num_blocks: 1
+          num_heads: 2
+          restore_model: false
+          rnn_layer: 1
+          time_step: 3
+          training_epoch: 2000
 Netflix 10k TRTE:
   CB:
     SimpleAgent:
@@ -7276,19 +7296,19 @@ Yahoo Music:
         ASPGreedy: {}
       value_function:
         NICF:
-          batch: 128
+          batch: 256
           clip_param: 0.2
-          dropout_rate: 0.1
+          dropout_rate: 0.01
           gamma: 0.0
           inner_epoch: 50
           latent_factor: 10
           learning_rate: 0.1
-          num_blocks: 2
-          num_heads: 1
+          num_blocks: 1
+          num_heads: 2
           restore_model: false
           rnn_layer: 1
           time_step: 3
-          training_epoch: 30000
+          training_epoch: 2000
   OurMethod1:
     SimpleAgent:
       action_selection_policy:
