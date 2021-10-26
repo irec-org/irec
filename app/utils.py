@@ -431,6 +431,13 @@ def create_value_function(value_function_settings):
         value_function = eval(
             "irec.value_functions.OurMethodInit.{}".format(value_function_name)
         )(**value_function_parameters)
+    if value_function_name in [
+        "ICTRTS",
+    ]:
+        exec("import irec.value_functions.ICTR")
+        value_function = eval(
+            "irec.value_functions.ICTR.{}".format(value_function_name)
+        )(**value_function_parameters)
     else:
         exec("import irec.value_functions.{}".format(value_function_name))
         value_function = eval(
