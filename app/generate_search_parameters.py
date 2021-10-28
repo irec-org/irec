@@ -36,13 +36,13 @@ for agent_name in args.agents:
     template = copy.deepcopy(base_agent_parameters)
     if agent_name == "PTS":
         template["SimpleAgent"]["value_function"]["PTS"]["num_lat"] = [
-            10,
+            10
         ]
         template["SimpleAgent"]["value_function"]["PTS"]["num_particles"] = [
-            5,
+            5
         ]
         template["SimpleAgent"]["value_function"]["PTS"]["var_v"] = np.around(
-            np.linspace(0.3, 5.0, 8), 3
+            np.linspace(0.3, 5.0, 3), 3
         ).tolist()
         template["SimpleAgent"]["value_function"]["PTS"]["var_u"] = np.around(
             np.linspace(0.01, 0.5, 4), 3

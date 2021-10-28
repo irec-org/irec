@@ -164,6 +164,7 @@ for dataset_loader_name in datasets_names:
             parameters_evaluation_run = utils.get_evaluation_run_parameters(settings)
 
             mlflow.set_experiment(settings["defaults"]["evaluation_experiment"])
+            print(dataset_loader_name,agent_name)
             run = utils.already_ran(
                 parameters_evaluation_run,
                 mlflow.get_experiment_by_name(

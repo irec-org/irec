@@ -13,6 +13,12 @@ import os
 from copy import copy
 
 
+def _si(x):
+    du0 = np.sort(np.unique(x))
+    ind0 = np.searchsorted(du0, x)
+    return ind0
+
+
 class DatasetPreprocessor:
     def __init__(self, name, dataset_descriptor, preprocessor, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -179,10 +185,17 @@ class MovieLens100k(DataProcessor):
 
 class DefaultDataset(DataProcessor):
     def process(self, dataset_dir):
-        data = np.loadtxt(os.path.join(dataset_dir, "ratings.csv"), delimiter=",", skiprows=1)
+        data = np.loadtxt(
+            os.path.join(dataset_dir, "ratings.csv"), delimiter=",", skiprows=1
+        )
+
+        data[:, 0] = _si(data[:, 0])
+        data[:, 1] = _si(data[:, 1])
+
         dataset = Dataset(data)
         dataset.update_from_data()
         dataset.update_num_total_users_items()
+        # print(max(dataset.uids), dataset.num_total_users)
         return dataset
 
 
@@ -199,6 +212,7 @@ class MovieLens1M(DataProcessor):
         dataset.update_num_total_users_items()
         return dataset
 
+
 class MovieLens10M(DataProcessor):
     def process(self, dataset_dir):
         data = np.loadtxt(os.path.join(dataset_dir, "ratings.dat"), delimiter="::")
@@ -213,19 +227,16 @@ class MovieLens10M(DataProcessor):
         return dataset
 
 
-
-
 class Netflix:
-    
     def _netflix_read_ratings(self, fileName):
         file = open(fileName, "r")
         file.readline()
         numratings = np.sum([1 for line in open(fileName)])
         usersId = np.zeros(numratings, dtype=np.int32)
         itemsId = np.zeros(numratings, dtype=np.int32)
-        timestamp = np.zeros(numratings, dtype=np.uint64) 
+        timestamp = np.zeros(numratings, dtype=np.uint64)
         ratings = np.zeros(numratings, dtype=np.uint8)
-        
+
         file = open(fileName, "r")
         file.readline()
         cont = 0
@@ -255,12 +266,12 @@ class Netflix:
         #     dataset_dir + "test.data"
         # )
         # test_data = np.array((u_test, i_test, r_test, t_test))
-        # train_data = np.array((u_train, i_train, r_train, t_train)) 
+        # train_data = np.array((u_train, i_train, r_train, t_train))
 
         usersId, itemsId, ratings, timestamp, numratings = self._netflix_read_ratings(
             dataset_dir + "ratings.csv"
         )
-        dataset = np.array([usersId,itemsId,ratings,timestamp]).T
+        dataset = np.array([usersId, itemsId, ratings, timestamp]).T
         # return train_data, test_data
         dataset = Dataset(dataset)
         dataset.update_from_data()
@@ -275,8 +286,16 @@ class TrainTestConsumption(DataProcessor):
         self.test_consumes = test_consumes
         self.crono = crono
 
-    def process(self, dataset):
-        data = dataset.data
+    def process(self, ds):
+        data = ds.data
+
+        data[:, 0] = _si(data[:, 0])
+        data[:, 1] = _si(data[:, 1])
+
+        ds = Dataset(data)
+        ds.update_from_data()
+        ds.update_num_total_users_items()
+
         num_users = len(np.unique(data[:, 0]))
         num_train_users = round(num_users * (self.train_size))
         num_test_users = int(num_users - num_train_users)
@@ -288,6 +307,7 @@ class TrainTestConsumption(DataProcessor):
             .keys()
         )
         if self.crono:
+            test_candidate_users = np.array(test_candidate_users, dtype=int)
             users_start_time = data_df.groupby(0).min()[3].to_numpy()
             test_uids = np.array(
                 list(
@@ -305,12 +325,12 @@ class TrainTestConsumption(DataProcessor):
 
         data_isin_test_uids = np.isin(data[:, 0], test_uids)
 
-        train_dataset = copy(dataset)
+        train_dataset = copy(ds)
         train_dataset.data = data[~data_isin_test_uids, :]
-        dataset.update_from_data()
-        test_dataset = copy(dataset)
+        ds.update_from_data()
+        test_dataset = copy(ds)
         test_dataset.data = data[data_isin_test_uids, :]
-        dataset.update_from_data()
+        ds.update_from_data()
         print("Test shape:", test_dataset.data.shape)
         print("Train shape:", train_dataset.data.shape)
         return TrainTestDataset(train=train_dataset, test=test_dataset)

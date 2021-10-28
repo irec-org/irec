@@ -699,9 +699,9 @@ class NICF(ExperimentalValueFunction):
             self.tau += 5
 
     def reset(self, observation):
-        train_dataset = observation
+        train_dataset = copy.deepcopy(observation)
         super().reset(train_dataset)
-        self.train_dataset = copy.copy(train_dataset)
+        self.train_dataset = train_dataset
         self.train_dataset.data[:, 2]
         self.train_dataset.data[:, 2] = np.ceil(self.train_dataset.data[:, 2])
         self.train_dataset.data[:, 0] += 1

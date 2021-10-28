@@ -1,6 +1,8 @@
 import numpy as np
 from tqdm import tqdm
-from . import ValueFunction, ExperimentalValueFunction
+
+# from . import ValueFunction, ExperimentalValueFunction
+from .ExperimentalValueFunction import ExperimentalValueFunction
 import os
 import random
 import scipy.stats
@@ -18,10 +20,12 @@ class EGreedy(ExperimentalValueFunction):
         super().reset(train_dataset)
         self.train_dataset = train_dataset
         self.train_consumption_matrix = scipy.sparse.csr_matrix(
-            (self.train_dataset.data[:, 2],
-             (self.train_dataset.data[:, 0], self.train_dataset.data[:, 1])),
-            (self.train_dataset.num_total_users,
-             self.train_dataset.num_total_items))
+            (
+                self.train_dataset.data[:, 2],
+                (self.train_dataset.data[:, 0], self.train_dataset.data[:, 1]),
+            ),
+            (self.train_dataset.num_total_users, self.train_dataset.num_total_items),
+        )
         self.num_total_items = self.train_consumption_matrix.shape[1]
 
         self.items_mean_values = np.zeros(self.num_total_items)
@@ -47,6 +51,6 @@ class EGreedy(ExperimentalValueFunction):
         item = action[1]
         additional_data = info
         self.items_mean_values[item] = (
-            self.items_mean_values[item] * self.items_count[item] +
-            reward) / (self.items_count[item] + 1)
+            self.items_mean_values[item] * self.items_count[item] + reward
+        ) / (self.items_count[item] + 1)
         self.items_count[item] += 1
