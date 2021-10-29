@@ -12,15 +12,15 @@ LinUCBvar:
 OurMethod1:
   name: Old UCB-Learner
 OurMethod2:
-  name: WSCB
+  name: WSPB
 OurMethod3:
-  name: WSCB Oracle
+  name: WSPB Oracle
 OurMethod4:
-  name: WSCB Parameters-based
+  name: WSPB Parameters-based
 OurMethod5:
-  name: WSCB time-aware
+  name: WSPB time-aware
 OurMethodBalanced:
-  name: WSCB uncertainty-based
+  name: WSPB uncertainty-based
 LinearUCB:
   #name: Linear UCB (PMF)
   name: Linear UCB
@@ -69,17 +69,17 @@ Entropy:
 LogPopEnt:
   name: log(Pop)⋅Ent
 OurMethodInit:
-  name: WSCB Init
+  name: WSPB Init
 OurMethodEntropy:
-  name: WSCB Entropy
+  name: WSPB Entropy
 OurMethodPopularity:
-  name: WSCB Pop
+  name: WSPB Pop
 OurMethodRandPopularity:
-  name: WSCB Rand Pop
+  name: WSPB Rand Pop
 OurMethodRandom:
-  name: WSCB Random
+  name: WSPB Random
 OurMethod2var:
-  name: WSCB var
+  name: WSPB var
 LinearUCBInit:
   name: Linear UCB (PMF) Init
 LinearUCBEntropy:
@@ -105,7 +105,7 @@ LinearEGreedyLogPopEnt:
 OurMethod1Mod:
   name: UCB-Learner Mod
 OurMethod2PCA:
-  name: WSCB PCA
+  name: WSPB PCA
 LinUCBPCA:
   name: LinUCB PCA
 ICTRTS:
@@ -146,8 +146,8 @@ TSEnsemble_Random:
 CB:
   name: Cluster-Bandit
 OurMethodZero:
-  name: WSCB (p=0)
+  name: WSPB (p=0)
 OurMethodOne:
-  name: WSCB (p=1)
+  name: WSPB (p=1)
 ICBandit:
   name: ICBandit

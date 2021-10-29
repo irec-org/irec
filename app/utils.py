@@ -534,15 +534,13 @@ def _get_params(run):
     return run.data.params
 
 
-def already_ran(parameters, experiment_id):
+def already_ran(parameters, experiment_id, runs_infos):
     """Best-effort detection of if a run with the given entrypoint name,
     parameters, and experiment id already ran. The run must have completed
     successfully and have at least the parameters provided.
     """
     # print('Exp',experiment_id)
-    all_run_infos = mlflow.list_run_infos(
-        experiment_id, order_by=["attribute.end_time DESC"]
-    )
+    all_run_infos = runs_infos
     for run_info in all_run_infos:
         # print(run_info)
 
@@ -627,6 +625,12 @@ def load_dataset_experiment(settings):
         mlflow.get_experiment_by_name(
             settings["defaults"]["dataset_experiment"]
         ).experiment_id,
+        runs_infos=mlflow.list_run_infos(
+            mlflow.get_experiment_by_name(
+                settings["defaults"]["dataset_experiment"]
+            ).experiment_id,
+            order_by=["attribute.end_time DESC"],
+        ),
     )
 
     client = MlflowClient()
@@ -822,6 +826,12 @@ def get_agent_run(settings):
         mlflow.get_experiment_by_name(
             settings["defaults"]["agent_experiment"]
         ).experiment_id,
+        runs_infos=mlflow.list_run_infos(
+            mlflow.get_experiment_by_name(
+                settings["defaults"]["agent_experiment"]
+            ).experiment_id,
+            order_by=["attribute.end_time DESC"],
+        ),
     )
     return run
 
@@ -833,6 +843,12 @@ def get_evaluation_run(settings):
         mlflow.get_experiment_by_name(
             settings["defaults"]["evaluation_experiment"]
         ).experiment_id,
+        runs_infos=mlflow.list_run_infos(
+            mlflow.get_experiment_by_name(
+                settings["defaults"]["evaluation_experiment"]
+            ).experiment_id,
+            order_by=["attribute.end_time DESC"],
+        ),
     )
     return run
 
