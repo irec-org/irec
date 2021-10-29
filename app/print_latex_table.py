@@ -147,6 +147,14 @@ datasets_metrics_users_values = defaultdict(
     lambda: defaultdict(lambda: defaultdict(list))
 )
 
+mlflow.set_experiment(settings["defaults"]["evaluation_experiment"])
+
+runs_infos = mlflow.list_run_infos(
+        mlflow.get_experiment_by_name(
+            settings["defaults"]["evaluation_experiment"]
+            ).experiment_id, order_by=["attribute.end_time DESC"]
+        )
+
 for dataset_loader_name in datasets_names:
 
     for metric_class_name in metrics_classes_names:
@@ -170,6 +178,7 @@ for dataset_loader_name in datasets_names:
                 mlflow.get_experiment_by_name(
                     settings["defaults"]["evaluation_experiment"]
                 ).experiment_id,
+                runs_infos
             )
 
             client = MlflowClient()
