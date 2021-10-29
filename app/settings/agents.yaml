@@ -351,7 +351,7 @@ NICF:
         restore_model: false
         rnn_layer: 1
         time_step: 100
-        training_epoch: 2000
+        training_epoch: 10000
 OurMethod1:
   SimpleAgent:
     action_selection_policy:
