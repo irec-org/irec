@@ -2,6 +2,9 @@ Interaction:
   num_interactions: 100
   interaction_size: 1
   save_info: False
+PercentageInteraction:
+  num_interactions: 20
+  interaction_size: 5
 OneInteraction:
   num_interactions: 100
   interaction_size: 1
