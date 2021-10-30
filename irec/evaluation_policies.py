@@ -566,7 +566,7 @@ class PercentageInteraction(EvaluationPolicy):
                         if method == "top_k_items_random":
                             best_items = random.sample(list(items_not_recommended), self.interaction_size)
                         else:
-                            best_items = np.argpartition(self.nonp_methods[method][items_not_recommended], -self.interaction_size)[-self.interaction_size:]
+                            best_items = items_not_recommended[np.argpartition(self.nonp_methods[method][items_not_recommended], -self.interaction_size)[-self.interaction_size:]]
 
                         actions, info = (None, best_items), {"vf_info": None, "asp_info": None}
 
