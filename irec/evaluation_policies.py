@@ -8,18 +8,26 @@ import numpy as np
 import random
 from tqdm import tqdm
 import irec.value_functions
-import irec.value_functions.MostPopular
-import irec.value_functions.OurMethodInit
 from irec.CandidateActions import OneUserCandidateActions
 from irec.utils.dataset import Dataset
 from irec.agents import Agent
-from irec.utils.utils import print_dict
+
+from irec.value_functions.Entropy import Entropy
+from irec.value_functions.MostPopular import MostPopular
+from irec.value_functions.LogPopEnt import LogPopEnt
 
 import matplotlib as mpl
 import seaborn as sns
 import matplotlib.pyplot as plt
 import scipy.stats
 import os
+import pickle
+
+from concurrent.futures import ProcessPoolExecutor
+import multiprocessing
+import itertools
+import dill
+import ctypes
 
 """Evaluation Policies.
 
@@ -27,10 +35,9 @@ This module implements several assessment policies that will define how
 to assess the agent after the recommendation process.
 """
 
-
 class EvaluationPolicy:
     """EvaluationPolicy.
-
+        
     Defines a form of evaluation for the recommendation process.
     """
 
@@ -38,7 +45,7 @@ class EvaluationPolicy:
         self, model: Agent, train_dataset: Dataset, test_dataset: Dataset
     ) -> [list, dict]:
         """evaluate.
-
+        
         Performs the form of evaluation according to the chosen policy.
 
         Args:
@@ -100,32 +107,19 @@ class Interaction(EvaluationPolicy):
             history_items_recommended = []
 
             num_trials = num_test_users * self.num_interactions
-            _intervals = num_trials // 100
-            # _intervals = num_trials // num_trials
+            # _intervals = num_trials // 20
+            _intervals = num_trials // num_trials
             _num_interactions = 0
             pbar = tqdm(total=num_trials)
             pbar.set_description(f"{model.name}")
             acts_info = []
-
-            train_consumption_matrix = scipy.sparse.csr_matrix(
-                (
-                    train_dataset.data[:, 2],
-                    (train_dataset.data[:, 0], train_dataset.data[:, 1]),
-                ),
-                (train_dataset.num_total_users, train_dataset.num_total_items),
-            )
-
-            items_popularity = (
-                irec.value_functions.MostPopular.MostPopular.get_items_popularity(
-                    train_consumption_matrix, normalize=True
-                )
-            )
-
             for i in range(num_trials):
                 uid = random.sample(available_users, k=1)[0]
                 not_recommended = np.ones(num_total_items, dtype=bool)
                 not_recommended[users_items_recommended[uid]] = 0
                 items_not_recommended = np.nonzero(not_recommended)[0]
+                # items_score, info = model.action_estimates((uid,items_not_recommended))
+                # best_items = items_not_recommended[np.argpartition(items_score,-self.interaction_size)[-self.interaction_size:]]
 
                 actions, info = model.act(
                     OneUserCandidateActions(uid, items_not_recommended),
@@ -134,16 +128,7 @@ class Interaction(EvaluationPolicy):
                 if self.save_info:
                     info["trial"] = i
                     info["user_interaction"] = users_num_interactions[uid]
-                    # info['rec_items']=actions[1]
-                    # if False and isinstance(model.value_function,irec.value_functions.OurMethodInit.OurMethodInit):
-                    #     if uid == 4653:
-                    #         info['popularity_correlation']=scipy.stats.pearsonr(items_popularity[items_not_recommended],info['vf_info']['items_score'])[0]
-                    #         info['popularity_percentile']= scipy.stats.percentileofscore(items_popularity,items_popularity[actions[1][0]])
-                    #         print('------ interaction',info["user_interaction"])
-                    #         print_dict(info)
-                    #         print('------')
-                    #     del info['vf_info']['items_score']
-                    #     acts_info.append(info)
+                acts_info.append(info)
                 best_items = actions[1]
                 users_items_recommended[uid].extend(best_items)
 
@@ -539,3 +524,152 @@ class OneInteraction(EvaluationPolicy):
             _num_interactions = 0
             pbar.close()
             return history_items_recommended
+
+
+class PercentageInteraction(EvaluationPolicy):
+    def __init__(
+        self,
+        num_interactions: int,
+        interaction_size: int,
+        *args,
+        **kwargs,
+    ):
+        super().__init__(*args, **kwargs)
+        self.num_interactions = int(num_interactions)
+        self.interaction_size = int(interaction_size)
+
+    @staticmethod
+    def run_eval(parameters):
+        obj_id, uid = parameters[0], parameters[1]
+        self = ctypes.cast(obj_id, ctypes.py_object).value
+
+        history_items_recommended = {}
+
+        for method in self.nonp_methods:
+            history_items_recommended[method] = {}
+            
+            for exchange_point in self.exchange_points:
+                history_items_recommended[method][exchange_point] = []
+                
+                t, num_items = 0, 0
+                max_items = int(len(self.test_consumption_matrix[uid,:].data) * exchange_point)
+                user_items_recommended = self.users_items_recommended_original[uid].copy()
+                not_recommended = np.ones(self.num_total_items, dtype=bool)
+                not_recommended[user_items_recommended] = 0
+                items_not_recommended = np.nonzero(not_recommended)[0]
+
+                while t < self.num_interactions:
+
+                    # rec nonpers
+                    if num_items <= max_items:
+
+                        if method == "top_k_items_random":
+                            best_items = random.sample(list(items_not_recommended), self.interaction_size)
+                        else:
+                            best_items = np.argpartition(self.nonp_methods[method][items_not_recommended], -self.interaction_size)[-self.interaction_size:]
+
+                        actions, info = (None, best_items), {"vf_info": None, "asp_info": None}
+
+                    # rec mab
+                    else:
+
+                        actions, info = self.model.act(
+                            OneUserCandidateActions(uid, items_not_recommended),
+                            self.interaction_size,
+                        )
+
+                    best_items = actions[1]
+                    for item in best_items:
+                        user_items_recommended.append(item)
+                        not_recommended[item] = 0
+                        if self.test_consumption_matrix[uid, item] != 0: 
+                            num_items += 1
+                            self.model.observe(
+                                None, (uid, item), self.test_consumption_matrix[uid, item], info
+                            )
+
+                    items_not_recommended = np.nonzero(not_recommended)[0]
+
+                    if num_items > max_items: 
+                        t += 1
+
+                history_items_recommended[method][exchange_point].append((uid, user_items_recommended))
+
+        return history_items_recommended
+
+    def evaluate(self, model, train_dataset, test_dataset):
+        def getBestRated(ratings_train):
+            best_rated = np.zeros(ratings_train.shape[1])
+            for iid in tqdm(range(ratings_train.shape[1]), position=0, leave=True):
+                item = ratings_train[:,iid].toarray()
+                best_rated[iid] = item.mean()
+            return best_rated
+        
+        # with threadpool_limits(limits=1, user_api="blas"):
+        test_users = np.unique(test_dataset.data[:, 0]).astype(int)
+        self.model = model
+        self.num_total_items = test_dataset.num_total_items
+        self.test_consumption_matrix = scipy.sparse.csr_matrix(
+            (
+                test_dataset.data[:, 2],
+                (
+                    test_dataset.data[:, 0].astype(int),
+                    test_dataset.data[:, 1].astype(int),
+                ),
+            ),
+            shape=(test_dataset.num_total_users, test_dataset.num_total_items),
+        )
+
+        self.users_items_recommended_original = defaultdict(list)
+
+        for i in range(len(train_dataset.data)):
+            uid = int(train_dataset.data[i, 0])
+            if uid in test_users:
+                iid = int(train_dataset.data[i, 1])
+                reward = train_dataset.data[i, 2]
+                self.users_items_recommended_original[uid].append(iid)
+
+        num_test_users = len(test_users)
+        print(f"Starting {self.model.name} Training")
+        self.model.reset(train_dataset)
+        print(f"Ended {model.name} Training")
+        # users_num_interactions = defaultdict(int)
+        available_users = set(test_users)
+
+        train_consumption_matrix = scipy.sparse.csr_matrix(
+            (
+                train_dataset.data[:, 2],
+                (train_dataset.data[:, 0], train_dataset.data[:, 1]),
+            ),
+            (train_dataset.num_total_users, train_dataset.num_total_items),
+        )
+
+        items_entropy = Entropy.get_items_entropy(train_consumption_matrix)
+        items_popularity = MostPopular.get_items_popularity(train_consumption_matrix, normalize=False)
+        items_logPopEnt = LogPopEnt.get_items_logpopent(items_popularity, items_entropy)
+        items_bestRated = getBestRated(train_consumption_matrix)
+
+        self.exchange_points = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]
+        self.nonp_methods = {
+            "top_k_items_entropy": items_entropy,
+            "top_k_items_logPopEnt": items_logPopEnt,
+            "top_k_items_bestRated": items_bestRated,
+            "top_k_items_popularity": items_popularity,
+            "top_k_items_random": None
+        }
+
+        print("num_interactions:", self.num_interactions)
+        print("interaction_size:", self.interaction_size)
+        
+        self_id = id(self)
+        parameters = [[self_id], available_users]
+        parameters = list(itertools.product(*parameters)) 
+
+        executor = ProcessPoolExecutor()
+        num_args = len(parameters)
+        chunksize = int(num_args/multiprocessing.cpu_count())
+
+        print("available_users:", list(available_users)[:5])
+        history_items_recommended = [i for i in tqdm(executor.map(PercentageInteraction.run_eval, parameters),total=num_args)]
+        # pickle.dump(history_items_recommended, open("history_items_recommended.pk", "wb"))
+        return history_items_recommended, None
