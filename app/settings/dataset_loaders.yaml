@@ -196,3 +196,16 @@
   random_seed: 0
   test_consumes: 5
   train_size: 0.8
+
+'Yahoo Music 5k':
+  crono: false
+  dataset_path: ./data/datasets/Yahoo Music 5k/
+  random_seed: 0
+  test_consumes: 1
+  train_size: 0.8
+'Yahoo Music 5k Validation':
+  crono: false
+  dataset_path: ./data/datasets/Yahoo Music 5k/
+  random_seed: 0
+  test_consumes: 1
+  train_size: 0.8
