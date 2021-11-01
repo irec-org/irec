@@ -131,12 +131,34 @@ class _Particle:
 
 
 class ICTRTS(MFValueFunction):
+    """Interactive Collaborative Topic Regression with Thompson Sampling.
+    
+    It is an interactive collaborative topic regression model that utilizes the TS
+    bandit algorithm and controls the items dependency by a particle learning strategy [1]_.
+
+    References
+    ----------
+    .. [1] Wang, Qing, et al. "Online interactive collaborative filtering using multi-armed 
+       bandit with dependent arms." IEEE Transactions on Knowledge and Data Engineering 31.8 (2018): 1569-1580.   
+    """
     def __init__(self, num_particles, *args, **kwargs):
+        """__init__.
+
+        Args:
+            args:
+            kwargs:
+            num_particles (int):
+        """
         super().__init__(*args, **kwargs)
         self.num_particles = num_particles
 
 
     def reset(self, observation):
+        """reset.
+
+        Args:
+            observation: 
+        """ 
         train_dataset = observation
         super().reset(train_dataset)
         self.train_dataset = train_dataset
@@ -169,6 +191,14 @@ class ICTRTS(MFValueFunction):
         ]
 
     def action_estimates(self, candidate_actions):
+        """action_estimates.
+
+        Args:
+            candidate_actions: (user id, candidate_items)
+        
+        Returns:
+            numpy.ndarray:
+        """
         uid = candidate_actions[0]
         candidate_items = candidate_actions[1]
         # items_pool_size = max(int(len(candidate_items)*0.1),num_req_items)
@@ -184,6 +214,14 @@ class ICTRTS(MFValueFunction):
         return items_score, None
 
     def update(self, observation, action, reward, info):
+        """update.
+
+        Args:
+            observation:
+            action: (user id, item)
+            reward (float): reward
+            info: 
+        """
         uid = action[0]
         item = action[1]
         additional_data = info
