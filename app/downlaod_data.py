@@ -2,8 +2,8 @@
 import argparse
 import zipfile
 import shutil 
+import gdown
 import os
-import sys 
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset_name', nargs="*", required=True, type=str, help='Name of dataset')
@@ -26,13 +26,15 @@ datasets_ids = {
 }
 
 dataset_dir = "./data/datasets/"
+url = "https://drive.google.com/uc?id="
+
 if not os.path.isdir(dataset_dir):
 	os.makedirs(dataset_dir)
 
 for dataset in args.dataset_name:
 	print("\nDataset:", dataset)
 	output = f"{dataset_dir}{dataset}.zip"
-	os.system(f'gdown --id {datasets_ids[dataset]} -O "{output}"')
+	gdown.download(f"{url}{datasets_ids[dataset]}", output)
 	with zipfile.ZipFile(output,"r") as zip_ref:
 	    zip_ref.extractall(dataset_dir)
 	os.remove(output)
