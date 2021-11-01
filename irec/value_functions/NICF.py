@@ -601,6 +601,16 @@ def convert_item_seq2matrix(item_seq):
 
 
 class NICF(ExperimentalValueFunction):
+    """NICF.
+    
+    It is an interactive method based on a combination of neural networks and 
+    collaborative filtering that also performs a meta-learning of the user’s preferences [1]_.
+
+    References
+    ----------
+    .. [1] Zhao, Xiaoxue, Weinan Zhang, and Jun Wang. "Interactive collaborative filtering." 
+       Proceedings of the 22nd ACM international conference on Information & Knowledge Management. 2013.   
+    """
     def __init__(
         self,
         time_step,
@@ -619,6 +629,26 @@ class NICF(ExperimentalValueFunction):
         *args,
         **kwargs
     ):
+        """__init__.
+
+        Args:
+            args:
+            kwargs:
+            time_step:
+            latent_factor:
+            learning_rate:
+            training_epoch:
+            rnn_layer:
+            inner_epoch:
+            batch:
+            gamma:
+            clip_param:
+            restore_model:
+            num_blocks:
+            num_heads:
+            dropout_rate:
+        """
+
         super().__init__(*args, **kwargs)
         self.time_step = time_step
         self.latent_factor = latent_factor
@@ -699,9 +729,14 @@ class NICF(ExperimentalValueFunction):
             self.tau += 5
 
     def reset(self, observation):
-        train_dataset = copy.deepcopy(observation)
+        """reset.
+
+        Args:
+            observation: 
+        """ 
+        train_dataset = observation
         super().reset(train_dataset)
-        self.train_dataset = train_dataset
+        self.train_dataset = copy.copy(train_dataset)
         self.train_dataset.data[:, 2]
         self.train_dataset.data[:, 2] = np.ceil(self.train_dataset.data[:, 2])
         self.train_dataset.data[:, 0] += 1
@@ -737,6 +772,14 @@ class NICF(ExperimentalValueFunction):
         pass
 
     def action_estimates(self, candidate_actions):
+        """action_estimates.
+
+        Args:
+            candidate_actions: (user id, candidate_items)
+        
+        Returns:
+            numpy.ndarray:
+        """
         uid = candidate_actions[0]
         candidate_items = candidate_actions[1]
         uid += 1
@@ -759,6 +802,14 @@ class NICF(ExperimentalValueFunction):
         return items_score, None
 
     def update(self, observation, action, reward, info):
+        """update.
+
+        Args:
+            observation:
+            action: (user id, item)
+            reward (float): reward
+            info: 
+        """
         uid = action[0]
         item = action[1]
         additional_data = info

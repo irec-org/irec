@@ -11,7 +11,24 @@ import random
 
 
 class kNNBandit(ExperimentalValueFunction):
+    """k Nearest-Neighbors Bandit.
+    
+    A simple multi-armed bandit elaboration of neighbor-based collaborative filtering. 
+    A variant of the nearest-neighbors scheme, but endowed with a controlled stochastic exploration 
+    capability of the users’ neighborhood, by a parameter-free application of Thompson sampling [1]_.
+
+    References
+    ----------
+    .. [1] Sanz-Cruzado, Javier, Pablo Castells, and Esther López. "A simple multi-armed nearest-neighbor 
+       bandit for interactive recommendation." Proceedings of the 13th ACM Conference on Recommender Systems. 2019.
+    """
     def __init__(self, alpha_0, beta_0, k, *args, **kwargs):
+        """__init__.
+
+        Args:
+            args:
+            kwargs:
+        """
         super().__init__(*args, **kwargs)
         self.alpha_0 = alpha_0
         self.beta_0 = beta_0
@@ -19,6 +36,11 @@ class kNNBandit(ExperimentalValueFunction):
 
 
     def reset(self, observation):
+        """reset.
+
+        Args:
+            observation: 
+        """ 
         train_dataset = observation
         super().reset(train_dataset)
         self.train_dataset = train_dataset
@@ -60,6 +82,14 @@ class kNNBandit(ExperimentalValueFunction):
         del self.train_consumption_matrix
 
     def action_estimates(self, candidate_actions):
+        """action_estimates.
+
+        Args:
+            candidate_actions: (user id, candidate_items)
+        
+        Returns:
+            numpy.ndarray:
+        """
         uid = candidate_actions[0]
         candidate_items = candidate_actions[1]
         users_score = np.zeros(self.num_total_users - 1)
@@ -88,6 +118,14 @@ class kNNBandit(ExperimentalValueFunction):
         return items_score, None
 
     def update(self, observation, action, reward, info):
+        """update.
+
+        Args:
+            observation:
+            action: (user id, item)
+            reward (float): reward
+            info: 
+        """
         uid = action[0]
         item = action[1]
         additional_data = info

@@ -21,7 +21,28 @@ def _softmax(x):
 
 
 class PTS(MFValueFunction):
+    """Particle Thompson sampling.
+    
+    It is a PMF formulation for the original TS based on a Bayesian inference around the items.
+    This method also applies particle filtering to guide the exploration of items over time [1]_.
+
+    References
+    ----------
+    .. [1] Wang, Qing, et al. "Online interactive collaborative filtering using multi-armed 
+       bandit with dependent arms." IEEE Transactions on Knowledge and Data Engineering 31.8 (2018): 1569-1580.   
+    """
+    
     def __init__(self, num_particles, var, var_u, var_v, *args, **kwargs):
+        """__init__.
+
+        Args:
+            args:
+            kwargs:
+            num_particles (int):
+            var:
+            var_u:
+            var_v:
+        """
         super().__init__(*args, **kwargs)
         self.num_particles = num_particles
         self.var = var
@@ -29,6 +50,11 @@ class PTS(MFValueFunction):
         self.var_v = var_v
 
     def reset(self, observation):
+        """reset.
+
+        Args:
+            observation: 
+        """ 
         train_dataset = observation
         super().reset(train_dataset)
         self.train_dataset = train_dataset
@@ -94,6 +120,14 @@ class PTS(MFValueFunction):
         #     self.update(uid,item,reward,None)
 
     def action_estimates(self, candidate_actions):
+        """action_estimates.
+
+        Args:
+            candidate_actions: (user id, candidate_items)
+        
+        Returns:
+            numpy.ndarray:
+        """
         uid = candidate_actions[0]
         candidate_items = candidate_actions[1]
         particle_idx = np.random.choice(self.particles_ids)
@@ -104,6 +138,14 @@ class PTS(MFValueFunction):
         return items_score, None
 
     def update(self, observation, action, reward, info):
+        """update.
+
+        Args:
+            observation:
+            action: (user id, item)
+            reward (float): reward
+            info: 
+        """
         uid = action[0]
         item = action[1]
         additional_data = info
