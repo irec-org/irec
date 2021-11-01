@@ -22,12 +22,10 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import scipy.stats
 import os
-import pickle
 
 from concurrent.futures import ProcessPoolExecutor
 import multiprocessing
 import itertools
-import dill
 import ctypes
 
 """Evaluation Policies.
@@ -569,7 +567,8 @@ class PercentageInteraction(EvaluationPolicy):
                     user_items_recommended.append(item)
                     not_recommended[item] = 0
                     if num_items > max_items: break
- 
+                        
+                del top_k_items
                 items_not_recommended = np.nonzero(not_recommended)[0]
 
                 #rec mab
@@ -585,6 +584,7 @@ class PercentageInteraction(EvaluationPolicy):
                     items_not_recommended = np.nonzero(not_recommended)[0]
 
                 history_items_recommended[method][exchange_point].append((uid, user_items_recommended))
+                del not_recommended, items_not_recommended
         return history_items_recommended
 
     def evaluate(self, model, train_dataset, test_dataset):
@@ -634,10 +634,10 @@ class PercentageInteraction(EvaluationPolicy):
 
         self.exchange_points = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]
         self.nonp_methods = {
-            "top_k_items_popularity": np.argsort(items_popularity)[::-1],
-            "top_k_items_entropy": np.argsort(items_entropy)[::-1],
-            "top_k_items_logPopEnt": np.argsort(items_logPopEnt)[::-1],
-            "top_k_items_bestRated": np.argsort(items_bestRated)[::-1],
+            "top_k_items_popularity": np.argsort(items_popularity)[::-1].astype(np.int32),
+            "top_k_items_entropy": np.argsort(items_entropy)[::-1].astype(np.int32),
+            "top_k_items_logPopEnt": np.argsort(items_logPopEnt)[::-1].astype(np.int32),
+            "top_k_items_bestRated": np.argsort(items_bestRated)[::-1].astype(np.int32),
             "top_k_items_random": None
         }
 
@@ -650,6 +650,5 @@ class PercentageInteraction(EvaluationPolicy):
         chunksize = int(num_args/multiprocessing.cpu_count())
 
         history_items_recommended = [i for i in tqdm(executor.map(PercentageInteraction.run_eval, parameters),total=num_args)]
-        pickle.dump(history_items_recommended, open("history_items_recommended3.pk", "wb"))
         
         return history_items_recommended, None
