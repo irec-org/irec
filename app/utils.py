@@ -864,3 +864,9 @@ def unflatten_dict(d, sep="."):
             d = d[part]
         d[parts[-1]] = value
     return result_dict
+
+
+def set_experiments(settings):
+	mlflow.set_experiment(settings["defaults"]["agent_experiment"])
+	mlflow.set_experiment(settings["defaults"]["dataset_experiment"])
+	mlflow.set_experiment(settings["defaults"]["evaluation_experiment"])
