@@ -352,7 +352,7 @@ Good Books:
           restore_model: false
           rnn_layer: 1
           time_step: 100
-          training_epoch: 2000
+          training_epoch: 10000
   OurMethod1:
     SimpleAgent:
       action_selection_policy:
@@ -2515,7 +2515,7 @@ Kindle 4k:
           restore_model: false
           rnn_layer: 1
           time_step: 100
-          training_epoch: 2000
+          training_epoch: 10000
   OurMethod2:
     SimpleAgent:
       action_selection_policy:
@@ -2840,7 +2840,7 @@ LastFM 5k:
           restore_model: false
           rnn_layer: 1
           time_step: 100
-          training_epoch: 2000
+          training_epoch: 10000
   OurMethod2:
     SimpleAgent:
       action_selection_policy:
@@ -3714,7 +3714,7 @@ MovieLens 10M:
           restore_model: false
           rnn_layer: 1
           time_step: 100
-          training_epoch: 2000
+          training_epoch: 10000
   OurMethod1:
     SimpleAgent:
       action_selection_policy:
@@ -6521,7 +6521,7 @@ Netflix 10k:
           restore_model: false
           rnn_layer: 1
           time_step: 100
-          training_epoch: 2000
+          training_epoch: 10000
   OurMethod2:
     SimpleAgent:
       action_selection_policy:
@@ -7308,7 +7308,7 @@ Yahoo Music:
           restore_model: false
           rnn_layer: 1
           time_step: 100
-          training_epoch: 2000
+          training_epoch: 10000
   OurMethod1:
     SimpleAgent:
       action_selection_policy:

@@ -6339,57 +6339,7 @@ PTS:
         num_particles: 5
         var: 0.01
         var_u: 0.01
-        var_v: 0.971
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.01
-        var_u: 0.01
-        var_v: 1.643
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.01
-        var_u: 0.01
-        var_v: 2.314
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.01
-        var_u: 0.01
-        var_v: 2.986
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.01
-        var_u: 0.01
-        var_v: 3.657
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.01
-        var_u: 0.01
-        var_v: 4.329
+        var_v: 2.65
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
@@ -6419,57 +6369,7 @@ PTS:
         num_particles: 5
         var: 0.01
         var_u: 0.173
-        var_v: 0.971
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.01
-        var_u: 0.173
-        var_v: 1.643
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.01
-        var_u: 0.173
-        var_v: 2.314
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.01
-        var_u: 0.173
-        var_v: 2.986
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.01
-        var_u: 0.173
-        var_v: 3.657
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.01
-        var_u: 0.173
-        var_v: 4.329
+        var_v: 2.65
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
@@ -6499,57 +6399,7 @@ PTS:
         num_particles: 5
         var: 0.01
         var_u: 0.337
-        var_v: 0.971
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.01
-        var_u: 0.337
-        var_v: 1.643
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.01
-        var_u: 0.337
-        var_v: 2.314
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.01
-        var_u: 0.337
-        var_v: 2.986
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.01
-        var_u: 0.337
-        var_v: 3.657
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.01
-        var_u: 0.337
-        var_v: 4.329
+        var_v: 2.65
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
@@ -6579,57 +6429,7 @@ PTS:
         num_particles: 5
         var: 0.01
         var_u: 0.5
-        var_v: 0.971
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.01
-        var_u: 0.5
-        var_v: 1.643
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.01
-        var_u: 0.5
-        var_v: 2.314
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.01
-        var_u: 0.5
-        var_v: 2.986
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.01
-        var_u: 0.5
-        var_v: 3.657
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.01
-        var_u: 0.5
-        var_v: 4.329
+        var_v: 2.65
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
@@ -6659,57 +6459,7 @@ PTS:
         num_particles: 5
         var: 0.173
         var_u: 0.01
-        var_v: 0.971
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.173
-        var_u: 0.01
-        var_v: 1.643
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.173
-        var_u: 0.01
-        var_v: 2.314
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.173
-        var_u: 0.01
-        var_v: 2.986
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.173
-        var_u: 0.01
-        var_v: 3.657
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.173
-        var_u: 0.01
-        var_v: 4.329
+        var_v: 2.65
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
@@ -6739,57 +6489,7 @@ PTS:
         num_particles: 5
         var: 0.173
         var_u: 0.173
-        var_v: 0.971
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.173
-        var_u: 0.173
-        var_v: 1.643
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.173
-        var_u: 0.173
-        var_v: 2.314
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.173
-        var_u: 0.173
-        var_v: 2.986
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.173
-        var_u: 0.173
-        var_v: 3.657
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.173
-        var_u: 0.173
-        var_v: 4.329
+        var_v: 2.65
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
@@ -6819,57 +6519,7 @@ PTS:
         num_particles: 5
         var: 0.173
         var_u: 0.337
-        var_v: 0.971
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.173
-        var_u: 0.337
-        var_v: 1.643
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.173
-        var_u: 0.337
-        var_v: 2.314
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.173
-        var_u: 0.337
-        var_v: 2.986
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.173
-        var_u: 0.337
-        var_v: 3.657
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.173
-        var_u: 0.337
-        var_v: 4.329
+        var_v: 2.65
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
@@ -6899,57 +6549,7 @@ PTS:
         num_particles: 5
         var: 0.173
         var_u: 0.5
-        var_v: 0.971
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.173
-        var_u: 0.5
-        var_v: 1.643
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.173
-        var_u: 0.5
-        var_v: 2.314
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.173
-        var_u: 0.5
-        var_v: 2.986
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.173
-        var_u: 0.5
-        var_v: 3.657
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.173
-        var_u: 0.5
-        var_v: 4.329
+        var_v: 2.65
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
@@ -6979,57 +6579,7 @@ PTS:
         num_particles: 5
         var: 0.337
         var_u: 0.01
-        var_v: 0.971
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.337
-        var_u: 0.01
-        var_v: 1.643
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.337
-        var_u: 0.01
-        var_v: 2.314
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.337
-        var_u: 0.01
-        var_v: 2.986
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.337
-        var_u: 0.01
-        var_v: 3.657
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.337
-        var_u: 0.01
-        var_v: 4.329
+        var_v: 2.65
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
@@ -7059,57 +6609,7 @@ PTS:
         num_particles: 5
         var: 0.337
         var_u: 0.173
-        var_v: 0.971
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.337
-        var_u: 0.173
-        var_v: 1.643
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.337
-        var_u: 0.173
-        var_v: 2.314
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.337
-        var_u: 0.173
-        var_v: 2.986
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.337
-        var_u: 0.173
-        var_v: 3.657
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.337
-        var_u: 0.173
-        var_v: 4.329
+        var_v: 2.65
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
@@ -7139,57 +6639,7 @@ PTS:
         num_particles: 5
         var: 0.337
         var_u: 0.337
-        var_v: 0.971
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.337
-        var_u: 0.337
-        var_v: 1.643
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.337
-        var_u: 0.337
-        var_v: 2.314
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.337
-        var_u: 0.337
-        var_v: 2.986
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.337
-        var_u: 0.337
-        var_v: 3.657
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.337
-        var_u: 0.337
-        var_v: 4.329
+        var_v: 2.65
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
@@ -7219,57 +6669,7 @@ PTS:
         num_particles: 5
         var: 0.337
         var_u: 0.5
-        var_v: 0.971
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.337
-        var_u: 0.5
-        var_v: 1.643
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.337
-        var_u: 0.5
-        var_v: 2.314
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.337
-        var_u: 0.5
-        var_v: 2.986
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.337
-        var_u: 0.5
-        var_v: 3.657
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.337
-        var_u: 0.5
-        var_v: 4.329
+        var_v: 2.65
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
@@ -7299,57 +6699,7 @@ PTS:
         num_particles: 5
         var: 0.5
         var_u: 0.01
-        var_v: 0.971
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.5
-        var_u: 0.01
-        var_v: 1.643
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.5
-        var_u: 0.01
-        var_v: 2.314
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.5
-        var_u: 0.01
-        var_v: 2.986
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.5
-        var_u: 0.01
-        var_v: 3.657
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.5
-        var_u: 0.01
-        var_v: 4.329
+        var_v: 2.65
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
@@ -7379,57 +6729,7 @@ PTS:
         num_particles: 5
         var: 0.5
         var_u: 0.173
-        var_v: 0.971
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.5
-        var_u: 0.173
-        var_v: 1.643
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.5
-        var_u: 0.173
-        var_v: 2.314
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.5
-        var_u: 0.173
-        var_v: 2.986
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.5
-        var_u: 0.173
-        var_v: 3.657
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.5
-        var_u: 0.173
-        var_v: 4.329
+        var_v: 2.65
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
@@ -7459,57 +6759,7 @@ PTS:
         num_particles: 5
         var: 0.5
         var_u: 0.337
-        var_v: 0.971
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.5
-        var_u: 0.337
-        var_v: 1.643
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.5
-        var_u: 0.337
-        var_v: 2.314
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.5
-        var_u: 0.337
-        var_v: 2.986
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.5
-        var_u: 0.337
-        var_v: 3.657
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.5
-        var_u: 0.337
-        var_v: 4.329
+        var_v: 2.65
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
@@ -7539,57 +6789,7 @@ PTS:
         num_particles: 5
         var: 0.5
         var_u: 0.5
-        var_v: 0.971
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.5
-        var_u: 0.5
-        var_v: 1.643
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.5
-        var_u: 0.5
-        var_v: 2.314
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.5
-        var_u: 0.5
-        var_v: 2.986
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.5
-        var_u: 0.5
-        var_v: 3.657
-- SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      PTS:
-        num_lat: 10
-        num_particles: 5
-        var: 0.5
-        var_u: 0.5
-        var_v: 4.329
+        var_v: 2.65
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
