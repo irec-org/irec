@@ -7727,6 +7727,170 @@ Yahoo Music:
         ASPGreedy: {}
       value_function:
         kNNBandit: {}
+Yahoo Music 5k:
+  MostPopular:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        MostPopular: {}
+  Random:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        Random: {}
+  EGreedy:
+    SimpleAgent:
+      action_selection_policy:
+        ASPEGreedy:
+          epsilon: 0.0001
+      value_function:
+        EGreedy: {}
+  GLM_UCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        GLM_UCB:
+          c: 2
+          item_var: 0.01
+          iterations: 20
+          num_lat: 10
+          stop_criteria: 0.0009
+          user_var: 0.01
+          var: 0.05
+  ICTRTS:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        ICTRTS:
+          num_lat: 2
+          num_particles: 5
+  LinearUCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        LinearUCB:
+          alpha: 1
+          item_var: 0.01
+          iterations: 20
+          num_lat: 20
+          stop_criteria: 0.0009
+          user_var: 0.01
+          var: 0.05
+  OurMethod2:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        OurMethod2:
+          alpha: 0.25
+          num_lat: 10
+  PTS:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        PTS:
+          num_lat: 10
+          num_particles: 5
+          var: 0.337
+          var_u: 0.01
+          var_v: 0.3
+  ThompsonSampling:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        ThompsonSampling:
+          alpha_0: 1
+          beta_0: 100
+  UCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        UCB:
+          c: 0.05
+Yahoo Music 5k Validation:
+  EGreedy:
+    SimpleAgent:
+      action_selection_policy:
+        ASPEGreedy:
+          epsilon: 0.0001
+      value_function:
+        EGreedy: {}
+  GLM_UCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        GLM_UCB:
+          c: 2
+          item_var: 0.01
+          iterations: 20
+          num_lat: 10
+          stop_criteria: 0.0009
+          user_var: 0.01
+          var: 0.05
+  ICTRTS:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        ICTRTS:
+          num_lat: 2
+          num_particles: 5
+  LinearUCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        LinearUCB:
+          alpha: 1
+          item_var: 0.01
+          iterations: 20
+          num_lat: 20
+          stop_criteria: 0.0009
+          user_var: 0.01
+          var: 0.05
+  OurMethod2:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        OurMethod2:
+          alpha: 0.25
+          num_lat: 10
+  PTS:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        PTS:
+          num_lat: 10
+          num_particles: 5
+          var: 0.337
+          var_u: 0.01
+          var_v: 0.3
+  ThompsonSampling:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        ThompsonSampling:
+          alpha_0: 1
+          beta_0: 100
+  UCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        UCB:
+          c: 0.05
 Yahoo Music Non-Pop:
   ALEntropy:
     SimpleAgent:
