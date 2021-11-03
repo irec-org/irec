@@ -7728,18 +7728,17 @@ Yahoo Music:
       value_function:
         kNNBandit: {}
 Yahoo Music 5k:
-  MostPopular:
+  CB:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        MostPopular: {}
-  Random:
-    SimpleAgent:
-      action_selection_policy:
-        ASPGreedy: {}
-      value_function:
-        Random: {}
+        CB:
+          B: 5
+          C: 0.5
+          D: 3
+          num_clusters: 4
+          num_lat: 20
   EGreedy:
     SimpleAgent:
       action_selection_policy:
@@ -7781,6 +7780,12 @@ Yahoo Music 5k:
           stop_criteria: 0.0009
           user_var: 0.01
           var: 0.05
+  MostPopular:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        MostPopular: {}
   OurMethod2:
     SimpleAgent:
       action_selection_policy:
@@ -7800,6 +7805,12 @@ Yahoo Music 5k:
           var: 0.337
           var_u: 0.01
           var_v: 0.3
+  Random:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        Random: {}
   ThompsonSampling:
     SimpleAgent:
       action_selection_policy:
@@ -7816,6 +7827,17 @@ Yahoo Music 5k:
         UCB:
           c: 0.05
 Yahoo Music 5k Validation:
+  CB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        CB:
+          B: 5
+          C: 0.5
+          D: 3
+          num_clusters: 4
+          num_lat: 20
   EGreedy:
     SimpleAgent:
       action_selection_policy:
