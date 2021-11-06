@@ -10,7 +10,7 @@ Systems.
 
 A basic Reinforcement Learning model:
 
-![Model](figures/mab-model.png)
+![Model](figures/IREC.jpg)
 
 Apresentamos a versão inicial do nosso **Framework**, que se concentra na avaliação de técnicas de RS baseadas em **Reinforcement Learning** em geral. Nosso objetivo é incentivar a avaliação de experimentos off-line reprodizíveis, fornecendo blocos de construção simples para executar experimentos robustos e uma plataforma extremamente intuitiva. Nossa estrutura pode ser usado para compartilhar ambientes SRs de referência e implementações reutilizáveis de agentes RS de referência. Dessa forma, construímos uma estrutura completa, desde a entrada e manipulação dos dados até a avaliação dos resultados obtidos, utilizando diversas métricas de avaliação perfeitamente capazes de mensurar qualidade da recomendação. 
 
