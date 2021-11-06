@@ -1,5 +1,7 @@
 irec - Interactive Recommender Systems Library
 
+![PyPI - Python Version](https://img.shields.io/badge/python-3.6%7C3.7%7C3.8-blue)
+
 This is a specialized library containing Multi-Armed Bandit, Active
 Learning and others methods.
 @@ -12,9 +12,9 @@ A basic Reinforcement Learning model:
