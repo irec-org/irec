@@ -66,14 +66,14 @@ The recommender metrics supported by Cornac are listed below.
 
 | Metric | Reference | Description
 | :---: | --- | :---: |
-| [Hits](reposit) | [Link](link) | Number of recommendations made successfully. 
-| [Precision](reposit) | [Link](link) | Precision is defined as the percentage of predictions we get right.
-| [Recall](reposit) | [Link](link) | Represents the probability that a relevant item will be selected.  
-| [EPC](reposit) | [Link](link) | It represents the novelty for each user and it is measured by the expected number of seen relevant recommended items not previously seen.  
-| [EPD](reposit) | [Link](link) | EPD is a distance-based novelty measure, which looks at distances between the items inthe user’s profile and the recommended items. 
-| [ILD](reposit) | [Link](link) | It represents the diversity between the list of items recommended. This diversity is measure by the Pearson correlation of the item’s features vector. 
-| [Gini Coefficient](reposit)| [Link](link) | Diversity is represented as the Gini coefficient – a measure of distributional inequality. It is measured as the inverse of cumulative frequency that each item is recommended.
-| [Users Coverage](reposit) | [Link](link) | It represents the percentage of distinctusers that are interested in at least k items recommended (k ≥ 1).
+| [Hits](https://github.com/heitor57/irec/blob/24a28734f757e95d1423dac4ada9dfb85fa05b73/irec/metrics.py#L183) | [Link](link) | Number of recommendations made successfully. 
+| [Precision](https://github.com/heitor57/irec/blob/24a28734f757e95d1423dac4ada9dfb85fa05b73/irec/metrics.py#L139) | [Link](link) | Precision is defined as the percentage of predictions we get right.
+| [Recall](https://github.com/heitor57/irec/blob/24a28734f757e95d1423dac4ada9dfb85fa05b73/irec/metrics.py#L97) | [Link](link) | Represents the probability that a relevant item will be selected.  
+| [EPC](https://github.com/heitor57/irec/blob/24a28734f757e95d1423dac4ada9dfb85fa05b73/irec/metrics.py#L232) | [Link](link) | It represents the novelty for each user and it is measured by the expected number of seen relevant recommended items not previously seen.  
+| [EPD](https://github.com/heitor57/irec/blob/24a28734f757e95d1423dac4ada9dfb85fa05b73/irec/metrics.py#L359) | [Link](link) | EPD is a distance-based novelty measure, which looks at distances between the items inthe user’s profile and the recommended items. 
+| [ILD](https://github.com/heitor57/irec/blob/24a28734f757e95d1423dac4ada9dfb85fa05b73/irec/metrics.py#L312) | [Link](link) | It represents the diversity between the list of items recommended. This diversity is measure by the Pearson correlation of the item’s features vector. 
+| [Gini Coefficient](https://github.com/heitor57/irec/blob/24a28734f757e95d1423dac4ada9dfb85fa05b73/irec/metrics.py#L449)| [Link](link) | Diversity is represented as the Gini coefficient – a measure of distributional inequality. It is measured as the inverse of cumulative frequency that each item is recommended.
+| [Users Coverage](https://github.com/heitor57/irec/blob/24a28734f757e95d1423dac4ada9dfb85fa05b73/irec/metrics.py#L498) | [Link](link) | It represents the percentage of distinctusers that are interested in at least k items recommended (k ≥ 1).
 <!-- | [NDCG](reposit) | A diversity metric | [Link](link)  -->
 <!-- | [F-Measure](reposit) | desc | [Link](link) -->
 <!-- | [MAE](reposit) | desc | [Link](link)  -->
