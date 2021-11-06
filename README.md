@@ -84,7 +84,7 @@ The recommender metrics supported by Cornac are listed below.
 [**dataset_loaders.yaml**](app/settings/dataset_loaders.yaml)
 
 ```yaml
-'MovieLens 10M':
+'MovieLens 1M':
   dataset_path: ./data/datasets/MovieLens 10M/
   train_size: 0.8
   test_consumes: 1
@@ -95,7 +95,7 @@ The recommender metrics supported by Cornac are listed below.
 
 [**dataset_agents.yaml**](app/settings/dataset_agents.yaml)
 ```yaml
-'MovieLens 10M':
+'MovieLens 1M':
   LinearUCB:
     SimpleAgent:
       action_selection_policy:
