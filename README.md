@@ -8,7 +8,7 @@ Learning and others methods.
 A full environment to code yours Reinforcement Learning Recommender
 Systems.
 
-![Model](figures/IREC.jpg)
+![Model](figures/IREC2.png)
 
 We present the initial version of our **Framework**, which focuses on evaluating SR techniques based on **Reinforcement Learning** in general. Our goal is to encourage the evaluation of reproducible offline experiments by providing simple building blocks for running robust experiments and an extremely intuitive platform. Our framework can be used to share environments reference SRs and reusable implementations of reference RS agents. Thus, we built a complete structure, from data entry and manipulation to the evaluation of the results obtained, using several evaluation metrics that are perfectly capable of measuring the quality of the recommendation.
 
