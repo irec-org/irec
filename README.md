@@ -1,6 +1,6 @@
 <!-- ![rerec](figures/logo4rr.png) -->
 
-ReRec - Reinforcement Learning Recommender Systems Library
+irec - Interactive Recommender Systems Library
 
 This is a specialized library containing Multi-Armed Bandit, Active
 Learning and others methods.
