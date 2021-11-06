@@ -1,20 +1,14 @@
-<!-- ![rerec](figures/logo4rr.png) -->
-
-ReRec - Reinforcement Learning Recommender Systems Library
+irec - Interactive Recommender Systems Library
 
 This is a specialized library containing Multi-Armed Bandit, Active
 Learning and others methods.
+@@ -12,9 +12,9 @@ A basic Reinforcement Learning model:
 
-A full environment to code yours Reinforcement Learning Recommender
-Systems.
+![Model](figures/IREC.jpj)
 
-A basic Reinforcement Learning model:
+We present the initial version of our **Framework**, which focuses on evaluating SR techniques based on **Reinforcement Learning** in general. Our goal is to encourage the evaluation of reproducible offline experiments by providing simple building blocks for running robust experiments and an extremely intuitive platform. Our framework can be used to share environments reference SRs and reusable implementations of reference RS agents. Thus, we built a complete structure, from data entry and manipulation to the evaluation of the results obtained, using several evaluation metrics that are perfectly capable of measuring the quality of the recommendation.
 
-![Model](figures/IREC.jpg)
-
-Apresentamos a versão inicial do nosso **Framework**, que se concentra na avaliação de técnicas de RS baseadas em **Reinforcement Learning** em geral. Nosso objetivo é incentivar a avaliação de experimentos off-line reprodizíveis, fornecendo blocos de construção simples para executar experimentos robustos e uma plataforma extremamente intuitiva. Nossa estrutura pode ser usado para compartilhar ambientes SRs de referência e implementações reutilizáveis de agentes RS de referência. Dessa forma, construímos uma estrutura completa, desde a entrada e manipulação dos dados até a avaliação dos resultados obtidos, utilizando diversas métricas de avaliação perfeitamente capazes de mensurar qualidade da recomendação. 
-
-Diferente de frameworks já existentes, nossa estrutura conta com os mais recentes e relevantes algoritmos de RL publicados até o momento, além fornecer diversas formas e métricas avaliação, generalizáveis em diversas situações e ideais para o cenário de sistemas de recomendação. 
+Unlike existing frameworks, our structure has the most recent and relevant RL algorithms published so far, in addition to providing different forms and evaluation metrics, generalizable in different situations and ideal for the scenario of recommendation systems.
 
 ## Installation
 
