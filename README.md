@@ -18,7 +18,7 @@ Unlike existing frameworks, our structure has the most recent and relevant RL al
 
 Currently, we are supporting Python 3. There are several ways to install irec:
 
-- **From PyPI (you may need a C++ compiler):**
+- **From PyPI:**
   ```bash
   pip3 install irec
   ```
