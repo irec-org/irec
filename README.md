@@ -36,16 +36,16 @@ Our framework has the ability to use any type of dataset, as long as it is suita
 
 | Dataset | Scenery  | Sparsity | Link
 | :---: | --- | :---: | :---: |
-MovieLens 100k |  Movies | 93.69% | [Link](link)
-MovieLens 1M | Movies | 95.80% | [Link](link)
-MovieLens 10M |  Movies | 98.66% | [Link](link)
+MovieLens 100k |  Movies | 93.69% | [Link](https://grouplens.org/datasets/movielens/100k/)
+MovieLens 1M | Movies | 95.80% | [Link](https://grouplens.org/datasets/movielens/1m/)
+MovieLens 10M |  Movies | 98.66% | [Link](https://grouplens.org/datasets/movielens/10m/)
 Netflix | Movies | 98.69% | [Link](link)
-Ciao DVD | Movies | 99.97% | [Link](link)	
-Yahoo Music |  Musics | 97.63% | [Link](link)
-LastFM | Musics | 99.84% | [Link](link)
-Good Books |  Books | 98.88% | [Link](link)
-Good Reads | Books | 99.50% | [Link](link)
-Amazon Kindle Store | Products | 99.97% | [Link](link)	
+Ciao DVD | Movies | 99.97% | [Link](http://konect.cc/networks/librec-ciaodvd-movie_ratings/)	
+Yahoo Music |  Musics | 97.63% | [Link](https://webscope.sandbox.yahoo.com/catalog.php?datatype=r)
+LastFM | Musics | 99.84% | [Link](http://ocelma.net/MusicRecommendationDataset/lastfm-360K.html)
+Good Books |  Books | 98.88% | [Link](https://www.kaggle.com/zygmunt/goodbooks-10k?select=ratings.csv)
+Good Reads | Books | 99.50% | [Link](https://www.kaggle.com/sahilkirpekar/goodreads10k-dataset-cleaned?select=Ratings.csv)
+Amazon Kindle Store | Products | 99.97% | [Link](https://jmcauley.ucsd.edu/data/amazon/)	
 Clothing Fit | Clothes | 99.97% | [Link](link)	
 
 ## Models
