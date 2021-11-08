@@ -30,6 +30,24 @@ Currently, we are supporting Python 3. There are several ways to install irec:
   pip install -r requirements.txt
   ```
 
+## Datasets
+
+Our framework has the ability to use any type of dataset, as long as it is suitable for the recommendation scenario and is formatted correctly. Below we list some of the datasets tested and used in some of our experiments.
+
+| Dataset | Scenery  | Sparsity | Link
+| :---: | --- | :---: | :---: |
+MovieLens 100k |  Movies | 93.69% | [Link](link)
+MovieLens 1M | Movies | 95.80% | [Link](link)
+MovieLens 10M |  Movies | 98.66% | [Link](link)
+Netflix | Movies | 98.69% | [Link](link)
+Ciao DVD | Movies | 99.97% | [Link](link)	
+Yahoo Music |  Musics | 97.63% | [Link](link)
+LastFM | Musics | 99.84% | [Link](link)
+Good Books |  Books | 98.88% | [Link](link)
+Good Reads | Books | 99.50% | [Link](link)
+Amazon Kindle Store | Products | 99.97% | [Link](link)	
+Clothing Fit | Clothes | 99.97% | [Link](link)	
+
 ## Models
 
 The recommender models supported by irec are listed below.
