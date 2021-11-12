@@ -346,11 +346,11 @@ Good Books:
           gamma: 0.0
           inner_epoch: 50
           latent_factor: 10
-          learning_rate: 0.1
+          learning_rate: 0.001
           num_blocks: 1
           num_heads: 2
           restore_model: false
-          rnn_layer: 1
+          rnn_layer: 2
           time_step: 100
           training_epoch: 10000
   OurMethod1:
@@ -1108,13 +1108,13 @@ Good Books Non-Pop:
           gamma: 0.0
           inner_epoch: 50
           latent_factor: 30
-          learning_rate: 0.1
+          learning_rate: 0.001
           num_blocks: 2
           num_heads: 1
           restore_model: false
-          rnn_layer: 1
-          time_step: 3
-          training_epoch: 30000
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 10000
   OurMethod1:
     SimpleAgent:
       action_selection_policy:
@@ -1638,13 +1638,13 @@ Good Books Pop:
           gamma: 0.0
           inner_epoch: 50
           latent_factor: 30
-          learning_rate: 0.1
+          learning_rate: 0.001
           num_blocks: 2
           num_heads: 1
           restore_model: false
-          rnn_layer: 1
-          time_step: 3
-          training_epoch: 30000
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 10000
   OurMethod1:
     SimpleAgent:
       action_selection_policy:
@@ -1986,9 +1986,9 @@ Good Books Sampled:
           num_blocks: 2
           num_heads: 1
           restore_model: false
-          rnn_layer: 1
-          time_step: 3
-          training_epoch: 30000
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 10000
   OurMethod1:
     SimpleAgent:
       action_selection_policy:
@@ -2509,11 +2509,11 @@ Kindle 4k:
           gamma: 0.0
           inner_epoch: 50
           latent_factor: 10
-          learning_rate: 0.1
+          learning_rate: 0.001
           num_blocks: 1
           num_heads: 2
           restore_model: false
-          rnn_layer: 1
+          rnn_layer: 2
           time_step: 100
           training_epoch: 10000
   OurMethod2:
@@ -2707,9 +2707,9 @@ LastFM 5K Validation:
           num_blocks: 2
           num_heads: 1
           restore_model: false
-          rnn_layer: 1
-          time_step: 3
-          training_epoch: 30000
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 10000
   OurMethod2:
     SimpleAgent:
       action_selection_policy:
@@ -2834,11 +2834,11 @@ LastFM 5k:
           gamma: 0.0
           inner_epoch: 50
           latent_factor: 10
-          learning_rate: 0.1
+          learning_rate: 0.001
           num_blocks: 1
           num_heads: 2
           restore_model: false
-          rnn_layer: 1
+          rnn_layer: 2
           time_step: 100
           training_epoch: 10000
   OurMethod2:
@@ -3232,9 +3232,9 @@ MovieLens 100k O:
           num_blocks: 2
           num_heads: 1
           restore_model: false
-          rnn_layer: 1
-          time_step: 3
-          training_epoch: 30000
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 10000
   NaiveEnsemble:
     SimpleEnsembleAgent:
       action_selection_policy:
@@ -3708,11 +3708,11 @@ MovieLens 10M:
           gamma: 0.0
           inner_epoch: 50
           latent_factor: 10
-          learning_rate: 0.1
+          learning_rate: 0.001
           num_blocks: 1
           num_heads: 2
           restore_model: false
-          rnn_layer: 1
+          rnn_layer: 2
           time_step: 100
           training_epoch: 10000
   OurMethod1:
@@ -4470,13 +4470,13 @@ MovieLens 10M Non-Pop:
           gamma: 0.0
           inner_epoch: 50
           latent_factor: 20
-          learning_rate: 0.1
+          learning_rate: 0.001
           num_blocks: 2
           num_heads: 1
           restore_model: false
-          rnn_layer: 1
-          time_step: 3
-          training_epoch: 30000
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 10000
   OurMethod1:
     SimpleAgent:
       action_selection_policy:
@@ -5029,13 +5029,13 @@ MovieLens 10M Pop:
           gamma: 0.0
           inner_epoch: 50
           latent_factor: 20
-          learning_rate: 0.1
+          learning_rate: 0.001
           num_blocks: 2
           num_heads: 1
           restore_model: false
-          rnn_layer: 1
-          time_step: 3
-          training_epoch: 30000
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 10000
   OurMethod1:
     SimpleAgent:
       action_selection_policy:
@@ -5406,9 +5406,9 @@ MovieLens 10M Sampled:
           num_blocks: 2
           num_heads: 1
           restore_model: false
-          rnn_layer: 1
-          time_step: 3
-          training_epoch: 30000
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 10000
   OurMethod1:
     SimpleAgent:
       action_selection_policy:
@@ -5993,9 +5993,9 @@ MovieLens 1M:
           num_blocks: 2
           num_heads: 1
           restore_model: false
-          rnn_layer: 1
-          time_step: 3
-          training_epoch: 30000
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 10000
   OurMethod1:
     SimpleAgent:
       action_selection_policy:
@@ -6334,9 +6334,9 @@ MovieLens 1M (B):
           num_blocks: 2
           num_heads: 1
           restore_model: false
-          rnn_layer: 1
-          time_step: 3
-          training_epoch: 30000
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 10000
   OurMethod1:
     SimpleAgent:
       action_selection_policy:
@@ -6515,11 +6515,11 @@ Netflix 10k:
           gamma: 0.0
           inner_epoch: 50
           latent_factor: 10
-          learning_rate: 0.1
+          learning_rate: 0.001
           num_blocks: 1
           num_heads: 2
           restore_model: false
-          rnn_layer: 1
+          rnn_layer: 2
           time_step: 100
           training_epoch: 10000
   OurMethod2:
@@ -6786,13 +6786,13 @@ Netflix 1K:
           gamma: 0.0
           inner_epoch: 50
           latent_factor: 20
-          learning_rate: 0.1
+          learning_rate: 0.001
           num_blocks: 2
           num_heads: 1
           restore_model: false
-          rnn_layer: 1
-          time_step: 3
-          training_epoch: 30000
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 10000
   OurMethod2:
     SimpleAgent:
       action_selection_policy:
@@ -6907,13 +6907,13 @@ Netflix 1K Validation:
           gamma: 0.0
           inner_epoch: 50
           latent_factor: 20
-          learning_rate: 0.1
+          learning_rate: 0.001
           num_blocks: 2
           num_heads: 1
           restore_model: false
-          rnn_layer: 1
-          time_step: 3
-          training_epoch: 30000
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 10000
   OurMethod2:
     SimpleAgent:
       action_selection_policy:
@@ -7302,11 +7302,11 @@ Yahoo Music:
           gamma: 0.0
           inner_epoch: 50
           latent_factor: 10
-          learning_rate: 0.1
+          learning_rate: 0.001
           num_blocks: 1
           num_heads: 2
           restore_model: false
-          rnn_layer: 1
+          rnn_layer: 2
           time_step: 100
           training_epoch: 10000
   OurMethod1:
@@ -7786,6 +7786,25 @@ Yahoo Music 5k:
         ASPGreedy: {}
       value_function:
         MostPopular: {}
+  NICF:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        NICF:
+          batch: 256
+          clip_param: 0.2
+          dropout_rate: 0.01
+          gamma: 0.0
+          inner_epoch: 50
+          latent_factor: 10
+          learning_rate: 0.001
+          num_blocks: 1
+          num_heads: 2
+          restore_model: false
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 10000
   OurMethod2:
     SimpleAgent:
       action_selection_policy:
@@ -8250,13 +8269,13 @@ Yahoo Music Non-Pop:
           gamma: 0.0
           inner_epoch: 50
           latent_factor: 10
-          learning_rate: 0.1
+          learning_rate: 0.001
           num_blocks: 2
           num_heads: 1
           restore_model: false
-          rnn_layer: 1
-          time_step: 3
-          training_epoch: 30000
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 10000
   OurMethod1:
     SimpleAgent:
       action_selection_policy:
@@ -8780,13 +8799,13 @@ Yahoo Music Pop:
           gamma: 0.0
           inner_epoch: 50
           latent_factor: 10
-          learning_rate: 0.1
+          learning_rate: 0.001
           num_blocks: 2
           num_heads: 1
           restore_model: false
-          rnn_layer: 1
-          time_step: 3
-          training_epoch: 30000
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 10000
   OurMethod1:
     SimpleAgent:
       action_selection_policy:
@@ -9314,9 +9333,9 @@ Yahoo Music Pop-Removed-Ent:
           num_blocks: 2
           num_heads: 1
           restore_model: false
-          rnn_layer: 1
-          time_step: 3
-          training_epoch: 30000
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 10000
   OurMethod1:
     SimpleAgent:
       action_selection_policy:
@@ -10279,9 +10298,9 @@ Yahoo Music Sampled:
           num_blocks: 2
           num_heads: 1
           restore_model: false
-          rnn_layer: 1
-          time_step: 3
-          training_epoch: 30000
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 10000
   OurMethod1:
     SimpleAgent:
       action_selection_policy:
@@ -10586,3 +10605,121 @@ Yahoo Music Validation:
         ASPGreedy: {}
       value_function:
         kNNBandit: {}
+Yahoo Music 10k:
+  CB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        CB:
+          B: 5
+          C: 0.5
+          D: 3
+          num_clusters: 4
+          num_lat: 20
+  EGreedy:
+    SimpleAgent:
+      action_selection_policy:
+        ASPEGreedy:
+          epsilon: 0.0001
+      value_function:
+        EGreedy: {}
+  GLM_UCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        GLM_UCB:
+          c: 2
+          item_var: 0.01
+          iterations: 20
+          num_lat: 10
+          stop_criteria: 0.0009
+          user_var: 0.01
+          var: 0.05
+  ICTRTS:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        ICTRTS:
+          num_lat: 2
+          num_particles: 5
+  LinearUCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        LinearUCB:
+          alpha: 1
+          item_var: 0.01
+          iterations: 20
+          num_lat: 20
+          stop_criteria: 0.0009
+          user_var: 0.01
+          var: 0.05
+  MostPopular:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        MostPopular: {}
+  NICF:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        NICF:
+          batch: 256
+          clip_param: 0.2
+          dropout_rate: 0.01
+          gamma: 0.0
+          inner_epoch: 50
+          latent_factor: 10
+          learning_rate: 0.001
+          num_blocks: 1
+          num_heads: 2
+          restore_model: false
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 10000
+  OurMethod2:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        OurMethod2:
+          alpha: 0.25
+          num_lat: 10
+  PTS:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        PTS:
+          num_lat: 10
+          num_particles: 5
+          var: 0.337
+          var_u: 0.01
+          var_v: 0.3
+  Random:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        Random: {}
+  ThompsonSampling:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        ThompsonSampling:
+          alpha_0: 1
+          beta_0: 100
+  UCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        UCB:
+          c: 0.05
