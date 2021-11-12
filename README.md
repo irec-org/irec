@@ -98,7 +98,13 @@ The recommender metrics supported by Cornac are listed below.
 
 ## Configuration Files
 
+IREC has some configuration files to define an experiment, such as dataset settings, agents, policies and evaluation metrics. Below we present brief examples about each of the files available in this framework.
+
+For more details on configuration files, go to [**configuration_files**](tutorials/configuration_files.ipynb)
+
 [**dataset_loaders.yaml**](app/settings/dataset_loaders.yaml)
+
+This configuration file stores all the configurations related to the bases that will be used during the execution of an experiment.
 
 ```yaml
 'MovieLens 10M':
@@ -111,6 +117,9 @@ The recommender metrics supported by Cornac are listed below.
 ```
 
 [**dataset_agents.yaml**](app/settings/dataset_agents.yaml)
+
+This configuration file stores the settings of the agents (Recommendators) that will be used in the experiments.
+
 ```yaml
 'MovieLens 10M':
   LinearUCB:
@@ -131,6 +140,8 @@ The recommender metrics supported by Cornac are listed below.
 
 [**evaluation_policies.yaml**](app/settings/evaluation_policies.yaml)
 
+In this configuration file the evaluation policies are defined. To carry out an experiment, we need to define how the recommendation process will be, the interactions between user and item, and for that we create an evaluation policy in accordance with the objectives of the experiment.
+
 ```yaml
 Interaction:
   num_interactions: 100
@@ -141,6 +152,8 @@ Interaction:
 ```
 
 [**metric_evaluators.yaml**](app/settings/metric_evaluators.yaml)
+
+This file defines the evaluation metrics for an experiment. This file is responsible for providing details on how to assess the interactions performed during the assessment process.
 
 ```yaml
 UserCumulativeInteractionMetricEvaluator:
@@ -158,6 +171,9 @@ UserCumulativeInteractionMetricEvaluator:
 ```
 
 [**defaults.yaml**](app/settings/defaults.yaml)
+
+This configuration file is a way to define the general settings for an experiment, here we can define the agents, the base, the policy and the evaluation metric, as well as some additional information.
+
 ```yaml
 agent: LinearUCB
 agent_experiment: agent
@@ -171,8 +187,6 @@ metric_evaluator: UserCumulativeInteractionMetricEvaluator
 pdf_dir: pdf/
 tex_dir: tex/
 ```
-
-For more details on configuration files, go to [**configuration_files**](tutorials/configuration_files.ipynb)
 
 ## Experiment
 
