@@ -12,7 +12,7 @@ args = parser.parse_args()
 datasets_ids = {
 	"Good Books": "14mT0bNCveFB1wKR_uhG08-GpOd_MxCZ7",
 	"Good Reads 10k": "1j3JA8ZUhCAWruvKgSgY1LbYpc0Mdrig8",
-	"Kindle 4k": "1tH2eb0E1EWNMaVz6QFoxgczmzlLd0vrp",
+	"Kindle 4k": "1CvhZ2GwalzHq9cp5r9SBKliedxfWpBba",
 	"Kindle Store": "1JBCBBLDFcY46RKn8vw5u9EeJM_2-oASn",
 	"LastFM 5k": "1AcnaOmxJccTaGuxAYH7icv9Vg_yh8r--",
 	"MovieLens 1M": "1zQZ3vxEEXFIjpS8mS82B3XSw84SCPe6w",
@@ -22,7 +22,8 @@ datasets_ids = {
 	"Netflix": "13H960S8-I2a-U3V_PmOC1TfOLZrkdm_h",
 	"Netflix 10k": "1yynqrIW7GwTGXvuZ0ToPf-SEOGACSil3",
 	"Yahoo Music": "1zWxmQ8zJvZQKBgUGK49_O6g6dQ7Mxhzn",
-	"Yahoo Music 5k": "1c7HRu7Nlz-gbcc1-HsSTk98PYIZSQWEy"
+	"Yahoo Music 5k": "1c7HRu7Nlz-gbcc1-HsSTk98PYIZSQWEy",
+	"Yahoo Music 10k": "1LMIMFjweVebeewn4D61KX72uIQJlW5d0"
 }
 
 dataset_dir = "./data/datasets/"
