@@ -19,6 +19,7 @@ class DatasetLoaderFactory:
             "Yahoo Music",
             "Good Reads 10k",
             "Yahoo Music 5k",
+            "Yahoo Music 10k",
         ]:
             dl = DatasetLoader.DefaultDatasetLoader(
                 dataset.DefaultDataset(), **dataset_parameters
@@ -35,6 +36,7 @@ class DatasetLoaderFactory:
             "Netflix 10k Validation",
             "Good Reads 10k Validation",
             "Yahoo Music 5k Validation",
+            "Yahoo Music 10k Validation",
         ]:
             dl = DatasetLoader.DefaultValidationDatasetLoader(
                 dataset.DefaultDataset(), **dataset_parameters
