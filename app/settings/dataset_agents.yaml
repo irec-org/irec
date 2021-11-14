@@ -352,7 +352,7 @@ Good Books:
           restore_model: false
           rnn_layer: 2
           time_step: 100
-          training_epoch: 10000
+          training_epoch: 4000
   OurMethod1:
     SimpleAgent:
       action_selection_policy:
@@ -1114,7 +1114,7 @@ Good Books Non-Pop:
           restore_model: false
           rnn_layer: 2
           time_step: 100
-          training_epoch: 10000
+          training_epoch: 4000
   OurMethod1:
     SimpleAgent:
       action_selection_policy:
@@ -1644,7 +1644,7 @@ Good Books Pop:
           restore_model: false
           rnn_layer: 2
           time_step: 100
-          training_epoch: 10000
+          training_epoch: 4000
   OurMethod1:
     SimpleAgent:
       action_selection_policy:
@@ -1988,7 +1988,7 @@ Good Books Sampled:
           restore_model: false
           rnn_layer: 2
           time_step: 100
-          training_epoch: 10000
+          training_epoch: 4000
   OurMethod1:
     SimpleAgent:
       action_selection_policy:
@@ -2515,7 +2515,7 @@ Kindle 4k:
           restore_model: false
           rnn_layer: 2
           time_step: 100
-          training_epoch: 10000
+          training_epoch: 4000
   OurMethod2:
     SimpleAgent:
       action_selection_policy:
@@ -2709,7 +2709,7 @@ LastFM 5K Validation:
           restore_model: false
           rnn_layer: 2
           time_step: 100
-          training_epoch: 10000
+          training_epoch: 4000
   OurMethod2:
     SimpleAgent:
       action_selection_policy:
@@ -2840,7 +2840,7 @@ LastFM 5k:
           restore_model: false
           rnn_layer: 2
           time_step: 100
-          training_epoch: 10000
+          training_epoch: 4000
   OurMethod2:
     SimpleAgent:
       action_selection_policy:
@@ -3234,7 +3234,7 @@ MovieLens 100k O:
           restore_model: false
           rnn_layer: 2
           time_step: 100
-          training_epoch: 10000
+          training_epoch: 4000
   NaiveEnsemble:
     SimpleEnsembleAgent:
       action_selection_policy:
@@ -3714,7 +3714,7 @@ MovieLens 10M:
           restore_model: false
           rnn_layer: 2
           time_step: 100
-          training_epoch: 10000
+          training_epoch: 4000
   OurMethod1:
     SimpleAgent:
       action_selection_policy:
@@ -4476,7 +4476,7 @@ MovieLens 10M Non-Pop:
           restore_model: false
           rnn_layer: 2
           time_step: 100
-          training_epoch: 10000
+          training_epoch: 4000
   OurMethod1:
     SimpleAgent:
       action_selection_policy:
@@ -5035,7 +5035,7 @@ MovieLens 10M Pop:
           restore_model: false
           rnn_layer: 2
           time_step: 100
-          training_epoch: 10000
+          training_epoch: 4000
   OurMethod1:
     SimpleAgent:
       action_selection_policy:
@@ -5408,7 +5408,7 @@ MovieLens 10M Sampled:
           restore_model: false
           rnn_layer: 2
           time_step: 100
-          training_epoch: 10000
+          training_epoch: 4000
   OurMethod1:
     SimpleAgent:
       action_selection_policy:
@@ -5995,7 +5995,7 @@ MovieLens 1M:
           restore_model: false
           rnn_layer: 2
           time_step: 100
-          training_epoch: 10000
+          training_epoch: 4000
   OurMethod1:
     SimpleAgent:
       action_selection_policy:
@@ -6336,7 +6336,7 @@ MovieLens 1M (B):
           restore_model: false
           rnn_layer: 2
           time_step: 100
-          training_epoch: 10000
+          training_epoch: 4000
   OurMethod1:
     SimpleAgent:
       action_selection_policy:
@@ -6521,7 +6521,7 @@ Netflix 10k:
           restore_model: false
           rnn_layer: 2
           time_step: 100
-          training_epoch: 10000
+          training_epoch: 4000
   OurMethod2:
     SimpleAgent:
       action_selection_policy:
@@ -6792,7 +6792,7 @@ Netflix 1K:
           restore_model: false
           rnn_layer: 2
           time_step: 100
-          training_epoch: 10000
+          training_epoch: 4000
   OurMethod2:
     SimpleAgent:
       action_selection_policy:
@@ -6913,7 +6913,7 @@ Netflix 1K Validation:
           restore_model: false
           rnn_layer: 2
           time_step: 100
-          training_epoch: 10000
+          training_epoch: 4000
   OurMethod2:
     SimpleAgent:
       action_selection_policy:
@@ -7308,7 +7308,7 @@ Yahoo Music:
           restore_model: false
           rnn_layer: 2
           time_step: 100
-          training_epoch: 10000
+          training_epoch: 4000
   OurMethod1:
     SimpleAgent:
       action_selection_policy:
@@ -7804,7 +7804,7 @@ Yahoo Music 5k:
           restore_model: false
           rnn_layer: 2
           time_step: 100
-          training_epoch: 10000
+          training_epoch: 4000
   OurMethod2:
     SimpleAgent:
       action_selection_policy:
@@ -8275,7 +8275,7 @@ Yahoo Music Non-Pop:
           restore_model: false
           rnn_layer: 2
           time_step: 100
-          training_epoch: 10000
+          training_epoch: 4000
   OurMethod1:
     SimpleAgent:
       action_selection_policy:
@@ -8805,7 +8805,7 @@ Yahoo Music Pop:
           restore_model: false
           rnn_layer: 2
           time_step: 100
-          training_epoch: 10000
+          training_epoch: 4000
   OurMethod1:
     SimpleAgent:
       action_selection_policy:
@@ -9335,7 +9335,7 @@ Yahoo Music Pop-Removed-Ent:
           restore_model: false
           rnn_layer: 2
           time_step: 100
-          training_epoch: 10000
+          training_epoch: 4000
   OurMethod1:
     SimpleAgent:
       action_selection_policy:
@@ -10300,7 +10300,7 @@ Yahoo Music Sampled:
           restore_model: false
           rnn_layer: 2
           time_step: 100
-          training_epoch: 10000
+          training_epoch: 4000
   OurMethod1:
     SimpleAgent:
       action_selection_policy:
@@ -10682,7 +10682,7 @@ Yahoo Music 10k:
           restore_model: false
           rnn_layer: 2
           time_step: 100
-          training_epoch: 10000
+          training_epoch: 4000
   OurMethod2:
     SimpleAgent:
       action_selection_policy:
