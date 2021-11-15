@@ -194,7 +194,7 @@ colors = ['k','tab:blue','tab:orange','tab:green','tab:red','tab:purple','tab:br
 for metric_class_name in metrics_classes_names:
     methods=[]
     for dataset_loader_name in datasets_names:
-        ds_metric_df = df[dataset_loader_name][metric_class_name]
+        # ds_metric_df = df[dataset_loader_name][metric_class_name]
         ds_recall_df = df[dataset_loader_name]['Recall']
         methods.extend(ds_recall_df.loc[str(max(nums_interactions_to_show))].T.sort_values(ascending=False).index[:5])
     methods=list(set(methods))
@@ -224,7 +224,7 @@ for metric_class_name in metrics_classes_names:
         ax.set_xticks(list(range(len(nums_interactions_to_show))))
         ax.set_xticklabels(nums_interactions_to_show)
         ax.set_xlabel('Top-k')
-        ax.set_ylabel('Precision')
+        ax.set_ylabel(metric_class_name)
 
         path = os.path.join(
             settings["defaults"]["data_dir"],
@@ -246,7 +246,7 @@ for metric_class_name in metrics_classes_names:
     path = os.path.join(
     settings["defaults"]["data_dir"],
     settings["defaults"]["general_dir"],
-    metric_class_name,
+    "legend",
     )
     figlegend.savefig(
         path+'.png',
