@@ -17,6 +17,9 @@ parser.add_argument(
     "--dataset_loaders", nargs="*", default=[settings["defaults"]["dataset_loader"]]
 )
 args = parser.parse_args()
+
+utils.set_experiments(settings)
+
 for dataset_name in args.dataset_loaders:
     dataset_loader_settings = settings["dataset_loaders"][dataset_name]
 

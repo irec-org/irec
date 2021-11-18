@@ -9,3 +9,4 @@ metric: Hits
 metric_evaluator: UserCumulativeInteractionMetricEvaluator
 pdf_dir: pdf/
 tex_dir: tex/
+general_dir: general/
