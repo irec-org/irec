@@ -449,7 +449,8 @@ class StageInteractionMetricEvaluator(InteractionMetricEvaluator):
                 ground_truth_dataset=self.ground_truth_dataset,
                 relevance_evaluator=self.relevance_evaluator,
             )
-
+        
+        self.interactions_to_evaluate = [0] + self.interactions_to_evaluate
         for i in range(len(self.interactions_to_evaluate)-1): 
             for uid in self.uids:
                 interaction_results = self.users_items_recommended[uid][self.interactions_to_evaluate[i]: self.interactions_to_evaluate[i+1]]
