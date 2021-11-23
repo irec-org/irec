@@ -32,7 +32,7 @@ UserCumulativeInteractionMetricEvaluator:
   num_interactions: 100
   relevance_evaluator_threshold: 3.999
 
-UserStageInteractionMetricEvaluator:
+StageIterationsMetricEvaluator:
   interactions_to_evaluate:
     - 5
     - 10
