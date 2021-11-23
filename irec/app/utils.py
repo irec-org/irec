@@ -1349,3 +1349,55 @@ def evaluate_agent_with_dataset_parameters(agents,dataset_loaders,
                         completed, futures = wait(futures, return_when=FIRST_COMPLETED)
         for f in futures:
             f.result()
+
+
+def run_agent_search_with_dataset_parameters(agents,dataset_loaders, settings,agents_search_parameters, tasks,forced_run):
+
+    from concurrent.futures import ProcessPoolExecutor, wait, FIRST_COMPLETED
+
+    with ProcessPoolExecutor(max_workers=tasks) as executor:
+        futures = set()
+        for dataset_loader_name in dataset_loaders:
+            settings["defaults"]["dataset_loader"] = dataset_loader_name
+            data = load_dataset_experiment(settings)
+            for agent_name in agents:
+                settings["defaults"]["agent"] = agent_name
+                for agent_og_parameters in agents_search_parameters[agent_name]:
+                    settings["agents"][agent_name] = agent_og_parameters
+                    f = executor.submit(run_agent, data, copy.deepcopy(settings),forced_run)
+                    futures.add(f)
+                    if len(futures) >= tasks:
+                        completed, futures = wait(futures, return_when=FIRST_COMPLETED)
+        for f in futures:
+            f.result()
+
+def eval_agent_search_with_dataset_parameters(agents,dataset_loaders, settings,agents_search_parameters, metrics, tasks):
+
+    from concurrent.futures import ProcessPoolExecutor, wait, FIRST_COMPLETED
+    with ProcessPoolExecutor(max_workers=tasks) as executor:
+        futures = set()
+        for dataset_loader_name in dataset_loaders:
+            settings["defaults"]["dataset_loader"] = dataset_loader_name
+            traintest = load_dataset_experiment(settings)
+
+            data = np.vstack((traintest.train.data, traintest.test.data))
+            dataset = copy.copy(traintest.train)
+            dataset.data = data
+            dataset.update_from_data()
+            for agent_name in agents:
+                settings["defaults"]["agent"] = agent_name
+                for agent_og_parameters in agents_search_parameters[agent_name]:
+                    settings["agents"][agent_name] = agent_og_parameters
+                    for metric_name in metrics:
+                        settings["defaults"]["metric"] = metric_name
+                        f = executor.submit(
+                            evaluate_itr,
+                            dataset,
+                            copy.deepcopy(settings),
+                            False
+                        )
+                        futures.add(f)
+                        if len(futures) >= tasks:
+                            completed, futures = wait(futures, return_when=FIRST_COMPLETED)
+        for f in futures:
+            f.result()

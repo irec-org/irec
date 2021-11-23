@@ -14,7 +14,3 @@
 </p>
 
 </div>
-
-## Install
-
-				pip install irec
