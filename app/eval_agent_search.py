@@ -1,12 +1,10 @@
 #!/usr/bin/python3
 
-from os.path import dirname, realpath, sep, pardir
+from os.path import dirname, realpath
 import yaml
-import sys
 import os
 import argparse
 
-sys.path.append(dirname(realpath(__file__)) + sep + pardir)
 from irec.app import utils
 import argparse
 
