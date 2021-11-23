@@ -411,3 +411,67 @@ class IterationsMetricEvaluator(InteractionMetricEvaluator):
             f"{self.__class__.__name__} spent {time.time()-start_time:.2f} seconds executing {metric_class.__name__} metric"
         )
         return metric_values
+
+class StageInteractionMetricEvaluator(InteractionMetricEvaluator):
+    @staticmethod
+    def metric_summarize(users_metric_values):
+        return np.mean(list(users_metric_values.values()))
+
+    def _metric_evaluation(self, metric_class):
+        start_time = time.time()
+        metric_values = []
+        if issubclass(metric_class, Recall):
+            metric = metric_class(
+                users_false_negative=self.users_false_negative,
+                ground_truth_dataset=self.ground_truth_dataset,
+                relevance_evaluator=self.relevance_evaluator,
+            )
+        elif issubclass(metric_class, ILD):
+            metric = metric_class(
+                items_distance=self.items_distance,
+                ground_truth_dataset=self.ground_truth_dataset,
+                relevance_evaluator=self.relevance_evaluator,
+            )
+        elif issubclass(metric_class, EPC):
+            metric = metric_class(
+                items_normalized_popularity=self.items_normalized_popularity,
+                ground_truth_dataset=self.ground_truth_dataset,
+                relevance_evaluator=self.relevance_evaluator,
+            )
+        elif issubclass(metric_class, Entropy):
+            metric = metric_class(
+                items_entropy=self.items_entropy,
+                ground_truth_dataset=self.ground_truth_dataset,
+                relevance_evaluator=self.relevance_evaluator,
+            )
+        else:
+            metric = metric_class(
+                ground_truth_dataset=self.ground_truth_dataset,
+                relevance_evaluator=self.relevance_evaluator,
+            )
+
+        for i in range(len(self.interactions_to_evaluate)-1): 
+            for uid in self.uids:
+                interaction_results = self.users_items_recommended[uid][self.interactions_to_evaluate[i]: self.interactions_to_evaluate[i+1]]
+                for item in interaction_results:
+                    metric.update_recommendation(
+                        uid, item, self.ground_truth_consumption_matrix[uid, item]
+                    )
+
+            print(f"Computing interaction {self.iterations_to_evaluate[i+1]} with {self.__class__.__name__}")
+            metric_values.append(
+                self.metric_summarize(
+                    {uid: metric.compute(uid) for uid in self.uids}
+                )
+            )
+
+        print(
+            f"{self.__class__.__name__} spent {time.time()-start_time:.2f} seconds executing {metric_class.__name__} metric"
+        )
+        return metric_values
+
+
+class UserStageInteractionMetricEvaluator(StageInteractionMetricEvaluator):
+    @staticmethod
+    def metric_summarize(users_metric_values):
+        return users_metric_values
