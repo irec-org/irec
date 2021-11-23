@@ -10,7 +10,6 @@ sys.path.append(dirname(realpath(__file__)) + sep + pardir)
 from irec.app import utils
 import argparse
 
-
 settings = utils.load_settings(dirname(realpath(__file__)))
 parser = argparse.ArgumentParser()
 parser.add_argument("-t", default=False, action="store_true", help="Print only top 1")
@@ -32,7 +31,6 @@ dataset_agents_parameters = yaml.load(
 )
 
 settings["defaults"]["metric_evaluator"] = args.metric_evaluator
-# print(args.b,args.m)
 
 agents_search_parameters = yaml.load(open("./settings/agents_search.yaml"), Loader=yaml.SafeLoader)
 

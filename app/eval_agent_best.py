@@ -10,8 +10,6 @@ sys.path.append(dirname(realpath(__file__)) + sep + pardir)
 from irec.app import utils
 import argparse
 
-
-
 settings = utils.load_settings(dirname(realpath(__file__)))
 parser = argparse.ArgumentParser()
 
