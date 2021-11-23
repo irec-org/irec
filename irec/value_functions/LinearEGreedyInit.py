@@ -4,7 +4,6 @@ from tqdm import tqdm
 from threadpoolctl import threadpool_limits
 import ctypes
 from collections import defaultdict
-import joblib
 import scipy
 import mf
 from .LinearEGreedy import *
