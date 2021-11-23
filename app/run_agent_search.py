@@ -32,5 +32,5 @@ agents_search = yaml.load(open("./settings/agents_search.yaml"), Loader=yaml.Saf
 settings["defaults"]["evaluation_policy"] = args.evaluation_policy
 
 
-utils.run_agent_search_with_dataset_parameters(args.agents,args.dataset_loaders,
+utils.run_agent_search(args.agents,args.dataset_loaders,
         settings,agents_search, args.tasks,args.forced_run)

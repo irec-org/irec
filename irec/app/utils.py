@@ -1351,7 +1351,7 @@ def evaluate_agent_with_dataset_parameters(agents,dataset_loaders,
             f.result()
 
 
-def run_agent_search_with_dataset_parameters(agents,dataset_loaders, settings,agents_search_parameters, tasks,forced_run):
+def run_agent_search(agents,dataset_loaders, settings,agents_search_parameters, tasks,forced_run):
 
     from concurrent.futures import ProcessPoolExecutor, wait, FIRST_COMPLETED
 
@@ -1371,7 +1371,7 @@ def run_agent_search_with_dataset_parameters(agents,dataset_loaders, settings,ag
         for f in futures:
             f.result()
 
-def eval_agent_search_with_dataset_parameters(agents,dataset_loaders, settings,agents_search_parameters, metrics, tasks):
+def eval_agent_search(agents,dataset_loaders, settings,agents_search_parameters, metrics, tasks):
 
     from concurrent.futures import ProcessPoolExecutor, wait, FIRST_COMPLETED
     with ProcessPoolExecutor(max_workers=tasks) as executor:
@@ -1401,3 +1401,97 @@ def eval_agent_search_with_dataset_parameters(agents,dataset_loaders, settings,a
                             completed, futures = wait(futures, return_when=FIRST_COMPLETED)
         for f in futures:
             f.result()
+
+def print_agent_search(agents,dataset_loaders, settings,dataset_agents_parameters,agents_search_parameters, metrics,dump,top_save):
+
+    import irec.metrics
+    import irec.evaluation_policies
+    evaluation_policy_name = settings["defaults"]["evaluation_policy"]
+    evaluation_policy_parameters = settings["evaluation_policies"][evaluation_policy_name]
+    metrics_classes = [irec.metrics.Hits]
+    metrics_names = ["Cumulative Hits"]
+    evaluation_policy = eval("irec.evaluation_policies." + evaluation_policy_name)(
+        **evaluation_policy_parameters
+    )
+
+    interactors_classes_names_to_names = {
+        k: v["name"] for k, v in settings["interactors_general_settings"].items()
+    }
+
+    # interactors_classes = ir.select_interactors()
+    # interactors_classes = [eval('irec.value_functions.'+interactor) for interactor in args.m]
+
+
+    metric_evaluator_parameters = settings["metric_evaluators"][
+        settings["defaults"]["metric_evaluator"]
+    ]
+
+    metric_class = eval("irec.metrics." + settings["defaults"]["metric"])
+
+    metric_evaluator = eval(
+        "irec.metric_evaluators." + settings["defaults"]["metric_evaluator"]
+    )(None, **metric_evaluator_parameters)
+
+    datasets_metrics_values = defaultdict(
+        lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(float)))
+    )
+
+    for dataset_loader_name in dataset_loaders:
+        settings["defaults"]["dataset_loader"] = dataset_loader_name
+        traintest_dataset = load_dataset_experiment(settings)
+
+        for metric_name in metrics:
+            for agent_name in agents:
+                for agent_parameters in agents_search_parameters[agent_name]:
+                    print(agent_name)
+                    settings["defaults"]["metric"] = metric_name
+                    settings["defaults"]["agent"] = agent_name
+                    settings["agents"][agent_name] = agent_parameters
+                    agent = create_agent(agent_name, agent_parameters)
+                    agent_id = get_agent_id(agent_name, agent_parameters)
+                    try:
+                        metric_values = load_evaluation_experiment(settings)
+                        if metric_values == None:
+                            continue
+
+                    except errors.EvaluationRunNotFoundError as e:
+                        print(e)
+                        continue
+                    except EOFError as e:
+                        print(e)
+                        continue
+
+                    datasets_metrics_values[settings["defaults"]["dataset_loader"]][
+                        settings["defaults"]["metric"]
+                    ][agent.name][json.dumps(agent_parameters)] = metric_values[-1]
+                    print(metric_values[-1])
+    # ','.join(map(lambda x: str(x[0])+'='+str(x[1]),list(parameters.items())))
+
+    # print(datasets_metrics_values)
+    for k1, v1 in datasets_metrics_values.items():
+        for k2, v2 in v1.items():
+            for k3, v3 in v2.items():
+                values = np.array(list(v3.values()))
+                keys = list(v3.keys())
+                idxs = np.argsort(values)[::-1]
+                keys = [keys[i] for i in idxs]
+                values = [values[i] for i in idxs]
+                if dump:
+                    if k1 not in dataset_agents_parameters:
+                        dataset_agents_parameters[k1] = {}
+                    dataset_agents_parameters[k1][k3] = json.loads(keys[0])
+                if top_save:
+                    print(f"{k3}:")
+                    # print('\tparameters:')
+                    agent_parameters, metric_value = json.loads(keys[0]), values[0]
+                    for name, value in agent_parameters.items():
+                        print(f"\t\t{name}: {value}")
+                else:
+                    for k4, v4 in zip(keys, values):
+                        k4 = yaml.safe_load(k4)
+                        # k4 = ','.join(map(lambda x: str(x[0])+'='+str(x[1]),list(k4.items())))
+                        print(f"{k3}({k4}) {v4:.5f}")
+
+    if dump:
+        print("Saved parameters!")
+        open("settings" + sep + "dataset_agents.yaml", "w").write(yaml.dump(dataset_agents_parameters))
