@@ -31,3 +31,16 @@ UserCumulativeInteractionMetricEvaluator:
     - 100
   num_interactions: 100
   relevance_evaluator_threshold: 3.999
+
+UserStageInteractionMetricEvaluator:
+  interactions_to_evaluate:
+    - 0
+    - 5
+    - 10
+    - 15
+    - 20
+    - 50
+    - 100
+  num_interactions: 100
+  relevance_evaluator_threshold: 3.999
+  interaction_size: 1
