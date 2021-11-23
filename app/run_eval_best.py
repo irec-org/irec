@@ -1,21 +1,18 @@
 #!/usr/bin/python3
 
-import os
-import sys
-from os.path import dirname, realpath
-
-sys.path.append(dirname(dirname(realpath(__file__))))
-from concurrent.futures import ProcessPoolExecutor, wait, FIRST_COMPLETED
-from app import utils
-import numpy as np
-from irec.utils.dataset import Dataset
-
-# from app import utils
+from os.path import dirname, realpath, sep, pardir
 import yaml
+import sys
+import os
 import argparse
-import copy
 
-settings = utils.load_settings()
+sys.path.append(dirname(realpath(__file__)) + sep + pardir)
+from irec.app import utils
+import argparse
+
+
+
+settings = utils.load_settings(dirname(realpath(__file__)))
 parser = argparse.ArgumentParser()
 
 parser.add_argument(
@@ -36,37 +33,12 @@ parser.add_argument("--forced_run", action='store_true', default=False)
 args = parser.parse_args()
 
 
-dataset_agents = yaml.load(
+dataset_agents_parameters = yaml.load(
     open("./settings/dataset_agents.yaml"), Loader=yaml.SafeLoader
 )
 
-with ProcessPoolExecutor(max_workers=args.tasks) as executor:
-    futures = set()
-    for dataset_loader_name in args.dataset_loaders:
-        settings["defaults"]["dataset_loader"] = dataset_loader_name
+settings["defaults"]["evaluation_policy"] = args.evaluation_policy
+settings["defaults"]["metric_evaluator"] = args.metric_evaluator
 
-        traintest_dataset = utils.load_dataset_experiment(settings)
+utils.evaluate_agent_with_dataset_parameters(args.agents,args.dataset_loaders,settings,dataset_agents_parameters, args.metrics, args.tasks,args.forced_run)
 
-        data = np.vstack((traintest_dataset.train.data, traintest_dataset.test.data))
-
-        dataset = Dataset(data)
-        dataset.update_from_data()
-        dataset.update_num_total_users_items()
-        for agent_name in args.agents:
-            settings["defaults"]["evaluation_policy"] = args.evaluation_policy
-            settings["defaults"]["agent"] = agent_name
-            settings["agents"][agent_name] = dataset_agents[dataset_loader_name][
-                agent_name
-            ]
-
-            for metric_name in args.metrics:
-                settings["defaults"]["metric"] = metric_name
-                settings["defaults"]["metric_evaluator"] = args.metric_evaluator
-                f = executor.submit(
-                    utils.evaluate_itr, dataset, copy.deepcopy(settings), args.forced_run
-                )
-                futures.add(f)
-                if len(futures) >= args.tasks:
-                    completed, futures = wait(futures, return_when=FIRST_COMPLETED)
-    for f in futures:
-        f.result()
