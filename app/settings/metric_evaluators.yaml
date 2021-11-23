@@ -34,7 +34,6 @@ UserCumulativeInteractionMetricEvaluator:
 
 UserStageInteractionMetricEvaluator:
   interactions_to_evaluate:
-    - 0
     - 5
     - 10
     - 15
