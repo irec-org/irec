@@ -33,6 +33,15 @@ Main features:
 - Online Learning and Reinforcement Learning models
 - Metrics and metrics evaluators are awesome to evaluate recommender systems in different ways
 
+Also, we provide a amazing application created using the IRec library (under the app/ folder) that can be used to setup a experiment under 5~ minutes with parallel processes, log registry and results views. The main features are:
+
+- Powerful application to run any reinforcement learning experiment powered by MLflow
+- Entire pipeline of execution is fully parallelized
+- Log registry
+- Results views
+- Statistical test
+- Extensible environment
+
 
 ## Install
 
