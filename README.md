@@ -15,3 +15,61 @@
 </p>
 
 </div>
+
+## Introduction
+
+> For Python >= 3.6
+
+Reinforcement Learning Recommender Systems Framework
+
+Main features:
+
+- Several state-of-the-art reinforcement learning models for the recommendation scenario
+- Novelty, coverage and much more different type of online metrics
+- Integration with the most used datasets for evaluating recommendation systems
+- Flexible configuration
+- Modular and reusable design
+- Contains multiple evaluation policies currently used in the literature to evaluate reinforcement learning models
+- Online Learning and Reinforcement Learning models
+- Metrics and metrics evaluators are awesome to evaluate recommender systems in different ways
+
+
+## Install
+
+Install with pip:
+
+    pip install irec
+
+
+## Examples
+
+Under app/ folder is a example of a application using irec and mlflow, where different experiments can be run with easy using existing recommender systems.
+
+Check this example of a execution using the example application:
+
+    cd app
+    metrics=(Hits Precision Recall);
+    models=(Random MostPopular UCB ThompsonSampling EGreedy);
+    metric_evaluator="IterationsMetricEvaluator"
+    bases=("Netflix 10k" "Good Books" "Yahoo Music 10k");
+    # run agents
+    ./run_agent_best.py --dataset_loaders "${bases[@]}" --agents "${models[@]}"
+  
+    # evaluate agents using the metrics and metric evaluator defined
+    ./eval_agent_best.py --dataset_loaders "${bases[@]}"\
+    --agents "${models[@]}" --metrics "${metrics[@]}"\
+    --metric_evaluator="$metric_evaluator"
+
+    # print latex table with results and statistical test
+    ./print_latex_table_results.py --dataset_loaders "${bases[@]}"\
+    --agents "${models[@]}" --metrics "${metrics[@]}"\
+    --metric_evaluator="$metric_evaluator"
+
+
+## API
+
+For writing anything new to the library (e.g., value function, agent, etc) read the documentation.
+
+## Contributing
+
+All contributions are welcome! Just open a pull request.
