@@ -65,6 +65,9 @@ Check this example of a execution using the example application:
     --agents "${models[@]}" --metrics "${metrics[@]}"\
     --metric_evaluator="$metric_evaluator"
 
+Also, using the framework is also awesome, check these examples:
+
+    TODO
 
 ## API
 
