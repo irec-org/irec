@@ -35,6 +35,8 @@ class MF:
         """
         super().__init__(*args, **kwargs)
         self.num_lat = num_lat
+        self.users_weights = None
+        self.items_weights = None
 
     def normalize_matrix(self, matrix):
         return matrix / np.max(matrix)
