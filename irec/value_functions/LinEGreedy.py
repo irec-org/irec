@@ -6,6 +6,7 @@ from threadpoolctl import threadpool_limits
 import mf
 import ctypes
 from .MFValueFunction import MFValueFunction
+import scipy.sparse
 
 
 class LinEGreedy(MFValueFunction):

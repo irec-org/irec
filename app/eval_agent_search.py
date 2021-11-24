@@ -18,19 +18,19 @@ parser.add_argument(
     "--dataset_loaders", nargs="*", default=[settings["defaults"]["dataset_loader"]]
 )
 parser.add_argument("--agents", nargs="*", default=[settings["defaults"]["agent"]])
-
 parser.add_argument("--tasks", type=int, default=os.cpu_count())
-
-parser.add_argument("--forced_run", action='store_true', default=False)
+parser.add_argument("--metrics", nargs="*", default=[settings["defaults"]["metric"]])
+parser.add_argument(
+    "--metric_evaluator", default="CumulativeInteractionMetricEvaluator"
+)
 utils.load_settings_to_parser(settings, parser)
 args = parser.parse_args()
 settings = utils.sync_settings_from_args(settings, args)
 
+agents_search = yaml.load(open("./settings/agents_search.yaml"), Loader=yaml.SafeLoader)
+
 settings["defaults"]["evaluation_policy"] = args.evaluation_policy
+settings["defaults"]["metric_evaluator"] = args.metric_evaluator
 
-dataset_agents_parameters = yaml.load(
-    open("./settings/dataset_agents.yaml"), Loader=yaml.SafeLoader
-)
-
-utils.run_agent_with_dataset_parameters(args.agents,args.dataset_loaders,settings,dataset_agents_parameters, args.tasks,args.forced_run)
-
+utils.eval_agent_search(args.agents,args.dataset_loaders,
+        settings,agents_search,args.metrics, args.tasks)
