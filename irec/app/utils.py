@@ -200,13 +200,13 @@ def load_settings(workdir):
     d = dict()
     loader = yaml.SafeLoader
     
-    d["interactors_general_settings"] = yaml.load(
+    d["agents_general_settings"] = yaml.load(
             open(
             workdir
             + sep
             + "settings"
             + sep
-            + "interactors_general_settings.yaml"
+            + "agents_general_settings.yaml"
             ),
             Loader=loader,
             )
@@ -468,7 +468,7 @@ def default_to_regular(d):
 
 
 def get_agent_pretty_name(agent_name, settings):
-    return settings["interactors_general_settings"][agent_name]["name"]
+    return settings["agents_general_settings"][agent_name]["name"]
 
 
 def nested_dict_to_df(values_dict):
@@ -980,7 +980,7 @@ def print_results_latex_table(agents,dataset_loaders,
     metrics_weights = {i: 1 / len(metrics_classes_names) for i in metrics_classes_names}
 
     interactors_classes_names_to_names = {
-        k: v["name"] for k, v in settings["interactors_general_settings"].items()
+        k: v["name"] for k, v in settings["agents_general_settings"].items()
     }
 
 
@@ -1415,7 +1415,7 @@ def print_agent_search(agents,dataset_loaders, settings,dataset_agents_parameter
     )
 
     interactors_classes_names_to_names = {
-        k: v["name"] for k, v in settings["interactors_general_settings"].items()
+        k: v["name"] for k, v in settings["agents_general_settings"].items()
     }
 
     # interactors_classes = ir.select_interactors()
