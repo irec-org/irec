@@ -983,9 +983,10 @@ def print_results_latex_table(agents,dataset_loaders,
         k: v["name"] for k, v in settings["interactors_general_settings"].items()
     }
 
-
-    nums_interactions_to_show = list(map(int, metric_evaluator.interactions_to_evaluate))
-
+    if metric_evaluator_name == "StageIterationsMetricEvaluator":
+        nums_interactions_to_show = ["1-5", "6-10", "11-15", "16-20", "21-50", "51-100"]
+    else:
+        nums_interactions_to_show = list(map(int, metric_evaluator.interactions_to_evaluate))
 
     def generate_table_spec():
         res = "|"
