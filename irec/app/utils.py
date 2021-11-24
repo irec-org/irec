@@ -856,7 +856,7 @@ def generate_base(dataset_name,settings):
         # for k,v in dataset_loader_settings.items():
         # log_param(k,v)
 
-        from irec.utils.DatasetLoaderFactory import DatasetLoaderFactory
+        from irec.utils.Factory import DatasetLoaderFactory
         dataset_loader_factory = DatasetLoaderFactory()
         dataset_loader = dataset_loader_factory.create(
             dataset_name, dataset_loader_settings
