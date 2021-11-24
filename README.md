@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/28633659/138386006-1c0ba3d1-a6c1-4571-b111-92f2c90b8bb3.png">
+  <img width=200 src="https://user-images.githubusercontent.com/28633659/138386006-1c0ba3d1-a6c1-4571-b111-92f2c90b8bb3.png">
 </p>
 <div align="center"><p>
     <a href="https://github.com/heitor57/irec/releases/latest">
