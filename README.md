@@ -13,6 +13,11 @@
       <img src="https://img.shields.io/github/license/heitor57/irec?style=flat-square&logo=MIT&label=License" alt="License"
     />
     </a>
+    <a href="https://github.com/heitor57/irec/actions/workflows/tests.yml">
+      <img src="https://github.com/heitor57/irec/actions/workflows/tests.yml/badge.svg" alt="Tests"
+    />
+    </a>
+    <a href="https://badge.fury.io/py/irec"><img src="https://badge.fury.io/py/irec.svg" alt="PyPI version" height="18"></a>
 </p>
 
 </div>
