@@ -90,7 +90,7 @@ evaluation_policy = eval("irec.evaluation_policies." + evaluation_policy_name)(
 )
 
 interactors_classes_names_to_names = {
-    k: v["name"] for k, v in settings["interactors_general_settings"].items()
+    k: v["name"] for k, v in settings["agents_general_settings"].items()
 }
 
 nums_interactions_to_show = list(map(int, metric_evaluator.interactions_to_evaluate))

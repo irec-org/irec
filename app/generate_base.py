@@ -7,7 +7,7 @@ sys.path.append(dirname(realpath(__file__)) + sep + pardir)
 from app import constants
 from irec.app import utils
 import argparse
-from irec.utils.DatasetLoaderFactory import DatasetLoaderFactory
+from irec.utils.Factory import DatasetLoaderFactory
 import mlflow
 
 settings = utils.load_settings(dirname(realpath(__file__)))

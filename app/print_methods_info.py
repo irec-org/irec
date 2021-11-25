@@ -51,7 +51,7 @@ settings = utils.sync_settings_from_args(settings, args)
 nums_interactions_to_show = args.i
 interactors_classes_names_to_names = {
     k: v['name']
-    for k, v in settings['interactors_general_settings'].items()
+    for k, v in settings['agents_general_settings'].items()
 }
 
 dm = DatasetManager()
