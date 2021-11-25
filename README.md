@@ -80,9 +80,9 @@ Check this example of a execution using the example application:
     --agents "${models[@]}" --metrics "${metrics[@]}"\
     --metric_evaluator="$metric_evaluator"
 
-Also, check these examples using the framework in Python code:
+<!--Also, check these examples using the framework in Python code:-->
 
-      :TODO:
+<!--:TODO:-->
 
 ## API
 
