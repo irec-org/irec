@@ -1,6 +1,7 @@
 <p align="center">
-  <img width=200 src="https://user-images.githubusercontent.com/28633659/138386006-1c0ba3d1-a6c1-4571-b111-92f2c90b8bb3.png">
+  <img width=200 src="https://user-images.githubusercontent.com/28633659/143366444-05c63b55-00f8-4221-8b30-e8d660f10bea.png">
 </p>
+
 <div align="center"><p>
     <a href="https://github.com/heitor57/irec/releases/latest">
       <img alt="Latest release" src="https://img.shields.io/github/v/release/heitor57/irec" />
@@ -18,7 +19,7 @@
 
 ## Introduction
 
-> For Python >= 3.6
+> For Python >= 3.9
 
 Reinforcement Learning Recommender Systems Framework
 
