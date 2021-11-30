@@ -3,8 +3,10 @@
 from os.path import dirname, realpath
 import yaml
 import os
+import sys
 import argparse
 
+sys.path.append(dirname(dirname(realpath(__file__))))
 from irec.app import utils
 import argparse
 

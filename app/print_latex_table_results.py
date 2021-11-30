@@ -1,10 +1,12 @@
 #!/usr/bin/python3
 from os.path import dirname, realpath
+import argparse
 import yaml
-import argparse
+import sys
+import os
 
+sys.path.append(dirname(dirname(realpath(__file__))))
 from irec.app import utils
-import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--evaluation_policy")

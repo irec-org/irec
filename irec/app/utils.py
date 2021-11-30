@@ -2,6 +2,8 @@ from os.path import dirname, realpath, sep, pardir
 import os
 import sys
 
+from six import u
+
 sys.path.append(dirname(dirname(realpath(__file__))))
 from app import errors
 import pickle
@@ -1135,8 +1137,8 @@ def print_results_latex_table(
                     ][metric_class_name][second_best_itr][i]
 
                     try:
-                        print(best_itr_users_val)
-                        print(second_best_itr_users_val)
+                        # print(best_itr_users_val)
+                        # print(second_best_itr_users_val)
                         statistic, pvalue = scipy.stats.wilcoxon(
                             best_itr_users_val,
                             second_best_itr_users_val,
@@ -1217,6 +1219,9 @@ def print_results_latex_table(
     os.system(
         f'latexmk -pdflatex=pdflatex -pdf -interaction=nonstopmode -output-directory="{pdf_path}" "{tex_path}"'
     )
+    useless_files = [os.path.join(dp, f) for dp, dn, filenames in os.walk(pdf_path) for f in filenames if os.path.splitext(f)[1] != '.pdf']
+    for useless_file in useless_files:
+        os.remove(useless_file)
 
 
 def evaluate_agent_with_dataset_parameters(
