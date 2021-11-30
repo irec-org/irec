@@ -764,6 +764,7 @@ def download_data(dataset_names):
         "Yahoo Music": "1zWxmQ8zJvZQKBgUGK49_O6g6dQ7Mxhzn",
         "Yahoo Music 5k": "1c7HRu7Nlz-gbcc1-HsSTk98PYIZSQWEy",
         "Yahoo Music 10k": "1LMIMFjweVebeewn4D61KX72uIQJlW5d0",
+        "Nano Dataset": "1ya8m3dDJ8OzvmDuYPlb6_fgsUrRysfAC",
     }
 
     dataset_dir = "./data/datasets/"
@@ -1021,11 +1022,17 @@ def print_results_latex_table(
                     metric_value = datasets_metrics_values[dataset_loader_name][
                         metric_class_name
                     ][agent_name][num_interaction]
-                    utility_scores[dataset_loader_name][metric_class_name][agent_name][
-                        num_interaction
-                    ] = (metric_value - metric_min_value) / (
-                        metric_max_value - metric_min_value
-                    )
+                    print("metric_value",metric_value,"metric_min_value",metric_min_value)
+                    try:
+                        utility_scores[dataset_loader_name][metric_class_name][agent_name][
+                            num_interaction
+                        ] = (metric_value - metric_min_value) / (
+                            metric_max_value - metric_min_value
+                        )
+                    except:
+                        utility_scores[dataset_loader_name][metric_class_name][agent_name][
+                            num_interaction
+                        ] = 0.0
 
     for num_interaction in range(len(nums_interactions_to_show)):
         for dataset_loader_name in datasets_names:

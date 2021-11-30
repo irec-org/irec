@@ -264,3 +264,18 @@
     random_seed: 0
     test_consumes: 1
     train_size: 0.8
+
+'Nano Dataset':
+  DefaultDatasetLoader:
+    crono: false
+    dataset_path: ./data/datasets/Nano Dataset/
+    random_seed: 0
+    test_consumes: 1
+    train_size: 0.8
+'Nano Dataset Validation':
+  DefaultValidationDatasetLoader:
+    crono: false
+    dataset_path: ./data/datasets/Nano Dataset/
+    random_seed: 0
+    test_consumes: 1
+    train_size: 0.8
