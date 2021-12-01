@@ -4,6 +4,7 @@ import argparse
 import yaml
 import sys
 import os
+sys.path.append(dirname(dirname(realpath(__file__))))
 
 from irec.app import utils
 
@@ -24,5 +25,8 @@ settings = utils.sync_settings_from_args(settings, args)
 dataset_agents_parameters = yaml.load(
     open("./settings/dataset_agents.yaml"), Loader=yaml.SafeLoader
 )
+
+settings["defaults"]["metric_evaluator"] = args.metric_evaluator
+settings["defaults"]["evaluation_policy"] = args.evaluation_policy
 
 utils.print_results_latex_table(args.agents,args.dataset_loaders,settings,dataset_agents_parameters, args.metrics, args.r,args.dump,args.type)

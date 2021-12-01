@@ -30,11 +30,10 @@ import irec.evaluation_policies
 from irec.utils.Factory import (
     AgentFactory,
 )
-from irec.metric_evaluators import (
-    InteractionMetricEvaluator,
-    CumulativeMetricEvaluator,
-    UserCumulativeInteractionMetricEvaluator,
-)
+
+from irec.metric_evaluators.InteractionMetricEvaluator import InteractionMetricEvaluator
+from irec.metric_evaluators.CumulativeMetricEvaluator import CumulativeMetricEvaluator
+from irec.metric_evaluators.UserCumulativeInteractionMetricEvaluator import UserCumulativeInteractionMetricEvaluator
 import copy
 import os.path
 import collections.abc
@@ -543,9 +542,10 @@ def evaluate_itr(dataset, settings, forced_run):
 
     metric_class = eval("irec.metrics." + settings["defaults"]["metric"])
     print(settings["defaults"]["metric_evaluator"], metric_evaluator_parameters)
-    metric_evaluator = eval(
-        "irec.metric_evaluators." + settings["defaults"]["metric_evaluator"]
-    )(dataset, **metric_evaluator_parameters)
+
+    metric_evaluator_name = settings["defaults"]["metric_evaluator"]
+    exec(f"from irec.metric_evaluators.{metric_evaluator_name} import {metric_evaluator_name}")
+    metric_evaluator = eval(metric_evaluator_name)(dataset, **metric_evaluator_parameters)
 
     mlflow.set_experiment(settings["defaults"]["agent_experiment"])
     # print(parameters_agent_run)
@@ -571,6 +571,7 @@ def evaluate_itr(dataset, settings, forced_run):
         interactions,
     )
     with mlflow.start_run(run_id=run.info.run_id) as run:
+        print(metric_evaluator, UserCumulativeInteractionMetricEvaluator)
         if isinstance(metric_evaluator, UserCumulativeInteractionMetricEvaluator):
             mlflow.log_metric(
                 metric_class.__name__, np.mean(list(metric_values[-1].values()))
@@ -853,9 +854,8 @@ def print_results_latex_table(
     metric_evaluator_name = settings["defaults"]["metric_evaluator"]
     metric_evaluator_parameters = settings["metric_evaluators"][metric_evaluator_name]
 
-    metric_evaluator = eval("irec.metric_evaluators." + metric_evaluator_name)(
-        None, **metric_evaluator_parameters
-    )
+    exec(f"from irec.metric_evaluators.{metric_evaluator_name} import {metric_evaluator_name}")
+    metric_evaluator = eval(metric_evaluator_name)(None, **metric_evaluator_parameters)
 
     evaluation_policy_name = settings["defaults"]["evaluation_policy"]
     evaluation_policy_parameters = settings["evaluation_policies"][
@@ -884,6 +884,7 @@ def print_results_latex_table(
         k: v["name"] for k, v in settings["agents_general_settings"].items()
     }
 
+    print("metric_evaluator_name", metric_evaluator_name)
     if metric_evaluator_name == "StageIterationsMetricEvaluator":
         nums_interactions_to_show = ["1-5", "6-10", "11-15", "16-20", "21-50", "51-100"]
     else:
