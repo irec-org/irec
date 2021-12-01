@@ -1,0 +1,28 @@
+ICTRTS:
+  num_lat: linspace(1,10,1)
+  num_particles: linspace(1,10,1)
+
+NICF:
+  batch: 128
+  clip_param: 0.2
+  dropout_rate: 0.1
+  gamma: 0.0
+  inner_epoch: 50
+  latent_factor: linspace(10, 100, 10)
+  learning_rate: 1
+  num_blocks: 2
+  num_heads: 1
+  restore_model: false
+  rnn_layer: 1
+  time_step: 3
+  training_epoch: [30000,40000]
+
+PTS:
+  num_lat: [10,20,30,40,50]
+  num_particles: 2
+  var: 0.3
+  var_u: 0.6
+  var_v: 0.6
+
+EGreedy:
+  epsilon: linspace(0.1, 1, 5)
