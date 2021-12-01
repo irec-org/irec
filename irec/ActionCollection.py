@@ -1,13 +1,13 @@
 from typing import List
 
 
-class CandidateActions:
-    """CandidateActions."""
+class ActionCollection:
+    """ActionCollection."""
 
     pass
 
 
-class OneUserCandidateActions(CandidateActions):
+class OneUserActionCollection(ActionCollection):
     """OneUserCandidateActions."""
 
     def __init__(self, user: int, items: List[int]) -> None:

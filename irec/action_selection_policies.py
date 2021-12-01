@@ -1,4 +1,4 @@
-from irec.CandidateActions import CandidateActions
+from irec.ActionCollection import ActionCollection
 from sklearn.cluster import KMeans
 import numpy as np
 from collections import defaultdict
@@ -16,7 +16,7 @@ class ActionSelectionPolicy:
     def __init__(self, *args, **kwargs):
         pass
 
-    def select_actions(self, actions: CandidateActions, action_estimates, actions_num):
+    def select_actions(self, actions: ActionCollection, action_estimates, actions_num):
         raise NotImplementedError
 
     def update(self, observation, action, reward, info):

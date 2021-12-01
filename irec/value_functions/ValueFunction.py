@@ -2,8 +2,8 @@ from os.path import dirname, realpath, sep, pardir
 import sys, os
 
 # sys.path.append(dirname(dirname(realpath(__file__))))
-from irec.CandidateActions import CandidateActions
-from irec.CandidateAction import CandidateAction
+from irec.ActionCollection import ActionCollection
+from irec.Action import Action
 
 import numpy as np
 import scipy.sparse
@@ -44,7 +44,7 @@ class ValueFunction:
         pass
         # super().reset(train_dataset)
 
-    def action_estimates(self, candidate_actions: CandidateActions) -> Tuple[Any, dict]:
+    def action_estimates(self, candidate_actions: ActionCollection) -> Tuple[Any, dict]:
         """action_estimates.
         
         Received as input the currently available actions the agent can perform and returns 
@@ -52,7 +52,7 @@ class ValueFunction:
         to allow a specific next action to be performed.
 
         Args:
-            candidate_actions (CandidateActions): candidate_actions
+            candidate_actions (ActionCollection): candidate_actions
 
         Returns:
             Tuple[Any, dict]: Scores and information
@@ -63,7 +63,7 @@ class ValueFunction:
         return None, None
 
     def update(
-        self, observation: Any, action: CandidateAction, reward: float, info: dict
+        self, observation: Any, action: Action, reward: float, info: dict
     ) -> None:
         """update.
         
@@ -72,7 +72,7 @@ class ValueFunction:
 
         Args:
             observation (Any): observation
-            action (CandidateAction): action
+            action (Action): action
             reward (float): reward
             info (dict): info
         """

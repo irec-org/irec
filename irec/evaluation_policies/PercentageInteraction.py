@@ -1,4 +1,4 @@
-from irec.CandidateActions import OneUserCandidateActions
+from irec.ActionCollection import OneUserActionCollection
 from irec.value_functions.MostPopular import MostPopular
 from irec.value_functions.LogPopEnt import LogPopEnt
 from irec.value_functions.BestRated import BestRated
@@ -60,7 +60,7 @@ class PercentageInteraction(EvaluationPolicy):
         uid, num_itr_npers, rec_items, items_not_recommended, not_recommended = result
         user_items_recommended = []
         for itr in range(self.num_interactions):
-            actions, info = model.act(OneUserCandidateActions(uid, items_not_recommended), self.interaction_size)
+            actions, info = model.act(OneUserActionCollection(uid, items_not_recommended), self.interaction_size)
             best_items = actions[1]
             for item in best_items:
                 not_recommended[item] = 0
