@@ -25,6 +25,7 @@ from os.path import dirname, realpath, sep, pardir
 import irec.action_selection_policies
 import irec.agents
 import irec.value_functions
+from irec.evaluation_policies.EvaluationPolicy import EvaluationPolicy
 import irec.evaluation_policies
 from irec.utils.Factory import (
     AgentFactory,
@@ -273,7 +274,7 @@ def get_experiment_run_id(dm, evaluation_policy, itr_id):
 def run_interactor(
     agent,
     traintest_dataset: TrainTestDataset,
-    evaluation_policy: irec.evaluation_policies.EvaluationPolicy,
+    evaluation_policy: EvaluationPolicy,
     settings,
     forced_run,
 ):
@@ -487,12 +488,17 @@ def run_agent(traintest_dataset, settings, forced_run):
         settings["defaults"]["dataset_loader"]
     ]
 
-    evaluation_policy_parameters = settings["evaluation_policies"][
-        settings["defaults"]["evaluation_policy"]
-    ]
-    evaluation_policy = eval(
-        "irec.evaluation_policies." + settings["defaults"]["evaluation_policy"]
-    )(**evaluation_policy_parameters)
+    evaluation_policy_name = settings["defaults"]["evaluation_policy"]
+    evaluation_policy_parameters = settings["evaluation_policies"][evaluation_policy_name]
+
+    # exec("import irec.value_functions.{}".format(value_function_name))
+    #         value_function = eval(
+    #             "irec.value_functions.{}.{}".format(
+    #                 value_function_name, value_function_name
+    #             )
+    #         )(**value_function_parameters)
+    exec(f"from irec.evaluation_policies.{evaluation_policy_name} import {evaluation_policy_name}")
+    evaluation_policy = eval(evaluation_policy_name)(**evaluation_policy_parameters)
 
     mlflow.set_experiment(settings["defaults"]["dataset_experiment"])
 
@@ -855,9 +861,10 @@ def print_results_latex_table(
     evaluation_policy_parameters = settings["evaluation_policies"][
         evaluation_policy_name
     ]
-    evaluation_policy = eval("irec.evaluation_policies." + evaluation_policy_name)(
-        **evaluation_policy_parameters
-    )
+    
+    exec(f"from irec.evaluation_policies.{evaluation_policy_name} import {evaluation_policy_name}")
+    evaluation_policy = eval(evaluation_policy_name)(**evaluation_policy_parameters)
+
     # metrics_names = [
     # 'Cumulative Precision',
     # 'Cumulative Recall',

@@ -80,10 +80,10 @@ class Dataset:
         self.max_rating = np.max(self.data[:, 2])
 
     def update_num_total_users_items(self):
-        self.num_total_users = self.num_users
-        self.num_total_items = self.num_items
-        # self.num_total_users = self.max_uid + 1
-        # self.num_total_items = self.max_iid + 1
+        # self.num_total_users = self.num_users
+        # self.num_total_items = self.num_items
+        self.num_total_users = self.max_uid + 1
+        self.num_total_items = self.max_iid + 1
         # print(self.num_total_users)
         # print(self.num_total_items)
 
