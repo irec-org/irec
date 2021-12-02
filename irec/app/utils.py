@@ -31,6 +31,7 @@ from irec.utils.Factory import (
     AgentFactory,
 )
 
+import scipy
 from irec.metric_evaluators.InteractionMetricEvaluator import InteractionMetricEvaluator
 from irec.metric_evaluators.CumulativeMetricEvaluator import CumulativeMetricEvaluator
 from irec.metric_evaluators.UserCumulativeInteractionMetricEvaluator import UserCumulativeInteractionMetricEvaluator
@@ -1158,8 +1159,8 @@ def print_results_latex_table(
                             best_itr_users_val,
                             second_best_itr_users_val,
                         )
-                    except:
-                        print("Wilcoxon error")
+                    except Exception as E:
+                        print("[ERROR]: Wilcoxon error", E)
                         datasets_metrics_gain[dataset_loader_name][metric_class_name][
                             best_itr
                         ][i] = bullet_str
