@@ -2,6 +2,8 @@ from os.path import dirname, realpath, sep, pardir
 import os
 import sys
 
+from six import u
+
 sys.path.append(dirname(dirname(realpath(__file__))))
 from app import errors
 import pickle
@@ -23,15 +25,16 @@ from os.path import dirname, realpath, sep, pardir
 import irec.action_selection_policies
 import irec.agents
 import irec.value_functions
+from irec.evaluation_policies.EvaluationPolicy import EvaluationPolicy
 import irec.evaluation_policies
 from irec.utils.Factory import (
     AgentFactory,
 )
-from irec.metric_evaluators import (
-    InteractionMetricEvaluator,
-    CumulativeMetricEvaluator,
-    UserCumulativeInteractionMetricEvaluator,
-)
+
+import scipy
+from irec.metric_evaluators.InteractionMetricEvaluator import InteractionMetricEvaluator
+from irec.metric_evaluators.CumulativeMetricEvaluator import CumulativeMetricEvaluator
+from irec.metric_evaluators.UserCumulativeInteractionMetricEvaluator import UserCumulativeInteractionMetricEvaluator
 import copy
 import os.path
 import collections.abc
@@ -271,7 +274,7 @@ def get_experiment_run_id(dm, evaluation_policy, itr_id):
 def run_interactor(
     agent,
     traintest_dataset: TrainTestDataset,
-    evaluation_policy: irec.evaluation_policies.EvaluationPolicy,
+    evaluation_policy: EvaluationPolicy,
     settings,
     forced_run,
 ):
@@ -485,12 +488,17 @@ def run_agent(traintest_dataset, settings, forced_run):
         settings["defaults"]["dataset_loader"]
     ]
 
-    evaluation_policy_parameters = settings["evaluation_policies"][
-        settings["defaults"]["evaluation_policy"]
-    ]
-    evaluation_policy = eval(
-        "irec.evaluation_policies." + settings["defaults"]["evaluation_policy"]
-    )(**evaluation_policy_parameters)
+    evaluation_policy_name = settings["defaults"]["evaluation_policy"]
+    evaluation_policy_parameters = settings["evaluation_policies"][evaluation_policy_name]
+
+    # exec("import irec.value_functions.{}".format(value_function_name))
+    #         value_function = eval(
+    #             "irec.value_functions.{}.{}".format(
+    #                 value_function_name, value_function_name
+    #             )
+    #         )(**value_function_parameters)
+    exec(f"from irec.evaluation_policies.{evaluation_policy_name} import {evaluation_policy_name}")
+    evaluation_policy = eval(evaluation_policy_name)(**evaluation_policy_parameters)
 
     mlflow.set_experiment(settings["defaults"]["dataset_experiment"])
 
@@ -535,9 +543,10 @@ def evaluate_itr(dataset, settings, forced_run):
 
     metric_class = eval("irec.metrics." + settings["defaults"]["metric"])
     print(settings["defaults"]["metric_evaluator"], metric_evaluator_parameters)
-    metric_evaluator = eval(
-        "irec.metric_evaluators." + settings["defaults"]["metric_evaluator"]
-    )(dataset, **metric_evaluator_parameters)
+
+    metric_evaluator_name = settings["defaults"]["metric_evaluator"]
+    exec(f"from irec.metric_evaluators.{metric_evaluator_name} import {metric_evaluator_name}")
+    metric_evaluator = eval(metric_evaluator_name)(dataset, **metric_evaluator_parameters)
 
     mlflow.set_experiment(settings["defaults"]["agent_experiment"])
     # print(parameters_agent_run)
@@ -563,6 +572,7 @@ def evaluate_itr(dataset, settings, forced_run):
         interactions,
     )
     with mlflow.start_run(run_id=run.info.run_id) as run:
+        print(metric_evaluator, UserCumulativeInteractionMetricEvaluator)
         if isinstance(metric_evaluator, UserCumulativeInteractionMetricEvaluator):
             mlflow.log_metric(
                 metric_class.__name__, np.mean(list(metric_values[-1].values()))
@@ -762,6 +772,7 @@ def download_data(dataset_names):
         "Yahoo Music": "1zWxmQ8zJvZQKBgUGK49_O6g6dQ7Mxhzn",
         "Yahoo Music 5k": "1c7HRu7Nlz-gbcc1-HsSTk98PYIZSQWEy",
         "Yahoo Music 10k": "1LMIMFjweVebeewn4D61KX72uIQJlW5d0",
+        "Nano Dataset": "1ya8m3dDJ8OzvmDuYPlb6_fgsUrRysfAC",
     }
 
     dataset_dir = "./data/datasets/"
@@ -844,17 +855,17 @@ def print_results_latex_table(
     metric_evaluator_name = settings["defaults"]["metric_evaluator"]
     metric_evaluator_parameters = settings["metric_evaluators"][metric_evaluator_name]
 
-    metric_evaluator = eval("irec.metric_evaluators." + metric_evaluator_name)(
-        None, **metric_evaluator_parameters
-    )
+    exec(f"from irec.metric_evaluators.{metric_evaluator_name} import {metric_evaluator_name}")
+    metric_evaluator = eval(metric_evaluator_name)(None, **metric_evaluator_parameters)
 
     evaluation_policy_name = settings["defaults"]["evaluation_policy"]
     evaluation_policy_parameters = settings["evaluation_policies"][
         evaluation_policy_name
     ]
-    evaluation_policy = eval("irec.evaluation_policies." + evaluation_policy_name)(
-        **evaluation_policy_parameters
-    )
+    
+    exec(f"from irec.evaluation_policies.{evaluation_policy_name} import {evaluation_policy_name}")
+    evaluation_policy = eval(evaluation_policy_name)(**evaluation_policy_parameters)
+
     # metrics_names = [
     # 'Cumulative Precision',
     # 'Cumulative Recall',
@@ -874,6 +885,7 @@ def print_results_latex_table(
         k: v["name"] for k, v in settings["agents_general_settings"].items()
     }
 
+    print("metric_evaluator_name", metric_evaluator_name)
     if metric_evaluator_name == "StageIterationsMetricEvaluator":
         nums_interactions_to_show = ["1-5", "6-10", "11-15", "16-20", "21-50", "51-100"]
     else:
@@ -1019,11 +1031,17 @@ def print_results_latex_table(
                     metric_value = datasets_metrics_values[dataset_loader_name][
                         metric_class_name
                     ][agent_name][num_interaction]
-                    utility_scores[dataset_loader_name][metric_class_name][agent_name][
-                        num_interaction
-                    ] = (metric_value - metric_min_value) / (
-                        metric_max_value - metric_min_value
-                    )
+                    print("metric_value",metric_value,"metric_min_value",metric_min_value)
+                    try:
+                        utility_scores[dataset_loader_name][metric_class_name][agent_name][
+                            num_interaction
+                        ] = (metric_value - metric_min_value) / (
+                            metric_max_value - metric_min_value
+                        )
+                    except:
+                        utility_scores[dataset_loader_name][metric_class_name][agent_name][
+                            num_interaction
+                        ] = 0.0
 
     for num_interaction in range(len(nums_interactions_to_show)):
         for dataset_loader_name in datasets_names:
@@ -1135,14 +1153,14 @@ def print_results_latex_table(
                     ][metric_class_name][second_best_itr][i]
 
                     try:
-                        print(best_itr_users_val)
-                        print(second_best_itr_users_val)
+                        # print(best_itr_users_val)
+                        # print(second_best_itr_users_val)
                         statistic, pvalue = scipy.stats.wilcoxon(
                             best_itr_users_val,
                             second_best_itr_users_val,
                         )
-                    except:
-                        print("Wilcoxon error")
+                    except Exception as E:
+                        print("[ERROR]: Wilcoxon error", E)
                         datasets_metrics_gain[dataset_loader_name][metric_class_name][
                             best_itr
                         ][i] = bullet_str
@@ -1217,6 +1235,9 @@ def print_results_latex_table(
     os.system(
         f'latexmk -pdflatex=pdflatex -pdf -interaction=nonstopmode -output-directory="{pdf_path}" "{tex_path}"'
     )
+    useless_files = [os.path.join(dp, f) for dp, dn, filenames in os.walk(pdf_path) for f in filenames if os.path.splitext(f)[1] != '.pdf']
+    for useless_file in useless_files:
+        os.remove(useless_file)
 
 
 def evaluate_agent_with_dataset_parameters(

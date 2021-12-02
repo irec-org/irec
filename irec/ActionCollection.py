@@ -1,14 +1,14 @@
 from typing import List
 
 
-class CandidateActions:
-    """CandidateActions."""
+class ActionCollection:
+    """ActionCollection."""
 
     pass
 
 
-class OneUserCandidateActions(CandidateActions):
-    """OneUserCandidateActions."""
+class OneUserActionCollection(ActionCollection):
+    """OneUserActionCollection."""
 
     def __init__(self, user: int, items: List[int]) -> None:
         """__init__.

@@ -1,10 +1,10 @@
 #!/usr/bin/python3
 from os.path import dirname, realpath
+import argparse
 import yaml
-import argparse
-
+import sys
+import os
 from irec.app import utils
-import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--evaluation_policy")
@@ -23,5 +23,8 @@ settings = utils.sync_settings_from_args(settings, args)
 dataset_agents_parameters = yaml.load(
     open("./settings/dataset_agents.yaml"), Loader=yaml.SafeLoader
 )
+
+settings["defaults"]["metric_evaluator"] = args.metric_evaluator
+settings["defaults"]["evaluation_policy"] = args.evaluation_policy
 
 utils.print_results_latex_table(args.agents,args.dataset_loaders,settings,dataset_agents_parameters, args.metrics, args.r,args.dump,args.type)

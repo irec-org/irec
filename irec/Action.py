@@ -1,11 +1,11 @@
-class CandidateAction:
-    """CandidateAction."""
+class Action:
+    """Action."""
 
     pass
 
 
-class UICandidateAction(CandidateAction):
-    """UICandidateAction."""
+class UIAction(Action):
+    """UIAction."""
 
     def __init__(self, user: int, item: int):
         """__init__.

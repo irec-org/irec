@@ -1,8 +1,8 @@
 from numpy.lib.npyio import save
 from irec import value_functions
 from irec import action_selection_policies
-from irec.CandidateActions import CandidateActions
-from irec.CandidateAction import CandidateAction, UICandidateAction
+from irec.ActionCollection import ActionCollection
+from irec.Action import Action, UIAction
 import numpy as np
 from typing import List, Any
 
@@ -54,18 +54,18 @@ class Agent:
         self.action_selection_policy = action_selection_policy
         self.name = name
 
-    def act(self, candidate_actions: CandidateActions, actions_num: int):
+    def act(self, candidate_actions: ActionCollection, actions_num: int):
         """act.
 
         An action is a recommendation, which will be made about the items available to a particular target user.
 
         Args:
-            candidate_actions (CandidateActions): candidate_actions
+            candidate_actions (ActionCollection): candidate_actions
             actions_num (int): actions_num
         """
         raise NotImplementedError
 
-    def observe(self, observation: Any, action: CandidateAction, reward: float, info: dict):
+    def observe(self, observation: Any, action: Action, reward: float, info: dict):
         """observe.
 
         After each action, the agent receives a reward, and determines what kind of information the agent 
@@ -73,7 +73,7 @@ class Agent:
 
         Args:
             observation (Any): observation
-            action (CandidateAction): action
+            action (Action): action
             reward (float): reward
             info (dict): info
         """
@@ -104,11 +104,11 @@ class SimpleAgent(Agent):
         """
         super().__init__(*args, **kwargs)
 
-    def act(self, candidate_actions: CandidateActions, actions_num: int):
+    def act(self, candidate_actions: ActionCollection, actions_num: int):
         """act.
 
         Args:
-            candidate_actions (CandidateActions): candidate_actions
+            candidate_actions (ActionCollection): candidate_actions
             actions_num (int): actions_num
         """
         action_estimates, vf_info = self.value_function.action_estimates(
@@ -121,13 +121,13 @@ class SimpleAgent(Agent):
         return actions, {"vf_info": vf_info, "asp_info": asp_info}
 
     def observe(
-        self, observation: Any, action: UICandidateAction, reward: float, info: dict
+        self, observation: Any, action: UIAction, reward: float, info: dict
     ):
         """observe.
         
         Args:
             observation (Any): observation
-            action (UICandidateAction): action
+            action (UIAction): action
             reward (float): reward
             info (dict): info
         """
@@ -188,11 +188,11 @@ class SimpleEnsembleAgent(Agent):
         self.default_actions_num = 1
         self.save_meta_actions = save_meta_actions
 
-    def act(self, candidate_actions: CandidateActions, actions_num: int):
+    def act(self, candidate_actions: ActionCollection, actions_num: int):
         """act.
 
         Args:
-            candidate_actions (CandidateActions): candidate_actions
+            candidate_actions (ActionCollection): candidate_actions
             actions_num (int): actions_num
         """
         info = {}
@@ -233,12 +233,12 @@ class SimpleEnsembleAgent(Agent):
             info = None
         return selected_agent_actions, info
 
-    def observe(self, observation: Any, action: UICandidateAction, reward: float, info: dict):
+    def observe(self, observation: Any, action: UIAction, reward: float, info: dict):
         """observe.
 
         Args:
             observation (Any): observation
-            action (UICandidateAction): action
+            action (UIAction): action
             reward (float): reward
             info (dict): info
         """

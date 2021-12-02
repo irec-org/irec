@@ -37,4 +37,3 @@ settings["defaults"]["evaluation_policy"] = args.evaluation_policy
 settings["defaults"]["metric_evaluator"] = args.metric_evaluator
 
 utils.evaluate_agent_with_dataset_parameters(args.agents,args.dataset_loaders,settings,dataset_agents_parameters, args.metrics, args.tasks,args.forced_run)
-
