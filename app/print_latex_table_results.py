@@ -4,8 +4,6 @@ import argparse
 import yaml
 import sys
 import os
-sys.path.append(dirname(dirname(realpath(__file__))))
-
 from irec.app import utils
 
 parser = argparse.ArgumentParser()

@@ -8,7 +8,7 @@ class ActionCollection:
 
 
 class OneUserActionCollection(ActionCollection):
-    """OneUserCandidateActions."""
+    """OneUserActionCollection."""
 
     def __init__(self, user: int, items: List[int]) -> None:
         """__init__.
