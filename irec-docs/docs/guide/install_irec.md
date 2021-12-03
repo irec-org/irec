@@ -17,5 +17,4 @@
 ### From the GitHub source (for latest updates):
     
     git clone https://github.com/heitor57/irec.git
-    pip install -r app/requirements.txt
-    pip install -r irec/requirements.txt
+    pip install -e irec
