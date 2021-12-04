@@ -18,7 +18,7 @@ class Recommender:
 
     def train(self):
         """train."""
-        ṕass
+        pass
 
     def predict(self):
         """predict."""

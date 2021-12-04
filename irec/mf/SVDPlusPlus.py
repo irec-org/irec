@@ -11,9 +11,23 @@ from numba import jit
 
 
 @jit(nopython=True)
-def _svdplusplus(data, indptr, indices, n_u, num_users, num_items, num_lat,
-                 learn_rate, delta, delta_bias, bias_learn_rate, iterations,
-                 stop_criteria, init_mean, init_std):
+def _svdplusplus(
+    data,
+    indptr,
+    indices,
+    n_u,
+    num_users,
+    num_items,
+    num_lat,
+    learn_rate,
+    delta,
+    delta_bias,
+    bias_learn_rate,
+    iterations,
+    stop_criteria,
+    init_mean,
+    init_std,
+):
     # print(n_u)
     num_r = len(data)
     r_mean = np.mean(data)
@@ -48,17 +62,16 @@ def _svdplusplus(data, indptr, indices, n_u, num_users, num_items, num_lat,
                 # print(len(e_ui))
                 # print(len(e_ui))
                 # print(e_ui)
-                error += e_ui**2
+                error += e_ui ** 2
 
                 b_u[uid] += bias_learn_rate * (e_ui - delta_bias * b_u[uid])
                 b_i[iid] += bias_learn_rate * (e_ui - delta_bias * b_i[iid])
 
                 normalized_e_ui = e_ui / n_u[uid]
-                p[uid] += learn_rate * (normalized_e_ui * q[iid] -
-                                        delta * p[uid])
+                p[uid] += learn_rate * (normalized_e_ui * q[iid] - delta * p[uid])
                 q[iid] += learn_rate * (normalized_e_ui * p_u - delta * q[iid])
         rmse = error / num_r
-        print(iteration + 1, 'RMSE:', rmse)
+        print(iteration + 1, "RMSE:", rmse)
 
         if np.fabs(rmse - rmse_old) <= stop_criteria:
             break
@@ -68,17 +81,19 @@ def _svdplusplus(data, indptr, indices, n_u, num_users, num_items, num_lat,
 
 
 class SVDPlusPlus(MF):
-    def __init__(self,
-                 iterations=50,
-                 learn_rate=0.05,
-                 delta=0.015,
-                 delta_bias=0.002,
-                 bias_learn_rate=0.005,
-                 stop_criteria=0.009,
-                 init_mean=0,
-                 init_std=0.1,
-                 *args,
-                 **kwargs):
+    def __init__(
+        self,
+        iterations=50,
+        learn_rate=0.05,
+        delta=0.015,
+        delta_bias=0.002,
+        bias_learn_rate=0.005,
+        stop_criteria=0.009,
+        init_mean=0,
+        init_std=0.1,
+        *args,
+        **kwargs
+    ):
         super().__init__(*args, **kwargs)
         self.iterations = iterations
         self.learn_rate = learn_rate
@@ -96,8 +111,19 @@ class SVDPlusPlus(MF):
         n_u = np.array([np.sqrt(len(i.data)) for i in training_matrix])
         self.r_mean = np.mean(training_matrix.data)
         self.b_u, self.b_i, self.p, self.q, self.y = _svdplusplus(
-            training_matrix.data, training_matrix.indptr,
-            training_matrix.indices, n_u, num_users, num_items, self.num_lat,
-            self.learn_rate, self.delta, self.delta_bias_bias,
-            self.bias_learn_rate, self.iterations, self.stop_criteria,
-            self.init_mean, self.init_std)
+            training_matrix.data,
+            training_matrix.indptr,
+            training_matrix.indices,
+            n_u,
+            num_users,
+            num_items,
+            self.num_lat,
+            self.learn_rate,
+            self.delta,
+            self.delta_bias_bias,
+            self.bias_learn_rate,
+            self.iterations,
+            self.stop_criteria,
+            self.init_mean,
+            self.init_std,
+        )

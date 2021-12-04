@@ -152,33 +152,3 @@ class OurMethodInit(MFValueFunction):
         A = self.As[uid]
         A += max_item_latent_factors[:, None].dot(max_item_latent_factors[None, :])
         b += reward * max_item_latent_factors
-
-
-class OurMethodEntropy(OurMethodInit):
-    def __init__(self, *args, **kwargs):
-        super().__init__(init="entropy", *args, **kwargs)
-
-
-class OurMethodPopularity(OurMethodInit):
-    def __init__(self, *args, **kwargs):
-        super().__init__(init="popularity", *args, **kwargs)
-
-
-class OurMethodRandPopularity(OurMethodInit):
-    def __init__(self, *args, **kwargs):
-        super().__init__(init="rand_popularity", *args, **kwargs)
-
-
-class OurMethodRandom(OurMethodInit):
-    def __init__(self, *args, **kwargs):
-        super().__init__(init="random", *args, **kwargs)
-
-
-class OurMethodZero(OurMethodInit):
-    def __init__(self, *args, **kwargs):
-        super().__init__(init="zero", *args, **kwargs)
-
-
-class OurMethodOne(OurMethodInit):
-    def __init__(self, *args, **kwargs):
-        super().__init__(init="one", *args, **kwargs)

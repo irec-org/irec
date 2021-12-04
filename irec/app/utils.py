@@ -2,8 +2,6 @@ from os.path import dirname, realpath, sep, pardir
 import os
 import sys
 
-from six import u
-
 sys.path.append(dirname(dirname(realpath(__file__))))
 from app import errors
 import pickle

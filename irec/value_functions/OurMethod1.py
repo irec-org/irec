@@ -1,16 +1,12 @@
 import numpy as np
-from tqdm import tqdm
-#import util
-from threadpoolctl import threadpool_limits
-import ctypes
 import scipy.spatial
-import matplotlib.pyplot as plt
-import os
-import pickle
 import mf
 from .MFValueFunction import MFValueFunction
+from .Entropy import Entropy
+from .MostPopular import MostPopular
+from .LogPopEnt import LogPopEnt
 from collections import defaultdict
-import value_functions
+import scipy.sparse
 
 
 class OurMethod1(MFValueFunction):
@@ -42,15 +38,11 @@ class OurMethod1(MFValueFunction):
         self.items_weights = mf_model.items_weights
         self.num_latent_factors = len(mf_model.items_weights[0])
 
-        # self.items_weights = items_weights
-        # num_total_users = len(uids)
-
-        items_entropy = value_functions.Entropy.get_items_entropy(
+        items_entropy = Entropy.get_items_entropy(
             self.train_consumption_matrix)
-        items_popularity = value_functions.MostPopular.get_items_popularity(
+        items_popularity = MostPopular.get_items_popularity(
             self.train_consumption_matrix, normalize=False)
-        # self.items_bias = value_functions.PPELPE.get_items_ppelpe(items_popularity,items_entropy)
-        self.items_bias = value_functions.LogPopEnt.get_items_logpopent(
+        self.items_bias = LogPopEnt.get_items_logpopent(
             items_popularity, items_entropy)
 
         assert (self.items_bias.min() >= 0 and self.items_bias.max() == 1)
@@ -66,12 +58,6 @@ class OurMethod1(MFValueFunction):
         self.users_distance_history = defaultdict(lambda: [])
         self.users_global_model_weights = defaultdict(lambda: [])
 
-        # user_latent_factors_history = np.empty(shape=(0, num_lat))
-        # num_correct_items_history = [0]
-        # similarity_score = [0]
-        # distance_history = []
-        # global_model_weights = []
-
     def get_global_model_weight(self, user_latent_factors_history,
                                 num_correct_items_history, distance_history):
         if self.weight_method == 'stop':
@@ -84,8 +70,6 @@ class OurMethod1(MFValueFunction):
             times_with_reward = np.nonzero(num_correct_items_history)[0]
             if len(times_with_reward) < 2:
                 return 1
-            # print(user_latent_factors_history[times_with_reward][-1])
-            # print(user_latent_factors_history[times_with_reward][-2])
             res = scipy.spatial.distance.cosine(
                 user_latent_factors_history[times_with_reward][-1],
                 user_latent_factors_history[times_with_reward][-2])
@@ -138,7 +122,7 @@ class OurMethod1(MFValueFunction):
     def update(self, observation, action, reward, info):
         uid = action[0]
         item = action[1]
-        additional_data = info
+        # additional_data = info
         max_item_latent_factors = self.items_weights[item]
         b = self.bs[uid]
         A = self.As[uid]

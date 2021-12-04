@@ -7,7 +7,6 @@ from threadpoolctl import threadpool_limits
 from irec.utils.dataset import Dataset
 from collections import defaultdict
 from irec.agents import Agent
-from tabulate import tabulate
 from tqdm import tqdm
 import scipy.sparse
 import scipy.stats
@@ -179,8 +178,6 @@ class OneInteraction(EvaluationPolicy):
                     )
                     break
 
-            # print(tabulate(items_value_table, tablefmt='psql'))
-            # print(tabulate(membership_table, tablefmt='psql'))
             pbar.update(_num_interactions)
             _num_interactions = 0
             pbar.close()
