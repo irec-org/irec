@@ -4178,12 +4178,12 @@ NICF:
         rnn_layer: 1
         time_step: 3
         training_epoch: 30000
-OurMethod1:
+UCBLearner:
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod1:
+      UCBLearner:
         alpha: 0.25
         num_lat: 5
         stop: null
@@ -4192,7 +4192,7 @@ OurMethod1:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod1:
+      UCBLearner:
         alpha: 0.5
         num_lat: 5
         stop: null
@@ -4201,7 +4201,7 @@ OurMethod1:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod1:
+      UCBLearner:
         alpha: 0.75
         num_lat: 5
         stop: null
@@ -4210,7 +4210,7 @@ OurMethod1:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod1:
+      UCBLearner:
         alpha: 1
         num_lat: 5
         stop: null
@@ -4219,7 +4219,7 @@ OurMethod1:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod1:
+      UCBLearner:
         alpha: 0.25
         num_lat: 10
         stop: null
@@ -4228,7 +4228,7 @@ OurMethod1:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod1:
+      UCBLearner:
         alpha: 0.5
         num_lat: 10
         stop: null
@@ -4237,7 +4237,7 @@ OurMethod1:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod1:
+      UCBLearner:
         alpha: 0.75
         num_lat: 10
         stop: null
@@ -4246,7 +4246,7 @@ OurMethod1:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod1:
+      UCBLearner:
         alpha: 1
         num_lat: 10
         stop: null
@@ -4255,7 +4255,7 @@ OurMethod1:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod1:
+      UCBLearner:
         alpha: 0.25
         num_lat: 20
         stop: null
@@ -4264,7 +4264,7 @@ OurMethod1:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod1:
+      UCBLearner:
         alpha: 0.5
         num_lat: 20
         stop: null
@@ -4273,7 +4273,7 @@ OurMethod1:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod1:
+      UCBLearner:
         alpha: 0.75
         num_lat: 20
         stop: null
@@ -4282,17 +4282,17 @@ OurMethod1:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod1:
+      UCBLearner:
         alpha: 1
         num_lat: 20
         stop: null
         weight_method: change
-OurMethod1Mod:
+UCBLearnerMod:
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod1Mod:
+      UCBLearnerMod:
         alpha: 0.25
         num_lat: 5
         stop: null
@@ -4301,7 +4301,7 @@ OurMethod1Mod:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod1Mod:
+      UCBLearnerMod:
         alpha: 0.5
         num_lat: 5
         stop: null
@@ -4310,7 +4310,7 @@ OurMethod1Mod:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod1Mod:
+      UCBLearnerMod:
         alpha: 0.75
         num_lat: 5
         stop: null
@@ -4319,7 +4319,7 @@ OurMethod1Mod:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod1Mod:
+      UCBLearnerMod:
         alpha: 1
         num_lat: 5
         stop: null
@@ -4328,7 +4328,7 @@ OurMethod1Mod:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod1Mod:
+      UCBLearnerMod:
         alpha: 0.25
         num_lat: 10
         stop: null
@@ -4337,7 +4337,7 @@ OurMethod1Mod:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod1Mod:
+      UCBLearnerMod:
         alpha: 0.5
         num_lat: 10
         stop: null
@@ -4346,7 +4346,7 @@ OurMethod1Mod:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod1Mod:
+      UCBLearnerMod:
         alpha: 0.75
         num_lat: 10
         stop: null
@@ -4355,7 +4355,7 @@ OurMethod1Mod:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod1Mod:
+      UCBLearnerMod:
         alpha: 1
         num_lat: 10
         stop: null
@@ -4364,7 +4364,7 @@ OurMethod1Mod:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod1Mod:
+      UCBLearnerMod:
         alpha: 0.25
         num_lat: 20
         stop: null
@@ -4373,7 +4373,7 @@ OurMethod1Mod:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod1Mod:
+      UCBLearnerMod:
         alpha: 0.5
         num_lat: 20
         stop: null
@@ -4382,7 +4382,7 @@ OurMethod1Mod:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod1Mod:
+      UCBLearnerMod:
         alpha: 0.75
         num_lat: 20
         stop: null
@@ -4391,187 +4391,187 @@ OurMethod1Mod:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod1Mod:
+      UCBLearnerMod:
         alpha: 1
         num_lat: 20
         stop: null
         weight_method: change
-OurMethod2:
+WSPB:
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.25
         num_lat: 5
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.5
         num_lat: 5
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.75
         num_lat: 5
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 1
         num_lat: 5
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.25
         num_lat: 10
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.5
         num_lat: 10
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.75
         num_lat: 10
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 1
         num_lat: 10
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.25
         num_lat: 20
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.5
         num_lat: 20
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.75
         num_lat: 20
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 1
         num_lat: 20
-OurMethod2PCA:
+WSPBPCA:
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2PCA:
+      WSPBPCA:
         alpha: 0.25
         num_lat: 5
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2PCA:
+      WSPBPCA:
         alpha: 0.5
         num_lat: 5
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2PCA:
+      WSPBPCA:
         alpha: 0.75
         num_lat: 5
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2PCA:
+      WSPBPCA:
         alpha: 1
         num_lat: 5
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2PCA:
+      WSPBPCA:
         alpha: 0.25
         num_lat: 10
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2PCA:
+      WSPBPCA:
         alpha: 0.5
         num_lat: 10
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2PCA:
+      WSPBPCA:
         alpha: 0.75
         num_lat: 10
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2PCA:
+      WSPBPCA:
         alpha: 1
         num_lat: 10
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2PCA:
+      WSPBPCA:
         alpha: 0.25
         num_lat: 20
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2PCA:
+      WSPBPCA:
         alpha: 0.5
         num_lat: 20
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2PCA:
+      WSPBPCA:
         alpha: 0.75
         num_lat: 20
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2PCA:
+      WSPBPCA:
         alpha: 1
         num_lat: 20
-OurMethod2var:
+WSPBvar:
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 1.164322
         num_lat: 5
@@ -4579,7 +4579,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 1.2315279
         num_lat: 5
@@ -4587,7 +4587,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 1.482435
         num_lat: 5
@@ -4595,7 +4595,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 0.5
         num_lat: 5
@@ -4603,7 +4603,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 0.1
         num_lat: 5
@@ -4611,7 +4611,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 0.01
         num_lat: 5
@@ -4619,7 +4619,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 0.001
         num_lat: 5
@@ -4627,7 +4627,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 1.164322
         num_lat: 5
@@ -4635,7 +4635,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 1.2315279
         num_lat: 5
@@ -4643,7 +4643,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 1.482435
         num_lat: 5
@@ -4651,7 +4651,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 0.5
         num_lat: 5
@@ -4659,7 +4659,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 0.1
         num_lat: 5
@@ -4667,7 +4667,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 0.01
         num_lat: 5
@@ -4675,7 +4675,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 0.001
         num_lat: 5
@@ -4683,7 +4683,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.75
         lambda_u: 1.164322
         num_lat: 5
@@ -4691,7 +4691,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.75
         lambda_u: 1.2315279
         num_lat: 5
@@ -4699,7 +4699,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.75
         lambda_u: 1.482435
         num_lat: 5
@@ -4707,7 +4707,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.75
         lambda_u: 0.5
         num_lat: 5
@@ -4715,7 +4715,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.75
         lambda_u: 0.1
         num_lat: 5
@@ -4723,7 +4723,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.75
         lambda_u: 0.01
         num_lat: 5
@@ -4731,7 +4731,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.75
         lambda_u: 0.001
         num_lat: 5
@@ -4739,7 +4739,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1
         lambda_u: 1.164322
         num_lat: 5
@@ -4747,7 +4747,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1
         lambda_u: 1.2315279
         num_lat: 5
@@ -4755,7 +4755,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1
         lambda_u: 1.482435
         num_lat: 5
@@ -4763,7 +4763,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1
         lambda_u: 0.5
         num_lat: 5
@@ -4771,7 +4771,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1
         lambda_u: 0.1
         num_lat: 5
@@ -4779,7 +4779,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1
         lambda_u: 0.01
         num_lat: 5
@@ -4787,7 +4787,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1
         lambda_u: 0.001
         num_lat: 5
@@ -4795,7 +4795,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 1.164322
         num_lat: 10
@@ -4803,7 +4803,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 1.2315279
         num_lat: 10
@@ -4811,7 +4811,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 1.482435
         num_lat: 10
@@ -4819,7 +4819,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 0.5
         num_lat: 10
@@ -4827,7 +4827,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 0.1
         num_lat: 10
@@ -4835,7 +4835,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 0.01
         num_lat: 10
@@ -4843,7 +4843,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 0.001
         num_lat: 10
@@ -4851,7 +4851,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 1.164322
         num_lat: 10
@@ -4859,7 +4859,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 1.2315279
         num_lat: 10
@@ -4867,7 +4867,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 1.482435
         num_lat: 10
@@ -4875,7 +4875,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 0.5
         num_lat: 10
@@ -4883,7 +4883,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 0.1
         num_lat: 10
@@ -4891,7 +4891,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 0.01
         num_lat: 10
@@ -4899,7 +4899,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 0.001
         num_lat: 10
@@ -4907,7 +4907,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.75
         lambda_u: 1.164322
         num_lat: 10
@@ -4915,7 +4915,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.75
         lambda_u: 1.2315279
         num_lat: 10
@@ -4923,7 +4923,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.75
         lambda_u: 1.482435
         num_lat: 10
@@ -4931,7 +4931,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.75
         lambda_u: 0.5
         num_lat: 10
@@ -4939,7 +4939,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.75
         lambda_u: 0.1
         num_lat: 10
@@ -4947,7 +4947,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.75
         lambda_u: 0.01
         num_lat: 10
@@ -4955,7 +4955,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.75
         lambda_u: 0.001
         num_lat: 10
@@ -4963,7 +4963,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1
         lambda_u: 1.164322
         num_lat: 10
@@ -4971,7 +4971,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1
         lambda_u: 1.2315279
         num_lat: 10
@@ -4979,7 +4979,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1
         lambda_u: 1.482435
         num_lat: 10
@@ -4987,7 +4987,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1
         lambda_u: 0.5
         num_lat: 10
@@ -4995,7 +4995,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1
         lambda_u: 0.1
         num_lat: 10
@@ -5003,7 +5003,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1
         lambda_u: 0.01
         num_lat: 10
@@ -5011,7 +5011,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1
         lambda_u: 0.001
         num_lat: 10
@@ -5019,7 +5019,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 1.164322
         num_lat: 20
@@ -5027,7 +5027,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 1.2315279
         num_lat: 20
@@ -5035,7 +5035,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 1.482435
         num_lat: 20
@@ -5043,7 +5043,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 0.5
         num_lat: 20
@@ -5051,7 +5051,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 0.1
         num_lat: 20
@@ -5059,7 +5059,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 0.01
         num_lat: 20
@@ -5067,7 +5067,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 0.001
         num_lat: 20
@@ -5075,7 +5075,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 1.164322
         num_lat: 20
@@ -5083,7 +5083,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 1.2315279
         num_lat: 20
@@ -5091,7 +5091,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 1.482435
         num_lat: 20
@@ -5099,7 +5099,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 0.5
         num_lat: 20
@@ -5107,7 +5107,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 0.1
         num_lat: 20
@@ -5115,7 +5115,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 0.01
         num_lat: 20
@@ -5123,7 +5123,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 0.001
         num_lat: 20
@@ -5131,7 +5131,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.75
         lambda_u: 1.164322
         num_lat: 20
@@ -5139,7 +5139,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.75
         lambda_u: 1.2315279
         num_lat: 20
@@ -5147,7 +5147,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.75
         lambda_u: 1.482435
         num_lat: 20
@@ -5155,7 +5155,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.75
         lambda_u: 0.5
         num_lat: 20
@@ -5163,7 +5163,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.75
         lambda_u: 0.1
         num_lat: 20
@@ -5171,7 +5171,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.75
         lambda_u: 0.01
         num_lat: 20
@@ -5179,7 +5179,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.75
         lambda_u: 0.001
         num_lat: 20
@@ -5187,7 +5187,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1
         lambda_u: 1.164322
         num_lat: 20
@@ -5195,7 +5195,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1
         lambda_u: 1.2315279
         num_lat: 20
@@ -5203,7 +5203,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1
         lambda_u: 1.482435
         num_lat: 20
@@ -5211,7 +5211,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1
         lambda_u: 0.5
         num_lat: 20
@@ -5219,7 +5219,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1
         lambda_u: 0.1
         num_lat: 20
@@ -5227,7 +5227,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1
         lambda_u: 0.01
         num_lat: 20
@@ -5235,7 +5235,7 @@ OurMethod2var:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1
         lambda_u: 0.001
         num_lat: 20
@@ -5583,12 +5583,12 @@ OurMethodEntropy:
       OurMethodEntropy:
         alpha: 1
         num_lat: 20
-OurMethodInit:
+WSPBInit:
 - SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.25
         init: entropy
         num_lat: 5
@@ -5596,7 +5596,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.25
         init: popularity
         num_lat: 5
@@ -5604,7 +5604,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.25
         init: logpopent
         num_lat: 5
@@ -5612,7 +5612,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.25
         init: rand_popularity
         num_lat: 5
@@ -5620,7 +5620,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.25
         init: random
         num_lat: 5
@@ -5628,7 +5628,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.5
         init: entropy
         num_lat: 5
@@ -5636,7 +5636,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.5
         init: popularity
         num_lat: 5
@@ -5644,7 +5644,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.5
         init: logpopent
         num_lat: 5
@@ -5652,7 +5652,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.5
         init: rand_popularity
         num_lat: 5
@@ -5660,7 +5660,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.5
         init: random
         num_lat: 5
@@ -5668,7 +5668,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.75
         init: entropy
         num_lat: 5
@@ -5676,7 +5676,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.75
         init: popularity
         num_lat: 5
@@ -5684,7 +5684,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.75
         init: logpopent
         num_lat: 5
@@ -5692,7 +5692,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.75
         init: rand_popularity
         num_lat: 5
@@ -5700,7 +5700,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.75
         init: random
         num_lat: 5
@@ -5708,7 +5708,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 1
         init: entropy
         num_lat: 5
@@ -5716,7 +5716,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 1
         init: popularity
         num_lat: 5
@@ -5724,7 +5724,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 1
         init: logpopent
         num_lat: 5
@@ -5732,7 +5732,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 1
         init: rand_popularity
         num_lat: 5
@@ -5740,7 +5740,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 1
         init: random
         num_lat: 5
@@ -5748,7 +5748,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.25
         init: entropy
         num_lat: 10
@@ -5756,7 +5756,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.25
         init: popularity
         num_lat: 10
@@ -5764,7 +5764,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.25
         init: logpopent
         num_lat: 10
@@ -5772,7 +5772,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.25
         init: rand_popularity
         num_lat: 10
@@ -5780,7 +5780,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.25
         init: random
         num_lat: 10
@@ -5788,7 +5788,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.5
         init: entropy
         num_lat: 10
@@ -5796,7 +5796,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.5
         init: popularity
         num_lat: 10
@@ -5804,7 +5804,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.5
         init: logpopent
         num_lat: 10
@@ -5812,7 +5812,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.5
         init: rand_popularity
         num_lat: 10
@@ -5820,7 +5820,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.5
         init: random
         num_lat: 10
@@ -5828,7 +5828,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.75
         init: entropy
         num_lat: 10
@@ -5836,7 +5836,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.75
         init: popularity
         num_lat: 10
@@ -5844,7 +5844,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.75
         init: logpopent
         num_lat: 10
@@ -5852,7 +5852,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.75
         init: rand_popularity
         num_lat: 10
@@ -5860,7 +5860,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.75
         init: random
         num_lat: 10
@@ -5868,7 +5868,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 1
         init: entropy
         num_lat: 10
@@ -5876,7 +5876,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 1
         init: popularity
         num_lat: 10
@@ -5884,7 +5884,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 1
         init: logpopent
         num_lat: 10
@@ -5892,7 +5892,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 1
         init: rand_popularity
         num_lat: 10
@@ -5900,7 +5900,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 1
         init: random
         num_lat: 10
@@ -5908,7 +5908,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.25
         init: entropy
         num_lat: 20
@@ -5916,7 +5916,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.25
         init: popularity
         num_lat: 20
@@ -5924,7 +5924,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.25
         init: logpopent
         num_lat: 20
@@ -5932,7 +5932,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.25
         init: rand_popularity
         num_lat: 20
@@ -5940,7 +5940,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.25
         init: random
         num_lat: 20
@@ -5948,7 +5948,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.5
         init: entropy
         num_lat: 20
@@ -5956,7 +5956,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.5
         init: popularity
         num_lat: 20
@@ -5964,7 +5964,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.5
         init: logpopent
         num_lat: 20
@@ -5972,7 +5972,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.5
         init: rand_popularity
         num_lat: 20
@@ -5980,7 +5980,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.5
         init: random
         num_lat: 20
@@ -5988,7 +5988,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.75
         init: entropy
         num_lat: 20
@@ -5996,7 +5996,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.75
         init: popularity
         num_lat: 20
@@ -6004,7 +6004,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.75
         init: logpopent
         num_lat: 20
@@ -6012,7 +6012,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.75
         init: rand_popularity
         num_lat: 20
@@ -6020,7 +6020,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.75
         init: random
         num_lat: 20
@@ -6028,7 +6028,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 1
         init: entropy
         num_lat: 20
@@ -6036,7 +6036,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 1
         init: popularity
         num_lat: 20
@@ -6044,7 +6044,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 1
         init: logpopent
         num_lat: 20
@@ -6052,7 +6052,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 1
         init: rand_popularity
         num_lat: 20
@@ -6060,7 +6060,7 @@ OurMethodInit:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 1
         init: random
         num_lat: 20
@@ -7670,7 +7670,7 @@ RerankedEntropyMostPopular:
           Entropy: {}
     value_function:
       MostPopular: {}
-RerankedEntropyOurMethod2:
+RerankedEntropyWSPB:
 - SimpleAgent:
     action_selection_policy:
       ASPReranker:
@@ -7679,7 +7679,7 @@ RerankedEntropyOurMethod2:
         rule:
           Entropy: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.75
         num_lat: 10
 - SimpleAgent:
@@ -7690,7 +7690,7 @@ RerankedEntropyOurMethod2:
         rule:
           Entropy: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.75
         num_lat: 10
 - SimpleAgent:
@@ -7701,7 +7701,7 @@ RerankedEntropyOurMethod2:
         rule:
           Entropy: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.75
         num_lat: 10
 - SimpleAgent:
@@ -7712,7 +7712,7 @@ RerankedEntropyOurMethod2:
         rule:
           Entropy: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.75
         num_lat: 10
 - SimpleAgent:
@@ -7723,7 +7723,7 @@ RerankedEntropyOurMethod2:
         rule:
           Entropy: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.5
         num_lat: 20
 - SimpleAgent:
@@ -7734,7 +7734,7 @@ RerankedEntropyOurMethod2:
         rule:
           Entropy: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.5
         num_lat: 20
 - SimpleAgent:
@@ -7745,7 +7745,7 @@ RerankedEntropyOurMethod2:
         rule:
           Entropy: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.5
         num_lat: 20
 - SimpleAgent:
@@ -7756,7 +7756,7 @@ RerankedEntropyOurMethod2:
         rule:
           Entropy: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.5
         num_lat: 20
 - SimpleAgent:
@@ -7767,7 +7767,7 @@ RerankedEntropyOurMethod2:
         rule:
           Entropy: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.25
         num_lat: 10
 - SimpleAgent:
@@ -7778,7 +7778,7 @@ RerankedEntropyOurMethod2:
         rule:
           Entropy: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.25
         num_lat: 10
 - SimpleAgent:
@@ -7789,7 +7789,7 @@ RerankedEntropyOurMethod2:
         rule:
           Entropy: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.25
         num_lat: 10
 - SimpleAgent:
@@ -7800,10 +7800,10 @@ RerankedEntropyOurMethod2:
         rule:
           Entropy: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.25
         num_lat: 10
-RerankedEntropyOurMethod2var:
+RerankedEntropyWSPBvar:
 - SimpleAgent:
     action_selection_policy:
       ASPReranker:
@@ -7812,7 +7812,7 @@ RerankedEntropyOurMethod2var:
         rule:
           Entropy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 1.4824
         num_lat: 10
@@ -7824,7 +7824,7 @@ RerankedEntropyOurMethod2var:
         rule:
           Entropy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 1.4824
         num_lat: 10
@@ -7836,7 +7836,7 @@ RerankedEntropyOurMethod2var:
         rule:
           Entropy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 1.4824
         num_lat: 10
@@ -7848,7 +7848,7 @@ RerankedEntropyOurMethod2var:
         rule:
           Entropy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 1.4824
         num_lat: 10
@@ -7860,7 +7860,7 @@ RerankedEntropyOurMethod2var:
         rule:
           Entropy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1.0
         lambda_u: 0.01
         num_lat: 10
@@ -7872,7 +7872,7 @@ RerankedEntropyOurMethod2var:
         rule:
           Entropy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1.0
         lambda_u: 0.01
         num_lat: 10
@@ -7884,7 +7884,7 @@ RerankedEntropyOurMethod2var:
         rule:
           Entropy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1.0
         lambda_u: 0.01
         num_lat: 10
@@ -7896,7 +7896,7 @@ RerankedEntropyOurMethod2var:
         rule:
           Entropy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1.0
         lambda_u: 0.01
         num_lat: 10
@@ -7908,7 +7908,7 @@ RerankedEntropyOurMethod2var:
         rule:
           Entropy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 1.4824
         num_lat: 10
@@ -7920,7 +7920,7 @@ RerankedEntropyOurMethod2var:
         rule:
           Entropy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 1.4824
         num_lat: 10
@@ -7932,7 +7932,7 @@ RerankedEntropyOurMethod2var:
         rule:
           Entropy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 1.4824
         num_lat: 10
@@ -7944,7 +7944,7 @@ RerankedEntropyOurMethod2var:
         rule:
           Entropy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 1.4824
         num_lat: 10
@@ -10085,7 +10085,7 @@ RerankedLogPopEntMostPopular:
           LogPopEnt: {}
     value_function:
       MostPopular: {}
-RerankedLogPopEntOurMethod2:
+RerankedLogPopEntWSPB:
 - SimpleAgent:
     action_selection_policy:
       ASPReranker:
@@ -10094,7 +10094,7 @@ RerankedLogPopEntOurMethod2:
         rule:
           LogPopEnt: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.75
         num_lat: 10
 - SimpleAgent:
@@ -10105,7 +10105,7 @@ RerankedLogPopEntOurMethod2:
         rule:
           LogPopEnt: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.75
         num_lat: 10
 - SimpleAgent:
@@ -10116,7 +10116,7 @@ RerankedLogPopEntOurMethod2:
         rule:
           LogPopEnt: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.75
         num_lat: 10
 - SimpleAgent:
@@ -10127,7 +10127,7 @@ RerankedLogPopEntOurMethod2:
         rule:
           LogPopEnt: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.75
         num_lat: 10
 - SimpleAgent:
@@ -10138,7 +10138,7 @@ RerankedLogPopEntOurMethod2:
         rule:
           LogPopEnt: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.5
         num_lat: 20
 - SimpleAgent:
@@ -10149,7 +10149,7 @@ RerankedLogPopEntOurMethod2:
         rule:
           LogPopEnt: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.5
         num_lat: 20
 - SimpleAgent:
@@ -10160,7 +10160,7 @@ RerankedLogPopEntOurMethod2:
         rule:
           LogPopEnt: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.5
         num_lat: 20
 - SimpleAgent:
@@ -10171,7 +10171,7 @@ RerankedLogPopEntOurMethod2:
         rule:
           LogPopEnt: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.5
         num_lat: 20
 - SimpleAgent:
@@ -10182,7 +10182,7 @@ RerankedLogPopEntOurMethod2:
         rule:
           LogPopEnt: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.25
         num_lat: 10
 - SimpleAgent:
@@ -10193,7 +10193,7 @@ RerankedLogPopEntOurMethod2:
         rule:
           LogPopEnt: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.25
         num_lat: 10
 - SimpleAgent:
@@ -10204,7 +10204,7 @@ RerankedLogPopEntOurMethod2:
         rule:
           LogPopEnt: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.25
         num_lat: 10
 - SimpleAgent:
@@ -10215,10 +10215,10 @@ RerankedLogPopEntOurMethod2:
         rule:
           LogPopEnt: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.25
         num_lat: 10
-RerankedLogPopEntOurMethod2var:
+RerankedLogPopEntWSPBvar:
 - SimpleAgent:
     action_selection_policy:
       ASPReranker:
@@ -10227,7 +10227,7 @@ RerankedLogPopEntOurMethod2var:
         rule:
           LogPopEnt: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 1.4824
         num_lat: 10
@@ -10239,7 +10239,7 @@ RerankedLogPopEntOurMethod2var:
         rule:
           LogPopEnt: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 1.4824
         num_lat: 10
@@ -10251,7 +10251,7 @@ RerankedLogPopEntOurMethod2var:
         rule:
           LogPopEnt: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 1.4824
         num_lat: 10
@@ -10263,7 +10263,7 @@ RerankedLogPopEntOurMethod2var:
         rule:
           LogPopEnt: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 1.4824
         num_lat: 10
@@ -10275,7 +10275,7 @@ RerankedLogPopEntOurMethod2var:
         rule:
           LogPopEnt: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1.0
         lambda_u: 0.01
         num_lat: 10
@@ -10287,7 +10287,7 @@ RerankedLogPopEntOurMethod2var:
         rule:
           LogPopEnt: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1.0
         lambda_u: 0.01
         num_lat: 10
@@ -10299,7 +10299,7 @@ RerankedLogPopEntOurMethod2var:
         rule:
           LogPopEnt: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1.0
         lambda_u: 0.01
         num_lat: 10
@@ -10311,7 +10311,7 @@ RerankedLogPopEntOurMethod2var:
         rule:
           LogPopEnt: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1.0
         lambda_u: 0.01
         num_lat: 10
@@ -10323,7 +10323,7 @@ RerankedLogPopEntOurMethod2var:
         rule:
           LogPopEnt: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 1.4824
         num_lat: 10
@@ -10335,7 +10335,7 @@ RerankedLogPopEntOurMethod2var:
         rule:
           LogPopEnt: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 1.4824
         num_lat: 10
@@ -10347,7 +10347,7 @@ RerankedLogPopEntOurMethod2var:
         rule:
           LogPopEnt: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 1.4824
         num_lat: 10
@@ -10359,7 +10359,7 @@ RerankedLogPopEntOurMethod2var:
         rule:
           LogPopEnt: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 1.4824
         num_lat: 10
@@ -12103,7 +12103,7 @@ RerankedMostPopularMostPopular:
           MostPopular: {}
     value_function:
       MostPopular: {}
-RerankedMostPopularOurMethod2:
+RerankedMostPopularWSPB:
 - SimpleAgent:
     action_selection_policy:
       ASPReranker:
@@ -12112,7 +12112,7 @@ RerankedMostPopularOurMethod2:
         rule:
           MostPopular: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.75
         num_lat: 10
 - SimpleAgent:
@@ -12123,7 +12123,7 @@ RerankedMostPopularOurMethod2:
         rule:
           MostPopular: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.75
         num_lat: 10
 - SimpleAgent:
@@ -12134,7 +12134,7 @@ RerankedMostPopularOurMethod2:
         rule:
           MostPopular: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.75
         num_lat: 10
 - SimpleAgent:
@@ -12145,7 +12145,7 @@ RerankedMostPopularOurMethod2:
         rule:
           MostPopular: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.75
         num_lat: 10
 - SimpleAgent:
@@ -12156,7 +12156,7 @@ RerankedMostPopularOurMethod2:
         rule:
           MostPopular: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.5
         num_lat: 20
 - SimpleAgent:
@@ -12167,7 +12167,7 @@ RerankedMostPopularOurMethod2:
         rule:
           MostPopular: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.5
         num_lat: 20
 - SimpleAgent:
@@ -12178,7 +12178,7 @@ RerankedMostPopularOurMethod2:
         rule:
           MostPopular: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.5
         num_lat: 20
 - SimpleAgent:
@@ -12189,7 +12189,7 @@ RerankedMostPopularOurMethod2:
         rule:
           MostPopular: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.5
         num_lat: 20
 - SimpleAgent:
@@ -12200,7 +12200,7 @@ RerankedMostPopularOurMethod2:
         rule:
           MostPopular: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.25
         num_lat: 10
 - SimpleAgent:
@@ -12211,7 +12211,7 @@ RerankedMostPopularOurMethod2:
         rule:
           MostPopular: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.25
         num_lat: 10
 - SimpleAgent:
@@ -12222,7 +12222,7 @@ RerankedMostPopularOurMethod2:
         rule:
           MostPopular: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.25
         num_lat: 10
 - SimpleAgent:
@@ -12233,10 +12233,10 @@ RerankedMostPopularOurMethod2:
         rule:
           MostPopular: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.25
         num_lat: 10
-RerankedMostPopularOurMethod2var:
+RerankedMostPopularWSPBvar:
 - SimpleAgent:
     action_selection_policy:
       ASPReranker:
@@ -12245,7 +12245,7 @@ RerankedMostPopularOurMethod2var:
         rule:
           MostPopular: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 1.4824
         num_lat: 10
@@ -12257,7 +12257,7 @@ RerankedMostPopularOurMethod2var:
         rule:
           MostPopular: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 1.4824
         num_lat: 10
@@ -12269,7 +12269,7 @@ RerankedMostPopularOurMethod2var:
         rule:
           MostPopular: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 1.4824
         num_lat: 10
@@ -12281,7 +12281,7 @@ RerankedMostPopularOurMethod2var:
         rule:
           MostPopular: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 1.4824
         num_lat: 10
@@ -12293,7 +12293,7 @@ RerankedMostPopularOurMethod2var:
         rule:
           MostPopular: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1.0
         lambda_u: 0.01
         num_lat: 10
@@ -12305,7 +12305,7 @@ RerankedMostPopularOurMethod2var:
         rule:
           MostPopular: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1.0
         lambda_u: 0.01
         num_lat: 10
@@ -12317,7 +12317,7 @@ RerankedMostPopularOurMethod2var:
         rule:
           MostPopular: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1.0
         lambda_u: 0.01
         num_lat: 10
@@ -12329,7 +12329,7 @@ RerankedMostPopularOurMethod2var:
         rule:
           MostPopular: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1.0
         lambda_u: 0.01
         num_lat: 10
@@ -12341,7 +12341,7 @@ RerankedMostPopularOurMethod2var:
         rule:
           MostPopular: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 1.4824
         num_lat: 10
@@ -12353,7 +12353,7 @@ RerankedMostPopularOurMethod2var:
         rule:
           MostPopular: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 1.4824
         num_lat: 10
@@ -12365,7 +12365,7 @@ RerankedMostPopularOurMethod2var:
         rule:
           MostPopular: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 1.4824
         num_lat: 10
@@ -12377,7 +12377,7 @@ RerankedMostPopularOurMethod2var:
         rule:
           MostPopular: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 1.4824
         num_lat: 10
@@ -14121,7 +14121,7 @@ RerankedRandomMostPopular:
           Random: {}
     value_function:
       MostPopular: {}
-RerankedRandomOurMethod2:
+RerankedRandomWSPB:
 - SimpleAgent:
     action_selection_policy:
       ASPReranker:
@@ -14130,7 +14130,7 @@ RerankedRandomOurMethod2:
         rule:
           Random: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.75
         num_lat: 10
 - SimpleAgent:
@@ -14141,7 +14141,7 @@ RerankedRandomOurMethod2:
         rule:
           Random: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.75
         num_lat: 10
 - SimpleAgent:
@@ -14152,7 +14152,7 @@ RerankedRandomOurMethod2:
         rule:
           Random: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.75
         num_lat: 10
 - SimpleAgent:
@@ -14163,7 +14163,7 @@ RerankedRandomOurMethod2:
         rule:
           Random: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.75
         num_lat: 10
 - SimpleAgent:
@@ -14174,7 +14174,7 @@ RerankedRandomOurMethod2:
         rule:
           Random: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.5
         num_lat: 20
 - SimpleAgent:
@@ -14185,7 +14185,7 @@ RerankedRandomOurMethod2:
         rule:
           Random: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.5
         num_lat: 20
 - SimpleAgent:
@@ -14196,7 +14196,7 @@ RerankedRandomOurMethod2:
         rule:
           Random: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.5
         num_lat: 20
 - SimpleAgent:
@@ -14207,7 +14207,7 @@ RerankedRandomOurMethod2:
         rule:
           Random: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.5
         num_lat: 20
 - SimpleAgent:
@@ -14218,7 +14218,7 @@ RerankedRandomOurMethod2:
         rule:
           Random: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.25
         num_lat: 10
 - SimpleAgent:
@@ -14229,7 +14229,7 @@ RerankedRandomOurMethod2:
         rule:
           Random: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.25
         num_lat: 10
 - SimpleAgent:
@@ -14240,7 +14240,7 @@ RerankedRandomOurMethod2:
         rule:
           Random: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.25
         num_lat: 10
 - SimpleAgent:
@@ -14251,10 +14251,10 @@ RerankedRandomOurMethod2:
         rule:
           Random: {}
     value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.25
         num_lat: 10
-RerankedRandomOurMethod2var:
+RerankedRandomWSPBvar:
 - SimpleAgent:
     action_selection_policy:
       ASPReranker:
@@ -14263,7 +14263,7 @@ RerankedRandomOurMethod2var:
         rule:
           Random: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 1.4824
         num_lat: 10
@@ -14275,7 +14275,7 @@ RerankedRandomOurMethod2var:
         rule:
           Random: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 1.4824
         num_lat: 10
@@ -14287,7 +14287,7 @@ RerankedRandomOurMethod2var:
         rule:
           Random: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 1.4824
         num_lat: 10
@@ -14299,7 +14299,7 @@ RerankedRandomOurMethod2var:
         rule:
           Random: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 1.4824
         num_lat: 10
@@ -14311,7 +14311,7 @@ RerankedRandomOurMethod2var:
         rule:
           Random: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1.0
         lambda_u: 0.01
         num_lat: 10
@@ -14323,7 +14323,7 @@ RerankedRandomOurMethod2var:
         rule:
           Random: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1.0
         lambda_u: 0.01
         num_lat: 10
@@ -14335,7 +14335,7 @@ RerankedRandomOurMethod2var:
         rule:
           Random: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1.0
         lambda_u: 0.01
         num_lat: 10
@@ -14347,7 +14347,7 @@ RerankedRandomOurMethod2var:
         rule:
           Random: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 1.0
         lambda_u: 0.01
         num_lat: 10
@@ -14359,7 +14359,7 @@ RerankedRandomOurMethod2var:
         rule:
           Random: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 1.4824
         num_lat: 10
@@ -14371,7 +14371,7 @@ RerankedRandomOurMethod2var:
         rule:
           Random: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 1.4824
         num_lat: 10
@@ -14383,7 +14383,7 @@ RerankedRandomOurMethod2var:
         rule:
           Random: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 1.4824
         num_lat: 10
@@ -14395,7 +14395,7 @@ RerankedRandomOurMethod2var:
         rule:
           Random: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.25
         lambda_u: 1.4824
         num_lat: 10

@@ -32,7 +32,7 @@ def _prediction_rule(A, b, items_weights, alpha):
     return user_model_items_score, items_user_similarity, weighted_items_uncertainty
 
 
-class OurMethodInit(MFValueFunction):
+class WSPBInit(MFValueFunction):
     def __init__(self, alpha, init, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.alpha = alpha

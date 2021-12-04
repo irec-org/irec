@@ -53,7 +53,7 @@ methods_pretty = {
     "GLM_UCB": "GLM-UCB",
     "LinearUCB": "Linear UCB",
     "MostPopular": "Popular",
-    "OurMethod2": "WSPB",
+    "WSPB": "WSPB",
 }
 # print(df.loc[df["method"] == "GLM_UCB"])
 for i, dataset in enumerate(datasets):

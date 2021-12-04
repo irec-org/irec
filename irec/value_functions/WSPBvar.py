@@ -14,12 +14,25 @@ import mf
 from collections import defaultdict
 from .MFValueFunction import MFValueFunction
 import value_functions
+import value_functions.Entropy
+import value_functions.MostPopular
+import value_functions.LogPopEnt
 
 
-class OurMethodBalanced(MFValueFunction):
-    def __init__(self, alpha, *args, **kwargs):
+def _prediction_rule(A, b, items_weights, alpha):
+    user_latent_factors = np.dot(np.linalg.inv(A), b)
+    items_uncertainty = np.sqrt(
+        np.sum(items_weights.dot(np.linalg.inv(A)) * items_weights, axis=1))
+    items_user_similarity = user_latent_factors @ items_weights.T
+    user_model_items_score = items_user_similarity + alpha * items_uncertainty
+    return user_model_items_score
+
+
+class WSPBvar(MFValueFunction):
+    def __init__(self, alpha, lambda_u, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.alpha = alpha
+        self.lambda_u = lambda_u
 
 
     def reset(self, observation):
@@ -38,12 +51,12 @@ class OurMethodBalanced(MFValueFunction):
         self.items_weights = mf_model.items_weights
         self.num_latent_factors = len(self.items_weights[0])
 
-        items_entropy = value_functions.Entropy.get_items_entropy(
+        items_entropy = value_functions.Entropy.Entropy.get_items_entropy(
             self.train_consumption_matrix)
-        items_popularity = value_functions.MostPopular.get_items_popularity(
+        items_popularity = value_functions.MostPopular.MostPopular.get_items_popularity(
             self.train_consumption_matrix, normalize=False)
         # self.items_bias = value_functions.PPELPE.get_items_ppelpe(items_popularity,items_entropy)
-        self.items_bias = value_functions.LogPopEnt.get_items_logpopent(
+        self.items_bias = value_functions.LogPopEnt.LogPopEnt.get_items_logpopent(
             items_popularity, items_entropy)
         print(self.items_bias.min(), self.items_bias.max())
         assert (self.items_bias.min() >= 0
@@ -65,35 +78,29 @@ class OurMethodBalanced(MFValueFunction):
 
         self.I = np.eye(len(self.items_weights[0]))
         self.bs = defaultdict(lambda: self.initial_b.copy())
-        self.As = defaultdict(lambda: self.I.copy())
+        self.As = defaultdict(lambda: self.lambda_u * self.I.copy())
+        # items_score = _prediction_rule(self.lambda_u*self.I,self.initial_b,self.items_weights,self.alpha)
+
+        # print("WSCBvar items score correlation with popularity:",scipy.stats.pearsonr(items_score,items_popularity),self.train_dataset.num_total_users, self.train_dataset.num_total_items)
+        # print("WSCBvar items score correlation with entropy:",scipy.stats.pearsonr(items_score,items_entropy),self.train_dataset.num_total_users, self.train_dataset.num_total_items)
 
     def action_estimates(self, candidate_actions):
         uid = candidate_actions[0]
         candidate_items = candidate_actions[1]
-        with threadpool_limits(limits=1, user_api='blas'):
-            b = self.bs[uid]
-            A = self.As[uid]
-            user_latent_factors = np.dot(np.linalg.inv(A), b)
-            items_uncertainty = np.sqrt(
-                np.sum(
-                    self.items_weights[candidate_items].dot(np.linalg.inv(A)) *
-                    self.items_weights[candidate_items],
-                    axis=1))
-            items_user_similarity = user_latent_factors @ self.items_weights[
-                candidate_items].T
-            user_model_items_score = items_user_similarity * items_uncertainty**self.alpha
-            items_score = user_model_items_score
-            return items_score, None
+        b = self.bs[uid]
+        A = self.As[uid]
+        user_model_items_score = _prediction_rule(
+            A, b, self.items_weights[candidate_items], self.alpha)
+        items_score = user_model_items_score
+        return items_score, None
 
     def update(self, observation, action, reward, info):
         uid = action[0]
         item = action[1]
         additional_data = info
-
-        with threadpool_limits(limits=1, user_api='blas'):
-            max_item_latent_factors = self.items_weights[item]
-            b = self.bs[uid]
-            A = self.As[uid]
-            A += max_item_latent_factors[:, None].dot(
-                max_item_latent_factors[None, :])
-            b += reward * max_item_latent_factors
+        max_item_latent_factors = self.items_weights[item]
+        b = self.bs[uid]
+        A = self.As[uid]
+        A += max_item_latent_factors[:, None].dot(
+            max_item_latent_factors[None, :])
+        b += reward * max_item_latent_factors

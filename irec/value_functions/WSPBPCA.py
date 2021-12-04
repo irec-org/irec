@@ -1,4 +1,5 @@
 import numpy as np
+import sklearn.decomposition
 from tqdm import tqdm
 #import util
 from threadpoolctl import threadpool_limits
@@ -14,25 +15,12 @@ import mf
 from collections import defaultdict
 from .MFValueFunction import MFValueFunction
 import value_functions
-import value_functions.Entropy
-import value_functions.MostPopular
-import value_functions.LogPopEnt
 
 
-def _prediction_rule(A, b, items_weights, alpha):
-    user_latent_factors = np.dot(np.linalg.inv(A), b)
-    items_uncertainty = np.sqrt(
-        np.sum(items_weights.dot(np.linalg.inv(A)) * items_weights, axis=1))
-    items_user_similarity = user_latent_factors @ items_weights.T
-    user_model_items_score = items_user_similarity + alpha * items_uncertainty
-    return user_model_items_score
-
-
-class OurMethod2var(MFValueFunction):
-    def __init__(self, alpha, lambda_u, *args, **kwargs):
+class WSPBPCA(MFValueFunction):
+    def __init__(self, alpha, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.alpha = alpha
-        self.lambda_u = lambda_u
 
 
     def reset(self, observation):
@@ -46,17 +34,28 @@ class OurMethod2var(MFValueFunction):
              self.train_dataset.num_total_items))
         self.num_total_items = self.train_dataset.num_total_items
 
-        mf_model = mf.SVD(num_lat=self.num_lat)
-        mf_model.fit(self.train_consumption_matrix)
-        self.items_weights = mf_model.items_weights
-        self.num_latent_factors = len(self.items_weights[0])
+        # mf_model = mf.SVD(num_lat=self.num_lat)
+        # mf_model.fit(self.train_consumption_matrix)
+        transformer = sklearn.decomposition.TruncatedSVD(
+            n_components=self.num_lat)
+        # x = self.train_dataset.data[:,:2]
+        # y = self.train_dataset.data[:,2]
+        transformer.fit(self.train_consumption_matrix.T)
+        # transformer.fit(x)
+        items_weights = transformer.transform(self.train_consumption_matrix.T)
+        # items_weights = transformer.transform(x)
+        # print(self.train_consumption_matrix.shape)
+        # print(items_weights.shape)
+        # raise SystemExit
+        self.items_weights = items_weights
+        self.num_latent_factors = self.num_lat
 
-        items_entropy = value_functions.Entropy.Entropy.get_items_entropy(
+        items_entropy = value_functions.Entropy.get_items_entropy(
             self.train_consumption_matrix)
-        items_popularity = value_functions.MostPopular.MostPopular.get_items_popularity(
+        items_popularity = value_functions.MostPopular.get_items_popularity(
             self.train_consumption_matrix, normalize=False)
         # self.items_bias = value_functions.PPELPE.get_items_ppelpe(items_popularity,items_entropy)
-        self.items_bias = value_functions.LogPopEnt.LogPopEnt.get_items_logpopent(
+        self.items_bias = value_functions.LogPopEnt.get_items_logpopent(
             items_popularity, items_entropy)
         print(self.items_bias.min(), self.items_bias.max())
         assert (self.items_bias.min() >= 0
@@ -78,19 +77,22 @@ class OurMethod2var(MFValueFunction):
 
         self.I = np.eye(len(self.items_weights[0]))
         self.bs = defaultdict(lambda: self.initial_b.copy())
-        self.As = defaultdict(lambda: self.lambda_u * self.I.copy())
-        # items_score = _prediction_rule(self.lambda_u*self.I,self.initial_b,self.items_weights,self.alpha)
-
-        # print("WSCBvar items score correlation with popularity:",scipy.stats.pearsonr(items_score,items_popularity),self.train_dataset.num_total_users, self.train_dataset.num_total_items)
-        # print("WSCBvar items score correlation with entropy:",scipy.stats.pearsonr(items_score,items_entropy),self.train_dataset.num_total_users, self.train_dataset.num_total_items)
+        self.As = defaultdict(lambda: self.I.copy())
 
     def action_estimates(self, candidate_actions):
         uid = candidate_actions[0]
         candidate_items = candidate_actions[1]
         b = self.bs[uid]
         A = self.As[uid]
-        user_model_items_score = _prediction_rule(
-            A, b, self.items_weights[candidate_items], self.alpha)
+        user_latent_factors = np.dot(np.linalg.inv(A), b)
+        items_uncertainty = np.sqrt(
+            np.sum(self.items_weights[candidate_items].dot(np.linalg.inv(A)) *
+                   self.items_weights[candidate_items],
+                   axis=1))
+        items_user_similarity = user_latent_factors @ self.items_weights[
+            candidate_items].T
+        user_model_items_score = items_user_similarity + self.alpha * items_uncertainty
+
         items_score = user_model_items_score
         return items_score, None
 
