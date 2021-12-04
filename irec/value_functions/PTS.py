@@ -95,14 +95,7 @@ class PTS(MFValueFunction):
         mf_model = mf.PMF(
             num_lat=self.num_lat, var=self.var, user_var=self.var_u, item_var=self.var_v
         )
-        # mf_model_id = joblib.hash(
-        # (mf_model.get_id(), self.train_consumption_matrix))
-        # pdm = PersistentDataManager('state_save')
-        # if pdm.file_exists(mf_model_id):
-        # mf_model = pdm.load(mf_model_id)
-        # else:
         mf_model.fit(self.train_consumption_matrix)
-        # pdm.save(mf_model_id, mf_model)
 
         for i in range(self.num_particles):
             self.particles_us[i] = mf_model.users_weights

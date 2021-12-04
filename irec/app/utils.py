@@ -39,6 +39,7 @@ import copy
 import os.path
 import collections.abc
 import pandas as pd
+import scipy.stats
 
 LATEX_TABLE_FOOTER = r"""
 \end{tabular}
