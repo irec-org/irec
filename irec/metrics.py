@@ -32,8 +32,6 @@ class Metric:
         self,
         ground_truth_dataset: Any,
         relevance_evaluator: RelevanceEvaluator,
-        *args,
-        **kwargs
     ):
         """__init__.
 
@@ -44,7 +42,6 @@ class Metric:
             kwargs:
         """
 
-        super().__init__(*args, **kwargs)
         self.ground_truth_dataset = ground_truth_dataset
         self.relevance_evaluator = relevance_evaluator
 

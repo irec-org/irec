@@ -1,14 +1,6 @@
 import numpy as np
-from tqdm import tqdm
-#import util
-from threadpoolctl import threadpool_limits
-import ctypes
 import scipy.stats
 import scipy.spatial
-import matplotlib.pyplot as plt
-import os
-import pickle
-import sklearn
 import scipy.optimize
 import scipy
 import mf
@@ -75,10 +67,10 @@ class WSPB(MFValueFunction):
         # print(np.corrcoef(self.items_bias,self.initial_b @ self.items_weights.T)[0,1])
 
         self.I = np.eye(len(self.items_weights[0]))
-        self.bs = defaultdict(lambda: self.initial_b.copy())
-        self.As = defaultdict(lambda: self.I.copy())
-        items_score = _prediction_rule(self.I, self.initial_b,
-                                       self.items_weights, self.alpha)
+        self.bs: defaultdict = defaultdict(lambda: self.initial_b.copy())
+        self.As: defaultdict = defaultdict(lambda: self.I.copy())
+        # items_score = _prediction_rule(self.I, self.initial_b,
+                                       # self.items_weights, self.alpha)
 
         # print("WSCB items score correlation with popularity:",scipy.stats.pearsonr(items_score,items_popularity),self.train_dataset.num_total_users, self.train_dataset.num_total_items)
         # print("WSCB items score correlation with entropy:",scipy.stats.pearsonr(items_score,items_entropy),self.train_dataset.num_total_users, self.train_dataset.num_total_items)
