@@ -1,14 +1,11 @@
 from concurrent.futures import ProcessPoolExecutor
 import math
-import collections
 from tqdm import tqdm
-import os
 import multiprocessing
 import numpy as np
-from pathlib import Path
 
 
-class TupleNonRedundantList():
+class TupleNonRedundantList:
     def __init__(self, redundant_key, non_redundant_list) -> None:
         self.non_redundant_list = non_redundant_list
         self.redundant_key = redundant_key
@@ -19,8 +16,7 @@ class TupleNonRedundantList():
         raise NotImplementedError
 
     def __getitem__(self, key):
-        return (self.redundant_key,
-                self.non_redundant_list.__getattribute__(key))
+        return (self.redundant_key, self.non_redundant_list.__getattribute__(key))
 
     def __setitem__(self, key, value):
         raise NotImplementedError
@@ -29,7 +25,7 @@ class TupleNonRedundantList():
 
 def dict_to_list_gen(d):
     for k, v in zip(d.keys(), d.values()):
-        if v == None:
+        if v is None:
             continue
         yield k
         yield v
@@ -53,9 +49,11 @@ def key_value_to_str(key, value):
 
 
 def join_strings(strings, num_bars=0):
-    return "/".join(
-        strings[:num_bars]) + ("/" if num_bars and len(strings[num_bars:]) != 0
-                               else "") + ",".join(strings[num_bars:])
+    return (
+        "/".join(strings[:num_bars])
+        + ("/" if num_bars and len(strings[num_bars:]) != 0 else "")
+        + ",".join(strings[num_bars:])
+    )
 
 
 def dict_to_str(dictionary, num_bars=0):
@@ -66,11 +64,11 @@ def dict_to_str(dictionary, num_bars=0):
     return join_strings(strings, num_bars=num_bars)
 
 
-def print_dict(dictionary, prefix=''):
+def print_dict(dictionary, prefix=""):
     for key, value in dictionary.items():
         if isinstance(value, dict):
             print(f"{prefix}{key}:")
-            print_dict(value, prefix + '\t')
+            print_dict(value, prefix + "\t")
         else:
             print(f"{prefix}{key}: {value}")
 
@@ -85,8 +83,9 @@ def run_parallel(func, args, use_tqdm=True):
         ff = lambda x, *y, **z: x
     results = [
         i
-        for i in ff(executor.map(func, *list(zip(*args)), chunksize=chunksize),
-                    total=num_args)
+        for i in ff(
+            executor.map(func, *list(zip(*args)), chunksize=chunksize), total=num_args
+        )
     ]
     return results
 
@@ -95,14 +94,13 @@ def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
 
-
 def repair_path_name(path):
     length = len(path)
     new_file_name = []
-    for i in path.split('/'):
+    for i in path.split("/"):
         if len(i) > 255:
-            lists = [i[j:j + 255] for j in range(0, len(i), 255)]
-            new_file_name.append('/'.join(lists))
+            lists = [i[j : j + 255] for j in range(0, len(i), 255)]
+            new_file_name.append("/".join(lists))
         else:
             new_file_name.append(i)
-    return '/'.join(new_file_name)
+    return "/".join(new_file_name)

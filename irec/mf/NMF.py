@@ -1,4 +1,4 @@
-from . import MF
+from .MF import MF
 import sklearn.decomposition
 
 

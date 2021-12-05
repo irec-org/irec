@@ -2,7 +2,10 @@ from .InteractionMetricEvaluator import InteractionMetricEvaluator
 from irec.metrics import ILD, Recall, Precision, EPC, EPD
 import numpy as np
 import time
+from typing import Any
+
 np.seterr(all="raise")
+
 
 class IterationsMetricEvaluator(InteractionMetricEvaluator):
     @staticmethod
@@ -36,7 +39,7 @@ class IterationsMetricEvaluator(InteractionMetricEvaluator):
                 relevance_evaluator=self.relevance_evaluator,
             )
         if 0 not in self.iterations_to_evaluate:
-            self.iterations_to_evaluate = [0] + self.iterations_to_evaluate
+            self.iterations_to_evaluate: Any = [0] + self.iterations_to_evaluate
         for i in range(len(self.iterations_to_evaluate) - 1):
             for uid in self.uids:
                 interaction_results = self.users_items_recommended[uid][

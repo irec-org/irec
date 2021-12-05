@@ -8,7 +8,9 @@ class RelevanceEvaluator:
             args:
             kwargs:
         """
-        super().__init__(*args, **kwargs)
+        del args, kwargs
+        pass
+        # super().__init__(*args, **kwargs)
 
     def is_relevant(self, reward: float):
         """is_relevant.
@@ -16,7 +18,7 @@ class RelevanceEvaluator:
         Args:
             reward (float): reward
         """
-        raise NotImplemented
+        raise NotImplementedError
 
 
 class ThresholdRelevanceEvaluator:

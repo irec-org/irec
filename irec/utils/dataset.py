@@ -97,7 +97,8 @@ class TrainTestDataset:
 
 
 class DataProcessor:
-    pass
+    def __init__(self, *args, **kwargs):
+        del args, kwargs
 
 
 class TRTE(DataProcessor):

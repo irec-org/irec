@@ -19,6 +19,7 @@ import value_functions
 from value_functions.MostPopular import MostPopular
 from value_functions.Entropy import Entropy
 from value_functions.LogPopEnt import LogPopEnt
+from typing import Any
 
 
 def _prediction_rule(A, b, items_weights, alpha):
@@ -56,7 +57,7 @@ class WSPBInit(MFValueFunction):
         self.items_weights = mf_model.items_weights
         self.num_latent_factors = len(self.items_weights[0])
         if self.init == "zero":
-            self.bs = defaultdict(lambda: np.zeros(self.num_lat))
+            self.bs: Any = defaultdict(lambda: np.zeros(self.num_lat))
         elif self.init == "one":
             self.bs = defaultdict(lambda: np.ones(self.num_lat))
 
@@ -116,7 +117,7 @@ class WSPBInit(MFValueFunction):
 
             self.bs = defaultdict(lambda: self.initial_b.copy())
         self.I = np.eye(len(self.items_weights[0]))
-        self.As = defaultdict(lambda: self.I.copy())
+        self.As: Any = defaultdict(lambda: self.I.copy())
 
         # self.users_last_items = dict()
         # items_score = _prediction_rule(self.I,self.initial_b,self.items_weights,self.alpha)
@@ -138,7 +139,7 @@ class WSPBInit(MFValueFunction):
         return items_score, {
             "class_name": self.__class__.__name__,
             "uid": uid,
-            "items_score":items_score,
+            "items_score": items_score,
             "similarity": scipy.stats.describe(l1),
             "uncertainty": scipy.stats.describe(l2),
         }

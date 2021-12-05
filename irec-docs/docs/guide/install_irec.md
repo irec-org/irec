@@ -8,7 +8,7 @@
 
   * macOS X
 
-  The library currently supports Python ≥ 3.9. There are several ways to install IRec:
+  The library currently supports Python ≥ 3.8. There are several ways to install IRec:
 
 ###  From PyPI:
 

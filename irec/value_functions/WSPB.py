@@ -1,3 +1,4 @@
+from typing import Any
 import numpy as np
 import scipy.stats
 import scipy.spatial
@@ -9,7 +10,6 @@ from .MFValueFunction import MFValueFunction
 from value_functions.Entropy import Entropy
 from value_functions.MostPopular import MostPopular
 from value_functions.LogPopEnt import LogPopEnt
-
 
 def _prediction_rule(A, b, items_weights, alpha):
     user_latent_factors = np.dot(np.linalg.inv(A), b)
@@ -67,8 +67,8 @@ class WSPB(MFValueFunction):
         # print(np.corrcoef(self.items_bias,self.initial_b @ self.items_weights.T)[0,1])
 
         self.I = np.eye(len(self.items_weights[0]))
-        self.bs: defaultdict = defaultdict(lambda: self.initial_b.copy())
-        self.As: defaultdict = defaultdict(lambda: self.I.copy())
+        self.bs: Any = defaultdict(lambda: self.initial_b.copy())
+        self.As: Any = defaultdict(lambda: self.I.copy())
         # items_score = _prediction_rule(self.I, self.initial_b,
                                        # self.items_weights, self.alpha)
 

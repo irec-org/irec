@@ -1,17 +1,15 @@
 from threadpoolctl import threadpool_limits
 import numpy as np
 from tqdm import tqdm
-from .ExperimentalValueFunction import ExperimentalValueFunction
-import matplotlib.pyplot as plt
-import os
 import scipy.sparse
 from collections import defaultdict
-import random
 from .MFValueFunction import MFValueFunction
 from tqdm import tqdm
-from numba import njit, jit
+from numba import njit
 import mf
-import value_functions
+from .Entropy import Entropy
+from .MostPopular import MostPopular
+from .LogPopEnt import LogPopEnt
 
 
 @njit
@@ -21,16 +19,16 @@ def _softmax(x):
 
 class PTS(MFValueFunction):
     """Particle Thompson sampling.
-    
+
     It is a PMF formulation for the original TS based on a Bayesian inference around the items.
     This method also applies particle filtering to guide the exploration of items over time [1]_.
 
     References
     ----------
-    .. [1] Wang, Qing, et al. "Online interactive collaborative filtering using multi-armed 
-       bandit with dependent arms." IEEE Transactions on Knowledge and Data Engineering 31.8 (2018): 1569-1580.   
+    .. [1] Wang, Qing, et al. "Online interactive collaborative filtering using multi-armed
+       bandit with dependent arms." IEEE Transactions on Knowledge and Data Engineering 31.8 (2018): 1569-1580.
     """
-    
+
     def __init__(self, num_particles, var, var_u, var_v, *args, **kwargs):
         """__init__.
 
@@ -52,8 +50,8 @@ class PTS(MFValueFunction):
         """reset.
 
         Args:
-            observation: 
-        """ 
+            observation:
+        """
         train_dataset = observation
         super().reset(train_dataset)
         self.train_dataset = train_dataset
@@ -116,7 +114,7 @@ class PTS(MFValueFunction):
 
         Args:
             candidate_actions: (user id, candidate_items)
-        
+
         Returns:
             numpy.ndarray:
         """
@@ -136,7 +134,7 @@ class PTS(MFValueFunction):
             observation:
             action: (user id, item)
             reward (float): reward
-            info: 
+            info:
         """
         uid = action[0]
         item = action[1]
@@ -255,18 +253,14 @@ class PTSInit(PTS):
         super().reset(train_dataset)
 
         if self.init == "entropy":
-            items_entropy = value_functions.Entropy.get_items_entropy(
-                self.train_consumption_matrix
-            )
+            items_entropy = Entropy.get_items_entropy(self.train_consumption_matrix)
             self.items_bias = items_entropy
         elif self.init == "logpopent":
-            items_entropy = value_functions.Entropy.get_items_entropy(
-                self.train_consumption_matrix
-            )
-            items_popularity = value_functions.MostPopular.get_items_popularity(
+            items_entropy = Entropy.get_items_entropy(self.train_consumption_matrix)
+            items_popularity = MostPopular.get_items_popularity(
                 self.train_consumption_matrix, normalize=False
             )
-            self.items_bias = value_functions.LogPopEnt.get_items_logpopent(
+            self.items_bias = LogPopEnt.get_items_logpopent(
                 items_popularity, items_entropy
             )
 
@@ -282,8 +276,6 @@ class PTSInit(PTS):
             method="BFGS",
         )
         self.initial_user_factors = res.x
-        # print(np.corrcoef(self.items_bias,self.initial_user_factors @ self.items_means.T)[0,1])
-        # self.bs = defaultdict(lambda: self.initial_b.copy())
         not_train_users = set(list(range(self.train_dataset.num_total_users))) - {
             int(self.train_dataset.data[i, 0])
             for i in range(len(self.train_dataset.data))
@@ -291,10 +283,3 @@ class PTSInit(PTS):
         for i in range(self.num_particles):
             for uid in not_train_users:
                 self.particles_us[i][uid] = self.initial_user_factors
-
-            # self.particles_vs[i]
-
-
-class PTSLogPopEnt(PTSInit):
-    def __init__(self, *args, **kwargs):
-        super().__init__(init="logpopent", *args, **kwargs)

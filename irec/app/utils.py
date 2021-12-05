@@ -1,10 +1,9 @@
-from os.path import dirname, realpath, sep, pardir
+from os.path import sep
 import os
-import sys
-
-sys.path.append(dirname(dirname(realpath(__file__))))
 from app import errors
 import pickle
+import yaml
+import secrets
 import mlflow.tracking
 import mlflow.entities
 import mlflow
@@ -12,32 +11,31 @@ from mlflow.tracking import MlflowClient
 import json
 from collections import defaultdict
 from pathlib import Path
-
 from irec.utils.dataset import TrainTestDataset
 import collections
 from app import constants
 import matplotlib.ticker as mtick
 import numpy as np
 import matplotlib.pyplot as plt
-from os.path import dirname, realpath, sep, pardir
-import irec.action_selection_policies
-import irec.agents
+from os.path import sep
 import irec.value_functions
 from irec.evaluation_policies.EvaluationPolicy import EvaluationPolicy
 import irec.evaluation_policies
 from irec.utils.Factory import (
     AgentFactory,
 )
-
 import scipy
 from irec.metric_evaluators.InteractionMetricEvaluator import InteractionMetricEvaluator
 from irec.metric_evaluators.CumulativeMetricEvaluator import CumulativeMetricEvaluator
-from irec.metric_evaluators.UserCumulativeInteractionMetricEvaluator import UserCumulativeInteractionMetricEvaluator
+from irec.metric_evaluators.UserCumulativeInteractionMetricEvaluator import (
+    UserCumulativeInteractionMetricEvaluator,
+)
 import copy
 import os.path
 import collections.abc
 import pandas as pd
 import scipy.stats
+
 
 LATEX_TABLE_FOOTER = r"""
 \end{tabular}
@@ -68,7 +66,7 @@ T & %s \\
 \hline
 \hline
 """
-import yaml
+
 
 def gen_dict_extract(key, var):
 
@@ -166,7 +164,7 @@ def flatten_dict(d, parent_key="", sep="."):
 
 
 def rec_defaultdict(d=None):
-    if d == None:
+    if d is None:
         return defaultdict(rec_defaultdict)
     else:
         return defaultdict(rec_defaultdict, d)
@@ -281,7 +279,7 @@ def run_interactor(
     mlflow.set_experiment(settings["defaults"]["agent_experiment"])
 
     run = get_agent_run(settings)
-    if forced_run == False and run != None:
+    if forced_run is False and run is not None:
         print(
             "Already executed {} in {}".format(
                 get_agent_run_parameters(settings),
@@ -445,9 +443,6 @@ def log_custom_parameters(settings: dict) -> None:
 # log_custom_parameters(cn, name, {cn:settings})
 
 
-import secrets
-
-
 def log_custom_artifact(fname, obj):
     fnametmp = f"./tmp/{secrets.token_urlsafe(16)}/{fname}"
     create_path_to_file(fnametmp)
@@ -483,12 +478,14 @@ def load_dataset_experiment(settings):
 
 def run_agent(traintest_dataset, settings, forced_run):
 
-    dataset_loader_parameters = settings["dataset_loaders"][
-        settings["defaults"]["dataset_loader"]
-    ]
+    # dataset_loader_parameters = settings["dataset_loaders"][
+    # settings["defaults"]["dataset_loader"]
+    # ]
 
     evaluation_policy_name = settings["defaults"]["evaluation_policy"]
-    evaluation_policy_parameters = settings["evaluation_policies"][evaluation_policy_name]
+    evaluation_policy_parameters = settings["evaluation_policies"][
+        evaluation_policy_name
+    ]
 
     # exec("import irec.value_functions.{}".format(value_function_name))
     #         value_function = eval(
@@ -496,7 +493,9 @@ def run_agent(traintest_dataset, settings, forced_run):
     #                 value_function_name, value_function_name
     #             )
     #         )(**value_function_parameters)
-    exec(f"from irec.evaluation_policies.{evaluation_policy_name} import {evaluation_policy_name}")
+    exec(
+        f"from irec.evaluation_policies.{evaluation_policy_name} import {evaluation_policy_name}"
+    )
     evaluation_policy = eval(evaluation_policy_name)(**evaluation_policy_parameters)
 
     mlflow.set_experiment(settings["defaults"]["dataset_experiment"])
@@ -515,7 +514,7 @@ def run_agent(traintest_dataset, settings, forced_run):
 
 def evaluate_itr(dataset, settings, forced_run):
     run = get_evaluation_run(settings)
-    if forced_run == False and run != None:
+    if forced_run is False and run is not None:
         print(
             "Already executed {} in {}".format(
                 get_evaluation_run_parameters(settings),
@@ -523,15 +522,15 @@ def evaluate_itr(dataset, settings, forced_run):
             )
         )
         return
-    agent_parameters = settings["agents"][settings["defaults"]["agent"]]
+    # agent_parameters = settings["agents"][settings["defaults"]["agent"]]
 
-    dataset_parameters = settings["dataset_loaders"][
-        settings["defaults"]["dataset_loader"]
-    ]
+    # dataset_parameters = settings["dataset_loaders"][
+    # settings["defaults"]["dataset_loader"]
+    # ]
 
-    evaluation_policy_parameters = settings["evaluation_policies"][
-        settings["defaults"]["evaluation_policy"]
-    ]
+    # evaluation_policy_parameters = settings["evaluation_policies"][
+    # settings["defaults"]["evaluation_policy"]
+    # ]
     # evaluation_policy = eval(
     # "irec.evaluation_policies." + settings["defaults"]["evaluation_policy"]
     # )(**evaluation_policy_parameters)
@@ -544,14 +543,18 @@ def evaluate_itr(dataset, settings, forced_run):
     print(settings["defaults"]["metric_evaluator"], metric_evaluator_parameters)
 
     metric_evaluator_name = settings["defaults"]["metric_evaluator"]
-    exec(f"from irec.metric_evaluators.{metric_evaluator_name} import {metric_evaluator_name}")
-    metric_evaluator = eval(metric_evaluator_name)(dataset, **metric_evaluator_parameters)
+    exec(
+        f"from irec.metric_evaluators.{metric_evaluator_name} import {metric_evaluator_name}"
+    )
+    metric_evaluator = eval(metric_evaluator_name)(
+        dataset, **metric_evaluator_parameters
+    )
 
     mlflow.set_experiment(settings["defaults"]["agent_experiment"])
     # print(parameters_agent_run)
     run = get_agent_run(settings)
 
-    if run == None:
+    if run is None:
         print("Could not find agent run")
         return
     client = MlflowClient()
@@ -600,13 +603,13 @@ def evaluate_itr(dataset, settings, forced_run):
 
 def load_evaluation_experiment(settings):
     mlflow.set_experiment(settings["defaults"]["evaluation_experiment"])
-    dataset_parameters = settings["dataset_loaders"][
-        settings["defaults"]["dataset_loader"]
-    ]
+    # dataset_parameters = settings["dataset_loaders"][
+    # settings["defaults"]["dataset_loader"]
+    # ]
     # metrics_evaluator_name = settings["defaults"]["metric_evaluator"]
     run = get_evaluation_run(settings)
 
-    if run == None:
+    if run is None:
         raise errors.EvaluationRunNotFoundError("Could not find evaluation run")
     client = MlflowClient()
     artifact_path = client.download_artifacts(run.info.run_id, "evaluation.pickle")
@@ -727,7 +730,7 @@ def generate_base(dataset_name, settings):
 
     dataset_loader_settings = settings["dataset_loaders"][dataset_name]
     mlflow.set_experiment("dataset")
-    with mlflow.start_run() as run:
+    with mlflow.start_run() as _:
         log_custom_parameters(
             parameters_normalize(
                 constants.DATASET_PARAMETERS_PREFIX,
@@ -854,16 +857,20 @@ def print_results_latex_table(
     metric_evaluator_name = settings["defaults"]["metric_evaluator"]
     metric_evaluator_parameters = settings["metric_evaluators"][metric_evaluator_name]
 
-    exec(f"from irec.metric_evaluators.{metric_evaluator_name} import {metric_evaluator_name}")
+    exec(
+        f"from irec.metric_evaluators.{metric_evaluator_name} import {metric_evaluator_name}"
+    )
     metric_evaluator = eval(metric_evaluator_name)(None, **metric_evaluator_parameters)
 
     evaluation_policy_name = settings["defaults"]["evaluation_policy"]
     evaluation_policy_parameters = settings["evaluation_policies"][
         evaluation_policy_name
     ]
-    
-    exec(f"from irec.evaluation_policies.{evaluation_policy_name} import {evaluation_policy_name}")
-    evaluation_policy = eval(evaluation_policy_name)(**evaluation_policy_parameters)
+
+    exec(
+        f"from irec.evaluation_policies.{evaluation_policy_name} import {evaluation_policy_name}"
+    )
+    # evaluation_policy = eval(evaluation_policy_name)(**evaluation_policy_parameters)
 
     # metrics_names = [
     # 'Cumulative Precision',
@@ -880,9 +887,9 @@ def print_results_latex_table(
     # metrics_weights = {'Hits': 0.25,'Recall':0.25,'EPC':0.125,'UsersCoverage':0.125,'ILD':0.125,'GiniCoefficientInv':0.125}
     metrics_weights = {i: 1 / len(metrics_classes_names) for i in metrics_classes_names}
 
-    interactors_classes_names_to_names = {
-        k: v["name"] for k, v in settings["agents_general_settings"].items()
-    }
+    # interactors_classes_names_to_names = {
+    # k: v["name"] for k, v in settings["agents_general_settings"].items()
+    # }
 
     print("metric_evaluator_name", metric_evaluator_name)
     if metric_evaluator_name == "StageIterationsMetricEvaluator":
@@ -956,11 +963,11 @@ def print_results_latex_table(
                 ]
                 settings["agents"][agent_name] = agent_parameters
                 settings["defaults"]["metric"] = metric_class_name
-                agent = AgentFactory().create(agent_name, agent_parameters)
-                agent_id = get_agent_id(agent_name, agent_parameters)
-                dataset_parameters = settings["dataset_loaders"][dataset_loader_name]
-                metrics_evaluator_name = metric_evaluator.__class__.__name__
-                parameters_agent_run = get_agent_run_parameters(settings)
+                # agent = AgentFactory().create(agent_name, agent_parameters)
+                # agent_id = get_agent_id(agent_name, agent_parameters)
+                # dataset_parameters = settings["dataset_loaders"][dataset_loader_name]
+                # metrics_evaluator_name = metric_evaluator.__class__.__name__
+                # parameters_agent_run = get_agent_run_parameters(settings)
                 parameters_evaluation_run = get_evaluation_run_parameters(settings)
 
                 mlflow.set_experiment(settings["defaults"]["evaluation_experiment"])
@@ -978,7 +985,7 @@ def print_results_latex_table(
                     run.info.run_id, "evaluation.pickle"
                 )
                 metric_values = pickle.load(open(artifact_path, "rb"))
-                users_items_recommended = metric_values
+                # users_items_recommended = metric_values
 
                 datasets_metrics_values[dataset_loader_name][metric_class_name][
                     agent_name
@@ -1002,7 +1009,7 @@ def print_results_latex_table(
     utility_scores = defaultdict(
         lambda: defaultdict(lambda: defaultdict(lambda: dict()))
     )
-    method_utility_scores = defaultdict(lambda: defaultdict(lambda: dict))
+    # method_utility_scores = defaultdict(lambda: defaultdict(lambda: dict))
     for num_interaction in range(len(nums_interactions_to_show)):
         for dataset_loader_name in datasets_names:
             for metric_class_name in metrics_classes_names:
@@ -1030,17 +1037,22 @@ def print_results_latex_table(
                     metric_value = datasets_metrics_values[dataset_loader_name][
                         metric_class_name
                     ][agent_name][num_interaction]
-                    print("metric_value",metric_value,"metric_min_value",metric_min_value)
+                    print(
+                        "metric_value",
+                        metric_value,
+                        "metric_min_value",
+                        metric_min_value,
+                    )
                     try:
-                        utility_scores[dataset_loader_name][metric_class_name][agent_name][
-                            num_interaction
-                        ] = (metric_value - metric_min_value) / (
+                        utility_scores[dataset_loader_name][metric_class_name][
+                            agent_name
+                        ][num_interaction] = (metric_value - metric_min_value) / (
                             metric_max_value - metric_min_value
                         )
-                    except:
-                        utility_scores[dataset_loader_name][metric_class_name][agent_name][
-                            num_interaction
-                        ] = 0.0
+                    except Exception as _:
+                        utility_scores[dataset_loader_name][metric_class_name][
+                            agent_name
+                        ][num_interaction] = 0.0
 
     for num_interaction in range(len(nums_interactions_to_show)):
         for dataset_loader_name in datasets_names:
@@ -1116,7 +1128,7 @@ def print_results_latex_table(
                     ][i] = True
                     if reference_agent == "lastmethod":
                         best_itr = methods[-1]
-                    elif reference_agent != None:
+                    elif reference_agent is not None:
                         best_itr = reference_agent
                     else:
                         best_itr = max(
@@ -1234,7 +1246,12 @@ def print_results_latex_table(
     os.system(
         f'latexmk -pdflatex=pdflatex -pdf -interaction=nonstopmode -output-directory="{pdf_path}" "{tex_path}"'
     )
-    useless_files = [os.path.join(dp, f) for dp, dn, filenames in os.walk(pdf_path) for f in filenames if os.path.splitext(f)[1] != '.pdf']
+    useless_files = [
+        os.path.join(dp, f)
+        for dp, dn, filenames in os.walk(pdf_path)
+        for f in filenames
+        if os.path.splitext(f)[1] != ".pdf"
+    ]
     for useless_file in useless_files:
         os.remove(useless_file)
 
@@ -1354,32 +1371,32 @@ def print_agent_search(
     top_save,
 ):
 
-    import irec.metrics
-    import irec.evaluation_policies
+    # import irec.metrics
+    # import irec.evaluation_policies
 
-    evaluation_policy_name = settings["defaults"]["evaluation_policy"]
-    evaluation_policy_parameters = settings["evaluation_policies"][
-        evaluation_policy_name
-    ]
-    metrics_classes = [irec.metrics.Hits]
-    metrics_names = ["Cumulative Hits"]
-    evaluation_policy = eval("irec.evaluation_policies." + evaluation_policy_name)(
-        **evaluation_policy_parameters
-    )
+    # evaluation_policy_name = settings["defaults"]["evaluation_policy"]
+    # evaluation_policy_parameters = settings["evaluation_policies"][
+    # evaluation_policy_name
+    # ]
+    # metrics_classes = [irec.metrics.Hits]
+    # metrics_names = ["Cumulative Hits"]
+    # evaluation_policy = eval("irec.evaluation_policies." + evaluation_policy_name)(
+    # **evaluation_policy_parameters
+    # )
 
-    interactors_classes_names_to_names = {
-        k: v["name"] for k, v in settings["agents_general_settings"].items()
-    }
+    # interactors_classes_names_to_names = {
+    # k: v["name"] for k, v in settings["agents_general_settings"].items()
+    # }
 
-    metric_evaluator_parameters = settings["metric_evaluators"][
-        settings["defaults"]["metric_evaluator"]
-    ]
+    # metric_evaluator_parameters = settings["metric_evaluators"][
+    # settings["defaults"]["metric_evaluator"]
+    # ]
 
-    metric_class = eval("irec.metrics." + settings["defaults"]["metric"])
+    # metric_class = eval("irec.metrics." + settings["defaults"]["metric"])
 
-    metric_evaluator = eval(
-        "irec.metric_evaluators." + settings["defaults"]["metric_evaluator"]
-    )(None, **metric_evaluator_parameters)
+    # metric_evaluator = eval(
+    # "irec.metric_evaluators." + settings["defaults"]["metric_evaluator"]
+    # )(None, **metric_evaluator_parameters)
 
     datasets_metrics_values = defaultdict(
         lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(float)))
@@ -1387,7 +1404,7 @@ def print_agent_search(
 
     for dataset_loader_name in dataset_loaders:
         settings["defaults"]["dataset_loader"] = dataset_loader_name
-        traintest_dataset = load_dataset_experiment(settings)
+        # traintest_dataset = load_dataset_experiment(settings)
 
         for metric_name in metrics:
             for agent_name in agents:
@@ -1397,11 +1414,11 @@ def print_agent_search(
                     settings["defaults"]["agent"] = agent_name
                     settings["agents"][agent_name] = agent_parameters
                     # agent = create_agent(agent_name, agent_parameters)
-                    AgentFactory().create(agent_name, agent_parameters)
-                    agent_id = get_agent_id(agent_name, agent_parameters)
+                    agent = AgentFactory().create(agent_name, agent_parameters)
+                    # agent_id = get_agent_id(agent_name, agent_parameters)
                     try:
                         metric_values = load_evaluation_experiment(settings)
-                        if metric_values == None:
+                        if metric_values is None:
                             continue
 
                     except errors.EvaluationRunNotFoundError as e:
@@ -1419,7 +1436,7 @@ def print_agent_search(
 
     # print(datasets_metrics_values)
     for k1, v1 in datasets_metrics_values.items():
-        for k2, v2 in v1.items():
+        for _, v2 in v1.items():
             for k3, v3 in v2.items():
                 values = np.array(list(v3.values()))
                 keys = list(v3.keys())
@@ -1433,7 +1450,7 @@ def print_agent_search(
                 if top_save:
                     print(f"{k3}:")
                     # print('\tparameters:')
-                    agent_parameters, metric_value = json.loads(keys[0]), values[0]
+                    agent_parameters, _ = json.loads(keys[0]), values[0]
                     for name, value in agent_parameters.items():
                         print(f"\t\t{name}: {value}")
                 else:

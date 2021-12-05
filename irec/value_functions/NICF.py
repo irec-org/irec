@@ -1,22 +1,15 @@
 """
-Code mainly from: https://github.com/zoulixin93/NICF
+Code taken mainly from: https://github.com/zoulixin93/NICF
 Author: zoulixin93
 """
-from threadpoolctl import threadpool_limits
 import numpy as np
 from tqdm import tqdm
 from .ExperimentalValueFunction import ExperimentalValueFunction
-import matplotlib.pyplot as plt
-import os
-import scipy.sparse
 from collections import defaultdict
-import random
-from .MFValueFunction import MFValueFunction
-from numba import njit, jit
-import mf
 import tensorflow as tf
 import copy
 from collections import defaultdict
+from typing import Any
 
 MEMORYSIZE = 50000
 BATCHSIZE = 128
@@ -46,9 +39,11 @@ class Namespace:
 
 
 class basic_model(object):
-    GRAPHS = {}
-    SESS = {}
-    SAVER = {}
+    GRAPHS: Any = {}
+    SESS: Any = {}
+    SAVER: Any = {}
+    CLUSTER: Any = None
+    SERVER: Any = None
 
     def c_opt(self, learning_rate, name):
         if str(name).__contains__("adam"):
@@ -126,7 +121,7 @@ class basic_model(object):
         }
 
     def _update_placehoders(self):
-        self.placeholders = {"none": {}}
+        self.placeholders: Any = {"none": {}}
         raise NotImplemented
 
     def _get_feed_dict(self, task, data_dicts):
@@ -601,15 +596,16 @@ def convert_item_seq2matrix(item_seq):
 
 class NICF(ExperimentalValueFunction):
     """NICF.
-    
-    It is an interactive method based on a combination of neural networks and 
+
+    It is an interactive method based on a combination of neural networks and
     collaborative filtering that also performs a meta-learning of the user’s preferences [1]_.
 
     References
     ----------
-    .. [1] Zhao, Xiaoxue, Weinan Zhang, and Jun Wang. "Interactive collaborative filtering." 
-       Proceedings of the 22nd ACM international conference on Information & Knowledge Management. 2013.   
+    .. [1] Zhao, Xiaoxue, Weinan Zhang, and Jun Wang. "Interactive collaborative filtering."
+       Proceedings of the 22nd ACM international conference on Information & Knowledge Management. 2013.
     """
+
     def __init__(
         self,
         time_step,
@@ -649,19 +645,19 @@ class NICF(ExperimentalValueFunction):
         """
 
         super().__init__(*args, **kwargs)
-        self.time_step = time_step
-        self.latent_factor = latent_factor
-        self.learning_rate = learning_rate
-        self.training_epoch = training_epoch
-        self.rnn_layer = rnn_layer
-        self.inner_epoch = inner_epoch
-        self.batch = batch
-        self.gamma = gamma
-        self.clip_param = clip_param
-        self.restore_model = restore_model
-        self.num_blocks = num_blocks
-        self.num_heads = num_heads
-        self.dropout_rate = dropout_rate
+        self.time_step: Any = time_step
+        self.latent_factor: Any = latent_factor
+        self.learning_rate: Any = learning_rate
+        self.training_epoch: Any = training_epoch
+        self.rnn_layer: Any = rnn_layer
+        self.inner_epoch: Any = inner_epoch
+        self.batch: Any = batch
+        self.gamma: Any = gamma
+        self.clip_param: Any = clip_param
+        self.restore_model: Any = restore_model
+        self.num_blocks: Any = num_blocks
+        self.num_heads: Any = num_heads
+        self.dropout_rate: Any = dropout_rate
 
     def reset_with_users(self, uid):
         self.state = [(uid, 1), []]
@@ -731,8 +727,8 @@ class NICF(ExperimentalValueFunction):
         """reset.
 
         Args:
-            observation: 
-        """ 
+            observation:
+        """
         train_dataset = observation
         super().reset(train_dataset)
         self.train_dataset = copy.copy(train_dataset)
@@ -753,7 +749,7 @@ class NICF(ExperimentalValueFunction):
         self.args = args
         self.fa = FA.create_model_without_distributed(args)
         self.memory = []
-        self.rates = defaultdict(dict)
+        self.rates: Any = defaultdict(dict)
         for i in range(len(self.train_dataset.data)):
             uid = int(self.train_dataset.data[i, 0])
             item = int(self.train_dataset.data[i, 1])
@@ -775,7 +771,7 @@ class NICF(ExperimentalValueFunction):
 
         Args:
             candidate_actions: (user id, candidate_items)
-        
+
         Returns:
             numpy.ndarray:
         """
@@ -807,7 +803,7 @@ class NICF(ExperimentalValueFunction):
             observation:
             action: (user id, item)
             reward (float): reward
-            info: 
+            info:
         """
         uid = action[0]
         item = action[1]
