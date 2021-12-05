@@ -19,6 +19,7 @@ import value_functions
 from value_functions.MostPopular import MostPopular
 from value_functions.Entropy import Entropy
 from value_functions.LogPopEnt import LogPopEnt
+from typing import Any
 
 
 def _prediction_rule(A, b, items_weights, alpha):
@@ -32,7 +33,7 @@ def _prediction_rule(A, b, items_weights, alpha):
     return user_model_items_score, items_user_similarity, weighted_items_uncertainty
 
 
-class OurMethodInit(MFValueFunction):
+class WSPBInit(MFValueFunction):
     def __init__(self, alpha, init, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.alpha = alpha
@@ -56,7 +57,7 @@ class OurMethodInit(MFValueFunction):
         self.items_weights = mf_model.items_weights
         self.num_latent_factors = len(self.items_weights[0])
         if self.init == "zero":
-            self.bs = defaultdict(lambda: np.zeros(self.num_lat))
+            self.bs: Any = defaultdict(lambda: np.zeros(self.num_lat))
         elif self.init == "one":
             self.bs = defaultdict(lambda: np.ones(self.num_lat))
 
@@ -116,7 +117,7 @@ class OurMethodInit(MFValueFunction):
 
             self.bs = defaultdict(lambda: self.initial_b.copy())
         self.I = np.eye(len(self.items_weights[0]))
-        self.As = defaultdict(lambda: self.I.copy())
+        self.As: Any = defaultdict(lambda: self.I.copy())
 
         # self.users_last_items = dict()
         # items_score = _prediction_rule(self.I,self.initial_b,self.items_weights,self.alpha)
@@ -138,7 +139,7 @@ class OurMethodInit(MFValueFunction):
         return items_score, {
             "class_name": self.__class__.__name__,
             "uid": uid,
-            "items_score":items_score,
+            "items_score": items_score,
             "similarity": scipy.stats.describe(l1),
             "uncertainty": scipy.stats.describe(l2),
         }
@@ -152,33 +153,3 @@ class OurMethodInit(MFValueFunction):
         A = self.As[uid]
         A += max_item_latent_factors[:, None].dot(max_item_latent_factors[None, :])
         b += reward * max_item_latent_factors
-
-
-class OurMethodEntropy(OurMethodInit):
-    def __init__(self, *args, **kwargs):
-        super().__init__(init="entropy", *args, **kwargs)
-
-
-class OurMethodPopularity(OurMethodInit):
-    def __init__(self, *args, **kwargs):
-        super().__init__(init="popularity", *args, **kwargs)
-
-
-class OurMethodRandPopularity(OurMethodInit):
-    def __init__(self, *args, **kwargs):
-        super().__init__(init="rand_popularity", *args, **kwargs)
-
-
-class OurMethodRandom(OurMethodInit):
-    def __init__(self, *args, **kwargs):
-        super().__init__(init="random", *args, **kwargs)
-
-
-class OurMethodZero(OurMethodInit):
-    def __init__(self, *args, **kwargs):
-        super().__init__(init="zero", *args, **kwargs)
-
-
-class OurMethodOne(OurMethodInit):
-    def __init__(self, *args, **kwargs):
-        super().__init__(init="one", *args, **kwargs)

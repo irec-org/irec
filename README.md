@@ -24,7 +24,7 @@
 
 ## Introduction
 
-> For Python >= 3.9
+> For Python >= 3.8
 
 Reinforcement Learning Recommender Systems Framework
 

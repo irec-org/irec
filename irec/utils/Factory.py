@@ -50,9 +50,9 @@ class ValueFunctionFactory(Factory):
             "OurMethodOne",
             "OurMethodZero",
         ]:
-            exec("import irec.value_functions.OurMethodInit")
+            exec("import irec.value_functions.WSPBInit")
             value_function = eval(
-                "irec.value_functions.OurMethodInit.{}".format(value_function_name)
+                "irec.value_functions.WSPBInit.{}".format(value_function_name)
             )(**value_function_parameters)
         if value_function_name in [
             "ICTRTS",
@@ -107,9 +107,7 @@ class AgentFactory(Factory):
                 sub_agent_settings = list(_agent.values())[0]
                 # sub_agent_class_name = list(sub_agent_settings.keys())[0]
                 # sub_agent_parameters = list(sub_agent_settings.values())[0]
-                new_agent = self.create(
-                    list(_agent.keys())[0], sub_agent_settings
-                )
+                new_agent = self.create(list(_agent.keys())[0], sub_agent_settings)
                 agents.append(new_agent)
             agent_class_parameters["agents"] = agents
         agent_class_parameters.update(

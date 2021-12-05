@@ -1,10 +1,13 @@
+from typing import Any
 from irec.metrics import ILD, Recall, Precision, EPC, EPD
 from .MetricEvaluator import MetricEvaluator
 from collections import defaultdict
 import scipy.sparse
 import numpy as np
 import time
+
 np.seterr(all="raise")
+
 
 class CumulativeMetricEvaluator(MetricEvaluator):
     def __init__(self, ground_truth_dataset, buffer_size, *args, **kwargs):
@@ -57,7 +60,7 @@ class CumulativeMetricEvaluator(MetricEvaluator):
         return metric_values
 
     def evaluate(self, metric_class, results):
-        self.users_false_negative = defaultdict(int)
+        self.users_false_negative: Any = defaultdict(int)
         for row in self.ground_truth_dataset.data:
             uid = int(row[0])
             reward = row[2]
@@ -71,4 +74,3 @@ class CumulativeMetricEvaluator(MetricEvaluator):
         self.results = results
         metric_values = self._metric_evaluation(metric_class)
         return metric_values
-

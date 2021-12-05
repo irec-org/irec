@@ -8,4 +8,3 @@ def test_create_value_functions():
     assert isinstance(MostPopular(), ValueFunction)
     assert isinstance(UCB(0.1), ValueFunction)
     assert isinstance(Random(), ValueFunction)
-

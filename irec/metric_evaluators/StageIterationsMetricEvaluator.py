@@ -1,12 +1,14 @@
+from typing import Any
 from .InteractionMetricEvaluator import InteractionMetricEvaluator
 from irec.metrics import ILD, Recall, Precision, EPC, EPD
 from collections import defaultdict
 import numpy as np
 import time
+
 np.seterr(all="raise")
 
-class StageIterationsMetricEvaluator(InteractionMetricEvaluator):
 
+class StageIterationsMetricEvaluator(InteractionMetricEvaluator):
     @staticmethod
     def metric_summarize(users_metric_values):
         return users_metric_values
@@ -39,7 +41,7 @@ class StageIterationsMetricEvaluator(InteractionMetricEvaluator):
                 relevance_evaluator=self.relevance_evaluator,
             )
         if 0 not in self.iterations_to_evaluate:
-            self.iterations_to_evaluate = [0] + self.iterations_to_evaluate
+            self.iterations_to_evaluate: Any = [0] + self.iterations_to_evaluate
         for i in range(len(self.iterations_to_evaluate) - 1):
             for uid in self.uids:
                 interaction_results = self.users_items_recommended[uid][
@@ -53,10 +55,8 @@ class StageIterationsMetricEvaluator(InteractionMetricEvaluator):
                 f"Computing iteration {self.iterations_to_evaluate[i+1]} with {self.__class__.__name__}"
             )
             metric_values.append(
-                    self.metric_summarize(
-                        {uid: metric.compute(uid) for uid in self.uids}
-                    )
-            )       
+                self.metric_summarize({uid: metric.compute(uid) for uid in self.uids})
+            )
             metric.users_true_positive = defaultdict(int)
 
         print(

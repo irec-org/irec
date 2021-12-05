@@ -9,9 +9,9 @@ LinUCB:
   name: LinUCB (MF)
 LinUCBvar:
   name: LinUCBvar (MF)
-OurMethod1:
+UCBLearner:
   name: Old UCB-Learner
-OurMethod2:
+WSPB:
   name: WSPB
 OurMethod3:
   name: WSPB Oracle
@@ -38,8 +38,6 @@ LinEGreedy:
   name: Linear e-Greedy (MF)
 PPELPE:
   name: PPELPE
-UCBLearner:
-  name: UCB-Learner (MF)
 GLM_UCB:
   #name: GLM-UCB (PMF)
   name: GLM-UCB
@@ -68,7 +66,7 @@ Entropy:
   name: Entropy
 LogPopEnt:
   name: log(Pop)⋅Ent
-OurMethodInit:
+WSPBInit:
   name: WSPB Init
 OurMethodEntropy:
   name: WSPB Entropy
@@ -78,7 +76,7 @@ OurMethodRandPopularity:
   name: WSPB Rand Pop
 OurMethodRandom:
   name: WSPB Random
-OurMethod2var:
+WSPBvar:
   name: WSPB var
 LinearUCBInit:
   name: Linear UCB (PMF) Init
@@ -102,9 +100,7 @@ LinearEGreedyRandom:
   name: Linear e-Greedy (PMF) Random
 LinearEGreedyLogPopEnt:
   name: e-Greedy*
-OurMethod1Mod:
-  name: UCB-Learner Mod
-OurMethod2PCA:
+WSPBPCA:
   name: WSPB PCA
 LinUCBPCA:
   name: LinUCB PCA

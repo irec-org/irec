@@ -1,13 +1,10 @@
 import pandas as pd
+from irec import value_functions
 import numpy as np
 import irec.value_functions
-from collections import defaultdict
 import random
-import math
-import time
 import scipy.sparse
 import os
-import re
 import numpy as np
 import os
 from copy import copy
@@ -97,7 +94,8 @@ class TrainTestDataset:
 
 
 class DataProcessor:
-    pass
+    def __init__(self, *args, **kwargs):
+        del args, kwargs
 
 
 class TRTE(DataProcessor):
@@ -135,7 +133,7 @@ class TRTEPopular(DataProcessor):
             (dataset.data[:, 2], (dataset.data[:, 0], dataset.data[:, 1])),
             (dataset.num_total_users, dataset.num_total_items),
         )
-        items_popularity = value_functions.MostPopular.get_items_popularity(
+        items_popularity = irec.value_functions.MostPopular.get_items_popularity(
             consumption_matrix
         )
         top_popular_items = np.argsort(items_popularity)[::-1][num_items_to_sample]
@@ -150,7 +148,7 @@ class TRTEPopular(DataProcessor):
 
         # train_dataset.data[train_dataset.data[:,1].isin(top_popular_items)]
 
-        train_dataset, test_dataset = ttc.process(train_dataset)
+        # train_dataset, test_dataset = ttc.process(train_dataset)
         return train_dataset, test_dataset
 
 
@@ -168,7 +166,7 @@ class TRTERandom(DataProcessor):
         test_dataset = train_dataset_and_test_dataset[1]
         # ttc = TrainTestConsumption(self.train_size, self.test_consumes,
         # self.crono, self.random_seed)
-        train_dataset, test_dataset = ttc.process(train_dataset)
+        # train_dataset, test_dataset = ttc.process(train_dataset)
         return train_dataset, test_dataset
 
 
@@ -372,10 +370,14 @@ class TRTESample(DataProcessor):
         )
         num_items_to_sample = int(self.items_rate * dataset.num_total_items)
         if self.sample_method == "entropy":
-            items_values = value_functions.Entropy.get_items_entropy(consumption_matrix)
-        elif self.sample_method == "popularity":
-            items_values = value_functions.MostPopular.get_items_popularity(
+            items_values = irec.value_functions.Entropy.Entropy.get_items_entropy(
                 consumption_matrix
+            )
+        elif self.sample_method == "popularity":
+            items_values = (
+                irec.value_functions.MostPopular.MostPopular.get_items_popularity(
+                    consumption_matrix
+                )
             )
 
         best_items = np.argpartition(items_values, -num_items_to_sample)[

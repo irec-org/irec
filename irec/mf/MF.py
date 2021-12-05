@@ -33,7 +33,7 @@ class MF:
             args:
             kwargs:
         """
-        super().__init__(*args, **kwargs)
+        del args, kwargs
         self.num_lat = num_lat
         self.users_weights = None
         self.items_weights = None

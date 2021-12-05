@@ -75,7 +75,7 @@ parameters_agents_symbols = {
           'num_clusters': r'num\_clusters',
           'num_lat': r'num\_lat',
           },
-    "OurMethod2": {
+    "WSPB": {
           'alpha':r'$\alpha$' ,
           'num_lat': r'num\_lat' ,
           },

@@ -1,17 +1,9 @@
 from irec.RelevanceEvaluator import RelevanceEvaluator
 import numpy as np
-
-import irec.value_functions
-
 import scipy.sparse
 from collections import defaultdict
-import time
-from irec.utils.utils import run_parallel
-import ctypes
 
 # import irec.utils.dataset as dataset
-from irec.utils import dataset
-from irec.value_functions.Entropy import Entropy
 from typing import Any
 
 np.seterr(all="raise")
@@ -21,19 +13,18 @@ np.seterr(all="raise")
 This module implements numerous evaluation metrics widely used in RS.
 """
 
+
 class Metric:
     """Metric.
 
-    Metrics are used to assess the performance of a recommendation system. 
-    For this, there are several metrics capable of evaluating recommendations in different ways.    
+    Metrics are used to assess the performance of a recommendation system.
+    For this, there are several metrics capable of evaluating recommendations in different ways.
     """
 
     def __init__(
         self,
         ground_truth_dataset: Any,
         relevance_evaluator: RelevanceEvaluator,
-        *args,
-        **kwargs
     ):
         """__init__.
 
@@ -44,13 +35,12 @@ class Metric:
             kwargs:
         """
 
-        super().__init__(*args, **kwargs)
         self.ground_truth_dataset = ground_truth_dataset
         self.relevance_evaluator = relevance_evaluator
 
     def compute(self, uid: int) -> Any:
         """compute.
-        
+
         This method performs the metric calculation for a given user.
 
         Args:
@@ -64,7 +54,7 @@ class Metric:
 
     def update_recommendation(self, uid: int, item: int, reward: float) -> None:
         """update_recommendation.
-        
+
         Uses user-supplied item rating to update metric attributes.
 
         Args:
@@ -75,13 +65,13 @@ class Metric:
         Returns:
             None:
         """
-        raise NotImplemented
+        raise NotImplementedError
 
     def update_consumption_history(self, uid: int, item: int, reward: float) -> None:
         """update_consumption_history.
-        
+
         Update items consumed by a user.
-        
+
         Args:
             uid (int): uid
             item (int): item
@@ -91,13 +81,13 @@ class Metric:
             None:
         """
 
-        raise NotImplemented
+        raise NotImplementedError
 
 
 class Recall(Metric):
     """Recall.
-    
-    Recall represents the probability that a relevant item will be selected. 
+
+    Recall represents the probability that a relevant item will be selected.
     (true positive/false negative)
     """
 
@@ -182,7 +172,7 @@ class Precision(Metric):
 
 class Hits(Metric):
     """Hits.
-    
+
     Number of recommendations made successfully.
     (right predictions)
     """
@@ -231,11 +221,11 @@ class NumInteractions(Metric):
 
 class EPC(Metric):
     """Expected Popularity Complement.
-    
-    EPC is a metric that measures the ability of a system to recommend 
+
+    EPC is a metric that measures the ability of a system to recommend
     relevant items that reside in the long-tail.
     """
-   
+
     def __init__(self, items_normalized_popularity, *args, **kwargs):
         """__init__.
 
@@ -267,7 +257,7 @@ class EPC(Metric):
             uid (int): user id
             item (int): item id
             reward (float): reward
-        """        
+        """
         self.users_num_items_recommended[uid] += 1
         probability_seen = self.items_normalized_popularity[item]
         self.users_prob_not_seen_cumulated[uid] += 1 - probability_seen
@@ -312,7 +302,7 @@ class TopItemsMembership(Metric):
 class ILD(Metric):
     """Intra-List Diversity.
 
-    This is used to measure the diversity of an individual user’s recommendations and quantifies user-novelty.   
+    This is used to measure the diversity of an individual user’s recommendations and quantifies user-novelty.
     """
 
     def __init__(self, items_distance, *args, **kwargs):
@@ -360,8 +350,9 @@ class EPD:
     """Expected Profile Distance.
 
     EPD, on the other hand, is a distance-based novelty measure, which looks
-    at distances between the items inthe user’s profile and the recommended items.   
+    at distances between the items inthe user’s profile and the recommended items.
     """
+
     def __init__(self, items_distance, *args, **kwargs):
         """__init__.
 
@@ -389,7 +380,7 @@ class EPD:
             uid (int): user id
         """
         rel = np.array(self.users_relevant_items[uid].A).flatten()
-        consumed_items = self.users_consumed_items[item]
+        consumed_items = self.users_consumed_items[uid]
         predicted = self.users_items_recommended[uid]
         res = (
             rel[predicted][:, None]
@@ -448,8 +439,8 @@ class AP(Metric):
 
 class GiniCoefficientInv(Metric):
     """GiniCoefficientInv.
-    
-    desc    
+
+    desc
     """
 
     def __init__(self, *args, **kwargs):
@@ -473,7 +464,7 @@ class GiniCoefficientInv(Metric):
         Args:
             uid (int): user id
         """
-        if self.is_computation_updated == False:
+        if self.is_computation_updated is False:
             self.is_computation_updated = True
             x = np.array(list(self.items_frequency.values()))
             diff_sum = 0
@@ -497,10 +488,11 @@ class GiniCoefficientInv(Metric):
 
 class UsersCoverage(Metric):
     """Users Coverage.
-    
-    It represents the percentage of distinctusers that are interested 
+
+    It represents the percentage of distinctusers that are interested
     in at least k items recommended (k ≥ 1).
     """
+
     def __init__(self, users_covered=defaultdict(bool), *args, **kwargs):
         """__init__.
 
@@ -518,8 +510,8 @@ class UsersCoverage(Metric):
         Args:
             uid (int): user id
         """
-        l = np.array(list(self.users_covered.values()))
-        return np.sum(l) / len(l)
+        vals = np.array(list(self.users_covered.values()))
+        return np.sum(vals) / len(vals)
 
     def update_recommendation(self, uid: int, item: int, reward: float):
         """update_consumption_history.
@@ -529,7 +521,7 @@ class UsersCoverage(Metric):
             item (int): item id
             reward (float): reward
         """
-        if self.users_covered[uid] == False and self.relevance_evaluator.is_relevant(
+        if self.users_covered[uid] is False and self.relevance_evaluator.is_relevant(
             reward
         ):
             self.users_covered[uid] = True

@@ -1,6 +1,8 @@
 from irec.RelevanceEvaluator import ThresholdRelevanceEvaluator
 import numpy as np
+
 np.seterr(all="raise")
+
 
 class MetricEvaluator:
     """MetricsEvaluator."""
@@ -13,7 +15,7 @@ class MetricEvaluator:
             args:
             kwargs:
         """
-        super().__init__(*args, **kwargs)
+        del args, kwargs
         self.relevance_evaluator = ThresholdRelevanceEvaluator(
             relevance_evaluator_threshold
         )

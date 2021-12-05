@@ -1,13 +1,13 @@
+from typing import Any
 from irec.ActionCollection import ActionCollection
 from sklearn.cluster import KMeans
 import numpy as np
 from collections import defaultdict
-import irec.value_functions.Entropy
 
-from value_functions.MostPopular import MostPopular
-from value_functions.Entropy import Entropy
+from irec.value_functions.MostPopular import MostPopular
+from irec.value_functions.Entropy import Entropy
 import scipy.sparse
-from value_functions.LogPopEnt import LogPopEnt
+from irec.value_functions.LogPopEnt import LogPopEnt
 import random
 import mf
 
@@ -161,25 +161,25 @@ class ASPICGreedy(ActionSelectionPolicy):
                 ],
             ), None
         else:
-            i=0
+            i = 0
             while True:
-                i+=1
+                i += 1
                 # print(i)
                 # g = self.choose_group(uid)
                 # try:
-                g= random.randint(0,self.num_clusters)
+                g = random.randint(0, self.num_clusters)
                 g_items = np.array(self.groups_items[g])
                 # print(actions[1],g_items)
-                g_items = np.intersect1d(actions[1],g_items)
+                g_items = np.intersect1d(actions[1], g_items)
                 # print(g_items)
                 if len(g_items) == 0:
                     continue
                 g_items = list(g_items)
                 top_item = g_items[np.argmax(self.items_popularity[g_items])]
                 break
-                    # break
+                # break
                 # except:
-                    # continue
+                # continue
 
             return (
                 actions[0],
@@ -188,7 +188,7 @@ class ASPICGreedy(ActionSelectionPolicy):
 
     def update(self, observation, action, reward, info):
         uid = action[0]
-        iid = action[1]
+        # iid = action[1]
         self.users_num_consumption[uid] += 1
         pass
 
@@ -220,7 +220,7 @@ class ASPICGreedy(ActionSelectionPolicy):
 
         self.groups = list(range(self.num_clusters))
         self.users_num_consumption = defaultdict(int)
-        self.users_num_consumption_groups = defaultdict(
+        self.users_num_consumption_groups: Any = defaultdict(
             lambda: np.zeros(self.num_clusters)
         )
 
