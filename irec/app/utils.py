@@ -863,9 +863,9 @@ def print_results_latex_table(
     metric_evaluator = eval(metric_evaluator_name)(None, **metric_evaluator_parameters)
 
     evaluation_policy_name = settings["defaults"]["evaluation_policy"]
-    evaluation_policy_parameters = settings["evaluation_policies"][
-        evaluation_policy_name
-    ]
+    # evaluation_policy_parameters = settings["evaluation_policies"][
+    # evaluation_policy_name
+    # ]
 
     exec(
         f"from irec.evaluation_policies.{evaluation_policy_name} import {evaluation_policy_name}"
@@ -1049,7 +1049,8 @@ def print_results_latex_table(
                         ][num_interaction] = (metric_value - metric_min_value) / (
                             metric_max_value - metric_min_value
                         )
-                    except Exception as _:
+                    except Exception as e:
+                        print(e)
                         utility_scores[dataset_loader_name][metric_class_name][
                             agent_name
                         ][num_interaction] = 0.0

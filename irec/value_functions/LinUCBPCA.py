@@ -1,13 +1,7 @@
 from typing import Any, DefaultDict
-from .ExperimentalValueFunction import ExperimentalValueFunction
 import numpy as np
-from tqdm import tqdm
-
-# import util
-from threadpoolctl import threadpool_limits
 import scipy
-import ctypes
-import mf
+import scipy.sparse
 from collections import defaultdict
 from .MFValueFunction import MFValueFunction
 import sklearn.decomposition
@@ -16,9 +10,9 @@ import sklearn.decomposition
 class LinUCBPCA(MFValueFunction):
     def __init__(self, alpha, zeta=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if alpha != None:
+        if alpha is not None:
             self.alpha = alpha
-        elif zeta != None:
+        elif zeta is not None:
             self.alpha = 1 + np.sqrt(np.log(2 / zeta) / 2)
 
     def reset(self, observation):
@@ -73,7 +67,7 @@ class LinUCBPCA(MFValueFunction):
     def update(self, observation, action, reward, info):
         uid = action[0]
         item = action[1]
-        additional_data = info
+        # additional_data = info
         max_item_latent_factors = self.items_weights[item]
         b = self.bs[uid]
         A = self.As[uid]

@@ -21,7 +21,7 @@ class RelevanceEvaluator:
         raise NotImplementedError
 
 
-class ThresholdRelevanceEvaluator:
+class ThresholdRelevanceEvaluator(RelevanceEvaluator):
     """ThresholdRelevanceEvaluator."""
 
     def __init__(self, threshold: float, *args, **kwargs):

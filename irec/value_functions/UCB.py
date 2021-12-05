@@ -10,13 +10,13 @@ from collections import defaultdict
 
 class UCB(ExperimentalValueFunction):
     """Upper Confidence Bound.
-    
+
     It is the original UCB that calculates a confidence interval for each item
     at each iteration and tries to shrink the confidence bounds [1]_.
 
     References
     ----------
-    .. [1] Auer, P., Cesa-Bianchi, N. & Fischer, P. Finite-time Analysis of the 
+    .. [1] Auer, P., Cesa-Bianchi, N. & Fischer, P. Finite-time Analysis of the
        Multiarmed Bandit Problem. Machine Learning 47, 235–256 (2002).
     """
 
@@ -36,7 +36,7 @@ class UCB(ExperimentalValueFunction):
         """reset.
 
         Args:
-            observation: 
+            observation:
         """
         train_dataset = observation
         super().reset(train_dataset)
@@ -72,7 +72,7 @@ class UCB(ExperimentalValueFunction):
             numpy.ndarray:
         """
 
-        uid = candidate_actions[0]
+        # uid = candidate_actions[0]
         candidate_items = candidate_actions[1]
         with np.errstate(divide="ignore"):
             items_uncertainty = self.c * np.sqrt(
@@ -89,11 +89,11 @@ class UCB(ExperimentalValueFunction):
             observation:
             action: (user id, item)
             reward (float): reward
-            info: 
+            info:
         """
-        uid = action[0]
+        # uid = action[0]
         item = action[1]
-        additional_data = info
+        # additional_data = info
         item = int(item)
         self.items_mean_values[item] = (
             self.items_mean_values[item] * self.items_count[item] + reward

@@ -7,7 +7,6 @@ import sys
 from mlflow.tracking.client import MlflowClient
 from traitlets.traitlets import default
 
-sys.path.append(dirname(dirname(realpath(__file__))))
 import mlflow
 from app import constants
 import mlflow.tracking
@@ -39,4 +38,4 @@ settings["defaults"]["agent"] = args.agent
 settings["defaults"]["dataset_loader"] = args.dataset_loader
 
 data = utils.load_dataset_experiment(settings)
-utils.run_agent(data, settings,True)
+utils.run_agent(data, settings, True)
