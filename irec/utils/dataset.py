@@ -3,7 +3,6 @@ from irec import value_functions
 import numpy as np
 import irec.value_functions
 import random
-import value_functions
 import scipy.sparse
 import os
 import numpy as np
@@ -134,7 +133,7 @@ class TRTEPopular(DataProcessor):
             (dataset.data[:, 2], (dataset.data[:, 0], dataset.data[:, 1])),
             (dataset.num_total_users, dataset.num_total_items),
         )
-        items_popularity = value_functions.MostPopular.get_items_popularity(
+        items_popularity = irec.value_functions.MostPopular.get_items_popularity(
             consumption_matrix
         )
         top_popular_items = np.argsort(items_popularity)[::-1][num_items_to_sample]
@@ -371,12 +370,14 @@ class TRTESample(DataProcessor):
         )
         num_items_to_sample = int(self.items_rate * dataset.num_total_items)
         if self.sample_method == "entropy":
-            items_values = value_functions.Entropy.Entropy.get_items_entropy(
+            items_values = irec.value_functions.Entropy.Entropy.get_items_entropy(
                 consumption_matrix
             )
         elif self.sample_method == "popularity":
-            items_values = value_functions.MostPopular.MostPopular.get_items_popularity(
-                consumption_matrix
+            items_values = (
+                irec.value_functions.MostPopular.MostPopular.get_items_popularity(
+                    consumption_matrix
+                )
             )
 
         best_items = np.argpartition(items_values, -num_items_to_sample)[

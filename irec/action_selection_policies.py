@@ -4,10 +4,10 @@ from sklearn.cluster import KMeans
 import numpy as np
 from collections import defaultdict
 
-from value_functions.MostPopular import MostPopular
-from value_functions.Entropy import Entropy
+from irec.value_functions.MostPopular import MostPopular
+from irec.value_functions.Entropy import Entropy
 import scipy.sparse
-from value_functions.LogPopEnt import LogPopEnt
+from irec.value_functions.LogPopEnt import LogPopEnt
 import random
 import mf
 
