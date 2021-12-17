@@ -279,3 +279,18 @@
     random_seed: 0
     test_consumes: 1
     train_size: 0.8
+    
+'MovieLens 25M':
+  DefaultDatasetLoader:
+    crono: false
+    dataset_path: ./data/datasets/MovieLens 25M/
+    random_seed: 0
+    test_consumes: 1
+    train_size: 0.8
+'MovieLens 25M Validation':
+  DefaultValidationDatasetLoader:
+    crono: false
+    dataset_path: ./data/datasets/MovieLens 25M/
+    random_seed: 0
+    test_consumes: 1
+    train_size: 0.8
