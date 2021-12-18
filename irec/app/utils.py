@@ -768,6 +768,7 @@ def download_data(dataset_names):
         "MovieLens 1M": "1zQZ3vxEEXFIjpS8mS82B3XSw84SCPe6w",
         "MovieLens 10M": "1pV5PD2Cio41DLGEcN0Fb5MP1cGPzBJBB",
         "MovieLens 20M": "1LOStldkZgOKyaOjd8QhSs8dkM9rPo6dY",
+        "MovieLens 25M": "1TMBII4-W_HfXxebwgQCXLZHVDjtX88hr",
         "MovieLens 100k": "1C0lHUQv73v58khSIKBE1VeVSldVsu_gE",
         "Netflix": "13H960S8-I2a-U3V_PmOC1TfOLZrkdm_h",
         "Netflix 10k": "1yynqrIW7GwTGXvuZ0ToPf-SEOGACSil3",
