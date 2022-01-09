@@ -1,11 +1,14 @@
+from typing import Any, DefaultDict
 from .ExperimentalValueFunction import *
 import numpy as np
 import random
 from tqdm import tqdm
 from threadpoolctl import threadpool_limits
+from collections import defaultdict
 import mf
 import ctypes
 from .MFValueFunction import MFValueFunction
+import scipy.sparse
 
 
 class LinEGreedy(MFValueFunction):
@@ -19,17 +22,19 @@ class LinEGreedy(MFValueFunction):
         super().reset(train_dataset)
         self.train_dataset = train_dataset
         self.train_consumption_matrix = scipy.sparse.csr_matrix(
-            (self.train_dataset.data[:, 2],
-             (self.train_dataset.data[:, 0], self.train_dataset.data[:, 1])),
-            (self.train_dataset.num_total_users,
-             self.train_dataset.num_total_items))
+            (
+                self.train_dataset.data[:, 2],
+                (self.train_dataset.data[:, 0], self.train_dataset.data[:, 1]),
+            ),
+            (self.train_dataset.num_total_users, self.train_dataset.num_total_items),
+        )
         self.num_total_items = self.train_dataset.num_total_items
         mf_model = mf.SVD()
         mf_model.fit(self.train_consumption_matrix)
         self.items_weights = mf_model.items_weights
 
-        self.bs = defaultdict(lambda: np.ones(self.num_lat))
-        self.As = defaultdict(lambda: np.eye(self.num_lat))
+        self.bs: DefaultDict[Any, Any] = defaultdict(lambda: np.ones(self.num_lat))
+        self.As: DefaultDict[Any, Any] = defaultdict(lambda: np.eye(self.num_lat))
 
     def action_estimates(self, candidate_actions):
         uid = candidate_actions[0]

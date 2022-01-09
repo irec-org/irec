@@ -343,57 +343,47 @@ NICF:
         clip_param: 0.2
         dropout_rate: 0.01
         gamma: 0.0
-        inner_epoch: 50
+        inner_epoch: 200
         latent_factor: 10
-        learning_rate: 0.1
+        learning_rate: 0.001
         num_blocks: 1
         num_heads: 2
         restore_model: false
         rnn_layer: 1
         time_step: 100
         training_epoch: 10000
-OurMethod1:
+UCBLearner:
   SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod1:
+      UCBLearner:
         alpha: 1
         num_lat: 20
         stop:
         weight_method: change
-OurMethod1Mod:
+WSPB:
   SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod1Mod:
-        alpha: 0.75
-        num_lat: 20
-        stop:
-        weight_method: change
-OurMethod2:
-  SimpleAgent:
-    action_selection_policy:
-      ASPGreedy: {}
-    value_function:
-      OurMethod2:
+      WSPB:
         alpha: 0.75
         num_lat: 10
-OurMethod2PCA:
+WSPBPCA:
   SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2PCA:
+      WSPBPCA:
         alpha: 0.5
         num_lat: 10
-OurMethod2var:
+WSPBvar:
   SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethod2var:
+      WSPBvar:
         alpha: 0.5
         lambda_u: 1.4824
         num_lat: 10
@@ -429,12 +419,12 @@ OurMethodEntropy:
       OurMethodEntropy:
         alpha: 0.5
         num_lat: 10
-OurMethodInit:
+WSPBInit:
   SimpleAgent:
     action_selection_policy:
       ASPGreedy: {}
     value_function:
-      OurMethodInit:
+      WSPBInit:
         alpha: 0.5
         init: entropy
         num_lat: 10

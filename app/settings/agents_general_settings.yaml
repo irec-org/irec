@@ -1,0 +1,149 @@
+NICF:
+  name: NICF
+PTS:
+  name: PTS
+Random:
+  name: Random
+  #name: Rand
+LinUCB:
+  name: LinUCB (MF)
+LinUCBvar:
+  name: LinUCBvar (MF)
+UCBLearner:
+  name: Old UCB-Learner
+WSPB:
+  name: WSPB
+OurMethod3:
+  name: WSPB Oracle
+OurMethod4:
+  name: WSPB Parameters-based
+OurMethod5:
+  name: WSPB time-aware
+OurMethodBalanced:
+  name: WSPB uncertainty-based
+LinearUCB:
+  #name: Linear UCB (PMF)
+  name: Linear UCB
+LinearUCB1:
+  name: Linear UCB (p=1) (PMF)
+COFIBA:
+  name: COFIBA
+ThompsonSampling:
+  name: TS
+kNNBandit:
+  name: kNN
+MostPopular:
+  name: Popular
+LinEGreedy:
+  name: Linear e-Greedy (MF)
+PPELPE:
+  name: PPELPE
+GLM_UCB:
+  #name: GLM-UCB (PMF)
+  name: GLM-UCB
+LinearEGreedy:
+  #name: Linear e-Greedy
+  name: e-Greedy
+LinearThompsonSampling:
+  name: Linear TS (PMF)
+EGreedy:
+  name: e-Greedy
+UCB:
+  name: UCB
+MostRepresentative:
+  name: Most Representative
+Entropy0:
+  name: Entropy0
+HELF:
+  name: HELF
+PopPlusEnt:
+  name: Pop+Ent
+DistinctPopular:
+  name: Distinct Popular
+EMostPopular:
+  name: e-Most Popular
+Entropy:
+  name: Entropy
+LogPopEnt:
+  name: log(Pop)⋅Ent
+WSPBInit:
+  name: WSPB Init
+OurMethodEntropy:
+  name: WSPB Entropy
+OurMethodPopularity:
+  name: WSPB Pop
+OurMethodRandPopularity:
+  name: WSPB Rand Pop
+OurMethodRandom:
+  name: WSPB Random
+WSPBvar:
+  name: WSPB var
+LinearUCBInit:
+  name: Linear UCB (PMF) Init
+LinearUCBEntropy:
+  name: Linear UCB (PMF) Entropy
+LinearUCBPopularity:
+  name: Linear UCB (PMF) Pop
+LinearUCBRandPopularity:
+  name: Linear UCB (PMF) Rand Pop
+LinearUCBRandom:
+  name: Linear UCB (PMF) Random
+LinearUCBLogPopEnt:
+  name: Linear UCB*
+LinearEGreedyEntropy:
+  name: Linear e-Greedy (PMF) Entropy
+LinearEGreedyPopularity:
+  name: Linear e-Greedy (PMF) Pop
+LinearEGreedyRandPopularity:
+  name: Linear e-Greedy (PMF) Rand Pop
+LinearEGreedyRandom:
+  name: Linear e-Greedy (PMF) Random
+LinearEGreedyLogPopEnt:
+  name: e-Greedy*
+WSPBPCA:
+  name: WSPB PCA
+LinUCBPCA:
+  name: LinUCB PCA
+ICTRTS:
+  name: ICTRTS
+PTSLogPopEnt:
+  name: PTS*
+GLM_UCBLogPopEnt:
+  #name: GLM_UCB+
+  name: GLM-UCB*
+LinUCBEntropy:
+  name: LinUCB Entropy
+RerankedEntropyGLM_UCB:
+  name: RerankedEntropy GLM-UCB
+RerankedEntropyLinUCB:
+  name: RerankedEntropy LinUCB
+RerankedEntropyLinearEGreedy:
+  name: RerankedEntropy LinearEGreedy
+RerankedEntropyLinearUCB:
+  name: RerankedEntropy LinearUCB
+RerankedLogPopEntGLM_UCB:
+  name: RerankedLogPopEnt GLM-UCB
+RerankedLogPopEntLinUCB:
+  name: RerankedLogPopEnt LinUCB
+RerankedLogPopEntLinearEGreedy:
+  name: RerankedLogPopEnt LinearEGreedy
+RerankedLogPopEntLinearUCB:
+  name: RerankedLogPopEnt LinearUCB
+NaiveEnsemble:
+  name: Naive Ensemble
+TSEnsemble_Pop:
+  name: TSEnsemble-Pop
+TSEnsemble_PopEnt:
+  name: TSEnsemble-PopEnt
+TSEnsemble_Entropy:
+  name: TSEnsemble-Entropy
+TSEnsemble_Random:
+  name: TSEnsemble-Random
+CB:
+  name: Cluster-Bandit
+OurMethodZero:
+  name: WSPB (p=0)
+OurMethodOne:
+  name: WSPB (p=1)
+ICBandit:
+  name: ICBandit

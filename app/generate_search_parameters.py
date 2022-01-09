@@ -72,25 +72,32 @@ for agent_name in args.agents:
         ]
     elif agent_name == "NICF":
         template["SimpleAgent"]["value_function"]["NICF"]["latent_factor"] = [
-            5,
+            # 5,
             10,
-            20,
-            50,
-            100,
+            # 20,
+            # 50,
+            # 100,
         ]
-        template["SimpleAgent"]["value_function"]["NICF"]["batch"] = [
-            64,
-            128,
-            256,
-        ]
+        # template["SimpleAgent"]["value_function"]["NICF"]["batch"] = [
+            # 64,
+            # 128,
+            # 256,
+        # ]
         template["SimpleAgent"]["value_function"]["NICF"]["num_blocks"] = [1, 2, 3]
 
         template["SimpleAgent"]["value_function"]["NICF"]["num_heads"] = [1, 2, 3]
         template["SimpleAgent"]["value_function"]["NICF"]["rnn_layer"] = [1, 2]
+        # template["SimpleAgent"]["value_function"]["NICF"]["rnn_layer"] = [1, 2]
+        # template["SimpleAgent"]["value_function"]["NICF"]["time_step"] = [
+            # 100,
+            # # 0.2,
+            # # 0.3,
+        # ]
         template["SimpleAgent"]["value_function"]["NICF"]["dropout_rate"] = [
+            0.01,
             0.1,
-            0.2,
-            0.3,
+            # 0.2,
+            # 0.3,
         ]
     elif agent_name == "CB":
         template["SimpleAgent"]["value_function"]["CB"]["num_clusters"] = [

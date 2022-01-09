@@ -8,20 +8,19 @@ class DatasetLoader:
 
 class DefaultDatasetLoader:
     def __init__(
-        self, dataset_processor, dataset_path, crono, random_seed, test_consumes, train_size
+        self, dataset_path, crono, random_seed, test_consumes, train_size
     ) -> None:
-        self.dataset_processor = dataset_processor
         self.dataset_path = dataset_path
         self.crono = crono
         self.random_seed = random_seed
         self.test_consumes = test_consumes
         self.train_size = train_size
-        self.dataset_processor = dataset_processor
 
     def load(self):
         np.random.seed(self.random_seed)
 
-        data = self.dataset_processor.process(self.dataset_path)
+        default_processor = dataset.DefaultDataset()
+        data = default_processor.process(self.dataset_path)
 
         traintest_processor = dataset.TrainTestConsumption(
             crono=self.crono,
@@ -33,9 +32,8 @@ class DefaultDatasetLoader:
 
 class DefaultValidationDatasetLoader:
     def __init__(
-        self, dataset_processor, dataset_path, crono, random_seed, test_consumes, train_size
+        self, dataset_path, crono, random_seed, test_consumes, train_size
     ) -> None:
-        self.dataset_processor = dataset_processor
         self.dataset_path = dataset_path
         self.crono = crono
         self.random_seed = random_seed
@@ -45,7 +43,9 @@ class DefaultValidationDatasetLoader:
     def load(self):
         np.random.seed(self.random_seed)
 
-        data = self.dataset_processor.process(self.dataset_path)
+        default_processor = dataset.DefaultDataset()
+        data = default_processor.process(self.dataset_path)
+
         traintest_processor = dataset.TrainTestConsumption(
             crono=self.crono,
             test_consumes=self.test_consumes,

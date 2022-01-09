@@ -1,6 +1,5 @@
-from . import MF
+from .MF import MF
 import scipy.sparse
-import numpy as np
 
 
 class SVD(MF):

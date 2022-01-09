@@ -1,8 +1,6 @@
 import numpy as np
 import scipy
 import scipy.stats
-import sys, os
-import random
 from threadpoolctl import threadpool_limits
 import ctypes
 import collections
@@ -10,7 +8,7 @@ import metrics
 from tqdm import tqdm
 
 from irec.utils.utils import run_parallel
-from . import MF
+from .MF import MF
 from numba import jit
 
 

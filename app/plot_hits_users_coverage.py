@@ -77,8 +77,8 @@ evaluation_policies_parameters = yaml.load(
 interactors_preprocessor_parameters = yaml.load(
     open("settings" + sep + "interactors_preprocessor_parameters.yaml"),
     Loader=yaml.SafeLoader)
-interactors_general_settings = yaml.load(
-    open("settings" + sep + "interactors_general_settings.yaml"),
+agents_general_settings = yaml.load(
+    open("settings" + sep + "agents_general_settings.yaml"),
     Loader=yaml.SafeLoader)
 
 evaluation_policies_parameters = yaml.load(
@@ -87,19 +87,19 @@ evaluation_policies_parameters = yaml.load(
 
 interactors_classes_names_to_names = {
     k: v['name']
-    for k, v in interactors_general_settings.items()
+    for k, v in agents_general_settings.items()
 }
 
 dm = DatasetManager()
 datasets_preprocessors = [datasets_preprocessors[base] for base in args.b]
-ir = InteractorRunner(dm, interactors_general_settings,
+ir = InteractorRunner(dm, agents_general_settings,
                       interactors_preprocessor_parameters,
                       evaluation_policies_parameters)
 interactors_classes = [
     eval('value_functions.' + interactor) for interactor in args.m
 ]
 
-# ir = InteractorRunner(dm, interactors_general_settings,
+# ir = InteractorRunner(dm, agents_general_settings,
 # interactors_preprocessor_parameters,
 # evaluation_policies_parameters)
 # interactors_classes = ir.select_interactors()
@@ -132,10 +132,10 @@ for dataset_preprocessor in datasets_preprocessors:
                     metrics_evaluator.get_id(), metric_class_name))
             # print(len(metric_values))
             datasets_metrics_values[dataset_preprocessor['name']][
-                metric_class_name][interactors_general_settings[
+                metric_class_name][agents_general_settings[
                     itr_class.__name__]['name']] = np.mean(metric_values[-1])
             datasets_metrics_users_values[dataset_preprocessor['name']][
-                metric_class_name][interactors_general_settings[
+                metric_class_name][agents_general_settings[
                     itr_class.__name__]['name']] = np.array(metric_values[-1])
 
 

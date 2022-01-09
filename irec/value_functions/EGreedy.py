@@ -1,6 +1,6 @@
 import numpy as np
 from tqdm import tqdm
-from . import ValueFunction, ExperimentalValueFunction
+from .ExperimentalValueFunction import ExperimentalValueFunction
 import os
 import random
 import scipy.stats

@@ -1,3 +1,144 @@
+Nano Dataset:
+  CB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        CB:
+          B: 5
+          C: 0.5
+          D: 3
+          num_clusters: 8
+          num_lat: 10
+  EGreedy:
+    SimpleAgent:
+      action_selection_policy:
+        ASPEGreedy:
+          epsilon: 0.001
+      value_function:
+        EGreedy: {}
+  GLM_UCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        GLM_UCB:
+          c: 4
+          item_var: 0.01
+          iterations: 20
+          num_lat: 10
+          stop_criteria: 0.0009
+          user_var: 0.01
+          var: 0.05
+  ICTRTS:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        ICTRTS:
+          num_lat: 2
+          num_particles: 5
+  LinUCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        LinUCB:
+          alpha: 0.5
+          num_lat: 10
+  LinearEGreedy:
+    SimpleAgent:
+      action_selection_policy:
+        ASPEGreedy:
+          epsilon: 0.1
+      value_function:
+        LinearEGreedy:
+          item_var: 0.01
+          iterations: 20
+          num_lat: 20
+          stop_criteria: 0.0009
+          user_var: 0.01
+          var: 0.05
+  LinearUCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        LinearUCB:
+          alpha: 1
+          item_var: 0.01
+          iterations: 20
+          num_lat: 20
+          stop_criteria: 0.0009
+          user_var: 0.01
+          var: 0.05
+  MostPopular:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        MostPopular: {}
+  NICF:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        NICF:
+          batch: 256
+          clip_param: 0.2
+          dropout_rate: 0.01
+          gamma: 0.0
+          inner_epoch: 50
+          latent_factor: 10
+          learning_rate: 0.001
+          num_blocks: 1
+          num_heads: 2
+          restore_model: false
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 4000
+  WSPB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        WSPB:
+          alpha: 1
+          num_lat: 10
+  PTS:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        PTS:
+          num_lat: 10
+          num_particles: 5
+          var: 0.01
+          var_u: 0.173
+          var_v: 2.65
+  Random:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        Random: {}
+  ThompsonSampling:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        ThompsonSampling:
+          alpha_0: 1
+          beta_0: 100
+  UCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        UCB:
+          c: 0.01
+
+
 Good Books:
   ALEntropy:
     SimpleAgent:
@@ -346,55 +487,55 @@ Good Books:
           gamma: 0.0
           inner_epoch: 50
           latent_factor: 10
-          learning_rate: 0.1
+          learning_rate: 0.001
           num_blocks: 1
           num_heads: 2
           restore_model: false
-          rnn_layer: 1
+          rnn_layer: 2
           time_step: 100
-          training_epoch: 2000
-  OurMethod1:
+          training_epoch: 4000
+  UCBLearner:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod1:
+        UCBLearner:
           alpha: 1
           num_lat: 20
           stop: null
           weight_method: change
-  OurMethod1Mod:
+  UCBLearnerMod:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod1Mod:
+        UCBLearnerMod:
           alpha: 1
           num_lat: 5
           stop: null
           weight_method: change
-  OurMethod2:
+  WSPB:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2:
+        WSPB:
           alpha: 0.25
           num_lat: 10
-  OurMethod2PCA:
+  WSPBPCA:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2PCA:
+        WSPBPCA:
           alpha: 0.25
           num_lat: 20
-  OurMethod2var:
+  WSPBvar:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2var:
+        WSPBvar:
           alpha: 0.25
           lambda_u: 1.4824
           num_lat: 10
@@ -430,12 +571,12 @@ Good Books:
         OurMethodEntropy:
           alpha: 0.25
           num_lat: 10
-  OurMethodInit:
+
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethodInit:
+
           alpha: 0.25
           init: entropy
           num_lat: 10
@@ -1108,55 +1249,55 @@ Good Books Non-Pop:
           gamma: 0.0
           inner_epoch: 50
           latent_factor: 30
-          learning_rate: 0.1
+          learning_rate: 0.001
           num_blocks: 2
           num_heads: 1
           restore_model: false
-          rnn_layer: 1
-          time_step: 3
-          training_epoch: 30000
-  OurMethod1:
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 4000
+  UCBLearner:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod1:
+        UCBLearner:
           alpha: 1
           num_lat: 20
           stop: null
           weight_method: change
-  OurMethod1Mod:
+  UCBLearnerMod:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod1Mod:
+        UCBLearnerMod:
           alpha: 1
           num_lat: 5
           stop: null
           weight_method: change
-  OurMethod2:
+  WSPB:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2:
+        WSPB:
           alpha: 0.25
           num_lat: 10
-  OurMethod2PCA:
+  WSPBPCA:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2PCA:
+        WSPBPCA:
           alpha: 0.25
           num_lat: 20
-  OurMethod2var:
+  WSPBvar:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2var:
+        WSPBvar:
           alpha: 0.25
           lambda_u: 1.4824
           num_lat: 10
@@ -1192,12 +1333,12 @@ Good Books Non-Pop:
         OurMethodEntropy:
           alpha: 0.25
           num_lat: 10
-  OurMethodInit:
+
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethodInit:
+
           alpha: 0.25
           init: entropy
           num_lat: 10
@@ -1638,55 +1779,55 @@ Good Books Pop:
           gamma: 0.0
           inner_epoch: 50
           latent_factor: 30
-          learning_rate: 0.1
+          learning_rate: 0.001
           num_blocks: 2
           num_heads: 1
           restore_model: false
-          rnn_layer: 1
-          time_step: 3
-          training_epoch: 30000
-  OurMethod1:
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 4000
+  UCBLearner:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod1:
+        UCBLearner:
           alpha: 1
           num_lat: 20
           stop: null
           weight_method: change
-  OurMethod1Mod:
+  UCBLearnerMod:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod1Mod:
+        UCBLearnerMod:
           alpha: 1
           num_lat: 5
           stop: null
           weight_method: change
-  OurMethod2:
+  WSPB:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2:
+        WSPB:
           alpha: 0.25
           num_lat: 10
-  OurMethod2PCA:
+  WSPBPCA:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2PCA:
+        WSPBPCA:
           alpha: 0.25
           num_lat: 20
-  OurMethod2var:
+  WSPBvar:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2var:
+        WSPBvar:
           alpha: 0.25
           lambda_u: 1.4824
           num_lat: 10
@@ -1722,12 +1863,12 @@ Good Books Pop:
         OurMethodEntropy:
           alpha: 0.25
           num_lat: 10
-  OurMethodInit:
+
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethodInit:
+
           alpha: 0.25
           init: entropy
           num_lat: 10
@@ -1986,25 +2127,25 @@ Good Books Sampled:
           num_blocks: 2
           num_heads: 1
           restore_model: false
-          rnn_layer: 1
-          time_step: 3
-          training_epoch: 30000
-  OurMethod1:
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 4000
+  UCBLearner:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod1:
+        UCBLearner:
           alpha: 1.0
           num_lat: 10
           stop: null
           weight_method: change
-  OurMethod2:
+  WSPB:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2:
+        WSPB:
           alpha: 1.0
           num_lat: 10
   PPELPE:
@@ -2248,32 +2389,32 @@ Good Books Validation:
           stop_criteria: 0.0009
           user_var: 0.01
           var: 0.05
-  OurMethod1:
+  UCBLearner:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod1:
+        UCBLearner:
           alpha: 1
           num_lat: 20
           stop: null
           weight_method: change
-  OurMethod1Mod:
+  UCBLearnerMod:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod1Mod:
+        UCBLearnerMod:
           alpha: 1
           num_lat: 5
           stop: null
           weight_method: change
-  OurMethod2PCA:
+  WSPBPCA:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2PCA:
+        WSPBPCA:
           alpha: 0.25
           num_lat: 20
   PTSLogPopEnt:
@@ -2509,19 +2650,19 @@ Kindle 4k:
           gamma: 0.0
           inner_epoch: 50
           latent_factor: 10
-          learning_rate: 0.1
+          learning_rate: 0.001
           num_blocks: 1
           num_heads: 2
           restore_model: false
-          rnn_layer: 1
+          rnn_layer: 2
           time_step: 100
-          training_epoch: 2000
-  OurMethod2:
+          training_epoch: 4000
+  WSPB:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2:
+        WSPB:
           alpha: 0.25
           num_lat: 20
   PTS:
@@ -2588,20 +2729,20 @@ Kindle 4k TRTE Validation:
         LinUCB:
           alpha: 0.75
           num_lat: 20
-  OurMethod2:
+  WSPB:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2:
+        WSPB:
           alpha: 0.25
           num_lat: 20
-  OurMethod2var:
+  WSPBvar:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2var:
+        WSPBvar:
           alpha: 0.25
           lambda_u: 0.01
           num_lat: 20
@@ -2707,15 +2848,15 @@ LastFM 5K Validation:
           num_blocks: 2
           num_heads: 1
           restore_model: false
-          rnn_layer: 1
-          time_step: 3
-          training_epoch: 30000
-  OurMethod2:
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 4000
+  WSPB:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2:
+        WSPB:
           alpha: 0.5
           num_lat: 20
   PTS:
@@ -2834,19 +2975,19 @@ LastFM 5k:
           gamma: 0.0
           inner_epoch: 50
           latent_factor: 10
-          learning_rate: 0.1
+          learning_rate: 0.001
           num_blocks: 1
           num_heads: 2
           restore_model: false
-          rnn_layer: 1
+          rnn_layer: 2
           time_step: 100
-          training_epoch: 2000
-  OurMethod2:
+          training_epoch: 4000
+  WSPB:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2:
+        WSPB:
           alpha: 0.25
           num_lat: 20
   PTS:
@@ -2918,20 +3059,20 @@ LastFM 5k TRTE:
         ASPGreedy: {}
       value_function:
         MostPopular: {}
-  OurMethod2:
+  WSPB:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2:
+        WSPB:
           alpha: 0.25
           num_lat: 20
-  OurMethod2var:
+  WSPBvar:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2var:
+        WSPBvar:
           alpha: 0.25
           lambda_u: 0.1
           num_lat: 20
@@ -3009,20 +3150,20 @@ LastFM 5k TRTE Validation:
         LinUCB:
           alpha: 0.5
           num_lat: 10
-  OurMethod2:
+  WSPB:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2:
+        WSPB:
           alpha: 0.25
           num_lat: 20
-  OurMethod2var:
+  WSPBvar:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2var:
+        WSPBvar:
           alpha: 0.25
           lambda_u: 0.1
           num_lat: 20
@@ -3058,7 +3199,7 @@ LastFM 5k TRTE Validation:
         OurMethodRandom:
           alpha: 0.25
           num_lat: 20
-MovieLens 100k O:
+MovieLens 100k:
   ALEntropy:
     SimpleAgent:
       action_selection_policy:
@@ -3232,9 +3373,9 @@ MovieLens 100k O:
           num_blocks: 2
           num_heads: 1
           restore_model: false
-          rnn_layer: 1
-          time_step: 3
-          training_epoch: 30000
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 4000
   NaiveEnsemble:
     SimpleEnsembleAgent:
       action_selection_policy:
@@ -3258,22 +3399,22 @@ MovieLens 100k O:
         GenericThompsonSampling:
           alpha_0: 1
           beta_0: 1
-  OurMethod1:
+  UCBLearner:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod1:
+        UCBLearner:
           alpha: 1.0
           num_lat: 10
           stop: null
           weight_method: change
-  OurMethod2:
+  WSPB:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2:
+        WSPB:
           alpha: 0.5
           num_lat: 20
   OurMethod3:
@@ -3708,55 +3849,55 @@ MovieLens 10M:
           gamma: 0.0
           inner_epoch: 50
           latent_factor: 10
-          learning_rate: 0.1
+          learning_rate: 0.001
           num_blocks: 1
           num_heads: 2
           restore_model: false
-          rnn_layer: 1
+          rnn_layer: 2
           time_step: 100
-          training_epoch: 2000
-  OurMethod1:
+          training_epoch: 4000
+  UCBLearner:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod1:
+        UCBLearner:
           alpha: 1
           num_lat: 20
           stop: null
           weight_method: change
-  OurMethod1Mod:
+  UCBLearnerMod:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod1Mod:
+        UCBLearnerMod:
           alpha: 0.75
           num_lat: 20
           stop: null
           weight_method: change
-  OurMethod2:
+  WSPB:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2:
+        WSPB:
           alpha: 0.75
           num_lat: 10
-  OurMethod2PCA:
+  WSPBPCA:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2PCA:
+        WSPBPCA:
           alpha: 0.5
           num_lat: 10
-  OurMethod2var:
+  WSPBvar:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2var:
+        WSPBvar:
           alpha: 0.5
           lambda_u: 1.4824
           num_lat: 10
@@ -3792,12 +3933,12 @@ MovieLens 10M:
         OurMethodEntropy:
           alpha: 0.5
           num_lat: 10
-  OurMethodInit:
+
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethodInit:
+
           alpha: 0.5
           init: entropy
           num_lat: 10
@@ -4470,55 +4611,55 @@ MovieLens 10M Non-Pop:
           gamma: 0.0
           inner_epoch: 50
           latent_factor: 20
-          learning_rate: 0.1
+          learning_rate: 0.001
           num_blocks: 2
           num_heads: 1
           restore_model: false
-          rnn_layer: 1
-          time_step: 3
-          training_epoch: 30000
-  OurMethod1:
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 4000
+  UCBLearner:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod1:
+        UCBLearner:
           alpha: 1
           num_lat: 20
           stop: null
           weight_method: change
-  OurMethod1Mod:
+  UCBLearnerMod:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod1Mod:
+        UCBLearnerMod:
           alpha: 0.75
           num_lat: 20
           stop: null
           weight_method: change
-  OurMethod2:
+  WSPB:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2:
+        WSPB:
           alpha: 0.75
           num_lat: 10
-  OurMethod2PCA:
+  WSPBPCA:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2PCA:
+        WSPBPCA:
           alpha: 0.5
           num_lat: 10
-  OurMethod2var:
+  WSPBvar:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2var:
+        WSPBvar:
           alpha: 0.5
           lambda_u: 1.4824
           num_lat: 10
@@ -4554,12 +4695,12 @@ MovieLens 10M Non-Pop:
         OurMethodEntropy:
           alpha: 0.5
           num_lat: 10
-  OurMethodInit:
+
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethodInit:
+
           alpha: 0.5
           init: entropy
           num_lat: 10
@@ -5029,55 +5170,55 @@ MovieLens 10M Pop:
           gamma: 0.0
           inner_epoch: 50
           latent_factor: 20
-          learning_rate: 0.1
+          learning_rate: 0.001
           num_blocks: 2
           num_heads: 1
           restore_model: false
-          rnn_layer: 1
-          time_step: 3
-          training_epoch: 30000
-  OurMethod1:
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 4000
+  UCBLearner:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod1:
+        UCBLearner:
           alpha: 1
           num_lat: 20
           stop: null
           weight_method: change
-  OurMethod1Mod:
+  UCBLearnerMod:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod1Mod:
+        UCBLearnerMod:
           alpha: 0.75
           num_lat: 20
           stop: null
           weight_method: change
-  OurMethod2:
+  WSPB:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2:
+        WSPB:
           alpha: 0.75
           num_lat: 10
-  OurMethod2PCA:
+  WSPBPCA:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2PCA:
+        WSPBPCA:
           alpha: 0.5
           num_lat: 10
-  OurMethod2var:
+  WSPBvar:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2var:
+        WSPBvar:
           alpha: 0.5
           lambda_u: 1.4824
           num_lat: 10
@@ -5113,12 +5254,12 @@ MovieLens 10M Pop:
         OurMethodEntropy:
           alpha: 0.5
           num_lat: 10
-  OurMethodInit:
+
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethodInit:
+
           alpha: 0.5
           init: entropy
           num_lat: 10
@@ -5406,25 +5547,25 @@ MovieLens 10M Sampled:
           num_blocks: 2
           num_heads: 1
           restore_model: false
-          rnn_layer: 1
-          time_step: 3
-          training_epoch: 30000
-  OurMethod1:
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 4000
+  UCBLearner:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod1:
+        UCBLearner:
           alpha: 1.0
           num_lat: 10
           stop: null
           weight_method: change
-  OurMethod2:
+  WSPB:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2:
+        WSPB:
           alpha: 1.0
           num_lat: 10
   PPELPE:
@@ -5669,32 +5810,32 @@ MovieLens 10M Validation:
           stop_criteria: 0.0009
           user_var: 0.01
           var: 0.05
-  OurMethod1:
+  UCBLearner:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod1:
+        UCBLearner:
           alpha: 1
           num_lat: 20
           stop: null
           weight_method: change
-  OurMethod1Mod:
+  UCBLearnerMod:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod1Mod:
+        UCBLearnerMod:
           alpha: 0.75
           num_lat: 20
           stop: null
           weight_method: change
-  OurMethod2PCA:
+  WSPBPCA:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2PCA:
+        WSPBPCA:
           alpha: 0.5
           num_lat: 10
   PTSLogPopEnt:
@@ -5993,33 +6134,33 @@ MovieLens 1M:
           num_blocks: 2
           num_heads: 1
           restore_model: false
-          rnn_layer: 1
-          time_step: 3
-          training_epoch: 30000
-  OurMethod1:
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 4000
+  UCBLearner:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod1:
+        UCBLearner:
           alpha: 1.0
           num_lat: 10
           stop: null
           weight_method: change
-  OurMethod2:
+  WSPB:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2:
+        WSPB:
           alpha: 0.25
           num_lat: 10
-  OurMethod2PCA:
+  WSPBPCA:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2PCA:
+        WSPBPCA:
           alpha: 0.25
           num_lat: 5
   PPELPE:
@@ -6334,25 +6475,25 @@ MovieLens 1M (B):
           num_blocks: 2
           num_heads: 1
           restore_model: false
-          rnn_layer: 1
-          time_step: 3
-          training_epoch: 30000
-  OurMethod1:
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 4000
+  UCBLearner:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod1:
+        UCBLearner:
           alpha: 1.0
           num_lat: 10
           stop: null
           weight_method: change
-  OurMethod2:
+  WSPB:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2:
+        WSPB:
           alpha: 1.0
           num_lat: 10
   PPELPE:
@@ -6515,19 +6656,19 @@ Netflix 10k:
           gamma: 0.0
           inner_epoch: 50
           latent_factor: 10
-          learning_rate: 0.1
+          learning_rate: 0.001
           num_blocks: 1
           num_heads: 2
           restore_model: false
-          rnn_layer: 1
+          rnn_layer: 2
           time_step: 100
-          training_epoch: 2000
-  OurMethod2:
+          training_epoch: 4000
+  WSPB:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2:
+        WSPB:
           alpha: 1
           num_lat: 10
   PTS:
@@ -6538,9 +6679,9 @@ Netflix 10k:
         PTS:
           num_lat: 10
           num_particles: 5
-          var: 0.7
-          var_u: 0.8
-          var_v: 0.9
+          var: 0.01
+          var_u: 0.173
+          var_v: 2.65
   Random:
     SimpleAgent:
       action_selection_policy:
@@ -6588,20 +6729,20 @@ Netflix 10k TRTE:
         ASPGreedy: {}
       value_function:
         MostPopular: {}
-  OurMethod2:
+  WSPB:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2:
+        WSPB:
           alpha: 0.5
           num_lat: 10
-  OurMethod2var:
+  WSPBvar:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2var:
+        WSPBvar:
           alpha: 0.75
           lambda_u: 1.2315279
           num_lat: 10
@@ -6663,20 +6804,20 @@ Netflix 10k TRTE Validation:
         LinUCB:
           alpha: 1
           num_lat: 5
-  OurMethod2:
+  WSPB:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2:
+        WSPB:
           alpha: 0.5
           num_lat: 10
-  OurMethod2var:
+  WSPBvar:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2var:
+        WSPBvar:
           alpha: 0.75
           lambda_u: 1.2315279
           num_lat: 10
@@ -6712,6 +6853,26 @@ Netflix 10k TRTE Validation:
         OurMethodRandom:
           alpha: 0.5
           num_lat: 10
+Netflix 10k Validation:
+  ICTRTS:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        ICTRTS:
+          num_lat: 2
+          num_particles: 5
+  PTS:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        PTS:
+          num_lat: 10
+          num_particles: 5
+          var: 0.01
+          var_u: 0.173
+          var_v: 2.65
 Netflix 1K:
   GLM_UCB:
     SimpleAgent:
@@ -6786,19 +6947,19 @@ Netflix 1K:
           gamma: 0.0
           inner_epoch: 50
           latent_factor: 20
-          learning_rate: 0.1
+          learning_rate: 0.001
           num_blocks: 2
           num_heads: 1
           restore_model: false
-          rnn_layer: 1
-          time_step: 3
-          training_epoch: 30000
-  OurMethod2:
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 4000
+  WSPB:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2:
+        WSPB:
           alpha: 1
           num_lat: 10
   PTS:
@@ -6907,19 +7068,19 @@ Netflix 1K Validation:
           gamma: 0.0
           inner_epoch: 50
           latent_factor: 20
-          learning_rate: 0.1
+          learning_rate: 0.001
           num_blocks: 2
           num_heads: 1
           restore_model: false
-          rnn_layer: 1
-          time_step: 3
-          training_epoch: 30000
-  OurMethod2:
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 4000
+  WSPB:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2:
+        WSPB:
           alpha: 1
           num_lat: 10
   PTS:
@@ -7302,55 +7463,55 @@ Yahoo Music:
           gamma: 0.0
           inner_epoch: 50
           latent_factor: 10
-          learning_rate: 0.1
+          learning_rate: 0.001
           num_blocks: 1
           num_heads: 2
           restore_model: false
-          rnn_layer: 1
+          rnn_layer: 2
           time_step: 100
-          training_epoch: 2000
-  OurMethod1:
+          training_epoch: 4000
+  UCBLearner:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod1:
+        UCBLearner:
           alpha: 1
           num_lat: 20
           stop: null
           weight_method: change
-  OurMethod1Mod:
+  UCBLearnerMod:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod1Mod:
+        UCBLearnerMod:
           alpha: 1
           num_lat: 5
           stop: null
           weight_method: change
-  OurMethod2:
+  WSPB:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2:
+        WSPB:
           alpha: 0.5
           num_lat: 20
-  OurMethod2PCA:
+  WSPBPCA:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2PCA:
+        WSPBPCA:
           alpha: 0.5
           num_lat: 20
-  OurMethod2var:
+  WSPBvar:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2var:
+        WSPBvar:
           alpha: 1.0
           lambda_u: 0.01
           num_lat: 10
@@ -7386,12 +7547,12 @@ Yahoo Music:
         OurMethodEntropy:
           alpha: 0.75
           num_lat: 20
-  OurMethodInit:
+
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethodInit:
+
           alpha: 0.75
           init: random
           num_lat: 20
@@ -7727,6 +7888,416 @@ Yahoo Music:
         ASPGreedy: {}
       value_function:
         kNNBandit: {}
+Yahoo Music 10k:
+  CB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        CB:
+          B: 5
+          C: 0.5
+          D: 3
+          num_clusters: 4
+          num_lat: 20
+  EGreedy:
+    SimpleAgent:
+      action_selection_policy:
+        ASPEGreedy:
+          epsilon: 0.0001
+      value_function:
+        EGreedy: {}
+  GLM_UCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        GLM_UCB:
+          c: 4
+          item_var: 0.01
+          iterations: 20
+          num_lat: 10
+          stop_criteria: 0.0009
+          user_var: 0.01
+          var: 0.05
+  ICTRTS:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        ICTRTS:
+          num_lat: 2
+          num_particles: 5
+  LinearUCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        LinearUCB:
+          alpha: 1
+          item_var: 0.01
+          iterations: 20
+          num_lat: 20
+          stop_criteria: 0.0009
+          user_var: 0.01
+          var: 0.05
+  MostPopular:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        MostPopular: {}
+  NICF:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        NICF:
+          batch: 256
+          clip_param: 0.2
+          dropout_rate: 0.01
+          gamma: 0.0
+          inner_epoch: 50
+          latent_factor: 10
+          learning_rate: 0.001
+          num_blocks: 1
+          num_heads: 2
+          restore_model: false
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 4000
+  WSPB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        WSPB:
+          alpha: 0.5
+          num_lat: 10
+  PTS:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        PTS:
+          num_lat: 10
+          num_particles: 5
+          var: 0.173
+          var_u: 0.01
+          var_v: 0.3
+  Random:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        Random: {}
+  ThompsonSampling:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        ThompsonSampling:
+          alpha_0: 1
+          beta_0: 100
+  UCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        UCB:
+          c: 0.01
+Yahoo Music 10k Validation:
+  CB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        CB:
+          B: 5
+          C: 0.5
+          D: 3
+          num_clusters: 4
+          num_lat: 20
+  EGreedy:
+    SimpleAgent:
+      action_selection_policy:
+        ASPEGreedy:
+          epsilon: 0.0001
+      value_function:
+        EGreedy: {}
+  GLM_UCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        GLM_UCB:
+          c: 4
+          item_var: 0.01
+          iterations: 20
+          num_lat: 10
+          stop_criteria: 0.0009
+          user_var: 0.01
+          var: 0.05
+  ICTRTS:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        ICTRTS:
+          num_lat: 2
+          num_particles: 5
+  LinearUCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        LinearUCB:
+          alpha: 1
+          item_var: 0.01
+          iterations: 20
+          num_lat: 20
+          stop_criteria: 0.0009
+          user_var: 0.01
+          var: 0.05
+  WSPB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        WSPB:
+          alpha: 0.5
+          num_lat: 10
+  PTS:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        PTS:
+          num_lat: 10
+          num_particles: 5
+          var: 0.173
+          var_u: 0.01
+          var_v: 0.3
+  ThompsonSampling:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        ThompsonSampling:
+          alpha_0: 1
+          beta_0: 100
+  UCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        UCB:
+          c: 0.01
+Yahoo Music 5k:
+  CB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        CB:
+          B: 5
+          C: 0.5
+          D: 3
+          num_clusters: 4
+          num_lat: 20
+  EGreedy:
+    SimpleAgent:
+      action_selection_policy:
+        ASPEGreedy:
+          epsilon: 0.0001
+      value_function:
+        EGreedy: {}
+  GLM_UCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        GLM_UCB:
+          c: 2
+          item_var: 0.01
+          iterations: 20
+          num_lat: 10
+          stop_criteria: 0.0009
+          user_var: 0.01
+          var: 0.05
+  ICTRTS:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        ICTRTS:
+          num_lat: 2
+          num_particles: 5
+  LinearUCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        LinearUCB:
+          alpha: 1
+          item_var: 0.01
+          iterations: 20
+          num_lat: 20
+          stop_criteria: 0.0009
+          user_var: 0.01
+          var: 0.05
+  MostPopular:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        MostPopular: {}
+  NICF:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        NICF:
+          batch: 256
+          clip_param: 0.2
+          dropout_rate: 0.01
+          gamma: 0.0
+          inner_epoch: 50
+          latent_factor: 10
+          learning_rate: 0.001
+          num_blocks: 1
+          num_heads: 2
+          restore_model: false
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 4000
+  WSPB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        WSPB:
+          alpha: 0.25
+          num_lat: 10
+  PTS:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        PTS:
+          num_lat: 10
+          num_particles: 5
+          var: 0.337
+          var_u: 0.01
+          var_v: 0.3
+  Random:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        Random: {}
+  ThompsonSampling:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        ThompsonSampling:
+          alpha_0: 1
+          beta_0: 100
+  UCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        UCB:
+          c: 0.05
+Yahoo Music 5k Validation:
+  CB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        CB:
+          B: 5
+          C: 0.5
+          D: 3
+          num_clusters: 4
+          num_lat: 20
+  EGreedy:
+    SimpleAgent:
+      action_selection_policy:
+        ASPEGreedy:
+          epsilon: 0.0001
+      value_function:
+        EGreedy: {}
+  GLM_UCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        GLM_UCB:
+          c: 2
+          item_var: 0.01
+          iterations: 20
+          num_lat: 10
+          stop_criteria: 0.0009
+          user_var: 0.01
+          var: 0.05
+  ICTRTS:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        ICTRTS:
+          num_lat: 2
+          num_particles: 5
+  LinearUCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        LinearUCB:
+          alpha: 1
+          item_var: 0.01
+          iterations: 20
+          num_lat: 20
+          stop_criteria: 0.0009
+          user_var: 0.01
+          var: 0.05
+  WSPB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        WSPB:
+          alpha: 0.25
+          num_lat: 10
+  PTS:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        PTS:
+          num_lat: 10
+          num_particles: 5
+          var: 0.337
+          var_u: 0.01
+          var_v: 0.3
+  ThompsonSampling:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        ThompsonSampling:
+          alpha_0: 1
+          beta_0: 100
+  UCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        UCB:
+          c: 0.05
 Yahoo Music Non-Pop:
   ALEntropy:
     SimpleAgent:
@@ -8064,55 +8635,55 @@ Yahoo Music Non-Pop:
           gamma: 0.0
           inner_epoch: 50
           latent_factor: 10
-          learning_rate: 0.1
+          learning_rate: 0.001
           num_blocks: 2
           num_heads: 1
           restore_model: false
-          rnn_layer: 1
-          time_step: 3
-          training_epoch: 30000
-  OurMethod1:
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 4000
+  UCBLearner:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod1:
+        UCBLearner:
           alpha: 1
           num_lat: 20
           stop: null
           weight_method: change
-  OurMethod1Mod:
+  UCBLearnerMod:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod1Mod:
+        UCBLearnerMod:
           alpha: 1
           num_lat: 5
           stop: null
           weight_method: change
-  OurMethod2:
+  WSPB:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2:
+        WSPB:
           alpha: 0.5
           num_lat: 20
-  OurMethod2PCA:
+  WSPBPCA:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2PCA:
+        WSPBPCA:
           alpha: 0.5
           num_lat: 20
-  OurMethod2var:
+  WSPBvar:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2var:
+        WSPBvar:
           alpha: 1.0
           lambda_u: 0.01
           num_lat: 10
@@ -8148,12 +8719,12 @@ Yahoo Music Non-Pop:
         OurMethodEntropy:
           alpha: 0.75
           num_lat: 20
-  OurMethodInit:
+
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethodInit:
+
           alpha: 0.75
           init: random
           num_lat: 20
@@ -8594,55 +9165,55 @@ Yahoo Music Pop:
           gamma: 0.0
           inner_epoch: 50
           latent_factor: 10
-          learning_rate: 0.1
+          learning_rate: 0.001
           num_blocks: 2
           num_heads: 1
           restore_model: false
-          rnn_layer: 1
-          time_step: 3
-          training_epoch: 30000
-  OurMethod1:
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 4000
+  UCBLearner:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod1:
+        UCBLearner:
           alpha: 1
           num_lat: 20
           stop: null
           weight_method: change
-  OurMethod1Mod:
+  UCBLearnerMod:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod1Mod:
+        UCBLearnerMod:
           alpha: 1
           num_lat: 5
           stop: null
           weight_method: change
-  OurMethod2:
+  WSPB:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2:
+        WSPB:
           alpha: 0.5
           num_lat: 20
-  OurMethod2PCA:
+  WSPBPCA:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2PCA:
+        WSPBPCA:
           alpha: 0.5
           num_lat: 20
-  OurMethod2var:
+  WSPBvar:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2var:
+        WSPBvar:
           alpha: 1.0
           lambda_u: 0.01
           num_lat: 10
@@ -8678,12 +9249,12 @@ Yahoo Music Pop:
         OurMethodEntropy:
           alpha: 0.75
           num_lat: 20
-  OurMethodInit:
+
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethodInit:
+
           alpha: 0.75
           init: random
           num_lat: 20
@@ -9128,51 +9699,51 @@ Yahoo Music Pop-Removed-Ent:
           num_blocks: 2
           num_heads: 1
           restore_model: false
-          rnn_layer: 1
-          time_step: 3
-          training_epoch: 30000
-  OurMethod1:
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 4000
+  UCBLearner:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod1:
+        UCBLearner:
           alpha: 1
           num_lat: 20
           stop: null
           weight_method: change
-  OurMethod1Mod:
+  UCBLearnerMod:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod1Mod:
+        UCBLearnerMod:
           alpha: 1
           num_lat: 5
           stop: null
           weight_method: change
-  OurMethod2:
+  WSPB:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2:
+        WSPB:
           alpha: 0.5
           num_lat: 20
-  OurMethod2PCA:
+  WSPBPCA:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2PCA:
+        WSPBPCA:
           alpha: 0.5
           num_lat: 20
-  OurMethod2var:
+  WSPBvar:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2var:
+        WSPBvar:
           alpha: 1.0
           lambda_u: 0.01
           num_lat: 10
@@ -9208,12 +9779,12 @@ Yahoo Music Pop-Removed-Ent:
         OurMethodEntropy:
           alpha: 0.75
           num_lat: 20
-  OurMethodInit:
+
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethodInit:
+
           alpha: 0.75
           init: random
           num_lat: 20
@@ -10093,25 +10664,25 @@ Yahoo Music Sampled:
           num_blocks: 2
           num_heads: 1
           restore_model: false
-          rnn_layer: 1
-          time_step: 3
-          training_epoch: 30000
-  OurMethod1:
+          rnn_layer: 2
+          time_step: 100
+          training_epoch: 4000
+  UCBLearner:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod1:
+        UCBLearner:
           alpha: 1.0
           num_lat: 10
           stop: null
           weight_method: change
-  OurMethod2:
+  WSPB:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2:
+        WSPB:
           alpha: 1.0
           num_lat: 10
   PPELPE:
@@ -10355,32 +10926,32 @@ Yahoo Music Validation:
           stop_criteria: 0.0009
           user_var: 0.01
           var: 0.05
-  OurMethod1:
+  UCBLearner:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod1:
+        UCBLearner:
           alpha: 1
           num_lat: 20
           stop: null
           weight_method: change
-  OurMethod1Mod:
+  UCBLearnerMod:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod1Mod:
+        UCBLearnerMod:
           alpha: 1
           num_lat: 5
           stop: null
           weight_method: change
-  OurMethod2PCA:
+  WSPBPCA:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        OurMethod2PCA:
+        WSPBPCA:
           alpha: 0.5
           num_lat: 20
   PTSLogPopEnt:

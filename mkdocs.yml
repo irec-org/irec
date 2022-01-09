@@ -19,4 +19,29 @@ theme:
   highlightjs: true
   hljs_languages:
     - python
-  name: readthedocs
+  name: material
+
+nav:
+  - <span style="color:rgb(51,177,240)">GET STARTED</span>:
+      Introduction: guide/introduction.md
+      Install IREC: guide/install_irec.md
+      Quick Start: guide/quick_start.md
+      Release Notes: guide/release_notes.md
+  
+  - <span style="color:rgb(51,177,240)">RUNNING EXPERIMENTS</span>:
+      Configurations Files: run_exp/configuration_files.md
+      Running an Experiment: run_exp/run_experiment.md
+
+  - <span style="color:rgb(51,177,240)">MODULES</span>:
+      Models: modules/models.md
+      Evaluation Policies: modules/evaluation_policies.md
+      Metric Evaluators: modules/metric_evaluators.md
+      Metrics: modules/metrics.md
+
+# markdown_extensions:
+#   - pymdownx.highlight
+#   - pymdownx.inlinehilite
+#   - pymdownx.superfences
+#   - pymdownx.snippets
+  
+#theme: readthedocs

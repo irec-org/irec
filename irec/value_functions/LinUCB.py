@@ -1,5 +1,6 @@
 import ctypes
 from collections import defaultdict
+from typing import Any, DefaultDict
 
 import mf
 import numpy as np
@@ -52,9 +53,11 @@ class LinUCB(MFValueFunction):
         self.num_latent_factors = len(self.items_weights[0])
 
         self.I = np.eye(len(self.items_weights[0]))
-        self.bs = defaultdict(lambda: np.ones(self.num_latent_factors))
+        self.bs: DefaultDict[Any, Any] = defaultdict(
+            lambda: np.ones(self.num_latent_factors)
+        )
 
-        self.As = defaultdict(lambda: self.I.copy())
+        self.As: DefaultDict[Any, Any] = defaultdict(lambda: self.I.copy())
 
     def action_estimates(self, candidate_actions):
         uid = candidate_actions[0]

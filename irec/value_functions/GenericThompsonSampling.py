@@ -1,23 +1,17 @@
 import numpy as np
-
 import numbers
-import copy
-from numpy.lib.npyio import save
-from tqdm import tqdm, trange
-from . import ValueFunction, ExperimentalValueFunction
-import os
-import random
-import scipy.stats
+from .ExperimentalValueFunction import ExperimentalValueFunction
 from collections import defaultdict
 
+
 def _create_attribute_with_check(value):
-    if isinstance(value,numbers.Number):
+    if isinstance(value, numbers.Number):
         return defaultdict(lambda: value)
-    elif isinstance(value,dict):
-        return defaultdict(lambda:1,value)
+    elif isinstance(value, dict):
+        return defaultdict(lambda: 1, value)
+
 
 class GenericThompsonSampling(ExperimentalValueFunction):
-
     def __init__(self, alpha_0, beta_0, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.alpha_0 = alpha_0
@@ -39,16 +33,18 @@ class GenericThompsonSampling(ExperimentalValueFunction):
 
         # self.train_dataset.num_total_items))
         # for i in range(self.train_dataset.data.shape[0]):
-            # uid = int(self.train_dataset.data[i, 0])
-            # item = int(self.train_dataset.data[i, 1])
-            # reward = self.train_dataset.data[i, 2]
-            # # self.action_estimates()
-            # # self.update(uid, item, reward, None)
-            # self.update(None, (uid, item), reward, None)
+        # uid = int(self.train_dataset.data[i, 0])
+        # item = int(self.train_dataset.data[i, 1])
+        # reward = self.train_dataset.data[i, 2]
+        # # self.action_estimates()
+        # # self.update(uid, item, reward, None)
+        # self.update(None, (uid, item), reward, None)
 
     def action_estimates(self, candidate_actions):
-        items_score = np.random.beta([self.alphas[ca] for ca in candidate_actions],
-                                     [self.betas[ca] for ca in candidate_actions])
+        items_score = np.random.beta(
+            [self.alphas[ca] for ca in candidate_actions],
+            [self.betas[ca] for ca in candidate_actions],
+        )
         # info = {'a': copy.copy(self.alphas), 'b': copy.copy(self.betas)}
         return items_score, None
         # return items_score, info
