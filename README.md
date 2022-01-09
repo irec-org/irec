@@ -17,7 +17,7 @@ Unlike existing frameworks, our structure has the most recent and relevant RL al
 
 ## Installation
 
-Currently, we are supporting Python 3. There are several ways to install irec:
+Currently, we support Python 3. There are several ways to install irec:
 
 - **From PyPI:**
   ```bash
@@ -33,7 +33,7 @@ Currently, we are supporting Python 3. There are several ways to install irec:
 
 ## Datasets
 
-Our framework has the ability to use any type of dataset, as long as it is suitable for the recommendation scenario and is formatted correctly. Below we list some of the datasets tested and used in some of our experiments.
+Our framework has the ability to use any type of dataset, as long as it is suitable for the recommendation scenario and is formatted correctly. Below we list several datasets tested and used in some of our experiments.
 
 | Dataset | Scenery  | Sparsity | Link
 | :---: | --- | :---: | :---: |
@@ -67,8 +67,8 @@ The recommender models supported by irec are listed below.
 | 2020 | [NICF](irec/value_functions/NICF.py) | [Link](https://dl.acm.org/doi/abs/10.1145/2505515.2505690?casa_token=MllrAXlioLsAAAAA:qnXgeSAEJF1jhTD7PNiDWFFr-FAET4vOHluesRPSCvxGuw3EfEeSnYokqCQKj3cNH0-v_I43UQE0) | It is an interactive method based on a combination of neural networks and  collaborative filtering that also performs a meta-learning of the user’s preferences.   
 | 2016 | [COFIBA](irec/value_functions/COFIBA.py) | [Link](https://dl.acm.org/doi/abs/10.1145/2911451.2911548?casa_token=UpXzuWNaGHUAAAAA:jQR2gPPq2plKCg2mqLMoJAn5l6BBd2fWi4oxw9DJN0LZ9r-03PLqb8qEKuNDD0DXcgp6N8W6x39b) | This method relies on upper-confidence-based tradeoffs between exploration and exploitation, combined with adaptive clustering procedures at both the user and the item sides.
 | 2002 | [UCB](irec/value_functions/UCB.py) | [Link](https://link.springer.com/article/10.1023/A:1013689704352) | It is the original UCB that calculates a confidence interval for each item at each iteration and tries to shrink the confidence bounds.
-| 2002 | [Entropy](irec/value_functions/Entropy.py) | [Link](https://dl.acm.org/doi/pdf/10.1145/502716.502737?casa_token=tQ6DkQMJnW0AAAAA:d3kGkV18mjoXwEDDMQmy4UBRMe9ZoZ-mCOeOqkZKgVCiIRpGolKB2M0RXm4ouePTuWkOgVhgBKh7) | The entropy of an item i is calculated using the relative frequency of each of the possible ratings ratings. In general, since entropy measures the spread of ratings for an item, this strategy tends to promote rarely rated items, which can be considerably informative.
-| 2002 | [LogPopEnt](irec/value_functions/LogPopEnt.py) | [Link](https://dl.acm.org/doi/pdf/10.1145/502716.502737?casa_token=tQ6DkQMJnW0AAAAA:d3kGkV18mjoXwEDDMQmy4UBRMe9ZoZ-mCOeOqkZKgVCiIRpGolKB2M0RXm4ouePTuWkOgVhgBKh7) | It combines popularity and entropy to identify potentially relevant items that also have the ability to add more knowledge to the system. As these concepts are not strongly correlated, it is possible to achieve this combination through a linear combination of the popularity ρ of an item i by its entropy ε: score(i) = log(ρi) · εi.
+| 2002 | [Entropy](irec/value_functions/Entropy.py) | [Link](https://dl.acm.org/doi/pdf/10.1145/502716.502737?casa_token=tQ6DkQMJnW0AAAAA:d3kGkV18mjoXwEDDMQmy4UBRMe9ZoZ-mCOeOqkZKgVCiIRpGolKB2M0RXm4ouePTuWkOgVhgBKh7) | The entropy of an item i is calculated using the relative frequency of each possible ratings. In general, since entropy measures the spread of ratings for an item, this strategy tends to promote rarely rated items, which can be considerably informative.
+| 2002 | [LogPopEnt](irec/value_functions/LogPopEnt.py) | [Link](https://dl.acm.org/doi/pdf/10.1145/502716.502737?casa_token=tQ6DkQMJnW0AAAAA:d3kGkV18mjoXwEDDMQmy4UBRMe9ZoZ-mCOeOqkZKgVCiIRpGolKB2M0RXm4ouePTuWkOgVhgBKh7) | It combines popularity and entropy to identify potentially relevant items that also have the ability to add more knowledge to the system. As these concepts are not strongly correlated, it is possible to achieve this merge through a linear combination of the popularity ρ of an item i by its entropy ε: score(i) = log(ρi) · εi.
 | - | [Random](irec/value_functions/Random.py) | [Link](link) | This method recommends totally random items.  
 | - | [MostPopular](irec/value_functions/MostPopular.py) | [Link](link) | It recommends items with the higher number of ratings received (most-popular) at each iteration.  
 | - | [BestRated](irec/value_functions/BestRated.py) | [Link](link) | Recommends top-rated items based on their average ratings in each iteration.
@@ -85,12 +85,12 @@ The recommender metrics supported by Cornac are listed below.
 | :---: | --- | :---: |
 | [Hits](https://github.com/heitor57/irec/blob/24a28734f757e95d1423dac4ada9dfb85fa05b73/irec/metrics.py#L183) | [Link](link) | Number of recommendations made successfully. 
 | [Precision](https://github.com/heitor57/irec/blob/24a28734f757e95d1423dac4ada9dfb85fa05b73/irec/metrics.py#L139) | [Link](link) | Precision is defined as the percentage of predictions we get right.
-| [Recall](https://github.com/heitor57/irec/blob/24a28734f757e95d1423dac4ada9dfb85fa05b73/irec/metrics.py#L97) | [Link](link) | Represents the probability that a relevant item will be selected.  
+| [Recall](https://github.com/heitor57/irec/blob/24a28734f757e95d1423dac4ada9dfb85fa05b73/irec/metrics.py#L97) | [Link](link) | It represents the probability that a relevant item will be selected.  
 | [EPC](https://github.com/heitor57/irec/blob/24a28734f757e95d1423dac4ada9dfb85fa05b73/irec/metrics.py#L232) | [Link](link) | It represents the novelty for each user and it is measured by the expected number of seen relevant recommended items not previously seen.  
-| [EPD](https://github.com/heitor57/irec/blob/24a28734f757e95d1423dac4ada9dfb85fa05b73/irec/metrics.py#L359) | [Link](link) | EPD is a distance-based novelty measure, which looks at distances between the items inthe user’s profile and the recommended items. 
-| [ILD](https://github.com/heitor57/irec/blob/24a28734f757e95d1423dac4ada9dfb85fa05b73/irec/metrics.py#L312) | [Link](link) | It represents the diversity between the list of items recommended. This diversity is measure by the Pearson correlation of the item’s features vector. 
+| [EPD](https://github.com/heitor57/irec/blob/24a28734f757e95d1423dac4ada9dfb85fa05b73/irec/metrics.py#L359) | [Link](link) | EPD is a distance-based novelty measure, which looks at distances between the items in the user’s profile and the recommended items. 
+| [ILD](https://github.com/heitor57/irec/blob/24a28734f757e95d1423dac4ada9dfb85fa05b73/irec/metrics.py#L312) | [Link](link) | It represents the diversity between the list of items recommended. This diversity is measured by the Pearson correlation of the item’s features vector. 
 | [Gini Coefficient](https://github.com/heitor57/irec/blob/24a28734f757e95d1423dac4ada9dfb85fa05b73/irec/metrics.py#L449)| [Link](link) | Diversity is represented as the Gini coefficient – a measure of distributional inequality. It is measured as the inverse of cumulative frequency that each item is recommended.
-| [Users Coverage](https://github.com/heitor57/irec/blob/24a28734f757e95d1423dac4ada9dfb85fa05b73/irec/metrics.py#L498) | [Link](link) | It represents the percentage of distinctusers that are interested in at least k items recommended (k ≥ 1).
+| [Users Coverage](https://github.com/heitor57/irec/blob/24a28734f757e95d1423dac4ada9dfb85fa05b73/irec/metrics.py#L498) | [Link](link) | It represents the percentage of distinct users that are interested in at least k items recommended (k ≥ 1).
 <!-- | [NDCG](reposit) | A diversity metric | [Link](link)  -->
 <!-- | [F-Measure](reposit) | desc | [Link](link) -->
 <!-- | [MAE](reposit) | desc | [Link](link)  -->
@@ -118,7 +118,7 @@ This configuration file stores all the configurations related to the bases that 
 
 [**dataset_agents.yaml**](app/settings/dataset_agents.yaml)
 
-This configuration file stores the settings of the agents (Recommendators) that will be used in the experiments.
+This configuration file stores the settings of the agents (Recommenders) that will be used in the experiments.
 
 ```yaml
 'MovieLens 10M':
@@ -140,7 +140,9 @@ This configuration file stores the settings of the agents (Recommendators) that 
 
 [**evaluation_policies.yaml**](app/settings/evaluation_policies.yaml)
 
-In this configuration file the evaluation policies are defined. To carry out an experiment, we need to define how the recommendation process will be, the interactions between user and item, and for that we create an evaluation policy in accordance with the objectives of the experiment.
+The evaluation policies are defined in this configuration file. To conduct an experiment, we need to define how the recommendation process will be executed and the user-item interactions. We specify these settings in this file according to the experiment's objectives.
+
+<!-- In this configuration file the evaluation policies are defined. To carry out an experiment, we need to define how the recommendation process will be, the interactions between user and item, and for that we create an evaluation policy in accordance with the objectives of the experiment. -->
 
 ```yaml
 Interaction:
@@ -172,7 +174,7 @@ UserCumulativeInteractionMetricEvaluator:
 
 [**defaults.yaml**](app/settings/defaults.yaml)
 
-This configuration file is a way to define the general settings for an experiment, here we can define the agents, the base, the policy and the evaluation metric, as well as some additional information.
+This configuration file defines the general settings of an experiment. We can specify not only the agents, the base, the policy, and the evaluation metric, but also some additional information.
 
 ```yaml
 agent: LinearUCB
