@@ -1,3 +1,0 @@
-# Metrics module
-
-::: irec.metrics
