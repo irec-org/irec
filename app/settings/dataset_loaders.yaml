@@ -184,7 +184,7 @@
     dataset_path: ./data/datasets/Good Books/
     random_seed: 0
     test_consumes: 5
-  train_size: 0.8
+    train_size: 0.8
 "Good Books Validation":
   DefaultValidationDatasetLoader:
     crono: true
