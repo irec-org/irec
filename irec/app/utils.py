@@ -798,18 +798,20 @@ def run_agent_with_dataset_parameters(
 ):
 
     from concurrent.futures import ProcessPoolExecutor, wait, FIRST_COMPLETED
-
-    with ProcessPoolExecutor(max_workers=tasks) as executor:
-        futures = set()
-        for dataset_loader_name in dataset_loaders:
-            current_settings = settings
-            current_settings["defaults"]["dataset_loader"] = dataset_loader_name
-            traintest_dataset = load_dataset_experiment(settings)
-            for agent_name in agents:
-                current_settings["defaults"]["agent"] = agent_name
-                current_settings["agents"][agent_name] = dataset_agents_parameters[
-                    dataset_loader_name
-                ][agent_name]
+    if tasks>1:
+        executor = ProcessPoolExecutor(max_workers=tasks)
+    futures = set()
+    # with ProcessPoolExecutor(max_workers=tasks) as executor:
+    for dataset_loader_name in dataset_loaders:
+        current_settings = settings
+        current_settings["defaults"]["dataset_loader"] = dataset_loader_name
+        traintest_dataset = load_dataset_experiment(settings)
+        for agent_name in agents:
+            current_settings["defaults"]["agent"] = agent_name
+            current_settings["agents"][agent_name] = dataset_agents_parameters[
+                dataset_loader_name
+            ][agent_name]
+            if tasks>1:
                 f = executor.submit(
                     run_agent,
                     traintest_dataset,
@@ -819,8 +821,11 @@ def run_agent_with_dataset_parameters(
                 futures.add(f)
                 if len(futures) >= tasks:
                     completed, futures = wait(futures, return_when=FIRST_COMPLETED)
-        for f in futures:
-            f.result()
+            else:
+                run_agent(traintest_dataset,copy.deepcopy(current_settings),forced_run)
+
+    for f in futures:
+        f.result()
 
 
 def print_results_latex_table(
