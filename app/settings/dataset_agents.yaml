@@ -6520,6 +6520,14 @@ MovieLens 1M:
         ASPGreedy: {}
       value_function:
         HELF: {}
+  ICTRTS:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        ICTRTS:
+          num_lat: 2
+          num_particles: 5
   LinEGreedy:
     SimpleAgent:
       action_selection_policy:

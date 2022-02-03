@@ -1471,3 +1471,403 @@ def print_agent_search(
         open("settings" + sep + "dataset_agents.yaml", "w").write(
             yaml.dump(dataset_agents_parameters)
         )
+
+
+def print_results_latex_horizontal_table(
+    agents,
+    dataset_loader,
+    settings,
+    dataset_agents_parameters,
+    metrics,
+    reference_agent,
+    dump,
+    type,
+):
+
+    dataset_loaders = [dataset_loader]
+    from cycler import cycler
+
+    plt.rcParams["axes.prop_cycle"] = cycler(color="krbgmyc")
+    plt.rcParams["lines.linewidth"] = 2
+    plt.rcParams["font.size"] = 15
+    metrics_classes = [eval("irec.metrics." + i) for i in metrics]
+
+    metrics_classes_names = list(map(lambda x: x.__name__, metrics_classes))
+    metrics_names = metrics_classes_names
+    datasets_names = dataset_loaders
+
+    metric_evaluator_name = settings["defaults"]["metric_evaluator"]
+    metric_evaluator_parameters = settings["metric_evaluators"][metric_evaluator_name]
+
+    exec(
+        f"from irec.metric_evaluators.{metric_evaluator_name} import {metric_evaluator_name}"
+    )
+    metric_evaluator = eval(metric_evaluator_name)(None, **metric_evaluator_parameters)
+
+    evaluation_policy_name = settings["defaults"]["evaluation_policy"]
+
+    exec(
+        f"from irec.evaluation_policies.{evaluation_policy_name} import {evaluation_policy_name}"
+    )
+    metrics_weights = {i: 1 / len(metrics_classes_names) for i in metrics_classes_names}
+
+    print("metric_evaluator_name", metric_evaluator_name)
+    if metric_evaluator_name == "StageIterationsMetricEvaluator":
+        nums_interactions_to_show = ["1-5", "6-10", "11-15", "16-20", "21-50", "51-100"]
+    else:
+        nums_interactions_to_show = list(
+            map(int, metric_evaluator.interactions_to_evaluate)
+        )
+
+    def generate_table_spec():
+        res = "|"
+        for i in range(1*len(metrics_names) + len(nums_interactions_to_show) * len(metrics_names)):
+            res += "c"
+            if i % (len(nums_interactions_to_show)) == 0:
+                res += "|"
+        return res
+
+    rtex_header = r"""
+    \documentclass{standalone}
+    %%\usepackage[landscape, paperwidth=15cm, paperheight=30cm, margin=0mm]{geometry}
+    \usepackage{multirow}
+    \usepackage{color, colortbl}
+    \usepackage{xcolor, soul}
+    \usepackage{amssymb}
+    \definecolor{Gray}{gray}{0.9}
+    \definecolor{StrongGray}{gray}{0.7}
+    \begin{document}
+    \begin{tabular}{%s}
+    \hline
+    \rowcolor{StrongGray}
+    Dataset & %s \\\hline
+    """ % (
+        generate_table_spec(),
+        r"\multicolumn{%d}{c|}{%s}" % (len(nums_interactions_to_show)*len(metrics_names), datasets_names[0])
+    )
+    rtex_footer = r"""
+    \end{tabular}
+    \end{document}
+    """
+    rtex = ""
+
+    datasets_metrics_values = defaultdict(
+        lambda: defaultdict(lambda: defaultdict(list))
+    )
+
+    datasets_metrics_users_values = defaultdict(
+        lambda: defaultdict(lambda: defaultdict(list))
+    )
+
+    mlflow.set_experiment(settings["defaults"]["evaluation_experiment"])
+
+    runs_infos = mlflow.list_run_infos(
+        mlflow.get_experiment_by_name(
+            settings["defaults"]["evaluation_experiment"]
+        ).experiment_id,
+        order_by=["attribute.end_time DESC"],
+    )
+
+    for dataset_loader_name in datasets_names:
+
+        for metric_class_name in metrics_classes_names:
+            for agent_name in agents:
+                settings["defaults"]["dataset_loader"] = dataset_loader_name
+                settings["defaults"]["agent"] = agent_name
+                agent_parameters = dataset_agents_parameters[dataset_loader_name][
+                    agent_name
+                ]
+                settings["agents"][agent_name] = agent_parameters
+                settings["defaults"]["metric"] = metric_class_name
+                parameters_evaluation_run = get_evaluation_run_parameters(settings)
+
+                mlflow.set_experiment(settings["defaults"]["evaluation_experiment"])
+                print(dataset_loader_name, agent_name)
+                run = already_ran(
+                    parameters_evaluation_run,
+                    mlflow.get_experiment_by_name(
+                        settings["defaults"]["evaluation_experiment"]
+                    ).experiment_id,
+                    runs_infos,
+                )
+
+                client = MlflowClient()
+                artifact_path = client.download_artifacts(
+                    run.info.run_id, "evaluation.pickle"
+                )
+                metric_values = pickle.load(open(artifact_path, "rb"))
+                # users_items_recommended = metric_values
+
+                datasets_metrics_values[dataset_loader_name][metric_class_name][
+                    agent_name
+                ].extend(
+                    [
+                        np.mean(list(metric_values[i].values()))
+                        for i in range(len(nums_interactions_to_show))
+                    ]
+                )
+                datasets_metrics_users_values[dataset_loader_name][metric_class_name][
+                    agent_name
+                ].extend(
+                    np.array(
+                        [
+                            list(metric_values[i].values())
+                            for i in range(len(nums_interactions_to_show))
+                        ]
+                    )
+                )
+
+    # utility_scores = defaultdict(
+        # lambda: defaultdict(lambda: defaultdict(lambda: dict()))
+    # )
+    # for num_interaction in range(len(nums_interactions_to_show)):
+        # for dataset_loader_name in datasets_names:
+            # for metric_class_name in metrics_classes_names:
+                # for agent_name in agents:
+                    # metric_max_value = np.max(
+                        # list(
+                            # map(
+                                # lambda x: x[num_interaction],
+                                # datasets_metrics_values[dataset_loader_name][
+                                    # metric_class_name
+                                # ].values(),
+                            # )
+                        # )
+                    # )
+                    # metric_min_value = np.min(
+                        # list(
+                            # map(
+                                # lambda x: x[num_interaction],
+                                # datasets_metrics_values[dataset_loader_name][
+                                    # metric_class_name
+                                # ].values(),
+                            # )
+                        # )
+                    # )
+                    # metric_value = datasets_metrics_values[dataset_loader_name][
+                        # metric_class_name
+                    # ][agent_name][num_interaction]
+                    # print(
+                        # "metric_value",
+                        # metric_value,
+                        # "metric_min_value",
+                        # metric_min_value,
+                    # )
+                    # try:
+                        # utility_scores[dataset_loader_name][metric_class_name][
+                            # agent_name
+                        # ][num_interaction] = (metric_value - metric_min_value) / (
+                            # metric_max_value - metric_min_value
+                        # )
+                    # except Exception as e:
+                        # print(e)
+                        # utility_scores[dataset_loader_name][metric_class_name][
+                            # agent_name
+                        # ][num_interaction] = 0.0
+
+    # for num_interaction in range(len(nums_interactions_to_show)):
+        # for dataset_loader_name in datasets_names:
+            # for agent_name in agents:
+                # us = [
+                    # utility_scores[dataset_loader_name][metric_class_name][agent_name][
+                        # num_interaction
+                    # ]
+                    # * metrics_weights[metric_class_name]
+                    # for metric_class_name in metrics_classes_names
+                # ]
+                # maut = np.sum(us)
+                # datasets_metrics_values[dataset_loader_name]["MAUT"][agent_name].append(
+                    # maut
+                # )
+                # datasets_metrics_users_values[dataset_loader_name]["MAUT"][
+                    # agent_name
+                # ].append(np.array([maut] * 100))
+
+    # if dump:
+        # with open("datasets_metrics_values.pickle", "wb") as f:
+            # pickle.dump(json.loads(json.dumps(datasets_metrics_values)), f)
+
+    # metrics_classes_names.append("MAUT")
+    # metrics_names.append("MAUT")
+
+    datasets_metrics_gain = defaultdict(
+        lambda: defaultdict(
+            lambda: defaultdict(lambda: [""] * len(nums_interactions_to_show))
+        )
+    )
+
+    datasets_metrics_best = defaultdict(
+        lambda: defaultdict(
+            lambda: defaultdict(lambda: [False] * len(nums_interactions_to_show))
+        )
+    )
+    bullet_str = r"\textcolor[rgb]{0.7,0.7,0.0}{$\bullet$}"
+    triangle_up_str = r"\textcolor[rgb]{00,0.45,0.10}{$\blacktriangle$}"
+    triangle_down_str = r"\textcolor[rgb]{0.7,00,00}{$\blacktriangledown$}"
+
+    if type == "pairs":
+        pool_of_methods_to_compare = [
+            (agents[i], agents[i + 1]) for i in range(0, len(agents) - 1, 2)
+        ]
+    else:
+        pool_of_methods_to_compare = [[agents[i] for i in range(len(agents))]]
+    print(pool_of_methods_to_compare)
+    for dataset_loader_name in datasets_names:
+        for metric_class_name in metrics_classes_names:
+            for i, num in enumerate(nums_interactions_to_show):
+                for methods in pool_of_methods_to_compare:
+                    datasets_metrics_values_tmp = copy.deepcopy(datasets_metrics_values)
+                    methods_set = set(methods)
+                    for k1, v1 in datasets_metrics_values.items():
+                        for k2, v2 in v1.items():
+                            for k3, v3 in v2.items():
+                                if k3 not in methods_set:
+                                    del datasets_metrics_values_tmp[k1][k2][k3]
+                            # print(datasets_metrics_values_tmp[k1][k2])
+                    # datasets_metrics_values_tmp =datasets_metrics_values
+                    datasets_metrics_best[dataset_loader_name][metric_class_name][
+                        max(
+                            datasets_metrics_values_tmp[dataset_loader_name][
+                                metric_class_name
+                            ].items(),
+                            key=lambda x: x[1][i],
+                        )[0]
+                    ][i] = True
+                    if reference_agent == "lastmethod":
+                        best_itr = methods[-1]
+                    elif reference_agent is not None:
+                        best_itr = reference_agent
+                    else:
+                        best_itr = max(
+                            datasets_metrics_values_tmp[dataset_loader_name][
+                                metric_class_name
+                            ].items(),
+                            key=lambda x: x[1][i],
+                        )[0]
+                    best_itr_vals = datasets_metrics_values_tmp[dataset_loader_name][
+                        metric_class_name
+                    ].pop(best_itr)
+                    best_itr_val = best_itr_vals[i]
+                    second_best_itr = max(
+                        datasets_metrics_values_tmp[dataset_loader_name][
+                            metric_class_name
+                        ].items(),
+                        key=lambda x: x[1][i],
+                    )[0]
+                    second_best_itr_vals = datasets_metrics_values_tmp[
+                        dataset_loader_name
+                    ][metric_class_name][second_best_itr]
+                    second_best_itr_val = second_best_itr_vals[i]
+                    # come back with value in dict
+                    datasets_metrics_values_tmp[dataset_loader_name][metric_class_name][
+                        best_itr
+                    ] = best_itr_vals
+
+                    best_itr_users_val = datasets_metrics_users_values[
+                        dataset_loader_name
+                    ][metric_class_name][best_itr][i]
+                    second_best_itr_users_val = datasets_metrics_users_values[
+                        dataset_loader_name
+                    ][metric_class_name][second_best_itr][i]
+
+                    try:
+                        # print(best_itr_users_val)
+                        # print(second_best_itr_users_val)
+                        statistic, pvalue = scipy.stats.wilcoxon(
+                            best_itr_users_val,
+                            second_best_itr_users_val,
+                        )
+                    except Exception as E:
+                        print("[ERROR]: Wilcoxon error", E)
+                        datasets_metrics_gain[dataset_loader_name][metric_class_name][
+                            best_itr
+                        ][i] = bullet_str
+                        continue
+
+                    if pvalue > 0.05:
+                        datasets_metrics_gain[dataset_loader_name][metric_class_name][
+                            best_itr
+                        ][i] = bullet_str
+                    else:
+                        # print(best_itr,best_itr_val,second_best_itr,second_best_itr_val,methods)
+                        if best_itr_val < second_best_itr_val:
+                            datasets_metrics_gain[dataset_loader_name][
+                                metric_class_name
+                            ][best_itr][i] = triangle_down_str
+                        elif best_itr_val > second_best_itr_val:
+                            datasets_metrics_gain[dataset_loader_name][
+                                metric_class_name
+                            ][best_itr][i] = triangle_up_str
+                        else:
+                            datasets_metrics_gain[dataset_loader_name][
+                                metric_class_name
+                            ][best_itr][i] = bullet_str
+
+
+    rtex+= "Measure & "
+    rtex+= "&".join([
+                r"\multicolumn{%d}{c|}{%s}" % (len(nums_interactions_to_show), i)
+                for i in metrics_names
+        ]) + '\\\\\\hline\n'
+
+    rtex+= "T"
+    for _ in metrics_names:
+        rtex += " & "
+        rtex += "&".join([
+                    r"%d" % (i)
+                    for i in nums_interactions_to_show
+            ])
+    rtex += '\\\\\\hline\\hline\n'
+
+    for dataset_name in datasets_names:
+        for agent_name in agents:
+            rtex += "%s" % (get_agent_pretty_name(agent_name, settings))
+            for metric_name, metric_class_name in zip(metrics_names, metrics_classes_names):
+                rtex += " & "
+                rtex += " & ".join(
+                            map(
+                                lambda x, y, z: (r"\textbf{" if z else "")
+                                + f"{x:.3f}{y}"
+                                + (r"}" if z else ""),
+                                datasets_metrics_values[dataset_name][metric_class_name][
+                                    agent_name
+                                ],
+                                datasets_metrics_gain[dataset_name][metric_class_name][
+                                    agent_name
+                                ],
+                                datasets_metrics_best[dataset_name][metric_class_name][
+                                    agent_name
+                                ],
+                            )
+                        )
+            rtex += r"\\\hline" + "\n"
+
+    res = rtex_header + rtex + rtex_footer
+
+    tmp = "_".join([dataset_name for dataset_name in datasets_names])
+    tex_path = os.path.join(
+        settings["defaults"]["data_dir"],
+        settings["defaults"]["tex_dir"],
+        f"tableh_{tmp}.tex",
+    )
+    create_path_to_file(tex_path)
+    open(
+        tex_path,
+        "w+",
+    ).write(res)
+    pdf_path = os.path.join(
+        settings["defaults"]["data_dir"], settings["defaults"]["pdf_dir"]
+    )
+    create_path_to_file(pdf_path)
+    # print(f"latexmk -pdf -interaction=nonstopmode -output-directory={pdf_path} {tex_path}")
+    os.system(
+        f'latexmk -pdflatex=pdflatex -pdf -interaction=nonstopmode -output-directory="{pdf_path}" "{tex_path}"'
+    )
+    useless_files = [
+        os.path.join(dp, f)
+        for dp, dn, filenames in os.walk(pdf_path)
+        for f in filenames
+        if os.path.splitext(f)[1] != ".pdf"
+    ]
+    for useless_file in useless_files:
+        os.remove(useless_file)
