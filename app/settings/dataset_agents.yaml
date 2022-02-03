@@ -6480,7 +6480,7 @@ MovieLens 1M:
     SimpleAgent:
       action_selection_policy:
         ASPEGreedy:
-          epsilon: 0.1
+          epsilon: 0.0001
       value_function:
         EGreedy: {}
   EMostPopular:
@@ -6507,7 +6507,7 @@ MovieLens 1M:
         ASPGreedy: {}
       value_function:
         GLM_UCB:
-          c: 8
+          c: 4
           item_var: 0.01
           iterations: 20
           num_lat: 10
@@ -6567,10 +6567,10 @@ MovieLens 1M:
         ASPGreedy: {}
       value_function:
         LinearUCB:
-          alpha: 1.0
+          alpha: 0.75
           item_var: 0.01
           iterations: 20
-          num_lat: 10
+          num_lat: 20
           stop_criteria: 0.0009
           user_var: 0.01
           var: 0.05
@@ -6580,12 +6580,7 @@ MovieLens 1M:
         ASPGreedy: {}
       value_function:
         LogPopEnt: {}
-  MostPopular:
-    SimpleAgent:
-      action_selection_policy:
-        ASPGreedy: {}
-      value_function:
-        MostPopular: {}
+  MostPopular: {}
   MostRepresentative:
     SimpleAgent:
       action_selection_policy:
@@ -6603,14 +6598,14 @@ MovieLens 1M:
           dropout_rate: 0.1
           gamma: 0.0
           inner_epoch: 50
-          latent_factor: 50
+          latent_factor: 30
           learning_rate: 0.001
           num_blocks: 2
           num_heads: 1
           restore_model: false
-          rnn_layer: 2
-          time_step: 100
-          training_epoch: 4000
+          rnn_layer: 1
+          time_step: 3
+          training_epoch: 30000
   PPELPE:
     SimpleAgent:
       action_selection_policy:
@@ -6623,23 +6618,18 @@ MovieLens 1M:
         ASPGreedy: {}
       value_function:
         PTS:
-          num_lat: 2
-          num_particles: 2
-          var: 0.5
-          var_u: 1.0
-          var_v: 1.0
+          num_lat: 10
+          num_particles: 5
+          var: 0.337
+          var_u: 0.01
+          var_v: 0.3
   PopPlusEnt:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
         PopPlusEnt: {}
-  Random:
-    SimpleAgent:
-      action_selection_policy:
-        ASPGreedy: {}
-      value_function:
-        Random: {}
+  Random: {}
   TSEnsemble_Entropy:
     SimpleEnsembleAgent:
       action_selection_policy:
@@ -6739,7 +6729,7 @@ MovieLens 1M:
       value_function:
         ThompsonSampling:
           alpha_0: 1
-          beta_0: 1
+          beta_0: 100
   TinUCB:
     SimpleAgent:
       action_selection_policy:
@@ -6753,7 +6743,7 @@ MovieLens 1M:
         ASPGreedy: {}
       value_function:
         UCB:
-          c: 1.0
+          c: 0.01
   UCBLearner:
     SimpleAgent:
       action_selection_policy:
@@ -6768,7 +6758,7 @@ MovieLens 1M:
         ASPGreedy: {}
       value_function:
         WSPB:
-          alpha: 0.25
+          alpha: 1
           num_lat: 10
   WSPBPCA:
     SimpleAgent:
@@ -7060,6 +7050,7 @@ MovieLens 1M Validation:
           stop_criteria: 0.0009
           user_var: 0.01
           var: 0.05
+  MostPopular: {}
   NICF:
     SimpleAgent:
       action_selection_policy:
@@ -7090,6 +7081,7 @@ MovieLens 1M Validation:
           var: 0.337
           var_u: 0.01
           var_v: 0.3
+  Random: {}
   ThompsonSampling:
     SimpleAgent:
       action_selection_policy:
