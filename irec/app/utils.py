@@ -502,7 +502,6 @@ def run_agent(traintest_dataset, settings, forced_run):
 
     agent_parameters = settings["agents"][settings["defaults"]["agent"]]
     agent = AgentFactory().create(settings["defaults"]["agent"], agent_parameters)
-    # agent_id = utils.get_agent_id(agent_name, parameters)
     run_interactor(
         agent=agent,
         traintest_dataset=traintest_dataset,

@@ -6449,6 +6449,18 @@ MovieLens 10M Validation:
       value_function:
         kNNBandit: {}
 MovieLens 1M:
+  MostPopular:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        MostPopular: {}
+  Random:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        Random: {}
   ALEntropy:
     SimpleAgent:
       action_selection_policy:
@@ -6588,7 +6600,6 @@ MovieLens 1M:
         ASPGreedy: {}
       value_function:
         LogPopEnt: {}
-  MostPopular: {}
   MostRepresentative:
     SimpleAgent:
       action_selection_policy:
@@ -6637,7 +6648,6 @@ MovieLens 1M:
         ASPGreedy: {}
       value_function:
         PopPlusEnt: {}
-  Random: {}
   TSEnsemble_Entropy:
     SimpleEnsembleAgent:
       action_selection_policy:
