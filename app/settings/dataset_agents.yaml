@@ -7019,19 +7019,100 @@ MovieLens 1M (B):
           beta_0: 1
           k: 1
 MovieLens 1M Validation:
+  EGreedy:
+    SimpleAgent:
+      action_selection_policy:
+        ASPEGreedy:
+          epsilon: 0.0001
+      value_function:
+        EGreedy: {}
   GLM_UCB:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
         GLM_UCB:
-          c: 8
+          c: 4
           item_var: 0.01
           iterations: 20
           num_lat: 10
           stop_criteria: 0.0009
           user_var: 0.01
           var: 0.05
+  ICTRTS:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        ICTRTS:
+          num_lat: 2
+          num_particles: 5
+  LinearUCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        LinearUCB:
+          alpha: 0.75
+          item_var: 0.01
+          iterations: 20
+          num_lat: 20
+          stop_criteria: 0.0009
+          user_var: 0.01
+          var: 0.05
+  NICF:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        NICF:
+          batch: 128
+          clip_param: 0.2
+          dropout_rate: 0.1
+          gamma: 0.0
+          inner_epoch: 50
+          latent_factor: 30
+          learning_rate: 0.001
+          num_blocks: 2
+          num_heads: 1
+          restore_model: false
+          rnn_layer: 1
+          time_step: 3
+          training_epoch: 30000
+  PTS:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        PTS:
+          num_lat: 10
+          num_particles: 5
+          var: 0.337
+          var_u: 0.01
+          var_v: 0.3
+  ThompsonSampling:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        ThompsonSampling:
+          alpha_0: 1
+          beta_0: 100
+  UCB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        UCB:
+          c: 0.01
+  WSPB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        WSPB:
+          alpha: 1
+          num_lat: 10
 Nano Dataset:
   CB:
     SimpleAgent:
