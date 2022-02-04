@@ -140,7 +140,7 @@ TSEnsemble_Entropy:
 TSEnsemble_Random:
   name: TSEnsemble-Random
 CB:
-  name: Cluster-Bandit
+  name: CB
 OurMethodZero:
   name: WSPB (p=0)
 OurMethodOne:
