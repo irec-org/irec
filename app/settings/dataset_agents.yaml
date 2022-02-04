@@ -6449,18 +6449,6 @@ MovieLens 10M Validation:
       value_function:
         kNNBandit: {}
 MovieLens 1M:
-  MostPopular:
-    SimpleAgent:
-      action_selection_policy:
-        ASPGreedy: {}
-      value_function:
-        MostPopular: {}
-  Random:
-    SimpleAgent:
-      action_selection_policy:
-        ASPGreedy: {}
-      value_function:
-        Random: {}
   ALEntropy:
     SimpleAgent:
       action_selection_policy:
@@ -6473,6 +6461,17 @@ MovieLens 1M:
         ASPGreedy: {}
       value_function:
         ALMostPopular: {}
+  CB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        CB:
+          B: 5
+          C: 0.5
+          D: 3
+          num_clusters: 4
+          num_lat: 20
   COFIBA:
     SimpleAgent:
       action_selection_policy:
@@ -6600,6 +6599,12 @@ MovieLens 1M:
         ASPGreedy: {}
       value_function:
         LogPopEnt: {}
+  MostPopular:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        MostPopular: {}
   MostRepresentative:
     SimpleAgent:
       action_selection_policy:
@@ -6648,6 +6653,12 @@ MovieLens 1M:
         ASPGreedy: {}
       value_function:
         PopPlusEnt: {}
+  Random:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        Random: {}
   TSEnsemble_Entropy:
     SimpleEnsembleAgent:
       action_selection_policy:
@@ -7027,6 +7038,17 @@ MovieLens 1M (B):
           beta_0: 1
           k: 1
 MovieLens 1M Validation:
+  CB:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        CB:
+          B: 5
+          C: 0.5
+          D: 3
+          num_clusters: 4
+          num_lat: 20
   EGreedy:
     SimpleAgent:
       action_selection_policy:

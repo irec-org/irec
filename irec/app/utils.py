@@ -1803,13 +1803,13 @@ def print_results_latex_horizontal_table(
                             ][best_itr][i] = bullet_str
 
 
-    rtex+= "Measure & "
+    rtex+= "\\rowcolor{Gray} Measure & "
     rtex+= "&".join([
                 r"\multicolumn{%d}{c|}{%s}" % (len(nums_interactions_to_show), i)
                 for i in metrics_names
         ]) + '\\\\\\hline\n'
 
-    rtex+= "T"
+    rtex+= "\\rowcolor{Gray} T"
     for _ in metrics_names:
         rtex += " & "
         rtex += "&".join([
