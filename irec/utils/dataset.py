@@ -278,11 +278,41 @@ class Netflix:
 
 
 class TrainTestConsumption(DataProcessor):
-    def __init__(self, train_size, test_consumes, crono: bool, *args, **kwargs):
+    def __init__(self, train_size, test_consumes, strategy, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.train_size = train_size
         self.test_consumes = test_consumes
-        self.crono = crono
+        self.strategy = strategy
+
+    def splitting(self, strategy, data_df, num_test_users):
+
+        users_items_consumed = data_df.groupby(0).count().iloc[:, 0]
+        test_candidate_users = list(
+            users_items_consumed[users_items_consumed >= self.test_consumes]
+            .to_dict()
+            .keys()
+        )
+
+        if strategy == "temporal":
+            test_candidate_users = np.array(test_candidate_users, dtype=int)
+            users_start_time = data_df.groupby(0).min()[3].to_numpy()
+            test_uids = np.array(
+                list(
+                    test_candidate_users[
+                        list(
+                            reversed(np.argsort(users_start_time[test_candidate_users]))
+                        )
+                    ]
+                )[:num_test_users]
+            )
+        elif strategy == "random":
+            test_uids = np.array(random.sample(test_candidate_users, k=num_test_users))
+        else:
+            raise ValueError(f'The split strategy {strategy} does not exist', 'temporal', 'random') 
+
+        train_uids = np.array(list(set(range(len(data_df[0].unique()))) - set(test_uids)))
+
+        return train_uids, test_uids
 
     def process(self, ds):
         data = ds.data
@@ -298,29 +328,9 @@ class TrainTestConsumption(DataProcessor):
         num_train_users = round(num_users * (self.train_size))
         num_test_users = int(num_users - num_train_users)
         data_df = pd.DataFrame(data)
-        users_items_consumed = data_df.groupby(0).count().iloc[:, 0]
-        test_candidate_users = list(
-            users_items_consumed[users_items_consumed >= self.test_consumes]
-            .to_dict()
-            .keys()
-        )
-        if self.crono:
-            test_candidate_users = np.array(test_candidate_users, dtype=int)
-            users_start_time = data_df.groupby(0).min()[3].to_numpy()
-            test_uids = np.array(
-                list(
-                    test_candidate_users[
-                        list(
-                            reversed(np.argsort(users_start_time[test_candidate_users]))
-                        )
-                    ]
-                )[:num_test_users]
-            )
-        else:
-            test_uids = np.array(random.sample(test_candidate_users, k=num_test_users))
-            # print(test_uids)
-        train_uids = np.array(list(set(range(num_users)) - set(test_uids)))
 
+        train_uids, test_uids = self.splitting(self.strategy, data_df, num_test_users)
+  
         data_isin_test_uids = np.isin(data[:, 0], test_uids)
 
         train_dataset = copy(ds)
