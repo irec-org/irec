@@ -24,9 +24,9 @@ InteractionMetricEvaluator:
 UserCumulativeInteractionMetricEvaluator:
   interaction_size: 1
   interactions_to_evaluate:
-    - 5
+    #- 5
     - 10
-    - 20
+    #- 20
     - 50
     - 100
   num_interactions: 100

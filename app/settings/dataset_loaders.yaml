@@ -21,7 +21,8 @@
   crono: true
   random_seed: 0
 "Yahoo Music TRTE":
-  dataset_path: ./data/datasets/Train-Test_Yahoo-Music/
+  TRTEDatasetLoader:  
+    dataset_path: ./data/datasets/Train-Test_Yahoo-Music/
 "Yahoo Music TRTE Validation":
   dataset_path: ./data/datasets/Train-Test_Yahoo-Music/
   train_size: 0.8
@@ -29,7 +30,8 @@
   crono: true
   random_seed: 0
 "Good Books TRTE":
-  dataset_path: ./data/datasets/Train-Test_Good-Books/
+  TRTEDatasetLoader:  
+    dataset_path: ./data/datasets/Train-Test_Good-Books/
 "Good Books TRTE Validation":
   dataset_path: ./data/datasets/Train-Test_Good-Books/
   train_size: 0.8
@@ -45,7 +47,8 @@
   crono: true
   random_seed: 0
 "Netflix 10k TRTE":
-  dataset_path: ./data/datasets/Train-Test_Netflix-10K/
+  TRTEDatasetLoader:  
+    dataset_path: ./data/datasets/Train-Test_Netflix-10K/
 "Netflix 10k TRTE Validation":
   dataset_path: ./data/datasets/Train-Test_Netflix-10K/
   train_size: 0.8
@@ -199,6 +202,7 @@
     splitting:
       strategy: temporal
       train_size: 0.8
+
 "Good Books Validation":
   DefaultValidationDatasetLoader:
     dataset_path: ./data/datasets/Good Books/
