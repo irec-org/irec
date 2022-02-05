@@ -1,6 +1,6 @@
-import utils
+from irec.app import utils
 import yaml
-import copy
+from os.path import dirname, realpath
 import argparse
 
 parser = argparse.ArgumentParser()
@@ -10,7 +10,7 @@ parser.add_argument('-sb', nargs='*')
 parser.add_argument('-tb', nargs='*')
 args = parser.parse_args()
 
-settings = utils.load_settings()
+settings = utils.load_settings(dirname(realpath(__file__)))
 dataset_agents = utils.defaultify(yaml.load(
     open("./settings/dataset_agents.yaml"), Loader=yaml.SafeLoader
 ))

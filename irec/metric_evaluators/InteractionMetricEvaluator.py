@@ -7,6 +7,7 @@ import irec.value_functions
 import scipy.sparse
 import numpy as np
 import time
+from irec import metrics
 np.seterr(all="raise")
 
 class InteractionMetricEvaluator(MetricEvaluator):
@@ -108,18 +109,18 @@ class InteractionMetricEvaluator(MetricEvaluator):
         for uid, item in results:
             self.users_items_recommended[uid].append(item)
         self.uids = list(self.users_items_recommended.keys())
-        if isinstance(metric_class, ILD):
-            self.items_distance = get_items_distance(
+        if issubclass(metric_class, (ILD,EPD)):
+            self.items_distance = metrics.get_items_distance(
                 self.ground_truth_consumption_matrix
             )
-        if isinstance(metric_class, EPC):
+        if issubclass(metric_class, EPC):
             self.items_normalized_popularity = (
-                irec.value_functions.MostPopular.get_items_popularity(
+                irec.value_functions.MostPopular.MostPopular.get_items_popularity(
                     self.ground_truth_consumption_matrix
                 )
             )
-        if isinstance(metric_class, Entropy):
-            self.items_entropy = irec.value_functions.Entropy.get_items_entropy(
+        if issubclass(metric_class, Entropy):
+            self.items_entropy = irec.value_functions.Entropy.Entropy.get_items_entropy(
                 self.ground_truth_consumption_matrix
             )
 

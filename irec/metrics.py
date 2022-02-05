@@ -346,7 +346,7 @@ class ILD(Metric):
         self.users_items_recommended[uid].append(item)
 
 
-class EPD:
+class EPD(Metric):
     """Expected Profile Distance.
 
     EPD, on the other hand, is a distance-based novelty measure, which looks
@@ -368,10 +368,22 @@ class EPD:
         self.users_items_recommended = defaultdict(list)
         self.users_local_ild = defaultdict(float)
 
-        self.users_relevant_items = scipy.sparse.csr_matrix(self.ground_truth_dataset)
+        self.users_relevant_items = scipy.sparse.csr_matrix(
+                (
+                    self.ground_truth_dataset.data[:, 2],
+                    (
+                        self.ground_truth_dataset.data[:, 0].astype(int),
+                        self.ground_truth_dataset.data[:, 1].astype(int),
+                    ),
+                ),
+                shape=(self.ground_truth_dataset.num_total_users, self.ground_truth_dataset.num_total_items),
+            )
+        # print(self.users_relevant_items)
+        # print("min rating",self.ground_truth_dataset.min_rating)
         self.users_relevant_items[
-            self.users_relevant_items > self.ground_truth_dataset.min_rating
+            self.users_relevant_items >= self.ground_truth_dataset.min_rating
         ] = True
+        # print(self.users_relevant_items)
 
     def compute(self, uid: int):
         """compute.

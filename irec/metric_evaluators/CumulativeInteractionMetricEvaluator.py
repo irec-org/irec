@@ -19,7 +19,7 @@ class CumulativeInteractionMetricEvaluator(InteractionMetricEvaluator):
                 ground_truth_dataset=self.ground_truth_dataset,
                 relevance_evaluator=self.relevance_evaluator,
             )
-        elif issubclass(metric_class, ILD):
+        elif issubclass(metric_class, (ILD,EPD)):
             metric = metric_class(
                 items_distance=self.items_distance,
                 ground_truth_dataset=self.ground_truth_dataset,
