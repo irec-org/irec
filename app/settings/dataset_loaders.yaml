@@ -61,239 +61,273 @@
 "MovieLens 1M":
   DefaultDatasetLoader:  
     dataset_path: ./data/datasets/MovieLens 1M/
-    train_size: 0.8
-    test_consumes: 5
-    crono: true
     random_seed: 0
+    test_consumes: 5
+    splitting:
+      strategy: temporal
+      train_size: 0.8
 "MovieLens 1M Validation":
   DefaultValidationDatasetLoader:  
     dataset_path: ./data/datasets/MovieLens 1M/
-    train_size: 0.8
-    test_consumes: 5
-    crono: true
     random_seed: 0
+    test_consumes: 5
+    splitting:
+      strategy: temporal
+      train_size: 0.8
 
 "MovieLens 10M":
   DefaultDatasetLoader:
     dataset_path: ./data/datasets/MovieLens 10M/
-    train_size: 0.8
-    test_consumes: 5
-    crono: true
     random_seed: 0
+    test_consumes: 5
+    splitting:
+      strategy: temporal
+      train_size: 0.8
 "MovieLens 10M Validation":
   DefaultValidationDatasetLoader:  
     dataset_path: ./data/datasets/MovieLens 10M/
-    train_size: 0.8
-    test_consumes: 5
-    crono: true
     random_seed: 0
+    test_consumes: 5
+    splitting:
+      strategy: temporal
+      train_size: 0.8
 
 "MovieLens 20M":
   DefaultDatasetLoader:
     dataset_path: ./data/datasets/MovieLens 20M/
-    train_size: 0.8
-    test_consumes: 5
-    crono: true
     random_seed: 0
+    test_consumes: 5
+    splitting:
+      strategy: temporal
+      train_size: 0.8
 "MovieLens 20M Validation":
   DefaultValidationDatasetLoader:
     dataset_path: ./data/datasets/MovieLens 20M/
-    train_size: 0.8
-    test_consumes: 5
-    crono: true
     random_seed: 0
+    test_consumes: 5
+    splitting:
+      strategy: temporal
+      train_size: 0.8
 
 "LastFM 5k":
   DefaultDatasetLoader:
-    crono: true
     dataset_path: "./data/datasets/LastFM-5K/"
     random_seed: 0
     test_consumes: 5
-    train_size: 0.8
+    splitting:
+      strategy: temporal
+      train_size: 0.8
 "LastFM 5k Validation":
   DefaultValidationDatasetLoader:
-    crono: true
     dataset_path: "./data/datasets/LastFM-5K/"
     random_seed: 0
     test_consumes: 5
-    train_size: 0.8
+    splitting:
+      strategy: temporal
+      train_size: 0.8
 
 "Kindle Store":
   DefaultDatasetLoader:
-    crono: true
     dataset_path: ./data/datasets/Kindle Store/
     random_seed: 0
     test_consumes: 5
-    train_size: 0.8
+    splitting:
+      strategy: temporal
+      train_size: 0.8
 "Kindle Store Validation":
   DefaultValidationDatasetLoader:  
-    crono: true
     dataset_path: ./data/datasets/Kindle Store/
     random_seed: 0
     test_consumes: 5
-    train_size: 0.8
+    splitting:
+      strategy: temporal
+      train_size: 0.8
 
 "Kindle 4k":
   DefaultDatasetLoader:
-    crono: true
     dataset_path: ./data/datasets/Kindle 4k/
     random_seed: 0
     test_consumes: 5
-    train_size: 0.8
+    splitting:
+      strategy: temporal
+      train_size: 0.8
 "Kindle 4k Validation":
   DefaultValidationDatasetLoader:
-    crono: true
     dataset_path: ./data/datasets/Kindle 4k/
     random_seed: 0
     test_consumes: 5
-    train_size: 0.8
+    splitting:
+      strategy: temporal
+      train_size: 0.8
 
 "Netflix":
   DefaultDatasetLoader:
-    crono: true
     dataset_path: ./data/datasets/Netflix/
     random_seed: 0
     test_consumes: 5
-    train_size: 0.8
+    splitting:
+      strategy: temporal
+      train_size: 0.8
 "Netflix Validation":
   DefaultValidationDatasetLoader:
-    crono: true
     dataset_path: ./data/datasets/Netflix/
     random_seed: 0
     test_consumes: 5
-    train_size: 0.8
+    splitting:
+      strategy: temporal
+      train_size: 0.8
 
 "Netflix 10k":
   DefaultDatasetLoader:
-    crono: true
     dataset_path: ./data/datasets/Netflix 10k/
     random_seed: 0
     test_consumes: 5
-    train_size: 0.8
+    splitting:
+      strategy: temporal
+      train_size: 0.8
 "Netflix 10k Validation":
   DefaultValidationDatasetLoader:
-    crono: true
     dataset_path: ./data/datasets/Netflix 10k/
     random_seed: 0
     test_consumes: 5
-    train_size: 0.8
+    splitting:
+      strategy: temporal
+      train_size: 0.8
 
 "Good Books":
   DefaultDatasetLoader:
-    crono: true
     dataset_path: ./data/datasets/Good Books/
     random_seed: 0
     test_consumes: 5
-    train_size: 0.8
+    splitting:
+      strategy: temporal
+      train_size: 0.8
+
 "Good Books Validation":
   DefaultValidationDatasetLoader:
-    crono: true
     dataset_path: ./data/datasets/Good Books/
     random_seed: 0
     test_consumes: 5
-    train_size: 0.8
+    splitting:
+      strategy: temporal
+      train_size: 0.8
 
 "Yahoo Music":
   DefaultDatasetLoader:
-    crono: true
     dataset_path: ./data/datasets/Yahoo Music/
     random_seed: 0
     test_consumes: 5
-    train_size: 0.8
+    splitting:
+      strategy: temporal
+      train_size: 0.8
 "Yahoo Music Validation":
   DefaultValidationDatasetLoader:
-    crono: true
     dataset_path: ./data/datasets/Yahoo Music/
     random_seed: 0
     test_consumes: 5
-    train_size: 0.8
+    splitting:
+      strategy: temporal
+      train_size: 0.8
 
 "Good Reads 10k":
   DefaultDatasetLoader:    
-    crono: true
     dataset_path: ./data/datasets/Good Reads 10k/
     random_seed: 0
     test_consumes: 5
-    train_size: 0.8
+    splitting:
+      strategy: temporal
+      train_size: 0.8
 "Good Reads 10k Validation":
   DefaultValidationDatasetLoader:
-    crono: true
     dataset_path: ./data/datasets/Good Reads 10k/
     random_seed: 0
     test_consumes: 5
-    train_size: 0.8
+    splitting:
+      strategy: temporal
+      train_size: 0.8
 
 'Yahoo Music 5k':
   DefaultDatasetLoader:
-    crono: false
     dataset_path: ./data/datasets/Yahoo Music 5k/
     random_seed: 0
-    test_consumes: 1
-    train_size: 0.8
+    test_consumes: 5
+    splitting:
+      strategy: temporal
+      train_size: 0.8
 'Yahoo Music 5k Validation':
   DefaultValidationDatasetLoader:
-    crono: false
     dataset_path: ./data/datasets/Yahoo Music 5k/
     random_seed: 0
-    test_consumes: 1
-    train_size: 0.8
+    test_consumes: 5
+    splitting:
+      strategy: temporal
+      train_size: 0.8
 
 'Yahoo Music 10k':
   DefaultDatasetLoader:
-    crono: false
     dataset_path: ./data/datasets/Yahoo Music 10k/
     random_seed: 0
-    test_consumes: 1
-    train_size: 0.8
+    test_consumes: 5
+    splitting:
+      strategy: temporal
+      train_size: 0.8
 'Yahoo Music 10k Validation':
   DefaultValidationDatasetLoader:
-    crono: false
     dataset_path: ./data/datasets/Yahoo Music 10k/
     random_seed: 0
-    test_consumes: 1
-    train_size: 0.8
+    test_consumes: 5
+    splitting:
+      strategy: temporal
+      train_size: 0.8
 
 'MovieLens 100k':
   DefaultDatasetLoader:
-    crono: false
     dataset_path: ./data/datasets/MovieLens 100k/
     random_seed: 0
     test_consumes: 1
-    train_size: 0.8
+    splitting:
+      strategy: temporal
+      train_size: 0.8
+
 'MovieLens 100k Validation':
   DefaultValidationDatasetLoader:
-    crono: false
     dataset_path: ./data/datasets/MovieLens 100k/
     random_seed: 0
     test_consumes: 1
-    train_size: 0.8
+    splitting:
+      strategy: temporal
+      train_size: 0.8
 
 'Nano Dataset':
   DefaultDatasetLoader:
-    crono: false
     dataset_path: ./data/datasets/Nano Dataset/
     random_seed: 0
     test_consumes: 1
-    train_size: 0.8
+    splitting:
+      strategy: random
+      train_size: 0.8
 'Nano Dataset Validation':
   DefaultValidationDatasetLoader:
-    crono: false
     dataset_path: ./data/datasets/Nano Dataset/
     random_seed: 0
-    test_consumes: 1
-    train_size: 0.8
+    test_consumes: 5
+    splitting:
+      strategy: random
+      train_size: 0.8
     
 'MovieLens 25M':
   DefaultDatasetLoader:
-    crono: false
     dataset_path: ./data/datasets/MovieLens 25M/
     random_seed: 0
-    test_consumes: 1
-    train_size: 0.8
+    test_consumes: 5
+    splitting:
+      strategy: temporal
+      train_size: 0.8
 'MovieLens 25M Validation':
   DefaultValidationDatasetLoader:
-    crono: false
     dataset_path: ./data/datasets/MovieLens 25M/
     random_seed: 0
-    test_consumes: 1
-    train_size: 0.8
+    test_consumes: 5
+    splitting:
+      strategy: temporal
+      train_size: 0.8

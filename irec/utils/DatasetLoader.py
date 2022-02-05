@@ -7,14 +7,12 @@ class DatasetLoader:
     pass
 
 class DefaultDatasetLoader:
-    def __init__(
-        self, dataset_path, crono, random_seed, test_consumes, train_size
-    ) -> None:
+    def __init__(self, dataset_path, splitting , random_seed, test_consumes) -> None:
         self.dataset_path = dataset_path
-        self.crono = crono
+        self.strategy = splitting["strategy"]
+        self.train_size = splitting["train_size"]
         self.random_seed = random_seed
         self.test_consumes = test_consumes
-        self.train_size = train_size
 
     def load(self):
         np.random.seed(self.random_seed)
@@ -23,7 +21,7 @@ class DefaultDatasetLoader:
         data = default_processor.process(self.dataset_path)
 
         traintest_processor = dataset.TrainTestConsumption(
-            crono=self.crono,
+            strategy=self.strategy,
             test_consumes=self.test_consumes,
             train_size=self.train_size,
         )
@@ -31,14 +29,12 @@ class DefaultDatasetLoader:
         return res
 
 class DefaultValidationDatasetLoader:
-    def __init__(
-        self, dataset_path, crono, random_seed, test_consumes, train_size
-    ) -> None:
+    def __init__(self, dataset_path, splitting , random_seed, test_consumes) -> None:
         self.dataset_path = dataset_path
-        self.crono = crono
+        self.strategy = splitting["strategy"]
+        self.train_size = splitting["train_size"]
         self.random_seed = random_seed
         self.test_consumes = test_consumes
-        self.train_size = train_size
 
     def load(self):
         np.random.seed(self.random_seed)
@@ -47,7 +43,7 @@ class DefaultValidationDatasetLoader:
         data = default_processor.process(self.dataset_path)
 
         traintest_processor = dataset.TrainTestConsumption(
-            crono=self.crono,
+            strategy=self.strategy,
             test_consumes=self.test_consumes,
             train_size=self.train_size,
         )
