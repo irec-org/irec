@@ -7,19 +7,20 @@ class DatasetLoader:
     pass
 
 class DefaultDatasetLoader:
-    def __init__(self, dataset_path, splitting , random_seed, test_consumes) -> None:
+    def __init__(self, dataset_path, prefiltering, splitting, random_seed) -> None:
         self.dataset_path = dataset_path
+        self.prefiltering = prefiltering
+        self.test_consumes = prefiltering["test_consumes"]
         self.strategy = splitting["strategy"]
         self.train_size = splitting["train_size"]
         self.random_seed = random_seed
-        self.test_consumes = test_consumes
 
     def load(self):
         np.random.seed(self.random_seed)
 
         default_processor = dataset.DefaultDataset()
         data = default_processor.process(self.dataset_path)
-
+        data = default_processor.prefiltering(data, self.prefiltering)
         traintest_processor = dataset.TrainTestConsumption(
             strategy=self.strategy,
             test_consumes=self.test_consumes,
