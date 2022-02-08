@@ -16,6 +16,7 @@ class DefaultDatasetLoader:
         self.random_seed = random_seed
 
     def load(self):
+        random.seed(self.random_seed)
         np.random.seed(self.random_seed)
 
         default_processor = dataset.DefaultDataset()
@@ -40,6 +41,7 @@ class DefaultValidationDatasetLoader:
         self.random_seed = random_seed
 
     def load(self):
+        random.seed(self.random_seed)
         np.random.seed(self.random_seed)
 
         default_processor = dataset.DefaultDataset()
