@@ -16,6 +16,7 @@ class Interaction(EvaluationPolicy):
         num_interactions: int,
         interaction_size: int,
         save_info: bool,
+        random_seed: int = 0,
         *args,
         **kwargs,
     ):
@@ -23,9 +24,12 @@ class Interaction(EvaluationPolicy):
         self.num_interactions = int(num_interactions)
         self.interaction_size = int(interaction_size)
         self.save_info = save_info
+        self.random_seed = random_seed
 
     def evaluate(self, model, train_dataset, test_dataset):
         with threadpool_limits(limits=1, user_api="blas"):
+            np.random.seed(self.random_seed)
+            random.seed(self.random_seed)
             test_users = np.unique(test_dataset.data[:, 0]).astype(int)
             num_total_items = test_dataset.num_total_items
             test_consumption_matrix = scipy.sparse.csr_matrix(
