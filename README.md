@@ -26,7 +26,7 @@
 
 > For Python >= 3.8
 
-Reinforcement Learning Recommender Systems Framework
+Interactive Recommender Systems Framework
 
 Main features:
 
