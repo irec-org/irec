@@ -48,7 +48,7 @@ Main features:
 - Online Learning and Reinforcement Learning models
 - Metrics and metrics evaluators are awesome to evaluate recommender systems in different ways
 
-Also, we provide a amazing application created using the iRec library (under the app/ folder) that can be used to setup a experiment under 5~ minutes with parallel processes, log registry and results views. The main features are:
+Also, we provide a amazing application created using the iRec library, the [iRec-cmdline](https://github.com/irec-org/irec-cmdline), that can be used to setup a experiment under 5~ minutes with parallel processes, log registry and results views. The main features are:
 
 - Powerful application to run any reinforcement learning experiment powered by MLflow
 - Entire pipeline of execution is fully parallelized
@@ -67,7 +67,7 @@ Install with pip:
 
 ## Examples
 
-Under app/ folder is a example of a application using iRec and MLflow, where different experiments can be run with easy using existing recommender systems.
+[iRec-cmdline](https://github.com/irec-org/irec-cmdline) contains a example of a application using iRec and MLflow, where different experiments can be run with easy using existing recommender systems.
 
 Check this example of a execution using the example application:
 
