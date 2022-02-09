@@ -1,6 +1,6 @@
 # Evaluation Policies
 
-The Evaluation Policies supported by IREC are listed below.
+The Evaluation Policies supported by iRec are listed below.
 
 | [Evaluation Policy](https://github.com/irec-org/irec/blob/master/irec/evaluation_policies/EvaluationPolicy.py) | Description
 | :---: | :--- |

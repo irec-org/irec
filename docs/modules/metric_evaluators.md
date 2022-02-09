@@ -1,6 +1,6 @@
 # Metric Evaluators
 
-The Metric Evaluators supported by IREC are listed below.
+The Metric Evaluators supported by iRec are listed below.
 
 | [Metric Evaluator](https://github.com/irec-org/irec/blob/master/irec/metric_evaluators/MetricEvaluator.py) | Description
 | :---: | :--- |

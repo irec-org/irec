@@ -1,6 +1,6 @@
 # Metrics
 
-The recommender metrics supported by IREC are listed below.
+The recommender metrics supported by iRec are listed below.
 
 | Metric | Reference | Description
 | :---: | --- | :--- |

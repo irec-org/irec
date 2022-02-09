@@ -150,7 +150,7 @@ The [recommender metrics](https://github.com/irec-org/irec/blob/master/irec/metr
 
 ## Configuration Files
 
-IREC has some configuration files to define an experiment, such as dataset settings, agents, policies and evaluation metrics. Below we present brief examples about each of the files available in this framework.
+iRec has some configuration files to define an experiment, such as dataset settings, agents, policies and evaluation metrics. Below we present brief examples about each of the files available in this framework.
 
 For more details on configuration files, go to [**configuration_files**](tutorials/configuration_files.ipynb)
 

@@ -24,7 +24,7 @@ theme:
 nav:
   - <span style="color:rgb(51,177,240)">GET STARTED</span>:
       Introduction: guide/introduction.md
-      Install IREC: guide/install_irec.md
+      Install iRec: guide/install_irec.md
       Quick Start: guide/quick_start.md
       Release Notes: guide/release_notes.md
   
