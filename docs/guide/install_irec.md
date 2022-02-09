@@ -1,6 +1,6 @@
 # Installation
 
-  IRec works with the following operating systems:
+  iRec works with the following operating systems:
 
   * Linux
 
@@ -8,7 +8,7 @@
 
   * macOS X
 
-  The library currently supports Python ≥ 3.8. There are several ways to install IRec:
+  The library currently supports Python ≥ 3.8. There are several ways to install iRec:
 
 ###  From PyPI:
 
@@ -16,5 +16,5 @@
 
 ### From the GitHub source (for latest updates):
     
-    git clone https://github.com/heitor57/irec.git
+    git clone https://github.com/irec-org/irec.git
     pip install -e irec

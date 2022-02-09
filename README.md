@@ -3,18 +3,18 @@
 </p>
 
 <div align="center"><p>
-    <a href="https://github.com/heitor57/irec/releases/latest">
-      <img alt="Latest release" src="https://img.shields.io/github/v/release/heitor57/irec" />
+    <a href="https://github.com/irec-org/irec/releases/latest">
+      <img alt="Latest release" src="https://img.shields.io/github/v/release/irec-org/irec" />
     </a>
-    <a href="https://github.com/heitor57/irec/pulse">
-      <img alt="Last commit" src="https://img.shields.io/github/last-commit/heitor57/irec"/>
+    <a href="https://github.com/irec-org/irec/pulse">
+      <img alt="Last commit" src="https://img.shields.io/github/last-commit/irec-org/irec"/>
     </a>
-    <a href="https://github.com/heitor57/irec/blob/main/LICENSE">
-      <img src="https://img.shields.io/github/license/heitor57/irec?style=flat-square&logo=MIT&label=License" alt="License"
+    <a href="https://github.com/irec-org/irec/blob/main/LICENSE">
+      <img src="https://img.shields.io/github/license/irec-org/irec?style=flat-square&logo=MIT&label=License" alt="License"
     />
     </a>
-    <a href="https://github.com/heitor57/irec/actions/workflows/tests.yml">
-      <img src="https://github.com/heitor57/irec/actions/workflows/tests.yml/badge.svg" alt="Tests"
+    <a href="https://github.com/irec-org/irec/actions/workflows/tests.yml">
+      <img src="https://github.com/irec-org/irec/actions/workflows/tests.yml/badge.svg" alt="Tests"
     />
     </a>
     <a href="https://badge.fury.io/py/irec"><img src="https://badge.fury.io/py/irec.svg" alt="PyPI version" height="18"></a>
@@ -39,7 +39,7 @@ Main features:
 - Online Learning and Reinforcement Learning models
 - Metrics and metrics evaluators are awesome to evaluate recommender systems in different ways
 
-Also, we provide a amazing application created using the IRec library (under the app/ folder) that can be used to setup a experiment under 5~ minutes with parallel processes, log registry and results views. The main features are:
+Also, we provide a amazing application created using the iRec library (under the app/ folder) that can be used to setup a experiment under 5~ minutes with parallel processes, log registry and results views. The main features are:
 
 - Powerful application to run any reinforcement learning experiment powered by MLflow
 - Entire pipeline of execution is fully parallelized
@@ -131,18 +131,18 @@ The recommender models supported by irec are listed below.
 
 ## Metrics
 
-The recommender metrics supported by Cornac are listed below.
+The [recommender metrics](https://github.com/irec-org/irec/blob/master/irec/metrics.py) supported by iRec are listed below.
 
 | Metric | Reference | Description
 | :---: | --- | :--- |
-| [Hits](https://github.com/heitor57/irec/blob/24a28734f757e95d1423dac4ada9dfb85fa05b73/irec/metrics.py#L183) | [Link](link) | Number of recommendations made successfully. 
-| [Precision](https://github.com/heitor57/irec/blob/24a28734f757e95d1423dac4ada9dfb85fa05b73/irec/metrics.py#L139) | [Link](link) | Precision is defined as the percentage of predictions we get right.
-| [Recall](https://github.com/heitor57/irec/blob/24a28734f757e95d1423dac4ada9dfb85fa05b73/irec/metrics.py#L97) | [Link](link) | Represents the probability that a relevant item will be selected.  
-| [EPC](https://github.com/heitor57/irec/blob/24a28734f757e95d1423dac4ada9dfb85fa05b73/irec/metrics.py#L232) | [Link](link) | Represents the novelty for each user and it is measured by the expected number of seen relevant recommended items not previously seen.  
-| [EPD](https://github.com/heitor57/irec/blob/24a28734f757e95d1423dac4ada9dfb85fa05b73/irec/metrics.py#L359) | [Link](link) | EPD is a distance-based novelty measure, which looks at distances between the items in the user’s profile and the recommended items. 
-| [ILD](https://github.com/heitor57/irec/blob/24a28734f757e95d1423dac4ada9dfb85fa05b73/irec/metrics.py#L312) | [Link](link) | It represents the diversity between the list of items recommended. This diversity is measured by the Pearson correlation of the item’s features vector. 
-| [Gini Coefficient](https://github.com/heitor57/irec/blob/24a28734f757e95d1423dac4ada9dfb85fa05b73/irec/metrics.py#L449)| [Link](link) | Diversity is represented as the Gini coefficient – a measure of distributional inequality. It is measured as the inverse of cumulative frequency that each item is recommended.
-| [Users Coverage](https://github.com/heitor57/irec/blob/24a28734f757e95d1423dac4ada9dfb85fa05b73/irec/metrics.py#L498) | [Link](link) | It represents the percentage of distinct users that are interested in at least k items recommended (k ≥ 1).
+| [Hits](https://github.com/irec-org/irec/blob/24a28734f757e95d1423dac4ada9dfb85fa05b73/irec/metrics.py#L183) | [Link](link) | Number of recommendations made successfully. 
+| [Precision](https://github.com/irec-org/irec/blob/24a28734f757e95d1423dac4ada9dfb85fa05b73/irec/metrics.py#L139) | [Link](link) | Precision is defined as the percentage of predictions we get right.
+| [Recall](https://github.com/irec-org/irec/blob/24a28734f757e95d1423dac4ada9dfb85fa05b73/irec/metrics.py#L97) | [Link](link) | Represents the probability that a relevant item will be selected.  
+| [EPC](https://github.com/irec-org/irec/blob/24a28734f757e95d1423dac4ada9dfb85fa05b73/irec/metrics.py#L232) | [Link](link) | Represents the novelty for each user and it is measured by the expected number of seen relevant recommended items not previously seen.  
+| [EPD](https://github.com/irec-org/irec/blob/24a28734f757e95d1423dac4ada9dfb85fa05b73/irec/metrics.py#L359) | [Link](link) | EPD is a distance-based novelty measure, which looks at distances between the items in the user’s profile and the recommended items. 
+| [ILD](https://github.com/irec-org/irec/blob/24a28734f757e95d1423dac4ada9dfb85fa05b73/irec/metrics.py#L312) | [Link](link) | It represents the diversity between the list of items recommended. This diversity is measured by the Pearson correlation of the item’s features vector. 
+| [Gini Coefficient](https://github.com/irec-org/irec/blob/24a28734f757e95d1423dac4ada9dfb85fa05b73/irec/metrics.py#L449)| [Link](link) | Diversity is represented as the Gini coefficient – a measure of distributional inequality. It is measured as the inverse of cumulative frequency that each item is recommended.
+| [Users Coverage](https://github.com/irec-org/irec/blob/24a28734f757e95d1423dac4ada9dfb85fa05b73/irec/metrics.py#L498) | [Link](link) | It represents the percentage of distinct users that are interested in at least k items recommended (k ≥ 1).
 <!-- | [NDCG](reposit) | A diversity metric | [Link](link)  -->
 <!-- | [F-Measure](reposit) | desc | [Link](link) -->
 <!-- | [MAE](reposit) | desc | [Link](link)  -->

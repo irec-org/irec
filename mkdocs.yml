@@ -14,7 +14,7 @@ plugins:
       #custom_templates: templates
       watch:
         - irec
-site_name: IRec
+site_name: iRec
 theme:
   highlightjs: true
   hljs_languages:

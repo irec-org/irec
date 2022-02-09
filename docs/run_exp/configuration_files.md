@@ -104,4 +104,4 @@ pdf_dir: pdf/
 tex_dir: tex/
 ```
 
-For more details, please take a look at our [tutorials](https://github.com/heitor57/irec/blob/readme/tutorials/configuration_files.ipynb)
+For more details, please take a look at our [tutorials](https://github.com/irec-org/irec/blob/readme/tutorials/configuration_files.ipynb)
