@@ -1,6 +1,6 @@
 # Models
 
-The recommender models supported by IREC are listed below.
+The recommender models supported by iRec are listed below.
 
 | Year | Model  | Paper | Description
 | :---: | --- | :---: | :--- |

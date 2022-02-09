@@ -1,6 +1,6 @@
-# Welcome to IREC documentation!
+# Welcome to iRec documentation!
 
-This is a specialized library containing Multi-Armed Bandit, Active Learning and others methods. A full environment to code yours Reinforcement Learning Recommender Systems. Our goal is to encourage the evaluation of reproducible offline experiments by providing simple building blocks for running robust experiments and an extremely intuitive platform. Our framework can be used to share environments reference SRs and reusable implementations of reference RS agents. Thus, we built a complete structure, from data entry and manipulation to the evaluation of the results obtained, using several evaluation metrics that are perfectly capable of measuring the quality of the recommendation.
+This is a specialized library containing Multi-Armed Bandit, Active Learning and others methods. A full environment to code yours Reinforcement Learning Recommender Systems. Our goal is to encourage the evaluation of reproducible offline experiments by providing simple building blocks for running robust experiments and an extremely intuitive platform. Our framework can be used to share environments reference RSs and reusable implementations of reference RS agents. Thus, we built a complete structure, from data entry and manipulation to the evaluation of the results obtained, using several evaluation metrics that are perfectly capable of measuring the quality of the recommendation.
 
 Unlike existing frameworks, our structure has the most recent and relevant RL algorithms published so far, in addition to providing different forms and evaluation metrics, generalizable in different situations and ideal for the scenario of recommendation systems.
 
@@ -29,7 +29,7 @@ Also, we provide a amazing application created using the iRec library (under the
 ## GET STARTED
 
 * [Introduction](guide/introduction.md)
-* [Install IREC](guide/install_irec.md)
+* [Install iRec](guide/install_irec.md)
 * [Quick Start](guide/quick_start.md)
 * [Release Notes](guide/release_notes.md)
 

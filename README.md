@@ -22,11 +22,20 @@
 
 </div>
 
+<div align="center">
+	<a href="https://irec-org.github.io/irec/">Introduction</a>
+  <span> • </span>
+    	<a href="https://irec-org.github.io/irec/guide/install_irec/">Install</a>
+  <span> • </span>
+       	<a href="https://irec-org.github.io/irec/guide/quick_start/">Quick Start</a>
+  <p></p>
+</div>
+
 ## Introduction
 
 > For Python >= 3.8
 
-Reinforcement Learning Recommender Systems Framework
+Interactive Recommender Systems Framework
 
 Main features:
 
@@ -85,9 +94,9 @@ Check this example of a execution using the example application:
 <!--:TODO:-->
 ## Datasets
 
-Our framework has the ability to use any type of dataset, as long as it is suitable for the recommendation scenario and is formatted correctly. Below we list some of the datasets tested and used in some of our experiments.
+Our framework has the ability to use any type of dataset, as long as it is suitable for the recommendation domain and is formatted correctly. Below we list some datasets tested and used in some of our experiments.
 
-| Dataset | Scenery  | Sparsity | Link
+| Dataset | Domain  | Sparsity | Link
 | :---: | --- | :---: | :---: |
 MovieLens 100k |  Movies | 93.69% | [Link](https://grouplens.org/datasets/movielens/100k/)
 MovieLens 1M | Movies | 95.80% | [Link](https://grouplens.org/datasets/movielens/1m/)
@@ -150,7 +159,7 @@ The [recommender metrics](https://github.com/irec-org/irec/blob/master/irec/metr
 
 ## Configuration Files
 
-IREC has some configuration files to define an experiment, such as dataset settings, agents, policies and evaluation metrics. Below we present brief examples about each of the files available in this framework.
+iRec has some configuration files to define an experiment, such as dataset settings, agents, policies and evaluation metrics. Below we present brief examples about each of the files available in this framework.
 
 For more details on configuration files, go to [**configuration_files**](tutorials/configuration_files.ipynb)
 
@@ -257,7 +266,7 @@ tex_dir: tex/
 
 ## API
 
-For writing anything new to the library (e.g., value function, agent, etc) read the documentation.
+For writing anything new to the library (e.g., value function, agent, etc) read the [documentation](https://irec-org.github.io/irec/).
 
 ## Contributing
 
