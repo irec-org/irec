@@ -1,6 +1,5 @@
 """
-Code taken mainly from: https://github.com/zoulixin93/NICF
-Author: zoulixin93
+Code adapted from: https://github.com/zoulixin93/NICF. Original author: zoulixin93.
 """
 import numpy as np
 from tqdm import tqdm
