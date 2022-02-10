@@ -164,3 +164,7 @@ For writing anything new to the library (e.g., value function, agent, etc) read 
 ## Contributing
 
 All contributions are welcome! Just open a pull request.
+
+## Related Projects
+
+- [iRec-cmdline](https://github.com/irec-org/irec-cmdline)
