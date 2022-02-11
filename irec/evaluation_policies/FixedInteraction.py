@@ -10,7 +10,7 @@ import numpy as np
 import random
 
 
-class Interaction(EvaluationPolicy):
+class FixedInteraction(EvaluationPolicy):
     def __init__(
         self,
         num_interactions: int,
