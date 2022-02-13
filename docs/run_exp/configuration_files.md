@@ -59,7 +59,7 @@ PTS:
 In this configuration file the evaluation policies are defined. To carry out an experiment, we need to define how the recommendation process will be, the interactions between user and item, and for that we create an evaluation policy in accordance with the objectives of the experiment.
 
 ```yaml
-Interaction:
+FixedInteraction:
   num_interactions: 100
   interaction_size: 1
   save_info: False
@@ -97,7 +97,7 @@ data_dir: data/
 dataset_experiment: dataset
 dataset_loader: 'MovieLens 1M'
 evaluation_experiment: evaluation
-evaluation_policy: Interaction
+evaluation_policy: FixedInteraction
 metric: Hits
 metric_evaluator: UserCumulativeInteractionMetricEvaluator
 pdf_dir: pdf/
