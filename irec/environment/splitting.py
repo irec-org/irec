@@ -48,7 +48,7 @@ class SplitStrategy():
 class Random(SplitStrategy):
 
     def get_test_uids(self, data_df, num_test_users):
-        test_candidate_users = self._get_users_candidate()
+        test_candidate_users = self._get_users_candidate(data_df)
         test_uids = np.array(random.sample(test_candidate_users, k=num_test_users))
         return test_uids
 
@@ -74,32 +74,3 @@ class Temporal(SplitStrategy):
 
     def split_dataset(self, dataset, test_uids):
         return super().split_dataset(dataset, test_uids)
-
-
-    # def process(self, dataset):
-    #     data = dataset.data
-
-    #     data[:, 0] = dataset._si(data[:, 0])
-    #     data[:, 1] = dataset._si(data[:, 1])
-
-    #     dataset = dataset.Dataset(data)
-    #     dataset.set_parameters()
-
-    #     num_users = len(np.unique(data[:, 0]))
-    #     num_train_users = round(num_users * (self.train_size))
-    #     num_test_users = int(num_users - num_train_users)
-    #     data_df = pd.DataFrame(data)
-
-    #     test_uids = self.splitting(self.strategy, data_df, num_test_users)
-  
-    #     data_isin_test_uids = np.isin(data[:, 0], test_uids)
-
-    #     train_dataset = copy(dataset)
-    #     train_dataset.data = data[~data_isin_test_uids, :]
-    #     dataset.set_parameters()
-    #     test_dataset = copy(dataset)
-    #     test_dataset.data = data[data_isin_test_uids, :]
-    #     dataset.set_parameters()
-    #     print("Test shape:", test_dataset.data.shape)
-    #     print("Train shape:", train_dataset.data.shape)
-    #     return dataset.TrainTestDataset(train=train_dataset, test=test_dataset)

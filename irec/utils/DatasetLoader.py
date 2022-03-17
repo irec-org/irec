@@ -77,6 +77,7 @@ class DefaultDatasetLoader:
         num_test_users = int(num_users - num_train_users)
         data_df = pd.DataFrame(data)
         
+        print(f"\nApplying splitting strategy: {split_name}\n")
         exec(f"from environment.splitting import {split_name}")
         split_strategy = eval(split_name)(
             strategy=self.strategy, 
