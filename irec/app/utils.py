@@ -1287,8 +1287,8 @@ def evaluate_agent_with_dataset_parameters(
             )
 
             dataset = Dataset(data)
-            dataset.update_from_data()
-            dataset.update_num_total_users_items()
+            dataset.set_parameters()
+            
             for agent_name in agents:
                 settings["defaults"]["agent"] = agent_name
                 settings["agents"][agent_name] = dataset_agents_parameters[
@@ -1347,7 +1347,7 @@ def eval_agent_search(
             data = np.vstack((traintest.train.data, traintest.test.data))
             dataset = copy.copy(traintest.train)
             dataset.data = data
-            dataset.update_from_data()
+            dataset.set_parameters()
             for agent_name in agents:
                 settings["defaults"]["agent"] = agent_name
                 for agent_og_parameters in agents_search_parameters[agent_name]:

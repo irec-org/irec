@@ -65,10 +65,10 @@
     prefiltering: #optional filters
       filter_users:
         min_consumption: 50
-        num_users: 100
+        num_users: 50
       filter_items: 
         min_ratings: 1
-        num_items: 100
+        num_items: 50
       test_consumes: 5
     splitting:
       strategy: temporal
@@ -308,7 +308,7 @@
       test_consumes: 5  
     splitting:
       strategy: temporal
-      train_size: 0.8
+      tInforain_size: 0.8
 'Yahoo Music 5k Validation':
   DefaultValidationDatasetLoader:
     dataset_path: ./data/datasets/Yahoo Music 5k/
