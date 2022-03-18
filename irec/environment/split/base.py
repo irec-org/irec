@@ -1,10 +1,12 @@
-from utils import dataset as dataset_module
-from copy import copy
-import numpy as np
 import random
+from copy import copy
 
-class SplitStrategy():
-    def __init__(self, train_size, test_consumes, *args, **kwargs):
+import numpy as np
+from utils import dataset as dataset_module
+
+
+class SplitStrategy:
+    def __init__(self, train_size, test_consumes):
         self.train_size = train_size
         self.test_consumes = test_consumes
 
@@ -31,13 +33,12 @@ class SplitStrategy():
         train_dataset = copy(dataset)
         train_dataset.data = data[~data_isin_test_uids, :]
         dataset.set_parameters()
-        
+
         test_dataset = copy(dataset)
         test_dataset.data = data[data_isin_test_uids, :]
         dataset.set_parameters()
-        
+
         print("Test shape:", test_dataset.data.shape)
         print("Train shape:", train_dataset.data.shape)
-        
-        return dataset_module.TrainTestDataset(train=train_dataset, test=test_dataset)
 
+        return dataset_module.TrainTestDataset(train=train_dataset, test=test_dataset)
