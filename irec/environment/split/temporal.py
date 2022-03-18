@@ -1,8 +1,9 @@
-from .split_strategy import SplitStrategy
 import numpy as np
 
-class Temporal(SplitStrategy):
+from .base import SplitStrategy
 
+
+class Temporal(SplitStrategy):
     def get_test_uids(self, data_df, num_test_users):
         test_candidate_users = self._get_users_candidate(data_df)
         test_candidate_users = np.array(test_candidate_users, dtype=int)
@@ -10,9 +11,7 @@ class Temporal(SplitStrategy):
         test_uids = np.array(
             list(
                 test_candidate_users[
-                    list(
-                        reversed(np.argsort(users_start_time[test_candidate_users]))
-                    )
+                    list(reversed(np.argsort(users_start_time[test_candidate_users])))
                 ]
             )[:num_test_users]
         )

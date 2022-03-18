@@ -1,9 +1,11 @@
-from .split_strategy import SplitStrategy
 import random
+
 import numpy as np
 
-class Random(SplitStrategy):
+from .base import SplitStrategy
 
+
+class Random(SplitStrategy):
     def get_test_uids(self, data_df, num_test_users):
         test_candidate_users = self._get_users_candidate(data_df)
         test_uids = np.array(random.sample(test_candidate_users, k=num_test_users))
