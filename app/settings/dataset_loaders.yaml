@@ -71,7 +71,7 @@
         num_items: 50
       test_consumes: 5
     splitting:
-      strategy: temporal
+      strategy: random
       train_size: 0.8
 
 'MovieLens 100k Validation':

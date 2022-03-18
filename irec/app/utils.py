@@ -747,7 +747,7 @@ def generate_base(dataset_name, settings):
         dataset_loader = dataset_loader_factory.create(
             dataset_name, dataset_loader_settings
         )
-        dataset = dataset_loader.load()
+        dataset = dataset_loader.process()
 
         fname = "./tmp/dataset.pickle"
         log_custom_artifact(fname, dataset)

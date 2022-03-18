@@ -1,11 +1,11 @@
-from posixpath import split
-import random
+from irec.environment.registry import SplitRegistry, FilterRegistry
+from utils.dataset import Dataset, DefaultDataset
 from typing import Any, Dict, List, TypedDict
 from mergedeep import Strategy
-import numpy as np
+from posixpath import split
 import pandas as pd
-
-from utils import dataset as dataset_module
+import numpy as np
+import random
 
 Splitting = TypedDict('splitting', {'strategy': str, 'train_size': float})
 FilterUsers = TypedDict('filter_users', {'min_consumption': int, 'num_users': int})
@@ -40,47 +40,32 @@ class DefaultDatasetLoader:
         self.train_size = splitting["train_size"]
         self.random_seed = random_seed
 
-    def apply_filters(self, data):
+    def _filter(self, data):
         filters = self.prefiltering
         del filters["test_consumes"]
         if len(filters) == 0: return data
-
-        dict_filters = {"filter_users": "FilteringByUsers",
-            "filter_items": "FilteringByItems"}
         data_df = pd.DataFrame(data.data)
         
         print("Applying filters...")
         for key, filters in filters.items():
-            filter_name = dict_filters[key]
-            exec(f"from environment.filtering import {filter_name}")
             for filter_method, value in filters.items():
                 print(f"\t {filter_method}: {value}")
-                data_df = eval(f"{filter_name}.{filter_method}")(data_df, value)
+                data_df = getattr(FilterRegistry.get(key), filter_method)(data_df, value)
 
-        filtered_dataset = dataset_module.Dataset(data_df.to_numpy())
+        filtered_dataset = Dataset(data_df.to_numpy())
+        filtered_dataset.reset_index()
         filtered_dataset.set_parameters()
         return filtered_dataset
 
-    def apply_splitting(self, dataset):
-        dict_split = {"temporal": "Temporal",
-            "random": "Random"}
-        
-        split_name = dict_split[self.strategy]
-        data = dataset.data
-        data[:, 0] = dataset_module._si(data[:, 0])
-        data[:, 1] = dataset_module._si(data[:, 1])
-        dataset = dataset_module.Dataset(data)
-        dataset.set_parameters()
+    def _split(self, dataset):
 
-        num_users = len(np.unique(data[:, 0]))
+        num_users = len(np.unique(dataset.data[:, 0]))
         num_train_users = round(num_users * (self.train_size))
         num_test_users = int(num_users - num_train_users)
-        data_df = pd.DataFrame(data)
-        
-        print(f"\nApplying splitting strategy: {split_name}\n")
-        exec(f"from environment.splitting import {split_name}")
-        split_strategy = eval(split_name)(
-            strategy=self.strategy, 
+        data_df = pd.DataFrame(dataset.data)
+
+        print(f"\nApplying splitting strategy: {self.strategy}\n")
+        split_strategy = SplitRegistry.get(self.strategy)(
             test_consumes=self.test_consumes,
             train_size=self.train_size)
 
@@ -88,17 +73,17 @@ class DefaultDatasetLoader:
         traintest_processor = split_strategy.split_dataset(dataset, test_uids)
         return traintest_processor
 
-    def load(self):
+    def process(self):
         random.seed(self.random_seed)
         np.random.seed(self.random_seed)
 
-        default_processor = dataset_module.DefaultDataset()
-        data = default_processor.process(self.dataset_path)
-        data = self.apply_filters(data)
-        traintest_processor = self.apply_splitting(data)
+        default_processor = DefaultDataset()
+        data = default_processor.read(self.dataset_path)
+        data = self._filter(data)
+        traintest_processor = self._split(data)
         return traintest_processor
 
-
+""""
 class DefaultValidationDatasetLoader:
     def __init__(self, dataset_path, prefiltering, splitting , random_seed) -> None:
         self.dataset_path = dataset_path
@@ -125,7 +110,6 @@ class DefaultValidationDatasetLoader:
 
         return res
 
-
 class TRTEDatasetLoader:
     def __init__(
         self,
@@ -151,7 +135,6 @@ class TRTEDatasetLoader:
         # res = traintest_processor.process(data)
         return res
 
-
 class TRTEValidationDatasetLoader:
     def __init__(
         self, dataset_path, crono, random_seed, test_consumes, train_size
@@ -176,3 +159,4 @@ class TRTEValidationDatasetLoader:
         res = traintest_processor.process(data.train)
 
         return res
+"""

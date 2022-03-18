@@ -1,3 +1,4 @@
+from typing import List
 from copy import copy
 import pandas as pd
 import scipy.sparse
@@ -5,10 +6,10 @@ import numpy as np
 import random
 import os
 
-def _si(x):
-    du0 = np.sort(np.unique(x))
-    ind0 = np.searchsorted(du0, x)
-    return ind0
+def normalize_ids(ids: List) -> np.array:
+    unique_values = np.sort(np.unique(ids))
+    result = np.searchsorted(unique_values, ids)
+    return result
 
 class Dataset:
     def __init__(
@@ -43,6 +44,9 @@ class Dataset:
         self.num_total_users = self.max_uid + 1
         self.num_total_items = self.max_iid + 1
 
+    def reset_index(self):
+        self.data[:, 0] = normalize_ids(self.data[:, 0])
+        self.data[:, 1] = normalize_ids(self.data[:, 1])
 
 class TrainTestDataset:
     def __init__(self, train, test):
@@ -68,18 +72,34 @@ class TRTE():
         return TrainTestDataset(train=train_dataset, test=test_dataset)
 
 
-class DefaultDataset():
+class DefaultDataset(Dataset):
 
-    def process(self, dataset_dir:str):
+    def __init__(self):
+        pass
+
+    def read(self, dataset_dir:str):
         data = np.loadtxt(
             os.path.join(dataset_dir, "ratings.csv"), delimiter=",", skiprows=1
         )
-        data[:, 0] = _si(data[:, 0])
-        data[:, 1] = _si(data[:, 1])
+        dataset = Dataset(data)
+        dataset.reset_index()
+        dataset.set_parameters()
+        return dataset
+
+class MovieLensDataset(Dataset):
+
+    def read(self, dataset_dir:str):
+        data = np.loadtxt(
+            os.path.join(dataset_dir, "ratings.csv"), delimiter="::", skiprows=1
+        )
+        data[:, 0] = normalize_ids(data[:, 0])
+        data[:, 1] = normalize_ids(data[:, 1])
         dataset = Dataset(data)
         dataset.set_parameters()
         return dataset
 
+
+"""
 class TRTETrainValidation():
     def __init__(self, train_size, test_consumes, crono, random_seed, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -96,3 +116,4 @@ class TRTETrainValidation():
         )
         train_dataset, test_dataset = ttc.process(train_dataset)
         return train_dataset, test_dataset
+"""
