@@ -1,25 +1,25 @@
+from typing import List
+
 import numpy as np
 
 
 class Dataset:
 
     def __init__(
-        self,
-        data,
-        num_total_users=None,
-        num_total_items=None,
-        num_users=None,
-        num_items=None,
-        rate_domain=None,
-        uids=None,
+            self,
+            data
     ):
         self.data = data
-        self.num_users = num_users
-        self.num_items = num_items
-        self.rate_domain = rate_domain
-        self.uids = uids
-        self.num_total_users = num_total_users
-        self.num_total_items = num_total_items
+
+    @staticmethod
+    def _normalize_ids(ids: List) -> np.array:
+        unique_values = np.sort(np.unique(ids))
+        result = np.searchsorted(unique_values, ids)
+        return result
+
+    def reset_index(self) -> np.array:
+        self.data[:, 0] = self._normalize_ids(self.data[:, 0])
+        self.data[:, 1] = self._normalize_ids(self.data[:, 1])
 
     def set_parameters(self):
         self.num_users = len(np.unique(self.data[:, 0]))
@@ -34,3 +34,6 @@ class Dataset:
         self.max_rating = np.max(self.data[:, 2])
         self.num_total_users = self.max_uid + 1
         self.num_total_items = self.max_iid + 1
+
+    def load(self):
+        return
