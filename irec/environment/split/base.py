@@ -1,8 +1,9 @@
-import random
-from copy import copy
-
 import numpy as np
-from utils import dataset as dataset_module
+import pandas as pd
+
+from typing import List
+from copy import copy
+from irec.environment.dataset import Dataset
 
 
 class SplitStrategy:
@@ -19,23 +20,29 @@ class SplitStrategy:
         )
         return test_candidate_users
 
-    def get_test_uids(self):
+    def get_test_uids(self,
+                      data_df: pd.DataFrame,
+                      num_test_users: int):
         pass
 
-    def split_dataset(self, dataset, test_uids):
+    @staticmethod
+    def split_dataset(dataset: Dataset,
+                      test_uids: List):
 
         data = dataset.data
-        data[:, 0] = dataset_module.normalize_ids(data[:, 0])
-        data[:, 1] = dataset_module.normalize_ids(data[:, 1])
+        data[:, 0] = dataset.normalize_ids(data[:, 0])
+        data[:, 1] = dataset.normalize_ids(data[:, 1])
 
         data_isin_test_uids = np.isin(data[:, 0], test_uids)
 
         train_dataset = copy(dataset)
         train_dataset.data = data[~data_isin_test_uids, :]
+        # TODO: @Thiago, I think here is train_dataset.set_parameters()
         dataset.set_parameters()
 
         test_dataset = copy(dataset)
         test_dataset.data = data[data_isin_test_uids, :]
+        # TODO: @Thiago, I think here is test_dataset.set_parameters()
         dataset.set_parameters()
 
         print("Test shape:", test_dataset.data.shape)

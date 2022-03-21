@@ -4,7 +4,7 @@ from typing import List
 
 from irec.environment.filter.filtering_by_items import FilteringByItems
 from irec.environment.filter.filtering_by_users import FilteringByUsers
-from irec.environment.split.random import Random
+from irec.environment.split.randomised import Random
 from irec.environment.split.temporal import Temporal
 
 

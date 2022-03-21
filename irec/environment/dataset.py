@@ -12,14 +12,14 @@ class Dataset:
         self.data = data
 
     @staticmethod
-    def _normalize_ids(ids: List) -> np.array:
+    def normalize_ids(ids: List) -> np.array:
         unique_values = np.sort(np.unique(ids))
         result = np.searchsorted(unique_values, ids)
         return result
 
     def reset_index(self) -> np.array:
-        self.data[:, 0] = self._normalize_ids(self.data[:, 0])
-        self.data[:, 1] = self._normalize_ids(self.data[:, 1])
+        self.data[:, 0] = self.normalize_ids(self.data[:, 0])
+        self.data[:, 1] = self.normalize_ids(self.data[:, 1])
 
     def set_parameters(self):
         self.num_users = len(np.unique(self.data[:, 0]))
@@ -37,3 +37,11 @@ class Dataset:
 
     def load(self):
         return
+
+
+# TODO: Is it really necessary?
+class TrainTestDataset:
+
+    def __init__(self, train, test):
+        self.train = train
+        self.test = test
