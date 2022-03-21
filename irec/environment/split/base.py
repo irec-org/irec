@@ -3,7 +3,7 @@ import pandas as pd
 
 from typing import List
 from copy import copy
-from irec.environment.dataset import Dataset
+from irec.environment.dataset import Dataset, TrainTestDataset
 
 
 class SplitStrategy:
@@ -48,4 +48,4 @@ class SplitStrategy:
         print("Test shape:", test_dataset.data.shape)
         print("Train shape:", train_dataset.data.shape)
 
-        return dataset_module.TrainTestDataset(train=train_dataset, test=test_dataset)
+        return TrainTestDataset(train=train_dataset, test=test_dataset)

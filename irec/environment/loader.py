@@ -6,6 +6,7 @@ import pandas as pd
 from irec.environment.dataset import Dataset
 from irec.environment.registry import FilterRegistry, SplitRegistry
 
+# TODO: change some definitions in the yaml file:
 DatasetType = TypedDict('DatasetType', {'path': str, 'random_seed': float, 'file_delimiter': str, 'skip_head': bool})
 FilterUsersType = TypedDict('FilterUsersType', {'min_consumption': int, 'num_users': int})
 FilterItemsType = TypedDict('FilterItemsType', {'min_ratings': int, 'num_items': int})
@@ -27,14 +28,22 @@ class Loader:
             splitting (SplittingType): info required by the Splitting
         """
         # dataset attributes
-        self.dataset_path = dataset["path"]
-        self.random_seed = dataset["random_seed"]
-        self.delimiter = dataset["file_delimiter"]
-        self.skip_rows = 1 if dataset["skip_head"] else 0
+        if "path" in dataset.keys():
+            self.dataset_path = dataset["path"]
+        else:
+            # TODO: Change it for a default value if it exists
+            print("You must define your dataset path to be reader by the system.")
+
+        self.random_seed = dataset["random_seed"] if "random_seed" in dataset.keys() else 0.0
+        self.delimiter = dataset["file_delimiter"] if "file_delimiter" in dataset.keys() else ","
+        self.skip_rows = int(dataset["file_delimiter"]) if "file_delimiter" in dataset.keys() else 1
+
         # filtering attributes
         self.prefiltering = prefiltering
-        # TODO: test_consumes must go to splitting group
+
         # splitting attributes
+        # TODO: test_consumes must go to splitting group
+        # TODO: what are the default values for these functions?
         self.test_consumes = splitting["test_consumes"]
         self.strategy = splitting["strategy"]
         self.train_size = splitting["train_size"]
@@ -44,7 +53,6 @@ class Loader:
         Returns:
             The data read according to the parameters specified.
         """
-
         data = np.loadtxt(self.dataset_path,
                           delimiter=self.delimiter,
                           skiprows=self.skip_rows)
@@ -58,7 +66,6 @@ class Loader:
         Returns:
             The data filtered by the filters applied.
         """
-
         data_df = pd.DataFrame(data)
         for key, filters in self.prefiltering.items():
             for filter_method, value in filters.items():
@@ -75,7 +82,6 @@ class Loader:
         Returns:
             # TODO: define it better
         """
-
         num_train_users = round(dataset.num_users * self.train_size)
         num_test_users = int(dataset.num_users - num_train_users)
         data_df = pd.DataFrame(dataset.data)
