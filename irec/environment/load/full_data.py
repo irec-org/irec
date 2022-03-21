@@ -31,24 +31,22 @@ class Loader:
         if "path" in dataset.keys():
             self.dataset_path = dataset["path"]
         else:
-            # TODO: Change it for a default value if it exists
+            # TODO: raise an error
             print("You must define your dataset path to be reader by the system.")
 
-        self.random_seed = dataset["random_seed"] if "random_seed" in dataset.keys() else 0.0
+        self.random_seed = dataset["random_seed"] if "random_seed" in dataset.keys() else 0
         self.delimiter = dataset["file_delimiter"] if "file_delimiter" in dataset.keys() else ","
-        self.skip_rows = int(dataset["file_delimiter"]) if "file_delimiter" in dataset.keys() else 1
+        self.skip_rows = int(dataset["skip_head"]) if "skip_head" in dataset.keys() else 1
 
         # filtering attributes
         self.prefiltering = prefiltering
 
         # splitting attributes
-        # TODO: test_consumes must go to splitting group
-        # TODO: what are the default values for these functions?
-        self.test_consumes = splitting["test_consumes"]
-        self.strategy = splitting["strategy"]
-        self.train_size = splitting["train_size"]
+        self.test_consumes = splitting["test_consumes"] if "test_consumes" in splitting.keys() else 0
+        self.strategy = splitting["strategy"] if "strategy" in splitting.keys() else "random"
+        self.train_size = splitting["train_size"] if "train_size" in splitting.keys() else 0.8
 
-    def _read(self):
+    def _read(self) -> np.ndarray:
         """
         Returns:
             The data read according to the parameters specified.
@@ -56,10 +54,11 @@ class Loader:
         data = np.loadtxt(self.dataset_path,
                           delimiter=self.delimiter,
                           skiprows=self.skip_rows)
+        # TODO: implement way to define the columns (user-id, item-id, etc)
         return data
 
     def _filter(self,
-                data: np.array) -> np.array:
+                data: np.array) -> np.ndarray:
         """
         Args:
             data: the array of data previously read
@@ -75,12 +74,13 @@ class Loader:
         return data_df.to_numpy()
 
     def _split(self,
-               dataset: Dataset):
+               dataset: Dataset) -> [Dataset, Dataset]:
         """
         Args:
             dataset (Dataset): an object of the dataset class
         Returns:
-            # TODO: define it better
+            train_dataset (Dataset):
+            test_dataset (Dataset):
         """
         num_train_users = round(dataset.num_users * self.train_size)
         num_test_users = int(dataset.num_users - num_train_users)
@@ -91,10 +91,10 @@ class Loader:
             train_size=self.train_size)
         # Apply it in the data
         test_uids = split_strategy.get_test_uids(data_df, num_test_users)
-        train_test_processor = split_strategy.split_dataset(dataset, test_uids)
-        return train_test_processor
+        train_dataset, test_dataset = split_strategy.split_dataset(dataset.data, test_uids)
+        return train_dataset, test_dataset
 
-    def process(self):
+    def process(self) -> [Dataset, Dataset]:
 
         # Read the data
         data = self._read()
@@ -102,6 +102,7 @@ class Loader:
         dataset = Dataset(data)
         dataset.reset_index()
         dataset.set_parameters()
+
         # Apply filters if they were defined
         if len(self.prefiltering) > 0:
             filtered_data = self._filter(dataset)
@@ -109,7 +110,8 @@ class Loader:
             dataset = Dataset(filtered_data)
             dataset.reset_index()
             dataset.set_parameters()
+
         # Apply the split approach
         print(f"\nApplying splitting strategy: {self.strategy}\n")
-        train_test_processor = self._split(dataset.data)
-        return train_test_processor
+        train_dataset, test_dataset = self._split(dataset)
+        return train_dataset, test_dataset

@@ -1,9 +1,7 @@
 import numpy as np
-import pandas as pd
 
 from typing import List
-from copy import copy
-from irec.environment.dataset import Dataset, TrainTestDataset
+from irec.environment.dataset import Dataset
 
 
 class SplitStrategy:
@@ -20,32 +18,21 @@ class SplitStrategy:
         )
         return test_candidate_users
 
-    def get_test_uids(self,
-                      data_df: pd.DataFrame,
-                      num_test_users: int):
-        pass
-
     @staticmethod
-    def split_dataset(dataset: Dataset,
-                      test_uids: List):
-
-        data = dataset.data
-        data[:, 0] = dataset.normalize_ids(data[:, 0])
-        data[:, 1] = dataset.normalize_ids(data[:, 1])
+    def split_dataset(data: np.ndarray,
+                      test_uids: List) -> [Dataset, Dataset]:
 
         data_isin_test_uids = np.isin(data[:, 0], test_uids)
 
-        train_dataset = copy(dataset)
-        train_dataset.data = data[~data_isin_test_uids, :]
-        # TODO: @Thiago, I think here is train_dataset.set_parameters()
-        dataset.set_parameters()
+        train_data = data[~data_isin_test_uids, :]
+        train_dataset = Dataset(train_data)
+        train_dataset.set_parameters()
 
-        test_dataset = copy(dataset)
-        test_dataset.data = data[data_isin_test_uids, :]
-        # TODO: @Thiago, I think here is test_dataset.set_parameters()
-        dataset.set_parameters()
+        test_data = data[data_isin_test_uids, :]
+        test_dataset = Dataset(test_data)
+        test_dataset.set_parameters()
 
         print("Test shape:", test_dataset.data.shape)
         print("Train shape:", train_dataset.data.shape)
 
-        return TrainTestDataset(train=train_dataset, test=test_dataset)
+        return train_dataset, test_dataset

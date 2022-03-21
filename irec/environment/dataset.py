@@ -7,8 +7,9 @@ class Dataset:
 
     def __init__(
             self,
-            data
+            data: np.ndarray
     ):
+
         self.data = data
 
     @staticmethod

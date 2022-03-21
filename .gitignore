@@ -15,6 +15,7 @@ data/
 *.aux
 *.log
 *.csv
+.idea/
 
 .vim/coc-settings.json
 # Byte-compiled / optimized / DLL files
