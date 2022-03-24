@@ -9,14 +9,14 @@ setup(
     install_requires=[
         "numpy==1.20",
         "threadpoolctl>=3.0.0",
-        "tqdm>=4.62.3",
-        "gdown",
-        "mlflow",
-        "matplotlib",
-        "sklearn",
-        "numba",
-        "pyyaml",
-        "mergedeep"
-    ],
+    	"tqdm>=4.62.3",
+    	"gdown",
+    	"mlflow",
+    	"matplotlib",
+    	"sklearn",
+    	"numba",
+    	"pyyaml",
+        "traitlets",
+        ],
     include_package_data=True,
 )
