@@ -63,11 +63,9 @@ class TrainTestLoader:
         test_dataset = Dataset(test_data)
         test_dataset.set_parameters()
         
-        num_total_users = max((np.vstack([train_data, test_data]))[:,0])+1
-        num_total_items = max((np.vstack([train_data, test_data]))[:,1])+1
+        num_total_users = max(train_dataset.max_uid, test_dataset.max_uid)+1
+        num_total_items = max(train_dataset.max_iid, test_dataset.max_iid)+1
        
-        print(num_total_users, num_total_items)
-
         train_dataset.update_num_total_users_items(
             num_total_users=num_total_users, 
             num_total_items=num_total_items
