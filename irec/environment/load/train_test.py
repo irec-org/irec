@@ -2,7 +2,7 @@ from typing import TypedDict
 
 import numpy as np
 
-from irec.environment.dataset import Dataset
+from irec.environment.dataset import Dataset, TrainTestDataset
 
 TrainDatasetType = TypedDict('TrainDatasetType', {'path': str, 'file_delimiter': str, 'skip_head': bool})
 TestDatasetType = TypedDict('TestDatasetType', {'path': str, 'file_delimiter': str, 'skip_head': bool})
@@ -16,7 +16,7 @@ class TrainTestLoader:
             self,
             dataset: DatasetType) -> None:
 
-        assert len(dataset.keys()) == 2, "You must define files for train and test sets."
+        assert len(dataset.keys()) == 3, "You must define files for train and test sets."
         self.dataset_params = dataset
 
     def _set_attributes(self,
@@ -62,5 +62,23 @@ class TrainTestLoader:
                                self.skip_rows)
         test_dataset = Dataset(test_data)
         test_dataset.set_parameters()
+        
+        num_total_users = max((np.vstack([train_data, test_data]))[:,0])+1
+        num_total_items = max((np.vstack([train_data, test_data]))[:,1])+1
+       
+        print(num_total_users, num_total_items)
 
-        return train_dataset, test_dataset
+        train_dataset.update_num_total_users_items(
+            num_total_users=num_total_users, 
+            num_total_items=num_total_items
+        )
+        test_dataset.update_num_total_users_items(
+            num_total_users=num_total_users, 
+            num_total_items=num_total_items
+        )
+
+        print("Test shape:", test_dataset.data.shape)
+        print("Train shape:", train_dataset.data.shape)
+
+        return TrainTestDataset(train_dataset, test_dataset)
+ 

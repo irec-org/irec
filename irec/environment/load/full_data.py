@@ -1,7 +1,6 @@
 from typing import TypedDict
-
-import numpy as np
 import pandas as pd
+import numpy as np
 import random
 
 from irec.environment.dataset import Dataset
@@ -36,6 +35,7 @@ class DefaultLoader:
             self.dataset_path = dataset["path"]
         else:
             # TODO: raise an error
+            # raise errors.EvaluationRunNotFoundError("Could not find evaluation run")
             print("You must define your dataset path to be reader by the system.")
 
         self.random_seed = dataset["random_seed"] if "random_seed" in dataset.keys() else 0
@@ -132,7 +132,7 @@ class DefaultLoader:
         # Apply the split approach
         print(f"\nApplying splitting strategy: {self.strategy}\n")
         train_dataset, test_dataset = self._split(dataset)
-
+        
         # print("train:", train_dataset.num_total_items, train_dataset.num_total_users)
         # print("teste:", test_dataset.num_total_items, test_dataset.num_total_users)
 

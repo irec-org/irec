@@ -96,20 +96,26 @@
     validation:
       validation_size: 0.1
 
-# 'MovieLens 100k TrainTest':
-#   TrainTestLoader:
-#     dataset:
-#       train:
-#         path: ./data/datasets/MovieLens 100k/
-#         file_delimiter: ","
-#         skip_head: true
-#       test:
-#         path: ./data/datasets/MovieLens 100k/
-#         file_delimiter: ","
-#         skip_head: true
-#       validation:
-#         path: ./data/datasets/MovieLens 100k/
-#         validation_size: 0.1
+
+# 'MovieLens 100k Validation':
+#   DefaultValidationLoader:
+#     loader: 'MovieLens 100k'
+#     validation_size: 0.1
+
+'MovieLens 100k TrainTest':
+  TrainTestLoader:
+    dataset:
+      train:
+        path: ./data/datasets/MovieLens 100k TrainTest/train.csv
+        file_delimiter: "::"
+        skip_head: false
+      test:
+        path: ./data/datasets/MovieLens 100k TrainTest/test.csv
+        file_delimiter: "::"
+        skip_head: false
+      validation:
+        path: ./data/datasets/MovieLens 100k/
+        validation_size: 0.1
 
 # 'MovieLens 100k Validation':
 #   ValidationLoader:
