@@ -1,8 +1,8 @@
-agent: UCB
+agent: MostPopular
 agent_experiment: agent
 data_dir: data/
 dataset_experiment: dataset
-dataset_loader: 'MovieLens 100k O'
+dataset_loader: 'MovieLens 100k'
 evaluation_experiment: evaluation
 evaluation_policy: FixedInteraction
 metric: Hits

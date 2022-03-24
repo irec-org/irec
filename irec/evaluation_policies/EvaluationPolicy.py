@@ -1,6 +1,5 @@
-from irec.utils.dataset import Dataset
+from irec.environment.dataset import Dataset
 from irec.agents import Agent
-import irec.value_functions
 
 """Evaluation Policies.
 

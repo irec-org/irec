@@ -11,7 +11,7 @@ from mlflow.tracking import MlflowClient
 import json
 from collections import defaultdict
 from pathlib import Path
-from irec.utils.dataset import TrainTestDataset
+from irec.environment.dataset import TrainTestDataset
 import collections
 from app import constants
 import matplotlib.ticker as mtick

@@ -11,6 +11,8 @@ class Dataset:
     ):
 
         self.data = data
+        self.num_total_users = 0
+        self.num_total_items = 0
 
     @staticmethod
     def normalize_ids(ids: List) -> np.array:
@@ -33,8 +35,11 @@ class Dataset:
         self.mean_rating = np.mean(self.data[:, 2])
         self.min_rating = np.min(self.data[:, 2])
         self.max_rating = np.max(self.data[:, 2])
-        self.num_total_users = self.max_uid + 1
-        self.num_total_items = self.max_iid + 1
+
+    def update_num_total_users_items(self, num_total_users=0, num_total_items=0):
+        self.num_total_users = num_total_users if num_total_users > self.max_uid+1 else self.max_uid+1
+        self.num_total_items = num_total_items if num_total_items > self.max_iid+1 else self.max_iid+1
+
 
     def load(self):
         return

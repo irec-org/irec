@@ -2,7 +2,7 @@ from irec.metrics import ILD, Recall, Precision, EPC, EPD
 from irec.value_functions.Entropy import Entropy
 from .MetricEvaluator import MetricEvaluator
 from collections import defaultdict
-from irec.utils import dataset
+from irec.environment.dataset import Dataset
 import irec.value_functions
 import scipy.sparse
 import numpy as np
@@ -29,7 +29,7 @@ class InteractionMetricEvaluator(MetricEvaluator):
             self.interactions_to_evaluate = list(range(self.num_interactions))
         self.iterations_to_evaluate = self.interactions_to_evaluate
 
-        if isinstance(ground_truth_dataset, dataset.Dataset):
+        if isinstance(ground_truth_dataset, Dataset):
             self.ground_truth_consumption_matrix = scipy.sparse.csr_matrix(
                 (
                     self.ground_truth_dataset.data[:, 2],
