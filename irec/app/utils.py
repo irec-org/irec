@@ -11,7 +11,7 @@ from mlflow.tracking import MlflowClient
 import json
 from collections import defaultdict
 from pathlib import Path
-from irec.environment.dataset import TrainTestDataset
+from irec.environment.dataset import Dataset, TrainTestDataset
 import collections
 from app import constants
 import matplotlib.ticker as mtick
@@ -1273,7 +1273,6 @@ def evaluate_agent_with_dataset_parameters(
 ):
 
     from concurrent.futures import ProcessPoolExecutor, wait, FIRST_COMPLETED
-    from irec.utils.dataset import Dataset
 
     with ProcessPoolExecutor(max_workers=tasks) as executor:
         futures = set()
@@ -1288,6 +1287,7 @@ def evaluate_agent_with_dataset_parameters(
 
             dataset = Dataset(data)
             dataset.set_parameters()
+            dataset.update_num_total_users_items()
             
             for agent_name in agents:
                 settings["defaults"]["agent"] = agent_name
