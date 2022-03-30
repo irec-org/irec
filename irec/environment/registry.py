@@ -39,6 +39,7 @@ class FilterRegistry:
     def get(cls: FilterRegistry, name: str):
         return cls._filters[name]
 
+
 class LoaderRegistry:
     
     from irec.environment.load.train_test import TrainTestLoader

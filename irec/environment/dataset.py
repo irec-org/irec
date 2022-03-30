@@ -5,6 +5,17 @@ import numpy as np
 
 class Dataset:
 
+    num_users = 0
+    num_items = 0
+    rate_domain = set()
+    uids = np.array()
+    iids = np.array()
+    max_uid = 0
+    max_iid = 0
+    mean_rating = 0
+    min_rating = 0
+    max_rating = 0
+
     def __init__(
             self,
             data: np.ndarray
@@ -40,14 +51,5 @@ class Dataset:
         self.num_total_users = num_total_users if num_total_users > self.max_uid+1 else self.max_uid+1
         self.num_total_items = num_total_items if num_total_items > self.max_iid+1 else self.max_iid+1
 
-
     def load(self):
         return
-
-
-# TODO: Is it really necessary?
-class TrainTestDataset:
-
-    def __init__(self, train, test):
-        self.train = train
-        self.test = test

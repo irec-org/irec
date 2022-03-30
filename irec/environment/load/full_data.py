@@ -4,7 +4,6 @@ import numpy as np
 import random
 
 from irec.environment.dataset import Dataset
-from irec.environment.dataset import TrainTestDataset
 from irec.environment.registry import FilterRegistry, SplitRegistry
 
 # TODO: change some definitions in the yaml file:
@@ -13,7 +12,6 @@ FilterUsersType = TypedDict('FilterUsersType', {'min_consumption': int, 'num_use
 FilterItemsType = TypedDict('FilterItemsType', {'min_ratings': int, 'num_items': int})
 FilteringType = TypedDict('FilteringType', {'filter_users': FilterUsersType, 'filter_items': FilterItemsType})
 SplittingType = TypedDict('SplittingType', {'strategy': str, 'train_size': float, 'test_consumes': int})
-Validation = TypedDict('Validation', {'validation_size': float})
 
 
 class DefaultLoader:
@@ -21,8 +19,7 @@ class DefaultLoader:
     def __init__(self,
                  dataset: DatasetType,
                  prefiltering: FilteringType,
-                 splitting: SplittingType,
-                 validation: Validation) -> None:
+                 splitting: SplittingType) -> None:
         """__init__.
 
         Args:
@@ -76,7 +73,6 @@ class DefaultLoader:
             for filter_method, value in filters.items():
                 print(f"\t {filter_method}: {value}")
                 data_df = getattr(FilterRegistry.get(key), filter_method)(data_df, value)
-
     
         return data_df.to_numpy()
 
@@ -110,6 +106,7 @@ class DefaultLoader:
         return train_dataset, test_dataset
 
     def process(self) -> [Dataset, Dataset]:
+
         np.random.seed(self.random_seed)
         random.seed(self.random_seed)
         # Read the data
@@ -129,11 +126,10 @@ class DefaultLoader:
             dataset.set_parameters()
             dataset.update_num_total_users_items()
 
-        # Apply the split approach
+        # Create train and test set
         print(f"\nApplying splitting strategy: {self.strategy}\n")
         train_dataset, test_dataset = self._split(dataset)
-        
         print("train:", train_dataset.num_total_items, train_dataset.num_total_users)
-        print("teste:", test_dataset.num_total_items, test_dataset.num_total_users)
+        print("test:", test_dataset.num_total_items, test_dataset.num_total_users)
 
-        return TrainTestDataset(train_dataset, test_dataset)
+        return train_dataset, test_dataset

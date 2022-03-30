@@ -2,7 +2,7 @@ from typing import TypedDict
 
 import numpy as np
 
-from irec.environment.dataset import Dataset, TrainTestDataset
+from irec.environment.dataset import Dataset
 
 TrainDatasetType = TypedDict('TrainDatasetType', {'path': str, 'file_delimiter': str, 'skip_head': bool})
 TestDatasetType = TypedDict('TestDatasetType', {'path': str, 'file_delimiter': str, 'skip_head': bool})
@@ -74,9 +74,8 @@ class TrainTestLoader:
             num_total_users=num_total_users, 
             num_total_items=num_total_items
         )
-
         print("Test shape:", test_dataset.data.shape)
         print("Train shape:", train_dataset.data.shape)
 
-        return TrainTestDataset(train_dataset, test_dataset)
+        return train_dataset, test_dataset
  

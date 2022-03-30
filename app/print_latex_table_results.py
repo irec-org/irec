@@ -6,7 +6,7 @@ from os.path import dirname, realpath, sep, pardir
 # sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "irec")
 # import irec
 # print(sys.path)
-from irec.app import utils
+from irec.connector import utils
 
 settings = utils.load_settings(dirname(realpath(__file__)))
 
