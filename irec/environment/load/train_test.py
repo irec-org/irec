@@ -21,7 +21,7 @@ class TrainTestLoader:
             dataset (DatasetType): info required by the dataset
         """
         
-        assert len(dataset.keys()) == 3, "You must define files for train and test sets."
+        assert len(dataset.keys()) == 2, "You must define files for train and test sets."
         self.dataset_params = dataset
 
     def _set_attributes(self,
