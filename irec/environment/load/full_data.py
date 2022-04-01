@@ -1,4 +1,4 @@
-from typing import TypedDict
+from typing import List, TypedDict
 import pandas as pd
 import numpy as np
 import random

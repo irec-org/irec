@@ -8,8 +8,6 @@ class Dataset:
     num_users = 0
     num_items = 0
     rate_domain = set()
-    uids = np.array()
-    iids = np.array()
     max_uid = 0
     max_iid = 0
     mean_rating = 0
