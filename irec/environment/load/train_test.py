@@ -1,7 +1,5 @@
-from typing import TypedDict
-
+from typing import TypedDict, Tuple
 import numpy as np
-
 from irec.environment.dataset import Dataset
 
 TrainDatasetType = TypedDict('TrainDatasetType', {'path': str, 'file_delimiter': str, 'skip_head': bool})
@@ -69,7 +67,7 @@ class TrainTestLoader:
                           skiprows=skiprows)
         return data
 
-    def process(self) -> [Dataset, Dataset]:
+    def process(self) -> Tuple[Dataset, Dataset]:
         
         """process
 
