@@ -1,4 +1,4 @@
-from typing import TypedDict
+from typing import List, TypedDict
 import pandas as pd
 import numpy as np
 import random
@@ -6,7 +6,6 @@ import random
 from irec.environment.dataset import Dataset
 from irec.environment.registry import FilterRegistry, SplitRegistry
 
-# TODO: change some definitions in the yaml file:
 DatasetType = TypedDict('DatasetType', {'path': str, 'random_seed': float, 'file_delimiter': str, 'skip_head': bool})
 FilterUsersType = TypedDict('FilterUsersType', {'min_consumption': int, 'num_users': int})
 FilterItemsType = TypedDict('FilterItemsType', {'min_ratings': int, 'num_items': int})
@@ -31,9 +30,7 @@ class DefaultLoader:
         if "path" in dataset.keys():
             self.dataset_path = dataset["path"]
         else:
-            # TODO: raise an error
-            # raise errors.EvaluationRunNotFoundError("Could not find evaluation run")
-            print("You must define your dataset path to be reader by the system.")
+            raise IndexError("Dataset 'path' not exists. You must define your dataset path to be reader by the system.")
 
         self.random_seed = dataset["random_seed"] if "random_seed" in dataset.keys() else 0
         self.delimiter = dataset["file_delimiter"] if "file_delimiter" in dataset.keys() else ","
@@ -48,23 +45,29 @@ class DefaultLoader:
         self.train_size = splitting["train_size"] if "train_size" in splitting.keys() else 0.8
 
     def _read(self) -> np.ndarray:
-        """
-        Returns:
+        """_read
+
             The data read according to the parameters specified.
+
+        Returns:
+            data (np.ndarray): The data loaded
         """
         data = np.loadtxt(self.dataset_path,
                           delimiter=self.delimiter,
                           skiprows=self.skip_rows)
-        # TODO: implement way to define the columns (user-id, item-id, etc)
         return data
 
     def _filter(self,
                 data: np.array) -> np.ndarray:
-        """
+        """_filter
+
+            Applies all filters specified in dataset_loaders.yaml
+
         Args:
             data: the array of data previously read
+
         Returns:
-            The data filtered by the filters applied.
+            data_df (np.array): The data filtered by the filters applied.
         """
         data_df = pd.DataFrame(data)
         print(f"\nApplying filters...")
@@ -78,12 +81,16 @@ class DefaultLoader:
 
     def _split(self,
                dataset: Dataset) -> [Dataset, Dataset]:
-        """
+        """split
+
+            Splits the data set into training and testing
+
         Args:
             dataset (Dataset): an object of the dataset class
+
         Returns:
-            train_dataset (Dataset):
-            test_dataset (Dataset):
+            train_dataset (Dataset): the train
+            test_dataset (Dataset): the test
         """
         num_train_users = round(dataset.num_users * self.train_size)
         num_test_users = int(dataset.num_users - num_train_users)
@@ -106,6 +113,15 @@ class DefaultLoader:
         return train_dataset, test_dataset
 
     def process(self) -> [Dataset, Dataset]:
+
+        """process
+
+        Perform complete processing of the dataset: read -> filter (optional) -> split
+
+        Return: 
+            train_dataset (Dataset): the train
+            test_dataset (Dataset): the test
+        """
 
         np.random.seed(self.random_seed)
         random.seed(self.random_seed)
@@ -132,4 +148,4 @@ class DefaultLoader:
         print("train:", train_dataset.num_total_items, train_dataset.num_total_users)
         print("test:", test_dataset.num_total_items, test_dataset.num_total_users)
 
-        return train_dataset, test_dataset
+        return [train_dataset, test_dataset]
