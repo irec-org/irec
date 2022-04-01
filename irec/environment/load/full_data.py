@@ -1,4 +1,4 @@
-from typing import List, TypedDict
+from typing import Tuple, TypedDict
 import pandas as pd
 import numpy as np
 import random
@@ -80,7 +80,7 @@ class DefaultLoader:
         return data_df.to_numpy()
 
     def _split(self,
-               dataset: Dataset) -> [Dataset, Dataset]:
+               dataset: Dataset) -> Tuple[Dataset, Dataset]:
         """split
 
             Splits the data set into training and testing
@@ -112,7 +112,7 @@ class DefaultLoader:
         )
         return train_dataset, test_dataset
 
-    def process(self) -> [Dataset, Dataset]:
+    def process(self) -> Tuple[Dataset, Dataset]:
 
         """process
 
