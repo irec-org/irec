@@ -17,6 +17,8 @@ setup(
     	"numba",
     	"pyyaml",
         "traitlets",
+        "behave",
+        "behave_pandas",
         ],
     include_package_data=True,
 )
