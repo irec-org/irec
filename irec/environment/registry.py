@@ -42,8 +42,8 @@ class FilterRegistry:
 
 class LoaderRegistry:
     
-    from irec.environment.load.train_test import TrainTestLoader
-    from irec.environment.load.full_data import DefaultLoader
+    from irec.environment.loader.train_test import TrainTestLoader
+    from irec.environment.loader.full_data import DefaultLoader
 
     _loader = {
         "TrainTestLoader": TrainTestLoader,

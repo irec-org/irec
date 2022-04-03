@@ -217,7 +217,7 @@ def load_settings(workdir):
     # with open(
     # workdir + sep + "settings" + sep +
     # "datasets_preprocessors_parameters.yaml") as f:
-    # d['datasets_preprocessors_parameters'] = yaml.load(f, Loader=loader)
+    # d['datasets_preprocessors_parameters'] = yaml.loader(f, Loader=loader)
     # d['datasets_preprocessors_parameters'] = {
     # k: {
     # **setting,

@@ -46,15 +46,17 @@ class DefaultLoader:
 
     def _read(self) -> np.ndarray:
         """_read
-
             The data read according to the parameters specified.
-
+            The expected columns are userId, itemId, rating, timestamp
         Returns:
             data (np.ndarray): The data loaded
         """
         data = np.loadtxt(self.dataset_path,
                           delimiter=self.delimiter,
                           skiprows=self.skip_rows)
+
+        # TODO: check if timestamp exists. If not, create a sequential value for it
+
         return data
 
     def _filter(self,
@@ -69,7 +71,7 @@ class DefaultLoader:
         Returns:
             data_df (np.array): The data filtered by the filters applied.
         """
-        data_df = pd.DataFrame(data)
+        data_df = pd.DataFrame(data, columns=["userId", "itemId", "rating", "timestamp"])
         print(f"\nApplying filters...")
         for key, filters in self.prefiltering.items():
             print(f"{key}:")
@@ -94,13 +96,12 @@ class DefaultLoader:
         """
         num_train_users = round(dataset.num_users * self.train_size)
         num_test_users = int(dataset.num_users - num_train_users)
-        data_df = pd.DataFrame(dataset.data)
         # Get the required strategy
         split_strategy = SplitRegistry.get(self.strategy)(
             test_consumes=self.test_consumes,
             train_size=self.train_size)
         # Apply it in the data
-        test_uids = split_strategy.get_test_uids(data_df, num_test_users)
+        test_uids = split_strategy.get_test_uids(dataset.data, num_test_users)
         train_dataset, test_dataset = split_strategy.split_dataset(dataset.data, test_uids)
         train_dataset.update_num_total_users_items(
             num_total_users=dataset.num_total_users, 

@@ -23,11 +23,11 @@ class FilteringByItems:
             The data filtered by the number of ratings.
         """
         selected_items = dict(
-            df_dataset.groupby(1)[0].agg("count")[
+            df_dataset.groupby("itemId")["userId"].agg("count")[
                 lambda ratings: ratings >= min_ratings
             ]
         )
-        return df_dataset[df_dataset[1].isin(selected_items)]
+        return df_dataset[df_dataset["itemId"].isin(selected_items)]
 
     @staticmethod
     def num_items(df_dataset: DataFrame, num_items: int) -> DataFrame:
@@ -41,7 +41,7 @@ class FilteringByItems:
             The data filtered by the number of items.
         """
         try:
-            selected_items = random.sample(list(df_dataset[1].unique()), num_items)
+            selected_items = random.sample(list(df_dataset["itemId"].unique()), num_items)
         except:
             return df_dataset
-        return df_dataset[df_dataset[1].isin(selected_items)]
+        return df_dataset[df_dataset["itemId"].isin(selected_items)]

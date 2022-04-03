@@ -91,6 +91,21 @@
 # # # uir = defaultdict(list)
 # # # for k,v in users_items_recommended.items():
 # # # uir[k] = v[:10]
+# for dataset_preprocessor in datasets_preprocessors:
+# dm.initialize_engines(dataset_preprocessor)
+# for itr_class in interactors_classes:
+# itr = itr_class(**settings['interactors_preprocessor_parameters'][dataset_preprocessor['name']][itr_class.__name__]['parameters'])
+            # pdm = PersistentDataManager(directory='results')
+# history_items_recommended = pdm.loader(InteractorCache().get_id(
+# dm, evaluation_policy, itr))
+# users_items_recommended = defaultdict(list)
+# for i in range(len(history_items_recommended)):
+# uid = history_items_recommended[i][0]
+# iid = history_items_recommended[i][1]
+# users_items_recommended[uid].append(iid)
+# # uir = defaultdict(list)
+# # for k,v in users_items_recommended.items():
+# # uir[k] = v[:10]
 
 # # datasets_interactors_items_recommended[dataset_preprocessor['name']][itr_class.__name__] = users_items_recommended
 # # datasets_interactors_items_recommended[dataset_preprocessor['name']][itr_class.__name__] = uir

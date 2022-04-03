@@ -16,7 +16,7 @@ class SplitStrategy:
 
         Args:
             train_size (float): defines the train size in percentage [0, 1]. 
-            test_consumes (int): minimun number of items a user must consume to be a candidate.
+            test_consumes (int): minimum number of items a user must consume to be a candidate.
         """
 
         self.train_size = train_size
@@ -34,7 +34,7 @@ class SplitStrategy:
             List of the valid candidate users.
         """
 
-        users_items_consumed = data_df.groupby(0).count().iloc[:, 0]
+        users_items_consumed = data_df.groupby("userId").count().iloc[:, 0]
         test_candidate_users = list(
             users_items_consumed[users_items_consumed >= self.test_consumes]
             .to_dict()
