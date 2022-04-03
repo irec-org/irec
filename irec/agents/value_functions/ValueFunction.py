@@ -1,5 +1,5 @@
-from irec.agents.ActionCollection import ActionCollection
-from irec.agents.Action import Action
+from irec.agents.action_collection import ActionCollection
+from irec.agents.action import Action
 from typing import Any, Dict, Tuple
 
 

@@ -1,14 +1,12 @@
-from irec.agents.ActionCollection import OneUserActionCollection
+from irec.agents.action_collection import OneUserActionCollection
 from irec.agents.value_functions.MostPopular import MostPopular
 from irec.agents.value_functions.LogPopEnt import LogPopEnt
 from irec.agents.value_functions.BestRated import BestRated
 from concurrent.futures import ProcessPoolExecutor
 from irec.agents.value_functions.Entropy import Entropy
 from .EvaluationPolicy import EvaluationPolicy
-from threadpoolctl import threadpool_limits
 from irec.environment.dataset import Dataset
 from collections import defaultdict
-import multiprocessing
 from tqdm import tqdm
 import scipy.sparse
 import numpy as np

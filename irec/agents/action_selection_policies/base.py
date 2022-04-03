@@ -1,4 +1,4 @@
-from irec.agents.ActionCollection import ActionCollection
+from irec.agents.action_collection import ActionCollection
 
 class ActionSelectionPolicy:
     def __init__(self, *args, **kwargs):

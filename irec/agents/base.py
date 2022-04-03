@@ -1,7 +1,7 @@
 from .action_selection_policies.base import ActionSelectionPolicy
 from .value_functions.ValueFunction import ValueFunction
-from .ActionCollection import ActionCollection
-from irec.agents.Action import Action
+from .action_collection import ActionCollection
+from irec.agents.action import Action
 from typing import Dict, Any
 
 """Recommender System Agent.

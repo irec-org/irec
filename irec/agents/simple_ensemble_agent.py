@@ -1,5 +1,5 @@
-from irec.agents.ActionCollection import ActionCollection
-from .Action import UIAction
+from irec.agents.action_collection import ActionCollection
+from .action import UIAction
 from .base import Agent
 from typing import Any, List
 import numpy as np

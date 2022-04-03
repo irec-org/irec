@@ -1,4 +1,4 @@
-from irec.agents.ActionCollection import OneUserActionCollection
+from irec.agents.action_collection import OneUserActionCollection
 from .EvaluationPolicy import EvaluationPolicy
 from threadpoolctl import threadpool_limits
 from irec.environment.dataset import Dataset
