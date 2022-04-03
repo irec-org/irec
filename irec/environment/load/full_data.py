@@ -148,4 +148,4 @@ class DefaultLoader:
         print("train:", train_dataset.num_total_items, train_dataset.num_total_users)
         print("test:", test_dataset.num_total_items, test_dataset.num_total_users)
 
-        return [train_dataset, test_dataset]
+        return train_dataset, test_dataset

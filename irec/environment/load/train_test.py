@@ -18,14 +18,14 @@ class TrainTestLoader:
         Args:
             dataset (DatasetType): info required by the dataset
         """
-        
+
         assert len(dataset.keys()) == 2, "You must define files for train and test sets."
         self.dataset_params = dataset
 
     def _set_attributes(self,
                         dataset: DatasetType,
                         split_type: str) -> None:
-        
+
         """_set_attributes
 
             Set dataset attributes
@@ -35,7 +35,6 @@ class TrainTestLoader:
             split_type (str): split type (train or test)
 
         """
-
 
         if split_type in dataset.keys() and "path" in dataset[split_type].keys():
             self.path = dataset[split_type]["path"]
@@ -68,7 +67,7 @@ class TrainTestLoader:
         return data
 
     def process(self) -> Tuple[Dataset, Dataset]:
-        
+
         """process
 
             reads the dataset and gets information about the dataset
@@ -91,20 +90,19 @@ class TrainTestLoader:
                                self.skip_rows)
         test_dataset = Dataset(test_data)
         test_dataset.set_parameters()
-        
-        num_total_users = max(train_dataset.max_uid, test_dataset.max_uid)+1
-        num_total_items = max(train_dataset.max_iid, test_dataset.max_iid)+1
-       
+
+        num_total_users = max(train_dataset.max_uid, test_dataset.max_uid) + 1
+        num_total_items = max(train_dataset.max_iid, test_dataset.max_iid) + 1
+
         train_dataset.update_num_total_users_items(
-            num_total_users=num_total_users, 
+            num_total_users=num_total_users,
             num_total_items=num_total_items
         )
         test_dataset.update_num_total_users_items(
-            num_total_users=num_total_users, 
+            num_total_users=num_total_users,
             num_total_items=num_total_items
         )
         print("Test shape:", test_dataset.data.shape)
         print("Train shape:", train_dataset.data.shape)
 
-        return [train_dataset, test_dataset]
- 
+        return train_dataset, test_dataset

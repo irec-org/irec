@@ -18,7 +18,7 @@ class Temporal(SplitStrategy):
         self,
         data_df: DataFrame,
         num_test_users: int
-    ) -> List[int]:
+    ) -> np.array:
         """get_test_uids.
 
         Performs the temporal splitting strategy.
