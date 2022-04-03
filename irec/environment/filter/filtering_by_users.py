@@ -23,11 +23,11 @@ class FilteringByUsers:
             The data filtered by the number of consumptions.
         """
         selected_users = dict(
-            df_dataset.groupby(0)[1].agg("count")[
+            df_dataset.groupby("userId")["itemId"].agg("count")[
                 lambda consumption: consumption >= min_consumption
             ]
         )
-        return df_dataset[df_dataset[0].isin(selected_users)]
+        return df_dataset[df_dataset["userId"].isin(selected_users)]
 
     @staticmethod
     def num_users(df_dataset: DataFrame, num_users: int) -> DataFrame:
@@ -41,7 +41,7 @@ class FilteringByUsers:
             The data filtered by the number of users.
         """
         try:
-            selected_users = random.sample(list(df_dataset[0].unique()), num_users)
+            selected_users = random.sample(list(df_dataset["userId"].unique()), num_users)
         except:
             return df_dataset
-        return df_dataset[df_dataset[0].isin(selected_users)]
+        return df_dataset[df_dataset["userId"].isin(selected_users)]

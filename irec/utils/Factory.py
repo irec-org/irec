@@ -1,4 +1,4 @@
-# from irec.environment.load.full_data import DatasetLoader
+# from irec.environment.loader.full_data import DatasetLoader
 import irec.agents
 from irec.environment.registry import LoaderRegistry
 

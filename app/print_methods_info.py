@@ -81,7 +81,7 @@ evaluation_policy = eval('irec.evaluation_policies.' + evaluation_policy_name)(
 # for itr_class in interactors_classes:
 # itr = itr_class(**settings['interactors_preprocessor_parameters'][dataset_preprocessor['name']][itr_class.__name__]['parameters'])
             pdm = PersistentDataManager(directory='results')
-# history_items_recommended = pdm.load(InteractorCache().get_id(
+# history_items_recommended = pdm.loader(InteractorCache().get_id(
 # dm, evaluation_policy, itr))
 # users_items_recommended = defaultdict(list)
 # for i in range(len(history_items_recommended)):
