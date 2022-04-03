@@ -14,7 +14,7 @@ import yaml
 from concurrent.futures import ProcessPoolExecutor, wait, FIRST_COMPLETED
 from app import utils
 
-import irec.value_functions
+import irec.agents.value_functions
 import irec.evaluation_policies
 import argparse
 import time

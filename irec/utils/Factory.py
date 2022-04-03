@@ -1,7 +1,6 @@
-# from irec.environment.load.full_data import DatasetLoader
-import irec.agents
 from irec.environment.registry import LoaderRegistry
-
+from irec.agents.registry import AgentRegistry
+from irec.agents.registry import ASPRegistry
 
 class Factory:
     def __init__(self) -> None:
@@ -17,19 +16,17 @@ class ActionSelectionPolicyFactory(Factory):
         pass
 
     def create(self, action_selection_policy_settings):
-        import irec.action_selection_policies
+        from irec.agents.action_selection_policies.asp_reranker import ASPReranker
 
         action_selection_policy_name = list(action_selection_policy_settings.keys())[0]
         action_selection_policy_parameters = list(
             action_selection_policy_settings.values()
         )[0]
 
-        action_selection_policy = eval(
-            "irec.action_selection_policies." + action_selection_policy_name
-        )(**action_selection_policy_parameters)
+        action_selection_policy =  ASPRegistry.get(action_selection_policy_name)(**action_selection_policy_parameters)
 
         if isinstance(
-            action_selection_policy, irec.action_selection_policies.ASPReranker
+            action_selection_policy, ASPReranker
         ):
             action_selection_policy.rule = self.value_function_factory.create(
                 action_selection_policy.rule
@@ -50,21 +47,21 @@ class ValueFunctionFactory(Factory):
             "OurMethodOne",
             "OurMethodZero",
         ]:
-            exec("import irec.value_functions.WSPBInit")
+            exec("import irec.agents.value_functions.WSPBInit")
             value_function = eval(
-                "irec.value_functions.WSPBInit.{}".format(value_function_name)
+                "irec.agents.value_functions.WSPBInit.{}".format(value_function_name)
             )(**value_function_parameters)
         if value_function_name in [
             "ICTRTS",
         ]:
-            exec("import irec.value_functions.ICTR")
+            exec("import irec.agents.value_functions.ICTR")
             value_function = eval(
-                "irec.value_functions.ICTR.{}".format(value_function_name)
+                "irec.agents.value_functions.ICTR.{}".format(value_function_name)
             )(**value_function_parameters)
         else:
-            exec("import irec.value_functions.{}".format(value_function_name))
+            exec("import irec.agents.value_functions.{}".format(value_function_name))
             value_function = eval(
-                "irec.value_functions.{}.{}".format(
+                "irec.agents.value_functions.{}.{}".format(
                     value_function_name, value_function_name
                 )
             )(**value_function_parameters)
@@ -86,7 +83,7 @@ class AgentFactory(Factory):
     def create(self, agent_name, agent_settings):
         agent_class_name = list(agent_settings.keys())[0]
         agent_parameters = list(agent_settings.values())[0]
-        agent_class = eval("irec.agents." + agent_class_name)
+        agent_class = AgentRegistry.get(agent_class_name)
 
         agent_class_parameters = {}
         action_selection_policy = self.action_selection_policy_factory.create(

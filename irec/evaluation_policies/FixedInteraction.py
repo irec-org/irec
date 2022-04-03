@@ -1,9 +1,9 @@
-from irec.ActionCollection import OneUserActionCollection
+from irec.agents.ActionCollection import OneUserActionCollection
 from .EvaluationPolicy import EvaluationPolicy
 from threadpoolctl import threadpool_limits
 from irec.environment.dataset import Dataset
 from collections import defaultdict
-from irec.agents import Agent
+from irec.agents.base import Agent
 from tqdm import tqdm
 import scipy.sparse
 import numpy as np

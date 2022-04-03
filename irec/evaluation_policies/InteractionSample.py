@@ -1,11 +1,9 @@
-from irec.value_functions.MostPopular import MostPopular
-from irec.value_functions.Entropy import Entropy
+from irec.agents.value_functions.MostPopular import MostPopular
+from irec.agents.value_functions.Entropy import Entropy
 from .EvaluationPolicy import EvaluationPolicy
-from irec.utils.dataset import Dataset
+from irec.environment.dataset import Dataset
 from collections import defaultdict
 import matplotlib.pyplot as plt
-from irec.agents import Agent
-import irec.value_functions
 import matplotlib as mpl
 from tqdm import tqdm
 import scipy.sparse
@@ -37,7 +35,6 @@ class InteractionSample(EvaluationPolicy):
         )
 
         data = np.vstack((train_dataset.data, test_dataset.data))
-        from irec.utils.dataset import Dataset
 
         dataset = Dataset(data)
         dataset.update_from_data()

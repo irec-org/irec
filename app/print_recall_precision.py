@@ -44,7 +44,7 @@ from irec.metric_evaluators import (
     CumulativeInteractionMetricEvaluator,
     UserCumulativeInteractionMetricEvaluator,
 )
-from irec.utils.dataset import Dataset
+from irec.environment.dataset import Dataset
 import metrics
 import matplotlib.pyplot as plt
 from cycler import cycler

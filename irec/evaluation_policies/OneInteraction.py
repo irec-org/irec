@@ -1,12 +1,12 @@
-from irec.value_functions.MostPopular import MostPopular
-from irec.value_functions.BestRated import BestRated
-from irec.value_functions.LogPopEnt import LogPopEnt
-from irec.value_functions.Entropy import Entropy
+from irec.agents.value_functions.MostPopular import MostPopular
+from irec.agents.value_functions.BestRated import BestRated
+from irec.agents.value_functions.LogPopEnt import LogPopEnt
+from irec.agents.value_functions.Entropy import Entropy
 from .EvaluationPolicy import EvaluationPolicy
 from threadpoolctl import threadpool_limits
-from irec.utils.dataset import Dataset
+from irec.environment.dataset import Dataset
 from collections import defaultdict
-from irec.agents import Agent
+from irec.agents.base import Agent
 from tqdm import tqdm
 import scipy.sparse
 import scipy.stats

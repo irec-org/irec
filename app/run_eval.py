@@ -15,9 +15,9 @@ import yaml
 
 import irec.evaluation_policies
 import irec.mf
-import irec.value_functions
+import irec.agents.value_functions
 from app import constants
-from irec.utils.dataset import Dataset
+from irec.environment.dataset import Dataset
 import argparse
 import pickle
 

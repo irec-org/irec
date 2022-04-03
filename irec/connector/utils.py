@@ -18,7 +18,7 @@ import matplotlib.ticker as mtick
 import numpy as np
 import matplotlib.pyplot as plt
 from os.path import sep
-import irec.value_functions
+import irec.agents.value_functions
 from irec.evaluation_policies.EvaluationPolicy import EvaluationPolicy
 import irec.evaluation_policies
 from irec.utils.Factory import (
