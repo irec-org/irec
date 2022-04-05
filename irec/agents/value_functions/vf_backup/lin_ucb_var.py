@@ -3,7 +3,7 @@ import numpy as np
 
 # import util
 import scipy
-import mf
+from . import mf
 from collections import defaultdict
 from .mf_value_function import MFValueFunction
 

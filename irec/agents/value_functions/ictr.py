@@ -13,7 +13,7 @@ import random
 from .mf_value_function import MFValueFunction
 from tqdm import tqdm
 from numba import njit, jit
-import mf
+from . import mf
 from .most_popular import *
 from typing import Any
 

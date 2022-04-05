@@ -6,7 +6,7 @@ from collections import defaultdict
 from .mf_value_function import MFValueFunction
 from tqdm import tqdm
 from numba import njit
-import mf
+from . import mf
 from .entropy import Entropy
 from .most_popular import MostPopular
 from .log_pop_ent import LogPopEnt

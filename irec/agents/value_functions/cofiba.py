@@ -8,7 +8,7 @@ from collections import defaultdict
 import random
 import itertools
 from numba import jit, prange
-import mf
+from . import mf
 from .mf_value_function import MFValueFunction
 
 

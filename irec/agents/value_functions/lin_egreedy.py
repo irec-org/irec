@@ -5,7 +5,7 @@ import random
 from tqdm import tqdm
 from threadpoolctl import threadpool_limits
 from collections import defaultdict
-import mf
+from . import mf
 import ctypes
 from .mf_value_function import MFValueFunction
 import scipy.sparse

@@ -4,7 +4,7 @@ import scipy.stats
 import scipy.spatial
 import scipy.optimize
 import scipy
-import mf
+from . import mf
 from collections import defaultdict
 from .mf_value_function import MFValueFunction
 from irec.agents.value_functions.entropy import Entropy

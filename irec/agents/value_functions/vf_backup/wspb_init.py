@@ -12,7 +12,7 @@ import sklearn
 import scipy.optimize
 import scipy
 import scipy.stats
-import mf
+from . import mf
 from collections import defaultdict
 from .mf_value_function import MFValueFunction
 import value_functions

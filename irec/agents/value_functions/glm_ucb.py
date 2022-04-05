@@ -8,7 +8,7 @@ import scipy.optimize
 import ctypes
 from collections import defaultdict
 import scipy
-import mf
+from . import mf
 import value_functions
 
 

@@ -2,7 +2,7 @@ import ctypes
 from collections import defaultdict
 from typing import Any, DefaultDict
 
-import mf
+from . import mf
 import numpy as np
 import scipy
 import scipy.stats

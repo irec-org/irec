@@ -6,7 +6,7 @@ from threadpoolctl import threadpool_limits
 import scipy
 import scipy.stats
 import ctypes
-import mf
+from . import mf
 from collections import defaultdict
 import value_functions
 from .mf_value_function import MFValueFunction
