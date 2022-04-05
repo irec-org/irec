@@ -1,5 +1,5 @@
 from irec.metrics import ILD, Recall, Precision, EPC, EPD
-from irec.agents.value_functions.Entropy import Entropy
+from irec.agents.value_functions.entropy import Entropy
 from .MetricEvaluator import MetricEvaluator
 from collections import defaultdict
 from irec.environment.dataset import Dataset

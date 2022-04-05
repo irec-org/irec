@@ -5,30 +5,12 @@ import matplotlib.pyplot as plt
 import scipy.stats
 import os
 import random
+import metrics
 
 
-class EMostPopular(experimental_valueFunction):
+class DistinctPopular(experimental_valueFunction):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-    def top_emostpopular(self, items_exploitation, items_exploration):
-        top_iids = []
-        num_total_items = self.train_consumption_matrix.shape[1]
-        for i in range(num_total_items):
-            not_recommended = np.ones(num_total_items, dtype=bool)
-            not_recommended[top_iids] = 0
-            items_not_recommended = np.nonzero(not_recommended)[0]
-            if self.epsilon < np.random.rand():
-                best_item = items_not_recommended[np.argmax(
-                    items_exploitation[items_not_recommended])]
-            else:
-                # best_item = random.choices(items_not_recommended,
-                #                            weights=items_entropy[items_not_recommended]
-                #                            ,k=1)[0]
-                best_item = items_not_recommended[np.argmax(
-                    items_exploration[items_not_recommended])]
-            top_iids.append(best_item)
-        return top_iids
 
     def reset(self, observation):
         train_dataset = observation
@@ -39,49 +21,38 @@ class EMostPopular(experimental_valueFunction):
              (self.train_dataset.data[:, 0], self.train_dataset.data[:, 1])),
             (self.train_dataset.num_total_users,
              self.train_dataset.num_total_items))
+        self.num_total_items = self.train_dataset.num_total_items
+
         self.items_entropy = entropy.get_items_entropy(
             self.train_consumption_matrix)
+        np.seterr('warn')
         self.items_popularity = most_popular.get_items_popularity(
             self.train_consumption_matrix, normalize=False)
+        self.items_distance = metrics.get_items_distance(
+            self.train_consumption_matrix)
 
-        self.top_iids = self.top_emostpopular(self.items_popularity,
-                                              self.items_entropy)
-        self.items_score = np.empty(len(self.top_iids))
-        for i, iid in enumerate(reversed(self.top_iids)):
-            self.items_score[iid] = i
+        self.top_iids = defaultdict([])
+        # num_total_items = self.train_consumption_matrix.shape[1]
 
     def action_estimates(self, candidate_actions):
         uid = candidate_actions[0]
         candidate_items = candidate_actions[1]
-        items_score = self.items_score[candidate_items]
-        return items_score, None
+        if len(self.top_iids) > 0:
+            candidate_items_distance = np.mean(
+                self.items_distance[self.top_iids[uid]][:, candidate_items],
+                axis=0)
+        else:
+            candidate_items_distance = 1
+
+        return candidate_items_distance * items_popularity[cadidate_items], None
 
     def update(self, observation, action, reward, info):
         uid = action[0]
         item = action[1]
         additional_data = info
-        pass
-        # top_iids = []
-        # num_total_items = self.train_consumption_matrix.shape[1]
-        # for i in range(num_total_items):
-        #     not_recommended = np.ones(num_total_items,dtype=bool)
-        #     not_recommended[top_iids] = 0
-        #     items_not_recommended = np.nonzero(not_recommended)[0]
-        #     if self.epsilon < np.random.rand():
-        #         best_item = items_not_recommended[np.argmax(items_popularity[items_not_recommended])]
-        #     else:
-        #         # best_item = random.choices(items_not_recommended,
-        #         #                            weights=items_entropy[items_not_recommended]
-        #         #                            ,k=1)[0]
-        #         best_item = items_not_recommended[np.argmax(items_entropy[items_not_recommended])]
-        #     top_iids.append(best_item)
-
-        # top_popularity_iids = list(reversed(np.argsort(items_entropy)))[:self.get_iterations()]
-        # top_entropy_iids = list(reversed(np.argsort(items_popularity)))[:self.get_iterations()]
+        self.top_iids[uid].append(item)
 
         # correlation = scipy.stats.pearsonr(items_entropy,items_popularity)[0]
-
-        # # top_iids = list(reversed(np.argsort(items_popplusent)))[:self.get_iterations()]
 
         # fig, ax = plt.subplots()
         # ax.scatter(items_entropy,items_popularity,marker="D",color='darkblue')
