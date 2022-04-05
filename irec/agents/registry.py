@@ -1,9 +1,11 @@
 from __future__ import annotations
 from typing import List
 
-def _import_class(root:str,
-              module_name:str,
-              class_name:str):
+def _import_class(
+        root:str,
+        module_name:str,
+        class_name:str
+    ):
 
     exec(f"from {root}.{module_name} import {class_name}")
 
