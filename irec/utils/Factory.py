@@ -17,7 +17,7 @@ class ActionSelectionPolicyFactory(Factory):
         pass
 
     def create(self, action_selection_policy_settings):
-        from irec.agents.action_selection_policies.asp_reranker import ASPReranker
+        from irec.agents.action_selection_policies.reranker import ASPReranker
 
         action_selection_policy_name = list(action_selection_policy_settings.keys())[0]
         action_selection_policy_parameters = list(

@@ -25,11 +25,11 @@ class AgentRegistry:
 class ASPRegistry:
     
     from irec.agents.action_selection_policies.base import ActionSelectionPolicy
-    from irec.agents.action_selection_policies.asp_egreedy import ASPEGreedy
-    from irec.agents.action_selection_policies.asp_generic_greedy import ASPGenericGreedy
-    from irec.agents.action_selection_policies.asp_greedy import ASPGreedy
-    from irec.agents.action_selection_policies.asp_ic_greedy import ASPICGreedy
-    from irec.agents.action_selection_policies.asp_reranker import ASPReranker
+    from irec.agents.action_selection_policies.egreedy import ASPEGreedy
+    from irec.agents.action_selection_policies.generic_greedy import ASPGenericGreedy
+    from irec.agents.action_selection_policies.greedy import ASPGreedy
+    from irec.agents.action_selection_policies.ic_greedy import ASPICGreedy
+    from irec.agents.action_selection_policies.reranker import ASPReranker
 
     _asp = {
         "ActionSelectionPolicy": ActionSelectionPolicy,
