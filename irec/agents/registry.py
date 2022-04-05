@@ -1,8 +1,8 @@
 from __future__ import annotations
 from typing import List
 
+
 class AgentRegistry:
-    
     from irec.agents.base import Agent
     from irec.agents.simple_agent import SimpleAgent
     from irec.agents.simple_ensemble_agent import SimpleEnsembleAgent
@@ -23,7 +23,6 @@ class AgentRegistry:
 
 
 class VFRegistry:
-    
     from irec.agents.value_functions.best_rated import BestRated
     from irec.agents.value_functions.cb import CB
     from irec.agents.value_functions.cofiba import COFIBA
@@ -63,7 +62,7 @@ class VFRegistry:
     from irec.agents.value_functions.thompson_sampling import ThompsonSampling
     from irec.agents.value_functions.ucb_learner import UCBLearner
     from irec.agents.value_functions.ucb import UCB
-    from irec.agents.value_functions.value_function import ValueFunction
+    from irec.agents.value_functions.base import ValueFunction
     from irec.agents.value_functions.wspb_init import WSPBInit
     from irec.agents.value_functions.wspb_pca import WSPBPCA
     from irec.agents.value_functions.wspb_var import WSPBvar
@@ -73,47 +72,47 @@ class VFRegistry:
         "BestRated": BestRated,
         "CB": CB,
         "COFIBA": COFIBA,
-        "DistinctPopular": DistinctPopular,
+        # "DistinctPopular": DistinctPopular,
         "EGreedy": EGreedy,
-        "EMostPopular": EMostPopular,
+        # "EMostPopular": EMostPopular,
         "Entropy": Entropy,
         "Entropy0": Entropy0,
         "ExperimentalValueFunction": ExperimentalValueFunction,
         "GenericThompsonSampling": GenericThompsonSampling,
         "GLM_UCB": GLM_UCB,
         "HELF": HELF,
-        "ICLinUCB": ICLinUCB,
+        # "ICLinUCB": ICLinUCB,
         "ICF": ICF,
         "ICTRTS": ICTRTS,
         "kNNBandit": kNNBandit,
         "LinEGreedy": LinEGreedy,
-        "LinUCBPCA": LinUCBPCA,
-        "LinUCBvar": LinUCBvar,
+        # "LinUCBPCA": LinUCBPCA,
+        # "LinUCBvar": LinUCBvar,
         "LinUCB": LinUCB,
-        "LinearEGreedyInit": LinearEGreedyInit,
+        # "LinearEGreedyInit": LinearEGreedyInit,
         "LinearEGreedy": LinearEGreedy,
-        "LinearICF": LinearICF,
+        # "LinearICF": LinearICF,
         "LinearThompsonSampling": LinearThompsonSampling,
-        "LinearUCBInit": LinearUCBInit,
+        # "LinearUCBInit": LinearUCBInit,
         "LinearUCB": LinearUCB,
         "LinearUCB1": LinearUCB1,
         "LogPopEnt": LogPopEnt,
         "MFValueFunction": MFValueFunction,
         "MostPopular": MostPopular,
-        "MostRepresentative": MostRepresentative,
+        # "MostRepresentative": MostRepresentative,
         "NICF": NICF,
-        "PopPlusEnt": PopPlusEnt,
-        "PPELPE": PPELPE,
+        # "PopPlusEnt": PopPlusEnt,
+        # "PPELPE": PPELPE,
         "PTS": PTS,
         "Random": Random,
         "ThompsonSampling": ThompsonSampling,
-        "UCBLearner": UCBLearner,
+        # "UCBLearner": UCBLearner,
         "UCB": UCB,
         "ValueFunction": ValueFunction,
-        "WSPBInit": WSPBInit,
-        "WSPBPCA": WSPBPCA,
-        "WSPBvar": WSPBvar,
-        "WSPB": WSPB
+        # "WSPBInit": WSPBInit,
+        # "WSPBPCA": WSPBPCA,
+        # "WSPBvar": WSPBvar,
+        # "WSPB": WSPB
     }
 
     @classmethod
@@ -126,7 +125,6 @@ class VFRegistry:
 
 
 class ASPRegistry:
-    
     from irec.agents.action_selection_policies.base import ActionSelectionPolicy
     from irec.agents.action_selection_policies.egreedy import ASPEGreedy
     from irec.agents.action_selection_policies.generic_greedy import ASPGenericGreedy

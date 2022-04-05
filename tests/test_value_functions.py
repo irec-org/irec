@@ -1,7 +1,7 @@
 from irec.agents.value_functions.most_popular import MostPopular
 from irec.agents.value_functions.ucb import UCB
 from irec.agents.value_functions.random import Random
-from irec.agents.value_functions.value_function import ValueFunction
+from irec.agents.value_functions.base import ValueFunction
 
 
 def test_create_value_functions():

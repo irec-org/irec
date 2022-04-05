@@ -1,6 +1,6 @@
 import numpy as np
 from tqdm import tqdm
-from .value_function import ValueFunction
+from .base import ValueFunction
 from .experimental_valueFunction import ExperimentalValueFunction
 import os
 import random
@@ -101,4 +101,4 @@ class UCB(ExperimentalValueFunction):
         self.items_count[item] += 1
         if self.recent_predict:
             self.t += 1
-            self.recent_predict = False
+            self.recent_predict = Fals

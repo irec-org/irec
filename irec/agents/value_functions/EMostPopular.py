@@ -1,6 +1,6 @@
 import numpy as np
 from tqdm import tqdm
-from . import entropy, entropy0, experimental_valueFunction, log_pop_ent, most_popular, value_function
+from . import entropy, entropy0, experimental_valueFunction, log_pop_ent, most_popular, base
 import matplotlib.pyplot as plt
 import scipy.stats
 import os

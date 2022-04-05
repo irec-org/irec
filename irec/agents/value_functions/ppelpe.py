@@ -1,6 +1,6 @@
 import numpy as np
 from tqdm import tqdm
-from . import entropy, experimental_valueFunction, log_pop_ent, most_popular, pop_plus_ent, value_function
+from . import entropy, experimental_valueFunction, log_pop_ent, most_popular, pop_plus_ent, base
 import matplotlib.pyplot as plt
 import scipy.stats
 import os
@@ -60,5 +60,4 @@ class PPELPE(ExperimentalValueFunction):
         # num_total_users = len(uids)
         # for idx_uid in tqdm(range(num_total_users)):
         #     uid = uids[idx_uid]
-        #     self.results[uid].extend(top_iids)
-        # self.save_results()
+ 

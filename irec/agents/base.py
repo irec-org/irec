@@ -1,5 +1,5 @@
 from .action_selection_policies.base import ActionSelectionPolicy
-from .value_functions.value_function import ValueFunction
+from .value_functions.base import ValueFunction
 from .action_collection import ActionCollection
 from irec.agents.action import Action
 from typing import Dict, Any

@@ -9,7 +9,7 @@ import scipy.sparse
 from collections import defaultdict
 import pickle
 import json
-from .value_function import ValueFunction
+from .base import ValueFunction
 
 
 class ExperimentalValueFunction(ValueFunction):
