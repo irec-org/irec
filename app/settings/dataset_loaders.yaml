@@ -325,7 +325,7 @@
       test_consumes: 5  
     splitting:
       strategy: temporal
-      tInforain_size: 0.8
+      train_size: 0.8
 'Yahoo Music 5k Validation':
   DefaultValidationDatasetLoader:
     dataset_path: ./data/datasets/Yahoo Music 5k/
