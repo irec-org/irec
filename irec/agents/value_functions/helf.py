@@ -4,9 +4,10 @@ from . import entropy, experimental_valueFunction, log_pop_ent, most_popular, va
 import matplotlib.pyplot as plt
 import scipy.stats
 import os
+from .experimental_valueFunction import ExperimentalValueFunction
 
 
-class HELF(experimental_valueFunction):
+class HELF(ExperimentalValueFunction):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

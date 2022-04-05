@@ -7,7 +7,7 @@ import scipy.stats
 from collections import defaultdict
 from sklearn.cluster import KMeans
 import itertools
-import mf
+from irec.mf.SVD import SVD
 
 from cachetools import cached
 from cachetools.keys import hashkey
@@ -141,7 +141,7 @@ class CB(ExperimentalValueFunction):
 
         # self.train_consumption_matrix
 
-        mf_model = mf.SVD(num_lat=self.num_lat)
+        mf_model = SVD(num_lat=self.num_lat)
         mf_model.fit(self.train_consumption_matrix)
         kmeans = KMeans(self.num_clusters).fit(mf_model.users_weights)
         self.num_total_items = self.train_dataset.num_total_items

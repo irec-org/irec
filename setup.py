@@ -19,6 +19,8 @@ setup(
         "traitlets",
         "behave",
         "behave_pandas",
+        "cachetools",
+        "tensorflow",
         ],
     include_package_data=True,
 )

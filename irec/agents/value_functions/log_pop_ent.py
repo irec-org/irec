@@ -1,12 +1,13 @@
 import numpy as np
 from tqdm import tqdm
-from . import entropy, experimental_valueFunction, log_pop_ent, most_popular
+from . import entropy, log_pop_ent, most_popular
 import matplotlib.pyplot as plt
 import scipy.stats
 import os
+from .experimental_valueFunction import ExperimentalValueFunction
 
 
-class log_pop_ent(experimental_valueFunction.ExperimentalValueFunction):
+class LogPopEnt(ExperimentalValueFunction):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

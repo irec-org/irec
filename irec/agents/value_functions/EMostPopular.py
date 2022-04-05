@@ -5,9 +5,10 @@ import matplotlib.pyplot as plt
 import scipy.stats
 import os
 import random
+from .experimental_valueFunction import ExperimentalValueFunction
 
 
-class EMostPopular(experimental_valueFunction):
+class EMostPopular(ExperimentalValueFunction):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

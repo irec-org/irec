@@ -4,9 +4,10 @@ from . import entropy, experimental_valueFunction, log_pop_ent, most_popular, po
 import matplotlib.pyplot as plt
 import scipy.stats
 import os
+from .experimental_valueFunction import ExperimentalValueFunction
 
 
-class PPELPE(experimental_valueFunction):
+class PPELPE(ExperimentalValueFunction):
     @staticmethod
     def get_items_ppelpe(items_popularity, items_entropy, do_sum=True):
         items_popplusent = pop_plus_ent.get_items_popplusent(

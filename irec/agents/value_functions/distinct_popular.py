@@ -1,14 +1,15 @@
 import numpy as np
 from tqdm import tqdm
-from . import entropy, entropy0, experimental_valueFunction, log_pop_ent, most_popular, value_function
+from . import entropy, entropy0, log_pop_ent, most_popular, value_function
 import matplotlib.pyplot as plt
 import scipy.stats
 import os
 import random
 import metrics
+from .experimental_valueFunction import ExperimentalValueFunction
 
 
-class DistinctPopular(experimental_valueFunction):
+class DistinctPopular(ExperimentalValueFunction):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

@@ -2,6 +2,7 @@ import irec.agents
 from irec.environment.registry import LoaderRegistry
 from irec.agents.registry import AgentRegistry
 from irec.agents.registry import ASPRegistry
+from irec.agents.registry import VFRegistry
 
 class Factory:
     def __init__(self) -> None:
@@ -39,33 +40,7 @@ class ValueFunctionFactory(Factory):
     def create(self, value_function_settings):
         value_function_name = list(value_function_settings.keys())[0]
         value_function_parameters = list(value_function_settings.values())[0]
-        value_function = None
-        if value_function_name in [
-            "OurMethodRandom",
-            "OurMethodRandPopularity",
-            "OurMethodEntropy",
-            "OurMethodPopularity",
-            "OurMethodOne",
-            "OurMethodZero",
-        ]:
-            exec("import irec.agents.value_functions.WSPBInit")
-            value_function = eval(
-                "irec.agents.value_functions.WSPBInit.{}".format(value_function_name)
-            )(**value_function_parameters)
-        if value_function_name in [
-            "ICTRTS",
-        ]:
-            exec("import irec.agents.value_functions.ICTR")
-            value_function = eval(
-                "irec.agents.value_functions.ICTR.{}".format(value_function_name)
-            )(**value_function_parameters)
-        else:
-            exec("import irec.agents.value_functions.{}".format(value_function_name))
-            value_function = eval(
-                "irec.agents.value_functions.{}.{}".format(
-                    value_function_name, value_function_name
-                )
-            )(**value_function_parameters)
+        value_function = VFRegistry.get(value_function_name)(**value_function_parameters)
         return value_function
 
 
