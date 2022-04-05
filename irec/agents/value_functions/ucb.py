@@ -101,4 +101,4 @@ class UCB(ExperimentalValueFunction):
         self.items_count[item] += 1
         if self.recent_predict:
             self.t += 1
-            self.recent_predict = Fals
+            self.recent_predict = False
