@@ -50,18 +50,6 @@ class CB(ExperimentalValueFunction):
         self.num_lat = num_lat
         self.num_clusters = num_clusters
 
-        # self.cache_dir = cache_dir
-
-        # self.Gamma = cached(self.Gamma,)
-
-    # def find_object(db_handle, query):
-    # print("processing {0}".format(query))
-    # return query
-    # memory = Memory(self.cache_dir, verbose=0)
-    # self.Gamma =  memory.cache(self.Gamma, ignore=['self'])
-    # # self.Rn =  memory.cache(self.Rn, ignore=['self'])
-    # self.Sigma =  memory.cache(self.Sigma, ignore=['self'])
-    # self.alpha =  memory.cache(self.alpha, ignore=['self'])
     @cached(cache={}, key=lambda self, g, h, v: hashkey(g, h, v))
     def Gamma(self, g, h, v):
 
@@ -87,14 +75,9 @@ class CB(ExperimentalValueFunction):
         return [self.Gamma(g, h, v) for v in user_candidate_items]
 
     def Rn(self, uid, g, h):
-        # items = [
-        # vi
-        # for vi in range(self.num_total_items)
-        # if self.groups_mean[g, vi] != self.groups_mean[h, vi]
-        # ]
+  
         items = np.arange(self.num_total_items)
         items = items[self.groups_mean[g, items] != self.groups_mean[h, items]]
-        # self.[]
         alphas = np.array([self.alpha(vi, g, h) for vi in items])
         with np.errstate(invalid="ignore"):
             l = alphas * (
@@ -107,16 +90,7 @@ class CB(ExperimentalValueFunction):
                     - self.groups_mean[h, items].flatten()
                 )
             )
-        # print(np.sum(l))
-        # l = [
-        # self.alpha(vi, g, h)
-        # * (
-        # (self.consumption_matrix[uid, vi] - self.groups_mean[h, vi])
-        # / (self.groups_mean[g, vi] - self.groups_mean[h, vi])
-        # )
-        # for vi in range(self.num_total_items)
-        # if self.groups_mean[g, vi] != self.groups_mean[h, vi]
-        # ]
+      
         return np.sum(l)
 
     def I(self, uid, g):
@@ -139,7 +113,6 @@ class CB(ExperimentalValueFunction):
             (self.train_dataset.num_total_users, self.train_dataset.num_total_items),
         )
 
-        # self.train_consumption_matrix
 
         mf_model = SVD(num_lat=self.num_lat)
         mf_model.fit(self.train_consumption_matrix)
@@ -158,40 +131,16 @@ class CB(ExperimentalValueFunction):
             ratings = self.train_consumption_matrix[uids]
             self.groups_mean[group] = ratings.mean(axis=0)
             num = np.array((ratings > 0).sum(axis=0)).flatten()
-            # print(num.shape)
             try:
                 self.groups_std[group] = _stds(ratings, axis=0)
             except:
                 self.groups_std[group] = np.zeros(self.num_total_items)
             self.groups_std[group] += 0.5 * np.sqrt(np.log(1 / 0.2) / (num + 0.01))
-            # print(group, self.groups_std[group])
-        # self.groups_std[self.groups_std] +=
 
         self.consumption_matrix = self.train_consumption_matrix.todok()
         self.exploration_phase = defaultdict(lambda: True)
         self.new_user = defaultdict(lambda: True)
         self.users_group = {}
-
-        # self.Gamma_cache = dict()
-        # for g in range(self.num_clusters):
-        # for h in range(self.num_clusters):
-        # for v in range(self.num_total_items):
-        # self.Gamma_cache[(g,h,v)] = self.Gamma(g,h,v)
-
-        # self.Rn_cache = dict()
-        # for g in range(self.num_clusters):
-        # for h in range(self.num_clusters):
-        # for u in range(self.num_total_users):
-        # self.Rn_cache[(u,g,h)] = self.Rn(u,g,h)
-
-        # print(self.groups)
-
-        # for uid in range(self.train_dataset.data.shape[0]):
-        # uid = int(self.train_dataset.data[uid, 0])
-        # item = int(self.train_dataset.data[uid, 1])
-        # reward = self.train_dataset.data[uid, 2]
-        # # self.update(uid,item,reward,None)
-        # self.update(None, (uid, item), reward, None)
 
     def action_estimates(self, candidate_actions):
         uid = candidate_actions[0]
@@ -200,11 +149,8 @@ class CB(ExperimentalValueFunction):
             g = np.random.randint(self.num_clusters)
             return self.explore(g, candidate_items), None
         else:
-            # print("Not new user")
             if self.exploration_phase[uid]:
-                # [g for g in self.groups if self.Rn(uid,g,)]
                 candidates_groups = []
-                # print("Not new user c1")
                 for g in self.groups:
                     ngroups = set(self.groups) - {g}
                     hs_vals = []
@@ -215,7 +161,6 @@ class CB(ExperimentalValueFunction):
                     fval = np.abs(min_h - 1)
                     if fval <= self.C:
                         candidates_groups.append(g)
-                # print("Not new user c2")
                 if len(candidates_groups) != 0:
                     g_hat = np.argmax([self.I(uid, g) for g in self.groups])
                     result_explore = self.explore(g_hat, candidate_items)
@@ -241,11 +186,8 @@ class CB(ExperimentalValueFunction):
 
                 return [self.groups_mean[user_g][i] for i in candidate_items], None
 
-        # return items_score, None
-
     def update(self, observation, action, reward, info):
         uid = action[0]
         item = action[1]
         self.consumption_matrix[uid, item] = reward
         self.new_user[uid] = False
-        # self.items_count[item] += 1

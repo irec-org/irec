@@ -44,18 +44,6 @@ class LinEGreedy(MFValueFunction):
 
         mean = np.dot(np.linalg.inv(A), b)
         items_score = mean @ self.items_weights[candidate_items].T
-
-        # rand = np.random.rand(min(num_req_items, len(candidate_items)))
-        # rand = self.epsilon > rand
-
-        # cnz = np.count_nonzero(rand)
-        # if cnz == min(num_req_items, len(candidate_items)):
-        # items_score = np.random.rand(len(candidate_items))
-        # else:
-        # items_score = mean @ self.items_weights[candidate_items].T
-        # randind = random.sample(list(range(len(candidate_items))),
-        # k=np.count_nonzero(rand))
-        # items_score[randind] = np.inf
         return items_score, None
 
     def update(self, observation, action, reward, info):

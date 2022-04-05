@@ -84,7 +84,6 @@ class PTS(MFValueFunction):
             uid = int(self.train_dataset.data[i, 0])
             item = int(self.train_dataset.data[i, 1])
             reward = self.train_dataset.data[i, 2]
-            # self.update(uid,item,reward,None)
             self.users_consumed_items[uid].append(item)
             self.users_consumed_items_rewards[uid].append(reward)
             self.items_consumed_users[item].append(uid)
@@ -99,15 +98,6 @@ class PTS(MFValueFunction):
             self.particles_us[i] = mf_model.users_weights
             self.particles_vs[i] = mf_model.items_weights
 
-        # for uid in self.users_consumed_items.keys():
-        #     item = self.users_consumed_items[uid].pop()
-        #     reward = self.users_consumed_items_rewards[uid].pop()
-        #     self.update(uid,item,reward,None)
-
-        # for item in self.items_consumed_users.keys():
-        #     uid = self.items_consumed_users[item].pop()
-        #     reward = self.items_consumed_users_rewards[item].pop()
-        #     self.update(uid,item,reward,None)
 
     def action_estimates(self, candidate_actions):
         """action_estimates.

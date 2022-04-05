@@ -100,11 +100,9 @@ class basic_model(object):
     def create_model_without_distributed(
         cls, config, variable_scope="target", trainable=True, graph_name="DEFAULT"
     ):
-        # if not graph_name in cls.GRAPHS:
         cls.GRAPHS[graph_name] = tf.Graph()
         with cls.GRAPHS[graph_name].as_default():
             model = cls(config, variable_scope=variable_scope, trainable=trainable)
-            # if not graph_name in cls.SESS:
             cls.SESS[graph_name] = tf.compat.v1.Session(
                 config=tf.compat.v1.ConfigProto(
                     gpu_options=tf.compat.v1.GPUOptions(allow_growth=True)
@@ -270,7 +268,6 @@ def embedding(
             "lookup_table",
             dtype=tf.float32,
             shape=[vocab_size, num_units],
-            # initializer=tf.contrib.layers.xavier_initializer(),
             regularizer=tf.contrib.layers.l2_regularizer(l2_reg),
         )
         if zero_pad:
@@ -322,9 +319,6 @@ def multihead_attention(
             num_units = queries.get_shape().as_list[-1]
 
         # Linear projections
-        # Q = tf.layers.dense(queries, num_units, activation=tf.nn.relu) # (N, T_q, C)
-        # K = tf.layers.dense(keys, num_units, activation=tf.nn.relu) # (N, T_k, C)
-        # V = tf.layers.dense(keys, num_units, activation=tf.nn.relu) # (N, T_k, C)
         Q = tf.compat.v1.layers.dense(
             queries, num_units, activation=None
         )  # (N, T_q, C)
@@ -737,7 +731,6 @@ class NICF(ExperimentalValueFunction):
         self.train_dataset.data[:, 1] += 1
         self.train_dataset.data = self.train_dataset.data.astype(int)
         self.train_dataset.update_from_data()
-        # self.train_consumption_matrix = scipy.sparse.csr_matrix((self.train_dataset.data[:,2],(self.train_dataset.data[:,0],self.train_dataset.data[:,1])),(self.train_dataset.num_total_users,self.train_dataset.num_total_items))
         self.tau = 0
 
         args = Namespace(
@@ -790,9 +783,6 @@ class NICF(ExperimentalValueFunction):
 
         policy = self.fa["model"].predict(self.fa["sess"], data)[0]
         items_score = policy[1:][candidate_items]
-        # for item in candidate_items:
-        # policy[item] = -np.inf
-        # items_score=np.random.rand(len(candidate_items))
         return items_score, None
 
     def update(self, observation, action, reward, info):

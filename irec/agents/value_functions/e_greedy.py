@@ -62,10 +62,7 @@ class EGreedy(ExperimentalValueFunction):
         """
         uid = candidate_actions[0]
         candidate_items = candidate_actions[1]
-        # if self.epsilon < np.random.rand():
         items_score = self.items_mean_values[candidate_items]
-        # else:
-        # items_score = np.random.rand(len(candidate_items))
         return items_score, None
 
     def update(self, observation, action, reward, info):

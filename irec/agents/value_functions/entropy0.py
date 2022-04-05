@@ -25,8 +25,6 @@ class Entropy0(ExperimentalValueFunction):
     @staticmethod
     def get_items_entropy(consumption_matrix):
         lowest_value = np.min(consumption_matrix)
-        # mask = np.ones(consumption_matrix.shape[0], dtype=bool)
-        # mask[test_uids] = 0
         items_entropy = np.zeros(consumption_matrix.shape[1])
         is_spmatrix = isinstance(consumption_matrix, scipy.sparse.spmatrix)
         if is_spmatrix:
@@ -58,10 +56,3 @@ class Entropy0(ExperimentalValueFunction):
         candidate_items = candidate_actions[1]
         items_score = self.items_entropy[candidate_items]
         return items_score, None
-        # fig, ax = plt.subplots()
-        # ax.hist(items_entropy,color='k')
-        # ax.set_xlabel("Entropy0")
-        # ax.set_ylabel("#Items")
-        # fig.savefig(os.path.join(self.DIRS['img'],"entropy0_"+self.get_id()+".png"))
-
-        # top_iids = list(reversed(np.argsort(items_entropy)))

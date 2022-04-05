@@ -2,7 +2,6 @@ from .icf import ICF
 from .linear_icf import LinearICF
 import numpy as np
 from tqdm import tqdm
-#import util
 from threadpoolctl import threadpool_limits
 import scipy.optimize
 import ctypes
@@ -75,13 +74,8 @@ class GLM_UCB(LinearICF):
         candidate_items = candidate_actions[1]
         A = self.As[uid]
         if len(self.users_rec_items_means[uid]) == 0:
-            # self.p_vals[uid] = np.zeros(self.num_latent_factors)
-            # self.p_vals[uid] = self.bs[uid]+1
-            # print(self.bs[uid].dtype)
             self.p_vals[uid] = self.bs[uid]
-            # self.p_vals[uid] = np.array(self.bs[uid],dtype=float)
         else:
-            # self.p_vals[uid] = np.array(self.p_vals[uid],dtype=float)
             self.p_vals[uid] = scipy.optimize.root(
                 self.error_user_weight_function, self.p_vals[uid],
                 (self.users_rec_rewards[uid],

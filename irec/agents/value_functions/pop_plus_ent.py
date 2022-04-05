@@ -44,34 +44,3 @@ class PopPlusEnt(ExperimentalValueFunction):
         candidate_items = candidate_actions[1]
         items_score = self.items_popplusent[candidate_items]
         return items_score, None
-
-        # correlation = scipy.stats.pearsonr(items_entropy,items_popularity)[0]
-
-        # top_iids = list(reversed(np.argsort(items_popplusent)))[:self.get_iterations()]
-        # fig, ax = plt.subplots()
-        # ax.hist(items_entropy,color='k')
-        # ax.set_xlabel("$Pop + Ent$")
-        # ax.set_ylabel("#Items")
-        # fig.savefig(os.path.join(self.DIRS['img'],"popplusent_"+self.get_id()+".png"))
-
-        # fig, ax = plt.subplots()
-        # ax.scatter(items_entropy,items_popularity,marker="D",color='darkblue')
-        # ax.set_ylabel("Popularity")
-        # ax.set_xlabel("Entropy")
-        # ax.text(0.3, 0.9 , f'Correlation coefficient: {correlation:.2f}', color='k',
-        #         ha='center', va='center',
-        #         bbox=dict(facecolor='none', edgecolor='k', pad=10.0),
-        #         transform = ax.transAxes)
-        # for start, end, color in [(0,10,'green'),(10,20,'red'),(20,30,'darkred'),(30,40,'yellow'),(40,50,'orange')]:
-        #     print(top_iids[start:end])
-        #     ax.scatter(items_entropy[top_iids[start:end]],items_popularity[top_iids[start:end]],marker='D',color=color)
-        #     print("[%d,%d] sum(popularity)=%.2f sum(entropy)=%.2f"%(start,end,
-        #                                                          np.sum(items_popularity[top_iids[start:end]]/np.max(items_popularity)),
-        #                                                          np.sum(items_entropy[top_iids[start:end]]/np.max(items_entropy))))
-        # fig.savefig(os.path.join(self.DIRS['img'],"corr_popent_"+self.get_id()+".png"))
-
-        # num_total_users = len(uids)
-        # for idx_uid in tqdm(range(num_total_users)):
-        #     uid = uids[idx_uid]
-        #     self.results[uid].extend(top_iids)
-        # self.save_results()

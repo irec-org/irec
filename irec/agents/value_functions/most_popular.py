@@ -45,8 +45,6 @@ class MostPopular(ExperimentalValueFunction):
     def action_estimates(self, candidate_actions):
         uid = candidate_actions[0]
         candidate_items = candidate_actions[1]
-        # print("items pop:", len(self.items_popularity), self.items_popularity, "\n")
-        # print("candidate items:", len(candidate_items), candidate_items)
         items_score = self.items_popularity[candidate_items]
         return items_score, None
 

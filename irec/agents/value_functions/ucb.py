@@ -59,7 +59,6 @@ class UCB(ExperimentalValueFunction):
             uid = int(self.train_dataset.data[i, 0])
             item = int(self.train_dataset.data[i, 1])
             reward = self.train_dataset.data[i, 2]
-            # self.update(uid,item,reward,None)
             self.update(None, (uid, item), reward, None)
 
     def action_estimates(self, candidate_actions):
@@ -72,7 +71,6 @@ class UCB(ExperimentalValueFunction):
             numpy.ndarray:
         """
 
-        # uid = candidate_actions[0]
         candidate_items = candidate_actions[1]
         with np.errstate(divide="ignore"):
             items_uncertainty = self.c * np.sqrt(
@@ -91,9 +89,7 @@ class UCB(ExperimentalValueFunction):
             reward (float): reward
             info:
         """
-        # uid = action[0]
         item = action[1]
-        # additional_data = info
         item = int(item)
         self.items_mean_values[item] = (
             self.items_mean_values[item] * self.items_count[item] + reward

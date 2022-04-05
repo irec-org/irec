@@ -74,7 +74,6 @@ class COFIBA(MFValueFunction):
                 users_graph[neighbor, uid] = 0
         n_components, labels = scipy.sparse.csgraph.connected_components(
             users_graph)
-        # self.users_clusterings[item_cluster] = labels
         return users_graph, labels
 
     def update_item_cluster(self, uid, item):
@@ -90,8 +89,6 @@ class COFIBA(MFValueFunction):
             np.nonzero(self.items_clustering == item_cluster)[0])
 
         neighbors = np.nonzero(self.items_graph[item])[1]
-        # users_graph = self.users_graphs[item_cluster].copy()
-        # neighbors = np.nonzero(users_graph[uid])[1]
 
         generated_user_neighbors = []
         for neighbor in neighbors:

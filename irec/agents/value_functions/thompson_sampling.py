@@ -56,7 +56,6 @@ class ThompsonSampling(ExperimentalValueFunction):
             uid = int(self.train_dataset.data[i, 0])
             item = int(self.train_dataset.data[i, 1])
             reward = self.train_dataset.data[i, 2]
-            # self.update(uid, item, reward, None)
             self.update(None, (uid, item), reward, None)
 
     def action_estimates(self, candidate_actions):

@@ -35,8 +35,6 @@ class HELF(ExperimentalValueFunction):
             (self.train_dataset.num_total_users,
              self.train_dataset.num_total_items))
         self.num_total_items = self.train_dataset.num_total_items
-        # mask = np.ones(self.train_consumption_matrix.shape[0], dtype=bool)
-        # mask[uids] = 0
         num_train_users = len(self.train_dataset.uids)
         items_entropy = entropy.get_items_entropy(
             self.train_consumption_matrix)
@@ -51,19 +49,3 @@ class HELF(ExperimentalValueFunction):
         candidate_items = candidate_actions[1]
         items_score = self.items_logpopent[candidate_items]
         return items_score, None
-        # top_items = list(reversed(np.argsort(items_score)))[:self.interaction_size]
-
-        # top_iids = list(reversed(np.argsort(items_logpopent)))[:self.get_iterations()]
-        # num_total_users = len(uids)
-
-        # fig, ax = plt.subplots()
-        # ax.scatter(items_entropy,items_popularity,marker="D",color='darkblue')
-        # ax.set_ylabel("Popularity")
-        # ax.set_xlabel("Entropy")
-        # for start, end, color in [(0,10,'green'),(10,20,'red'),(20,30,'darkred'),(30,40,'yellow'),(40,50,'orange')]:
-        #     ax.scatter(items_entropy[top_iids[start:end]],items_popularity[top_iids[start:end]],marker='D',color=color)
-        # fig.savefig(os.path.join(self.DIRS['img'],"corr_popent_"+self.get_id()+".png"))
-
-        # for idx_uid in tqdm(range(num_total_users)):
-        #     uid = uids[idx_uid]
-       
