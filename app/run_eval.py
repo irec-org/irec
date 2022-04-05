@@ -14,7 +14,7 @@ import numpy as np
 import yaml
 
 import irec.evaluation_policies
-import irec.mf
+import irec.agents.value_functions.mf
 import irec.agents.value_functions
 from app import constants
 from irec.environment.dataset import Dataset

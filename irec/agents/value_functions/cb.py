@@ -7,7 +7,7 @@ import scipy.stats
 from collections import defaultdict
 from sklearn.cluster import KMeans
 import itertools
-from irec.mf.SVD import SVD
+from irec.agents.value_functions.mf.SVD import SVD
 
 from cachetools import cached
 from cachetools.keys import hashkey

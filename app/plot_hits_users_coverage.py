@@ -20,7 +20,7 @@
 # from irec.environment.dataset import Dataset
 # from irec.utils.PersistentDataManager import PersistentDataManager
 # from irec.utils.InteractorCache import InteractorCache
-# import metrics
+# from irec import metrics
 # import matplotlib.pyplot as plt
 # from irec.utils.DirectoryDependent import DirectoryDependent
 # from cycler import cycler
