@@ -3,11 +3,11 @@ from typing import List
 
 def _import_class(root:str,
               module_name:str,
-              import_name:str):
-    exec(
-        f"from {root}.{module_name} import {import_name}"
-    )
-    return eval(import_name)
+              class_name:str):
+
+    exec(f"from {root}.{module_name} import {class_name}")
+
+    return eval(class_name)
 
 class AgentRegistry:
     
@@ -74,7 +74,7 @@ class VFRegistry:
         return _import_class(
             root="irec.agents.value_functions",
             module_name=cls._vf[name],
-            import_name=name
+            class_name=name
         )
 
 
