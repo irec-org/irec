@@ -78,8 +78,6 @@ class AgentFactory(Factory):
         ]:
             for _agent in agent_parameters["agents"]:
                 sub_agent_settings = list(_agent.values())[0]
-                # sub_agent_class_name = list(sub_agent_settings.keys())[0]
-                # sub_agent_parameters = list(sub_agent_settings.values())[0]
                 new_agent = self.create(list(_agent.keys())[0], sub_agent_settings)
                 agents.append(new_agent)
             agent_class_parameters["agents"] = agents
@@ -94,8 +92,8 @@ class AgentFactory(Factory):
 
 
 class DatasetLoaderFactory(Factory):
-    def create(self, dataset_name, dataset_settings):
+    def create(self, dataset_settings):
         dataset_class_name = list(dataset_settings.keys())[0]
         dataset_parameters = list(dataset_settings.values())[0]
-        dataset_class = LoaderRegistry.get(dataset_class_name)(**dataset_settings[dataset_class_name])
+        dataset_class = LoaderRegistry.get(dataset_class_name)(**dataset_parameters)
         return dataset_class

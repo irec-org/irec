@@ -723,9 +723,7 @@ def generate_base(dataset_name, settings):
         from irec.utils.Factory import DatasetLoaderFactory
 
         dataset_loader_factory = DatasetLoaderFactory()
-        dataset_loader = dataset_loader_factory.create(
-            dataset_name, dataset_loader_settings
-        )
+        dataset_loader = dataset_loader_factory.create(dataset_loader_settings)
         train_dataset, test_dataset = dataset_loader.process()
         log_custom_artifact("./tmp/train_dataset.pickle", train_dataset)
         log_custom_artifact("./tmp/test_dataset.pickle", test_dataset)

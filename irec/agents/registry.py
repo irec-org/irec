@@ -25,7 +25,7 @@ class AgentRegistry:
 
     @classmethod
     def get(cls: AgentRegistry, name: str):
-         return _import_class(
+        return _import_class(
             root="irec.agents",
             module_name=cls._agent[name],
             class_name=name
@@ -91,13 +91,12 @@ class ASPRegistry:
         "ASPReranker": "reranker",
     }
 
-
     @classmethod
-    def all(cls: AgentRegistry) -> List[str]:
+    def all(cls: ASPRegistry) -> List[str]:
         return list(cls._asp.keys())
 
     @classmethod
-    def get(cls: AgentRegistry, name: str):
+    def get(cls: ASPRegistry, name: str):
         return _import_class(
             root="irec.agents.action_selection_policies",
             module_name=cls._asp[name],
