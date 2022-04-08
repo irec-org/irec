@@ -58,30 +58,10 @@
 
 #Default Loaders
 
-# 'MovieLens 100k':
-#   DefaultLoader:
-#     dataset_path: ./data/datasets/MovieLens 100k/
-#     random_seed: 0
-#     prefiltering:
-#       filter_users:
-#         min_consumption: 50
-#         num_users: 100
-#       filter_items: 
-#         min_ratings: 1
-#         num_items: 100
-#       test_consumes: 5
-#     splitting:
-#       strategy: temporal
-#       train_size: 0.8
-
-
 'MovieLens 100k':
-  DefaultLoader:
-    dataset:
-      path: ./data/datasets/MovieLens 100k/ratings.csv
-      random_seed: 0
-      file_delimiter: ","
-      skip_head: true
+  DefaultDatasetLoader:
+    dataset_path: ./data/datasets/MovieLens 100k/
+    random_seed: 0
     prefiltering: #optional filters
       filter_users:
         min_consumption: 50
@@ -89,23 +69,26 @@
       filter_items: 
         min_ratings: 1
         num_items: 100
-    splitting:
-      strategy: random
-      train_size: 0.8
       test_consumes: 5
+    splitting:
+      strategy: temporal
+      train_size: 0.8
 
-
-'MovieLens 100k TrainTest':
-  TrainTestLoader:
-    dataset:
-      train:
-        path: ./data/datasets/MovieLens 100k TrainTest/train.csv
-        file_delimiter: "::"
-        skip_head: false
-      test:
-        path: ./data/datasets/MovieLens 100k TrainTest/test.csv
-        file_delimiter: "::"
-        skip_head: false
+'MovieLens 100k Validation':
+  DefaultValidationDatasetLoader:
+    dataset_path: ./data/datasets/MovieLens 100k/
+    random_seed: 0
+    prefiltering:
+      filter_users:
+        min_consumption: 50
+        num_users: 100
+      filter_items: 
+        min_ratings: 1
+        num_items: 100
+      test_consumes: 5
+    splitting:
+      strategy: temporal
+      train_size: 0.8
 
 "MovieLens 1M":
   DefaultDatasetLoader:  

@@ -1,4 +1,4 @@
-from irec.connector import utils
+from irec.app import utils
 import yaml
 from os.path import dirname, realpath
 import argparse

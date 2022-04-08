@@ -5,6 +5,7 @@ import os
 import sys
 
 from mlflow.tracking.client import MlflowClient
+from traitlets.traitlets import default
 
 import mlflow
 from app import constants

@@ -5,7 +5,7 @@ import sys
 
 sys.path.append(dirname(dirname(realpath(__file__))))
 import argparse
-from irec.connector.utils import download_data
+from irec.app.utils import download_data
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset_name', nargs="*", required=True, type=str, help='Name of dataset')

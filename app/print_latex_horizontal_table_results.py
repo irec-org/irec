@@ -2,7 +2,7 @@
 from os.path import dirname, realpath
 import argparse
 import yaml
-from irec.connector import utils
+from irec.app import utils
 
 settings = utils.load_settings(dirname(realpath(__file__)))
 

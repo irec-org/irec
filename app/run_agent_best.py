@@ -6,7 +6,7 @@ import os
 import sys
 import argparse
 
-from irec.connector import utils
+from irec.app import utils
 import argparse
 
 settings = utils.load_settings(dirname(realpath(__file__)))
