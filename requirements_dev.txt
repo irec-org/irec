@@ -5,3 +5,5 @@ flake8>=3.8
 tox>=3.24
 types-PyYAML
 types-cachetools
+behave_pandas
+behave

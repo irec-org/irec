@@ -11,7 +11,7 @@ from mlflow.tracking import MlflowClient
 import json
 from collections import defaultdict
 from pathlib import Path
-from irec.utils.dataset import TrainTestDataset
+from irec.environment.dataset import Dataset
 import collections
 from app import constants
 import matplotlib.ticker as mtick
@@ -217,7 +217,7 @@ def load_settings(workdir):
     # with open(
     # workdir + sep + "settings" + sep +
     # "datasets_preprocessors_parameters.yaml") as f:
-    # d['datasets_preprocessors_parameters'] = yaml.load(f, Loader=loader)
+    # d['datasets_preprocessors_parameters'] = yaml.loader(f, Loader=loader)
     # d['datasets_preprocessors_parameters'] = {
     # k: {
     # **setting,
@@ -270,7 +270,8 @@ def get_experiment_run_id(dm, evaluation_policy, itr_id):
 
 def run_interactor(
     agent,
-    traintest_dataset: TrainTestDataset,
+    train_dataset: Dataset, 
+    test_dataset: Dataset,
     evaluation_policy: EvaluationPolicy,
     settings,
     forced_run,
@@ -291,29 +292,17 @@ def run_interactor(
         log_custom_parameters(get_agent_run_parameters(settings))
 
         interactions, acts_info = evaluation_policy.evaluate(
-            agent, traintest_dataset.train, traintest_dataset.test
+            agent, train_dataset, test_dataset
         )
 
         fname = "./tmp/interactions.pickle"
         log_custom_artifact(fname, interactions)
         fname = "./tmp/acts_info.pickle"
         log_custom_artifact(fname, acts_info)
-        # create_path_to_file(fname)
-        # with open(fname,mode='wb') as f:
-        # pickle.dump(history_items_recommended,f)
-        # mlflow.log_artifact(f.name)
 
 
 def get_agent_id(agent_name, agent_parameters):
-    # agent_dict = class2dict(agent)
     return agent_name + "_" + json.dumps(agent_parameters, separators=(",", ":"))
-
-
-# def get_agent_id(agent, template_parameters):
-# agent_dict = class2dict(agent)
-# new_agent_settings = update_nested_dict(template_parameters, agent_dict)
-# return agent.name + '_' + json.dumps(new_agent_settings,
-# separators=(',', ':'))
 
 
 def get_agent_id_from_settings(agent, settings):
@@ -471,28 +460,20 @@ def load_dataset_experiment(settings):
     )
 
     client = MlflowClient()
-    artifact_path = client.download_artifacts(run.info.run_id, "dataset.pickle")
-    traintest_dataset = pickle.load(open(artifact_path, "rb"))
-    return traintest_dataset
+    train_artifact_path = client.download_artifacts(run.info.run_id, "train_dataset.pickle")
+    test_artifact_path = client.download_artifacts(run.info.run_id, "test_dataset.pickle")
+    train_dataset = pickle.load(open(train_artifact_path, "rb"))
+    test_dataset = pickle.load(open(test_artifact_path, "rb"))
+    return train_dataset, test_dataset
 
 
-def run_agent(traintest_dataset, settings, forced_run):
-
-    # dataset_loader_parameters = settings["dataset_loaders"][
-    # settings["defaults"]["dataset_loader"]
-    # ]
+def run_agent(train_dataset, test_dataset, settings, forced_run):
 
     evaluation_policy_name = settings["defaults"]["evaluation_policy"]
     evaluation_policy_parameters = settings["evaluation_policies"][
         evaluation_policy_name
     ]
 
-    # exec("import irec.value_functions.{}".format(value_function_name))
-    #         value_function = eval(
-    #             "irec.value_functions.{}.{}".format(
-    #                 value_function_name, value_function_name
-    #             )
-    #         )(**value_function_parameters)
     exec(
         f"from irec.evaluation_policies.{evaluation_policy_name} import {evaluation_policy_name}"
     )
@@ -504,7 +485,8 @@ def run_agent(traintest_dataset, settings, forced_run):
     agent = AgentFactory().create(settings["defaults"]["agent"], agent_parameters)
     run_interactor(
         agent=agent,
-        traintest_dataset=traintest_dataset,
+        train_dataset=train_dataset,
+        test_dataset=test_dataset,
         evaluation_policy=evaluation_policy,
         settings=settings,
         forced_run=forced_run,
@@ -737,9 +719,6 @@ def generate_base(dataset_name, settings):
                 dataset_loader_settings,
             )
         )
-        # client.log_param()
-        # for k,v in dataset_loader_settings.items():
-        # log_param(k,v)
 
         from irec.utils.Factory import DatasetLoaderFactory
 
@@ -747,10 +726,9 @@ def generate_base(dataset_name, settings):
         dataset_loader = dataset_loader_factory.create(
             dataset_name, dataset_loader_settings
         )
-        dataset = dataset_loader.load()
-
-        fname = "./tmp/dataset.pickle"
-        log_custom_artifact(fname, dataset)
+        train_dataset, test_dataset = dataset_loader.process()
+        log_custom_artifact("./tmp/train_dataset.pickle", train_dataset)
+        log_custom_artifact("./tmp/test_dataset.pickle", test_dataset)
 
 
 def download_data(dataset_names):
@@ -804,7 +782,7 @@ def run_agent_with_dataset_parameters(
     for dataset_loader_name in dataset_loaders:
         current_settings = settings
         current_settings["defaults"]["dataset_loader"] = dataset_loader_name
-        traintest_dataset = load_dataset_experiment(settings)
+        train_dataset, test_dataset = load_dataset_experiment(settings)
         for agent_name in agents:
             current_settings["defaults"]["agent"] = agent_name
             current_settings["agents"][agent_name] = dataset_agents_parameters[
@@ -813,7 +791,8 @@ def run_agent_with_dataset_parameters(
             if tasks>1:
                 f = executor.submit(
                     run_agent,
-                    traintest_dataset,
+                    train_dataset,
+                    test_dataset,
                     copy.deepcopy(current_settings),
                     forced_run,
                 )
@@ -821,7 +800,7 @@ def run_agent_with_dataset_parameters(
                 if len(futures) >= tasks:
                     completed, futures = wait(futures, return_when=FIRST_COMPLETED)
             else:
-                run_agent(traintest_dataset,copy.deepcopy(current_settings),forced_run)
+                run_agent(train_dataset, test_dataset,copy.deepcopy(current_settings),forced_run)
 
     for f in futures:
         f.result()
@@ -1273,22 +1252,22 @@ def evaluate_agent_with_dataset_parameters(
 ):
 
     from concurrent.futures import ProcessPoolExecutor, wait, FIRST_COMPLETED
-    from irec.utils.dataset import Dataset
 
     with ProcessPoolExecutor(max_workers=tasks) as executor:
         futures = set()
         for dataset_loader_name in dataset_loaders:
             settings["defaults"]["dataset_loader"] = dataset_loader_name
 
-            traintest_dataset = load_dataset_experiment(settings)
+            train_dataset, test_dataset = load_dataset_experiment(settings)
 
             data = np.vstack(
-                (traintest_dataset.train.data, traintest_dataset.test.data)
+                (train_dataset.data, test_dataset.data)
             )
 
             dataset = Dataset(data)
-            dataset.update_from_data()
+            dataset.set_parameters()
             dataset.update_num_total_users_items()
+            
             for agent_name in agents:
                 settings["defaults"]["agent"] = agent_name
                 settings["agents"][agent_name] = dataset_agents_parameters[
@@ -1347,7 +1326,7 @@ def eval_agent_search(
             data = np.vstack((traintest.train.data, traintest.test.data))
             dataset = copy.copy(traintest.train)
             dataset.data = data
-            dataset.update_from_data()
+            dataset.set_parameters()
             for agent_name in agents:
                 settings["defaults"]["agent"] = agent_name
                 for agent_og_parameters in agents_search_parameters[agent_name]:
