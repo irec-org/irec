@@ -1,6 +1,6 @@
-from . import DatasetLoader
-import irec.utils.dataset as dataset
+# from irec.environment.loader.full_data import DatasetLoader
 import irec.agents
+from irec.environment.registry import LoaderRegistry
 
 
 class Factory:
@@ -124,5 +124,5 @@ class DatasetLoaderFactory(Factory):
     def create(self, dataset_name, dataset_settings):
         dataset_class_name = list(dataset_settings.keys())[0]
         dataset_parameters = list(dataset_settings.values())[0]
-        dataset_class = eval("irec.utils.DatasetLoader." + dataset_class_name)
-        return dataset_class(**dataset_settings[dataset_class_name])
+        dataset_class = LoaderRegistry.get(dataset_class_name)(**dataset_settings[dataset_class_name])
+        return dataset_class
