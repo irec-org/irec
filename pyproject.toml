@@ -8,11 +8,11 @@ build-backend = "setuptools.build_meta"
 [tool.pytest.ini_options]
 addopts = "--cov=slapping"
 testpaths = [
-    "tests",
+    "tests/unit",
 ]
 
 [tool.mypy]
-mypy_path = "src"
+mypy_path = "irec"
 check_untyped_defs = true
 disallow_any_generics = true
 ignore_missing_imports = true
