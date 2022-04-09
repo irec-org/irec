@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import scipy.stats
 import os
 import random
-import metrics
+from irec import metrics
 
 
 class DistinctPopular(ExperimentalValueFunction):

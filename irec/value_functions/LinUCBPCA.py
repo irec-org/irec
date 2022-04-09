@@ -3,7 +3,7 @@ import numpy as np
 import scipy
 import scipy.sparse
 from collections import defaultdict
-from .MFValueFunction import MFValueFunction
+from irec.value_functions.MFValueFunction import MFValueFunction
 import sklearn.decomposition
 
 

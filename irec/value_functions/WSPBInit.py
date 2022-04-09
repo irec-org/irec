@@ -12,13 +12,12 @@ import sklearn
 import scipy.optimize
 import scipy
 import scipy.stats
-import mf
+from irec import mf
 from collections import defaultdict
-from .MFValueFunction import MFValueFunction
-import value_functions
-from value_functions.MostPopular import MostPopular
-from value_functions.Entropy import Entropy
-from value_functions.LogPopEnt import LogPopEnt
+from irec.mf.MFValueFunction import MFValueFunction
+from irec.value_functions.MostPopular import MostPopular
+from irec.value_functions.Entropy import Entropy
+from irec.value_functions.LogPopEnt import LogPopEnt
 from typing import Any
 
 

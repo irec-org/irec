@@ -4,12 +4,12 @@ import scipy.stats
 import scipy.spatial
 import scipy.optimize
 import scipy
-import mf
+from irec import mf
 from collections import defaultdict
 from .MFValueFunction import MFValueFunction
-from value_functions.Entropy import Entropy
-from value_functions.MostPopular import MostPopular
-from value_functions.LogPopEnt import LogPopEnt
+from irec.value_functions.Entropy import Entropy
+from irec.value_functions.MostPopular import MostPopular
+from irec.value_functions.LogPopEnt import LogPopEnt
 
 def _prediction_rule(A, b, items_weights, alpha):
     user_latent_factors = np.dot(np.linalg.inv(A), b)

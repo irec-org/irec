@@ -4,11 +4,11 @@ import scipy.stats
 from threadpoolctl import threadpool_limits
 import ctypes
 import collections
-import metrics
+from irec import metrics
 from tqdm import tqdm
 
 from irec.utils.utils import run_parallel
-from .MF import MF
+from irec.mf.MF import MF
 from numba import jit
 
 

@@ -3,9 +3,9 @@ import numpy as np
 
 # import util
 import scipy
-import mf
+from irec import mf
 from collections import defaultdict
-from .MFValueFunction import MFValueFunction
+from irec.value_functions.MFValueFunction import MFValueFunction
 
 
 class LinUCBvar(MFValueFunction):

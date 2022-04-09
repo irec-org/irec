@@ -1,8 +1,5 @@
 import numpy as np
-from tqdm import tqdm
 from .ExperimentalValueFunction import ExperimentalValueFunction
-import matplotlib.pyplot as plt
-import os
 import scipy.sparse
 
 
@@ -19,7 +16,7 @@ class Entropy(ExperimentalValueFunction):
 
     @staticmethod
     def values_entropy(values):
-        unique, counts = np.unique(values, return_counts=True)
+        _, counts = np.unique(values, return_counts=True)
         values_probability = counts / np.sum(counts)
         return Entropy.probabilities_entropy(values_probability)
 

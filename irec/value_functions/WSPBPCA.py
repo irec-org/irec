@@ -12,10 +12,12 @@ import os
 import sklearn
 import scipy.optimize
 import scipy
-import mf
+from irec import mf
 from collections import defaultdict
-from .MFValueFunction import MFValueFunction
-import value_functions
+from irec.value_functions.MFValueFunction import MFValueFunction
+from irec.value_functions.MostPopular import MostPopular
+from irec.value_functions.Entropy import Entropy
+from irec.value_functions.LogPopEnt import LogPopEnt
 
 
 class WSPBPCA(MFValueFunction):
@@ -42,13 +44,13 @@ class WSPBPCA(MFValueFunction):
         self.items_weights = items_weights
         self.num_latent_factors = self.num_lat
 
-        items_entropy = value_functions.Entropy.get_items_entropy(
+        items_entropy = Entropy.get_items_entropy(
             self.train_consumption_matrix
         )
-        items_popularity = value_functions.MostPopular.get_items_popularity(
+        items_popularity = MostPopular.get_items_popularity(
             self.train_consumption_matrix, normalize=False
         )
-        self.items_bias = value_functions.LogPopEnt.get_items_logpopent(
+        self.items_bias = LogPopEnt.get_items_logpopent(
             items_popularity, items_entropy
         )
         print(self.items_bias.min(), self.items_bias.max())

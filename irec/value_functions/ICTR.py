@@ -10,10 +10,10 @@ import scipy.sparse
 import scipy.stats
 from collections import defaultdict
 import random
-from .MFValueFunction import MFValueFunction
+from irec.value_functions.MFValueFunction import MFValueFunction
 from tqdm import tqdm
 from numba import njit, jit
-import mf
+from irec import mf
 from .MostPopular import *
 from typing import Any
 

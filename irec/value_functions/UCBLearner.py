@@ -1,6 +1,6 @@
 import numpy as np
 import scipy.spatial
-import mf
+from irec import mf
 from .MFValueFunction import MFValueFunction
 from .Entropy import Entropy
 from .MostPopular import MostPopular

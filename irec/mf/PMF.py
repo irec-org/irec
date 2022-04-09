@@ -5,11 +5,11 @@ import sys, os
 import random
 from threadpoolctl import threadpool_limits
 import ctypes
-import metrics
+from irec import metrics
 from tqdm import tqdm
 
 from irec.utils.utils import run_parallel
-from mf import MF
+from irec.mf.MF import MF
 
 
 class PMF(MF):

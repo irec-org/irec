@@ -3,10 +3,10 @@ import numpy as np
 from tqdm import tqdm
 import scipy.sparse
 from collections import defaultdict
-from .MFValueFunction import MFValueFunction
+from irec.value_functions.MFValueFunction import MFValueFunction
 from tqdm import tqdm
 from numba import njit
-import mf
+from irec import mf
 from .Entropy import Entropy
 from .MostPopular import MostPopular
 from .LogPopEnt import LogPopEnt

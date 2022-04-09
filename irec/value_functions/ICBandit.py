@@ -6,11 +6,11 @@ from threadpoolctl import threadpool_limits
 import scipy
 import scipy.stats
 import ctypes
-import mf
+from irec import mf
 from collections import defaultdict
-import value_functions
-from .MFValueFunction import MFValueFunction
-from .LinUCB import LinUCB
+import irec.value_functions
+from irec.value_functions.MFValueFunction import MFValueFunction
+from irec.value_functions.LinUCB import LinUCB
 
 
 def _prediction_rule(A, b, items_weights, alpha):
