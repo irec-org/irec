@@ -18,6 +18,7 @@ tabulate = "*"
 numpy = "*"
 mlflow = "*"
 pytest = "*"
+pytest-cov = "*"
 
 [dev-packages]
 

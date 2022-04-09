@@ -6,7 +6,7 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [tool.pytest.ini_options]
-addopts = "--cov=slapping"
+addopts = "--cov=tests/unit"
 testpaths = [
     "tests/unit",
 ]
