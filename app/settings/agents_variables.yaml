@@ -1,5 +1,4 @@
 ICTRTS:
-  validation_size: 0.1
   num_lat: linspace(1,10,1)
   num_particles: linspace(1,10,1)
 

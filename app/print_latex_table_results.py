@@ -1,11 +1,7 @@
 #!/usr/bin/python3
+from os.path import dirname, realpath
 import argparse
 import yaml
-import sys
-from os.path import dirname, realpath, sep, pardir
-# sys.path.append(dirname(realpath(__file__)) + sep + pardir + sep + "irec")
-# import irec
-# print(sys.path)
 from irec.connector import utils
 
 settings = utils.load_settings(dirname(realpath(__file__)))

@@ -14,7 +14,7 @@ args = parser.parse_args()
 
 # settings = utils.load_settings(dirname(realpath(__file__)))
 dataset_agents_parameters = yaml.load(open("./settings/dataset_agents.yaml"),Loader=yaml.SafeLoader)
-# settings = yaml.loader("./settings/",Loader=yaml.SafeLoader)
+# settings = yaml.load("./settings/",Loader=yaml.SafeLoader)
 settings = utils.load_settings(dirname(realpath(__file__)))
 
 parameters_agents_symbols = {

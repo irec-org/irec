@@ -29,9 +29,6 @@ class InteractionMetricEvaluator(MetricEvaluator):
             self.interactions_to_evaluate = list(range(self.num_interactions))
         self.iterations_to_evaluate = self.interactions_to_evaluate
 
-        # print(">>>>>>>>>>>", self.ground_truth_dataset.num_total_users)
-        # print(">>>>>>>>>>>", self.ground_truth_dataset.num_total_items)
-
         if isinstance(ground_truth_dataset, Dataset):
             self.ground_truth_consumption_matrix = scipy.sparse.csr_matrix(
                 (
