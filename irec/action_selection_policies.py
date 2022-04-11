@@ -9,7 +9,7 @@ from irec.value_functions.Entropy import Entropy
 import scipy.sparse
 from irec.value_functions.LogPopEnt import LogPopEnt
 import random
-import mf
+from irec import mf
 
 
 class ActionSelectionPolicy:

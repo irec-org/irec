@@ -1,4 +1,4 @@
-from .MF import MF
+from irec.mf.MF import MF
 import sklearn.decomposition
 
 

@@ -1,5 +1,5 @@
-from .ExperimentalValueFunction import ExperimentalValueFunction
-from .MFValueFunction import MFValueFunction
+from irec.value_function.ExperimentalValueFunction import ExperimentalValueFunction
+from irec.value_function.MFValueFunction import MFValueFunction
 
 
 class ICF(MFValueFunction):

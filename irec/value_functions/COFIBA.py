@@ -8,8 +8,8 @@ from collections import defaultdict
 import random
 import itertools
 from numba import jit, prange
-import mf
-from .MFValueFunction import MFValueFunction
+from irec import mf
+from irec.value_functions.MFValueFunction import MFValueFunction
 
 
 class COFIBA(MFValueFunction):

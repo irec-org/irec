@@ -1,16 +1,11 @@
-from .ICF import ICF
 from .LinearICF import LinearICF
 import numpy as np
-from tqdm import tqdm
-#import util
-from threadpoolctl import threadpool_limits
 import scipy.optimize
-import ctypes
 from collections import defaultdict
 import scipy
-import mf
-import value_functions
-
+from irec.value_functions.Entropy import Entropy
+from irec.value_functions.MostPopular import MostPopular
+from irec.value_functions.LogPopEnt import LogPopEnt
 
 class GLM_UCB(LinearICF):
     """Generalized Linear Model Bandit-Upper Confidence Bound.
@@ -127,22 +122,22 @@ class GLM_UCBInit(GLM_UCB):
         super().reset(train_dataset)
 
         if self.init == 'entropy':
-            items_entropy = value_functions.Entropy.get_items_entropy(
+            items_entropy = Entropy.get_items_entropy(
                 self.train_consumption_matrix)
             self.items_bias = items_entropy
         elif self.init == 'popularity':
-            items_popularity = value_functions.MostPopular.get_items_popularity(
+            items_popularity = MostPopular.get_items_popularity(
                 self.train_consumption_matrix, normalize=False)
             self.items_bias = items_popularity
         elif self.init == 'logpopent':
-            items_entropy = value_functions.Entropy.get_items_entropy(
+            items_entropy = Entropy.get_items_entropy(
                 self.train_consumption_matrix)
-            items_popularity = value_functions.MostPopular.get_items_popularity(
+            items_popularity = MostPopular.get_items_popularity(
                 self.train_consumption_matrix, normalize=False)
-            self.items_bias = value_functions.LogPopEnt.get_items_logpopent(
+            self.items_bias = LogPopEnt.get_items_logpopent(
                 items_popularity, items_entropy)
         elif self.init == 'rand_popularity':
-            items_popularity = value_functions.MostPopular.get_items_popularity(
+            items_popularity = MostPopular.get_items_popularity(
                 self.train_consumption_matrix, normalize=False)
             items_popularity[np.argsort(items_popularity)[::-1][100:]] = 0
             self.items_bias = items_popularity

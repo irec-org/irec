@@ -5,7 +5,7 @@ from threadpoolctl import threadpool_limits
 import ctypes
 from collections import defaultdict
 import scipy
-import mf
+from irec import mf
 from .LinearICF import LinearICF
 from .LinearUCB import LinearUCB
 

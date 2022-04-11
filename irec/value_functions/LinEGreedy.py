@@ -5,9 +5,9 @@ import random
 from tqdm import tqdm
 from threadpoolctl import threadpool_limits
 from collections import defaultdict
-import mf
+from irec import mf
 import ctypes
-from .MFValueFunction import MFValueFunction
+from irec.value_functions.MFValueFunction import MFValueFunction
 import scipy.sparse
 
 

@@ -1,20 +1,9 @@
-import ctypes
 from collections import defaultdict
 from typing import Any, DefaultDict
-
-import mf
+from irec import mf
 import numpy as np
-import scipy
-import scipy.stats
-
-from threadpoolctl import threadpool_limits
-from tqdm import tqdm
-
-import value_functions
-
-from .ExperimentalValueFunction import ExperimentalValueFunction
-from .MFValueFunction import MFValueFunction
-
+from irec.value_functions.ExperimentalValueFunction import ExperimentalValueFunction
+from irec.value_functions.MFValueFunction import MFValueFunction
 
 def _prediction_rule(A, b, items_weights, alpha):
     mean = np.dot(np.linalg.inv(A), b)
