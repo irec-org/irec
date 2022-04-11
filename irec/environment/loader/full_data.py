@@ -146,7 +146,5 @@ class DefaultLoader:
         # Create train and test set
         print(f"\nApplying splitting strategy: {self.strategy}\n")
         train_dataset, test_dataset = self._split(dataset)
-        print("train:", train_dataset.num_total_items, train_dataset.num_total_users)
-        print("test:", test_dataset.num_total_items, test_dataset.num_total_users)
 
         return train_dataset, test_dataset

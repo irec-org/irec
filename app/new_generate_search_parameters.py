@@ -13,7 +13,7 @@ import sys
 import os
 
 sys.path.append(dirname(dirname(realpath(__file__))))
-from irec.app.utils import load_settings, flatten_dict, unflatten_dict
+from irec.connector.utils import load_settings, flatten_dict, unflatten_dict
 
 def generate_values(values):
 	if "linspace" in str(values):

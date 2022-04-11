@@ -4,7 +4,7 @@ import yaml
 import os
 import argparse
 
-from irec.app import utils
+from irec.connector import utils
 import argparse
 
 parser = argparse.ArgumentParser()
