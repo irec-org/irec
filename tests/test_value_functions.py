@@ -1,6 +1,6 @@
-from irec.agents.value_functions.most_popular import MostPopular
-from irec.agents.value_functions.ucb import UCB
-from irec.agents.value_functions.random import Random
+from irec.agents.value_functions.experimental.most_popular import MostPopular
+from irec.agents.value_functions.experimental.ucb import UCB
+from irec.agents.value_functions.experimental.random import Random
 from irec.agents.value_functions.base import ValueFunction
 
 
