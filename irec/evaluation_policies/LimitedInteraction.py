@@ -1,11 +1,6 @@
-from irec.agents.value_functions.most_popular import MostPopular
-from irec.agents.value_functions.entropy import Entropy
 from .EvaluationPolicy import EvaluationPolicy
 from threadpoolctl import threadpool_limits
-from irec.environment.dataset import Dataset
 from collections import defaultdict
-from irec.agents.base import Agent
-from tqdm import tqdm
 import scipy.sparse
 import numpy as np
 import random
