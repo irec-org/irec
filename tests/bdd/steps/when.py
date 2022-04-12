@@ -9,6 +9,7 @@ from irec.environment.filter.filtering_by_items import FilteringByItems
 from irec.environment.filter.filtering_by_users import FilteringByUsers
 from irec.environment.split.randomised import Random
 from irec.environment.split.temporal import Temporal
+from irec.environment.split.global_timestamp import GlobalTimestampSplit
 
 
 @when('filtered by items with min_ratings')
@@ -74,6 +75,34 @@ def step_impl(context):
     # run metric
     t = Temporal(train_size=context.train_size,
                  test_consumes=context.test_consumes)
+    test_uids = t.get_test_uids(dataset.data, num_test_users)
+    train_dataset, test_dataset = t.split_dataset(dataset.data, test_uids)
+    # train
+    context.train_df = pd.DataFrame(train_dataset.data, columns=dtypes.keys())
+    context.train_df = context.train_df.astype(dtypes)
+    # test
+    context.test_df = pd.DataFrame(test_dataset.data, columns=dtypes.keys())
+    context.test_df = context.test_df.astype(dtypes)
+
+
+@when('split globaly')
+def step_impl(context):
+    # parameters
+    num_users = len(context.input_df["userId"].unique())
+    num_train_users = round(num_users * context.train_size)
+    num_test_users = int(num_users - num_train_users)
+    dtypes = {
+        "userId": int,
+        "itemId": int,
+        "rating": float,
+        "timestamp": int
+    }
+    # dataset
+    dataset = Dataset(data=context.input_df.to_numpy())
+    dataset.reset_index()
+    # run metric
+    t = GlobalTimestampSplit(train_size=context.train_size,
+                             test_consumes=context.test_consumes)
     test_uids = t.get_test_uids(dataset.data, num_test_users)
     train_dataset, test_dataset = t.split_dataset(dataset.data, test_uids)
     # train
