@@ -2,6 +2,12 @@ from .base import ActionSelectionPolicy
 import numpy as np
 
 class ASPGenericGreedy(ActionSelectionPolicy):
+
+    """ASPGenericGreedy
+    
+        
+    """
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

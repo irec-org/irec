@@ -3,6 +3,12 @@ from collections import defaultdict
 import numpy as np
 
 class ASPReranker(ActionSelectionPolicy):
+
+    """ASPReranker
+
+    
+    """
+
     def __init__(self, rule, input_filter_size, rerank_limit, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
         self.rule = rule

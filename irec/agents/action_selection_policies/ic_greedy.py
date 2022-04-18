@@ -11,6 +11,12 @@ import numpy as np
 import random
 
 class ASPICGreedy(ActionSelectionPolicy):
+
+    """ASPICGreedy
+
+    
+    """
+
     def __init__(self, stop, num_clusters, num_lat, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.stop = stop
@@ -37,22 +43,14 @@ class ASPICGreedy(ActionSelectionPolicy):
             i = 0
             while True:
                 i += 1
-                # print(i)
-                # g = self.choose_group(uid)
-                # try:
                 g = random.randint(0, self.num_clusters)
                 g_items = np.array(self.groups_items[g])
-                # print(actions[1],g_items)
                 g_items = np.intersect1d(actions[1], g_items)
-                # print(g_items)
                 if len(g_items) == 0:
                     continue
                 g_items = list(g_items)
                 top_item = g_items[np.argmax(self.items_popularity[g_items])]
                 break
-                # break
-                # except:
-                # continue
 
             return (
                 actions[0],

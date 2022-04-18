@@ -18,6 +18,13 @@ def _prediction_rule(A, b, items_weights, alpha):
 
 
 class LinUCB(MFValueFunction):
+
+    """LinUCB
+
+        
+    """
+
+
     def __init__(self, alpha, zeta=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if alpha != None:

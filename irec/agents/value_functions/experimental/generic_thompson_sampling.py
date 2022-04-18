@@ -12,6 +12,12 @@ def _create_attribute_with_check(value):
 
 
 class GenericThompsonSampling(ExperimentalValueFunction):
+
+    """GenericThompsonSampling.
+    
+  
+    """
+
     def __init__(self, alpha_0, beta_0, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.alpha_0 = alpha_0

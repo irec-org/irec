@@ -5,6 +5,23 @@ from .experimental_valueFunction import ExperimentalValueFunction
 
 
 class LogPopEnt(ExperimentalValueFunction):
+
+
+    """LogPopEnt
+
+    It combines popularity and entropy to identify potentially relevant items
+    that also have the ability to add more knowledge to the system. As these 
+    concepts are not strongly correlated, it is possible to achieve this 
+    combination through a linear combination of the popularity 'p' of an item 
+    i by its entropy ε: score(i) = log('p'i) · εi.
+    
+    References
+    ----------
+    .. Mehdi Elahi, Francesco Ricci, and Neil Rubens. 2016. A survey of active learning
+       in collaborative filtering recommender systems. Computer Science Review 20 (2016), 29–50. 
+    """
+
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

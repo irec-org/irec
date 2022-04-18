@@ -2,7 +2,14 @@ from .base import ActionSelectionPolicy
 import numpy as np
 
 class ASPEGreedy(ActionSelectionPolicy):
-    def __init__(self, epsilon, *args, **kwargs):
+
+    """ASPEGreedy
+    
+        ASPEGreedy select the best items based on the diversification
+        parameter 𝜖 to execute random recommendations
+    """
+
+    def __init__(self, epsilon:float, *args, **kwargs):
         super().__init__(self, *args, **kwargs)
         self.epsilon = epsilon
 

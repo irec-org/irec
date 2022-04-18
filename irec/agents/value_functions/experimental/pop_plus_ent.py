@@ -5,6 +5,11 @@ from .experimental_valueFunction import ExperimentalValueFunction
 
 
 class PopPlusEnt(ExperimentalValueFunction):
+
+    """PopPlusEnt
+    
+    """
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

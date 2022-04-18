@@ -5,6 +5,20 @@ import scipy.sparse
 
 
 class Entropy(ExperimentalValueFunction):
+
+    """Entropy
+
+    The entropy of an item i is calculated using the relative frequency of
+    the possible ratings. In general, since entropy measures the spread of
+    ratings for an item, this strategy tends to promote rarely rated items, 
+    which can be considerably informative.
+    
+    References
+    ----------
+    .. Mehdi Elahi, Francesco Ricci, and Neil Rubens. 2016. A survey of active learning
+       in collaborative filtering recommender systems. Computer Science Review 20 (2016), 29–50. 
+    """
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

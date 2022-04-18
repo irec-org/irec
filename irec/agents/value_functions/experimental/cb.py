@@ -32,6 +32,17 @@ def _argmin(d):
 
 
 class CB(ExperimentalValueFunction):
+
+    """CB
+    
+    It is a new bandit algorithm based on clusters to face the cold-start problem.
+    
+      References
+    ----------
+    .. Sulthana Shams, Daron Anderson, and Douglas Leith. 2021. Cluster-Based Bandits: 
+    Fast Cold-Start for Recommender System New Users. (2021).
+    """
+
     def __init__(
         self,
         num_clusters: int,

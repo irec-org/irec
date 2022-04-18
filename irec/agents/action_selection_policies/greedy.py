@@ -2,6 +2,12 @@ from .base import ActionSelectionPolicy
 import numpy as np
 
 class ASPGreedy(ActionSelectionPolicy):
+
+    """ASPGreedy
+    
+        Will always select the best items available
+    """
+
     def select_actions(self, actions, action_estimates, actions_num):
         return (
             actions[0],

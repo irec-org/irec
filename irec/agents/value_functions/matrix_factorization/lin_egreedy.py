@@ -8,10 +8,15 @@ import scipy.sparse
 
 
 class LinEGreedy(MFValueFunction):
+
+    """LinEGreedy
+
+    A linear exploitation of the items latent factors defined by a SVD
+    formulation that also explore random items with probability ε
+    """
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # self.epsilon = epsilon
-        #
 
     def reset(self, observation):
         train_dataset = observation

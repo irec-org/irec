@@ -5,6 +5,12 @@ from ..base import ValueFunction
 
 
 class ExperimentalValueFunction(ValueFunction):
+
+    """ExperimentalValueFunction
+
+    
+    """
+
     def __init__(self, *args, **kwargs):
         ValueFunction.__init__(self, *args, **kwargs)
 

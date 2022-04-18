@@ -8,7 +8,11 @@ class ActionCollection:
 
 
 class OneUserActionCollection(ActionCollection):
-    """OneUserActionCollection."""
+    """OneUserActionCollection.
+    
+        Used to represent the scenario where more than one item is recommended for a user
+
+    """
 
     def __init__(self, user: int, items: List[int]) -> None:
         """__init__.

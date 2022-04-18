@@ -2,6 +2,13 @@ import numpy as np
 from .experimental_valueFunction import ExperimentalValueFunction
 
 class Random(ExperimentalValueFunction):
+
+    """Random
+
+        This method recommends totally random items.
+        
+    """
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

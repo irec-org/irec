@@ -5,7 +5,11 @@ class Action:
 
 
 class UIAction(Action):
-    """UIAction."""
+    """UIAction.
+    
+        Used to represent the scenario where one item is recommended for a user
+
+    """
 
     def __init__(self, user: int, item: int):
         """__init__.
