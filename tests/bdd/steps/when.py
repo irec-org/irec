@@ -85,7 +85,7 @@ def step_impl(context):
     context.test_df = context.test_df.astype(dtypes)
 
 
-@when('split globaly')
+@when('split globally')
 def step_impl(context):
     # parameters
     num_users = len(context.input_df["userId"].unique())

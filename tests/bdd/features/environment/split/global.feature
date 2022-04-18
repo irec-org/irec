@@ -1,4 +1,4 @@
-Feature: These are the scenarios to filter the dataset globaly
+Feature: These are the scenarios to filter the dataset globally
 
   Scenario: test global users selection
     Given a dataset containing
@@ -13,7 +13,7 @@ Feature: These are the scenarios to filter the dataset globaly
     And using the train size as "0.8"
     And using the tests consumes as "1"
     And random seed equals to "0"
-    When split globaly
+    When split globally
     Then the train output should be equal to
       | int    | int    | float  | int       |
       | userId | itemId | rating | timestamp |
