@@ -4,7 +4,10 @@ from .base import Agent
 from typing import Any
 
 class SimpleAgent(Agent):
-    """SimpleAgent."""
+    """SimpleAgent.
+    
+    Define only one Action Selection Policy and one ValueFunction for each one of them.
+    """
 
     def __init__(self, *args, **kwargs):
         """__init__.

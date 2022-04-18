@@ -5,7 +5,12 @@ from typing import Any, List
 import numpy as np
 
 class SimpleEnsembleAgent(Agent):
-    """SimpleEnsembleAgent."""
+    """SimpleEnsembleAgent.
+    
+    iRec also allows agents based on ensemble strategies by using the tag 
+    EnsembleAgent and, in this case, more than one Action Selection Policy
+    and/or more than one ValueFunction can be set.
+    """
 
     def __init__(
         self,
@@ -26,7 +31,6 @@ class SimpleEnsembleAgent(Agent):
         """
 
         super().__init__(*args, **kwargs)
-        # self.ensemble_method_vf = ensemble_method_vf
         self.agents = agents
         self.use_name_meta_actions = use_name_meta_actions
         if self.use_name_meta_actions:
@@ -37,7 +41,6 @@ class SimpleEnsembleAgent(Agent):
             }
         else:
             self.ensemble_candidate_actions = np.array(list(range(len(self.agents))))
-        # self.ensemble_candidate_actions = []
         self.default_actions_num = 1
         self.save_meta_actions = save_meta_actions
 
@@ -52,16 +55,12 @@ class SimpleEnsembleAgent(Agent):
         meta_action_estimates, meta_vf_info = self.value_function.action_estimates(
             self.ensemble_candidate_actions
         )
-        # print(m,meta_action_estimates)
-        # info = {'meta_action_estimates': meta_action_estimates}
         meta_actions, meta_asp_info = self.action_selection_policy.select_actions(
             self.ensemble_candidate_actions,
             meta_action_estimates,
             self.default_actions_num,
         )
         meta_action = meta_actions[0]
-        # print(meta_actions)
-        # actions = (candidate_actions[0],candidate_actions[1][actions_indexes])
         if self.use_name_meta_actions:
             selected_agent = self.actions_name_object_map[meta_action]
         else:
