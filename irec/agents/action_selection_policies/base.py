@@ -1,4 +1,4 @@
-from irec.agents.action_collection import ActionCollection
+from irec.agents.action import Action
 
 
 class ActionSelectionPolicy:
@@ -15,7 +15,7 @@ class ActionSelectionPolicy:
     def __init__(self, *args, **kwargs):
         pass
 
-    def select_actions(self, actions: ActionCollection, actions_estimate, actions_num: int):
+    def select_actions(self, actions: Action, actions_estimate, actions_num: int):
         """select actions
         
             Select the best actions (recommendations)

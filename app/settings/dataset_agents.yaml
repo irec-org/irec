@@ -4040,8 +4040,8 @@ LastFM 5k TRTE Validation:
           alpha: 0.25
           lambda_u: 0.1
           num_lat: 20
-MovieLens 100k:
-# Nano Dataset:
+# MovieLens 100k:
+Nano Dataset:
   LinearUCB1:
     SimpleAgent:
       action_selection_policy:

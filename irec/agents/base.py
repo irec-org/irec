@@ -1,6 +1,5 @@
 from .action_selection_policies.base import ActionSelectionPolicy
 from .value_functions.base import ValueFunction
-from .action_collection import ActionCollection
 from irec.agents.action import Action
 from typing import Dict, Any
 
@@ -52,13 +51,13 @@ class Agent:
         self.action_selection_policy = action_selection_policy
         self.name = name
 
-    def act(self, candidate_actions: ActionCollection, actions_num: int):
+    def act(self, candidate_actions: Action, actions_num: int):
         """act.
 
         An action is a recommendation, which will be made about the items available to a particular target user.
 
         Args:
-            candidate_actions (ActionCollection): candidate_actions
+            candidate_actions (Action): candidate_actions
             actions_num (int): actions_num
         """
         raise NotImplementedError

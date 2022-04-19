@@ -1,4 +1,4 @@
-from irec.agents.action_collection import ActionCollection
+from irec.agents.action import Action
 from irec.agents.action import Action
 from typing import Any, Dict, Tuple
 
@@ -33,7 +33,7 @@ class ValueFunction:
         # super().reset(train_dataset)
 
     def actions_estimate(
-        self, candidate_actions: ActionCollection
+        self, candidate_actions: Action
     ) -> Tuple[Any, Dict[Any, Any]]:
         """actions_estimate.
 
@@ -42,7 +42,7 @@ class ValueFunction:
         to allow a specific next action to be performed.
 
         Args:
-            candidate_actions (ActionCollection): candidate_actions
+            candidate_actions (Action): candidate_actions
 
         Returns:
             Tuple[Any, dict]: Scores and information

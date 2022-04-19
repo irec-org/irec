@@ -6,7 +6,7 @@ class ASPReranker(ActionSelectionPolicy):
 
     """ASPReranker
 
-    
+        Re-rank items based on a certain rule, which can be any type of value function    
     """
 
     def __init__(self, rule, input_filter_size, rerank_limit, *args, **kwargs):

@@ -1,5 +1,5 @@
 FixedInteraction:
-  num_interactions: 100
+  num_interactions: 2
   interaction_size: 1
   save_info: False
 PercentageInteraction:

@@ -1,5 +1,5 @@
-from irec.agents.action_collection import ActionCollection
-from .action import UIAction
+from irec.agents.action import Action
+from .action import UserItemAction
 from .base import Agent
 from typing import Any, List
 import numpy as np
@@ -44,11 +44,11 @@ class SimpleEnsembleAgent(Agent):
         self.default_actions_num = 1
         self.save_meta_actions = save_meta_actions
 
-    def act(self, candidate_actions: ActionCollection, actions_num: int):
+    def act(self, candidate_actions: Action, actions_num: int):
         """act.
 
         Args:
-            candidate_actions (ActionCollection): candidate_actions
+            candidate_actions (Action): candidate_actions
             actions_num (int): actions_num
         """
         info = {}
@@ -85,12 +85,12 @@ class SimpleEnsembleAgent(Agent):
             info = None
         return selected_agent_actions, info
 
-    def observe(self, observation: Any, action: UIAction, reward: float, info: dict):
+    def observe(self, observation: Any, action: UserItemAction, reward: float, info: dict):
         """observe.
 
         Args:
             observation (Any): observation
-            action (UIAction): action
+            action (UserItemAction): action
             reward (float): reward
             info (dict): info
         """
