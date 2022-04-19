@@ -11,12 +11,12 @@ MovieLens 100k TrainTest:
         ASPGreedy: {}
       value_function:
         ALMostPopular: {}
-  CB:
+  ClusterBandit:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        CB:
+        ClusterBandit:
           B: 5
           C: 0.5
           D: 3
@@ -306,12 +306,12 @@ Good Books:
         ASPGreedy: {}
       value_function:
         ALMostPopular: {}
-  CB:
+  ClusterBandit:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        CB:
+        ClusterBandit:
           B: 5
           C: 0.5
           D: 3
@@ -2313,12 +2313,12 @@ Good Books TRTE:
         ASPGreedy: {}
       value_function:
         ALMostPopular: {}
-  CB:
+  ClusterBandit:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        CB:
+        ClusterBandit:
           B: 5
           C: 0.5
           D: 3
@@ -3055,12 +3055,12 @@ Good Books TRTE:
       value_function:
         kNNBandit: {}
 Good Books Validation:
-  CB:
+  ClusterBandit:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        CB:
+        ClusterBandit:
           B: 5
           C: 0.5
           D: 3
@@ -3400,12 +3400,12 @@ Good Books Validation:
       value_function:
         kNNBandit: {}
 Kindle 4k:
-  CB:
+  ClusterBandit:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        CB:
+        ClusterBandit:
           B: 5
           C: 0.5
           D: 3
@@ -3539,24 +3539,24 @@ Kindle 4k:
           alpha: 0.25
           num_lat: 20
 Kindle 4k TRTE:
-  CB:
+  ClusterBandit:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        CB:
+        ClusterBandit:
           B: 5
           C: 0.5
           D: 3
           num_clusters: 4
           num_lat: 10
 Kindle 4k TRTE Validation:
-  CB:
+  ClusterBandit:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        CB:
+        ClusterBandit:
           B: 5
           C: 0.5
           D: 3
@@ -3733,12 +3733,12 @@ LastFM 5K Validation:
           alpha: 0.5
           num_lat: 20
 LastFM 5k:
-  CB:
+  ClusterBandit:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        CB:
+        ClusterBandit:
           B: 5
           C: 0.5
           D: 3
@@ -3864,12 +3864,12 @@ LastFM 5k:
           alpha: 0.25
           num_lat: 20
 LastFM 5k TRTE:
-  CB:
+  ClusterBandit:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        CB:
+        ClusterBandit:
           B: 5
           C: 0.5
           D: 3
@@ -3972,12 +3972,12 @@ LastFM 5k TRTE:
           lambda_u: 0.1
           num_lat: 20
 LastFM 5k TRTE Validation:
-  CB:
+  ClusterBandit:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        CB:
+        ClusterBandit:
           B: 5
           C: 0.5
           D: 3
@@ -4041,6 +4041,17 @@ LastFM 5k TRTE Validation:
           lambda_u: 0.1
           num_lat: 20
 MovieLens 100k:
+  ClusterBandit:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        ClusterBandit:
+          B: 5
+          C: 0.5
+          D: 3
+          num_clusters: 4
+          num_lat: 10
   ALEntropy:
     SimpleAgent:
       action_selection_policy:
@@ -4053,12 +4064,12 @@ MovieLens 100k:
         ASPGreedy: {}
       value_function:
         ALMostPopular: {}
-  CB:
+  ClusterBandit:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        CB:
+        ClusterBandit:
           B: 5
           C: 0.5
           D: 3
@@ -4345,12 +4356,12 @@ MovieLens 10M:
         ASPGreedy: {}
       value_function:
         ALMostPopular: {}
-  CB:
+  ClusterBandit:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        CB:
+        ClusterBandit:
           B: 5
           C: 0.5
           D: 3
@@ -6398,12 +6409,12 @@ MovieLens 10M Sampled:
       value_function:
         kNNBandit: {}
 MovieLens 10M Validation:
-  CB:
+  ClusterBandit:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        CB:
+        ClusterBandit:
           B: 5
           C: 0.5
           D: 3
@@ -6756,12 +6767,12 @@ MovieLens 1M:
         ASPGreedy: {}
       value_function:
         ALMostPopular: {}
-  CB:
+  ClusterBandit:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        CB:
+        ClusterBandit:
           B: 5
           C: 0.5
           D: 3
@@ -7333,12 +7344,12 @@ MovieLens 1M (B):
           beta_0: 1
           k: 1
 MovieLens 1M Validation:
-  CB:
+  ClusterBandit:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        CB:
+        ClusterBandit:
           B: 5
           C: 0.5
           D: 3
@@ -7441,12 +7452,12 @@ MovieLens 1M Validation:
           alpha: 1
           num_lat: 10
 Nano Dataset:
-  CB:
+  ClusterBandit:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        CB:
+        ClusterBandit:
           B: 5
           C: 0.5
           D: 3
@@ -7580,12 +7591,12 @@ Nano Dataset:
           alpha: 1
           num_lat: 10
 Netflix 10k:
-  CB:
+  ClusterBandit:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        CB:
+        ClusterBandit:
           B: 5
           C: 0.5
           D: 3
@@ -7719,12 +7730,12 @@ Netflix 10k:
           alpha: 1
           num_lat: 10
 Netflix 10k TRTE:
-  CB:
+  ClusterBandit:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        CB:
+        ClusterBandit:
           B: 5
           C: 0.5
           D: 3
@@ -7858,12 +7869,12 @@ Netflix 10k TRTE:
           alpha: 1
           num_lat: 10
 Netflix 10k TRTE Validation:
-  CB:
+  ClusterBandit:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        CB:
+        ClusterBandit:
           B: 5
           C: 0.5
           D: 3
@@ -8201,12 +8212,12 @@ Yahoo Music:
         ASPGreedy: {}
       value_function:
         ALMostPopular: {}
-  CB:
+  ClusterBandit:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        CB:
+        ClusterBandit:
           B: 5
           C: 0.5
           D: 3
@@ -8943,12 +8954,12 @@ Yahoo Music:
       value_function:
         kNNBandit: {}
 Yahoo Music 10k:
-  CB:
+  ClusterBandit:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        CB:
+        ClusterBandit:
           B: 5
           C: 0.5
           D: 3
@@ -9061,12 +9072,12 @@ Yahoo Music 10k:
           alpha: 0.5
           num_lat: 10
 Yahoo Music 10k Validation:
-  CB:
+  ClusterBandit:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        CB:
+        ClusterBandit:
           B: 5
           C: 0.5
           D: 3
@@ -9148,12 +9159,12 @@ Yahoo Music 10k Validation:
           alpha: 0.5
           num_lat: 10
 Yahoo Music 5k:
-  CB:
+  ClusterBandit:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        CB:
+        ClusterBandit:
           B: 5
           C: 0.5
           D: 3
@@ -9266,12 +9277,12 @@ Yahoo Music 5k:
           alpha: 0.25
           num_lat: 10
 Yahoo Music 5k Validation:
-  CB:
+  ClusterBandit:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        CB:
+        ClusterBandit:
           B: 5
           C: 0.5
           D: 3
@@ -11738,12 +11749,12 @@ Yahoo Music Sampled:
       value_function:
         kNNBandit: {}
 Yahoo Music Validation:
-  CB:
+  ClusterBandit:
     SimpleAgent:
       action_selection_policy:
         ASPGreedy: {}
       value_function:
-        CB:
+        ClusterBandit:
           B: 5
           C: 0.5
           D: 3

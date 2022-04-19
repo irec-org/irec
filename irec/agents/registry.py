@@ -37,7 +37,7 @@ class VFRegistry:
 
     _vf = {
         "BestRated": "experimental.best_rated",
-        "cluster_bandit": "experimental.cb",
+        "ClusterBandit": "experimental.cluster_bandit",
         "COFIBA": "matrix_factorization.cofiba",
         "EGreedy": "experimental.e_greedy",
         "Entropy": "experimental.entropy",

@@ -37,7 +37,7 @@ class ClusterBandit(ExperimentalValueFunction):
     
     It is a new bandit algorithm based on clusters to face the cold-start problem.
     
-      References
+      References 
     ----------
     .. Sulthana Shams, Daron Anderson, and Douglas Leith. 2021. Cluster-Based Bandits: 
     Fast Cold-Start for Recommender System New Users. (2021).
