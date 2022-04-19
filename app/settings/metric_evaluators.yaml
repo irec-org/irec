@@ -1,0 +1,45 @@
+CumulativeInteractionMetricEvaluator:
+  interaction_size: 1
+  interactions_to_evaluate:
+    - 5
+    - 10
+    - 20
+    - 50
+    - 100
+  num_interactions: 100
+  relevance_evaluator_threshold: 3.999
+CumulativeMetricEvaluator:
+  buffer_size: 1000000
+  relevance_evaluator_threshold: 3.999
+InteractionMetricEvaluator:
+  interaction_size: 1
+  interactions_to_evaluate:
+    - 5
+    - 10
+    - 20
+    - 50
+    - 100
+  num_interactions: 100
+  relevance_evaluator_threshold: 3.999
+UserCumulativeInteractionMetricEvaluator:
+  interaction_size: 1
+  interactions_to_evaluate:
+    #- 5
+    - 10
+    #- 20
+    - 50
+    - 100
+  num_interactions: 100
+  relevance_evaluator_threshold: 3.999
+
+StageIterationsMetricEvaluator:
+  interactions_to_evaluate:
+    - 5
+    - 10
+    - 15
+    - 20
+    - 50
+    - 100
+  num_interactions: 100
+  relevance_evaluator_threshold: 3.999
+  interaction_size: 1
