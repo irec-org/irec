@@ -6,10 +6,13 @@ class SplitRegistry:
 
     from irec.environment.split.randomised import Random
     from irec.environment.split.temporal import Temporal
+    from irec.environment.split.global_timestamp import GlobalTimestampSplit
 
     _splitting = {
         "temporal": Temporal,
         "random": Random,
+        "global": GlobalTimestampSplit,
+
     }
 
     @classmethod
@@ -41,7 +44,7 @@ class FilterRegistry:
 
 
 class LoaderRegistry:
-    
+
     from irec.environment.loader.train_test import TrainTestLoader
     from irec.environment.loader.full_data import DefaultLoader
 
