@@ -49,8 +49,6 @@ class VFRegistry:
         "ICF": "matrix_factorization.icf",
         "ICTRTS": "matrix_factorization.ictr",
         "kNNBandit": "experimental.knn_bandit",
-        "LinEGreedy": "matrix_factorization.lin_egreedy",
-        "LinUCB": "matrix_factorization.lin_ucb",
         "LinearEGreedy": "matrix_factorization.linear_egreedy",
         "LinearICF": "matrix_factorization.linear_icf",
         "LinearThompsonSampling": "matrix_factorization.linear_ts",
