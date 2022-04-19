@@ -8,10 +8,10 @@ class ASPGreedy(ActionSelectionPolicy):
         Will always select the best items available
     """
 
-    def select_actions(self, actions, action_estimates, actions_num):
+    def select_actions(self, actions, actions_estimate, actions_num):
         return (
             actions[0],
-            actions[1][np.argpartition(action_estimates, -actions_num)[-actions_num:]],
+            actions[1][np.argpartition(actions_estimate, -actions_num)[-actions_num:]],
         ), None
 
     def update(self, observation, action, reward, info):

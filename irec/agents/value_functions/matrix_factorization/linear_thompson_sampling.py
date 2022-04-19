@@ -65,8 +65,8 @@ class LinearThompsonSampling(LinearICF):
 
         self.num_latent_factors = len(self.items_latent_factors[0])
 
-    def action_estimates(self, candidate_actions):
-        """action_estimates.
+    def actions_estimate(self, candidate_actions):
+        """actions_estimate.
 
         Args:
             candidate_actions: (user id, candidate_items)

@@ -16,7 +16,7 @@ class Random(ExperimentalValueFunction):
         train_dataset = observation
         super().reset(train_dataset)
 
-    def action_estimates(self, candidate_actions):
+    def actions_estimate(self, candidate_actions):
         uid = candidate_actions[0]
         candidate_items = candidate_actions[1]
         return np.random.rand(len(candidate_items)), None

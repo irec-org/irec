@@ -32,10 +32,10 @@ class ValueFunction:
         pass
         # super().reset(train_dataset)
 
-    def action_estimates(
+    def actions_estimate(
         self, candidate_actions: ActionCollection
     ) -> Tuple[Any, Dict[Any, Any]]:
-        """action_estimates.
+        """actions_estimate.
 
         Received as input the currently available actions the agent can perform and returns
         the necessary information, limited to the actions the agent can perform at time step t,

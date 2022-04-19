@@ -31,7 +31,7 @@ class GenericThompsonSampling(ExperimentalValueFunction):
         self.alphas = _create_attribute_with_check(self.alpha_0)
         self.betas = _create_attribute_with_check(self.beta_0)
 
-    def action_estimates(self, candidate_actions):
+    def actions_estimate(self, candidate_actions):
         items_score = np.random.beta(
             [self.alphas[ca] for ca in candidate_actions],
             [self.betas[ca] for ca in candidate_actions],

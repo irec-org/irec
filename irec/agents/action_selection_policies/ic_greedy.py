@@ -30,13 +30,13 @@ class ASPICGreedy(ActionSelectionPolicy):
     def get_item_group(self, item):
         return self.groups_items[item]
 
-    def select_actions(self, actions, action_estimates, actions_num):
+    def select_actions(self, actions, actions_estimate, actions_num):
         uid = actions[0]
         if self.users_num_consumption[uid] >= self.stop:
             return (
                 actions[0],
                 actions[1][
-                    np.argpartition(action_estimates, -actions_num)[-actions_num:]
+                    np.argpartition(actions_estimate, -actions_num)[-actions_num:]
                 ],
             ), None
         else:

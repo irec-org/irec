@@ -48,7 +48,7 @@ class Entropy0(ExperimentalValueFunction):
         self.items_entropy = self.get_items_entropy(
             self.train_consumption_matrix)
 
-    def action_estimates(self, candidate_actions):
+    def actions_estimate(self, candidate_actions):
         uid = candidate_actions[0]
         candidate_items = candidate_actions[1]
         items_score = self.items_entropy[candidate_items]

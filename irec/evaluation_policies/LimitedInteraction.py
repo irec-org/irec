@@ -53,7 +53,7 @@ class LimitedInteraction(EvaluationPolicy):
                 not_recommended = np.ones(num_total_items, dtype=bool)
                 not_recommended[users_items_recommended[uid]] = 0
                 items_not_recommended = np.nonzero(not_recommended)[0]
-                # items_score, info = model.action_estimates(
+                # items_score, info = model.actions_estimate(
                 # (uid, items_not_recommended))
                 # best_items = items_not_recommended[np.argpartition(
                 # items_score,

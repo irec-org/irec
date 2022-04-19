@@ -25,11 +25,11 @@ class SimpleAgent(Agent):
             candidate_actions (ActionCollection): candidate_actions
             actions_num (int): actions_num
         """
-        action_estimates, vf_info = self.value_function.action_estimates(
+        actions_estimate, vf_info = self.value_function.actions_estimate(
             candidate_actions
         )
         actions, asp_info = self.action_selection_policy.select_actions(
-            candidate_actions, action_estimates, actions_num
+            candidate_actions, actions_estimate, actions_num
         )
         # actions = (candidate_actions[0],candidate_actions[1][actions_indexes])
         return actions, {"vf_info": vf_info, "asp_info": asp_info}

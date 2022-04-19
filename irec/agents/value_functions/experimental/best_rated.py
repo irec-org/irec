@@ -52,8 +52,8 @@ class BestRated(ExperimentalValueFunction):
         self.items_bestrated = self.get_items_bestrated(
             self.train_consumption_matrix)
 
-    def action_estimates(self, candidate_actions):
-        """action_estimates.
+    def actions_estimate(self, candidate_actions):
+        """actions_estimate.
 
         Args:
             candidate_actions: (user id, candidate_items)

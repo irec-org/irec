@@ -68,7 +68,7 @@ class Entropy(ExperimentalValueFunction):
             self.items_ratings[int(iid), self.unique_values_ids[reward]] += 1
             self.items_num_total_ratings[int(iid)] += 1
 
-    def action_estimates(self, candidate_actions):
+    def actions_estimate(self, candidate_actions):
         uid = candidate_actions[0]
         candidate_items = candidate_actions[1]
         items_score = [

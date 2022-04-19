@@ -41,7 +41,7 @@ class PopPlusEnt(ExperimentalValueFunction):
         self.items_popplusent = PopPlusEnt.get_items_popplusent(
             items_popularity, items_entropy)
 
-    def action_estimates(self, candidate_actions):
+    def actions_estimate(self, candidate_actions):
         uid = candidate_actions[0]
         candidate_items = candidate_actions[1]
         items_score = self.items_popplusent[candidate_items]

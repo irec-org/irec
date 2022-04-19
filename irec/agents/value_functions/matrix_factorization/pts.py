@@ -99,8 +99,8 @@ class PTS(MFValueFunction):
             self.particles_vs[i] = mf_model.items_weights
 
 
-    def action_estimates(self, candidate_actions):
-        """action_estimates.
+    def actions_estimate(self, candidate_actions):
+        """actions_estimate.
 
         Args:
             candidate_actions: (user id, candidate_items)

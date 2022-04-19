@@ -162,8 +162,8 @@ class ICTRTS(MFValueFunction):
 
         self.particles = [copy.deepcopy(particle) for _ in range(self.num_particles)]
 
-    def action_estimates(self, candidate_actions):
-        """action_estimates.
+    def actions_estimate(self, candidate_actions):
+        """actions_estimate.
 
         Args:
             candidate_actions: (user id, candidate_items)

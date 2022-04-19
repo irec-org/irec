@@ -56,8 +56,8 @@ class GLM_UCB(LinearICF):
                       u_rec_items_means[t]
                       for t in range(0, len(u_rec_items_means))]), 0)
 
-    def action_estimates(self, candidate_actions):
-        """action_estimates.
+    def actions_estimate(self, candidate_actions):
+        """actions_estimate.
 
         Args:
             candidate_actions: (user id, candidate_items)

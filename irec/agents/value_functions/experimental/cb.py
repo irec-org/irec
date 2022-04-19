@@ -153,7 +153,7 @@ class CB(ExperimentalValueFunction):
         self.new_user = defaultdict(lambda: True)
         self.users_group = {}
 
-    def action_estimates(self, candidate_actions):
+    def actions_estimate(self, candidate_actions):
         uid = candidate_actions[0]
         candidate_items = candidate_actions[1]
         if self.new_user[uid]:

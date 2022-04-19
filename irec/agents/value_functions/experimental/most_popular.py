@@ -49,7 +49,7 @@ class MostPopular(ExperimentalValueFunction):
         self.items_popularity = self.get_items_popularity(
             self.train_consumption_matrix, normalize=False)
 
-    def action_estimates(self, candidate_actions):
+    def actions_estimate(self, candidate_actions):
         uid = candidate_actions[0]
         candidate_items = candidate_actions[1]
         items_score = self.items_popularity[candidate_items]

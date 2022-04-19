@@ -15,7 +15,7 @@ class ActionSelectionPolicy:
     def __init__(self, *args, **kwargs):
         pass
 
-    def select_actions(self, actions: ActionCollection, action_estimates, actions_num: int):
+    def select_actions(self, actions: ActionCollection, actions_estimate, actions_num: int):
         """select actions
         
             Select the best actions (recommendations)

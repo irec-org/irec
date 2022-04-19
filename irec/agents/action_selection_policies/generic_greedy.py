@@ -11,9 +11,9 @@ class ASPGenericGreedy(ActionSelectionPolicy):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def select_actions(self, actions, action_estimates, actions_num):
+    def select_actions(self, actions, actions_estimate, actions_num):
         actions = actions[
-            np.argpartition(action_estimates, -actions_num)[-actions_num:]
+            np.argpartition(actions_estimate, -actions_num)[-actions_num:]
         ]
         return actions, None
 

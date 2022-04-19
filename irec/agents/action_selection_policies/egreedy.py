@@ -13,8 +13,8 @@ class ASPEGreedy(ActionSelectionPolicy):
         super().__init__(self, *args, **kwargs)
         self.epsilon = epsilon
 
-    def select_actions(self, actions, action_estimates, actions_num):
-        greedy_actions = np.argpartition(action_estimates, -actions_num)[-actions_num:][
+    def select_actions(self, actions, actions_estimate, actions_num):
+        greedy_actions = np.argpartition(actions_estimate, -actions_num)[-actions_num:][
             ::-1
         ]
         actions_indexes = []
@@ -29,7 +29,7 @@ class ASPEGreedy(ActionSelectionPolicy):
                 actions_indexes.append(action_index)
             else:
                 while True:
-                    action_index = np.random.randint(len(action_estimates))
+                    action_index = np.random.randint(len(actions_estimate))
                     if action_index not in actions_indexes:
                         break
                 actions_indexes.append(action_index)

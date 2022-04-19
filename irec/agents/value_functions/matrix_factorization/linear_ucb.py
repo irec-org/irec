@@ -36,8 +36,8 @@ class LinearUCB(LinearICF):
         train_dataset = observation
         super().reset(train_dataset)
 
-    def action_estimates(self, candidate_actions):
-        """action_estimates.
+    def actions_estimate(self, candidate_actions):
+        """actions_estimate.
 
         Args:
             candidate_actions: (user id, candidate_items)

@@ -208,8 +208,8 @@ class COFIBA(MFValueFunction):
         self.t = 1
         self.recent_predict = True
 
-    def action_estimates(self, candidate_actions):
-        """action_estimates.
+    def actions_estimate(self, candidate_actions):
+        """actions_estimate.
 
         Args:
             candidate_actions: (user id, candidate_items)

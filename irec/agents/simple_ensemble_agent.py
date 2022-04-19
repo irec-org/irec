@@ -52,12 +52,12 @@ class SimpleEnsembleAgent(Agent):
             actions_num (int): actions_num
         """
         info = {}
-        meta_action_estimates, meta_vf_info = self.value_function.action_estimates(
+        meta_actions_estimate, meta_vf_info = self.value_function.actions_estimate(
             self.ensemble_candidate_actions
         )
         meta_actions, meta_asp_info = self.action_selection_policy.select_actions(
             self.ensemble_candidate_actions,
-            meta_action_estimates,
+            meta_actions_estimate,
             self.default_actions_num,
         )
         meta_action = meta_actions[0]

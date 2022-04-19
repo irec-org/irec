@@ -56,8 +56,8 @@ class UCB(ExperimentalValueFunction):
             reward = self.train_dataset.data[i, 2]
             self.update(None, (uid, item), reward, None)
 
-    def action_estimates(self, candidate_actions):
-        """action_estimates.
+    def actions_estimate(self, candidate_actions):
+        """actions_estimate.
 
         Args:
             candidate_actions: (user id, candidate_items)

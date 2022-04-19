@@ -758,8 +758,8 @@ class NICF(ExperimentalValueFunction):
     def _update(self, uid, item, reward):
         pass
 
-    def action_estimates(self, candidate_actions):
-        """action_estimates.
+    def actions_estimate(self, candidate_actions):
+        """actions_estimate.
 
         Args:
             candidate_actions: (user id, candidate_items)
