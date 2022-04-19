@@ -68,7 +68,7 @@ parameters_agents_symbols = {
           'num_lat':'num\_lat',
           'num_particles':'$B$',
         },
-    "CB": {
+    "cluster_bandit": {
           'B': 'B',
           'C': 'C',
           'D': 'C',

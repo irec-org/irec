@@ -31,9 +31,9 @@ def _argmin(d):
     return [k for k in d if d[k] == min_val][0]
 
 
-class CB(ExperimentalValueFunction):
+class ClusterBandit(ExperimentalValueFunction):
 
-    """CB
+    """ClusterBandit
     
     It is a new bandit algorithm based on clusters to face the cold-start problem.
     

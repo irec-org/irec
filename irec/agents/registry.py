@@ -37,7 +37,7 @@ class VFRegistry:
 
     _vf = {
         "BestRated": "experimental.best_rated",
-        "CB": "experimental.cb",
+        "cluster_bandit": "experimental.cb",
         "COFIBA": "matrix_factorization.cofiba",
         "EGreedy": "experimental.e_greedy",
         "Entropy": "experimental.entropy",
@@ -53,7 +53,7 @@ class VFRegistry:
         "LinUCB": "matrix_factorization.lin_ucb",
         "LinearEGreedy": "matrix_factorization.linear_egreedy",
         "LinearICF": "matrix_factorization.linear_icf",
-        "LinearThompsonSampling": "matrix_factorization.linear_thompson_sampling",
+        "LinearThompsonSampling": "matrix_factorization.linear_ts",
         "LinearUCB": "matrix_factorization.linear_ucb",
         "LinearUCB1": "matrix_factorization.linear_ucb1",
         "LogPopEnt": "experimental.log_pop_ent",
