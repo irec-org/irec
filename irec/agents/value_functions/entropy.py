@@ -1,10 +1,10 @@
 import numpy as np
 from tqdm import tqdm
-from .experimental_valueFunction import ExperimentalValueFunction
+from .base import ValueFunction
 import scipy.sparse
 
 
-class Entropy(ExperimentalValueFunction):
+class Entropy(ValueFunction):
 
     """Entropy
 

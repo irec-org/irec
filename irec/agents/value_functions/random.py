@@ -1,7 +1,7 @@
 import numpy as np
-from .experimental_valueFunction import ExperimentalValueFunction
+from .base import ValueFunction
 
-class Random(ExperimentalValueFunction):
+class Random(ValueFunction):
 
     """Random
 

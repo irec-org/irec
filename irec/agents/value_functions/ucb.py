@@ -1,9 +1,9 @@
 import numpy as np
-from .experimental_valueFunction import ExperimentalValueFunction
+from .base import ValueFunction
 import scipy.stats
 
 
-class UCB(ExperimentalValueFunction):
+class UCB(ValueFunction):
     """Upper Confidence Bound.
 
     It is the original UCB that calculates a confidence interval for each item

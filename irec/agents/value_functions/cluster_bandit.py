@@ -2,12 +2,12 @@
 Cluster-Based algorithm of "Cluster-Based Bandits: Fast Cold-Start for Recommender System New Users"
 """
 import numpy as np
-from .experimental_valueFunction import ExperimentalValueFunction
+from .base import ValueFunction
 import scipy.stats
 from collections import defaultdict
 from sklearn.cluster import KMeans
 import itertools
-from irec.agents.value_functions.matrix_factorization.mf.SVD import SVD
+from .matrix_factorization.SVD import SVD
 
 from cachetools import cached
 from cachetools.keys import hashkey
@@ -31,7 +31,7 @@ def _argmin(d):
     return [k for k in d if d[k] == min_val][0]
 
 
-class ClusterBandit(ExperimentalValueFunction):
+class ClusterBandit(ValueFunction):
 
     """ClusterBandit
     

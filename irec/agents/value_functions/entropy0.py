@@ -1,11 +1,11 @@
 import numpy as np
-from .experimental_valueFunction import ExperimentalValueFunction
+from .base import ValueFunction
 import scipy.sparse
 
 from .most_popular import *
 
 
-class Entropy0(ExperimentalValueFunction):
+class Entropy0(ValueFunction):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

@@ -3,13 +3,10 @@ import numpy as np
 from tqdm import tqdm
 import scipy.sparse
 from collections import defaultdict
-from .mf_value_function import MFValueFunction
+from base import ValueFunction
 from tqdm import tqdm
 from numba import njit
-from . import mf
-from ..experimental.entropy import Entropy
-from ..experimental.most_popular import MostPopular
-from ..experimental.log_pop_ent import LogPopEnt
+import matrix_factorization as mf
 
 
 @njit
@@ -17,7 +14,7 @@ def _softmax(x):
     return np.exp(x - np.max(x)) / np.sum(np.exp(x - np.max(x)))
 
 
-class PTS(MFValueFunction):
+class PTS(ValueFunction):
     """Particle Thompson sampling.
 
     It is a PMF formulation for the original TS based on a Bayesian inference around the items.
@@ -29,7 +26,7 @@ class PTS(MFValueFunction):
        bandit with dependent arms." IEEE Transactions on Knowledge and Data Engineering 31.8 (2018): 1569-1580.
     """
 
-    def __init__(self, num_particles, var, var_u, var_v, *args, **kwargs):
+    def __init__(self, num_lat, num_particles, var, var_u, var_v, *args, **kwargs):
         """__init__.
 
         Args:
@@ -45,6 +42,7 @@ class PTS(MFValueFunction):
         self.var = var
         self.var_u = var_u
         self.var_v = var_v
+        self.num_lat = num_lat
 
     def reset(self, observation):
         """reset.
@@ -231,45 +229,3 @@ class PTS(MFValueFunction):
             self.particles_vs = new_particles_vs
             self.particles_var_us = new_particles_var_us
             self.particles_var_vs = new_particles_var_vs
-
-
-class PTSInit(PTS):
-    def __init__(self, init, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.init = init
-
-    def reset(self, observation):
-        train_dataset = observation
-        super().reset(train_dataset)
-
-        if self.init == "entropy":
-            items_entropy = Entropy.get_items_entropy(self.train_consumption_matrix)
-            self.items_bias = items_entropy
-        elif self.init == "logpopent":
-            items_entropy = Entropy.get_items_entropy(self.train_consumption_matrix)
-            items_popularity = MostPopular.get_items_popularity(
-                self.train_consumption_matrix, normalize=False
-            )
-            self.items_bias = LogPopEnt.get_items_logpopent(
-                items_popularity, items_entropy
-            )
-
-        self.items_bias = self.items_bias - np.min(self.items_bias)
-        self.items_bias = self.items_bias / np.max(self.items_bias)
-        assert self.items_bias.min() >= 0 and np.isclose(self.items_bias.max(), 1)
-        res = scipy.optimize.minimize(
-            lambda x, items_means, items_bias: np.sum(
-                (items_bias - x @ items_means.T) ** 2
-            ),
-            np.ones(self.num_lat),
-            args=(self.particles_vs[0], self.items_bias),
-            method="BFGS",
-        )
-        self.initial_user_factors = res.x
-        not_train_users = set(list(range(self.train_dataset.num_total_users))) - {
-            int(self.train_dataset.data[i, 0])
-            for i in range(len(self.train_dataset.data))
-        }
-        for i in range(self.num_particles):
-            for uid in not_train_users:
-                self.particles_us[i][uid] = self.initial_user_factors

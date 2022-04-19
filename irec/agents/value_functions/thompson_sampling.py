@@ -1,25 +1,32 @@
 import numpy as np
-from .experimental_valueFunction import ExperimentalValueFunction
+from .base import ValueFunction
 import scipy.stats
 
-class EGreedy(ExperimentalValueFunction):
-    """EGreedy.
+class ThompsonSampling(ValueFunction):
+    """Thompson Sampling.
     
-    In general, ε-Greedy models the problem based on an ε diversification parameter to perform random actions [1]_.
-    
+    A basic item-oriented bandit algorithm that follows a Gaussian distribution
+    of items and users to perform the prediction rule based on their samples [1]_.
+
+
     References
     ----------
-    .. [1] Auer, P., Cesa-Bianchi, N. & Fischer, P. Finite-time Analysis of the 
-       Multiarmed Bandit Problem. Machine Learning 47, 235–256 (2002).  
+    .. [1] Chapelle, Olivier, and Lihong Li. "An empirical evaluation of thompson sampling."
+        Advances in neural information processing systems 24 (2011): 2249-2257.   
     """
-    def __init__(self, *args, **kwargs):
+    def __init__(self, alpha_0, beta_0, *args, **kwargs):
         """__init__.
 
         Args:
             args:
             kwargs:
+            alpha_0:
+            beta_0:
         """
         super().__init__(*args, **kwargs)
+        self.alpha_0 = alpha_0
+        self.beta_0 = beta_0
+
 
     def reset(self, observation):
         """reset.
@@ -35,10 +42,10 @@ class EGreedy(ExperimentalValueFunction):
              (self.train_dataset.data[:, 0], self.train_dataset.data[:, 1])),
             (self.train_dataset.num_total_users,
              self.train_dataset.num_total_items))
-        self.num_total_items = self.train_consumption_matrix.shape[1]
+        self.num_total_items = self.train_dataset.num_total_items
 
-        self.items_mean_values = np.zeros(self.num_total_items)
-        self.items_count = np.zeros(self.num_total_items, dtype=int)
+        self.alphas = np.ones(self.num_total_items) * self.alpha_0
+        self.betas = np.ones(self.num_total_items) * self.beta_0
 
         for i in range(self.train_dataset.data.shape[0]):
             uid = int(self.train_dataset.data[i, 0])
@@ -57,7 +64,8 @@ class EGreedy(ExperimentalValueFunction):
         """
         uid = candidate_actions[0]
         candidate_items = candidate_actions[1]
-        items_score = self.items_mean_values[candidate_items]
+        items_score = np.random.beta(self.alphas[candidate_items],
+                                     self.betas[candidate_items])
         return items_score, None
 
     def update(self, observation, action, reward, info):
@@ -72,7 +80,6 @@ class EGreedy(ExperimentalValueFunction):
         uid = action[0]
         item = action[1]
         additional_data = info
-        self.items_mean_values[item] = (
-            self.items_mean_values[item] * self.items_count[item] +
-            reward) / (self.items_count[item] + 1)
-        self.items_count[item] += 1
+        reward = 1 if (reward >= self.train_dataset.mean_rating) else 0
+        self.alphas[item] += reward
+        self.betas[item] += 1 - reward

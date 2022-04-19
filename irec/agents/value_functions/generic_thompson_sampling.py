@@ -1,6 +1,6 @@
 import numpy as np
 import numbers
-from .experimental_valueFunction import ExperimentalValueFunction
+from .base import ValueFunction
 from collections import defaultdict
 
 
@@ -11,7 +11,7 @@ def _create_attribute_with_check(value):
         return defaultdict(lambda: 1, value)
 
 
-class GenericThompsonSampling(ExperimentalValueFunction):
+class GenericThompsonSampling(ValueFunction):
 
     """GenericThompsonSampling.
     

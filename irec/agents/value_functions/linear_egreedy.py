@@ -1,5 +1,4 @@
 from .icf import *
-from .lin_egreedy import *
 import numpy as np
 from .linear_icf import LinearICF
 

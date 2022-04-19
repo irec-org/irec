@@ -17,16 +17,18 @@ class GLM_UCB(LinearICF):
     .. [1] Zhao, Xiaoxue, Weinan Zhang, and Jun Wang. "Interactive collaborative filtering." 
        Proceedings of the 22nd ACM international conference on Information & Knowledge Management. 2013.
     """
-    def __init__(self, c=1.0, *args, **kwargs):
+    def __init__(self, num_lat, c=1.0, *args, **kwargs):
         """__init__.
 
         Args:
             args:
             kwargs:
             c (float):
+            num_lat (int): number of latent factors
         """
         super().__init__(*args, **kwargs)
         self.c = c
+        self.num_lat = num_lat
 
 
     def sigmoid(self, x):

@@ -63,7 +63,7 @@ class LinearThompsonSampling(LinearICF):
         self.train_dataset = train_dataset
         self.num_total_items = self.train_dataset.num_total_items
 
-        self.num_latent_factors = len(self.items_latent_factors[0])
+        self.num_latent_factors = len(self.items_means[0])
 
     def actions_estimate(self, candidate_actions):
         """actions_estimate.

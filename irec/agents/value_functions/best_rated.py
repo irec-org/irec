@@ -1,10 +1,10 @@
 import numpy as np
-from .experimental_valueFunction import ExperimentalValueFunction
+from .base import ValueFunction
 from .best_rated import *
 import scipy
 
 
-class BestRated(ExperimentalValueFunction):
+class BestRated(ValueFunction):
     """Best Rated.
     
     Recommends top-rated items based on their average ratings in each iteration.    

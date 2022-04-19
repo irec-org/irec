@@ -1,6 +1,6 @@
 from .InteractionMetricEvaluator import InteractionMetricEvaluator
 from irec.metrics import ILD, Recall, Precision, EPC, EPD
-from irec.agents.value_functions.experimental.entropy import Entropy
+from irec.agents.value_functions.entropy import Entropy
 import numpy as np
 import time
 np.seterr(all="raise")

@@ -1,10 +1,10 @@
 import numpy as np
 import scipy
-from . import mf
-from .mf_value_function import MFValueFunction
+from .matrix_factorization.SVD import SVD
+from .base import ValueFunction
 
 
-class COFIBA(MFValueFunction):
+class COFIBA(ValueFunction):
     """COFIBA.
     
     This method relies on upper-confidence-based tradeoffs between exploration and exploitation,
@@ -16,7 +16,7 @@ class COFIBA(MFValueFunction):
        Proceedings of the 39th International ACM SIGIR conference on Research and Development 
        in Information Retrieval. 2016.   
     """
-    def __init__(self, alpha=1, alpha_2=1, *args, **kwargs):
+    def __init__(self, num_lat, alpha=1, alpha_2=1, *args, **kwargs):
         """__init__.
 
         Args:
@@ -28,6 +28,7 @@ class COFIBA(MFValueFunction):
         super().__init__(*args, **kwargs)
         self.alpha = alpha
         self.alpha_2 = alpha_2
+        self.num_lat = num_lat
 
 
     def cb(self, alpha, item_latent_factors, m, t):
@@ -178,7 +179,7 @@ class COFIBA(MFValueFunction):
         self.consumption_matrix = self.train_consumption_matrix.tolil()
         self.num_total_users = self.train_dataset.num_total_users
 
-        mf_model = mf.SVD(num_lat=self.num_lat)
+        mf_model = SVD(num_lat=self.num_lat)
         mf_model.fit(self.train_consumption_matrix)
         self.items_latent_factors = mf_model.items_weights
 

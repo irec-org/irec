@@ -2,7 +2,7 @@ from .icf import ICF
 import numpy as np
 from collections import defaultdict
 import scipy
-import mf
+from .matrix_factorization.ICFPMFS import ICFPMFS
 
 
 class LinearICF(ICF):
@@ -21,7 +21,7 @@ class LinearICF(ICF):
             (self.train_dataset.num_total_users, self.train_dataset.num_total_items),
         )
         self.num_total_items = self.train_dataset.num_total_items
-        mf_model = mf.ICFPMFS(
+        mf_model = ICFPMFS(
             self.iterations,
             self.var,
             self.user_var,

@@ -3,7 +3,7 @@ Code adapted from: https://github.com/zoulixin93/NICF. Original author: zoulixin
 """
 import numpy as np
 from tqdm import tqdm
-from .experimental_valueFunction import ExperimentalValueFunction
+from .base import ValueFunction
 from collections import defaultdict
 import tensorflow as tf
 import copy
@@ -587,7 +587,7 @@ def convert_item_seq2matrix(item_seq):
     return matrix, target_index
 
 
-class NICF(ExperimentalValueFunction):
+class NICF(ValueFunction):
     """NICF.
 
     It is an interactive method based on a combination of neural networks and

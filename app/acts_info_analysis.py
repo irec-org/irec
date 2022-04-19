@@ -11,7 +11,7 @@ import pandas as pd
 import numpy as np
 from irec.agents.simple_ensemble_agent import SimpleEnsembleAgent
 import argparse
-import irec.agents.value_functions.mf
+import irec.agents.value_functions.matrix_factorization
 import mlflow
 import pickle
 import ctypes

@@ -1,10 +1,10 @@
 import numpy as np
-from .experimental_valueFunction import ExperimentalValueFunction
+from .base import ValueFunction
 from .most_popular import *
 import scipy
 
 
-class MostPopular(ExperimentalValueFunction):
+class MostPopular(ValueFunction):
 
     """MostPopular
 

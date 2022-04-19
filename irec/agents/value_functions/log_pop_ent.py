@@ -1,10 +1,14 @@
 import numpy as np
-from . import entropy, log_pop_ent, most_popular
+
+from . import log_pop_ent
+
+from . import entropy
+from . import most_popular
 import scipy.stats
-from .experimental_valueFunction import ExperimentalValueFunction
+from .base import ValueFunction
 
 
-class LogPopEnt(ExperimentalValueFunction):
+class LogPopEnt(ValueFunction):
 
 
     """LogPopEnt

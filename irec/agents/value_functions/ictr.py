@@ -3,10 +3,10 @@ import numpy as np
 from tqdm import tqdm
 import scipy.sparse
 import scipy.stats
-from .mf_value_function import MFValueFunction
+from .base import ValueFunction
 from tqdm import tqdm
 from numba import njit, jit
-from ..experimental.most_popular import *
+from .most_popular import *
 from typing import Any
 
 
@@ -109,7 +109,7 @@ class _Particle:
         self.Phi[topic] = np.random.dirichlet(self.eta[topic])
 
 
-class ICTRTS(MFValueFunction):
+class ICTRTS(ValueFunction):
     """Interactive Collaborative Topic Regression with Thompson Sampling.
 
     It is an interactive collaborative topic regression model that utilizes the TS
@@ -121,7 +121,7 @@ class ICTRTS(MFValueFunction):
        bandit with dependent arms." IEEE Transactions on Knowledge and Data Engineering 31.8 (2018): 1569-1580.
     """
 
-    def __init__(self, num_particles, *args, **kwargs):
+    def __init__(self, num_lat, num_particles, *args, **kwargs):
         """__init__.
 
         Args:
@@ -131,6 +131,7 @@ class ICTRTS(MFValueFunction):
         """
         super().__init__(*args, **kwargs)
         self.num_particles = num_particles
+        self.num_lat = num_lat
 
     def reset(self, observation):
         """reset.

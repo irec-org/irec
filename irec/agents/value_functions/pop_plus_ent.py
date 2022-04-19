@@ -1,10 +1,12 @@
 import numpy as np
-from . import entropy, most_popular
+
+from . import entropy
+from . import most_popular
 import scipy.stats
-from .experimental_valueFunction import ExperimentalValueFunction
+from .base import ValueFunction
 
 
-class PopPlusEnt(ExperimentalValueFunction):
+class PopPlusEnt(ValueFunction):
 
     """PopPlusEnt
     

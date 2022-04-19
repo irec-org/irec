@@ -1,10 +1,10 @@
-from ..value_functions.experimental.most_popular import MostPopular
-from ..value_functions.experimental.log_pop_ent import LogPopEnt
-from ..value_functions.experimental.entropy import Entropy
+from ..value_functions.most_popular import MostPopular
+from ..value_functions.log_pop_ent import LogPopEnt
+from ..value_functions.entropy import Entropy
 from .base import ActionSelectionPolicy
 from collections import defaultdict
 from sklearn.cluster import KMeans
-from irec.agents.value_functions.matrix_factorization.mf.SVD import SVD
+from irec.agents.value_functions.matrix_factorization.SVD import SVD
 from typing import Any
 import scipy.sparse
 import numpy as np

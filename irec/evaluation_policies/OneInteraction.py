@@ -1,5 +1,5 @@
-from irec.agents.value_functions.experimental.most_popular import MostPopular
-from irec.agents.value_functions.experimental.entropy import Entropy
+from irec.agents.value_functions.most_popular import MostPopular
+from irec.agents.value_functions.entropy import Entropy
 from .EvaluationPolicy import EvaluationPolicy
 from threadpoolctl import threadpool_limits
 from collections import defaultdict

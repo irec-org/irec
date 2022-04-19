@@ -65,14 +65,14 @@
       random_seed: 0
       file_delimiter: ","
       skip_head: true
-    # prefiltering: None
-    prefiltering:
-      filter_users:
-        min_consumption: 50
-        num_users: 50
-      filter_items: 
-        min_ratings: 1
-        num_items: 100
+    prefiltering: None
+    # prefiltering:
+    #   filter_users:
+    #     min_consumption: 50
+    #     num_users: 10
+    #   filter_items: 
+    #     min_ratings: 1
+    #     num_items: 100
     splitting:
       strategy: temporal
       train_size: 0.8
@@ -90,6 +90,23 @@
         path: ./data/datasets/MovieLens 100k TrainTest/test.csv
         file_delimiter: "::"
         skip_head: false
+
+
+'Nano Dataset':
+  DefaultLoader:
+    dataset:
+      path: ./data/datasets/Nano Dataset/ratings.csv
+      random_seed: 0
+      file_delimiter: ","
+      skip_head: true
+    prefiltering: None
+    splitting:
+      strategy: temporal
+      train_size: 0.8
+      test_consumes: 1
+
+
+
 
 "MovieLens 1M":
   DefaultDatasetLoader:  
@@ -337,25 +354,6 @@
       test_consumes: 5  
     splitting:
       strategy: temporal
-      train_size: 0.8
-
-'Nano Dataset':
-  DefaultDatasetLoader:
-    dataset_path: ./data/datasets/Nano Dataset/
-    random_seed: 0
-    prefiltering:
-      test_consumes: 1
-    splitting:
-      strategy: random
-      train_size: 0.8
-'Nano Dataset Validation':
-  DefaultValidationDatasetLoader:
-    dataset_path: ./data/datasets/Nano Dataset/
-    random_seed: 0
-    prefiltering:
-      test_consumes: 1
-    splitting:
-      strategy: random
       train_size: 0.8
     
 'MovieLens 25M':

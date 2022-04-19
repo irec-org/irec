@@ -4041,6 +4041,26 @@ LastFM 5k TRTE Validation:
           lambda_u: 0.1
           num_lat: 20
 MovieLens 100k:
+# Nano Dataset:
+  LinearUCB1:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        LinearUCB1:
+          alpha: 1.0
+          item_var: 0.01
+          iterations: 20
+          num_lat: 20
+          stop_criteria: 0.0009
+          user_var: 0.01
+          var: 0.05
+  BestRated:
+    SimpleAgent:
+      action_selection_policy:
+        ASPGreedy: {}
+      value_function:
+        BestRated: {}
   ClusterBandit:
     SimpleAgent:
       action_selection_policy:
@@ -7451,7 +7471,7 @@ MovieLens 1M Validation:
         WSPB:
           alpha: 1
           num_lat: 10
-Nano Dataset:
+Nano Dataset2:
   ClusterBandit:
     SimpleAgent:
       action_selection_policy:

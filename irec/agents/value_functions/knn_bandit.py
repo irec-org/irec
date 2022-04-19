@@ -1,11 +1,11 @@
 from typing import Any
 import numpy as np
 from tqdm import tqdm
-from .experimental_valueFunction import ExperimentalValueFunction
+from .base import ValueFunction
 import scipy.sparse
 from collections import defaultdict
 
-class kNNBandit(ExperimentalValueFunction):
+class kNNBandit(ValueFunction):
     """k Nearest-Neighbors Bandit.
 
     A simple multi-armed bandit elaboration of neighbor-based collaborative filtering.

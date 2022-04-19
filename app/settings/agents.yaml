@@ -327,6 +327,12 @@ MostPopular:
       ASPGreedy: {}
     value_function:
       MostPopular: {}
+BestRated:
+  SimpleAgent:
+    action_selection_policy:
+      ASPGreedy: {}
+    value_function:
+      BestRated: {}
 MostRepresentative:
   SimpleAgent:
     action_selection_policy:
