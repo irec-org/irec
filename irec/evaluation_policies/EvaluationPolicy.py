@@ -1,5 +1,6 @@
+from click import Tuple
 from irec.environment.dataset import Dataset
-from irec.agents import Agent
+from irec.agents.base import Agent
 
 """Evaluation Policies.
 

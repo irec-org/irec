@@ -1,0 +1,376 @@
+"LastFM 5k TRTE":
+  dataset_path: "./data/datasets/Train-Test_LastFM-5K/"
+"LastFM 5k TRTE Validation":
+  crono: true
+  dataset_path: "./data/datasets/Train-Test_LastFM-5K/"
+  random_seed: 0
+  test_consumes: 5
+  train_size: 0.8
+"MovieLens 100k O":
+  crono: true
+  dataset_path: ./data/datasets/ml-100k/
+  random_seed: 0
+  test_consumes: 5
+  train_size: 0.8
+"Kindle 4k TRTE":
+  dataset_path: ./data/datasets/Train-Test_Kindle-Store-4K/
+"Kindle 4k TRTE Validation":
+  dataset_path: ./data/datasets/Train-Test_Kindle-Store-4K/
+  train_size: 0.8
+  test_consumes: 5
+  crono: true
+  random_seed: 0
+"Yahoo Music TRTE":
+  TRTEDatasetLoader:  
+    dataset_path: ./data/datasets/Train-Test_Yahoo-Music/
+"Yahoo Music TRTE Validation":
+  dataset_path: ./data/datasets/Train-Test_Yahoo-Music/
+  train_size: 0.8
+  test_consumes: 5
+  crono: true
+  random_seed: 0
+"Good Books TRTE":
+  TRTEDatasetLoader:  
+    dataset_path: ./data/datasets/Train-Test_Good-Books/
+"Good Books TRTE Validation":
+  dataset_path: ./data/datasets/Train-Test_Good-Books/
+  train_size: 0.8
+  test_consumes: 5
+  crono: true
+  random_seed: 0
+"MovieLens 10M TRTE":
+  dataset_path: ./data/datasets/Train-Test_ML-10M/
+"MovieLens 10M TRTE Validation":
+  dataset_path: ./data/datasets/Train-Test_ML-10M/
+  train_size: 0.8
+  test_consumes: 5
+  crono: true
+  random_seed: 0
+"Netflix 10k TRTE":
+  TRTEDatasetLoader:  
+    dataset_path: ./data/datasets/Train-Test_Netflix-10K/
+"Netflix 10k TRTE Validation":
+  dataset_path: ./data/datasets/Train-Test_Netflix-10K/
+  train_size: 0.8
+  test_consumes: 5
+  crono: true
+  random_seed: 0
+
+#Default Loaders
+
+'MovieLens 100k':
+  DefaultLoader:
+    dataset:
+      path: ./data/datasets/MovieLens 100k/ratings.csv
+      random_seed: 0
+      file_delimiter: ","
+      skip_head: true
+    prefiltering: None
+    # prefiltering:
+    #   filter_users:
+    #     min_consumption: 50
+    #     num_users: 10
+    #   filter_items: 
+    #     min_ratings: 1
+    #     num_items: 100
+    splitting:
+      strategy: temporal
+      train_size: 0.8
+      test_consumes: 5
+
+
+'MovieLens 100k TrainTest':
+  TrainTestLoader:
+    dataset:
+      train:
+        path: ./data/datasets/MovieLens 100k TrainTest/train.csv
+        file_delimiter: "::"
+        skip_head: false
+      test:
+        path: ./data/datasets/MovieLens 100k TrainTest/test.csv
+        file_delimiter: "::"
+        skip_head: false
+
+
+'Nano Dataset':
+  DefaultLoader:
+    dataset:
+      path: ./data/datasets/Nano Dataset/ratings.csv
+      random_seed: 0
+      file_delimiter: ","
+      skip_head: true
+    prefiltering: None
+    splitting:
+      strategy: temporal
+      train_size: 0.8
+      test_consumes: 1
+
+
+
+
+"MovieLens 1M":
+  DefaultDatasetLoader:  
+    dataset_path: ./data/datasets/MovieLens 1M/
+    random_seed: 0
+    prefiltering:
+      test_consumes: 5    
+    splitting:
+      strategy: temporal
+      train_size: 0.8
+"MovieLens 1M Validation":
+  DefaultValidationDatasetLoader:  
+    dataset_path: ./data/datasets/MovieLens 1M/
+    random_seed: 0
+    prefiltering:
+      test_consumes: 5  
+    splitting:
+      strategy: temporal
+      train_size: 0.8
+
+"MovieLens 10M":
+  DefaultDatasetLoader:
+    dataset_path: ./data/datasets/MovieLens 10M/
+    random_seed: 0
+    prefiltering:
+      test_consumes: 5  
+    splitting:
+      strategy: temporal
+      train_size: 0.8
+"MovieLens 10M Validation":
+  DefaultValidationDatasetLoader:  
+    dataset_path: ./data/datasets/MovieLens 10M/
+    random_seed: 0
+    prefiltering:
+      test_consumes: 5  
+    splitting:
+      strategy: temporal
+      train_size: 0.8
+
+"MovieLens 20M":
+  DefaultDatasetLoader:
+    dataset_path: ./data/datasets/MovieLens 20M/
+    random_seed: 0
+    prefiltering:
+      test_consumes: 5  
+    splitting:
+      strategy: temporal
+      train_size: 0.8
+"MovieLens 20M Validation":
+  DefaultValidationDatasetLoader:
+    dataset_path: ./data/datasets/MovieLens 20M/
+    random_seed: 0
+    prefiltering:
+      test_consumes: 5  
+    splitting:
+      strategy: temporal
+      train_size: 0.8
+
+"LastFM 5k":
+  DefaultDatasetLoader:
+    dataset_path: "./data/datasets/LastFM-5K/"
+    random_seed: 0
+    prefiltering:
+      test_consumes: 5  
+    splitting:
+      strategy: temporal
+      train_size: 0.8
+"LastFM 5k Validation":
+  DefaultValidationDatasetLoader:
+    dataset_path: "./data/datasets/LastFM-5K/"
+    random_seed: 0
+    prefiltering:
+      test_consumes: 5  
+    splitting:
+      strategy: temporal
+      train_size: 0.8
+
+"Kindle Store":
+  DefaultDatasetLoader:
+    dataset_path: ./data/datasets/Kindle Store/
+    random_seed: 0
+    prefiltering:
+      test_consumes: 5  
+    splitting:
+      strategy: temporal
+      train_size: 0.8
+"Kindle Store Validation":
+  DefaultValidationDatasetLoader:  
+    dataset_path: ./data/datasets/Kindle Store/
+    random_seed: 0
+    prefiltering:
+      test_consumes: 5  
+    splitting:
+      strategy: temporal
+      train_size: 0.8
+
+"Kindle 4k":
+  DefaultDatasetLoader:
+    dataset_path: ./data/datasets/Kindle 4k/
+    random_seed: 0
+    prefiltering:
+      test_consumes: 5  
+    splitting:
+      strategy: temporal
+      train_size: 0.8
+"Kindle 4k Validation":
+  DefaultValidationDatasetLoader:
+    dataset_path: ./data/datasets/Kindle 4k/
+    random_seed: 0
+    prefiltering:
+      test_consumes: 5  
+    splitting:
+      strategy: temporal
+      train_size: 0.8
+
+"Netflix":
+  DefaultDatasetLoader:
+    dataset_path: ./data/datasets/Netflix/
+    random_seed: 0
+    prefiltering:
+      test_consumes: 5  
+    splitting:
+      strategy: temporal
+      train_size: 0.8
+"Netflix Validation":
+  DefaultValidationDatasetLoader:
+    dataset_path: ./data/datasets/Netflix/
+    random_seed: 0
+    prefiltering:
+      test_consumes: 5  
+    splitting:
+      strategy: temporal
+      train_size: 0.8
+
+"Netflix 10k":
+  DefaultDatasetLoader:
+    dataset_path: ./data/datasets/Netflix 10k/
+    random_seed: 0
+    prefiltering:
+      test_consumes: 5  
+    splitting:
+      strategy: temporal
+      train_size: 0.8
+"Netflix 10k Validation":
+  DefaultValidationDatasetLoader:
+    dataset_path: ./data/datasets/Netflix 10k/
+    random_seed: 0
+    prefiltering:
+      test_consumes: 5  
+    splitting:
+      strategy: temporal
+      train_size: 0.8
+
+"Good Books":
+  DefaultDatasetLoader:
+    dataset_path: ./data/datasets/Good Books/
+    random_seed: 0
+    prefiltering:
+      test_consumes: 5  
+    splitting:
+      strategy: temporal
+      train_size: 0.8
+
+"Good Books Validation":
+  DefaultValidationDatasetLoader:
+    dataset_path: ./data/datasets/Good Books/
+    random_seed: 0
+    prefiltering:
+      test_consumes: 5  
+    splitting:
+      strategy: temporal
+      train_size: 0.8
+
+"Yahoo Music":
+  DefaultDatasetLoader:
+    dataset_path: ./data/datasets/Yahoo Music/
+    random_seed: 0
+    prefiltering:
+      test_consumes: 5  
+    splitting:
+      strategy: temporal
+      train_size: 0.8
+"Yahoo Music Validation":
+  DefaultValidationDatasetLoader:
+    dataset_path: ./data/datasets/Yahoo Music/
+    random_seed: 0
+    prefiltering:
+      test_consumes: 5  
+    splitting:
+      strategy: temporal
+      train_size: 0.8
+
+"Good Reads 10k":
+  DefaultDatasetLoader:    
+    dataset_path: ./data/datasets/Good Reads 10k/
+    random_seed: 0
+    prefiltering:
+      test_consumes: 5  
+    splitting:
+      strategy: temporal
+      train_size: 0.8
+"Good Reads 10k Validation":
+  DefaultValidationDatasetLoader:
+    dataset_path: ./data/datasets/Good Reads 10k/
+    random_seed: 0
+    prefiltering:
+      test_consumes: 5  
+    splitting:
+      strategy: temporal
+      train_size: 0.8
+
+'Yahoo Music 5k':
+  DefaultDatasetLoader:
+    dataset_path: ./data/datasets/Yahoo Music 5k/
+    random_seed: 0
+    prefiltering:
+      test_consumes: 5  
+    splitting:
+      strategy: temporal
+      train_size: 0.8
+'Yahoo Music 5k Validation':
+  DefaultValidationDatasetLoader:
+    dataset_path: ./data/datasets/Yahoo Music 5k/
+    random_seed: 0
+    prefiltering:
+      test_consumes: 5  
+    splitting:
+      strategy: temporal
+      train_size: 0.8
+
+'Yahoo Music 10k':
+  DefaultDatasetLoader:
+    dataset_path: ./data/datasets/Yahoo Music 10k/
+    random_seed: 0
+    prefiltering:
+      test_consumes: 5  
+    splitting:
+      strategy: temporal
+      train_size: 0.8
+'Yahoo Music 10k Validation':
+  DefaultValidationDatasetLoader:
+    dataset_path: ./data/datasets/Yahoo Music 10k/
+    random_seed: 0
+    prefiltering:
+      test_consumes: 5  
+    splitting:
+      strategy: temporal
+      train_size: 0.8
+    
+'MovieLens 25M':
+  DefaultDatasetLoader:
+    dataset_path: ./data/datasets/MovieLens 25M/
+    random_seed: 0
+    prefiltering:
+      test_consumes: 5 
+    splitting:
+      strategy: temporal
+      train_size: 0.8
+'MovieLens 25M Validation':
+  DefaultValidationDatasetLoader:
+    dataset_path: ./data/datasets/MovieLens 25M/
+    random_seed: 0
+    prefiltering:
+      test_consumes: 5 
+    splitting:
+      strategy: temporal
+      train_size: 0.8
