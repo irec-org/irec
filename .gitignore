@@ -4,6 +4,8 @@
 *#
 *.pickle
 data/
+app/
+irec-venv/
 *.out
 *.zip
 *.data
@@ -40,7 +42,6 @@ parts/
 sdist/
 var/
 wheels/
-irec-venv/
 share/python-wheels/
 *.egg-info/
 .installed.cfg
