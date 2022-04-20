@@ -1,11 +1,9 @@
-from irec.value_functions.MostPopular import MostPopular
-from irec.value_functions.Entropy import Entropy
+from irec.agents.value_functions.most_popular import MostPopular
+from irec.agents.value_functions.entropy import Entropy
 from .EvaluationPolicy import EvaluationPolicy
-from irec.utils.dataset import Dataset
+from irec.environment.dataset import Dataset
 from collections import defaultdict
 import matplotlib.pyplot as plt
-from irec.agents import Agent
-import irec.value_functions
 import matplotlib as mpl
 from tqdm import tqdm
 import scipy.sparse
@@ -37,7 +35,6 @@ class InteractionSample(EvaluationPolicy):
         )
 
         data = np.vstack((train_dataset.data, test_dataset.data))
-        from irec.utils.dataset import Dataset
 
         dataset = Dataset(data)
         dataset.update_from_data()
@@ -76,7 +73,7 @@ class InteractionSample(EvaluationPolicy):
             not_recommended = np.ones(num_total_items, dtype=bool)
             not_recommended[users_items_recommended[uid]] = 0
             items_not_recommended = np.nonzero(not_recommended)[0]
-            items_score, info = model.action_estimates((uid, items_not_recommended))
+            items_score, info = model.actions_estimate((uid, items_not_recommended))
             best_items = items_not_recommended[
                 np.argpartition(items_score, -self.interaction_size)[
                     -self.interaction_size :

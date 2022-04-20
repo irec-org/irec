@@ -1,9 +1,9 @@
 from irec.metrics import ILD, Recall, Precision, EPC, EPD
-from irec.value_functions.Entropy import Entropy
+from irec.agents.value_functions.entropy import Entropy
 from .MetricEvaluator import MetricEvaluator
 from collections import defaultdict
 from irec.environment.dataset import Dataset
-import irec.value_functions
+import irec.agents.value_functions
 import scipy.sparse
 import numpy as np
 import time
@@ -115,12 +115,12 @@ class InteractionMetricEvaluator(MetricEvaluator):
             )
         if issubclass(metric_class, EPC):
             self.items_normalized_popularity = (
-                irec.value_functions.MostPopular.MostPopular.get_items_popularity(
+                irec.agents.value_functions.MostPopular.MostPopular.get_items_popularity(
                     self.ground_truth_consumption_matrix
                 )
             )
         if issubclass(metric_class, Entropy):
-            self.items_entropy = irec.value_functions.Entropy.Entropy.get_items_entropy(
+            self.items_entropy = irec.agents.value_functions.Entropy.Entropy.get_items_entropy(
                 self.ground_truth_consumption_matrix
             )
 

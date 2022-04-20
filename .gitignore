@@ -4,6 +4,8 @@
 *#
 *.pickle
 data/
+app/
+irec-venv/
 *.out
 *.zip
 *.data

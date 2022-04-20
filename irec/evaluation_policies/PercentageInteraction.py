@@ -1,9 +1,9 @@
-from irec.ActionCollection import OneUserActionCollection
-from irec.value_functions.MostPopular import MostPopular
-from irec.value_functions.LogPopEnt import LogPopEnt
-from irec.value_functions.BestRated import BestRated
+from irec.agents.action import OneUserItemCollection
+from irec.agents.value_functions.most_popular import MostPopular
+from irec.agents.value_functions.log_pop_ent import LogPopEnt
+from irec.agents.value_functions.best_rated import BestRated
+from irec.agents.value_functions.entropy import Entropy
 from concurrent.futures import ProcessPoolExecutor
-from irec.value_functions.Entropy import Entropy
 from .EvaluationPolicy import EvaluationPolicy
 from irec.environment.dataset import Dataset
 from collections import defaultdict
@@ -70,10 +70,7 @@ class PercentageInteraction(EvaluationPolicy):
         uid, num_itr_npers, rec_items, items_not_recommended, not_recommended = result
         user_items_recommended = []
         for itr in range(self.num_interactions):
-            actions, info = model.act(
-                OneUserActionCollection(uid, items_not_recommended),
-                self.interaction_size,
-            )
+            actions, info = model.act(OneUserItemCollection(uid, items_not_recommended), self.interaction_size)
             best_items = actions[1]
             for item in best_items:
                 not_recommended[item] = 0
