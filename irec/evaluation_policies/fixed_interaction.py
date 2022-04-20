@@ -1,9 +1,7 @@
 from irec.ActionCollection import OneUserActionCollection
-from .EvaluationPolicy import EvaluationPolicy
+from .base import EvaluationPolicy
 from threadpoolctl import threadpool_limits
-from irec.environment.dataset import Dataset
 from collections import defaultdict
-from irec.agents import Agent
 from tqdm import tqdm
 import scipy.sparse
 import numpy as np
@@ -11,6 +9,17 @@ import random
 
 
 class FixedInteraction(EvaluationPolicy):
+
+    """FixedInteraction
+    
+    Each user will be selected for 𝑇 times. Thus, the system will perform 𝑇 × |𝑈 | iterations,
+    where |𝑈 | is the number of distinct users available for the evaluation. The number 𝑇 is 
+    predefined by the researcher in a con- figuration file. Each user is randomly selected and
+    each action will not be per- formed more than once for him/her. 
+
+    """
+
+
     def __init__(
         self,
         num_interactions: int,
@@ -73,8 +82,6 @@ class FixedInteraction(EvaluationPolicy):
                 not_recommended = np.ones(num_total_items, dtype=bool)
                 not_recommended[users_items_recommended[uid]] = 0
                 items_not_recommended = np.nonzero(not_recommended)[0]
-                # items_score, info = model.action_estimates((uid,items_not_recommended))
-                # best_items = items_not_recommended[np.argpartition(items_score,-self.interaction_size)[-self.interaction_size:]]
                 actions, info = model.act(
                     OneUserActionCollection(uid, items_not_recommended),
                     self.interaction_size,
@@ -91,7 +98,6 @@ class FixedInteraction(EvaluationPolicy):
                     model.observe(
                         None, (uid, item), test_consumption_matrix[uid, item], info
                     )
-                # model.increment_time()
                 users_num_interactions[uid] += 1
                 if users_num_interactions[uid] == self.num_interactions:
                     available_users = available_users - {uid}

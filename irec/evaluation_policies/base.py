@@ -1,5 +1,6 @@
 from irec.environment.dataset import Dataset
 from irec.agents import Agent
+from typing import Tuple
 
 """Evaluation Policies.
 
@@ -15,7 +16,7 @@ class EvaluationPolicy:
 
     def evaluate(
         self, model: Agent, train_dataset: Dataset, test_dataset: Dataset
-    ) -> [list, dict]:
+    ) -> Tuple[list, dict]:
         """evaluate.
         
         Performs the form of evaluation according to the chosen policy.
