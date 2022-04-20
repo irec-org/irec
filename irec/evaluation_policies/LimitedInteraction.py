@@ -1,11 +1,6 @@
-from irec.value_functions.MostPopular import MostPopular
-from irec.value_functions.Entropy import Entropy
 from .EvaluationPolicy import EvaluationPolicy
 from threadpoolctl import threadpool_limits
-from irec.utils.dataset import Dataset
 from collections import defaultdict
-from irec.agents import Agent
-from tqdm import tqdm
 import scipy.sparse
 import numpy as np
 import random
@@ -58,7 +53,7 @@ class LimitedInteraction(EvaluationPolicy):
                 not_recommended = np.ones(num_total_items, dtype=bool)
                 not_recommended[users_items_recommended[uid]] = 0
                 items_not_recommended = np.nonzero(not_recommended)[0]
-                # items_score, info = model.action_estimates(
+                # items_score, info = model.actions_estimate(
                 # (uid, items_not_recommended))
                 # best_items = items_not_recommended[np.argpartition(
                 # items_score,

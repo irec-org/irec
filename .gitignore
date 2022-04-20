@@ -40,6 +40,7 @@ parts/
 sdist/
 var/
 wheels/
+irec-venv/
 share/python-wheels/
 *.egg-info/
 .installed.cfg

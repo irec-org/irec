@@ -1,9 +1,9 @@
-from irec.ActionCollection import OneUserActionCollection
+from irec.agents.action import OneUserItemCollection
 from .EvaluationPolicy import EvaluationPolicy
 from threadpoolctl import threadpool_limits
 from irec.environment.dataset import Dataset
 from collections import defaultdict
-from irec.agents import Agent
+from irec.agents.base import Agent
 from tqdm import tqdm
 import scipy.sparse
 import numpy as np
@@ -73,10 +73,10 @@ class FixedInteraction(EvaluationPolicy):
                 not_recommended = np.ones(num_total_items, dtype=bool)
                 not_recommended[users_items_recommended[uid]] = 0
                 items_not_recommended = np.nonzero(not_recommended)[0]
-                # items_score, info = model.action_estimates((uid,items_not_recommended))
+                # items_score, info = model.actions_estimate((uid,items_not_recommended))
                 # best_items = items_not_recommended[np.argpartition(items_score,-self.interaction_size)[-self.interaction_size:]]
                 actions, info = model.act(
-                    OneUserActionCollection(uid, items_not_recommended),
+                    OneUserItemCollection(uid, items_not_recommended),
                     self.interaction_size,
                 )
                 if self.save_info:

@@ -3,7 +3,6 @@ import numpy as np
 import scipy.sparse
 from collections import defaultdict
 
-# import irec.utils.dataset as dataset
 from typing import Any
 
 np.seterr(all="raise")
