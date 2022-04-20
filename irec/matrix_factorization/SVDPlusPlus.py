@@ -6,7 +6,7 @@ from threadpoolctl import threadpool_limits
 import ctypes
 
 from irec.utils.utils import run_parallel
-from matrix_factorization import MF
+from irec.matrix_factorization import MF
 from numba import jit
 
 
