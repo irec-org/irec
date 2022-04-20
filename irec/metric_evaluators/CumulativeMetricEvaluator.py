@@ -1,6 +1,6 @@
 from typing import Any
 from irec.metrics import ILD, Recall, Precision, EPC, EPD
-from .MetricEvaluator import MetricEvaluator
+from .base import MetricEvaluator
 from collections import defaultdict
 import scipy.sparse
 import numpy as np

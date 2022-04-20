@@ -1,4 +1,4 @@
-from .MetricEvaluator import MetricEvaluator
+from .base import MetricEvaluator
 from collections import defaultdict
 from irec.metrics import Recall
 from irec.utils import dataset
@@ -8,6 +8,14 @@ import time
 np.seterr(all="raise")
 
 class TotalMetricEvaluator(MetricEvaluator):
+
+    """TotalMetricEvaluator
+    
+    Evaluate the whole recommendation process as one unique procedure. 
+    For example, if certain items were recommended during 100 interactions, 
+    the metric will be calculated only at the 100th interaction.
+    """
+
     def __init__(self, ground_truth_dataset, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.ground_truth_dataset = ground_truth_dataset

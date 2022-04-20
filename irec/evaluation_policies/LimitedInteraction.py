@@ -2,7 +2,7 @@ from irec.value_functions.MostPopular import MostPopular
 from irec.value_functions.Entropy import Entropy
 from .EvaluationPolicy import EvaluationPolicy
 from threadpoolctl import threadpool_limits
-from irec.utils.dataset import Dataset
+from irec.environment.dataset import Dataset
 from collections import defaultdict
 from irec.agents import Agent
 from tqdm import tqdm
