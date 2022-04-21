@@ -1,6 +1,6 @@
 import numpy as np
 import scipy
-from .matrix_factorization.SVD import SVD
+from irec.matrix_factorization.SVD import SVD
 from .base import ValueFunction
 
 

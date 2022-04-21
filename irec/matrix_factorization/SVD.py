@@ -1,4 +1,4 @@
-from irec.mf.MF import MF
+from irec.matrix_factorization.MF import MF
 import scipy.sparse
 
 
