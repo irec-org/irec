@@ -1,3 +1,4 @@
+from tokenize import Number
 from typing import List
 import numpy as np
 
@@ -78,3 +79,15 @@ class Dataset:
         """ 
         self.num_total_users = num_total_users if num_total_users > self.max_uid+1 else self.max_uid+1
         self.num_total_items = num_total_items if num_total_items > self.max_iid+1 else self.max_iid+1
+
+
+    def __str__(self):
+        return f"\n\
+                 Number of users: {self.num_users} \n\
+                 Number of itemns: {self.num_items} \n\
+                 Max uid: {self.max_uid} \n\
+                 Max iid: {self.max_iid} \n\
+                 Min rating: {self.min_rating} \n\
+                 Max rating: {self.max_rating} \n\
+                 Total number of users: {self.num_total_users} \n\
+                 Total number of items: {self.num_total_items} \n"

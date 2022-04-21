@@ -30,11 +30,13 @@ class Temporal(SplitStrategy):
         data_df = pd.DataFrame(data, columns=["userId", "itemId", "rating", "timestamp"])
         test_candidate_users = self._get_users_candidate(data_df)
         test_candidate_users = np.array(test_candidate_users, dtype=int)
-        users_start_time = data_df.groupby("userId").min()["timestamp"].to_numpy()
+        users_start_time = data_df.groupby("userId").min()["timestamp"].to_dict()
+        users_start_time = [users_start_time[tcu] for tcu in test_candidate_users]
+        
         test_uids = np.array(
             list(
                 test_candidate_users[
-                    list(reversed(np.argsort(users_start_time[test_candidate_users])))
+                    list(reversed(np.argsort(users_start_time)))
                 ]
             )[:num_test_users]
         )

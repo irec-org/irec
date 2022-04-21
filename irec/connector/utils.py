@@ -724,9 +724,11 @@ def generate_base(dataset_name, settings):
 
         dataset_loader_factory = DatasetLoaderFactory()
         dataset_loader = dataset_loader_factory.create(dataset_loader_settings)
-        train_dataset, test_dataset = dataset_loader.process()
+        train_dataset, test_dataset, x_validation, y_validation = dataset_loader.process()
         log_custom_artifact("./tmp/train_dataset.pickle", train_dataset)
         log_custom_artifact("./tmp/test_dataset.pickle", test_dataset)
+        log_custom_artifact("./tmp/x_validation.pickle", x_validation)
+        log_custom_artifact("./tmp/y_validation.pickle", y_validation)
 
 
 def download_data(dataset_names):

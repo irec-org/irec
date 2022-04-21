@@ -2,7 +2,7 @@ from typing import Tuple, TypedDict
 import pandas as pd
 import numpy as np
 import random
-
+from copy import deepcopy
 from irec.environment.dataset import Dataset
 from irec.environment.registry import FilterRegistry, SplitRegistry
 
@@ -11,6 +11,7 @@ FilterUsersType = TypedDict('FilterUsersType', {'min_consumption': int, 'num_use
 FilterItemsType = TypedDict('FilterItemsType', {'min_ratings': int, 'num_items': int})
 FilteringType = TypedDict('FilteringType', {'filter_users': FilterUsersType, 'filter_items': FilterItemsType})
 SplittingType = TypedDict('SplittingType', {'strategy': str, 'train_size': float, 'test_consumes': int})
+ValidationType = TypedDict('ValidationType', {'validation_size': float})
 
 
 class DefaultLoader:
@@ -18,6 +19,7 @@ class DefaultLoader:
     def __init__(self,
                  dataset: DatasetType,
                  prefiltering: FilteringType,
+                 validation: ValidationType,
                  splitting: SplittingType) -> None:
         """__init__.
 
@@ -38,6 +40,9 @@ class DefaultLoader:
 
         # filtering attributes
         self.prefiltering = prefiltering
+        
+        # validation attributes
+        self.validation = validation
 
         # splitting attributes
         self.test_consumes = splitting["test_consumes"] if "test_consumes" in splitting.keys() else 0
@@ -147,4 +152,10 @@ class DefaultLoader:
         print(f"\nApplying splitting strategy: {self.strategy}\n")
         train_dataset, test_dataset = self._split(dataset)
 
-        return train_dataset, test_dataset
+        # Split to validation if necessary
+        x_validation, y_validation = None, None
+        if self.validation != "None":
+            print("\nGenerating x_validation and y_validation: ")
+            x_validation, y_validation = self._split(train_dataset)
+
+        return train_dataset, test_dataset, x_validation, y_validation
