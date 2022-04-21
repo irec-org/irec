@@ -1,4 +1,4 @@
-from .EvaluationPolicy import EvaluationPolicy
+from .base import EvaluationPolicy
 from threadpoolctl import threadpool_limits
 from collections import defaultdict
 import scipy.sparse
@@ -6,6 +6,17 @@ import numpy as np
 import random
 
 class LimitedInteraction(EvaluationPolicy):
+
+    """LimitedInteraction
+
+    In this evaluation policy, the system will perform new actions until it
+    reaches all items registered in the user's history. The idea is to do an
+    exhaustive experiment to observe which algorithm takes the longest to reach
+    all the items previously evaluated by each user. Each user is randomly selected and
+    each action will not be per- formed more than once for him/her. 
+    
+    """
+
     def __init__(
         self, interaction_size, recommend_test_data_rate_limit, *args, **kwargs
     ):
@@ -33,7 +44,6 @@ class LimitedInteraction(EvaluationPolicy):
             print(f"Starting {model.name} Training")
             model.reset(train_dataset)
             print(f"Ended {model.name} Training")
-            # users_num_interactions = defaultdict(int)
             users_num_items_to_recommend_from_test = dict()
             available_users = set()
             for uid in test_users:
@@ -53,11 +63,7 @@ class LimitedInteraction(EvaluationPolicy):
                 not_recommended = np.ones(num_total_items, dtype=bool)
                 not_recommended[users_items_recommended[uid]] = 0
                 items_not_recommended = np.nonzero(not_recommended)[0]
-                # items_score, info = model.actions_estimate(
-                # (uid, items_not_recommended))
-                # best_items = items_not_recommended[np.argpartition(
-                # items_score,
-                # -self.interaction_size)[-self.interaction_size:]]
+           
                 actions, info = model.act(
                     (uid, items_not_recommended), self.interaction_size
                 )
@@ -73,7 +79,6 @@ class LimitedInteraction(EvaluationPolicy):
                         test_consumption_matrix[uid, item] > 0
                     )
 
-                # users_num_interactions[uid] += 1
                 if (
                     users_num_items_recommended_from_test[uid]
                     >= users_num_items_to_recommend_from_test[uid]
