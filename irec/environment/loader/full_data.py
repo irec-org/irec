@@ -14,7 +14,7 @@ SplittingType = TypedDict('SplittingType', {'strategy': str, 'train_size': float
 ValidationType = TypedDict('ValidationType', {'validation_size': float})
 
 
-class DefaultLoader:
+class FullData:
 
     def __init__(self,
                  dataset: DatasetType,

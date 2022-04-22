@@ -9,12 +9,12 @@ DatasetType = TypedDict('DatasetType', {'train': TrainDatasetType, 'test': TestD
 ValidationType = TypedDict('ValidationType', {'validation_size': float})
 
 
-class TrainTestLoader:
+class SplitData:
 
     def __init__(
             self,
-            validation, ValidationType,
-            dataset: DatasetType) -> None:
+            dataset: DatasetType,
+            validation: ValidationType) -> None:
         """__init__.
 
         Args:

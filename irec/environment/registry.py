@@ -45,12 +45,12 @@ class FilterRegistry:
 
 class LoaderRegistry:
     
-    from irec.environment.loader.train_test import TrainTestLoader
-    from irec.environment.loader.full_data import DefaultLoader
+    from irec.environment.loader.train_test import SplitData
+    from irec.environment.loader.full_data import FullData
 
     _loader = {
-        "TrainTestLoader": TrainTestLoader,
-        "DefaultLoader": DefaultLoader,
+        "SplitData": SplitData,
+        "FullData": FullData,
     }
 
     @classmethod
