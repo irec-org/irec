@@ -1,9 +1,10 @@
-from typing import Tuple, TypedDict
+from typing import Tuple, TypedDict, List
 import pandas as pd
 import numpy as np
 import random
 
 from irec.environment.dataset import Dataset
+from irec.environment.loader.base import Loader
 from irec.environment.registry import FilterRegistry, SplitRegistry
 
 DatasetType = TypedDict('DatasetType', {'path': str, 'random_seed': float, 'file_delimiter': str, 'skip_head': bool})
@@ -13,7 +14,7 @@ FilteringType = TypedDict('FilteringType', {'filter_users': FilterUsersType, 'fi
 SplittingType = TypedDict('SplittingType', {'strategy': str, 'train_size': float, 'test_consumes': int})
 
 
-class DefaultLoader:
+class FullData(Loader):
 
     def __init__(self,
                  dataset: DatasetType,
@@ -62,12 +63,9 @@ class DefaultLoader:
     def _filter(self,
                 data: np.array) -> np.ndarray:
         """_filter
-
-            Applies all filters specified in dataset_loaders.yaml
-
+            Applies all filters required
         Args:
             data: the array of data previously read
-
         Returns:
             data_df (np.array): The data filtered by the filters applied.
         """
@@ -84,12 +82,9 @@ class DefaultLoader:
     def _split(self,
                dataset: Dataset) -> Tuple[Dataset, Dataset]:
         """split
-
             Splits the data set into training and testing
-
         Args:
             dataset (Dataset): an object of the dataset class
-
         Returns:
             train_dataset (Dataset): the train
             test_dataset (Dataset): the test
@@ -113,17 +108,13 @@ class DefaultLoader:
         )
         return train_dataset, test_dataset
 
-    def process(self) -> Tuple[Dataset, Dataset]:
-
+    def process(self) -> List[Dataset, Dataset, Dataset, Dataset]:
         """process
-
-        Perform complete processing of the dataset: read -> filter (optional) -> split
-
-        Return: 
+            Perform complete processing of the dataset: read -> filter (optional) -> split
+        Returns:
             train_dataset (Dataset): the train
             test_dataset (Dataset): the test
         """
-
         np.random.seed(self.random_seed)
         random.seed(self.random_seed)
         # Read the data
@@ -147,4 +138,4 @@ class DefaultLoader:
         print(f"\nApplying splitting strategy: {self.strategy}\n")
         train_dataset, test_dataset = self._split(dataset)
 
-        return train_dataset, test_dataset
+        return [train_dataset, test_dataset, None, None]

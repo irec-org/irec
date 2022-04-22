@@ -1,6 +1,7 @@
-from typing import TypedDict, Tuple
+from typing import TypedDict, List
 import numpy as np
 from irec.environment.dataset import Dataset
+from irec.environment.loader.base import Loader
 
 TrainDatasetType = TypedDict('TrainDatasetType', {'path': str, 'file_delimiter': str, 'skip_head': bool})
 TestDatasetType = TypedDict('TestDatasetType', {'path': str, 'file_delimiter': str, 'skip_head': bool})
@@ -8,17 +9,15 @@ ValidationDatasetType = TypedDict('ValidationDatasetType', {'path': str, 'file_d
 DatasetType = TypedDict('DatasetType', {'train': TrainDatasetType, 'test': TestDatasetType})
 
 
-class TrainTestLoader:
+class SplitData(Loader):
 
     def __init__(
             self,
             dataset: DatasetType) -> None:
         """__init__.
-
         Args:
             dataset (DatasetType): info required by the dataset
         """
-
         assert len(dataset.keys()) == 2, "You must define files for train and test sets."
         self.dataset_params = dataset
 
@@ -27,13 +26,10 @@ class TrainTestLoader:
                         split_type: str) -> None:
 
         """_set_attributes
-
             Set dataset attributes
-
         Args:
             dataset (DatasetType): dictionary with training and test datasets
             split_type (str): split type (train or test)
-
         """
 
         if split_type in dataset.keys() and "path" in dataset[split_type].keys():
@@ -48,33 +44,29 @@ class TrainTestLoader:
     @staticmethod
     def _read(path: str,
               delimiter: str,
-              skiprows: int) -> np.ndarray:
+              skip_rows: int) -> np.ndarray:
         """_read
-
             The data read according to the parameters specified.
-
         Args:
             path (str): dataset directory
             delimiter (str): file delimiter
-            skiprows (str): used to skip or not the file header
-
-        Return:
+            skip_rows (str): used to skip or not the file header
+        Returns:
             data (np.ndarray): the data    
         """
         data = np.loadtxt(path,
                           delimiter=delimiter,
-                          skiprows=skiprows)
+                          skiprows=skip_rows)
         return data
 
-    def process(self) -> Tuple[Dataset, Dataset]:
-
+    def process(self) -> List[Dataset, Dataset, Dataset, Dataset]:
         """process
-
-            reads the dataset and gets information about the dataset
-
+            Reads the dataset and gets information about the dataset
         Returns:
             train_dataset (Dataset): the train
             test_dataset (Dataset): the test
+            x_validation (Dataset): the validation train
+            y_validation (Dataset): the validation test
         """
 
         self._set_attributes(self.dataset_params, split_type="train")
@@ -105,4 +97,4 @@ class TrainTestLoader:
         print("Test shape:", test_dataset.data.shape)
         print("Train shape:", train_dataset.data.shape)
 
-        return train_dataset, test_dataset
+        return [train_dataset, test_dataset, None, None]

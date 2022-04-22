@@ -45,12 +45,13 @@ class FilterRegistry:
 
 class LoaderRegistry:
     
-    from irec.environment.loader.train_test import TrainTestLoader
-    from irec.environment.loader.full_data import DefaultLoader
+    from irec.environment.loader.train_test import SplitData
+    from irec.environment.loader.full_data import FullData
 
+    # TODO: rename these parameters?
     _loader = {
-        "TrainTestLoader": TrainTestLoader,
-        "DefaultLoader": DefaultLoader,
+        "TrainTestLoader": SplitData,
+        "DefaultLoader": FullData,
     }
 
     @classmethod
