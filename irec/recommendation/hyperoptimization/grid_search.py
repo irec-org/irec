@@ -1,11 +1,11 @@
-from typing import List
-from base import Tunning
-# from .base import Tunning
-import json
-import numpy as np
-import sklearn.model_selection
-from numpy import linspace
 from irec.connector.utils import flatten_dict, unflatten_dict
+import sklearn.model_selection
+from .base import Tunning
+from numpy import linspace
+# from base import Tunning
+from typing import List
+import numpy as np
+import json
 import copy
 
 class GridSearch(Tunning):
@@ -42,9 +42,10 @@ class GridSearch(Tunning):
         agents_search = {}
         for index, agent_template in enumerate(agents_variables):
             agent_name = list(agents_variables[index].keys())[0]
-            self.current_template = agent_template
+            self.current_template = agent_template[agent_name]
             self._update_current_template(self.current_template)
             agents_variables[index] = self.current_template
+            # print(self.current_template)
             new_parameters = self._generate_grid_parameters(agents_variables[index])
             agents_search[agent_name] = new_parameters
         return agents_search

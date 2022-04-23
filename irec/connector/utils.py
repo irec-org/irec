@@ -1,5 +1,7 @@
 from os.path import sep
 import os
+
+from sqlalchemy import true
 from app import errors
 import pickle
 import yaml
@@ -444,7 +446,7 @@ def log_custom_artifact(fname, obj):
     mlflow.log_artifact(fnametmp)
 
 
-def load_dataset_experiment(settings):
+def load_dataset_experiment(settings, validation=False):
     run = already_ran(
         parameters_normalize(
             constants.DATASET_PARAMETERS_PREFIX,
@@ -467,7 +469,14 @@ def load_dataset_experiment(settings):
     test_artifact_path = client.download_artifacts(run.info.run_id, "test_dataset.pickle")
     train_dataset = pickle.load(open(train_artifact_path, "rb"))
     test_dataset = pickle.load(open(test_artifact_path, "rb"))
-    return train_dataset, test_dataset
+    x_validation, y_validation = None, None
+    if validation:
+        x_validation_path = client.download_artifacts(run.info.run_id, "x_validation.pickle")
+        y_validation_path = client.download_artifacts(run.info.run_id, "y_validation.pickle")
+        x_validation = pickle.load(open(x_validation_path, "rb"))
+        y_validation = pickle.load(open(y_validation_path, "rb"))
+
+    return train_dataset, test_dataset, x_validation, y_validation
 
 
 def run_agent(train_dataset, test_dataset, settings, forced_run):
@@ -782,7 +791,7 @@ def run_agent_with_dataset_parameters(
     for dataset_loader_name in dataset_loaders:
         current_settings = settings
         current_settings["defaults"]["dataset_loader"] = dataset_loader_name
-        train_dataset, test_dataset = load_dataset_experiment(settings)
+        train_dataset, test_dataset, _, _ = load_dataset_experiment(settings)
         for agent_name in agents:
             current_settings["defaults"]["agent"] = agent_name
             current_settings["agents"][agent_name] = dataset_agents_parameters[
@@ -1258,7 +1267,7 @@ def evaluate_agent_with_dataset_parameters(
         for dataset_loader_name in dataset_loaders:
             settings["defaults"]["dataset_loader"] = dataset_loader_name
 
-            train_dataset, test_dataset = load_dataset_experiment(settings)
+            train_dataset, test_dataset, _, _ = load_dataset_experiment(settings)
 
             data = np.vstack(
                 (train_dataset.data, test_dataset.data)
@@ -1296,13 +1305,14 @@ def run_agent_search(
         futures = set()
         for dataset_loader_name in dataset_loaders:
             settings["defaults"]["dataset_loader"] = dataset_loader_name
-            data = load_dataset_experiment(settings)
+            train_dataset, test_dataset, x_validation, y_validation = load_dataset_experiment(settings, validation=True)
             for agent_name in agents:
                 settings["defaults"]["agent"] = agent_name
                 for agent_og_parameters in agents_search_parameters[agent_name]:
                     settings["agents"][agent_name] = agent_og_parameters
                     f = executor.submit(
-                        run_agent, data, copy.deepcopy(settings), forced_run
+                        # run_agent, train_dataset, test_dataset, copy.deepcopy(settings), forced_run
+                        run_agent, x_validation, y_validation, copy.deepcopy(settings), forced_run
                     )
                     futures.add(f)
                     if len(futures) >= tasks:
@@ -1321,12 +1331,14 @@ def eval_agent_search(
         futures = set()
         for dataset_loader_name in dataset_loaders:
             settings["defaults"]["dataset_loader"] = dataset_loader_name
-            traintest = load_dataset_experiment(settings)
-
-            data = np.vstack((traintest.train.data, traintest.test.data))
-            dataset = copy.copy(traintest.train)
-            dataset.data = data
+            
+            train_dataset, test_dataset, x_validation, y_validation = load_dataset_experiment(settings, validation=True)
+            # data = np.vstack((train_dataset.data, test_dataset.data))
+            data = np.vstack((x_validation.data, y_validation.data))
+            dataset = Dataset(data)
             dataset.set_parameters()
+            dataset.update_num_total_users_items()
+
             for agent_name in agents:
                 settings["defaults"]["agent"] = agent_name
                 for agent_og_parameters in agents_search_parameters[agent_name]:
@@ -1425,6 +1437,7 @@ def print_agent_search(
             for k3, v3 in v2.items():
                 values = np.array(list(v3.values()))
                 keys = list(v3.keys())
+                print("\n\n\n\nVALUES: ", values)
                 idxs = np.argsort(values)[::-1]
                 keys = [keys[i] for i in idxs]
                 values = [values[i] for i in idxs]
