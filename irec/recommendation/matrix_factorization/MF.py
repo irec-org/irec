@@ -8,7 +8,7 @@ import scipy.sparse
 from numba import jit, prange
 
 # from .. import irec.utils
-from irec.offline_experiments import metrics
+import irec.offline_experiments.metrics_utils as metrics
 
 
 @jit(nopython=True, parallel=True)

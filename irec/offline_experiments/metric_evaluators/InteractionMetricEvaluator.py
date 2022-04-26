@@ -1,5 +1,10 @@
-from irec.offline_experiments.metrics import ILD, Recall, Precision, EPC, EPD
+from irec.offline_experiments.metrics.ild import ILD
+from irec.offline_experiments.metrics.recall import Recall
+from irec.offline_experiments.metrics.precision import Precision
+from irec.offline_experiments.metrics.epc import EPC
+from irec.offline_experiments.metrics.epd import EPD
 from irec.recommendation.agents.value_functions.entropy import Entropy
+from irec.recommendation.agents.value_functions.most_popular import MostPopular
 from .MetricEvaluator import MetricEvaluator
 from collections import defaultdict
 from irec.environment.dataset import Dataset
@@ -7,7 +12,7 @@ import irec.recommendation.agents.value_functions
 import scipy.sparse
 import numpy as np
 import time
-from irec.offline_experiments import metrics
+import irec.offline_experiments.metrics_utils as metrics
 np.seterr(all="raise")
 
 class InteractionMetricEvaluator(MetricEvaluator):
@@ -115,12 +120,12 @@ class InteractionMetricEvaluator(MetricEvaluator):
             )
         if issubclass(metric_class, EPC):
             self.items_normalized_popularity = (
-                irec.recommendation.agents.value_functions.MostPopular.MostPopular.get_items_popularity(
+                MostPopular.get_items_popularity(
                     self.ground_truth_consumption_matrix
                 )
             )
         if issubclass(metric_class, Entropy):
-            self.items_entropy = irec.recommendation.agents.value_functions.Entropy.Entropy.get_items_entropy(
+            self.items_entropy = Entropy.get_items_entropy(
                 self.ground_truth_consumption_matrix
             )
 

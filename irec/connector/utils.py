@@ -33,7 +33,8 @@ from irec.offline_experiments.metric_evaluators.UserCumulativeInteractionMetricE
     UserCumulativeInteractionMetricEvaluator,
 )
 
-from irec.offline_experiments.evaluation_policies.registry import EvalPolicyRegistry
+from irec.offline_experiments.registry import EvalPolicyRegistry
+from irec.offline_experiments.registry import MetricRegistry
 
 import copy
 import os.path
@@ -529,7 +530,8 @@ def evaluate_itr(dataset, settings, forced_run):
         settings["defaults"]["metric_evaluator"]
     ]
 
-    metric_class = eval("irec.offline_experiments.metrics." + settings["defaults"]["metric"])
+    metric_class_name = settings["defaults"]["metric"]
+    metric_class = MetricRegistry.get(metric_class_name)
     print(settings["defaults"]["metric_evaluator"], metric_evaluator_parameters)
 
     metric_evaluator_name = settings["defaults"]["metric_evaluator"]
@@ -832,7 +834,7 @@ def print_results_latex_table(
     plt.rcParams["lines.linewidth"] = 2
     plt.rcParams["font.size"] = 15
     # metrics_classes = [metrics.Hits, metrics.Recall]
-    metrics_classes = [eval("irec.offline_experiments.metrics." + i) for i in metrics]
+    metrics_classes = [MetricRegistry.get(i) for i in metrics]
 
     # metrics_classes = [
     # metrics.Hits,
@@ -1481,7 +1483,7 @@ def print_results_latex_horizontal_table(
     plt.rcParams["axes.prop_cycle"] = cycler(color="krbgmyc")
     plt.rcParams["lines.linewidth"] = 2
     plt.rcParams["font.size"] = 15
-    metrics_classes = [eval("irec.offline_experiments.metrics." + i) for i in metrics]
+    metrics_classes = [MetricRegistry.get(i) for i in metrics]
 
     metrics_classes_names = list(map(lambda x: x.__name__, metrics_classes))
     metrics_names = metrics_classes_names
