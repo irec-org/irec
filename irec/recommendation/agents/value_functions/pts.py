@@ -6,7 +6,7 @@ from collections import defaultdict
 from base import ValueFunction
 from tqdm import tqdm
 from numba import njit
-import irec.matrix_factorization as mf
+import irec.recommendation.matrix_factorization as mf
 
 
 @njit

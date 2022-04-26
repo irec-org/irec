@@ -2,7 +2,7 @@ from .icf import ICF
 import numpy as np
 from collections import defaultdict
 import scipy
-from irec.matrix_factorization.ICFPMFS import ICFPMFS
+from irec.recommendation.matrix_factorization.ICFPMFS import ICFPMFS
 
 
 class LinearICF(ICF):

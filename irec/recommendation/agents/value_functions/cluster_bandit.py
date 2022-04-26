@@ -7,7 +7,7 @@ import scipy.stats
 from collections import defaultdict
 from sklearn.cluster import KMeans 
 import itertools
-from irec.matrix_factorization.SVD import SVD
+from irec.recommendation.matrix_factorization.SVD import SVD
 
 from cachetools import cached
 from cachetools.keys import hashkey

@@ -9,7 +9,7 @@ from irec import metrics
 from tqdm import tqdm
 
 from irec.utils.utils import run_parallel
-from irec.matrix_factorization import MF
+from irec.recommendation.matrix_factorization import MF
 
 
 class PMF(MF):

@@ -5,7 +5,7 @@ from threadpoolctl import threadpool_limits
 import ctypes
 
 from irec.utils.utils import run_parallel
-from irec.matrix_factorization.MF import MF
+from irec.recommendation.matrix_factorization.MF import MF
 
 
 class ICFPMF(MF):

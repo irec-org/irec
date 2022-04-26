@@ -8,7 +8,7 @@ from irec import metrics
 from tqdm import tqdm
 
 from irec.utils.utils import run_parallel
-from irec.matrix_factorization.MF import MF
+from irec.recommendation.matrix_factorization.MF import MF
 from numba import jit
 
 

@@ -4,7 +4,7 @@ from ..value_functions.entropy import Entropy
 from .base import ActionSelectionPolicy
 from collections import defaultdict
 from sklearn.cluster import KMeans
-from irec.matrix_factorization.SVD import SVD
+from irec.recommendation.matrix_factorization.SVD import SVD
 from typing import Any
 import scipy.sparse
 import numpy as np
