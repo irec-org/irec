@@ -4,9 +4,9 @@ from typing import List
 
 class EvalPolicyRegistry:
 
-    from irec.evaluation_policies.base import EvaluationPolicy
-    from irec.evaluation_policies.fixed_interaction import FixedInteraction
-    from irec.evaluation_policies.limited_interaction import LimitedInteraction
+    from irec.offline_experiments.evaluation_policies.base import EvaluationPolicy
+    from irec.offline_experiments.evaluation_policies.fixed_interaction import FixedInteraction
+    from irec.offline_experiments.evaluation_policies.limited_interaction import LimitedInteraction
 
     _eval_policy = {
         "EvaluationPolicy": EvaluationPolicy,

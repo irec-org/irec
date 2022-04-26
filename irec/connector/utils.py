@@ -21,19 +21,19 @@ import numpy as np
 import matplotlib.pyplot as plt
 from os.path import sep
 import irec.value_functions
-from irec.evaluation_policies.base import EvaluationPolicy
-import irec.evaluation_policies
+from irec.offline_experiments.evaluation_policies.base import EvaluationPolicy
+import irec.offline_experiments.evaluation_policies
 from irec.utils.Factory import (
     AgentFactory,
 )
 import scipy
-from irec.metric_evaluators.InteractionMetricEvaluator import InteractionMetricEvaluator
-from irec.metric_evaluators.CumulativeMetricEvaluator import CumulativeMetricEvaluator
-from irec.metric_evaluators.UserCumulativeInteractionMetricEvaluator import (
+from irec.offline_experiments.metric_evaluators.InteractionMetricEvaluator import InteractionMetricEvaluator
+from irec.offline_experiments.metric_evaluators.CumulativeMetricEvaluator import CumulativeMetricEvaluator
+from irec.offline_experiments.metric_evaluators.UserCumulativeInteractionMetricEvaluator import (
     UserCumulativeInteractionMetricEvaluator,
 )
 
-from irec.evaluation_policies.registry import EvalPolicyRegistry
+from irec.offline_experiments.evaluation_policies.registry import EvalPolicyRegistry
 
 import copy
 import os.path
@@ -522,7 +522,7 @@ def evaluate_itr(dataset, settings, forced_run):
     # settings["defaults"]["evaluation_policy"]
     # ]
     # evaluation_policy = eval(
-    # "irec.evaluation_policies." + settings["defaults"]["evaluation_policy"]
+    # "irec.offline_experiments.evaluation_policies." + settings["defaults"]["evaluation_policy"]
     # )(**evaluation_policy_parameters)
 
     metric_evaluator_parameters = settings["metric_evaluators"][
@@ -534,7 +534,7 @@ def evaluate_itr(dataset, settings, forced_run):
 
     metric_evaluator_name = settings["defaults"]["metric_evaluator"]
     exec(
-        f"from irec.metric_evaluators.{metric_evaluator_name} import {metric_evaluator_name}"
+        f"from irec.offline_experiments.metric_evaluators.{metric_evaluator_name} import {metric_evaluator_name}"
     )
     metric_evaluator = eval(metric_evaluator_name)(
         dataset, **metric_evaluator_parameters
@@ -851,7 +851,7 @@ def print_results_latex_table(
     metric_evaluator_parameters = settings["metric_evaluators"][metric_evaluator_name]
 
     exec(
-        f"from irec.metric_evaluators.{metric_evaluator_name} import {metric_evaluator_name}"
+        f"from irec.offline_experiments.metric_evaluators.{metric_evaluator_name} import {metric_evaluator_name}"
     )
     metric_evaluator = eval(metric_evaluator_name)(None, **metric_evaluator_parameters)
 
@@ -861,7 +861,7 @@ def print_results_latex_table(
     # ]
 
     # exec(
-        # f"from irec.evaluation_policies.{evaluation_policy_name} import {evaluation_policy_name}"
+        # f"from irec.offline_experiments.evaluation_policies.{evaluation_policy_name} import {evaluation_policy_name}"
     # )
     # evaluation_policy = eval(evaluation_policy_name)(**evaluation_policy_parameters)
 
@@ -1369,7 +1369,7 @@ def print_agent_search(
 ):
 
     # import irec.metrics
-    # import irec.evaluation_policies
+    # import irec.offline_experiments.evaluation_policies
 
     # evaluation_policy_name = settings["defaults"]["evaluation_policy"]
     # evaluation_policy_parameters = settings["evaluation_policies"][
@@ -1377,7 +1377,7 @@ def print_agent_search(
     # ]
     # metrics_classes = [irec.metrics.Hits]
     # metrics_names = ["Cumulative Hits"]
-    # evaluation_policy = eval("irec.evaluation_policies." + evaluation_policy_name)(
+    # evaluation_policy = eval("irec.offline_experiments.evaluation_policies." + evaluation_policy_name)(
     # **evaluation_policy_parameters
     # )
 
@@ -1392,7 +1392,7 @@ def print_agent_search(
     # metric_class = eval("irec.metrics." + settings["defaults"]["metric"])
 
     # metric_evaluator = eval(
-    # "irec.metric_evaluators." + settings["defaults"]["metric_evaluator"]
+    # "irec.offline_experiments.metric_evaluators." + settings["defaults"]["metric_evaluator"]
     # )(None, **metric_evaluator_parameters)
 
     datasets_metrics_values = defaultdict(
@@ -1491,14 +1491,14 @@ def print_results_latex_horizontal_table(
     metric_evaluator_parameters = settings["metric_evaluators"][metric_evaluator_name]
 
     exec(
-        f"from irec.metric_evaluators.{metric_evaluator_name} import {metric_evaluator_name}"
+        f"from irec.offline_experiments.metric_evaluators.{metric_evaluator_name} import {metric_evaluator_name}"
     )
     metric_evaluator = eval(metric_evaluator_name)(None, **metric_evaluator_parameters)
 
     evaluation_policy_name = settings["defaults"]["evaluation_policy"]
 
     exec(
-        f"from irec.evaluation_policies.{evaluation_policy_name} import {evaluation_policy_name}"
+        f"from irec.offline_experiments.evaluation_policies.{evaluation_policy_name} import {evaluation_policy_name}"
     )
     metrics_weights = {i: 1 / len(metrics_classes_names) for i in metrics_classes_names}
 
