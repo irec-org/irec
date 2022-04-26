@@ -1,8 +1,8 @@
-import irec.agents
+import irec.recommendation.agents
 from irec.environment.registry import LoaderRegistry
-from irec.agents.registry import AgentRegistry
-from irec.agents.registry import ASPRegistry
-from irec.agents.registry import VFRegistry
+from irec.recommendation.agents.registry import AgentRegistry
+from irec.recommendation.agents.registry import ASPRegistry
+from irec.recommendation.agents.registry import VFRegistry
 
 class Factory:
     def __init__(self) -> None:
@@ -18,7 +18,7 @@ class ActionSelectionPolicyFactory(Factory):
         pass
 
     def create(self, action_selection_policy_settings):
-        from irec.agents.action_selection_policies.reranker import ASPReranker
+        from irec.recommendation.agents.action_selection_policies.reranker import ASPReranker
 
         action_selection_policy_name = list(action_selection_policy_settings.keys())[0]
         action_selection_policy_parameters = list(

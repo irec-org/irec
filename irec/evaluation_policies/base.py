@@ -1,6 +1,6 @@
 from typing import Tuple
 from irec.environment.dataset import Dataset
-from irec.agents.base import Agent
+from irec.recommendation.agents.base import Agent
 
 """Evaluation Policies.
 

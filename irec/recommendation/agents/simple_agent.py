@@ -1,4 +1,4 @@
-from irec.agents.action import Action
+from irec.recommendation.agents.action import Action
 from .action import UserItemAction
 from .base import Agent
 from typing import Any

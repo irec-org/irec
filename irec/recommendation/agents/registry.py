@@ -26,7 +26,7 @@ class AgentRegistry:
     @classmethod
     def get(cls: AgentRegistry, name: str):
         return _import_class(
-            root="irec.agents",
+            root="irec.recommendation.agents",
             module_name=cls._agent[name],
             class_name=name
         )
@@ -71,7 +71,7 @@ class VFRegistry:
     @classmethod
     def get(cls: VFRegistry, name: str):
         return _import_class(
-            root="irec.agents.value_functions",
+            root="irec.recommendation.agents.value_functions",
             module_name=cls._vf[name],
             class_name=name
         )
@@ -95,7 +95,7 @@ class ASPRegistry:
     @classmethod
     def get(cls: ASPRegistry, name: str):
         return _import_class(
-            root="irec.agents.action_selection_policies",
+            root="irec.recommendation.agents.action_selection_policies",
             module_name=cls._asp[name],
             class_name=name
         )

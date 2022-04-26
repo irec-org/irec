@@ -1,8 +1,8 @@
-from irec.agents.action import OneUserItemCollection
+from irec.recommendation.agents.action import OneUserItemCollection
 from .base import EvaluationPolicy
 from threadpoolctl import threadpool_limits
 from collections import defaultdict
-from irec.agents.base import Agent
+from irec.recommendation.agents.base import Agent
 from tqdm import tqdm
 import scipy.sparse
 import numpy as np
