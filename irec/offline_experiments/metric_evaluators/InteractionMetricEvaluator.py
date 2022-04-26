@@ -1,4 +1,4 @@
-from irec.metrics import ILD, Recall, Precision, EPC, EPD
+from irec.offline_experiments.metrics import ILD, Recall, Precision, EPC, EPD
 from irec.recommendation.agents.value_functions.entropy import Entropy
 from .MetricEvaluator import MetricEvaluator
 from collections import defaultdict
@@ -7,7 +7,7 @@ import irec.recommendation.agents.value_functions
 import scipy.sparse
 import numpy as np
 import time
-from irec import metrics
+from irec.offline_experiments import metrics
 np.seterr(all="raise")
 
 class InteractionMetricEvaluator(MetricEvaluator):

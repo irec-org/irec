@@ -1,5 +1,5 @@
 from .InteractionMetricEvaluator import InteractionMetricEvaluator
-from irec.metrics import ILD, Recall, Precision, EPC, EPD
+from irec.offline_experiments.metrics import ILD, Recall, Precision, EPC, EPD
 from irec.recommendation.agents.value_functions.entropy import Entropy
 import numpy as np
 import time

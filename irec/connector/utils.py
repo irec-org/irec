@@ -529,7 +529,7 @@ def evaluate_itr(dataset, settings, forced_run):
         settings["defaults"]["metric_evaluator"]
     ]
 
-    metric_class = eval("irec.metrics." + settings["defaults"]["metric"])
+    metric_class = eval("irec.offline_experiments.metrics." + settings["defaults"]["metric"])
     print(settings["defaults"]["metric_evaluator"], metric_evaluator_parameters)
 
     metric_evaluator_name = settings["defaults"]["metric_evaluator"]
@@ -832,7 +832,7 @@ def print_results_latex_table(
     plt.rcParams["lines.linewidth"] = 2
     plt.rcParams["font.size"] = 15
     # metrics_classes = [metrics.Hits, metrics.Recall]
-    metrics_classes = [eval("irec.metrics." + i) for i in metrics]
+    metrics_classes = [eval("irec.offline_experiments.metrics." + i) for i in metrics]
 
     # metrics_classes = [
     # metrics.Hits,
@@ -1368,14 +1368,14 @@ def print_agent_search(
     top_save,
 ):
 
-    # import irec.metrics
+    # import irec.offline_experiments.metrics
     # import irec.offline_experiments.evaluation_policies
 
     # evaluation_policy_name = settings["defaults"]["evaluation_policy"]
     # evaluation_policy_parameters = settings["evaluation_policies"][
     # evaluation_policy_name
     # ]
-    # metrics_classes = [irec.metrics.Hits]
+    # metrics_classes = [irec.offline_experiments.metrics.Hits]
     # metrics_names = ["Cumulative Hits"]
     # evaluation_policy = eval("irec.offline_experiments.evaluation_policies." + evaluation_policy_name)(
     # **evaluation_policy_parameters
@@ -1389,7 +1389,7 @@ def print_agent_search(
     # settings["defaults"]["metric_evaluator"]
     # ]
 
-    # metric_class = eval("irec.metrics." + settings["defaults"]["metric"])
+    # metric_class = eval("irec.offline_experiments.metrics." + settings["defaults"]["metric"])
 
     # metric_evaluator = eval(
     # "irec.offline_experiments.metric_evaluators." + settings["defaults"]["metric_evaluator"]
@@ -1481,7 +1481,7 @@ def print_results_latex_horizontal_table(
     plt.rcParams["axes.prop_cycle"] = cycler(color="krbgmyc")
     plt.rcParams["lines.linewidth"] = 2
     plt.rcParams["font.size"] = 15
-    metrics_classes = [eval("irec.metrics." + i) for i in metrics]
+    metrics_classes = [eval("irec.offline_experiments.metrics." + i) for i in metrics]
 
     metrics_classes_names = list(map(lambda x: x.__name__, metrics_classes))
     metrics_names = metrics_classes_names

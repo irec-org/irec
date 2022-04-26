@@ -1,6 +1,6 @@
 from .MetricEvaluator import MetricEvaluator
 from collections import defaultdict
-from irec.metrics import Recall
+from irec.offline_experiments.metrics import Recall
 from irec.utils import dataset
 import scipy.sparse
 import numpy as np

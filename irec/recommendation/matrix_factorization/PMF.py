@@ -5,7 +5,7 @@ import sys, os
 import random
 from threadpoolctl import threadpool_limits
 import ctypes
-from irec import metrics
+from irec.offline_experiments import metrics
 from tqdm import tqdm
 
 from irec.utils.utils import run_parallel

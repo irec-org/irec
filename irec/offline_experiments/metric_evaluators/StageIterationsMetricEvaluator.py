@@ -1,6 +1,6 @@
 from typing import Any
 from .InteractionMetricEvaluator import InteractionMetricEvaluator
-from irec.metrics import ILD, Recall, Precision, EPC, EPD
+from irec.offline_experiments.metrics import ILD, Recall, Precision, EPC, EPD
 from collections import defaultdict
 import numpy as np
 import time

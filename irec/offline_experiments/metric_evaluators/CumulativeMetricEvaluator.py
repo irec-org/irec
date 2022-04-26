@@ -1,5 +1,5 @@
 from typing import Any
-from irec.metrics import ILD, Recall, Precision, EPC, EPD
+from irec.offline_experiments.metrics import ILD, Recall, Precision, EPC, EPD
 from .MetricEvaluator import MetricEvaluator
 from collections import defaultdict
 import scipy.sparse
