@@ -13,10 +13,10 @@ class FixedInteraction(EvaluationPolicy):
 
     """FixedInteraction
     
-    Each user will be selected for 𝑇 times. Thus, the system will perform 𝑇 × |𝑈 | iterations,
-    where |𝑈 | is the number of distinct users available for the evaluation. The number 𝑇 is 
-    predefined by the researcher in a con- figuration file. Each user is randomly selected and
-    each action will not be per- formed more than once for him/her. 
+    Each user will be selected for T times. Thus, the system will perform T x |U| iterations,
+    where |U| is the number of distinct users available for the evaluation. The number T is 
+    predefined by the researcher in a configuration file. Each user is randomly selected and
+    each action will not be performed more than once for him/her. 
 
     """
 

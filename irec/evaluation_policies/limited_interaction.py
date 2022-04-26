@@ -13,7 +13,7 @@ class LimitedInteraction(EvaluationPolicy):
     reaches all items registered in the user's history. The idea is to do an
     exhaustive experiment to observe which algorithm takes the longest to reach
     all the items previously evaluated by each user. Each user is randomly selected and
-    each action will not be per- formed more than once for him/her. 
+    each action will not be performed more than once for him/her. 
     
     """
 
