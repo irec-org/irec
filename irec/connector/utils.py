@@ -18,8 +18,8 @@ import matplotlib.ticker as mtick
 import numpy as np
 import matplotlib.pyplot as plt
 from os.path import sep
-import irec.agents.value_functions
-from irec.evaluation_policies.EvaluationPolicy import EvaluationPolicy
+import irec.value_functions
+from irec.evaluation_policies.base import EvaluationPolicy
 import irec.evaluation_policies
 from irec.utils.Factory import (
     AgentFactory,
@@ -30,6 +30,9 @@ from irec.metric_evaluators.CumulativeMetricEvaluator import CumulativeMetricEva
 from irec.metric_evaluators.UserCumulativeInteractionMetricEvaluator import (
     UserCumulativeInteractionMetricEvaluator,
 )
+
+from irec.evaluation_policies.registry import EvalPolicyRegistry
+
 import copy
 import os.path
 import collections.abc
@@ -474,10 +477,7 @@ def run_agent(train_dataset, test_dataset, settings, forced_run):
         evaluation_policy_name
     ]
 
-    exec(
-        f"from irec.evaluation_policies.{evaluation_policy_name} import {evaluation_policy_name}"
-    )
-    evaluation_policy = eval(evaluation_policy_name)(**evaluation_policy_parameters)
+    evaluation_policy = EvalPolicyRegistry.get(evaluation_policy_name)(**evaluation_policy_parameters)
 
     mlflow.set_experiment(settings["defaults"]["dataset_experiment"])
 
@@ -849,9 +849,9 @@ def print_results_latex_table(
     # evaluation_policy_name
     # ]
 
-    exec(
-        f"from irec.evaluation_policies.{evaluation_policy_name} import {evaluation_policy_name}"
-    )
+    # exec(
+        # f"from irec.evaluation_policies.{evaluation_policy_name} import {evaluation_policy_name}"
+    # )
     # evaluation_policy = eval(evaluation_policy_name)(**evaluation_policy_parameters)
 
     # metrics_names = [
