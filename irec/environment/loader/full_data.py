@@ -4,7 +4,8 @@ import numpy as np
 import random
 
 from irec.environment.dataset import Dataset
-from irec.environment.registry import FilterRegistry, SplitRegistry
+from irec.environment.filter.registry import FilterRegistry
+from irec.environment.split.registry import SplitRegistry
 
 DatasetType = TypedDict('DatasetType', {'path': str, 'random_seed': float, 'file_delimiter': str, 'skip_head': bool})
 FilterUsersType = TypedDict('FilterUsersType', {'min_consumption': int, 'num_users': int})
@@ -17,8 +18,8 @@ class DefaultLoader:
 
     def __init__(self,
                  dataset: DatasetType,
-                 prefiltering: FilteringType,
-                 splitting: SplittingType) -> None:
+                 splitting: SplittingType,
+                 prefiltering: FilteringType = None) -> None:
         """__init__.
 
         Args:
@@ -37,7 +38,10 @@ class DefaultLoader:
         self.skip_rows = int(dataset["skip_head"]) if "skip_head" in dataset.keys() else 1
 
         # filtering attributes
-        self.prefiltering = prefiltering
+        if prefiltering:
+            self.prefiltering = prefiltering
+        else:
+            self.prefiltering = "None"
 
         # splitting attributes
         self.test_consumes = splitting["test_consumes"] if "test_consumes" in splitting.keys() else 0
