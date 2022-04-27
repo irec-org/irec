@@ -16,7 +16,7 @@ class EvaluationPolicy:
 
     def evaluate(
         self, model: Agent, train_dataset: Dataset, test_dataset: Dataset
-    ) -> Tuple[list, dict]:
+    ):
         """evaluate.
         
         Performs the form of evaluation according to the chosen policy.

@@ -1,8 +1,9 @@
 import irec.agents
-from irec.environment.registry import LoaderRegistry
+from irec.environment.loader.registry import LoaderRegistry
 from irec.agents.registry import AgentRegistry
 from irec.agents.registry import ASPRegistry
 from irec.agents.registry import VFRegistry
+
 
 class Factory:
     def __init__(self) -> None:
