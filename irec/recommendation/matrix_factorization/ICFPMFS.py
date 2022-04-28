@@ -4,7 +4,7 @@ import scipy.stats
 from threadpoolctl import threadpool_limits
 import ctypes
 import collections
-import irec.offline_experiments.metrics_utils as metrics
+import irec.offline_experiments.metrics.utils as metrics
 from tqdm import tqdm
 
 from irec.utils.utils import run_parallel

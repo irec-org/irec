@@ -12,7 +12,7 @@ import irec.recommendation.agents.value_functions
 import scipy.sparse
 import numpy as np
 import time
-import irec.offline_experiments.metrics_utils as metrics
+import irec.offline_experiments.metrics.utils as metrics
 np.seterr(all="raise")
 
 class Interaction(MetricEvaluator):
