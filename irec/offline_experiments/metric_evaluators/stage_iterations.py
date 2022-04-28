@@ -1,20 +1,21 @@
-from .InteractionMetricEvaluator import InteractionMetricEvaluator
+from typing import Any
+from .interaction import Interaction
 from irec.offline_experiments.metrics.ild import ILD
 from irec.offline_experiments.metrics.recall import Recall
 from irec.offline_experiments.metrics.precision import Precision
 from irec.offline_experiments.metrics.epc import EPC
 from irec.offline_experiments.metrics.epd import EPD
+from collections import defaultdict
 import numpy as np
 import time
-from typing import Any
 
 np.seterr(all="raise")
 
 
-class IterationsMetricEvaluator(InteractionMetricEvaluator):
+class StageIterations(Interaction):
     @staticmethod
     def metric_summarize(users_metric_values):
-        return np.mean(users_metric_values)
+        return users_metric_values
 
     def _metric_evaluation(self, metric_class):
         start_time = time.time()
@@ -38,6 +39,7 @@ class IterationsMetricEvaluator(InteractionMetricEvaluator):
                 relevance_evaluator=self.relevance_evaluator,
             )
         else:
+
             metric = metric_class(
                 ground_truth_dataset=self.ground_truth_dataset,
                 relevance_evaluator=self.relevance_evaluator,
@@ -53,13 +55,13 @@ class IterationsMetricEvaluator(InteractionMetricEvaluator):
                     metric.update_recommendation(
                         uid, item, self.ground_truth_consumption_matrix[uid, item]
                     )
-            # if (i+1) in interactions_to_evaluate:
             print(
                 f"Computing iteration {self.iterations_to_evaluate[i+1]} with {self.__class__.__name__}"
             )
             metric_values.append(
-                self.metric_summarize([metric.compute(uid) for uid in self.uids])
+                self.metric_summarize({uid: metric.compute(uid) for uid in self.uids})
             )
+            metric.users_true_positive = defaultdict(int)
 
         print(
             f"{self.__class__.__name__} spent {time.time()-start_time:.2f} seconds executing {metric_class.__name__} metric"

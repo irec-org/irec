@@ -5,7 +5,7 @@ from irec.offline_experiments.metrics.epc import EPC
 from irec.offline_experiments.metrics.epd import EPD
 from irec.recommendation.agents.value_functions.entropy import Entropy
 from irec.recommendation.agents.value_functions.most_popular import MostPopular
-from .MetricEvaluator import MetricEvaluator
+from .base import MetricEvaluator
 from collections import defaultdict
 from irec.environment.dataset import Dataset
 import irec.recommendation.agents.value_functions
@@ -15,7 +15,7 @@ import time
 import irec.offline_experiments.metrics_utils as metrics
 np.seterr(all="raise")
 
-class InteractionMetricEvaluator(MetricEvaluator):
+class Interaction(MetricEvaluator):
     def __init__(
         self,
         ground_truth_dataset,

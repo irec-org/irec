@@ -27,14 +27,15 @@ from irec.utils.Factory import (
     AgentFactory,
 )
 import scipy
-from irec.offline_experiments.metric_evaluators.InteractionMetricEvaluator import InteractionMetricEvaluator
-from irec.offline_experiments.metric_evaluators.CumulativeMetricEvaluator import CumulativeMetricEvaluator
-from irec.offline_experiments.metric_evaluators.UserCumulativeInteractionMetricEvaluator import (
-    UserCumulativeInteractionMetricEvaluator,
+from irec.offline_experiments.metric_evaluators.interaction import Interaction
+from irec.offline_experiments.metric_evaluators.cumulative import Cumulative
+from irec.offline_experiments.metric_evaluators.user_cumulative_interaction import (
+    UserCumulativeInteraction,
 )
 
-from irec.offline_experiments.registry import EvalPolicyRegistry
-from irec.offline_experiments.registry import MetricRegistry
+from irec.offline_experiments.evaluation_policies.registry import EvalPolicyRegistry
+from irec.offline_experiments.metrics.registry import MetricRegistry
+from irec.offline_experiments.metric_evaluators.registry import MetricEvaluatorRegistry
 
 import copy
 import os.path
@@ -274,7 +275,7 @@ def get_experiment_run_id(dm, evaluation_policy, itr_id):
     return os.path.join(dm.get_id(), evaluation_policy.get_id(), itr_id)
 
 
-def run_interactor(
+def     run_interactor(
     agent,
     train_dataset: Dataset, 
     test_dataset: Dataset,
@@ -513,18 +514,6 @@ def evaluate_itr(dataset, settings, forced_run):
             )
         )
         return
-    # agent_parameters = settings["agents"][settings["defaults"]["agent"]]
-
-    # dataset_parameters = settings["dataset_loaders"][
-    # settings["defaults"]["dataset_loader"]
-    # ]
-
-    # evaluation_policy_parameters = settings["evaluation_policies"][
-    # settings["defaults"]["evaluation_policy"]
-    # ]
-    # evaluation_policy = eval(
-    # "irec.offline_experiments.evaluation_policies." + settings["defaults"]["evaluation_policy"]
-    # )(**evaluation_policy_parameters)
 
     metric_evaluator_parameters = settings["metric_evaluators"][
         settings["defaults"]["metric_evaluator"]
@@ -535,15 +524,10 @@ def evaluate_itr(dataset, settings, forced_run):
     print(settings["defaults"]["metric_evaluator"], metric_evaluator_parameters)
 
     metric_evaluator_name = settings["defaults"]["metric_evaluator"]
-    exec(
-        f"from irec.offline_experiments.metric_evaluators.{metric_evaluator_name} import {metric_evaluator_name}"
-    )
-    metric_evaluator = eval(metric_evaluator_name)(
-        dataset, **metric_evaluator_parameters
-    )
 
+    metric_evaluator = MetricEvaluatorRegistry.get(metric_evaluator_name)(dataset, **metric_evaluator_parameters)
     mlflow.set_experiment(settings["defaults"]["agent_experiment"])
-    # print(parameters_agent_run)
+    
     run = get_agent_run(settings)
 
     if run is None:
@@ -566,14 +550,14 @@ def evaluate_itr(dataset, settings, forced_run):
         interactions,
     )
     with mlflow.start_run(run_id=run.info.run_id) as run:
-        print(metric_evaluator, UserCumulativeInteractionMetricEvaluator)
-        if isinstance(metric_evaluator, UserCumulativeInteractionMetricEvaluator):
+        print(metric_evaluator, UserCumulativeInteraction)
+        if isinstance(metric_evaluator, UserCumulativeInteraction):
             mlflow.log_metric(
                 metric_class.__name__, np.mean(list(metric_values[-1].values()))
             )
-        elif isinstance(metric_evaluator, InteractionMetricEvaluator):
+        elif isinstance(metric_evaluator, Interaction):
             pass
-        elif isinstance(metric_evaluator, CumulativeMetricEvaluator):
+        elif isinstance(metric_evaluator, Cumulative):
             pass
 
     mlflow.set_experiment(settings["defaults"]["evaluation_experiment"])
@@ -581,13 +565,13 @@ def evaluate_itr(dataset, settings, forced_run):
 
     with mlflow.start_run() as run:
         log_custom_parameters(parameters_evaluation_run)
-        if isinstance(metric_evaluator, UserCumulativeInteractionMetricEvaluator):
+        if isinstance(metric_evaluator, UserCumulativeInteraction):
             mlflow.log_metric(
                 metric_class.__name__, np.mean(list(metric_values[-1].values()))
             )
-        elif isinstance(metric_evaluator, InteractionMetricEvaluator):
+        elif isinstance(metric_evaluator, Interaction):
             pass
-        elif isinstance(metric_evaluator, CumulativeMetricEvaluator):
+        elif isinstance(metric_evaluator, Cumulative):
             pass
         # print(metric_values)
         log_custom_artifact("evaluation.pickle", metric_values)
@@ -595,10 +579,6 @@ def evaluate_itr(dataset, settings, forced_run):
 
 def load_evaluation_experiment(settings):
     mlflow.set_experiment(settings["defaults"]["evaluation_experiment"])
-    # dataset_parameters = settings["dataset_loaders"][
-    # settings["defaults"]["dataset_loader"]
-    # ]
-    # metrics_evaluator_name = settings["defaults"]["metric_evaluator"]
     run = get_evaluation_run(settings)
 
     if run is None:
@@ -852,21 +832,10 @@ def print_results_latex_table(
     metric_evaluator_name = settings["defaults"]["metric_evaluator"]
     metric_evaluator_parameters = settings["metric_evaluators"][metric_evaluator_name]
 
-    exec(
-        f"from irec.offline_experiments.metric_evaluators.{metric_evaluator_name} import {metric_evaluator_name}"
-    )
-    metric_evaluator = eval(metric_evaluator_name)(None, **metric_evaluator_parameters)
+    metric_evaluator = MetricEvaluatorRegistry.get(metric_evaluator_name)(None, **metric_evaluator_parameters)
 
     evaluation_policy_name = settings["defaults"]["evaluation_policy"]
-    # evaluation_policy_parameters = settings["evaluation_policies"][
-    # evaluation_policy_name
-    # ]
-
-    # exec(
-        # f"from irec.offline_experiments.evaluation_policies.{evaluation_policy_name} import {evaluation_policy_name}"
-    # )
-    # evaluation_policy = eval(evaluation_policy_name)(**evaluation_policy_parameters)
-
+ 
     # metrics_names = [
     # 'Cumulative Precision',
     # 'Cumulative Recall',
@@ -887,7 +856,7 @@ def print_results_latex_table(
     # }
 
     print("metric_evaluator_name", metric_evaluator_name)
-    if metric_evaluator_name == "StageIterationsMetricEvaluator":
+    if metric_evaluator_name == "StageIterations":
         nums_interactions_to_show = ["1-5", "6-10", "11-15", "16-20", "21-50", "51-100"]
     else:
         nums_interactions_to_show = list(
@@ -1492,10 +1461,7 @@ def print_results_latex_horizontal_table(
     metric_evaluator_name = settings["defaults"]["metric_evaluator"]
     metric_evaluator_parameters = settings["metric_evaluators"][metric_evaluator_name]
 
-    exec(
-        f"from irec.offline_experiments.metric_evaluators.{metric_evaluator_name} import {metric_evaluator_name}"
-    )
-    metric_evaluator = eval(metric_evaluator_name)(None, **metric_evaluator_parameters)
+    metric_evaluator = MetricEvaluatorRegistry.get(metric_evaluator_name)(None, **metric_evaluator_parameters)
 
     evaluation_policy_name = settings["defaults"]["evaluation_policy"]
 
@@ -1505,7 +1471,7 @@ def print_results_latex_horizontal_table(
     metrics_weights = {i: 1 / len(metrics_classes_names) for i in metrics_classes_names}
 
     print("metric_evaluator_name", metric_evaluator_name)
-    if metric_evaluator_name == "StageIterationsMetricEvaluator":
+    if metric_evaluator_name == "StageIterations":
         nums_interactions_to_show = ["1-5", "6-10", "11-15", "16-20", "21-50", "51-100"]
     else:
         nums_interactions_to_show = list(

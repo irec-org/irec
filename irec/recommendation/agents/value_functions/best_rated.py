@@ -3,6 +3,13 @@ from .base import ValueFunction
 from .best_rated import *
 import scipy
 
+from irec.recommendation.matrix_factorization.SVD import SVD
+from irec.recommendation.agents.value_functions.base import ValueFunction
+from irec.recommendation.agents.value_functions.entropy import Entropy
+from irec.recommendation.agents.value_functions.most_popular import MostPopular
+from irec.recommendation.agents.value_functions.log_pop_ent import LogPopEnt
+
+
 
 class BestRated(ValueFunction):
     """Best Rated.
