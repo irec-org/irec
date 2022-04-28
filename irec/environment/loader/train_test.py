@@ -6,13 +6,15 @@ TrainDatasetType = TypedDict('TrainDatasetType', {'path': str, 'file_delimiter':
 TestDatasetType = TypedDict('TestDatasetType', {'path': str, 'file_delimiter': str, 'skip_head': bool})
 ValidationDatasetType = TypedDict('ValidationDatasetType', {'path': str, 'file_delimiter': str, 'skip_head': bool})
 DatasetType = TypedDict('DatasetType', {'train': TrainDatasetType, 'test': TestDatasetType})
+ValidationType = TypedDict('ValidationType', {'validation_size': float})
 
 
-class TrainTestLoader:
+class SplitData:
 
     def __init__(
             self,
-            dataset: DatasetType) -> None:
+            dataset: DatasetType,
+            validation: ValidationType) -> None:
         """__init__.
 
         Args:
@@ -21,6 +23,9 @@ class TrainTestLoader:
 
         assert len(dataset.keys()) == 2, "You must define files for train and test sets."
         self.dataset_params = dataset
+
+        # validation attributes
+        self.validation = validation
 
     def _set_attributes(self,
                         dataset: DatasetType,
@@ -105,4 +110,18 @@ class TrainTestLoader:
         print("Test shape:", test_dataset.data.shape)
         print("Train shape:", train_dataset.data.shape)
 
-        return train_dataset, test_dataset
+        # Split to validation if necessary
+        x_validation, y_validation = None, None
+        if self.validation != "None":
+            x_validation = self._read(
+                self.validation["x_validation"]["path"],
+                self.validation["x_validation"]["file_delimiter"],
+                self.validation["x_validation"]["skip_head"]
+            )
+            y_validation = self._read(
+                self.validation["y_validation"]["path"],
+                self.validation["y_validation"]["file_delimiter"],
+                self.validation["y_validation"]["skip_head"]
+            )
+
+        return train_dataset, test_dataset, x_validation, y_validation

@@ -10,7 +10,7 @@ Check this example of a execution using the example application:
 
     metrics=(Hits Precision Recall);
     models=(Random MostPopular UCB ThompsonSampling EGreedy);
-    metric_evaluator="IterationsMetricEvaluator"
+    metric_evaluator="Interaction"
     evaluation_policy="FixedInteraction"
     bases=("Netflix 10k" "Good Books" "Yahoo Music 10k");
 

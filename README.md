@@ -74,7 +74,7 @@ Check this example of a execution using the example application:
     cd app
     metrics=(Hits Precision Recall);
     models=(Random MostPopular UCB ThompsonSampling EGreedy);
-    metric_evaluator="IterationsMetricEvaluator"
+    metric_evaluator="Interaction"
     bases=("Netflix 10k" "Good Books" "Yahoo Music 10k");
     # run agents
     ./run_agent_best.py --dataset_loaders "${bases[@]}" --agents "${models[@]}"
