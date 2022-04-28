@@ -45,6 +45,9 @@ class FullData:
         else:
             self.prefiltering = "None"
 
+        # validation attributes
+        self.validation = validation
+
         # splitting attributes
         self.test_consumes = splitting["test_consumes"] if "test_consumes" in splitting.keys() else 0
         self.strategy = splitting["strategy"] if "strategy" in splitting.keys() else "random"

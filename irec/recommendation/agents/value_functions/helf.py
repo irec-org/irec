@@ -1,6 +1,6 @@
 import numpy as np
 
-from . import entropy
+from entropy import Entropy
 from . import most_popular
 import scipy.stats
 from .base import ValueFunction
@@ -41,7 +41,7 @@ class HELF(ValueFunction):
              self.train_dataset.num_total_items))
         self.num_total_items = self.train_dataset.num_total_items
         num_train_users = len(self.train_dataset.uids)
-        items_entropy = entropy.get_items_entropy(
+        items_entropy = Entropy.get_items_entropy(
             self.train_consumption_matrix)
         items_popularity = most_popular.get_items_popularity(
             self.train_consumption_matrix, normalize=False)
