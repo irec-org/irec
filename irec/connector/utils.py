@@ -20,12 +20,8 @@ import matplotlib.ticker as mtick
 import numpy as np
 import matplotlib.pyplot as plt
 from os.path import sep
-import irec.value_functions
 from irec.offline_experiments.evaluation_policies.base import EvaluationPolicy
-import irec.offline_experiments.evaluation_policies
-from irec.utils.Factory import (
-    AgentFactory,
-)
+from irec.utils.Factory import AgentFactory
 import scipy
 from irec.offline_experiments.metric_evaluators.interaction import Interaction
 from irec.offline_experiments.metric_evaluators.cumulative import Cumulative
@@ -275,7 +271,7 @@ def get_experiment_run_id(dm, evaluation_policy, itr_id):
     return os.path.join(dm.get_id(), evaluation_policy.get_id(), itr_id)
 
 
-def     run_interactor(
+def run_interactor(
     agent,
     train_dataset: Dataset, 
     test_dataset: Dataset,

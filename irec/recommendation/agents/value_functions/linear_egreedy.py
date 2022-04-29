@@ -14,14 +14,15 @@ class LinearEGreedy(LinearICF):
     .. [1 ]Zhao, Xiaoxue, Weinan Zhang, and Jun Wang. "Interactive collaborative filtering." 
        Proceedings of the 22nd ACM international conference on Information & Knowledge Management. 2013.
     """
-    def __init__(self, *args, **kwargs):
+    def __init__(self, num_lat, *args, **kwargs):
         """__init__.
 
         Args:
             args:
             kwargs:
         """
-        super().__init__(*args, **kwargs)
+        super().__init__(num_lat=num_lat, *args, **kwargs)
+        self.num_lat = num_lat
 
     def reset(self, observation):
         """reset.

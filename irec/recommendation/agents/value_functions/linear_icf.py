@@ -6,9 +6,10 @@ from irec.recommendation.matrix_factorization.ICFPMFS import ICFPMFS
 
 
 class LinearICF(ICF):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
+    def __init__(self, num_lat, *args, **kwargs):
+        super().__init__(num_lat=num_lat, *args, **kwargs)
+        self.num_lat = num_lat
+    
     def reset(self, observation):
         train_dataset = observation
         super().reset(train_dataset)

@@ -3,7 +3,7 @@ import numpy as np
 from tqdm import tqdm
 import scipy.sparse
 from collections import defaultdict
-from base import ValueFunction
+from .base import ValueFunction
 from tqdm import tqdm
 from numba import njit
 import irec.recommendation.matrix_factorization as mf

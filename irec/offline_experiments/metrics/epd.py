@@ -60,6 +60,7 @@ class EPD(Metric):
             @ rel[consumed_items][None, :]
             * self.items_distance[predicted, :][:, consumed_items]
         )
+        print(">>>>>>>>>", len(predicted), consumed_items, self.users_consumed_items)
         C = 1 / (len(predicted) * np.sum(rel[consumed_items]))
         return C * np.sum(res)
 
@@ -84,4 +85,5 @@ class EPD(Metric):
             item (int): item id
             reward (float): reward
         """
+        print("ENTROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOU\n\n\n\n")
         self.users_consumed_items[uid].append(item)

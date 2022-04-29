@@ -3,8 +3,9 @@ import numpy as np
 import scipy.optimize
 from collections import defaultdict
 import scipy
-import value_functions
-
+from .most_popular import MostPopular
+from .entropy import Entropy
+from .log_pop_ent import LogPopEnt
 
 class GLM_UCB(LinearICF):
     """Generalized Linear Model Bandit-Upper Confidence Bound.
@@ -26,7 +27,7 @@ class GLM_UCB(LinearICF):
             c (float):
             num_lat (int): number of latent factors
         """
-        super().__init__(*args, **kwargs)
+        super().__init__(num_lat=num_lat, *args, **kwargs)
         self.c = c
         self.num_lat = num_lat
 
