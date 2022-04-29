@@ -19,8 +19,8 @@ class FullData:
 
     def __init__(self,
                  dataset: DatasetType,
-                 validation: ValidationType,
                  splitting: SplittingType,
+                 validation: ValidationType = None,
                  prefiltering: FilteringType = None) -> None:
         """__init__.
 
@@ -40,10 +40,7 @@ class FullData:
         self.skip_rows = int(dataset["skip_head"]) if "skip_head" in dataset.keys() else 1
 
         # filtering attributes
-        if prefiltering:
-            self.prefiltering = prefiltering
-        else:
-            self.prefiltering = "None"
+        self.prefiltering = prefiltering
 
         # validation attributes
         self.validation = validation
@@ -144,7 +141,7 @@ class FullData:
         dataset.update_num_total_users_items()
 
         # Apply filters if they were defined
-        if self.prefiltering != "None":
+        if self.prefiltering is not None:
             filtered_data = self._filter(dataset.data)
             # update dataset
             dataset = Dataset(filtered_data)
@@ -158,7 +155,7 @@ class FullData:
 
         # Split to validation if necessary
         x_validation, y_validation = None, None
-        if self.validation != "None":
+        if self.validation is not None:
             print("\nGenerating x_validation and y_validation: ")
             x_validation, y_validation = self._split(train_dataset)
 
