@@ -107,12 +107,13 @@ class SplitData:
             num_total_users=num_total_users,
             num_total_items=num_total_items
         )
-        print("Test shape:", test_dataset.data.shape)
+        print("\nTest shape:", test_dataset.data.shape)
         print("Train shape:", train_dataset.data.shape)
 
         # Split to validation if necessary
         x_validation, y_validation = None, None
         if self.validation is not None:
+            print("\nReading x_validation and y_validation: ")
             x_validation = self._read(
                 self.validation["x_validation"]["path"],
                 self.validation["x_validation"]["file_delimiter"],
