@@ -1,4 +1,4 @@
-from irec.RelevanceEvaluator import ThresholdRelevanceEvaluator
+from irec.offline_experiments.relevance_evaluator import ThresholdRelevanceEvaluator
 import numpy as np
 
 np.seterr(all="raise")

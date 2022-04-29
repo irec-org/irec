@@ -1,4 +1,4 @@
-from irec.RelevanceEvaluator import RelevanceEvaluator
+from irec.offline_experiments.relevance_evaluator import RelevanceEvaluator
 import numpy as np
 from typing import Any
 
