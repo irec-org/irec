@@ -14,7 +14,7 @@ class SplitData:
     def __init__(
             self,
             dataset: DatasetType,
-            validation: ValidationType) -> None:
+            validation: ValidationType = None) -> None:
         """__init__.
 
         Args:
@@ -112,7 +112,7 @@ class SplitData:
 
         # Split to validation if necessary
         x_validation, y_validation = None, None
-        if self.validation != "None":
+        if self.validation is not None:
             x_validation = self._read(
                 self.validation["x_validation"]["path"],
                 self.validation["x_validation"]["file_delimiter"],
