@@ -517,7 +517,7 @@ def evaluate_itr(dataset, settings, forced_run):
 
     metric_class_name = settings["defaults"]["metric"]
     metric_class = MetricRegistry.get(metric_class_name)
-    print(settings["defaults"]["metric_evaluator"], metric_evaluator_parameters)
+    #print(settings["defaults"]["metric_evaluator"], metric_evaluator_parameters)
 
     metric_evaluator_name = settings["defaults"]["metric_evaluator"]
 
@@ -1065,7 +1065,7 @@ def print_results_latex_table(
         ]
     else:
         pool_of_methods_to_compare = [[agents[i] for i in range(len(agents))]]
-    print(pool_of_methods_to_compare)
+    #print(pool_of_methods_to_compare)
     for dataset_loader_name in datasets_names:
         for metric_class_name in metrics_classes_names:
             for i, num in enumerate(nums_interactions_to_show):
@@ -1373,7 +1373,7 @@ def print_agent_search(
         for metric_name in metrics:
             for agent_name in agents:
                 for agent_parameters in agents_search_parameters[agent_name]:
-                    print(agent_name)
+                    # print(agent_name, agent_parameters, "\n\n", agents_search_parameters)
                     settings["defaults"]["metric"] = metric_name
                     settings["defaults"]["agent"] = agent_name
                     settings["agents"][agent_name] = agent_parameters
@@ -1395,34 +1395,65 @@ def print_agent_search(
                     datasets_metrics_values[settings["defaults"]["dataset_loader"]][
                         settings["defaults"]["metric"]
                     ][agent.name][json.dumps(agent_parameters)] = metric_values[-1]
-                    print(metric_values[-1])
+                    # print("metric_values:", metric_values)
+                    # import sys
+                    # sys.exit()
+                    
+                    #print("\n\n\nmetric_values[-1]\n\n\n", metric_values[-1])
     # ','.join(map(lambda x: str(x[0])+'='+str(x[1]),list(parameters.items())))
 
     # print(datasets_metrics_values)
+    # print (json.dumps(datasets_metrics_values, indent=2, default=str))
     for k1, v1 in datasets_metrics_values.items():
-        for _, v2 in v1.items():
+        # print("\nK1", k1)
+        # print("\nV1", v1)
+        for k2, v2 in v1.items():
+            # print("\nK2", k2)
+            # print("\nV2", v2)
+            # print("\nV2 keys", v2.keys())
+
             for k3, v3 in v2.items():
-                values = np.array(list(v3.values()))
-                keys = list(v3.keys())
-                print("\n\n\n\nVALUES: ", values)
-                idxs = np.argsort(values)[::-1]
-                keys = [keys[i] for i in idxs]
-                values = [values[i] for i in idxs]
-                if dump:
-                    if k1 not in dataset_agents_parameters:
-                        dataset_agents_parameters[k1] = {}
-                    dataset_agents_parameters[k1][k3] = json.loads(keys[0])
-                if top_save:
-                    print(f"{k3}:")
-                    # print('\tparameters:')
-                    agent_parameters, _ = json.loads(keys[0]), values[0]
-                    for name, value in agent_parameters.items():
-                        print(f"\t\t{name}: {value}")
-                else:
-                    for k4, v4 in zip(keys, values):
-                        k4 = yaml.safe_load(k4)
-                        # k4 = ','.join(map(lambda x: str(x[0])+'='+str(x[1]),list(k4.items())))
-                        print(f"{k3}({k4}) {v4:.5f}")
+ 
+                # print("\nV3 keys", v3.keys(), len(v3.keys()), "\n\n\n", v3[0])
+                # print("\nV3 VALUES", len(v3.values()), "\n\n\n")
+                # print("\nV3 VALUES", list(list(v3.values())[0].values()), "\n\n\n")
+
+                for k5, v5 in v3.items():
+                    
+                    if k5 == 0.0 or v5 == 0.0: continue
+                    # print("K5 keys:", k5)
+                    # print("v5 values :", v5)
+
+                    # print("\nK3", k3)
+
+                    values = np.array((list(v5.values())))
+                    # values = np.array(list(v3.values()))
+                    # print("\n\n\ntype:", type(values))
+                    keys = list((v5.keys()))
+                    # keys = list(v3.keys())
+                    # print("v3 keys:", list(v5.keys())[0])
+                    # print("\n\n\n\nVALUES: ", len(values[0]), values[0], "\n\n\n", values[1])
+                    
+                    idxs = np.argsort(values)[::-1]
+                    keys = [keys[i] for i in idxs]
+                    values = [values[i] for i in idxs]
+                    if dump:
+                        if k1 not in dataset_agents_parameters:
+                            dataset_agents_parameters[k1] = {}
+                        dataset_agents_parameters[k1][k5] = json.loads(keys[0])
+                    if top_save:
+                        # print(f"{k5}:")
+                        # print('\tparameters:')
+                        agent_parameters, _ = json.loads(k5), values[0]
+                        # agent_parameters, _ = json.loads(keys[0]), values[0]
+                        # for name, value in agent_parameters.items():
+                        print(f">>>>>>> \t\t{agent_parameters}: {values[0]}")
+                    else:
+                        for k4, v4 in zip(keys, values):
+                            print("K4, V4", k4, v4)
+                            # k4 = yaml.safe_load(k4)
+                            # k4 = ','.join(map(lambda x: str(x[0])+'='+str(x[1]),list(k4.items())))
+                            print(f"k5 {k5}k4 ({k4}) v4 {v4}")
 
     if dump:
         print("Saved parameters!")
