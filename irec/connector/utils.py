@@ -2,7 +2,7 @@ from os.path import sep
 import os
 
 from sqlalchemy import true
-from app import errors
+from app.scripts.others import errors
 import pickle
 import yaml
 import secrets
@@ -15,7 +15,7 @@ from collections import defaultdict
 from pathlib import Path
 from irec.environment.dataset import Dataset
 import collections
-from app import constants
+from app.scripts.others import constants
 import matplotlib.ticker as mtick
 import numpy as np
 import matplotlib.pyplot as plt
@@ -186,7 +186,7 @@ def _do_nothing(d):
 def load_settings(workdir):
     d = dict()
     loader = yaml.SafeLoader
-
+    
     d["agents_general_settings"] = yaml.load(
         open(workdir + sep + "settings" + sep + "agents_general_settings.yaml"),
         Loader=loader,
@@ -1492,9 +1492,9 @@ def print_results_latex_horizontal_table(
 
     evaluation_policy_name = settings["defaults"]["evaluation_policy"]
 
-    exec(
-        f"from irec.offline_experiments.evaluation_policies.{evaluation_policy_name} import {evaluation_policy_name}"
-    )
+    # exec(
+    #     f"from irec.offline_experiments.evaluation_policies.{evaluation_policy_name} import {evaluation_policy_name}"
+    # )
     metrics_weights = {i: 1 / len(metrics_classes_names) for i in metrics_classes_names}
 
     print("metric_evaluator_name", metric_evaluator_name)
