@@ -1,8 +1,8 @@
-from irec.agents.value_functions.most_popular import MostPopular
-from irec.agents.value_functions.ucb import UCB
-from irec.agents.value_functions.random import Random
-from irec.agents.value_functions.base import ValueFunction
-from irec.agents.value_functions.cluster_bandit import ClusterBandit
+from irec.recommendation.agents.value_functions.most_popular import MostPopular
+from irec.recommendation.agents.value_functions.ucb import UCB
+from irec.recommendation.agents.value_functions.random import Random
+from irec.recommendation.agents.value_functions.base import ValueFunction
+from irec.recommendation.agents.value_functions.cluster_bandit import ClusterBandit
 
 
 def test_create_value_functions():

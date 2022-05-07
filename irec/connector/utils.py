@@ -1,6 +1,8 @@
 from os.path import sep
 import os
-from app import errors
+
+from sqlalchemy import true
+from app.scripts.others import errors
 import pickle
 import yaml
 import secrets
@@ -13,25 +15,23 @@ from collections import defaultdict
 from pathlib import Path
 from irec.environment.dataset import Dataset
 import collections
-from app import constants
+from app.scripts.others import constants
 import matplotlib.ticker as mtick
 import numpy as np
 import matplotlib.pyplot as plt
 from os.path import sep
-import irec.value_functions
-from irec.evaluation_policies.base import EvaluationPolicy
-import irec.evaluation_policies
-from irec.utils.Factory import (
-    AgentFactory,
-)
+from irec.offline_experiments.evaluation_policies.base import EvaluationPolicy
+from irec.utils.Factory import AgentFactory
 import scipy
-from irec.metric_evaluators.InteractionMetricEvaluator import InteractionMetricEvaluator
-from irec.metric_evaluators.CumulativeMetricEvaluator import CumulativeMetricEvaluator
-from irec.metric_evaluators.UserCumulativeInteractionMetricEvaluator import (
-    UserCumulativeInteractionMetricEvaluator,
+from irec.offline_experiments.metric_evaluators.interaction import Interaction
+from irec.offline_experiments.metric_evaluators.cumulative import Cumulative
+from irec.offline_experiments.metric_evaluators.user_cumulative_interaction import (
+    UserCumulativeInteraction,
 )
 
-from irec.evaluation_policies.registry import EvalPolicyRegistry
+from irec.offline_experiments.evaluation_policies.registry import EvalPolicyRegistry
+from irec.offline_experiments.metrics.registry import MetricRegistry
+from irec.offline_experiments.metric_evaluators.registry import MetricEvaluatorRegistry
 
 import copy
 import os.path
@@ -186,7 +186,7 @@ def _do_nothing(d):
 def load_settings(workdir):
     d = dict()
     loader = yaml.SafeLoader
-
+    
     d["agents_general_settings"] = yaml.load(
         open(workdir + sep + "settings" + sep + "agents_general_settings.yaml"),
         Loader=loader,
@@ -444,7 +444,7 @@ def log_custom_artifact(fname, obj):
     mlflow.log_artifact(fnametmp)
 
 
-def load_dataset_experiment(settings):
+def load_dataset_experiment(settings, validation=False):
     run = already_ran(
         parameters_normalize(
             constants.DATASET_PARAMETERS_PREFIX,
@@ -467,7 +467,14 @@ def load_dataset_experiment(settings):
     test_artifact_path = client.download_artifacts(run.info.run_id, "test_dataset.pickle")
     train_dataset = pickle.load(open(train_artifact_path, "rb"))
     test_dataset = pickle.load(open(test_artifact_path, "rb"))
-    return train_dataset, test_dataset
+    x_validation, y_validation = None, None
+    if validation:
+        x_validation_path = client.download_artifacts(run.info.run_id, "x_validation.pickle")
+        y_validation_path = client.download_artifacts(run.info.run_id, "y_validation.pickle")
+        x_validation = pickle.load(open(x_validation_path, "rb"))
+        y_validation = pickle.load(open(y_validation_path, "rb"))
+
+    return train_dataset, test_dataset, x_validation, y_validation
 
 
 def run_agent(train_dataset, test_dataset, settings, forced_run):
@@ -503,36 +510,20 @@ def evaluate_itr(dataset, settings, forced_run):
             )
         )
         return
-    # agent_parameters = settings["agents"][settings["defaults"]["agent"]]
-
-    # dataset_parameters = settings["dataset_loaders"][
-    # settings["defaults"]["dataset_loader"]
-    # ]
-
-    # evaluation_policy_parameters = settings["evaluation_policies"][
-    # settings["defaults"]["evaluation_policy"]
-    # ]
-    # evaluation_policy = eval(
-    # "irec.evaluation_policies." + settings["defaults"]["evaluation_policy"]
-    # )(**evaluation_policy_parameters)
 
     metric_evaluator_parameters = settings["metric_evaluators"][
         settings["defaults"]["metric_evaluator"]
     ]
 
-    metric_class = eval("irec.metrics." + settings["defaults"]["metric"])
-    print(settings["defaults"]["metric_evaluator"], metric_evaluator_parameters)
+    metric_class_name = settings["defaults"]["metric"]
+    metric_class = MetricRegistry.get(metric_class_name)
+    #print(settings["defaults"]["metric_evaluator"], metric_evaluator_parameters)
 
     metric_evaluator_name = settings["defaults"]["metric_evaluator"]
-    exec(
-        f"from irec.metric_evaluators.{metric_evaluator_name} import {metric_evaluator_name}"
-    )
-    metric_evaluator = eval(metric_evaluator_name)(
-        dataset, **metric_evaluator_parameters
-    )
 
+    metric_evaluator = MetricEvaluatorRegistry.get(metric_evaluator_name)(dataset, **metric_evaluator_parameters)
     mlflow.set_experiment(settings["defaults"]["agent_experiment"])
-    # print(parameters_agent_run)
+    
     run = get_agent_run(settings)
 
     if run is None:
@@ -555,14 +546,14 @@ def evaluate_itr(dataset, settings, forced_run):
         interactions,
     )
     with mlflow.start_run(run_id=run.info.run_id) as run:
-        print(metric_evaluator, UserCumulativeInteractionMetricEvaluator)
-        if isinstance(metric_evaluator, UserCumulativeInteractionMetricEvaluator):
+        print(metric_evaluator, UserCumulativeInteraction)
+        if isinstance(metric_evaluator, UserCumulativeInteraction):
             mlflow.log_metric(
                 metric_class.__name__, np.mean(list(metric_values[-1].values()))
             )
-        elif isinstance(metric_evaluator, InteractionMetricEvaluator):
+        elif isinstance(metric_evaluator, Interaction):
             pass
-        elif isinstance(metric_evaluator, CumulativeMetricEvaluator):
+        elif isinstance(metric_evaluator, Cumulative):
             pass
 
     mlflow.set_experiment(settings["defaults"]["evaluation_experiment"])
@@ -570,13 +561,13 @@ def evaluate_itr(dataset, settings, forced_run):
 
     with mlflow.start_run() as run:
         log_custom_parameters(parameters_evaluation_run)
-        if isinstance(metric_evaluator, UserCumulativeInteractionMetricEvaluator):
+        if isinstance(metric_evaluator, UserCumulativeInteraction):
             mlflow.log_metric(
                 metric_class.__name__, np.mean(list(metric_values[-1].values()))
             )
-        elif isinstance(metric_evaluator, InteractionMetricEvaluator):
+        elif isinstance(metric_evaluator, Interaction):
             pass
-        elif isinstance(metric_evaluator, CumulativeMetricEvaluator):
+        elif isinstance(metric_evaluator, Cumulative):
             pass
         # print(metric_values)
         log_custom_artifact("evaluation.pickle", metric_values)
@@ -584,10 +575,6 @@ def evaluate_itr(dataset, settings, forced_run):
 
 def load_evaluation_experiment(settings):
     mlflow.set_experiment(settings["defaults"]["evaluation_experiment"])
-    # dataset_parameters = settings["dataset_loaders"][
-    # settings["defaults"]["dataset_loader"]
-    # ]
-    # metrics_evaluator_name = settings["defaults"]["metric_evaluator"]
     run = get_evaluation_run(settings)
 
     if run is None:
@@ -724,9 +711,11 @@ def generate_base(dataset_name, settings):
 
         dataset_loader_factory = DatasetLoaderFactory()
         dataset_loader = dataset_loader_factory.create(dataset_loader_settings)
-        train_dataset, test_dataset = dataset_loader.process()
+        train_dataset, test_dataset, x_validation, y_validation = dataset_loader.process()
         log_custom_artifact("./tmp/train_dataset.pickle", train_dataset)
         log_custom_artifact("./tmp/test_dataset.pickle", test_dataset)
+        log_custom_artifact("./tmp/x_validation.pickle", x_validation)
+        log_custom_artifact("./tmp/y_validation.pickle", y_validation)
 
 
 def download_data(dataset_names):
@@ -780,7 +769,7 @@ def run_agent_with_dataset_parameters(
     for dataset_loader_name in dataset_loaders:
         current_settings = settings
         current_settings["defaults"]["dataset_loader"] = dataset_loader_name
-        train_dataset, test_dataset = load_dataset_experiment(settings)
+        train_dataset, test_dataset, _, _ = load_dataset_experiment(settings)
         for agent_name in agents:
             current_settings["defaults"]["agent"] = agent_name
             current_settings["agents"][agent_name] = dataset_agents_parameters[
@@ -821,7 +810,7 @@ def print_results_latex_table(
     plt.rcParams["lines.linewidth"] = 2
     plt.rcParams["font.size"] = 15
     # metrics_classes = [metrics.Hits, metrics.Recall]
-    metrics_classes = [eval("irec.metrics." + i) for i in metrics]
+    metrics_classes = [MetricRegistry.get(i) for i in metrics]
 
     # metrics_classes = [
     # metrics.Hits,
@@ -839,21 +828,10 @@ def print_results_latex_table(
     metric_evaluator_name = settings["defaults"]["metric_evaluator"]
     metric_evaluator_parameters = settings["metric_evaluators"][metric_evaluator_name]
 
-    exec(
-        f"from irec.metric_evaluators.{metric_evaluator_name} import {metric_evaluator_name}"
-    )
-    metric_evaluator = eval(metric_evaluator_name)(None, **metric_evaluator_parameters)
+    metric_evaluator = MetricEvaluatorRegistry.get(metric_evaluator_name)(None, **metric_evaluator_parameters)
 
     evaluation_policy_name = settings["defaults"]["evaluation_policy"]
-    # evaluation_policy_parameters = settings["evaluation_policies"][
-    # evaluation_policy_name
-    # ]
-
-    # exec(
-        # f"from irec.evaluation_policies.{evaluation_policy_name} import {evaluation_policy_name}"
-    # )
-    # evaluation_policy = eval(evaluation_policy_name)(**evaluation_policy_parameters)
-
+ 
     # metrics_names = [
     # 'Cumulative Precision',
     # 'Cumulative Recall',
@@ -874,7 +852,7 @@ def print_results_latex_table(
     # }
 
     print("metric_evaluator_name", metric_evaluator_name)
-    if metric_evaluator_name == "StageIterationsMetricEvaluator":
+    if metric_evaluator_name == "StageIterations":
         nums_interactions_to_show = ["1-5", "6-10", "11-15", "16-20", "21-50", "51-100"]
     else:
         nums_interactions_to_show = list(
@@ -1087,7 +1065,7 @@ def print_results_latex_table(
         ]
     else:
         pool_of_methods_to_compare = [[agents[i] for i in range(len(agents))]]
-    print(pool_of_methods_to_compare)
+    #print(pool_of_methods_to_compare)
     for dataset_loader_name in datasets_names:
         for metric_class_name in metrics_classes_names:
             for i, num in enumerate(nums_interactions_to_show):
@@ -1256,7 +1234,7 @@ def evaluate_agent_with_dataset_parameters(
         for dataset_loader_name in dataset_loaders:
             settings["defaults"]["dataset_loader"] = dataset_loader_name
 
-            train_dataset, test_dataset = load_dataset_experiment(settings)
+            train_dataset, test_dataset, _, _ = load_dataset_experiment(settings)
 
             data = np.vstack(
                 (train_dataset.data, test_dataset.data)
@@ -1294,13 +1272,14 @@ def run_agent_search(
         futures = set()
         for dataset_loader_name in dataset_loaders:
             settings["defaults"]["dataset_loader"] = dataset_loader_name
-            data = load_dataset_experiment(settings)
+            train_dataset, test_dataset, x_validation, y_validation = load_dataset_experiment(settings, validation=True)
             for agent_name in agents:
                 settings["defaults"]["agent"] = agent_name
                 for agent_og_parameters in agents_search_parameters[agent_name]:
                     settings["agents"][agent_name] = agent_og_parameters
                     f = executor.submit(
-                        run_agent, data, copy.deepcopy(settings), forced_run
+                        # run_agent, train_dataset, test_dataset, copy.deepcopy(settings), forced_run
+                        run_agent, x_validation, y_validation, copy.deepcopy(settings), forced_run
                     )
                     futures.add(f)
                     if len(futures) >= tasks:
@@ -1319,12 +1298,14 @@ def eval_agent_search(
         futures = set()
         for dataset_loader_name in dataset_loaders:
             settings["defaults"]["dataset_loader"] = dataset_loader_name
-            traintest = load_dataset_experiment(settings)
-
-            data = np.vstack((traintest.train.data, traintest.test.data))
-            dataset = copy.copy(traintest.train)
-            dataset.data = data
+            
+            train_dataset, test_dataset, x_validation, y_validation = load_dataset_experiment(settings, validation=True)
+            # data = np.vstack((train_dataset.data, test_dataset.data))
+            data = np.vstack((x_validation.data, y_validation.data))
+            dataset = Dataset(data)
             dataset.set_parameters()
+            dataset.update_num_total_users_items()
+
             for agent_name in agents:
                 settings["defaults"]["agent"] = agent_name
                 for agent_og_parameters in agents_search_parameters[agent_name]:
@@ -1354,16 +1335,16 @@ def print_agent_search(
     top_save,
 ):
 
-    # import irec.metrics
-    # import irec.evaluation_policies
+    # import irec.offline_experiments.metrics
+    # import irec.offline_experiments.evaluation_policies
 
     # evaluation_policy_name = settings["defaults"]["evaluation_policy"]
     # evaluation_policy_parameters = settings["evaluation_policies"][
     # evaluation_policy_name
     # ]
-    # metrics_classes = [irec.metrics.Hits]
+    # metrics_classes = [irec.offline_experiments.metrics.Hits]
     # metrics_names = ["Cumulative Hits"]
-    # evaluation_policy = eval("irec.evaluation_policies." + evaluation_policy_name)(
+    # evaluation_policy = eval("irec.offline_experiments.evaluation_policies." + evaluation_policy_name)(
     # **evaluation_policy_parameters
     # )
 
@@ -1375,10 +1356,10 @@ def print_agent_search(
     # settings["defaults"]["metric_evaluator"]
     # ]
 
-    # metric_class = eval("irec.metrics." + settings["defaults"]["metric"])
+    # metric_class = eval("irec.offline_experiments.metrics." + settings["defaults"]["metric"])
 
     # metric_evaluator = eval(
-    # "irec.metric_evaluators." + settings["defaults"]["metric_evaluator"]
+    # "irec.offline_experiments.metric_evaluators." + settings["defaults"]["metric_evaluator"]
     # )(None, **metric_evaluator_parameters)
 
     datasets_metrics_values = defaultdict(
@@ -1392,7 +1373,7 @@ def print_agent_search(
         for metric_name in metrics:
             for agent_name in agents:
                 for agent_parameters in agents_search_parameters[agent_name]:
-                    print(agent_name)
+                    # print(agent_name, agent_parameters, "\n\n", agents_search_parameters)
                     settings["defaults"]["metric"] = metric_name
                     settings["defaults"]["agent"] = agent_name
                     settings["agents"][agent_name] = agent_parameters
@@ -1414,33 +1395,65 @@ def print_agent_search(
                     datasets_metrics_values[settings["defaults"]["dataset_loader"]][
                         settings["defaults"]["metric"]
                     ][agent.name][json.dumps(agent_parameters)] = metric_values[-1]
-                    print(metric_values[-1])
+                    # print("metric_values:", metric_values)
+                    # import sys
+                    # sys.exit()
+                    
+                    #print("\n\n\nmetric_values[-1]\n\n\n", metric_values[-1])
     # ','.join(map(lambda x: str(x[0])+'='+str(x[1]),list(parameters.items())))
 
     # print(datasets_metrics_values)
+    # print (json.dumps(datasets_metrics_values, indent=2, default=str))
     for k1, v1 in datasets_metrics_values.items():
-        for _, v2 in v1.items():
+        # print("\nK1", k1)
+        # print("\nV1", v1)
+        for k2, v2 in v1.items():
+            # print("\nK2", k2)
+            # print("\nV2", v2)
+            # print("\nV2 keys", v2.keys())
+
             for k3, v3 in v2.items():
-                values = np.array(list(v3.values()))
-                keys = list(v3.keys())
-                idxs = np.argsort(values)[::-1]
-                keys = [keys[i] for i in idxs]
-                values = [values[i] for i in idxs]
-                if dump:
-                    if k1 not in dataset_agents_parameters:
-                        dataset_agents_parameters[k1] = {}
-                    dataset_agents_parameters[k1][k3] = json.loads(keys[0])
-                if top_save:
-                    print(f"{k3}:")
-                    # print('\tparameters:')
-                    agent_parameters, _ = json.loads(keys[0]), values[0]
-                    for name, value in agent_parameters.items():
-                        print(f"\t\t{name}: {value}")
-                else:
-                    for k4, v4 in zip(keys, values):
-                        k4 = yaml.safe_load(k4)
-                        # k4 = ','.join(map(lambda x: str(x[0])+'='+str(x[1]),list(k4.items())))
-                        print(f"{k3}({k4}) {v4:.5f}")
+ 
+                # print("\nV3 keys", v3.keys(), len(v3.keys()), "\n\n\n", v3[0])
+                # print("\nV3 VALUES", len(v3.values()), "\n\n\n")
+                # print("\nV3 VALUES", list(list(v3.values())[0].values()), "\n\n\n")
+
+                for k5, v5 in v3.items():
+                    
+                    if k5 == 0.0 or v5 == 0.0: continue
+                    # print("K5 keys:", k5)
+                    # print("v5 values :", v5)
+
+                    # print("\nK3", k3)
+
+                    values = np.array((list(v5.values())))
+                    # values = np.array(list(v3.values()))
+                    # print("\n\n\ntype:", type(values))
+                    keys = list((v5.keys()))
+                    # keys = list(v3.keys())
+                    # print("v3 keys:", list(v5.keys())[0])
+                    # print("\n\n\n\nVALUES: ", len(values[0]), values[0], "\n\n\n", values[1])
+                    
+                    idxs = np.argsort(values)[::-1]
+                    keys = [keys[i] for i in idxs]
+                    values = [values[i] for i in idxs]
+                    if dump:
+                        if k1 not in dataset_agents_parameters:
+                            dataset_agents_parameters[k1] = {}
+                        dataset_agents_parameters[k1][k5] = json.loads(keys[0])
+                    if top_save:
+                        # print(f"{k5}:")
+                        # print('\tparameters:')
+                        agent_parameters, _ = json.loads(k5), values[0]
+                        # agent_parameters, _ = json.loads(keys[0]), values[0]
+                        # for name, value in agent_parameters.items():
+                        print(f">>>>>>> \t\t{agent_parameters}: {values[0]}")
+                    else:
+                        for k4, v4 in zip(keys, values):
+                            print("K4, V4", k4, v4)
+                            # k4 = yaml.safe_load(k4)
+                            # k4 = ','.join(map(lambda x: str(x[0])+'='+str(x[1]),list(k4.items())))
+                            print(f"k5 {k5}k4 ({k4}) v4 {v4}")
 
     if dump:
         print("Saved parameters!")
@@ -1466,7 +1479,7 @@ def print_results_latex_horizontal_table(
     plt.rcParams["axes.prop_cycle"] = cycler(color="krbgmyc")
     plt.rcParams["lines.linewidth"] = 2
     plt.rcParams["font.size"] = 15
-    metrics_classes = [eval("irec.metrics." + i) for i in metrics]
+    metrics_classes = [MetricRegistry.get(i) for i in metrics]
 
     metrics_classes_names = list(map(lambda x: x.__name__, metrics_classes))
     metrics_names = metrics_classes_names
@@ -1475,20 +1488,17 @@ def print_results_latex_horizontal_table(
     metric_evaluator_name = settings["defaults"]["metric_evaluator"]
     metric_evaluator_parameters = settings["metric_evaluators"][metric_evaluator_name]
 
-    exec(
-        f"from irec.metric_evaluators.{metric_evaluator_name} import {metric_evaluator_name}"
-    )
-    metric_evaluator = eval(metric_evaluator_name)(None, **metric_evaluator_parameters)
+    metric_evaluator = MetricEvaluatorRegistry.get(metric_evaluator_name)(None, **metric_evaluator_parameters)
 
     evaluation_policy_name = settings["defaults"]["evaluation_policy"]
 
-    exec(
-        f"from irec.evaluation_policies.{evaluation_policy_name} import {evaluation_policy_name}"
-    )
+    # exec(
+    #     f"from irec.offline_experiments.evaluation_policies.{evaluation_policy_name} import {evaluation_policy_name}"
+    # )
     metrics_weights = {i: 1 / len(metrics_classes_names) for i in metrics_classes_names}
 
     print("metric_evaluator_name", metric_evaluator_name)
-    if metric_evaluator_name == "StageIterationsMetricEvaluator":
+    if metric_evaluator_name == "StageIterations":
         nums_interactions_to_show = ["1-5", "6-10", "11-15", "16-20", "21-50", "51-100"]
     else:
         nums_interactions_to_show = list(

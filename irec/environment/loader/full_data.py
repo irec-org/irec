@@ -2,7 +2,7 @@ from typing import Tuple, TypedDict
 import pandas as pd
 import numpy as np
 import random
-
+from copy import deepcopy
 from irec.environment.dataset import Dataset
 from irec.environment.filter.registry import FilterRegistry
 from irec.environment.split.registry import SplitRegistry
@@ -12,13 +12,15 @@ FilterUsersType = TypedDict('FilterUsersType', {'min_consumption': int, 'num_use
 FilterItemsType = TypedDict('FilterItemsType', {'min_ratings': int, 'num_items': int})
 FilteringType = TypedDict('FilteringType', {'filter_users': FilterUsersType, 'filter_items': FilterItemsType})
 SplittingType = TypedDict('SplittingType', {'strategy': str, 'train_size': float, 'test_consumes': int})
+ValidationType = TypedDict('ValidationType', {'validation_size': float})
 
 
-class DefaultLoader:
+class FullData:
 
     def __init__(self,
                  dataset: DatasetType,
                  splitting: SplittingType,
+                 validation: ValidationType = None,
                  prefiltering: FilteringType = None) -> None:
         """__init__.
 
@@ -38,10 +40,10 @@ class DefaultLoader:
         self.skip_rows = int(dataset["skip_head"]) if "skip_head" in dataset.keys() else 1
 
         # filtering attributes
-        if prefiltering:
-            self.prefiltering = prefiltering
-        else:
-            self.prefiltering = "None"
+        self.prefiltering = prefiltering
+
+        # validation attributes
+        self.validation = validation
 
         # splitting attributes
         self.test_consumes = splitting["test_consumes"] if "test_consumes" in splitting.keys() else 0
@@ -139,7 +141,7 @@ class DefaultLoader:
         dataset.update_num_total_users_items()
 
         # Apply filters if they were defined
-        if self.prefiltering != "None":
+        if self.prefiltering is not None:
             filtered_data = self._filter(dataset.data)
             # update dataset
             dataset = Dataset(filtered_data)
@@ -151,4 +153,10 @@ class DefaultLoader:
         print(f"\nApplying splitting strategy: {self.strategy}\n")
         train_dataset, test_dataset = self._split(dataset)
 
-        return train_dataset, test_dataset
+        # Split to validation if necessary
+        x_validation, y_validation = None, None
+        if self.validation is not None:
+            print("\nGenerating x_validation and y_validation: ")
+            x_validation, y_validation = self._split(train_dataset)
+
+        return train_dataset, test_dataset, x_validation, y_validation

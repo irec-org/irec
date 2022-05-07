@@ -72,7 +72,7 @@ FixedInteraction:
 This file defines the evaluation metrics for an experiment. This file is responsible for providing details on how to assess the interactions performed during the assessment process.
 
 ```yaml
-UserCumulativeInteractionMetricEvaluator:
+UserCumulativeInteraction:
   interaction_size: 1
   interactions_to_evaluate:
     - 5
@@ -99,7 +99,7 @@ dataset_loader: 'MovieLens 1M'
 evaluation_experiment: evaluation
 evaluation_policy: FixedInteraction
 metric: Hits
-metric_evaluator: UserCumulativeInteractionMetricEvaluator
+metric_evaluator: UserCumulativeInteraction
 pdf_dir: pdf/
 tex_dir: tex/
 ```
