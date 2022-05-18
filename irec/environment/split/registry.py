@@ -7,12 +7,13 @@ class SplitRegistry:
     from irec.environment.split.randomised import Random
     from irec.environment.split.temporal import Temporal
     from irec.environment.split.global_timestamp import GlobalTimestampSplit
+    from irec.environment.split.user_history import UserHistory
 
     _splitting = {
         "temporal": Temporal,
         "random": Random,
         "global": GlobalTimestampSplit,
-
+        "user_history": UserHistory,
     }
 
     @classmethod
