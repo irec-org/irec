@@ -41,10 +41,10 @@ class UserHistory(SplitStrategy):
         Returns:
             A tuple containing the trainset and the testset.
         """
+
         def split_history(df: pd.DataFrame):
-            msk = int(len(df) * self.train_size) * [True]
-            msk = np.array(msk + (len(df)-len(msk)) * [False])
-            train, test = df[msk], df[~msk]
+            ratings_train = int(len(df) * self.train_size)  
+            train, test = df.iloc[:ratings_train], df.iloc[ratings_train:]
             testset.append(test)
             return train
 
