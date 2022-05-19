@@ -53,7 +53,7 @@ class UserHistory(SplitStrategy):
         testset = []
         trainset = dataframe.groupby(0).apply(
             lambda user_history: 
-                split_history(user_history.sort_values(3)).reset_index(drop=True)
+                split_history(user_history.sort_values(3).reset_index(drop=True))
             
         ).reset_index(drop=True)
 
