@@ -71,12 +71,11 @@ class GlobalTimestampSplit(SplitStrategy):
         first_interactions = self._get_sorted_first_interactions(dataframe)
         threshold = int(first_interactions.loc[first_interactions[0] == test_uids[-1]][3])
 
+        testset = dataframe[dataframe[0].isin(test_uids)]
         trainset = dataframe[
             (dataframe[3] <= threshold) &
             (~dataframe[0].isin(test_uids))
         ]
-
-        testset = dataframe[dataframe[0].isin(test_uids)]
 
         train_dataset = Dataset(np.array(trainset))
         test_dataset = Dataset(np.array(testset))
