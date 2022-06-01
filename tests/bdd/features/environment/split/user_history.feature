@@ -5,8 +5,8 @@ Feature: These are the scenarios for filtering the dataset based on a percentage
       | int       | int       | float       | int           |
       | userId    | itemId    | rating      | timestamp     |
       | 0         | 1         | 3.5         | 101           |
-      | 0         | 0         | 4.0         | 102           |
       | 0         | 2         | 4.0         | 103           |
+      | 0         | 0         | 4.0         | 102           |
       | 1         | 1         | 4.5         | 104           |
       | 1         | 0         | 4.5         | 105           |
       | 1         | 2         | 4.5         | 106           |
