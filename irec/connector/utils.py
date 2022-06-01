@@ -1335,55 +1335,25 @@ def print_agent_search(
     top_save,
 ):
 
-    # import irec.offline_experiments.metrics
-    # import irec.offline_experiments.evaluation_policies
-
-    # evaluation_policy_name = settings["defaults"]["evaluation_policy"]
-    # evaluation_policy_parameters = settings["evaluation_policies"][
-    # evaluation_policy_name
-    # ]
-    # metrics_classes = [irec.offline_experiments.metrics.Hits]
-    # metrics_names = ["Cumulative Hits"]
-    # evaluation_policy = eval("irec.offline_experiments.evaluation_policies." + evaluation_policy_name)(
-    # **evaluation_policy_parameters
-    # )
-
-    # interactors_classes_names_to_names = {
-    # k: v["name"] for k, v in settings["agents_general_settings"].items()
-    # }
-
-    # metric_evaluator_parameters = settings["metric_evaluators"][
-    # settings["defaults"]["metric_evaluator"]
-    # ]
-
-    # metric_class = eval("irec.offline_experiments.metrics." + settings["defaults"]["metric"])
-
-    # metric_evaluator = eval(
-    # "irec.offline_experiments.metric_evaluators." + settings["defaults"]["metric_evaluator"]
-    # )(None, **metric_evaluator_parameters)
-
     datasets_metrics_values = defaultdict(
         lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(float)))
     )
 
     for dataset_loader_name in dataset_loaders:
         settings["defaults"]["dataset_loader"] = dataset_loader_name
-        # traintest_dataset = load_dataset_experiment(settings)
 
         for metric_name in metrics:
             for agent_name in agents:
                 for agent_parameters in agents_search_parameters[agent_name]:
-                    # print(agent_name, agent_parameters, "\n\n", agents_search_parameters)
+
                     settings["defaults"]["metric"] = metric_name
                     settings["defaults"]["agent"] = agent_name
                     settings["agents"][agent_name] = agent_parameters
-                    # agent = create_agent(agent_name, agent_parameters)
                     agent = AgentFactory().create(agent_name, agent_parameters)
-                    # agent_id = get_agent_id(agent_name, agent_parameters)
+
                     try:
                         metric_values = load_evaluation_experiment(settings)
-                        if metric_values is None:
-                            continue
+                        if metric_values is None: continue
 
                     except errors.EvaluationRunNotFoundError as e:
                         print(e)
@@ -1395,66 +1365,36 @@ def print_agent_search(
                     datasets_metrics_values[settings["defaults"]["dataset_loader"]][
                         settings["defaults"]["metric"]
                     ][agent.name][json.dumps(agent_parameters)] = metric_values[-1]
-                    # print("metric_values:", metric_values)
-                    # import sys
-                    # sys.exit()
-                    
-                    #print("\n\n\nmetric_values[-1]\n\n\n", metric_values[-1])
-    # ','.join(map(lambda x: str(x[0])+'='+str(x[1]),list(parameters.items())))
 
-    # print(datasets_metrics_values)
-    # print (json.dumps(datasets_metrics_values, indent=2, default=str))
-    for k1, v1 in datasets_metrics_values.items():
-        # print("\nK1", k1)
-        # print("\nV1", v1)
-        for k2, v2 in v1.items():
-            # print("\nK2", k2)
-            # print("\nV2", v2)
-            # print("\nV2 keys", v2.keys())
+    for dataset_name, metric_dict in datasets_metrics_values.items():
+        print("\nDataset Name:", dataset_name)
+        
+        for metric_name, agent_dict in metric_dict.items():
+            print("Metric Name:", metric_name, "\n")
 
-            for k3, v3 in v2.items():
- 
-                # print("\nV3 keys", v3.keys(), len(v3.keys()), "\n\n\n", v3[0])
-                # print("\nV3 VALUES", len(v3.values()), "\n\n\n")
-                # print("\nV3 VALUES", list(list(v3.values())[0].values()), "\n\n\n")
+            for agent_name, agent_parameters_dict in agent_dict.items():
+                print("Agent Name:", agent_name)
 
-                for k5, v5 in v3.items():
-                    
-                    if k5 == 0.0 or v5 == 0.0: continue
-                    # print("K5 keys:", k5)
-                    # print("v5 values :", v5)
+                metric_values = np.array(list(agent_parameters_dict.values()))
+                agent_parameters = np.array(list(agent_parameters_dict.keys()))
 
-                    # print("\nK3", k3)
+                idxs = np.argsort(metric_values)[::-1]
+                agent_parameters = [agent_parameters[i] for i in idxs]
+                metric_values = [metric_values[i] for i in idxs]
 
-                    values = np.array((list(v5.values())))
-                    # values = np.array(list(v3.values()))
-                    # print("\n\n\ntype:", type(values))
-                    keys = list((v5.keys()))
-                    # keys = list(v3.keys())
-                    # print("v3 keys:", list(v5.keys())[0])
-                    # print("\n\n\n\nVALUES: ", len(values[0]), values[0], "\n\n\n", values[1])
-                    
-                    idxs = np.argsort(values)[::-1]
-                    keys = [keys[i] for i in idxs]
-                    values = [values[i] for i in idxs]
-                    if dump:
-                        if k1 not in dataset_agents_parameters:
-                            dataset_agents_parameters[k1] = {}
-                        dataset_agents_parameters[k1][k5] = json.loads(keys[0])
-                    if top_save:
-                        # print(f"{k5}:")
-                        # print('\tparameters:')
-                        agent_parameters, _ = json.loads(k5), values[0]
-                        # agent_parameters, _ = json.loads(keys[0]), values[0]
-                        # for name, value in agent_parameters.items():
-                        print(f">>>>>>> \t\t{agent_parameters}: {values[0]}")
-                    else:
-                        for k4, v4 in zip(keys, values):
-                            print("K4, V4", k4, v4)
-                            # k4 = yaml.safe_load(k4)
-                            # k4 = ','.join(map(lambda x: str(x[0])+'='+str(x[1]),list(k4.items())))
-                            print(f"k5 {k5}k4 ({k4}) v4 {v4}")
-
+                if dump:
+                    dataset_agents_parameters[dataset_name][agent_name] = json.loads(agent_parameters[0])
+          
+                if top_save:
+                    agent_parameters, best_value = json.loads(agent_parameters[0]), metric_values[0]
+                    print(f"Best Score for ({metric_name}):", "%.5f" % best_value)
+                    print(f"Agent Parameters: {agent_parameters}\n")
+                
+                else:
+                    for agent_parameter, value in zip(agent_parameters, metric_values):
+                        print(f"\n{agent_name} - Score for ({metric_name}):", "%.5f" % value)
+                        print(f"Agent Parameters: {agent_parameter}\n")
+                
     if dump:
         print("Saved parameters!")
         open("settings" + sep + "dataset_agents.yaml", "w").write(
