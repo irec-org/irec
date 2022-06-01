@@ -61,6 +61,7 @@ class VFRegistry:
         "Random": "random",
         "ThompsonSampling": "thompson_sampling",
         "UCB": "ucb",
+        "WSCB": "wscb",
         "ValueFunction": "base",
     }
 
