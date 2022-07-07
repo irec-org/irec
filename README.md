@@ -71,27 +71,20 @@ Install with pip:
 
 Check this example of a execution using the example application:
 
-    cd app
-    metrics=(Hits Precision Recall);
-    models=(Random MostPopular UCB ThompsonSampling EGreedy);
-    metric_evaluator="Interaction"
-    bases=("Netflix 10k" "Good Books" "Yahoo Music 10k");
-    # run agents
-    ./run_agent_best.py --dataset_loaders "${bases[@]}" --agents "${models[@]}"
+    dataset=("Netflix 10k" "Good Books" "Yahoo Music 10k");\
+    models=(Random MostPopular UCB ThompsonSampling EGreedy);\
+    metrics=(Hits Precision Recall);\
+    eval_pol=("FixedInteraction");
+    metric_evaluator="Interaction";\
+    
+    cd agents &&
+    python run_agent_best.py --agents "${models[@]}" --dataset_loaders "${dataset[@]}" --evaluation_policy "${eval_pol[@]}" &&
   
-    # evaluate agents using the metrics and metric evaluator defined
-    ./eval_agent_best.py --dataset_loaders "${bases[@]}"\
-    --agents "${models[@]}" --metrics "${metrics[@]}"\
-    --metric_evaluator="$metric_evaluator"
+    cd ../evaluation &&
+    python eval_agent_best.py --agents "${models[@]}" --dataset_loaders "${dataset[@]}" --evaluation_policy "${eval_pol[@]}" --metrics "${metrics[@]}" --metric_evaluator "${metric_eval[@]}" &&
 
-    # print latex table with results and statistical test
-    ./print_latex_table_results.py --dataset_loaders "${bases[@]}"\
-    --agents "${models[@]}" --metrics "${metrics[@]}"\
-    --metric_evaluator="$metric_evaluator"
+    python print_latex_table_results.py --agents "${models[@]}" --dataset_loaders "${dataset[@]}" --evaluation_policy "${eval_pol[@]}" --metric_evaluator "${metric_eval[@]}" --metrics "${metrics[@]}"
 
-<!--Also, check these examples using the framework in Python code:-->
-
-<!--:TODO:-->
 ## Datasets
 
 Our framework has the ability to use any type of dataset, as long as it is suitable for the recommendation domain and is formatted correctly. Below we list some datasets tested and used in some of our experiments.
@@ -116,7 +109,7 @@ The recommender models supported by irec are listed below.
 
 | Year | Model  | Paper | Description
 | :---: | --- | :---: | :--- |
-| 2002 | [ε-Greedy](irec/value_functions/EGreedy.py) | [Link](https://link.springer.com/article/10.1023/A:1013689704352) | In general, ε-Greedy models the problem based on an ε diversification parameter to perform random actions.   
+| 2002 | [ε-Greedy](irec/recommendation/agents/value_functions/e_greedy.py) | [Link](https://link.springer.com/article/10.1023/A:1013689704352) | In general, ε-Greedy models the problem based on an ε diversification parameter to perform random actions.   
 | 2013 | [Linear ε-Greedy](irec/value_functions/LinearEGreedy.py) | [Link](https://dl.acm.org/doi/abs/10.1145/2505515.2505690?casa_token=1PDIAs6p1ysAAAAA:ZFkzkEnCX1_ZiqSCAgqOw9Z3mOPybhJLRtAdkfnEagDI_aef1TR7SD3IZkkVhs2hTzk_FkigZ548) | A linear exploitation of the items latent factors defined by a PMF formulation that also explore random items with probability ε.   
 | 2011 | [Thompson Sampling](irec/value_functions/ThompsonSampling.py) | [Link](https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.831.5818&rep=rep1&type=pdf) |  A basic item-oriented bandit algorithm that follows a Gaussian distribution of items and users to perform the prediction rule based on their samples.
 | 2013 | [GLM-UCB](irec/value_functions/GLM_UCB.py) | [Link](https://dl.acm.org/doi/abs/10.1145/2505515.2505690?casa_token=cCSF9jXF2VMAAAAA:zpD_LhYXadYz5BAm5-R_SpSA4za8EGH4U98mbbxquS6BZFLFM2tylXVemkgW9033knXcqB_kumP5) | It follows a similar process as Linear UCB based on the PMF formulation, but it also adds a sigmoid form in the exploitation step and makes a time-dependent exploration.   
