@@ -31,6 +31,16 @@
   <p></p>
 </div>
 
+![Overview iRec](./figures/IREC3.jpg)
+
+iRec is structured in three main components as usually made by classical frameworks in the RS field. These main components are:
+
+• **Environment Setting**: responsible for loading, preprocessing, and splitting the dataset into train and test sets (when required) to create the task environment for the pipeline;
+
+• **Recommendation Agent**: responsible for implementing the recommendation model required as an interactive algorithm that will interact with the environment;
+
+• **Experimental Evaluation**: responsible for defining how the agent will interact with the environment to simulate the interactive scenario and get the logs required for a complete evaluation.
+
 ## Introduction
 
 > For Python >= 3.8
