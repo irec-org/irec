@@ -105,7 +105,7 @@ Clothing Fit | Clothes | 99.97% | [Link](link)
 
 ## Models
 
-The recommender models supported by irec are listed below.
+The [recommender models](https://github.com/irec-org/irec/tree/master/irec/recommendation/agents/value_functions) supported by irec are listed below.
 
 | Year | Model  | Paper | Description
 | :---: | --- | :---: | :--- |
@@ -121,6 +121,7 @@ The recommender models supported by irec are listed below.
 | 2020 | [NICF](irec/recommendation/agents/value_functions/nicf.py) | [Link](https://dl.acm.org/doi/abs/10.1145/2505515.2505690?casa_token=MllrAXlioLsAAAAA:qnXgeSAEJF1jhTD7PNiDWFFr-FAET4vOHluesRPSCvxGuw3EfEeSnYokqCQKj3cNH0-v_I43UQE0) | It is an interactive method based on a combination of neural networks and  collaborative filtering that also performs a meta-learning of the user’s preferences.   
 | 2016 | [COFIBA](irec/recommendation/agents/value_functions/cofiba.py) | [Link](https://dl.acm.org/doi/abs/10.1145/2911451.2911548?casa_token=UpXzuWNaGHUAAAAA:jQR2gPPq2plKCg2mqLMoJAn5l6BBd2fWi4oxw9DJN0LZ9r-03PLqb8qEKuNDD0DXcgp6N8W6x39b) | This method relies on upper-confidence-based tradeoffs between exploration and exploitation, combined with adaptive clustering procedures at both the user and the item sides.
 | 2002 | [UCB](irec/recommendation/agents/value_functions/ucb.py) | [Link](https://link.springer.com/article/10.1023/A:1013689704352) | It is the original UCB that calculates a confidence interval for each item at each iteration and tries to shrink the confidence bounds.
+| 2021 | [Cluster-Bandit (CB)](irec/recommendation/agents/value_functions/cluster_bandit.py) | [Link](https://dl.acm.org/doi/abs/10.1145/3404835.3463033) | it is a new bandit algorithm based on clusters to face the cold-start problem.
 | 2002 | [Entropy](irec/recommendation/agents/value_functions/entropy.py) | [Link](https://dl.acm.org/doi/pdf/10.1145/502716.502737?casa_token=tQ6DkQMJnW0AAAAA:d3kGkV18mjoXwEDDMQmy4UBRMe9ZoZ-mCOeOqkZKgVCiIRpGolKB2M0RXm4ouePTuWkOgVhgBKh7) | The entropy of an item i is calculated using the relative frequency of the possible ratings. In general, since entropy measures the spread of ratings for an item, this strategy tends to promote rarely rated items, which can be considerably informative.
 | 2002 | [log(pop)*ent](irec/recommendation/agents/value_functions/log_pop_ent.py) | [Link](https://dl.acm.org/doi/pdf/10.1145/502716.502737?casa_token=tQ6DkQMJnW0AAAAA:d3kGkV18mjoXwEDDMQmy4UBRMe9ZoZ-mCOeOqkZKgVCiIRpGolKB2M0RXm4ouePTuWkOgVhgBKh7) | It combines popularity and entropy to identify potentially relevant items that also have the ability to add more knowledge to the system. As these concepts are not strongly correlated, it is possible to achieve this combination through a linear combination of the popularity ρ of an item i by its entropy ε: score(i) = log(ρi) · εi.
 | - | [Random](irec/recommendation/agents/value_functions/random.py) | [Link](link) | This method recommends totally random items.  
@@ -133,7 +134,7 @@ The recommender models supported by irec are listed below.
 
 ## Metrics
 
-The [recommender metrics](https://github.com/irec-org/irec/blob/master/irec/metrics.py) supported by iRec are listed below.
+The [recommender metrics](https://github.com/irec-org/irec/tree/master/irec/offline_experiments/metrics) supported by iRec are listed below.
 
 | Metric | Reference | Description
 | :---: | --- | :--- |

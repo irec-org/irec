@@ -6,27 +6,18 @@ Under app/ folder is a example of a application using irec and mlflow, where dif
 
 Check this example of a execution using the example application:
 
-    cd app
-
-    metrics=(Hits Precision Recall);
-    models=(Random MostPopular UCB ThompsonSampling EGreedy);
-    metric_evaluator="Interaction"
-    evaluation_policy="FixedInteraction"
-    bases=("Netflix 10k" "Good Books" "Yahoo Music 10k");
-
-    # run agents
-    ./run_agent_best.py --dataset_loaders "${bases[@]}" --agents "${models[@]}" --evaluation_policy "$evaluation_policy"
+    dataset=("Netflix 10k" "Good Books" "Yahoo Music 10k");\
+    models=(Random MostPopular UCB ThompsonSampling EGreedy);\
+    metrics=(Hits Precision Recall);\
+    eval_pol=("FixedInteraction");
+    metric_evaluator="Interaction";\
+    
+    cd agents &&
+    python run_agent_best.py --agents "${models[@]}" --dataset_loaders "${dataset[@]}" --evaluation_policy "${eval_pol[@]}" &&
   
-    # evaluate agents using the metrics and metric evaluator defined
-    ./eval_agent_best.py --dataset_loaders "${bases[@]}"\
-    --agents "${models[@]}" --metrics "${metrics[@]}"\
-    --evaluation_policy "$evaluation_policy"
-    --metric_evaluator="$metric_evaluator"
+    cd ../evaluation &&
+    python eval_agent_best.py --agents "${models[@]}" --dataset_loaders "${dataset[@]}" --evaluation_policy "${eval_pol[@]}" --metrics "${metrics[@]}" --metric_evaluator "${metric_eval[@]}" &&
 
-    # print latex table with results and statistical test
-    ./print_latex_table_results.py --dataset_loaders "${bases[@]}"\
-    --agents "${models[@]}" --metrics "${metrics[@]}"\
-    --evaluation_policy "$evaluation_policy"
-    --metric_evaluator="$metric_evaluator"
+    python print_latex_table_results.py --agents "${models[@]}" --dataset_loaders "${dataset[@]}" --evaluation_policy "${eval_pol[@]}" --metric_evaluator "${metric_eval[@]}" --metrics "${metrics[@]}"
 
-For more details, please take a look at our [tutorials](run_example.ipynb)
+For more details, please take a look at our [tutorials](https://github.com/irec-org/irec/tree/update-info/tutorials)
