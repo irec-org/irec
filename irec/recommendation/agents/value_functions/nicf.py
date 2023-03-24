@@ -730,7 +730,7 @@ class NICF(ValueFunction):
         self.train_dataset.data[:, 0] += 1
         self.train_dataset.data[:, 1] += 1
         self.train_dataset.data = self.train_dataset.data.astype(int)
-        self.train_dataset.update_from_data()
+        self.train_dataset.set_parameters()
         self.tau = 0
 
         args = Namespace(

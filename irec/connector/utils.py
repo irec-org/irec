@@ -1,44 +1,35 @@
-from os.path import sep
 import os
-
-from sqlalchemy import true
-from app.scripts.others import errors
-import pickle
 import yaml
-import secrets
-import mlflow.tracking
-import mlflow.entities
-import mlflow
-from mlflow.tracking import MlflowClient
-import json
-from collections import defaultdict
-from pathlib import Path
-from irec.environment.dataset import Dataset
-import collections
-from app.scripts.others import constants
-import matplotlib.ticker as mtick
-import numpy as np
-import matplotlib.pyplot as plt
-from os.path import sep
-from irec.offline_experiments.evaluation_policies.base import EvaluationPolicy
-from irec.utils.Factory import AgentFactory
-import scipy
-from irec.offline_experiments.metric_evaluators.interaction import Interaction
-from irec.offline_experiments.metric_evaluators.cumulative import Cumulative
-from irec.offline_experiments.metric_evaluators.user_cumulative_interaction import (
-    UserCumulativeInteraction,
-)
-
-from irec.offline_experiments.evaluation_policies.registry import EvalPolicyRegistry
-from irec.offline_experiments.metrics.registry import MetricRegistry
-from irec.offline_experiments.metric_evaluators.registry import MetricEvaluatorRegistry
-
 import copy
+import json
+import scipy
+import pickle
+import mlflow
 import os.path
-import collections.abc
-import pandas as pd
+import secrets
 import scipy.stats
-
+import numpy as np
+import collections
+import pandas as pd
+import mlflow.tracking
+import collections.abc
+import mlflow.entities
+from os.path import sep
+from pathlib import Path
+import matplotlib.pyplot as plt
+from irec.utils import constants
+import matplotlib.ticker as mtick
+from collections import defaultdict
+from mlflow.tracking import MlflowClient
+from irec.utils.Factory import AgentFactory
+from irec.environment.dataset import Dataset
+from irec.offline_experiments.metrics.registry import MetricRegistry
+from irec.offline_experiments.metric_evaluators.cumulative import Cumulative
+from irec.offline_experiments.metric_evaluators.interaction import Interaction
+from irec.offline_experiments.evaluation_policies.base import EvaluationPolicy
+from irec.offline_experiments.evaluation_policies.registry import EvalPolicyRegistry
+from irec.offline_experiments.metric_evaluators.registry import MetricEvaluatorRegistry
+from irec.offline_experiments.metric_evaluators.user_cumulative_interaction import UserCumulativeInteraction
 
 LATEX_TABLE_FOOTER = r"""
 \end{tabular}
@@ -541,10 +532,14 @@ def evaluate_itr(dataset, settings, forced_run):
     artifact_path = client.download_artifacts(run.info.run_id, "interactions.pickle")
     # print(artifact_path)
     interactions = pickle.load(open(artifact_path, "rb"))
-    metric_values = metric_evaluator.evaluate(
-        metric_class,
-        interactions,
-    )
+    try:
+        metric_values = metric_evaluator.evaluate(
+            metric_class,
+            interactions,
+        )
+    except Exception as e:
+        print("Error", e)
+        return
     with mlflow.start_run(run_id=run.info.run_id) as run:
         print(metric_evaluator, UserCumulativeInteraction)
         if isinstance(metric_evaluator, UserCumulativeInteraction):
@@ -578,7 +573,7 @@ def load_evaluation_experiment(settings):
     run = get_evaluation_run(settings)
 
     if run is None:
-        raise errors.EvaluationRunNotFoundError("Could not find evaluation run")
+        raise Exception("Could not find evaluation run")
     client = MlflowClient()
     artifact_path = client.download_artifacts(run.info.run_id, "evaluation.pickle")
     # print(artifact_path)
@@ -626,19 +621,6 @@ def get_evaluation_run_parameters(settings):
     return parameters_evaluation_run
 
 
-# def get_agent_run(settings):
-# parameters_evaluation_run = get_parameters_agent_run(settings)
-
-# # parameters_evaluation_run |= parameters_normalize(
-# # constants.METRIC_PARAMETERS_PREFIX, settings["defaults"]["metric"], {}
-# # )
-# run = already_ran(
-# parameters_evaluation_run,
-# mlflow.get_experiment_by_name(
-# settings["defaults"]["evaluation_experiment"]
-# ).experiment_id,
-# )
-# return run
 def get_agent_run(settings):
     agent_run_parameters = get_agent_run_parameters(settings)
     run = already_ran(
@@ -775,7 +757,7 @@ def run_agent_with_dataset_parameters(
             current_settings["agents"][agent_name] = dataset_agents_parameters[
                 dataset_loader_name
             ][agent_name]
-            if tasks>1:
+            if tasks > 1:
                 f = executor.submit(
                     run_agent,
                     train_dataset,
@@ -787,7 +769,7 @@ def run_agent_with_dataset_parameters(
                 if len(futures) >= tasks:
                     completed, futures = wait(futures, return_when=FIRST_COMPLETED)
             else:
-                run_agent(train_dataset, test_dataset,copy.deepcopy(current_settings),forced_run)
+                run_agent(train_dataset, test_dataset, copy.deepcopy(current_settings), forced_run)
 
     for f in futures:
         f.result()
@@ -809,18 +791,8 @@ def print_results_latex_table(
     plt.rcParams["axes.prop_cycle"] = cycler(color="krbgmyc")
     plt.rcParams["lines.linewidth"] = 2
     plt.rcParams["font.size"] = 15
-    # metrics_classes = [metrics.Hits, metrics.Recall]
     metrics_classes = [MetricRegistry.get(i) for i in metrics]
 
-    # metrics_classes = [
-    # metrics.Hits,
-    # metrics.Recall,
-    # # metrics.EPC,
-    # # metrics.Entropy,
-    # # metrics.UsersCoverage,
-    # # metrics.ILD,
-    # # metrics.GiniCoefficientInv,
-    # ]
     metrics_classes_names = list(map(lambda x: x.__name__, metrics_classes))
     metrics_names = metrics_classes_names
     datasets_names = dataset_loaders
@@ -831,25 +803,7 @@ def print_results_latex_table(
     metric_evaluator = MetricEvaluatorRegistry.get(metric_evaluator_name)(None, **metric_evaluator_parameters)
 
     evaluation_policy_name = settings["defaults"]["evaluation_policy"]
- 
-    # metrics_names = [
-    # 'Cumulative Precision',
-    # 'Cumulative Recall',
-    # # 'Cumulative EPC',
-    # # 'Cumulative Entropy',
-    # # 'Cumulative Users Coverage',
-    # # 'Cumulative ILD',
-    # # '1-(Gini-Index)'
-    # ]
-    # metrics_weights = {'Entropy': 0.5,'EPC':0.5}
-    # metrics_weights = {'Hits': 0.3,'Recall':0.3,'EPC':0.1,'UsersCoverage':0.1,'ILD':0.1,'GiniCoefficientInv':0.1}
-    # metrics_weights = {'Hits': 0.3,'Recall':0.3,'EPC':0.16666,'UsersCoverage':0.16666,'ILD':0.16666}
-    # metrics_weights = {'Hits': 0.25,'Recall':0.25,'EPC':0.125,'UsersCoverage':0.125,'ILD':0.125,'GiniCoefficientInv':0.125}
     metrics_weights = {i: 1 / len(metrics_classes_names) for i in metrics_classes_names}
-
-    # interactors_classes_names_to_names = {
-    # k: v["name"] for k, v in settings["agents_general_settings"].items()
-    # }
 
     print("metric_evaluator_name", metric_evaluator_name)
     if metric_evaluator_name == "StageIterations":
@@ -923,11 +877,6 @@ def print_results_latex_table(
                 ]
                 settings["agents"][agent_name] = agent_parameters
                 settings["defaults"]["metric"] = metric_class_name
-                # agent = AgentFactory().create(agent_name, agent_parameters)
-                # agent_id = get_agent_id(agent_name, agent_parameters)
-                # dataset_parameters = settings["dataset_loaders"][dataset_loader_name]
-                # metrics_evaluator_name = metric_evaluator.__class__.__name__
-                # parameters_agent_run = get_agent_run_parameters(settings)
                 parameters_evaluation_run = get_evaluation_run_parameters(settings)
 
                 mlflow.set_experiment(settings["defaults"]["evaluation_experiment"])
@@ -945,7 +894,6 @@ def print_results_latex_table(
                     run.info.run_id, "evaluation.pickle"
                 )
                 metric_values = pickle.load(open(artifact_path, "rb"))
-                # users_items_recommended = metric_values
 
                 datasets_metrics_values[dataset_loader_name][metric_class_name][
                     agent_name
@@ -1034,15 +982,11 @@ def print_results_latex_table(
                 ].append(np.array([maut] * 100))
 
     if dump:
-        # with open('datasets_metrics_values.pickle','wb') as f:
-        # pickle.dump(datasets_metrics_values,f)
         with open("datasets_metrics_values.pickle", "wb") as f:
             pickle.dump(json.loads(json.dumps(datasets_metrics_values)), f)
-            # f.write(str(methods_users_hits))
-    # print(datasets_metrics_values['Yahoo Music']['MAUT'])
 
-    metrics_classes_names.append("MAUT")
-    metrics_names.append("MAUT")
+    # metrics_classes_names.append("MAUT")
+    # metrics_names.append("MAUT")
 
     datasets_metrics_gain = defaultdict(
         lambda: defaultdict(
@@ -1355,11 +1299,11 @@ def print_agent_search(
                         metric_values = load_evaluation_experiment(settings)
                         if metric_values is None: continue
 
-                    except errors.EvaluationRunNotFoundError as e:
-                        print(e)
-                        continue
                     except EOFError as e:
-                        print(e)
+                        print(["ERROR"], e)
+                        continue
+                    except Exception as e:
+                        print(["ERROR"], e)
                         continue
 
                     datasets_metrics_values[settings["defaults"]["dataset_loader"]][

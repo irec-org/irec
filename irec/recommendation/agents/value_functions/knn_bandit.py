@@ -18,7 +18,7 @@ class kNNBandit(ValueFunction):
        bandit for interactive recommendation." Proceedings of the 13th ACM Conference on Recommender Systems. 2019.
     """
 
-    def __init__(self, alpha_0, beta_0, k, *args, **kwargs):
+    def __init__(self, alpha_0, beta_0, k, threshold: int = 4, *args, **kwargs):
         """__init__.
 
         Args:
@@ -29,6 +29,7 @@ class kNNBandit(ValueFunction):
         self.alpha_0 = alpha_0
         self.beta_0 = beta_0
         self.k = k
+        self.threshold = threshold
 
     def reset(self, observation):
         """reset.
@@ -65,7 +66,7 @@ class kNNBandit(ValueFunction):
             uid = int(self.train_dataset.data[i, 0])
             item = int(self.train_dataset.data[i, 1])
             reward = self.train_dataset.data[i, 2]
-            reward = reward >= 4
+            reward = reward >= self.threshold
             self.users_rating_sum[uid] += reward
             if len(self.items_consumed_users[item]) > 0:
                 item_consumed_uids = np.array(
@@ -129,7 +130,7 @@ class kNNBandit(ValueFunction):
         uid = action[0]
         item = action[1]
         additional_data = info
-        reward = reward >= 4
+        reward = reward >= self.threshold
 
         if len(self.items_consumed_users[item]) > 0:
             item_consumed_uids = np.array([i for i in self.items_consumed_users[item]])
