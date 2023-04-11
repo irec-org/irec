@@ -41,7 +41,6 @@ importlib-resources==5.10.2
 inquirer==2.7.0
 ipykernel==6.20.2
 ipython==8.8.0
--e git+https://github.com/irec-org/irec.git@364f8663af1bd4670e2b047d80be09c79ab3c55a#egg=irec
 itsdangerous==2.0.1
 jax==0.4.6
 jedi==0.18.2
