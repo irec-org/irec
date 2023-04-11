@@ -1,6 +1,6 @@
 import numpy as np
 
-from entropy import Entropy
+from .entropy import Entropy
 from . import most_popular
 import scipy.stats
 from .base import ValueFunction

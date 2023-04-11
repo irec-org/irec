@@ -1,6 +1,5 @@
 import numpy as np
 from .base import ValueFunction
-from .most_popular import *
 import scipy
 
 
