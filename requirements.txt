@@ -6,7 +6,6 @@ numpy
 pandas
 scikit-learn
 scipy
-sklearn
 threadpoolctl>=3.0.0
 tqdm>=4.62.3
 mlflow
