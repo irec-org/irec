@@ -1,0 +1,90 @@
+	
+\documentclass{article}
+
+\usepackage{multirow}
+\usepackage{color, colortbl}
+\usepackage{xcolor, soul}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{graphicx}
+\usepackage{subcaption}  
+
+\definecolor{Gray}{gray}{0.9}
+\definecolor{StrongGray}{gray}{0.7}
+
+\title{Dataset Information}
+\begin{document}
+\maketitle
+			
+	\begin{table}[h!]
+		\centering
+		\begin{tabular}{ |c||c|c|c|  } \hline 
+
+			\rowcolor{StrongGray}
+			\multicolumn{4}{|c|}{ML-100K Dataset Information - Sparsity: 0.9370} \\ \hline \hline
+
+			\rowcolor{Gray}
+			Information & User Consumption Info & Item Rating Info & Rating Info\\ \hline \hline
+
+			STD & 100.9 & 80.3 & 1.1\\ \hline
+			MIN & 1.0 & 1.0 & 0.0\\ \hline
+			MEDIAN & 64.5 & 27.0 & 4.0\\ \hline
+			MEAN & 105.9 & 59.4 & 3.5\\ \hline
+			MAX & 737.0 & 583.0 & 5.0\\ \hline
+			NUM & 944.0 & 1683.0 & 100001.0\\ \hline
+			$\geq75$ & 148.0 & 80.0 & 4.0\\ \hline
+			$\geq50$ & 64.5 & 27.0 & 4.0\\ \hline
+			$\geq25$ & 33.0 & 6.0 & 3.0\\ \hline
+
+		\end{tabular}
+		\caption{Information about users, items and ratings.}
+		\label{table:1}
+	\end{table}
+		
+
+	\begin{figure}[!ht]
+	    \centering
+		\begin{minipage}{0.5\textwidth}
+		    \centering
+		    \includegraphics[width=0.9\textwidth]{./Analysis/ML-100K/Graphics/corr_pop_ent.png} 
+		    \caption{corr pop ent}
+		    \label{fig:figura1minipg}
+		\end{minipage}\hfill
+	    \begin{minipage}{0.5\textwidth}
+		    \centering
+		    \includegraphics[width=0.9\textwidth]{./Analysis/ML-100K/Graphics/corr_meanratings_pop.png} 
+		    \caption{corr meanratings pop}
+		    \label{fig:figura1minipg}
+		\end{minipage}\hfill
+	    \begin{minipage}{0.5\textwidth}
+		    \centering
+		    \includegraphics[width=0.9\textwidth]{./Analysis/ML-100K/Graphics/users_consuption.png} 
+		    \caption{users consuption}
+		    \label{fig:figura1minipg}
+		\end{minipage}\hfill
+	    \begin{minipage}{0.5\textwidth}
+		    \centering
+		    \includegraphics[width=0.9\textwidth]{./Analysis/ML-100K/Graphics/corr_itemsfeatures_pop.png} 
+		    \caption{corr itemsfeatures pop}
+		    \label{fig:figura1minipg}
+		\end{minipage}\hfill
+	    \begin{minipage}{0.5\textwidth}
+		    \centering
+		    \includegraphics[width=0.9\textwidth]{./Analysis/ML-100K/Graphics/items_rated.png} 
+		    \caption{items rated}
+		    \label{fig:figura1minipg}
+		\end{minipage}\hfill
+	    \begin{minipage}{0.5\textwidth}
+		    \centering
+		    \includegraphics[width=0.9\textwidth]{./Analysis/ML-100K/Graphics/corr_meanratings_ent.png} 
+		    \caption{corr meanratings ent}
+		    \label{fig:figura1minipg}
+		\end{minipage}\hfill
+	    
+		% \caption{Graphics}
+		\label{fig:figurasminipg}
+	\end{figure}
+			
+\end{document}
+			

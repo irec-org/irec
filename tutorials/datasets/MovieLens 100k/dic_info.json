@@ -1,0 +1,37 @@
+{
+    "name": "ML-100K",
+    "sparsity": 0.937056884900853,
+    "user_information": {
+        "std_consumption": 100.93613152085523,
+        "min_consumption": 1.0,
+        "median_consumption": 64.5,
+        "mean_consumption": 105.9332627118644,
+        "max_consumption": 737.0,
+        "num_user": 944.0,
+        ">=75%": 148.0,
+        ">=50%": 64.5,
+        ">=25%": 33.0
+    },
+    "item_information": {
+        "std_ratings": 80.37257740532644,
+        "min_ratings": 1.0,
+        "median_ratings": 27.0,
+        "mean_ratings": 59.41830065359477,
+        "max_ratings": 583.0,
+        "num_item": 1683.0,
+        ">=75%": 80.0,
+        ">=50%": 27.0,
+        ">=25%": 6.0
+    },
+    "ratings_information": {
+        "std": 1.1257233133724367,
+        "min": 0.0,
+        "median": 4.0,
+        "mean": 3.5298247017529825,
+        "max": 5.0,
+        "num_ratings": 100001.0,
+        ">=75%": 4.0,
+        ">=50%": 4.0,
+        ">=25%": 3.0
+    }
+}
