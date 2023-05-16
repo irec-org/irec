@@ -63,6 +63,15 @@ class VFRegistry:
         "UCB": "ucb",
         "WSCB": "wscb",
         "ValueFunction": "base",
+        "LinearEGreedyLogPopEnt": "linear_egreedy_init",
+        "LinearUCBLogPopEnt": "linear_ucb_init",
+        "PTSLogPopEnt": "pts_init",
+        "WSCBInit": "wscb_init",
+        "LinUCB": "linucb",
+
+        "ContextualLinUCB": "contextual_lin_ucb",
+        "ContextualEgreedy": "contextual_linear_egreedy",
+        "ContextualPTS": "contextual_pts",
     }
 
     @classmethod
@@ -79,7 +88,7 @@ class VFRegistry:
 
 
 class ASPRegistry:
-    
+
     _asp = {
         "ActionSelectionPolicy": "base",
         "ASPEGreedy": "egreedy",
@@ -87,6 +96,9 @@ class ASPRegistry:
         "ASPGreedy": "greedy",
         "ASPICGreedy": "ic_greedy",
         "ASPReranker": "reranker",
+
+        "ASPMismatchEgreedy": "asp_mismatch_egreedy",
+        "ASPMismatchGreedy": "asp_mismatch_greedy",
     }
 
     @classmethod
