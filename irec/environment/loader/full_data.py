@@ -88,7 +88,8 @@ class FullData:
         return data_df.to_numpy()
 
     def _split(self,
-               dataset: Dataset) -> Tuple[Dataset, Dataset]:
+               dataset: Dataset,
+               validation=False) -> Tuple[Dataset, Dataset]:
         """split
 
             Splits the data set into training and testing
@@ -109,14 +110,26 @@ class FullData:
         # Apply it in the data
         test_uids = split_strategy.get_test_uids(dataset.data, num_test_users)
         train_dataset, test_dataset = split_strategy.split_dataset(dataset.data, test_uids)
-        train_dataset.update_num_total_users_items(
-            num_total_users=dataset.num_total_users, 
-            num_total_items=dataset.num_total_items
-        )
-        test_dataset.update_num_total_users_items(
-            num_total_users=dataset.num_total_users, 
-            num_total_items=dataset.num_total_items
-        )
+        if not validation:
+            train_dataset.update_num_total_users_items(
+                num_total_users=dataset.num_total_users, 
+                num_total_items=dataset.num_total_items
+            )
+            test_dataset.update_num_total_users_items(
+                num_total_users=dataset.num_total_users,
+                num_total_items=dataset.num_total_items
+            )
+        else:
+            num_total_users = train_dataset.max_uid+1 if train_dataset.max_uid >= test_dataset.max_uid else test_dataset.max_uid+1
+            num_total_items = train_dataset.max_iid+1 if train_dataset.max_iid >= test_dataset.max_iid else test_dataset.max_iid+1
+            train_dataset.update_num_total_users_items(
+                num_total_users=num_total_users,
+                num_total_items=num_total_items
+            )
+            test_dataset.update_num_total_users_items(
+                num_total_users=num_total_users,
+                num_total_items=num_total_items
+            )
         return train_dataset, test_dataset
 
     def process(self) -> Tuple[Dataset, Dataset]:
@@ -157,6 +170,11 @@ class FullData:
         x_validation, y_validation = None, None
         if self.validation is not None:
             print("\nGenerating x_validation and y_validation: ")
-            x_validation, y_validation = self._split(train_dataset)
+            x_validation, y_validation = self._split(train_dataset, validation=True)
+
+        print("train_dataset", train_dataset)
+        print("test_dataset", test_dataset)
+        print("x_validation", x_validation)
+        print("y_validation", y_validation)
 
         return train_dataset, test_dataset, x_validation, y_validation

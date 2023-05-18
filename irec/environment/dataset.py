@@ -80,7 +80,6 @@ class Dataset:
         self.num_total_users = num_total_users if num_total_users > self.max_uid+1 else self.max_uid+1
         self.num_total_items = num_total_items if num_total_items > self.max_iid+1 else self.max_iid+1
 
-
     def __str__(self):
         return f"\n\
                  Number of users: {self.num_users} \n\
